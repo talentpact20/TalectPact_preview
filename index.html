@@ -572,6 +572,12 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 .sp-skill-bar{height:4px;background:var(--slate-200);border-radius:2px;overflow:hidden}.sp-skill-bar-fill{height:100%;border-radius:2px}
 .sp-skill-item.locked{opacity:.5;position:relative}
 .sp-skill-item.locked::after{content:'🔒';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:1.1rem}
+.cand-zero-cta{background:linear-gradient(145deg,var(--emerald-50) 0%,var(--slate-50) 100%);border:1.5px solid var(--emerald-200);border-radius:var(--radius-lg);padding:22px 20px;margin-bottom:20px;text-align:center;box-shadow:var(--shadow-sm)}
+.cand-zero-cta-title{font-family:'Sora',sans-serif;font-weight:800;font-size:1.08rem;color:var(--slate-900);margin-bottom:8px;line-height:1.25}
+.cand-zero-cta-sub{font-size:.8125rem;color:var(--slate-600);margin-bottom:18px;line-height:1.55;max-width:440px;margin-left:auto;margin-right:auto}
+.cand-zero-cta-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center}
+.cand-zero-cta-btns .btn{justify-content:center}
+.sp-pending-toggle{width:100%;margin-bottom:12px}
 
 /* ── COMMON EXERCISES GRID ── */
 .common-ex-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
@@ -1148,6 +1154,14 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="ob-track"><div class="ob-fill" id="obFill" style="width:0%"></div></div>
       <div class="ob-steps" id="obSteps"></div>
     </div>
+    <div id="candZeroRetosCta" class="cand-zero-cta" style="display:none" role="region" aria-label="Primeros pasos">
+      <div class="cand-zero-cta-title">Empieza con un reto común</div>
+      <p class="cand-zero-cta-sub">Así desbloqueas skills en tu perfil y las empresas pueden ver tu nivel. Tienes 3 ejercicios por reto (básico → intermedio → avanzado).</p>
+      <div class="cand-zero-cta-btns">
+        <button type="button" class="btn btn-primary btn-lg" id="candBtnVerRetos">Ver todos los retos</button>
+        <button type="button" class="btn btn-outline btn-lg" id="candBtnStartSuggested">Empezar un reto sugerido</button>
+      </div>
+    </div>
     <div class="skill-profile-card">
       <div class="sp-header">
         <div class="sp-avatar">AC</div>
@@ -1157,7 +1171,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Habilidades verificadas</div>
       <div class="sp-skills-grid" id="spSkillsGrid">
       </div>
-      <p style="font-size:.75rem;color:var(--slate-400);margin-top:12px;text-align:center">Completa los retos comunes para desbloquear tus skills y hacerte visible para empresas.</p>
+      <p id="candProfileFootnote" style="font-size:.75rem;color:var(--slate-500);margin-top:14px;text-align:center;line-height:1.5">Cada skill se desbloquea al completar su reto asociado. Usa el botón de arriba o la pestaña <strong>Retos</strong> para elegir por dónde empezar.</p>
     </div>
   </div>
 
@@ -1364,7 +1378,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <button class="filter-btn" onclick="setExLevel('intermedio',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(245,158,11,.3);color:var(--amber-500)">Intermedio</button>
       <button class="filter-btn" onclick="setExLevel('avanzado',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(239,68,68,.2);color:var(--red-500)">Avanzado</button>
     </div>
-    <div class="results-meta reveal" id="exResultsCount"></div>
+    <div class="results-meta" id="exResultsCount"></div>
     <div class="common-ex-grid" id="landingCommonGrid"></div>
 
     <div class="reveal" style="margin-top:56px"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
@@ -1381,7 +1395,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <button class="filter-btn" onclick="setSector('Sales',this)">Ventas</button>
       <button class="filter-btn" onclick="setSector('Languages',this)">Idiomas</button>
     </div>
-    <div class="results-meta reveal" id="resultsCount"></div>
+    <div class="results-meta" id="resultsCount"></div>
     <div class="jobs-grid" id="jobsGrid"></div>
     <div class="no-results" id="noResults" style="display:none"><p>No encontramos resultados. Prueba otro término.</p></div>
   </div>
@@ -2873,6 +2887,15 @@ const COMMON_EXERCISES=[
     {id:'e3',briefing:'Enfrentarás un reto avanzado de Edición de Vídeo. La situación se revelará al empezar.',timeLimit:480,difficulty:'avanzado',num:'03',title:'Edición de Vídeo — Reto Avanzado',sub:'Estrategia — 8 min',skills:{hard:['Edición de Vídeo'],soft:['Estrategia','Visión']},scenario:'Reto de nivel avanzado. Demuestra criterio experto y capacidad de tomar decisiones complejas en Edición de Vídeo.',type:'decision',data:{options:[{id:'o1',text:'Opción estratégica A — Alto impacto, alto riesgo',correct:'yes'},{id:'o2',text:'Opción conservadora B — Bajo riesgo, resultados lentos',correct:'no'},{id:'o3',text:'Opción innovadora C — Requiere inversión pero transforma',correct:'yes'},{id:'o4',text:'Opción reactiva D — Parche temporal sin visión',correct:'no'}],cats:['✅ Buena decisión','⚠️ Decisión subóptima'],keys:['yes','no']}}
   ]}
 ];
+function goToCandRetosTab(){
+  const tabs=document.querySelectorAll('#candDashTabs .dash-tab');
+  const retosTab=tabs[1];
+  if(retosTab)switchCandTab('common',retosTab);
+  setTimeout(function(){
+    const grid=document.getElementById('commonExGrid');
+    if(grid)grid.scrollIntoView({behavior:'smooth',block:'start'});
+  },80);
+}
 function switchCandTab(tab,btn){
   document.querySelectorAll('#candDashTabs .dash-tab').forEach(t=>t.classList.remove('active'));
   btn.classList.add('active');
@@ -2912,12 +2935,38 @@ function updateCandProfile(){
   }
   const totalLocked=lS.length+lSe.length;
   if(totalLocked>0){
-    html+='<div style="font-size:.65rem;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;cursor:pointer" onclick="var g=document.getElementById(\'lockedSkillsGrid\');g.style.display=g.style.display===\'none\'?\'grid\':\'none\'">Pendientes ('+totalLocked+') — clic para ver</div>';
-    html+='<div class="sp-skills-grid" id="lockedSkillsGrid" style="display:'+(totalLocked>12?'none':'grid')+'">'+renderSG([...lS,...lSe])+'</div>';
+    const startHidden=totalLocked>12;
+    html+='<button type="button" class="btn btn-outline btn-sm sp-pending-toggle" aria-expanded="'+(startHidden?'false':'true')+'" onclick="var g=document.getElementById(\'lockedSkillsGrid\');if(!g)return;var hidden=(g.style.display===\'none\');g.style.display=hidden?\'grid\':\'none\';this.setAttribute(\'aria-expanded\',hidden?\'true\':\'false\');this.textContent=hidden?\'Ocultar skills pendientes ▴\':\'Ver '+totalLocked+' skills pendientes ▾\'">'+(!startHidden?'Ocultar skills pendientes ▴':'Ver '+totalLocked+' skills pendientes ▾')+'</button>';
+    html+='<div class="sp-skills-grid" id="lockedSkillsGrid" style="display:'+(startHidden?'none':'grid')+'">'+renderSG([...lS,...lSe])+'</div>';
   }
   document.getElementById('spSkillsGrid').innerHTML=html;
   const matches=getJobMatches();
   document.getElementById('cDashMatches').textContent=matches.filter(m=>m.matchScore===100).length;
+
+  const cta=document.getElementById('candZeroRetosCta');
+  const foot=document.getElementById('candProfileFootnote');
+  if(cta){
+    if(completed.length===0){
+      cta.style.display='block';
+      if(foot)foot.style.display='none';
+      const ver=document.getElementById('candBtnVerRetos');
+      const sugBtn=document.getElementById('candBtnStartSuggested');
+      if(ver)ver.onclick=function(){goToCandRetosTab();};
+      const sug=COMMON_EXERCISES.find(function(c){return !candidateProfile.completedCommon.find(function(x){return x.id===c.id;});});
+      if(sugBtn){
+        if(sug){
+          sugBtn.style.display='inline-flex';
+          sugBtn.textContent='Empezar: '+sug.icon+' '+sug.title;
+          sugBtn.onclick=function(){openCommonEx(sug.id);};
+        }else{
+          sugBtn.style.display='none';
+        }
+      }
+    }else{
+      cta.style.display='none';
+      if(foot)foot.style.display='block';
+    }
+  }
 }
 
 
@@ -3703,21 +3752,21 @@ let _exLevelLanding='all';
 function renderLandingCommon(filter='',cat='all',level='all'){
   const el=document.getElementById('landingCommonGrid');
   if(!el)return;
-  let list=COMMON_EXERCISES;
+  let list=COMMON_EXERCISES.filter(ce=>Array.isArray(ce.exercises)&&ce.exercises.length);
   if(cat==='soft')list=list.filter(ce=>ce.category==='soft');
   else if(cat==='sector')list=list.filter(ce=>ce.category==='sector');
-  // Level filter: check if at least one sub-exercise matches the level
   if(level!=='all'){
     list=list.filter(ce=>ce.exercises.some(e=>e.difficulty===level));
   }
   if(filter){
     const q=filter.toLowerCase();
-    list=list.filter(ce=>(ce.title+' '+ce.desc+' '+(ce.searchTerms||'')+' '+ce.skill).toLowerCase().includes(q));
+    list=list.filter(ce=>(ce.title+' '+ce.desc+' '+(ce.searchTerms||'')+' '+(ce.skill||'')).toLowerCase().includes(q));
   }
   const countEl=document.getElementById('exResultsCount');
   if(countEl)countEl.textContent=`${list.length} reto${list.length!==1?'s':''} disponible${list.length!==1?'s':''}`;
   if(!list.length){el.innerHTML='<div style="text-align:center;padding:24px;color:var(--slate-400);grid-column:1/-1"><p>No hay retos que coincidan con tu búsqueda.</p></div>';return;}
   let h='';
+  const tagsOf=ce=>(ce.tags||[]).filter(t=>t!=='Universal'&&t!=='Sector');
   list.forEach(ce=>{
     const catBadge=ce.category==='sector'?`<span class="cex-tag" style="background:var(--blue-100);color:var(--blue-500);border:1px solid rgba(59,130,246,.15)">Sector</span>`:`<span class="cex-tag universal">Universal</span>`;
     const levels=ce.exercises.map(e=>e.difficulty).filter((v,i,a)=>a.indexOf(v)===i);
@@ -3726,14 +3775,14 @@ function renderLandingCommon(filter='',cat='all',level='all'){
       const label=l==='basico'?'Básico':l==='intermedio'?'Intermedio':'Avanzado';
       return`<span class="cex-tag ex-meta-pill ${cls}" style="font-size:.55rem;padding:2px 6px">${label}</span>`;
     }).join('');
-    h+=`<div class="common-ex-card" onclick="openAuth('candidate')"><span class="cex-icon">${ce.icon}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta">${catBadge}${levelBadges}${ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').map(t=>`<span class="cex-tag">${t}</span>`).join('')}</div></div>`;
+    h+=`<div class="common-ex-card" onclick="openAuth('candidate')"><span class="cex-icon">${ce.icon}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta">${catBadge}${levelBadges}${tagsOf(ce).map(t=>`<span class="cex-tag">${t}</span>`).join('')}</div></div>`;
   });
   el.innerHTML=h;
 }
 
 function filterCommonExLanding(){
   const q=document.getElementById('exSearchInput')?.value||'';
-  document.getElementById('exSearchClear').classList.toggle('show',q.length>0);
+  document.getElementById('exSearchClear')?.classList.toggle('show',q.length>0);
   renderLandingCommon(q,_exCategoryLanding,_exLevelLanding);
 }
 
@@ -4448,6 +4497,17 @@ function submitBugReport(){
 
   alert('Reporte enviado. Gracias por ayudarnos a mejorar.');
   document.getElementById('bugDesc').value = '';
+}
+
+// Explorar (landing): pintar retos y ofertas cuando el DOM está listo (evita race con el parser y asegura reflow tras layout)
+function initPublicExplore(){
+  try{filterCommonExLanding();}catch(e){console.error('filterCommonExLanding',e);}
+  try{filterJobs();}catch(e){console.error('filterJobs',e);}
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(initPublicExplore);});
+}else{
+  requestAnimationFrame(initPublicExplore);
 }
 </script>
 
