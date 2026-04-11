@@ -348,6 +348,3 @@
   }); // END DOMContentLoaded
 
 })();
-hola
-
-})();
