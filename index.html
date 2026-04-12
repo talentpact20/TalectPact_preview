@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TalentPact — Prove. Connect. Hire.</title>
-<!-- Analytics (GA4): se carga solo si el usuario acepta cookies en el banner -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JN1K33D5YZ"></script>
+<script>
+window.dataLayer=window.dataLayer||[];
+function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());
+gtag('config','G-JN1K33D5YZ');
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&family=Anybody:ital,wght@0,800;0,900;1,800&display=swap" rel="stylesheet">
 <style>
@@ -45,10 +51,6 @@ nav a.nl:hover{color:var(--slate-900)}
 .nav-access-btn:hover{background:var(--slate-800)}
 .nav-access-btn svg{width:14px;height:14px;transition:transform .2s}
 .nav-access-btn.open svg{transform:rotate(180deg)}
-.nav-lang{display:inline-flex;align-items:center;border:1px solid var(--slate-200);border-radius:9px;padding:2px;background:var(--slate-50);margin-right:4px;flex-shrink:0}
-.nav-lang button{border:none;background:transparent;padding:6px 11px;font-size:.72rem;font-weight:700;cursor:pointer;border-radius:7px;color:var(--slate-500);font-family:'Plus Jakarta Sans',sans-serif;letter-spacing:.02em}
-.nav-lang button:hover{color:var(--slate-800)}
-.nav-lang button.active{background:white;color:var(--slate-900);box-shadow:var(--shadow-sm)}
 .access-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:0;background:white;border:1px solid var(--slate-200);border-radius:12px;box-shadow:var(--shadow-xl);width:280px;overflow:hidden;z-index:100;animation:dropIn .2s ease}
 .access-dropdown.show{display:block}
 @keyframes dropIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
@@ -418,22 +420,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 .fg input:focus,.fg select:focus{border-color:var(--emerald-500);background:white}.fg textarea{resize:none;height:64px}
 .cclose{position:absolute;top:14px;right:18px;width:28px;height:28px;border-radius:6px;background:var(--slate-100);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--slate-500)}
 .fsucc{display:none;text-align:center;padding:12px 0}.fsucc h3{font-family:'Sora',sans-serif;font-size:1.25rem;font-weight:800;color:var(--emerald-600);margin-bottom:4px}.fsucc p{color:var(--slate-500);font-size:.8125rem}
-.fsucc-icon{width:52px;height:52px;border-radius:50%;background:var(--emerald-50);border:2px solid var(--emerald-200);display:inline-flex;align-items:center;justify-content:center;font-size:1.35rem;margin-bottom:12px}
-.fsucc-lead{font-size:.9375rem;font-weight:600;color:var(--slate-800);margin-bottom:8px;line-height:1.45}
-.fsucc-detail{font-size:.8125rem;color:var(--slate-500);line-height:1.6;max-width:340px;margin:0 auto 16px}
-.cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:10002;background:var(--slate-900);color:var(--slate-200);padding:16px clamp(16px,4vw,32px);box-shadow:0 -8px 30px rgba(0,0,0,.12);display:none;border-top:1px solid var(--slate-700)}
-.cookie-banner.show{display:block;animation:fadeUp .35s ease both}
-.cookie-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:14px 20px;justify-content:space-between}
-.cookie-text{flex:1;min-width:220px;font-size:.8125rem;line-height:1.55;color:var(--slate-300)}
-.cookie-text strong{color:white;font-weight:600}
-.cookie-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.legal-body{font-size:.8125rem;color:var(--slate-600);line-height:1.65;max-height:min(62vh,480px);overflow-y:auto;padding-right:6px}
-.legal-body h3{font-family:'Sora',sans-serif;font-size:.9375rem;color:var(--slate-900);margin:20px 0 8px}
-.legal-body h3:first-child{margin-top:0}
-.legal-body p{margin-bottom:10px}
-.legal-toc{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--slate-100)}
-.legal-toc a{font-size:.72rem;font-weight:600;color:var(--emerald-600);text-decoration:none}
-.legal-toc a:hover{text-decoration:underline}
 
 /* ── AUDIO/VIDEO RECORDING ── */
 .rec-container{background:var(--slate-900);border-radius:var(--radius-lg);padding:28px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden}
@@ -732,8 +718,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   .logo-icon{width:26px;height:26px}
   .nav-access-btn{padding:7px 12px;font-size:.75rem}
   .nav-access-btn svg{width:12px;height:12px}
-  .nav-lang{margin-right:2px}
-  .nav-lang button{padding:5px 8px;font-size:.65rem}
   .access-dropdown{width:260px;right:-8px}
 
   /* ── HERO ── */
@@ -1116,9 +1100,8 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
 <nav id="mainNav">
   <div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div>
-  <ul><li><a class="nl" data-i18n="nav_explorar" onclick="goTo('explorar')">Explorar</a></li><li><a class="nl" data-i18n="nav_features" onclick="goTo('features')">Cómo funciona</a></li><li><a class="nl" data-i18n="nav_contact" onclick="openContact()">Contacto</a></li></ul>
-  <div class="nav-lang" role="group" aria-label="Language"><button type="button" class="active" id="langEsBtn" onclick="setUiLang('es')">ES</button><button type="button" id="langEnBtn" onclick="setUiLang('en')">EN</button></div>
-  <div class="nav-auth"><div class="nav-access"><button class="nav-access-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menú de acceso" onclick="toggleAccessMenu()" id="accessBtn"><span data-i18n="nav_access">Acceder</span> <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button><div class="access-dropdown" id="accessDrop"><div class="access-option" onclick="closeAccessMenu();openAuth('candidate')"><div class="access-icon" style="background:var(--emerald-50);color:var(--emerald-600)">🎯</div><div><h4 data-i18n="acc_cand_h">Soy Candidato</h4><p data-i18n="acc_cand_p">Completa retos y genera tu perfil de skills</p></div></div><div class="access-option" onclick="closeAccessMenu();openAuth('empresa')"><div class="access-icon" style="background:var(--blue-100);color:var(--blue-500)">🏢</div><div><h4 data-i18n="acc_emp_h">Soy Empresa</h4><p data-i18n="acc_emp_p">Publica ofertas y accede al pool de talento</p></div></div><div class="access-option" onclick="closeAccessMenu();openAdmin()" style="border-top:1px solid var(--slate-100)"><div class="access-icon" style="background:rgba(239,68,68,.08);color:#ef4444">⚙️</div><div><h4 data-i18n="acc_adm_h">Admin</h4><p data-i18n="acc_adm_p">Panel de administración</p></div></div></div></div></div>
+  <ul><li><a class="nl" onclick="goTo('explorar')">Explorar</a></li><li><a class="nl" onclick="goTo('features')">Cómo funciona</a></li><li><a class="nl" onclick="openContact()">Contacto</a></li></ul>
+  <div class="nav-auth"><div class="nav-access"><button class="nav-access-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menú de acceso" onclick="toggleAccessMenu()" id="accessBtn">Acceder <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button><div class="access-dropdown" id="accessDrop"><div class="access-option" onclick="closeAccessMenu();openAuth('candidate')"><div class="access-icon" style="background:var(--emerald-50);color:var(--emerald-600)">🎯</div><div><h4>Soy Candidato</h4><p>Completa retos y genera tu perfil de skills</p></div></div><div class="access-option" onclick="closeAccessMenu();openAuth('empresa')"><div class="access-icon" style="background:var(--blue-100);color:var(--blue-500)">🏢</div><div><h4>Soy Empresa</h4><p>Publica ofertas y accede al pool de talento</p></div></div><div class="access-option" onclick="closeAccessMenu();openAdmin()" style="border-top:1px solid var(--slate-100)"><div class="access-icon" style="background:rgba(239,68,68,.08);color:#ef4444">⚙️</div><div><h4>Admin</h4><p>Panel de administración</p></div></div></div></div></div>
 </nav>
 
 <!-- ═══ AUTH CANDIDATO ═══ -->
@@ -1342,157 +1325,138 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 <!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="preview-banner">
-    <div class="preview-banner-text"><strong data-i18n="pre_strong">Versión preliminar</strong> — <span data-i18n="pre_body">Esta web es una preview de TalentPact. La plataforma se encuentra en desarrollo activo. ¿Te interesa?</span> <a href="#" onclick="event.preventDefault();openContact()" data-i18n="pre_link">Contáctanos</a></div>
+    <div class="preview-banner-text"><strong>Versión preliminar</strong> — Esta web es una preview de TalentPact. La plataforma se encuentra en desarrollo activo. ¿Te interesa? <a href="#" onclick="event.preventDefault();openContact()">Contáctanos</a></div>
   </div>
   <div class="hero-badge"><div class="hero-badge-dot"></div><span class="mono" style="font-size:.6875rem;letter-spacing:.04em">PROVE. CONNECT. HIRE.</span></div>
-  <h1 class="display" data-i18n-html="hero_title">Contrata por<br><span class="gradient-text">habilidades reales.</span><br>No por <span style="text-decoration:line-through;color:var(--slate-400)">currículum.</span></h1>
-  <p class="hero-sub" data-i18n="hero_sub">Evaluación 100% anónima con retos prácticos. Candidatos demuestran lo que saben hacer. Empresas contratan mejor y más rápido.</p>
-  <div class="hero-cta"><button class="btn btn-dark btn-lg" onclick="openAuth('candidate')" data-i18n="hero_btn_cand">Empezar como candidato →</button><button class="btn btn-outline btn-lg" onclick="openAuth('empresa')" data-i18n="hero_btn_emp">Acceso empresa</button></div>
+  <h1 class="display">Contrata por<br><span class="gradient-text">habilidades reales.</span><br>No por <span style="text-decoration:line-through;color:var(--slate-400)">currículum.</span></h1>
+  <p class="hero-sub">Evaluación 100% anónima con retos prácticos. Candidatos demuestran lo que saben hacer. Empresas contratan mejor y más rápido.</p>
+  <div class="hero-cta"><button class="btn btn-dark btn-lg" onclick="openAuth('candidate')">Empezar como candidato →</button><button class="btn btn-outline btn-lg" onclick="openAuth('empresa')">Acceso empresa</button></div>
   <div class="hero-proof">
     <div class="hero-avatars"><span style="background:var(--emerald-500)">AG</span><span style="background:var(--blue-500)">MT</span><span style="background:var(--amber-500)">LR</span><span style="background:var(--violet-500)">JP</span></div>
-    <div class="hero-proof-text" data-i18n-html="hero_proof"><strong>+240 candidatos</strong> evaluados este mes</div>
+    <div class="hero-proof-text"><strong>+240 candidatos</strong> evaluados este mes</div>
   </div>
 </section>
 
 <!-- LOGOS -->
-<div class="logos-bar"><p data-i18n="logos_title">Empresas que ya confían en TalentPact</p><div class="logos-row"><span>TechCorp</span><span>GrowthLab</span><span>DataPulse</span><span>FinEdge</span><span>PixelCraft</span><span>LogiFlow</span></div></div>
+<div class="logos-bar"><p>Empresas que ya confían en TalentPact</p><div class="logos-row"><span>TechCorp</span><span>GrowthLab</span><span>DataPulse</span><span>FinEdge</span><span>PixelCraft</span><span>LogiFlow</span></div></div>
 
 <!-- STATS -->
 <div class="stats-strip"><div class="stats-inner">
-  <div class="stat-item"><div class="stat-val">73<span>%</span></div><div class="stat-lbl" data-i18n="stat_lbl1">Empresas con dificultad para validar junior</div></div>
-  <div class="stat-item"><div class="stat-val">3<span>x</span></div><div class="stat-lbl" data-i18n="stat_lbl2">Más rápido que selección tradicional</div></div>
-  <div class="stat-item"><div class="stat-val"><span>0</span></div><div class="stat-lbl" data-i18n="stat_lbl3">Datos personales visibles al evaluador</div></div>
-  <div class="stat-item"><div class="stat-val">€<span>0</span></div><div class="stat-lbl" data-i18n="stat_lbl4">Coste inicial para empresas</div></div>
+  <div class="stat-item"><div class="stat-val">73<span>%</span></div><div class="stat-lbl">Empresas con dificultad para validar junior</div></div>
+  <div class="stat-item"><div class="stat-val">3<span>x</span></div><div class="stat-lbl">Más rápido que selección tradicional</div></div>
+  <div class="stat-item"><div class="stat-val"><span>0</span></div><div class="stat-lbl">Datos personales visibles al evaluador</div></div>
+  <div class="stat-item"><div class="stat-val">€<span>0</span></div><div class="stat-lbl">Coste inicial para empresas</div></div>
 </div></div>
 
 <!-- FEATURES -->
 <div id="features" class="section">
-  <div class="reveal"><div class="section-label" data-i18n="feat_label">Cómo funciona</div><h2 class="section-title display" data-i18n="feat_title">Del reto al match en 4 pasos.</h2><p class="section-desc" data-i18n="feat_desc">Sin CV, sin sesgos. Solo habilidades demostradas en entornos reales de trabajo.</p></div>
+  <div class="reveal"><div class="section-label">Cómo funciona</div><h2 class="section-title display">Del reto al match en 4 pasos.</h2><p class="section-desc">Sin CV, sin sesgos. Solo habilidades demostradas en entornos reales de trabajo.</p></div>
   <div class="features-grid reveal d1">
-    <div class="feature-card"><div class="feature-icon fi-emerald">01</div><h3 data-i18n="feat01h">Registro sin barreras</h3><p data-i18n="feat01p">Solo nombre y email. Sin CV, sin foto, sin datos personales que generen sesgos.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-blue">02</div><h3 data-i18n="feat02h">Elige tu vertical</h3><p data-i18n="feat02p">Marketing, IT, Data, Business, Diseño, Finanzas, Legal, Operaciones — retos específicos para cada perfil.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-amber">03</div><h3 data-i18n="feat03h">Completa 3 retos</h3><p data-i18n="feat03p">Ejercicios prácticos que simulan situaciones laborales reales. Sin trucos, solo habilidades.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-violet">04</div><h3 data-i18n="feat04h">Perfil ciego generado</h3><p data-i18n="feat04p">Solo iniciales, sector y métricas de rendimiento. Cero datos personales.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-slate">05</div><h3 data-i18n="feat05h">Empresas te descubren</h3><p data-i18n="feat05p">Las empresas filtran por skills y scores. Tu talento habla por ti.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-red">06</div><h3 data-i18n="feat06h">Match & Kill Switch</h3><p data-i18n="feat06p">Al ser contratado, tu perfil desaparece del pool. Talento siempre activo.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-emerald">01</div><h3>Registro sin barreras</h3><p>Solo nombre y email. Sin CV, sin foto, sin datos personales que generen sesgos.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-blue">02</div><h3>Elige tu vertical</h3><p>Marketing, IT, Data, Business, Diseño, Finanzas, Legal, Operaciones — retos específicos para cada perfil.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-amber">03</div><h3>Completa 3 retos</h3><p>Ejercicios prácticos que simulan situaciones laborales reales. Sin trucos, solo habilidades.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-violet">04</div><h3>Perfil ciego generado</h3><p>Solo iniciales, sector y métricas de rendimiento. Cero datos personales.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-slate">05</div><h3>Empresas te descubren</h3><p>Las empresas filtran por skills y scores. Tu talento habla por ti.</p></div>
+    <div class="feature-card"><div class="feature-icon fi-red">06</div><h3>Match & Kill Switch</h3><p>Al ser contratado, tu perfil desaparece del pool. Talento siempre activo.</p></div>
   </div>
 </div>
 
 <!-- EXPLORAR -->
 <div id="explorar" class="search-sec">
   <div class="search-inner">
-    <div class="reveal"><div class="section-label" data-i18n="ex_label1">Retos y habilidades</div><h2 class="section-title display" data-i18n="ex_title1">Demuestra lo que sabes.</h2><p class="section-desc" data-i18n="ex_desc1">Retos universales que evalúan tus habilidades reales. Completa los que quieras y genera tu perfil verificado.</p></div>
-    <div class="search-bar-wrap reveal d1"><span class="search-icon">🔍</span><input class="search-bar" id="exSearchInput" type="search" data-i18n-placeholder="ex_ph1" aria-label="Buscar retos y habilidades" placeholder="Busca retos: marketing, python, liderazgo, excel…" oninput="filterCommonExLanding()"><button class="search-clear" id="exSearchClear" onclick="clearExSearch()">✕</button></div>
+    <div class="reveal"><div class="section-label">Retos y habilidades</div><h2 class="section-title display">Demuestra lo que sabes.</h2><p class="section-desc">Retos universales que evalúan tus habilidades reales. Completa los que quieras y genera tu perfil verificado.</p></div>
+    <div class="search-bar-wrap reveal d1"><span class="search-icon">🔍</span><input class="search-bar" id="exSearchInput" type="search" aria-label="Buscar retos y habilidades" placeholder="Busca retos: marketing, python, liderazgo, excel…" oninput="filterCommonExLanding()"><button class="search-clear" id="exSearchClear" onclick="clearExSearch()">✕</button></div>
     <div class="filters-row reveal d1" id="exCategoryFilters">
-      <button class="filter-btn active" onclick="setExCategory('all',this)" data-i18n="filt_all">Todos</button>
-      <button class="filter-btn" onclick="setExCategory('soft',this)" data-i18n="filt_soft">Soft Skills</button>
-      <button class="filter-btn" onclick="setExCategory('sector',this)" data-i18n="filt_sector">Por Sector</button>
+      <button class="filter-btn active" onclick="setExCategory('all',this)">Todos</button>
+      <button class="filter-btn" onclick="setExCategory('soft',this)">Soft Skills</button>
+      <button class="filter-btn" onclick="setExCategory('sector',this)">Por Sector</button>
     </div>
     <div class="filters-row reveal d1" style="margin-top:-12px;margin-bottom:16px" id="exLevelFilters">
-      <span style="font-size:.6875rem;color:var(--slate-400);font-weight:600;padding:6px 0" data-i18n="lvl_heading">NIVEL:</span>
-      <button class="filter-btn active" onclick="setExLevel('all',this)" style="font-size:.6875rem;padding:4px 10px" data-i18n="lvl_all">Todos</button>
-      <button class="filter-btn" onclick="setExLevel('basico',this)" style="font-size:.6875rem;padding:4px 10px;border-color:var(--emerald-200);color:var(--emerald-600)" data-i18n="lvl_basic">Básico</button>
-      <button class="filter-btn" onclick="setExLevel('intermedio',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(245,158,11,.3);color:var(--amber-500)" data-i18n="lvl_mid">Intermedio</button>
-      <button class="filter-btn" onclick="setExLevel('avanzado',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(239,68,68,.2);color:var(--red-500)" data-i18n="lvl_adv">Avanzado</button>
+      <span style="font-size:.6875rem;color:var(--slate-400);font-weight:600;padding:6px 0">NIVEL:</span>
+      <button class="filter-btn active" onclick="setExLevel('all',this)" style="font-size:.6875rem;padding:4px 10px">Todos</button>
+      <button class="filter-btn" onclick="setExLevel('basico',this)" style="font-size:.6875rem;padding:4px 10px;border-color:var(--emerald-200);color:var(--emerald-600)">Básico</button>
+      <button class="filter-btn" onclick="setExLevel('intermedio',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(245,158,11,.3);color:var(--amber-500)">Intermedio</button>
+      <button class="filter-btn" onclick="setExLevel('avanzado',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(239,68,68,.2);color:var(--red-500)">Avanzado</button>
     </div>
     <div class="results-meta" id="exResultsCount"></div>
     <div class="common-ex-grid" id="landingCommonGrid"></div>
 
-    <div class="reveal" style="margin-top:56px"><div class="section-label" data-i18n="jobs_label">Ofertas de empresas</div><h2 class="section-title display" data-i18n="jobs_title">Empresas que buscan talento.</h2><p class="section-desc" data-i18n="jobs_desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
-    <div class="search-bar-wrap reveal d1"><span class="search-icon">🔍</span><input class="search-bar" id="searchInput" type="search" data-i18n-placeholder="jobs_ph" aria-label="Buscar ofertas de empleo" placeholder="Busca por rol, sector o skill…" oninput="filterJobs()"><button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button></div>
+    <div class="reveal" style="margin-top:56px"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
+    <div class="search-bar-wrap reveal d1"><span class="search-icon">🔍</span><input class="search-bar" id="searchInput" type="search" aria-label="Buscar ofertas de empleo" placeholder="Busca por rol, sector o skill…" oninput="filterJobs()"><button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button></div>
     <div class="filters-row reveal d1" id="sectorFilters">
-      <button class="filter-btn active" onclick="setSector('all',this)" data-i18n="filt_all">Todos</button>
-      <button class="filter-btn" onclick="setSector('Marketing',this)" data-i18n="sec_mkt">Marketing</button>
-      <button class="filter-btn" onclick="setSector('IT',this)" data-i18n="sec_it">IT / Dev</button>
-      <button class="filter-btn" onclick="setSector('Data',this)" data-i18n="sec_data">Data</button>
-      <button class="filter-btn" onclick="setSector('Business',this)" data-i18n="sec_biz">Business</button>
-      <button class="filter-btn" onclick="setSector('Design',this)" data-i18n="sec_design">Diseño</button>
-      <button class="filter-btn" onclick="setSector('RRHH',this)" data-i18n="sec_hr">RRHH</button>
-      <button class="filter-btn" onclick="setSector('Finance',this)" data-i18n="sec_fin">Finanzas</button>
-      <button class="filter-btn" onclick="setSector('Sales',this)" data-i18n="sec_sales">Ventas</button>
-      <button class="filter-btn" onclick="setSector('Languages',this)" data-i18n="sec_lang">Idiomas</button>
+      <button class="filter-btn active" onclick="setSector('all',this)">Todos</button>
+      <button class="filter-btn" onclick="setSector('Marketing',this)">Marketing</button>
+      <button class="filter-btn" onclick="setSector('IT',this)">IT / Dev</button>
+      <button class="filter-btn" onclick="setSector('Data',this)">Data</button>
+      <button class="filter-btn" onclick="setSector('Business',this)">Business</button>
+      <button class="filter-btn" onclick="setSector('Design',this)">Diseño</button>
+      <button class="filter-btn" onclick="setSector('RRHH',this)">RRHH</button>
+      <button class="filter-btn" onclick="setSector('Finance',this)">Finanzas</button>
+      <button class="filter-btn" onclick="setSector('Sales',this)">Ventas</button>
+      <button class="filter-btn" onclick="setSector('Languages',this)">Idiomas</button>
     </div>
     <div class="results-meta" id="resultsCount"></div>
     <div class="jobs-grid" id="jobsGrid"></div>
-    <div class="no-results" id="noResults" style="display:none"><p data-i18n="no_jobs">No encontramos resultados. Prueba otro término.</p></div>
+    <div class="no-results" id="noResults" style="display:none"><p>No encontramos resultados. Prueba otro término.</p></div>
   </div>
 </div>
 
 <!-- CTA -->
-<div class="cta-sec"><h2 class="display" data-i18n-html="cta_h">¿Listo para contratar<br>por <em>talento real?</em></h2><p data-i18n="cta_p">Skills-based hiring para empresas que quieren contratar mejor.</p><div class="cta-btns"><button class="btn btn-primary btn-lg" onclick="openAuth('candidate')" data-i18n="cta_cand">Soy candidato →</button><button class="btn btn-white btn-lg" onclick="openAuth('empresa')" data-i18n="cta_emp">Soy empresa</button></div></div>
+<div class="cta-sec"><h2 class="display">¿Listo para contratar<br>por <em>talento real?</em></h2><p>Skills-based hiring para empresas que quieren contratar mejor.</p><div class="cta-btns"><button class="btn btn-primary btn-lg" onclick="openAuth('candidate')">Soy candidato →</button><button class="btn btn-white btn-lg" onclick="openAuth('empresa')">Soy empresa</button></div></div>
 <footer>
   <div class="footer-main">
     <div class="footer-brand">
       <div class="logo" onclick="goHome()" style="cursor:pointer"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#475569"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text" style="color:white">talent<span>pact</span></div></div>
-      <p data-i18n="foot_tag">Prove. Connect. Hire. — La plataforma de hiring basada en habilidades reales. Sin CV. Sin sesgos.</p>
+      <p>Prove. Connect. Hire. — La plataforma de hiring basada en habilidades reales. Sin CV. Sin sesgos.</p>
       <div class="footer-social">
-        <a href="https://www.linkedin.com/company/talentpact/" target="_blank" rel="noopener noreferrer" title="TalentPact en LinkedIn" aria-label="LinkedIn">in</a>
+        <a href="#" title="LinkedIn">in</a>
+        <a href="#" title="X (Twitter)">𝕏</a>
+        <a href="#" title="Instagram">ig</a>
+        <a href="#" title="YouTube">▶</a>
       </div>
-      <p class="footer-social-note" style="font-size:.7rem;color:var(--slate-500);margin-top:10px;line-height:1.4" data-i18n="foot_social_note">Otras redes: próximamente.</p>
     </div>
     <div class="footer-col">
-      <h5 data-i18n="foot_col1">Plataforma</h5>
-      <a href="#" onclick="event.preventDefault();goTo('explorar')"><span data-i18n="foot_explore">Explorar trabajos</span></a>
-      <a href="#" onclick="event.preventDefault();openAuth('candidate')"><span data-i18n="foot_cand">Para candidatos</span></a>
-      <a href="#" onclick="event.preventDefault();openAuth('empresa')"><span data-i18n="foot_emp">Para empresas</span></a>
-      <a href="#" onclick="event.preventDefault();goTo('features')"><span data-i18n="foot_how">Cómo funciona</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('pricing')"><span data-i18n="foot_price">Pricing</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('api')"><span data-i18n="foot_api">API</span></a>
+      <h5>Plataforma</h5>
+      <a href="#" onclick="goTo('explorar')">Explorar trabajos</a>
+      <a href="#" onclick="openAuth('candidate')">Para candidatos</a>
+      <a href="#" onclick="openAuth('empresa')">Para empresas</a>
+      <a href="#" onclick="goTo('features')">Cómo funciona</a>
+      <a href="#">Pricing</a>
+      <a href="#">API</a>
     </div>
     <div class="footer-col">
-      <h5 data-i18n="foot_col2">Empresa</h5>
-      <a href="#" onclick="event.preventDefault();openLegal('about')"><span data-i18n="foot_about">Sobre nosotros</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('blog')"><span data-i18n="foot_blog">Blog</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('careers')"><span data-i18n="foot_careers">Carreras</span></a>
-      <a href="#" onclick="event.preventDefault();openContact()"><span data-i18n="foot_contact">Contacto</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('press')"><span data-i18n="foot_press">Prensa</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('partners')"><span data-i18n="foot_partners">Partners</span></a>
+      <h5>Empresa</h5>
+      <a href="#">Sobre nosotros</a>
+      <a href="#">Blog</a>
+      <a href="#">Carreras</a>
+      <a href="#" onclick="openContact()">Contacto</a>
+      <a href="#">Prensa</a>
+      <a href="#">Partners</a>
     </div>
     <div class="footer-col">
-      <h5 data-i18n="foot_col3">Contacto</h5>
-      <a href="mailto:hola@talentpact.com">hola@talentpact.com</a>
-      <span style="display:block;font-size:.8125rem;color:var(--slate-500);margin-bottom:8px;line-height:1.5" data-i18n="foot_addr">Barcelona, España</span>
-      <a href="tel:+34900000000" data-i18n="foot_phone">+34 900 000 000</a>
+      <h5>Contacto</h5>
+      <a href="/cdn-cgi/l/email-protection#5139343d3d3e1125303d343f25213032257f383e"><span class="__cf_email__" data-cfemail="345c5158585b74405558515a40445557401a5d5b">[email&#160;protected]</span></a>
+      <a href="#">Barcelona, España</a>
+      <a href="#">+34 900 000 000</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span data-i18n="foot_copy">© 2026 TalentPact. Todos los derechos reservados.</span>
+    <span>© 2026 TalentPact. Todos los derechos reservados.</span>
     <div>
-      <a href="#" onclick="event.preventDefault();openLegal('aviso')"><span data-i18n="legal_link_aviso">Aviso Legal</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('privacidad')"><span data-i18n="legal_link_priv">Política de Privacidad</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('terminos')"><span data-i18n="legal_link_terms">Términos y Condiciones</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('cookies')"><span data-i18n="legal_link_cookies">Política de Cookies</span></a>
-      <a href="#" onclick="event.preventDefault();openLegal('rgpd')"><span data-i18n="legal_link_rgpd">RGPD</span></a>
+      <a href="#">Aviso Legal</a>
+      <a href="#">Política de Privacidad</a>
+      <a href="#">Términos y Condiciones</a>
+      <a href="#">Política de Cookies</a>
+      <a href="#">RGPD</a>
     </div>
   </div>
 </footer>
-
-<div id="cookieBanner" class="cookie-banner" role="dialog" aria-labelledby="cookieBannerTitle" aria-live="polite">
-  <div class="cookie-inner">
-    <p class="cookie-text" id="cookieBannerTitle"><span data-i18n="cookie_txt">TalentPact utiliza cookies técnicas necesarias y, si aceptas, analíticas (Google Analytics) para mejorar la web. Puedes rechazar las no esenciales con un solo clic. </span><a href="#" onclick="event.preventDefault();openLegal('cookies')" style="color:var(--emerald-400);font-weight:600;text-decoration:none" data-i18n="cookie_more">Más información</a></p>
-    <div class="cookie-actions">
-      <button type="button" class="btn btn-outline btn-sm" style="border-color:var(--slate-500);color:var(--slate-100)" id="cookieRejectBtn" data-i18n="cookie_reject">Solo cookies necesarias</button>
-      <button type="button" class="btn btn-primary btn-sm" id="cookieAcceptBtn" data-i18n="cookie_accept">Aceptar todas</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="legalModal" role="dialog" aria-modal="true" aria-labelledby="legalModalTitle">
-  <div class="job-modal" style="max-width:640px">
-    <button class="jm-close" type="button" onclick="closeLegalModal()" aria-label="Cerrar">✕</button>
-    <h2 class="display" style="font-size:1.35rem;margin-bottom:8px" id="legalModalTitle">TalentPact — Información legal</h2>
-    <p style="font-size:.8125rem;color:var(--slate-500);margin-bottom:16px">Documentación para usuarios y visitantes de la plataforma TalentPact.</p>
-    <div class="legal-toc" id="legalToc"></div>
-    <div class="legal-body" id="legalBody"></div>
-    <div style="margin-top:20px;text-align:right"><button type="button" class="btn btn-primary" onclick="closeLegalModal()">Cerrar</button></div>
-  </div>
-</div>
 
 <!-- EXERCISE MODAL -->
 <div class="modal-overlay" id="jobModal" role="dialog" aria-modal="true" aria-label="Detalle de oferta"><div class="job-modal"><div class="jm-header"><button class="jm-close" onclick="closeJobModal()">✕</button><div class="job-badge" id="jmBadge"></div><h2 id="jmTitle"></h2><p id="jmDesc"></p><div class="jm-progress" id="jmProgress"></div></div><div class="ex-nav" id="exNav"></div><div id="exContent"></div></div></div>
 
 <!-- CONTACT -->
-<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="contact"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2 data-i18n="cf_title">Hablemos</h2><p data-i18n="cf_sub">¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label data-i18n="cf_name">Nombre</label><input type="text" id="cf-name" name="nombre" data-i18n-placeholder="cf_ph_name" placeholder="Tu nombre" required></div><div class="fg"><label data-i18n="cf_email">Email</label><input type="email" id="cf-email" name="email" data-i18n-placeholder="cf_ph_email" placeholder="tu@empresa.com" required></div><div class="fg"><label data-i18n="cf_profile">Perfil</label><select name="perfil" id="cf-perfil"><option value="" data-i18n="cf_sel0">Selecciona…</option><option value="Inversor" data-i18n="cf_sel1">Inversor</option><option value="Empresa" data-i18n="cf_sel2">Empresa</option><option value="Aceleradora" data-i18n="cf_sel3">Aceleradora</option><option value="Otro" data-i18n="cf_sel4">Otro</option></select></div><div class="fg"><label data-i18n="cf_msg">Mensaje</label><textarea name="mensaje" id="cf-msg" data-i18n-placeholder="cf_ph_msg" placeholder="Cuéntanos…"></textarea></div><button type="button" id="cf-submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="submitContact()" data-i18n="cf_send">Enviar →</button></form><div class="fsucc" id="csucc" role="status" aria-live="assertive"><div class="fsucc-icon" aria-hidden="true">✓</div><h3 data-i18n="cf_ok_h">Mensaje enviado correctamente</h3><p class="fsucc-lead" data-i18n="cf_ok_lead">Gracias por contactar con TalentPact.</p><p class="fsucc-detail" data-i18n="cf_ok_detail">Hemos registrado tu solicitud. Revisa tu bandeja de correo (y spam): si indicaste un email válido, recibirás una copia o confirmación. El equipo suele responder en menos de 24 horas laborables.</p><button type="button" class="btn btn-primary" style="margin-top:8px" onclick="closeM('cmodal')" data-i18n="cf_close">Cerrar</button></div></div></div>
+<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="contact"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2>Hablemos</h2><p>¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label>Nombre</label><input type="text" id="cf-name" name="nombre" placeholder="Tu nombre" required></div><div class="fg"><label>Email</label><input type="email" id="cf-email" name="email" placeholder="tu@empresa.com" required></div><div class="fg"><label>Perfil</label><select name="perfil"><option value="">Selecciona…</option><option value="Inversor">Inversor</option><option value="Empresa">Empresa</option><option value="Aceleradora">Aceleradora</option><option value="Otro">Otro</option></select></div><div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos…"></textarea></div><button type="button" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="submitContact()">Enviar →</button></form><div class="fsucc" id="csucc"><h3>¡Enviado!</h3><p>Te contactamos en 24h.</p><button class="btn btn-primary" style="margin-top:14px" onclick="closeM('cmodal')">Cerrar</button></div></div></div>
 
 <!-- ═══ SUPERADMIN BACKOFFICE ═══ -->
 <div class="admin-overlay" id="dashAdmin" role="main" aria-label="Panel de superadministrador">
@@ -2277,18 +2241,18 @@ const COMMON_EXERCISES=[
      scenario:'Tu startup mide muchas cosas pero necesita enfocarse. Clasifica cada métrica.',
      type:'decision',data:{options:[{id:'m1',text:'Número total de descargas de la app (acumulado desde el lanzamiento)',correct:'vanity'},{id:'m2',text:'% de usuarios que completan onboarding en los primeros 10 minutos',correct:'actionable'},{id:'m3',text:'Seguidores en Twitter de la cuenta de la empresa',correct:'vanity'},{id:'m4',text:'Revenue por cohorte de adquisición (cuánto paga cada grupo de usuarios)',correct:'actionable'},{id:'m5',text:'Páginas vistas del blog (totales mensuales)',correct:'vanity'},{id:'m6',text:'Tasa de conversión de trial gratuito a plan de pago',correct:'actionable'}],cats:['✅ Métrica accionable','📊 Vanity metric'],keys:['actionable','vanity']}}
   ]},
-  {id:'common_sales_commercial',category:'sector',searchTerms:'ventas comercial cold calling pipeline crm cierre objeciones negociación b2b',title:'Ventas y Comercial',icon:'🎯',desc:'Cold calling, manejo de objeciones, técnicas de cierre, pipeline management y negociación comercial en escenarios B2B y B2C reales.',
+  {id:'common_sales_commercial',category:'sector',searchTerms:'ventas comercial cliente precio visita pipeline email priorizar',title:'Ventas y Comercial',icon:'🎯',desc:'Tres pasos claros: eliges visitas, respondes cuando el precio molesta y ordenas oportunidades en el pipeline.',
    skill:'Ventas y Comercial',tags:['Sector','15 min','IA evalúa'],
    exercises:[
-    {id:'e1',briefing:'Simularás una llamada en frío. El contexto del cliente aparecerá justo antes de grabar — tendrás que improvisar.',difficulty:'basico',num:'01',title:'Cold Call Improvisada',sub:'🎙️ Venta por voz — 2 min',skills:{hard:['Cold calling','Objeciones','SPIN Selling'],soft:['Improvisación','Tono de voz','Resiliencia']},
-     scenario:'Llamas a la directora de marketing de una empresa de 80 empleados. Vendes una herramienta de automatización de email marketing (€299/mes). Ella contesta: "Dime rápido, tengo 2 minutos." Tienes que captar su interés, hacer una pregunta de descubrimiento y proponer un siguiente paso.',
-     type:'audio',data:{botMessage:'📞 Directora de Marketing: "Hola, dime rápido que tengo 2 minutos."',context:'Cold call B2B — Herramienta de email marketing €299/mes',duration:120,evalCriteria:['Apertura no invasiva','Pregunta de descubrimiento (SPIN)','Propuesta de valor en <30s','Manejo del tiempo','Cierre con next step concreto']}},
-    {id:'e2',briefing:'Responderás a una objeción de precio por escrito. La objeción exacta se revelará al empezar.',timeLimit:300,difficulty:'intermedio',num:'02',title:'Manejo de Objeción de Precio',sub:'Negociación escrita — 5 min',skills:{hard:['Objeciones','Value selling','Pricing'],soft:['Empatía','Firmeza']},
-     scenario:'Después de 3 reuniones y un piloto exitoso, el cliente dice por email: "Nos gusta mucho la herramienta, pero €299/mes es el doble de lo que paga nuestro competidor principal por algo similar. Si no podéis igualar el precio, tendremos que irnos con ellos." Responde.',
-     type:'email',data:{to:'Laura Méndez — Directora de Compras',subject:'Re: Propuesta comercial — Pricing',hint:'NO bajes el precio directamente. 1) Agradece la transparencia. 2) Pregunta qué incluye la oferta del competidor (casi seguro menos). 3) Cuantifica el ROI de tu herramienta vs la otra. 4) Ofrece alternativa que no sea descuento (plan anual, features extra, soporte premium). 5) Cierre con urgencia suave.'}},
-    {id:'e3',briefing:'Priorizarás tu pipeline de ventas con datos reales. Los deals se revelarán al empezar.',timeLimit:180,difficulty:'avanzado',num:'03',title:'Pipeline Triage',sub:'Priorización — 3 min',skills:{hard:['CRM','Pipeline','Forecasting'],soft:['Juicio comercial','Eficiencia']},
-     scenario:'Viernes. Tu jefe quiere el forecast del mes. Clasifica cada deal de tu pipeline.',
-     type:'decision',data:{options:[{id:'s1',text:'€42K — Demo hecha, 3 stakeholders alineados, presupuesto aprobado, esperando firma',correct:'close'},{id:'s2',text:'€18K — 2 reuniones, le gusta pero dice "lo hablamos en enero"',correct:'nurture'},{id:'s3',text:'€65K — Solo 1 email de interés, no ha habido reunión',correct:'discard'},{id:'s4',text:'€28K — Piloto completado con éxito, el usuario ama el producto, falta aprobación del CFO',correct:'close'},{id:'s5',text:'€12K — Contacto vía LinkedIn, ha descargado un whitepaper pero no responde emails',correct:'discard'},{id:'s6',text:'€35K — Reunión positiva la semana pasada, pidieron propuesta formal para el comité',correct:'nurture'}],cats:['🎯 Cerrar este mes','🔄 Nutrir (siguiente mes)','❌ Descartar (no es real)'],keys:['close','nurture','discard']}}
+    {id:'e1',briefing:'Lees un caso breve con tres clientes. Solo tienes que decidir con lógica a quién visitas y explicarlo en frases normales.',timeLimit:360,difficulty:'basico',num:'01',title:'¿A quién visitas esta semana?',sub:'Elegir clientes — 6 min',skills:{hard:['Priorización','Criterio comercial'],soft:['Claridad','Síntesis']},
+     scenario:'Vendes una app de facturas para negocios pequeños: cafeterías, tiendas, oficinas. Esta semana solo puedes hacer dos visitas en persona.\n\nTienes tres posibles clientes:\n\n1. Café Luna — Local pequeño, seis trabajadores. La dueña quiere pagar poco. Aún no ha visto una demo de tu producto.\n\n2. Oficinas Delta — Alrededor de cincuenta personas. Ya hicieron la demo en videollamada y el responsable dijo que hay presupuesto aprobado para este mes.\n\n3. Tienda Sur — Solo te han escrito por Instagram. No sabes quién paga ni quién decide.\n\nEscribe tu respuesta en tres partes, así es más fácil de corregir:\n\nA) Los dos nombres que visitas esta semana.\n\nB) En qué orden vas (primero cuál, segundo cuál) y una razón corta para cada uno.\n\nC) Por qué el tercero lo dejas para más tarde: una o dos frases bastan.',
+     type:'analysis',data:{table:[{n:'Café Luna',a:'6 personas',b:'Sin demo aún',c:'Presión por precio',d:'Poco avanzado',cls:'v-warn'},{n:'Oficinas Delta',a:'~50 personas',b:'Demo hecha',c:'Presupuesto',d:'Muy avanzado',cls:'v-good'},{n:'Tienda Sur',a:'Desconocido',b:'Solo Instagram',c:'Sin decisor claro',d:'Muy frío',cls:'v-bad'}],headers:['Cliente','Tamaño','Situación','Señal','Resumen'],q:'Responde a las partes A, B y C usando la tabla como apoyo.',kw:['Luna','Delta','Sur','demo','presupuesto','Instagram','visita','orden','primero','segundo','tercero','espera']}},
+    {id:'e2',briefing:'Un cliente que ya te conoce te escribe con una duda de precio. Contestas con un email profesional y tranquilo.',timeLimit:360,difficulty:'intermedio',num:'02',title:'Cuando el precio es un problema',sub:'Email — 6 min',skills:{hard:['Objeciones','Email comercial'],soft:['Empatía','Claridad']},
+     scenario:'Te escriben diciendo que les gusta tu producto, pero que han visto otra opción parecida por menos de la mitad de dinero. Preguntan si podéis bajar el precio.\n\nRedacta el cuerpo del email de respuesta. No hace falta inventar datos que no conozcas: sí hace falta tono serio y pasos claros.',
+     type:'email',data:{to:'Cliente con el que ya hablas',subject:'Re: Sobre el precio',hint:'Orden sugerido para el email, en cuatro bloques:\n\n1. Agradecer y decir que entiendes que comparar precios es normal.\n\n2. Preguntar qué incluye exactamente la otra oferta, porque muchas veces no es lo mismo.\n\n3. Explicar en una o dos frases un beneficio real del vuestro: tiempo que ahorra, menos errores, soporte, seguridad, lo que te encaje al caso.\n\n4. Proponer un siguiente paso concreto: por ejemplo una llamada de quince minutos o enviar una tabla comparativa sencilla.\n\nNo envíes solo un saludo. Escribe varias frases por bloque si puedes.',minChars:280,minWords:55,kw:['gracias','precio','compet','inclu','beneficio','llamada','minuto','tabla','comparar','opción','duda','producto']}},
+    {id:'e3',briefing:'Mueves cada venta a una de tres columnas: cerrar pronto, seguir en contacto, o aparcar.',timeLimit:180,difficulty:'avanzado',num:'03',title:'Ordenar el pipeline',sub:'Tres columnas — 3 min',skills:{hard:['Pipeline','Forecast'],soft:['Juicio']},
+     scenario:'Es viernes y revisas seis ventas en curso. Para cada fila elige una sola categoría:\n\nCerrar este mes — Casi listo para firmar o cobrar, con señal clara de compra.\n\nSeguir en contacto — Hay interés real, pero falta tiempo o falta un paso concreto.\n\nAparcado — Hoy no es oportunidad real: no hay decisor, no hay presupuesto, o el contacto va muy frío.',
+     type:'decision',data:{options:[{id:'s1',text:'€42K — Demo hecha, varios responsables de acuerdo, falta solo la firma',correct:'close'},{id:'s2',text:'€18K — Le gusta, pero pospone todo a enero',correct:'nurture'},{id:'s3',text:'€65K — Solo un email de interés, sin reunión',correct:'discard'},{id:'s4',text:'€28K — Piloto bien, usuario contento, falta visto bueno de finanzas',correct:'close'},{id:'s5',text:'€12K — Descargó un PDF y no contesta a los emails',correct:'discard'},{id:'s6',text:'€35K — Buena reunión; pidieron propuesta para el comité',correct:'nurture'}],cats:['✅ Cerrar este mes','📎 Seguir en contacto','⏸ Aparcado por ahora'],keys:['close','nurture','discard']}}
   ]},
   {id:'common_finance_accounting',category:'sector',searchTerms:'finanzas contabilidad presupuesto inversión p&l balance margen ebitda roi',title:'Finanzas y Contabilidad',icon:'💰',desc:'Análisis financiero, interpretación de P&L, presupuestos, cash flow y decisiones financieras en contextos reales de empresa.',
    skill:'Finanzas y Contabilidad',tags:['Sector','15 min','IA evalúa'],
@@ -3107,27 +3071,7 @@ function renderJobMatches(){
 }
 
 // ═══ RENDER ═══
-function renderJobs(list){
-  const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');
-  const en=getUiLang()==='en',n=list.length;
-  document.getElementById('resultsCount').textContent=en?(n+' company job listing'+(n!==1?'s':'')):(n+' oferta'+(n!==1?'s':'')+' de empresas');
-  if(!list.length){g.innerHTML='';nr.style.display='block';return;}
-  nr.style.display='none';
-  const skillsLbl=en?'Required skills:':'Skills requeridos:';
-  const empLbl=en?'employees':'empleados';
-  g.innerHTML=list.map(j=>{
-    const co=COMPANIES.find(c=>c.id===j.company);
-    const req=j.requiredSkills||[];
-    const reqLevel=j.requiredLevel||'basico';
-    const levelLabel=en?(reqLevel==='avanzado'?'Advanced':reqLevel==='intermedio'?'Intermediate':'Beginner'):(reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico');
-    const levelCls='level-'+reqLevel;
-    const configLabel=en
-      ?(j.exerciseConfig==='common+custom'?'Common + custom':j.exerciseConfig==='custom'?'Custom':j.exerciseConfig==='contact'?'Tailored':'Platform')
-      :(j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes');
-    const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';
-    return`<div class="job-card" onclick="openJob('${j.id}')" role="link" tabindex="0" onkeydown="if(event.key==='Enter')openJob('${j.id}')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em">${skillsLbl}</div><div class="job-tags">${req.map(s=>`<span class="job-tag" style="border:1px solid var(--emerald-100);background:var(--emerald-50);color:var(--emerald-600)">${s}</span>`).join('')}${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?`<div class="job-company"><div class="job-company-dot" style="background:var(--slate-200);color:var(--slate-600)">${co.logo}</div>${co.name} · ${co.size} ${empLbl}</div>`:''}<div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:6px"><span class="level-badge ${levelCls}">${levelLabel}</span><span class="ex-config-badge ${configCls}">${configLabel}</span></div><span style="font-size:.72rem;font-weight:600;color:var(--emerald-600)">${en?'View role →':'Ver oferta →'}</span></div></div>`;
-  }).join('');
-}
+function renderJobs(list){const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');document.getElementById('resultsCount').textContent=`${list.length} oferta${list.length!==1?'s':''} de empresas`;if(!list.length){g.innerHTML='';nr.style.display='block';return;}nr.style.display='none';g.innerHTML=list.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return`<div class="job-card" onclick="openAuth('candidate')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em">Skills requeridos:</div><div class="job-tags">${req.map(s=>`<span class="job-tag" style="border:1px solid var(--emerald-100);background:var(--emerald-50);color:var(--emerald-600)">${s}</span>`).join('')}${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?`<div class="job-company"><div class="job-company-dot" style="background:var(--slate-200);color:var(--slate-600)">${co.logo}</div>${co.name} · ${co.size} empleados</div>`:''}<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span class="level-badge ${levelCls}">${levelLabel}</span><span class="ex-config-badge ${configCls}">${configLabel}</span></div></div>`;}).join('');}
 function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(empPostedJobs);if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}
 function setSector(s,btn){currentSector=s;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterJobs();}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClear').classList.remove('show');filterJobs();}
@@ -3397,6 +3341,9 @@ async function submitEx(i){
     candidateResponse=(document.getElementById('exAns')?.value||'').trim();
     const subj=(document.getElementById('exSubj')?.value||'').trim();
     if(!candidateResponse||candidateResponse.length<20){alert('Escribe tu respuesta (mín. 20 caracteres).');return;}
+    const ed=ex.data||{};
+    if(ed.minChars&&candidateResponse.length<ed.minChars){alert('El cuerpo del email es demasiado corto para este ejercicio: necesitas al menos '+ed.minChars+' caracteres (ahora tienes '+candidateResponse.length+').');return;}
+    if(ed.minWords){const wc=candidateResponse.split(/\s+/).filter(Boolean).length;if(wc<ed.minWords){alert('Necesitas al menos '+ed.minWords+' palabras en el cuerpo del email (ahora tienes '+wc+').');return;}}
     if(subj) candidateResponse='Asunto: '+subj+'\n\n'+candidateResponse;
   }else if(ex.type==='decision'){
     const items=document.querySelectorAll('#decItems .ex-choice');
@@ -3808,7 +3755,6 @@ let _exLevelLanding='all';
 function renderLandingCommon(filter='',cat='all',level='all'){
   const el=document.getElementById('landingCommonGrid');
   if(!el)return;
-  const en=getUiLang()==='en';
   let list=COMMON_EXERCISES.filter(ce=>Array.isArray(ce.exercises)&&ce.exercises.length);
   if(cat==='soft')list=list.filter(ce=>ce.category==='soft');
   else if(cat==='sector')list=list.filter(ce=>ce.category==='sector');
@@ -3820,9 +3766,8 @@ function renderLandingCommon(filter='',cat='all',level='all'){
     list=list.filter(ce=>(ce.title+' '+ce.desc+' '+(ce.searchTerms||'')+' '+(ce.skill||'')).toLowerCase().includes(q));
   }
   const countEl=document.getElementById('exResultsCount');
-  const n=list.length;
-  if(countEl)countEl.textContent=en?(n+' challenge'+(n!==1?'s':'')+' available'):(`${n} reto${n!==1?'s':''} disponible${n!==1?'s':''}`);
-  if(!list.length){el.innerHTML='<div style="text-align:center;padding:24px;color:var(--slate-400);grid-column:1/-1"><p>'+(en?'No challenges match your search.':'No hay retos que coincidan con tu búsqueda.')+'</p></div>';return;}
+  if(countEl)countEl.textContent=`${list.length} reto${list.length!==1?'s':''} disponible${list.length!==1?'s':''}`;
+  if(!list.length){el.innerHTML='<div style="text-align:center;padding:24px;color:var(--slate-400);grid-column:1/-1"><p>No hay retos que coincidan con tu búsqueda.</p></div>';return;}
   let h='';
   const tagsOf=ce=>(ce.tags||[]).filter(t=>t!=='Universal'&&t!=='Sector');
   list.forEach(ce=>{
@@ -3830,11 +3775,10 @@ function renderLandingCommon(filter='',cat='all',level='all'){
     const levels=ce.exercises.map(e=>e.difficulty).filter((v,i,a)=>a.indexOf(v)===i);
     const levelBadges=levels.map(l=>{
       const cls=l==='basico'?'difficulty-basico':l==='intermedio'?'difficulty-intermedio':'difficulty-avanzado';
-      const label=en?(l==='basico'?'Beginner':l==='intermedio'?'Intermediate':'Advanced'):(l==='basico'?'Básico':l==='intermedio'?'Intermedio':'Avanzado');
+      const label=l==='basico'?'Básico':l==='intermedio'?'Intermedio':'Avanzado';
       return`<span class="cex-tag ex-meta-pill ${cls}" style="font-size:.55rem;padding:2px 6px">${label}</span>`;
     }).join('');
-    const ctaHint=en?'<div style="margin-top:8px;font-size:.68rem;font-weight:600;color:var(--emerald-600)">Sign in free to start →</div>':'<div style="margin-top:8px;font-size:.68rem;font-weight:600;color:var(--emerald-600)">Cuenta gratuita para empezar →</div>';
-    h+=`<div class="common-ex-card" onclick="openAuth('candidate')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openAuth('candidate')"><span class="cex-icon">${ce.icon}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta">${catBadge}${levelBadges}${tagsOf(ce).map(t=>`<span class="cex-tag">${t}</span>`).join('')}</div>${ctaHint}</div>`;
+    h+=`<div class="common-ex-card" onclick="openAuth('candidate')"><span class="cex-icon">${ce.icon}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta">${catBadge}${levelBadges}${tagsOf(ce).map(t=>`<span class="cex-tag">${t}</span>`).join('')}</div></div>`;
   });
   el.innerHTML=h;
 }
@@ -3965,141 +3909,30 @@ function publishJob(){
 function closeDash(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
 
 // ═══ UTILS ═══
-var TP_I18N_EN={nav_explorar:'Explore',nav_features:'How it works',nav_contact:'Contact',nav_access:'Sign in',acc_cand_h:"I'm a candidate",acc_cand_p:'Complete challenges and build your skills profile',acc_emp_h:"I'm a company",acc_emp_p:'Post jobs and access the talent pool',acc_adm_h:'Admin',acc_adm_p:'Administration panel',pre_strong:'Preview version',pre_body:'This site is a TalentPact preview. The platform is under active development. Interested?',pre_link:'Contact us',hero_title:'Hire for<br><span class="gradient-text">real skills.</span><br>Not for <span style="text-decoration:line-through;color:var(--slate-400)">resumes.</span>',hero_sub:'Fully anonymous assessments with practical challenges. Candidates prove what they can do. Companies hire better and faster.',hero_btn_cand:'Start as a candidate →',hero_btn_emp:'Company access',hero_proof:'<strong>+240 candidates</strong> assessed this month',logos_title:'Companies that already trust TalentPact',stat_lbl1:'Companies struggling to validate junior hires',stat_lbl2:'Faster than traditional screening',stat_lbl3:'Personal data visible to evaluators',stat_lbl4:'Upfront cost for companies',feat_label:'How it works',feat_title:'From challenge to match in 4 steps.',feat_desc:'No CV, no bias. Only skills demonstrated in realistic work scenarios.',feat01h:'Frictionless sign-up',feat01p:'Just name and email. No CV, no photo, no personal data that drives bias.',feat02h:'Pick your track',feat02p:'Marketing, IT, Data, Business, Design, Finance, Legal, Operations — challenges tailored to each path.',feat03h:'Complete 3 challenges',feat03p:'Hands-on exercises that mirror real work situations. No tricks — skills only.',feat04h:'Blind profile generated',feat04p:'Only initials, sector and performance metrics. Zero personal identifiers.',feat05h:'Companies discover you',feat05p:'They filter by skills and scores. Your talent speaks for itself.',feat06h:'Match & kill switch',feat06p:'Once hired, your profile leaves the pool. Talent stays active.',ex_label1:'Challenges & skills',ex_title1:'Prove what you know.',ex_desc1:'Universal challenges that assess real skills. Complete any you want and build a verified profile.',ex_ph1:'Search challenges: marketing, python, leadership, excel…',filt_all:'All',filt_soft:'Soft skills',filt_sector:'By sector',lvl_heading:'LEVEL:',lvl_all:'All',lvl_basic:'Beginner',lvl_mid:'Intermediate',lvl_adv:'Advanced',jobs_label:'Company jobs',jobs_title:'Companies hiring talent.',jobs_desc:'Each company posts roles with custom challenges. See required skills and apply — no external ATS.',jobs_ph:'Search by role, sector or skill…',sec_mkt:'Marketing',sec_it:'IT / Dev',sec_data:'Data',sec_biz:'Business',sec_design:'Design',sec_hr:'HR',sec_fin:'Finance',sec_sales:'Sales',sec_lang:'Languages',no_jobs:'No results. Try another keyword.',cta_h:'Ready to hire<br>for <em>real talent?</em>',cta_p:'Skills-based hiring for companies that want better hires.',cta_cand:"I'm a candidate →",cta_emp:"I'm a company",foot_tag:'Prove. Connect. Hire. — The skills-based hiring platform. No CV. No bias.',foot_social_note:'More social channels coming soon.',foot_col1:'Platform',foot_explore:'Browse jobs',foot_cand:'For candidates',foot_emp:'For companies',foot_how:'How it works',foot_price:'Pricing',foot_api:'API',foot_col2:'Company',foot_about:'About us',foot_blog:'Blog',foot_careers:'Careers',foot_contact:'Contact',foot_press:'Press',foot_partners:'Partners',foot_col3:'Contact',foot_addr:'Barcelona, Spain',foot_phone:'+34 900 000 000',foot_copy:'© 2026 TalentPact. All rights reserved.',legal_link_aviso:'Legal notice',legal_link_priv:'Privacy policy',legal_link_terms:'Terms & conditions',legal_link_cookies:'Cookie policy',legal_link_rgpd:'GDPR',cookie_txt:'TalentPact uses essential technical cookies and, if you accept, analytics (Google Analytics) to improve the site. You can reject non-essential cookies in one click. ',cookie_more:'Learn more',cookie_reject:'Essential cookies only',cookie_accept:'Accept all',cf_title:"Let's talk",cf_sub:'Investor or company? We will get back to you within 24h.',cf_name:'Name',cf_email:'Email',cf_profile:'Profile',cf_msg:'Message',cf_ph_name:'Your name',cf_ph_email:'you@company.com',cf_ph_msg:'Tell us what you need…',cf_sel0:'Choose…',cf_sel1:'Investor',cf_sel2:'Company',cf_sel3:'Accelerator',cf_sel4:'Other',cf_send:'Send →',cf_ok_h:'Message sent successfully',cf_ok_lead:'Thank you for contacting TalentPact.',cf_ok_detail:'We have received your request. Check your inbox (and spam): if you provided a valid email, you may receive a copy or confirmation. Our team usually replies within one business day.',cf_close:'Close'};
-function getUiLang(){return localStorage.getItem('tp_ui_lang')||'es';}
-function setUiLang(code){
-  if(code!=='es'&&code!=='en')return;
-  localStorage.setItem('tp_ui_lang',code);
-  var bEs=document.getElementById('langEsBtn'),bEn=document.getElementById('langEnBtn');
-  if(bEs)bEs.classList.toggle('active',code==='es');
-  if(bEn)bEn.classList.toggle('active',code==='en');
-  applyUiLang();
-}
-function applyUiLang(){
-  var lang=getUiLang();
-  document.documentElement.setAttribute('lang',lang==='en'?'en':'es');
-  function walk(sel,attr){
-    document.querySelectorAll(sel).forEach(function(el){
-      var k=el.getAttribute(attr);
-      if(!k)return;
-      if(lang==='en'){
-        if(attr==='data-i18n'){
-          if(el.dataset.i18nEs==null)el.dataset.i18nEs=el.textContent;
-          if(TP_I18N_EN[k])el.textContent=TP_I18N_EN[k];
-        }else if(attr==='data-i18n-html'){
-          if(el.dataset.i18nEsHtml==null)el.dataset.i18nEsHtml=el.innerHTML;
-          if(TP_I18N_EN[k])el.innerHTML=TP_I18N_EN[k];
-        }else if(attr==='data-i18n-placeholder'){
-          if(el.dataset.i18nEsPh==null)el.dataset.i18nEsPh=el.getAttribute('placeholder')||'';
-          if(TP_I18N_EN[k])el.setAttribute('placeholder',TP_I18N_EN[k]);
-        }
-      }else{
-        if(attr==='data-i18n'&&el.dataset.i18nEs!=null)el.textContent=el.dataset.i18nEs;
-        if(attr==='data-i18n-html'&&el.dataset.i18nEsHtml!=null)el.innerHTML=el.dataset.i18nEsHtml;
-        if(attr==='data-i18n-placeholder'&&el.dataset.i18nEsPh!=null)el.setAttribute('placeholder',el.dataset.i18nEsPh);
-      }
-    });
-  }
-  walk('[data-i18n]','data-i18n');
-  walk('[data-i18n-html]','data-i18n-html');
-  walk('[data-i18n-placeholder]','data-i18n-placeholder');
-  if(lang==='en'){
-    document.querySelectorAll('option[data-i18n]').forEach(function(el){
-      var k=el.getAttribute('data-i18n');
-      if(el.dataset.i18nEs==null)el.dataset.i18nEs=el.textContent;
-      if(TP_I18N_EN[k])el.textContent=TP_I18N_EN[k];
-    });
-  }else{
-    document.querySelectorAll('option[data-i18n]').forEach(function(el){
-      if(el.dataset.i18nEs!=null)el.textContent=el.dataset.i18nEs;
-    });
-  }
-  try{filterJobs();}catch(e){}
-  try{filterCommonExLanding();}catch(e){}
-}
-window.__tpGtagLoaded=false;
-function loadGoogleAnalytics(){
-  if(window.__tpGtagLoaded)return;
-  window.__tpGtagLoaded=true;
-  window.dataLayer=window.dataLayer||[];
-  window.gtag=function(){dataLayer.push(arguments);};
-  var s=document.createElement('script');
-  s.async=true;
-  s.src='https://www.googletagmanager.com/gtag/js?id=G-JN1K33D5YZ';
-  s.onload=function(){gtag('js',new Date());gtag('config','G-JN1K33D5YZ');};
-  document.head.appendChild(s);
-}
-function initCookieBanner(){
-  var key='tp_cookie_consent';
-  var v=localStorage.getItem(key);
-  if(v==='all')loadGoogleAnalytics();
-  if(v)return;
-  if(window.__tpCookieInit)return;
-  window.__tpCookieInit=true;
-  var b=document.getElementById('cookieBanner');
-  if(b){b.classList.add('show');b.style.display='block';}
-  var acc=document.getElementById('cookieAcceptBtn');
-  var rej=document.getElementById('cookieRejectBtn');
-  function hide(){var el=document.getElementById('cookieBanner');if(el){el.classList.remove('show');el.style.display='none';}}
-  if(acc)acc.onclick=function(){localStorage.setItem(key,'all');loadGoogleAnalytics();hide();};
-  if(rej)rej.onclick=function(){localStorage.setItem(key,'essential');hide();};
-}
-var LEGAL_CONTENT={
-  aviso:'<h3>Aviso legal</h3><p>En cumplimiento de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), se informa de que el sitio web y los servicios asociados a la marca <strong>TalentPact</strong> son operados con fines de demostración y preview del producto.</p><p>Los datos de contacto publicados (correo electrónico, teléfono y domicilio social en Barcelona, España) permiten ejercer los derechos de comunicación con el responsable del tratamiento. El acceso al sitio implica la aceptación de las condiciones de uso vigentes en cada momento.</p>',
-  privacidad:'<h3>Política de privacidad</h3><p><strong>TalentPact</strong> trata los datos personales conforme al Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD).</p><p>Los datos enviados a través del formulario de contacto se utilizan únicamente para atender la solicitud. Puede ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a <strong>hola@talentpact.com</strong>, indicando la referencia «Protección de datos».</p>',
-  terminos:'<h3>Términos y condiciones de uso</h3><p>El uso de la plataforma <strong>TalentPact</strong> (incluida esta preview) está sujeto a estos términos. Los retos, puntuaciones y perfiles mostrados pueden ser demostrativos.</p><p>El usuario se compromete a facilitar información veraz y a no utilizar el servicio de forma fraudulenta. TalentPact se reserva el derecho a suspender cuentas que incumplan la normativa aplicable o estos términos.</p>',
-  cookies:'<h3>Política de cookies</h3><p>Utilizamos cookies técnicas necesarias para el funcionamiento del sitio (por ejemplo, preferencia de idioma y registro de su elección sobre cookies).</p><p>Si acepta el uso de analítica, se cargará <strong>Google Analytics 4</strong> (Google Ireland Limited) para estadísticas agregadas. Puede retirar su consentimiento borrando las cookies del navegador y volviendo a elegir «Solo cookies necesarias» en el banner cuando vuelva a aparecer (o contactándonos).</p>',
-  rgpd:'<h3>RGPD — información adicional</h3><p>Responsable: <strong>TalentPact</strong>. Finalidades: gestión de consultas, mejora del servicio y, en su caso, analítica web con base jurídica en el consentimiento (art. 6.1.a RGPD) o interés legítimo en el caso de cookies estrictamente necesarias.</p><p>Conservación: los datos de formulario se conservan el tiempo necesario para atender la solicitud y los plazos legales aplicables. No se ceden datos a terceros salvo obligación legal o proveedores que actúan como encargados del tratamiento (p. ej. alojamiento o analítica, con contrato tipo).</p>',
-  pricing:'<h3>Pricing</h3><p>Los planes comerciales de <strong>TalentPact</strong> se adaptan al tamaño de la empresa y al volumen de contrataciones. Para un presupuesto detallado o una demo comercial, utilice el formulario de contacto o escriba a <strong>hola@talentpact.com</strong>.</p>',
-  api:'<h3>API</h3><p>La API pública de <strong>TalentPact</strong> está en hoja de ruta. Si necesita integraciones empresariales (ATS, HRIS), indíquelo en el formulario de contacto para valorar su caso.</p>',
-  about:'<h3>Sobre nosotros</h3><p><strong>TalentPact</strong> conecta candidatos y empresas mediante evaluación práctica de habilidades, reduciendo sesgos del currículum tradicional.</p>',
-  blog:'<h3>Blog</h3><p>Próximamente publicaremos artículos sobre skills-based hiring, evaluación técnica y buenas prácticas de RRHH.</p>',
-  careers:'<h3>Carreras en TalentPact</h3><p>Si desea unirse al equipo, envíe su perfil y motivación a través del formulario de contacto indicando «Carreras».</p>',
-  press:'<h3>Prensa</h3><p>Para solicitudes de medios o notas de prensa, contacte con <strong>hola@talentpact.com</strong> con el asunto «Prensa».</p>',
-  partners:'<h3>Partners</h3><p>Programa de partners en definición. Escríbanos si representa a una aceleradora, consultora o plataforma compatible.</p>'
-};
-function openLegal(section){
-  var body=document.getElementById('legalBody');
-  var toc=document.getElementById('legalToc');
-  if(!body)return;
-  var keys=[['aviso','Aviso legal'],['privacidad','Privacidad'],['terminos','Términos'],['cookies','Cookies'],['rgpd','RGPD']];
-  toc.innerHTML=keys.map(function(x){return'<a href="#" onclick="event.preventDefault();openLegal(\''+x[0]+'\')">'+x[1]+'</a>';}).join('');
-  body.innerHTML=LEGAL_CONTENT[section]||LEGAL_CONTENT.aviso;
-  document.getElementById('legalModal').classList.add('open');
-}
-function closeLegalModal(){document.getElementById('legalModal').classList.remove('open');}
 function toggleAccessMenu(){const d=document.getElementById('accessDrop'),b=document.getElementById('accessBtn');d.classList.toggle('show');b.classList.toggle('open');}
 function closeAccessMenu(){document.getElementById('accessDrop').classList.remove('show');document.getElementById('accessBtn').classList.remove('open');}
 document.addEventListener('click',function(e){if(!e.target.closest('.nav-access'))closeAccessMenu();});
 function goTo(id){const el=document.getElementById(id);if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-70,behavior:'smooth'});}}
 function goHome(){closeDash('dashCandidate');closeDash('dashEmpresa');closeAdmin();closeAuth('authCandidate');closeAuth('authEmpresa');window.scrollTo({top:0,behavior:'smooth'});}
-function openContact(){
-  var form=document.getElementById('cform'),succ=document.getElementById('csucc'),btn=document.getElementById('cf-submit');
-  if(form){form.style.display='block';form.reset();}
-  if(succ)succ.style.display='none';
-  if(btn){btn.disabled=false;btn.textContent=(getUiLang()==='en'&&TP_I18N_EN.cf_send)?TP_I18N_EN.cf_send:'Enviar →';}
-  document.getElementById('cmodal').classList.add('open');
-}
+function openContact(){document.getElementById('cform').style.display='block';document.getElementById('csucc').style.display='none';document.getElementById('cmodal').classList.add('open');}
 function submitContact(){
   const name=document.getElementById('cf-name').value.trim();
   const email=document.getElementById('cf-email').value.trim();
-  const en=getUiLang()==='en';
-  if(!name||!email){alert(en?'Please enter your name and email.':'Rellena nombre y email.');return;}
+  if(!name||!email){alert('Rellena nombre y email.');return;}
   const form=document.getElementById('cform');
-  const btn=document.getElementById('cf-submit');
-  btn.textContent=en?'Sending…':'Enviando…';btn.disabled=true;
+  const btn=form.querySelector('button');
+  btn.textContent='Enviando…';btn.disabled=true;
   const formData=new URLSearchParams(new FormData(form)).toString();
   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData})
-    .then(function(r){if(r.ok){form.style.display='none';document.getElementById('csucc').style.display='block';if(btn){btn.textContent=en?((TP_I18N_EN.cf_send)||'Send →'):'Enviar →';btn.disabled=false;}}else{alert(en?'Could not send. Please try again.':'Error al enviar. Inténtalo de nuevo.');btn.textContent=en?((TP_I18N_EN.cf_send)||'Send →'):'Enviar →';btn.disabled=false;}})
-    .catch(function(){alert(en?'Connection error. Please try again.':'Error de conexión. Inténtalo de nuevo.');btn.textContent=en?((TP_I18N_EN.cf_send)||'Send →'):'Enviar →';btn.disabled=false;});
+    .then(function(r){if(r.ok){form.style.display='none';document.getElementById('csucc').style.display='block';}else{alert('Error al enviar. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;}})
+    .catch(function(){alert('Error de conexión. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;});
 }
 function closeM(id){document.getElementById(id).classList.remove('open');}
 document.getElementById('cmodal').addEventListener('click',function(e){if(e.target===this)closeM('cmodal');});
-document.getElementById('legalModal').addEventListener('click',function(e){if(e.target===this)closeLegalModal();});
 document.getElementById('jobModal').addEventListener('click',function(e){if(e.target===this)closeJobModal();});
 document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeM('profileModal');});
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePayModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');closeLegalModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
 document.getElementById('adminLoginModal').addEventListener('click',function(e){if(e.target===this)closeAdminLogin();});
 const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
@@ -4671,14 +4504,8 @@ function submitBugReport(){
 
 // Explorar (landing): pintar retos y ofertas cuando el DOM está listo (evita race con el parser y asegura reflow tras layout)
 function initPublicExplore(){
-  try{
-    var c=getUiLang();
-    var bEs=document.getElementById('langEsBtn'),bEn=document.getElementById('langEnBtn');
-    if(bEs)bEs.classList.toggle('active',c==='es');
-    if(bEn)bEn.classList.toggle('active',c==='en');
-    applyUiLang();
-  }catch(e){console.error('applyUiLang',e);}
-  try{initCookieBanner();}catch(e){console.error('initCookieBanner',e);}
+  try{filterCommonExLanding();}catch(e){console.error('filterCommonExLanding',e);}
+  try{filterJobs();}catch(e){console.error('filterJobs',e);}
 }
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(initPublicExplore);});
