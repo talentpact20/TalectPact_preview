@@ -4904,16 +4904,17 @@ function submitBugReport(){
   document.getElementById('bugDesc').value = '';
 }
 
-// Explorar (landing): pintar retos y ofertas cuando el DOM está listo (evita race con el parser y asegura reflow tras layout)
+// Explorar (landing): pintar retos y ofertas. Se lanza tras el evento load para no interferir con el scroll reset.
 function initPublicExplore(){
   try{filterCommonExLanding();}catch(e){console.error('filterCommonExLanding',e);}
   try{filterJobs();}catch(e){console.error('filterJobs',e);}
+  // Tras el reflow del grid, forzar de nuevo el scroll al top
+  if(typeof _scrollTop==='function'){_scrollTop();setTimeout(_scrollTop,50);setTimeout(_scrollTop,150);}
 }
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(initPublicExplore);});
-}else{
-  requestAnimationFrame(initPublicExplore);
-}
+// Esperar al load completo (fuentes, CSS) antes de pintar el grid, para que los _scrollTop previos ya hayan actuado
+window.addEventListener('load',function(){
+  setTimeout(initPublicExplore,0);
+});
 </script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->
