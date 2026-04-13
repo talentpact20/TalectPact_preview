@@ -5,14 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TalentPact — Prove. Connect. Hire.</title>
 <script>
-// Forzar scroll al top en desktop y móvil (iOS Safari incluido)
 if('scrollRestoration'in history)history.scrollRestoration='manual';
-function _scrollTop(){window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}
+function _scrollTop(){
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+}
 _scrollTop();
 document.addEventListener('DOMContentLoaded',_scrollTop);
-window.addEventListener('load',function(){_scrollTop();setTimeout(_scrollTop,50);setTimeout(_scrollTop,200);setTimeout(_scrollTop,500);});
-// iOS Safari bfcache (back/forward cache)
-window.addEventListener('pageshow',function(e){if(e.persisted||performance.navigation&&performance.navigation.type===2)_scrollTop();});
+window.addEventListener('load',function(){
+  _scrollTop();
+  // Repetir durante 1.2s para neutralizar cualquier restauración tardía del navegador móvil
+  var _n=0,_iv=setInterval(function(){
+    _scrollTop();
+    if(++_n>=24)clearInterval(_iv);
+  },50);
+});
+window.addEventListener('pageshow',function(e){
+  if(e.persisted||(performance.navigation&&performance.navigation.type===2)){
+    _scrollTop();setTimeout(_scrollTop,50);
+  }
+});
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JN1K33D5YZ"></script>
 <script>
@@ -844,7 +857,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   .access-dropdown{width:260px;right:-8px}
 
   /* ── HERO ── */
-  .hero{padding:90px 16px 50px;min-height:auto}
+  .hero{padding:90px 16px 60px;min-height:100vh;min-height:100svh}
   .hero h1{font-size:2rem;line-height:1.15}
   .hero-sub{font-size:.9rem;margin-bottom:24px}
   .hero-badge{font-size:.7rem;padding:5px 12px 5px 6px;margin-bottom:20px}
