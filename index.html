@@ -6,26 +6,25 @@
 <title>TalentPact — Prove. Connect. Hire.</title>
 <script>
 if('scrollRestoration'in history)history.scrollRestoration='manual';
+var _st_iv=null;
 function _scrollTop(){
   window.scrollTo(0,0);
   document.documentElement.scrollTop=0;
   document.body.scrollTop=0;
 }
-_scrollTop();
-document.addEventListener('DOMContentLoaded',_scrollTop);
-window.addEventListener('load',function(){
+function _startScrollGuard(){
   _scrollTop();
-  // Repetir durante 1.2s para neutralizar cualquier restauración tardía del navegador móvil
-  var _n=0,_iv=setInterval(function(){
+  if(_st_iv)clearInterval(_st_iv);
+  var _n=0;
+  _st_iv=setInterval(function(){
     _scrollTop();
-    if(++_n>=24)clearInterval(_iv);
+    if(++_n>=60)clearInterval(_st_iv); // 3s a 50ms — cubre primera carga Y recarga
   },50);
-});
-window.addEventListener('pageshow',function(e){
-  if(e.persisted||(performance.navigation&&performance.navigation.type===2)){
-    _scrollTop();setTimeout(_scrollTop,50);
-  }
-});
+}
+_startScrollGuard();
+document.addEventListener('DOMContentLoaded',_scrollTop);
+// pageshow dispara en carga inicial, recarga y vuelta atrás (bfcache)
+window.addEventListener('pageshow',function(){_startScrollGuard();});
 </script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JN1K33D5YZ"></script>
 <script>
@@ -4347,7 +4346,7 @@ document.getElementById('jobModal').addEventListener('click',function(e){if(e.ta
 document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeM('profileModal');});
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePayModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSettings('cand');closeSettings('emp');closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
-window.addEventListener('load',function(){if(typeof _scrollTop==='function'){_scrollTop();setTimeout(_scrollTop,100);}});
+window.addEventListener('load',function(){if(typeof _scrollTop==='function')_scrollTop();});
 document.getElementById('adminLoginModal').addEventListener('click',function(e){if(e.target===this)closeAdminLogin();});
 const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
