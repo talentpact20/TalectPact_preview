@@ -4131,7 +4131,7 @@ function selectLandingReto(id){
   _selectedLandingRetoId=id;_selectedLandingExIdx=0;
   document.querySelectorAll('.rpl-item').forEach(el=>el.classList.remove('active'));
   const item=document.getElementById('rplItem_'+id);
-  if(item){item.classList.add('active');item.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  if(item){item.classList.add('active');}
   const preview=document.getElementById('rplPreview');if(!preview)return;
   const ex=ce.exercises[0];if(!ex)return;
   const diffLabel=ex.difficulty==='basico'?'Básico':ex.difficulty==='intermedio'?'Intermedio':'Avanzado';
