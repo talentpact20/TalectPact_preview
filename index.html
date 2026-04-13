@@ -96,6 +96,118 @@ nav a.nl:hover{color:var(--slate-900)}
 .preview-banner-text a{color:var(--emerald-400);font-weight:600;text-decoration:none;transition:color .2s}
 .preview-banner-text a:hover{color:var(--emerald-300);text-decoration:underline}
 
+/* ── RETOS PANEL LAYOUT (landing, two-pane) ── */
+.rpl-wrap{display:grid;grid-template-columns:290px 1fr;gap:0;border:1.5px solid var(--slate-200);border-radius:var(--radius-lg);overflow:hidden;background:white;min-height:580px;margin-top:32px;box-shadow:var(--shadow-md)}
+.rpl-sidebar{border-right:1.5px solid var(--slate-100);display:flex;flex-direction:column;min-height:0;background:white}
+.rpl-sidebar-top{padding:14px 14px 10px;border-bottom:1px solid var(--slate-100);flex-shrink:0}
+.rpl-sidebar-top .search-bar-wrap{margin-bottom:8px;margin-top:0}
+.rpl-count{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--slate-400);font-weight:500;margin:0 0 8px}
+.rpl-cat-filters{display:flex;gap:4px;flex-wrap:wrap}
+.rpl-cat-btn{padding:4px 10px;border-radius:100px;border:1px solid var(--slate-200);background:white;color:var(--slate-600);font-size:.65rem;font-weight:600;cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif}
+.rpl-cat-btn:hover{border-color:var(--emerald-400);color:var(--emerald-600)}
+.rpl-cat-btn.active{background:var(--slate-900);color:white;border-color:var(--slate-900)}
+.rpl-list{flex:1;overflow-y:auto;padding:6px 0;max-height:520px;scrollbar-width:thin;scrollbar-color:var(--slate-200) transparent}
+.rpl-list::-webkit-scrollbar{width:4px}.rpl-list::-webkit-scrollbar-thumb{background:var(--slate-200);border-radius:2px}
+.rpl-group-label{padding:10px 14px 4px;font-family:'JetBrains Mono',monospace;font-size:.58rem;color:var(--slate-400);text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.rpl-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:background .15s;position:relative;border-bottom:1px solid var(--slate-50)}
+.rpl-item:hover{background:var(--slate-50)}
+.rpl-item.active{background:var(--emerald-50)}
+.rpl-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--emerald-500);border-radius:0 2px 2px 0}
+.rpl-item-icon{width:34px;height:34px;border-radius:9px;background:var(--slate-100);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;transition:background .15s}
+.rpl-item.active .rpl-item-icon{background:var(--emerald-100)}
+.rpl-item-info{flex:1;min-width:0}
+.rpl-item-title{font-size:.78rem;font-weight:700;color:var(--slate-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s}
+.rpl-item.active .rpl-item-title{color:var(--emerald-700)}
+.rpl-item-sub{font-size:.63rem;color:var(--slate-400);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpl-dots{display:flex;gap:3px;align-items:center;flex-shrink:0}
+.rpl-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
+/* Preview panel */
+.rpl-preview{display:flex;flex-direction:column;min-height:0;background:var(--slate-50)}
+.rpl-preview-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px;text-align:center;color:var(--slate-400)}
+.rpl-preview-empty span{font-size:2.5rem;margin-bottom:12px;display:block}
+.rpl-preview-empty p{font-size:.8rem;line-height:1.6}
+.rpl-pv-topbar{background:white;border-bottom:1.5px solid var(--slate-100);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0;flex-wrap:wrap}
+.rpl-pv-title{font-size:.875rem;font-weight:700;color:var(--slate-900);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpl-pv-right{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.rpl-pv-badge{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:.6rem;font-weight:700;font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+.rpl-pv-badge.basico{background:var(--emerald-50);color:var(--emerald-600);border:1px solid var(--emerald-100)}
+.rpl-pv-badge.intermedio{background:rgba(245,158,11,.08);color:var(--amber-500);border:1px solid rgba(245,158,11,.2)}
+.rpl-pv-badge.avanzado{background:rgba(239,68,68,.06);color:var(--red-500);border:1px solid rgba(239,68,68,.15)}
+.rpl-pv-exnum{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--slate-500)}
+.rpl-pv-timer{display:flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600;color:var(--emerald-600);background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:6px;padding:3px 8px}
+.rpl-ex-tabs{display:flex;border-bottom:1px solid var(--slate-100);background:white;flex-shrink:0}
+.rpl-ex-tab{flex:1;padding:9px 6px;font-size:.7rem;font-weight:600;color:var(--slate-500);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;text-align:center}
+.rpl-ex-tab:hover{color:var(--slate-700);background:var(--slate-50)}
+.rpl-ex-tab.active{color:var(--emerald-600);border-bottom-color:var(--emerald-500);background:var(--emerald-50)}
+.rpl-pv-body{padding:22px 24px 28px;flex:1;overflow-y:auto}
+.rpl-pv-warn{display:flex;align-items:flex-start;gap:8px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);border-radius:8px;padding:10px 14px;font-size:.75rem;color:var(--amber-500);margin-bottom:22px;line-height:1.5}
+.rpl-pv-center{text-align:center}
+.rpl-pv-big-icon{font-size:2.25rem;display:block;margin-bottom:14px}
+.rpl-pv-ex-title{font-family:'Sora',sans-serif;font-weight:800;font-size:1.15rem;color:var(--slate-900);margin-bottom:8px}
+.rpl-pv-ex-desc{font-size:.875rem;color:var(--slate-500);line-height:1.65;max-width:460px;margin:0 auto 20px}
+.rpl-pv-skills{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-bottom:24px}
+.rpl-pv-skill-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;letter-spacing:.07em;padding:4px 10px;border-radius:100px;border:1.5px solid var(--slate-200);color:var(--slate-600);background:white}
+.rpl-pv-cta{display:flex;justify-content:center}
+.rpl-pv-cta-btn{background:var(--slate-900);color:white;border:none;padding:13px 32px;border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px}
+.rpl-pv-cta-btn:hover{background:var(--emerald-600);transform:translateY(-2px);box-shadow:0 8px 24px rgba(16,185,129,.25)}
+@media (max-width:880px){.rpl-wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr}.rpl-sidebar{border-right:none;border-bottom:1.5px solid var(--slate-100)}.rpl-list{max-height:220px}}
+@media (max-width:640px){.rpl-wrap{border-radius:var(--radius)}.rpl-pv-topbar{flex-direction:column;align-items:flex-start;gap:6px}.rpl-pv-body{padding:14px 16px 20px}}
+
+
+/* ── SETTINGS DRAWER ── */
+.st-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:20001;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(3px)}
+.st-overlay.open{opacity:1;pointer-events:all}
+.st-drawer{position:fixed;top:0;right:0;width:min(420px,96vw);height:100%;background:white;z-index:20002;display:flex;flex-direction:column;transform:translateX(108%);transition:transform .32s cubic-bezier(.4,0,.2,1);box-shadow:-16px 0 56px rgba(15,23,42,.16)}
+.st-drawer.open{transform:translateX(0)}
+/* Topbar del drawer */
+.st-topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 22px 16px;border-bottom:1.5px solid var(--slate-100);flex-shrink:0;gap:12px}
+.st-topbar-left{display:flex;align-items:center;gap:12px;min-width:0}
+.st-topbar-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.st-topbar h2{font-size:.9375rem;font-weight:700;color:var(--slate-900);margin:0;line-height:1.2}
+.st-topbar p{font-size:.7rem;color:var(--slate-400);margin:2px 0 0}
+.st-close{width:30px;height:30px;border-radius:8px;border:none;background:var(--slate-100);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--slate-500);font-size:1rem;transition:all .15s;flex-shrink:0;line-height:1}
+.st-close:hover{background:var(--slate-200);color:var(--slate-900)}
+/* Body scrollable */
+.st-body{flex:1;overflow-y:auto;padding:20px 22px 40px;display:flex;flex-direction:column;gap:4px}
+/* Secciones */
+.st-section{margin-bottom:6px}
+.st-section-label{font-size:.6rem;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;padding-left:2px}
+/* Cards */
+.st-card{border:1.5px solid var(--slate-200);border-radius:12px;padding:14px 16px;background:white}
+/* Filas con toggle */
+.st-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--slate-100)}
+.st-row:last-child{border-bottom:none;padding-bottom:0}
+.st-row:first-child{padding-top:0}
+.st-row-info{flex:1;min-width:0}
+.st-row-info h5{font-size:.8rem;font-weight:600;color:var(--slate-900);margin-bottom:1px}
+.st-row-info p{font-size:.69rem;color:var(--slate-500);line-height:1.3}
+/* Campos de formulario */
+.st-field{margin-bottom:10px}
+.st-field:last-child{margin-bottom:0}
+.st-field label{display:block;font-size:.68rem;font-weight:600;color:var(--slate-500);margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em}
+.st-field input,.st-field select,.st-field textarea{width:100%;border:1.5px solid var(--slate-200);border-radius:8px;padding:7px 10px;font-size:.8rem;font-family:'Plus Jakarta Sans',sans-serif;color:var(--slate-900);outline:none;transition:border-color .15s;background:white;box-sizing:border-box}
+.st-field input:focus,.st-field select:focus,.st-field textarea:focus{border-color:var(--emerald-400);box-shadow:0 0 0 3px rgba(16,185,129,.07)}
+.st-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* Toggle */
+.st-tog{position:relative;width:36px;height:20px;flex-shrink:0;cursor:pointer}
+.st-tog input{opacity:0;width:0;height:0;position:absolute}
+.st-tog-sl{position:absolute;cursor:pointer;inset:0;background:var(--slate-200);border-radius:10px;transition:.2s}
+.st-tog-sl::before{content:'';position:absolute;left:3px;bottom:3px;width:14px;height:14px;border-radius:50%;background:white;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.st-tog input:checked+.st-tog-sl{background:var(--emerald-500)}
+.st-tog input:checked+.st-tog-sl::before{transform:translateX(16px)}
+/* Plan bar */
+.st-plan-bar{height:4px;background:var(--slate-100);border-radius:2px;overflow:hidden;margin:3px 0 10px}
+.st-plan-bar-fill{height:100%;border-radius:2px}
+/* Danger zone */
+.st-danger{border:1.5px solid rgba(239,68,68,.18);border-radius:12px;padding:14px 16px;background:rgba(239,68,68,.018);margin-top:4px}
+.st-danger-title{font-size:.7rem;font-weight:700;color:#ef4444;margin-bottom:5px}
+.st-danger p{font-size:.7rem;color:var(--slate-500);margin-bottom:10px;line-height:1.5}
+/* Gear button in dash-topbar */
+.dash-gear-btn{width:32px;height:32px;border-radius:9px;border:1.5px solid var(--slate-200);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--slate-500);transition:all .22s;flex-shrink:0;margin-left:4px}
+.dash-gear-btn:hover{background:var(--slate-900);color:white;border-color:var(--slate-900)}
+.dash-gear-btn:hover svg{transform:rotate(65deg)}
+.dash-gear-btn svg{width:14px;height:14px;transition:transform .38s ease}
+
 /* ── LOGOS BAR ── */
 .logos-bar{padding:40px 24px;border-bottom:1px solid var(--slate-100);text-align:center}
 .logos-bar p{font-size:.75rem;color:var(--slate-400);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:20px}
@@ -1129,7 +1241,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 </div></div>
 
 <!-- ═══ DASH CANDIDATO ═══ -->
-<div class="dash-overlay" id="dashCandidate" role="main" aria-label="Panel de candidato"><div class="dash-topbar"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600)">AC</div>Ana C.<button class="btn btn-ghost btn-sm" onclick="closeDash('dashCandidate')">Cerrar sesión</button></div></div>
+<div class="dash-overlay" id="dashCandidate" role="main" aria-label="Panel de candidato"><div class="dash-topbar"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600)">AC</div>Ana C.<button class="dash-gear-btn" onclick="openSettings('cand')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashCandidate')">Cerrar sesión</button></div></div>
 <div class="dash-body">
   <div class="dash-stats">
     <div class="dash-stat-card"><div class="dsc-val" style="color:var(--emerald-600)" id="cDashCompleted">0</div><div class="dsc-lbl">Retos completados</div></div>
@@ -1245,79 +1357,273 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div style="padding:16px 18px">
         <p style="font-size:.8125rem;color:var(--slate-600);margin-bottom:12px">¿Necesitas ayuda personalizada? Nuestro equipo responde en menos de 24h.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a href="/cdn-cgi/l/email-protection#dfacb0afb0adabba9fabbeb3bab1abafbebcabf1b6b0" class="btn btn-outline btn-sm">📧 <span class="__cf_email__" data-cfemail="790a1609160b0d1c390d18151c170d09181a0d571016">[email&#160;protected]</span></a>
+          <a href="mailto:hola@talentpact.com" class="btn btn-outline btn-sm">📧 hola@talentpact.com</a>
           <button class="btn btn-outline btn-sm" onclick="toggleChat()">💬 Chat en vivo</button>
         </div>
       </div>
     </div>
   </div>
 
-</div></div>
+</div><!-- /dash-body --></div><!-- /dashCandidate -->
 
 <!-- ═══ DASH EMPRESA ═══ -->
-<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar" style="border-bottom-color:var(--slate-200)"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--blue-100);color:var(--blue-500)">TC</div>TechCorp<button class="btn btn-ghost btn-sm" onclick="closeDash('dashEmpresa')">Cerrar sesión</button></div></div>
+<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar" style="border-bottom-color:var(--slate-200)"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--blue-100);color:var(--blue-500)">TC</div>TechCorp<button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashEmpresa')">Cerrar sesión</button></div></div>
+
 <div class="dash-body">
+  <!-- Estadísticas siempre visibles -->
   <div class="dash-stats"><div class="dash-stat-card"><div class="dsc-val" style="color:var(--blue-500)" id="empStatOffers">4</div><div class="dsc-lbl">Ofertas activas</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--emerald-600)">127</div><div class="dsc-lbl">Candidatos en pool</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--amber-500)">23</div><div class="dsc-lbl">Score >80</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--slate-400)">€0</div><div class="dsc-lbl">Contactos desbloqueados</div></div></div>
-  
-  <!-- PAYMENT METHOD -->
-  <div class="dash-section">
-    <div class="dash-section-head"><div class="dash-section-title">💳 Método de pago</div><button class="btn btn-outline btn-sm" onclick="toggleAddPayMethod()">+ Añadir método</button></div>
-    <div class="pm-card">
-      <div class="pm-methods">
-        <div class="pm-method active" onclick="selectPayMethod('card',this)">
-          <div class="pm-method-icon">💳</div>
-          <div class="pm-method-info"><h5>Tarjeta de crédito</h5><p>Visa, Mastercard, AMEX</p></div>
-          <div class="pm-check">✓</div>
-        </div>
-        <div class="pm-method" onclick="selectPayMethod('transfer',this)">
-          <div class="pm-method-icon">🏦</div>
-          <div class="pm-method-info"><h5>Transferencia SEPA</h5><p>Domiciliación bancaria</p></div>
-          <div class="pm-check"></div>
-        </div>
-        <div class="pm-method" onclick="selectPayMethod('invoice',this)">
-          <div class="pm-method-icon">📄</div>
-          <div class="pm-method-info"><h5>Factura</h5><p>Pago a 30 días (Plan Enterprise)</p></div>
-          <div class="pm-check"></div>
-        </div>
-      </div>
-      <div class="pm-saved-card" id="empSavedCard">
-        <span class="card-brand">💳</span>
-        <div class="card-info"><div class="card-num">Visa •••• •••• •••• 4242</div><div class="card-exp">Expira 09/2028 · Predeterminada</div></div>
-        <button class="btn btn-outline btn-sm" onclick="toggleAddPayMethod()">Cambiar</button>
-      </div>
-      <div class="pm-add-form" id="pmAddForm">
-        <div style="font-size:.78rem;font-weight:700;margin-bottom:12px">Añadir nueva tarjeta</div>
-        <div style="margin-bottom:10px"><input class="pm-input" placeholder="Nombre del titular" style="width:100%"></div>
-        <div style="margin-bottom:10px"><input class="pm-input" placeholder="Número de tarjeta" maxlength="19" oninput="this.value=this.value.replace(/\D/g,'').replace(/(.{4})/g,'$1 ').trim()" style="width:100%;font-family:JetBrains Mono,monospace"></div>
-        <div class="pm-input-row">
-          <input class="pm-input" placeholder="MM/AA" maxlength="5" oninput="if(this.value.length===2&&!this.value.includes('/'))this.value+='/'">
-          <input class="pm-input" placeholder="CVC" maxlength="4" type="password">
-        </div>
-        <div style="display:flex;gap:8px;margin-top:12px">
-          <button class="btn btn-primary btn-sm" onclick="savePayMethod()">Guardar tarjeta</button>
-          <button class="btn btn-outline btn-sm" onclick="toggleAddPayMethod()">Cancelar</button>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:10px;font-size:.6rem;color:var(--slate-400)">🔒 Datos encriptados con SSL 256-bit · Procesado por Stripe</div>
+
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label>Salario</label><input type="text" id="pj-salary" placeholder="22.000€ - 28.000€"></div><div class="pj-field"><label>Modalidad</label><select id="pj-mode"><option>Remoto</option><option>Híbrido</option><option>Presencial</option></select></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
+    <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">Selecciona qué habilidades verificadas necesita el candidato. Escribe para filtrar.</p><input class="search-bar" id="pjSkillSearch" type="text" placeholder="Buscar skill: python, excel, liderazgo…" oninput="renderPjSkills()" style="font-size:.78rem;padding:8px 12px;margin-bottom:8px;width:100%;box-sizing:border-box"><div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><button class="filter-btn active" onclick="setPjSkillCat('all',this)" style="font-size:.65rem;padding:3px 8px">Todos</button><button class="filter-btn" onclick="setPjSkillCat('soft',this)" style="font-size:.65rem;padding:3px 8px">Soft Skills</button><button class="filter-btn" onclick="setPjSkillCat('sector',this)" style="font-size:.65rem;padding:3px 8px">Sectoriales</button><button class="filter-btn" onclick="setPjSkillCat('selected',this)" style="font-size:.65rem;padding:3px 8px">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
+    <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)">🟢 Básico <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)">🟡 Intermedio <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)">🔴 Avanzado <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥75)</span></div></div></div>
+    <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>📋 Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🏢 Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🎯 Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
+    </div><div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" onclick="publishJob()">Publicar oferta →</button><button class="btn btn-outline" onclick="togglePostJob()">Cancelar</button></div></div></div></div>
+
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Mis ofertas</div></div><div id="empJobsList"></div></div>
+
+    <div class="dash-section" id="empOfferCandidatesSection" style="display:none">
+      <div class="dash-section-head"><div class="dash-section-title" id="empOfferCandTitle">Candidatos para: —</div><button class="btn btn-outline btn-sm" onclick="hideOfferCandidates()">← Volver a ofertas</button></div>
+      <p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:16px;">Candidatos que encajan con esta oferta según sus skills verificados. Para ver su contacto real, desbloquea el perfil.</p>
+      <div id="empOfferCandList"></div>
+    </div>
+
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:12px;">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
+
+
+
+</div><!-- /dash-body --></div><!-- /dashEmpresa -->
+
+<!-- ═══ SETTINGS DRAWER — CANDIDATO ═══ -->
+<div class="st-overlay" id="stOverlayCand" onclick="closeSettings('cand')"></div>
+<aside class="st-drawer" id="stDrawerCand" aria-label="Ajustes de candidato">
+  <div class="st-topbar">
+    <div class="st-topbar-left">
+      <div class="st-topbar-icon" style="background:var(--emerald-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <div>
+        <h2>Ajustes</h2>
+        <p>Cuenta de candidato · Ana Casanova</p>
       </div>
     </div>
+    <button class="st-close" onclick="closeSettings('cand')">✕</button>
   </div>
+  <div class="st-body">
 
-  <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label>Salario</label><input type="text" id="pj-salary" placeholder="22.000€ - 28.000€"></div><div class="pj-field"><label>Modalidad</label><select id="pj-mode"><option>Remoto</option><option>Híbrido</option><option>Presencial</option></select></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
-  <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">Selecciona qué habilidades verificadas necesita el candidato. Escribe para filtrar.</p><input class="search-bar" id="pjSkillSearch" type="text" placeholder="Buscar skill: python, excel, liderazgo…" oninput="renderPjSkills()" style="font-size:.78rem;padding:8px 12px;margin-bottom:8px;width:100%;box-sizing:border-box"><div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><button class="filter-btn active" onclick="setPjSkillCat('all',this)" style="font-size:.65rem;padding:3px 8px">Todos</button><button class="filter-btn" onclick="setPjSkillCat('soft',this)" style="font-size:.65rem;padding:3px 8px">Soft Skills</button><button class="filter-btn" onclick="setPjSkillCat('sector',this)" style="font-size:.65rem;padding:3px 8px">Sectoriales</button><button class="filter-btn" onclick="setPjSkillCat('selected',this)" style="font-size:.65rem;padding:3px 8px">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
-  <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)">🟢 Básico <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)">🟡 Intermedio <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)">🔴 Avanzado <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥75)</span></div></div></div>
-  <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>📋 Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🏢 Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🎯 Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
-  </div><div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" onclick="publishJob()">Publicar oferta →</button><button class="btn btn-outline" onclick="togglePostJob()">Cancelar</button></div></div></div></div>
-  
-  <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Mis ofertas</div></div><div id="empJobsList"></div></div>
-  
-  <div class="dash-section" id="empOfferCandidatesSection" style="display:none">
-    <div class="dash-section-head"><div class="dash-section-title" id="empOfferCandTitle">Candidatos para: —</div><button class="btn btn-outline btn-sm" onclick="hideOfferCandidates()">← Volver a ofertas</button></div>
-    <p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:16px;">Candidatos que encajan con esta oferta según sus skills verificados. Para ver su contacto real, desbloquea el perfil.</p>
-    <div id="empOfferCandList"></div>
+    <!-- PERFIL -->
+    <div class="st-section">
+      <div class="st-section-label">Datos personales</div>
+      <div class="st-card">
+        <div class="st-grid">
+          <div class="st-field"><label>Nombre</label><input type="text" value="Ana"></div>
+          <div class="st-field"><label>Apellido</label><input type="text" value="Casanova"></div>
+        </div>
+        <div class="st-field"><label>Email</label><input type="email" value="ana.casanova@email.com"></div>
+        <div class="st-grid">
+          <div class="st-field"><label>Sector preferido</label><select><option>IT / Dev</option><option selected>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option></select></div>
+          <div class="st-field"><label>Ciudad</label><input type="text" placeholder="Barcelona…"></div>
+        </div>
+        <div class="st-grid">
+          <div class="st-field"><label>LinkedIn</label><input type="url" placeholder="linkedin.com/in/…"></div>
+          <div class="st-field"><label>GitHub / Portafolio</label><input type="url" placeholder="github.com/…"></div>
+        </div>
+        <div style="margin-top:4px"><button class="btn btn-primary btn-sm" onclick="alert('Perfil guardado.')">Guardar cambios</button></div>
+      </div>
+    </div>
+
+    <!-- PRIVACIDAD -->
+    <div class="st-section">
+      <div class="st-section-label">Privacidad</div>
+      <div class="st-card">
+        <div style="background:var(--emerald-50);border-radius:8px;padding:9px 12px;font-size:.7rem;color:var(--emerald-700);margin-bottom:12px;display:flex;gap:8px">🔒 <span>Tu nombre y contacto son siempre anónimos hasta que una empresa pague por desbloquearte <em>y tú aceptes</em>.</span></div>
+        <div class="st-row"><div class="st-row-info"><h5>Visible en el pool de talento</h5><p>Las empresas pueden encontrar tu perfil</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Recibir solicitudes de contacto</h5><p>Empresas pueden pagarte para desbloquearte</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Aparecer en ranking público</h5><p>Tu posición anónima en el leaderboard</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Notificar cuando me desbloqueen</h5><p>Email inmediato al ser desbloqueado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+      </div>
+    </div>
+
+    <!-- NOTIFICACIONES -->
+    <div class="st-section">
+      <div class="st-section-label">Notificaciones</div>
+      <div class="st-card">
+        <div class="st-row"><div class="st-row-info"><h5>Resultado de reto completado</h5><p>Score y feedback por email</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Empresa desbloqueó tu contacto</h5><p>Alerta inmediata</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Nuevas ofertas que encajan</h5><p>Match ≥70% con tus skills</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Recordatorio retos pendientes</h5><p>Resumen semanal</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Novedades de TalentPact</h5><p>Nuevas funciones y retos</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+      </div>
+    </div>
+
+    <!-- INCENTIVOS -->
+    <div class="st-section">
+      <div class="st-section-label">Incentivos económicos</div>
+      <div class="st-card">
+        <div style="display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--emerald-50);border-radius:10px;margin-bottom:14px">
+          <div style="font-family:'Sora',sans-serif;font-size:1.75rem;font-weight:800;color:var(--emerald-700);line-height:1" id="stCandEarned">€0</div>
+          <div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--emerald-700)">Ganados</div>
+            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px" id="stCandEarnedDesc">Completa retos avanzados con score ≥75 para ganar €100 c/u.</div>
+          </div>
+        </div>
+        <div class="st-grid">
+          <div class="st-field"><label>Nombre titular</label><input type="text" placeholder="Ana Casanova"></div>
+          <div class="st-field"><label>Método de cobro</label><select><option>Transferencia IBAN</option><option>PayPal</option></select></div>
+        </div>
+        <div class="st-field"><label>IBAN / Email PayPal</label><input type="text" placeholder="ES00 0000 0000 0000 0000 0000"></div>
+        <button class="btn btn-primary btn-sm" onclick="alert('Datos de cobro guardados.')">Guardar datos de cobro</button>
+      </div>
+    </div>
+
+    <!-- SEGURIDAD -->
+    <div class="st-section">
+      <div class="st-section-label">Seguridad y acceso</div>
+      <div class="st-card">
+        <div class="st-row"><div class="st-row-info"><h5>Contraseña</h5><p>Última actualización: hace 1 mes</p></div><button class="btn btn-outline btn-sm" onclick="alert('Recibirás un email para restablecer tu contraseña.')">Cambiar</button></div>
+        <div class="st-row"><div class="st-row-info"><h5>Verificación en 2 pasos</h5><p>Protege tu cuenta con un segundo factor</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Sesiones activas</h5><p>Chrome · macOS · Barcelona — Ahora</p></div><button class="btn btn-outline btn-sm" onclick="alert('Cerrar sesiones en otros dispositivos.')">Cerrar otras</button></div>
+        <div class="st-row"><div class="st-row-info"><h5>Exportar mis datos</h5><p>Retos, scores y perfil completo</p></div><button class="btn btn-outline btn-sm" onclick="alert('Tu archivo estará listo en 24h y se enviará por email.')">Exportar →</button></div>
+      </div>
+      <div class="st-danger">
+        <div class="st-danger-title">⚠️ Zona de peligro</div>
+        <p>Si eliminas tu cuenta perderás todos tus retos, scores y ranking. Irreversible.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="alert('Tu perfil se ocultará temporalmente del pool.')">Ocultar perfil</button>
+          <button class="btn btn-danger btn-sm" onclick="alert('Esta acción es irreversible. Contacta con soporte.')">Eliminar cuenta</button>
+        </div>
+      </div>
+    </div>
+
   </div>
-  
-  <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:12px;">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
-</div></div>
+</aside>
+
+<!-- ═══ SETTINGS DRAWER — EMPRESA ═══ -->
+<div class="st-overlay" id="stOverlayEmp" onclick="closeSettings('emp')"></div>
+<aside class="st-drawer" id="stDrawerEmp" aria-label="Ajustes de empresa">
+  <div class="st-topbar">
+    <div class="st-topbar-left">
+      <div class="st-topbar-icon" style="background:var(--blue-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <div>
+        <h2>Ajustes</h2>
+        <p>Cuenta de empresa · TechCorp S.L.</p>
+      </div>
+    </div>
+    <button class="st-close" onclick="closeSettings('emp')">✕</button>
+  </div>
+  <div class="st-body">
+
+    <!-- PERFIL EMPRESA -->
+    <div class="st-section">
+      <div class="st-section-label">Perfil de empresa</div>
+      <div class="st-card">
+        <div class="st-grid">
+          <div class="st-field"><label>Nombre de empresa</label><input type="text" value="TechCorp S.L."></div>
+          <div class="st-field"><label>Sector principal</label><select><option selected>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
+        </div>
+        <div class="st-grid">
+          <div class="st-field"><label>Tamaño</label><select><option>1-10</option><option selected>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
+          <div class="st-field"><label>Web corporativa</label><input type="url" placeholder="https://techcorp.com"></div>
+        </div>
+        <div class="st-field"><label>Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
+        <button class="btn btn-primary btn-sm" onclick="alert('Perfil guardado.')">Guardar cambios</button>
+      </div>
+    </div>
+
+    <!-- PLAN Y USO -->
+    <div class="st-section">
+      <div class="st-section-label">Plan y estadísticas</div>
+      <div class="st-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+          <div>
+            <span style="font-size:.65rem;font-weight:700;background:var(--slate-100);color:var(--slate-600);padding:3px 9px;border-radius:5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em">FREE</span>
+            <div style="font-size:.68rem;color:var(--slate-400);margin-top:4px">Plan actual</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="alert('Planes Pro disponibles próximamente.')">Actualizar a Pro →</button>
+        </div>
+        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Contactos desbloqueados este mes</span><strong style="color:var(--slate-900)">2 / 5</strong></div>
+        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:40%;background:var(--emerald-500)"></div></div>
+        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Ofertas activas</span><strong style="color:var(--slate-900)">4 / 5</strong></div>
+        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:80%;background:var(--amber-500)"></div></div>
+        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Candidatos en pool visibles</span><strong style="color:var(--emerald-600)">Ilimitado</strong></div>
+        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:100%;background:var(--emerald-500)"></div></div>
+      </div>
+    </div>
+
+    <!-- FACTURACIÓN -->
+    <div class="st-section">
+      <div class="st-section-label">Datos de facturación</div>
+      <div class="st-card">
+        <div class="st-grid">
+          <div class="st-field"><label>Razón social</label><input type="text" value="TechCorp S.L."></div>
+          <div class="st-field"><label>CIF / NIF</label><input type="text" placeholder="B-12345678"></div>
+        </div>
+        <div class="st-grid">
+          <div class="st-field"><label>Email de facturación</label><input type="email" placeholder="contabilidad@techcorp.com"></div>
+          <div class="st-field"><label>Teléfono</label><input type="tel" placeholder="+34 91 000 0000"></div>
+        </div>
+        <div class="st-field"><label>Dirección fiscal</label><input type="text" placeholder="Calle Gran Vía, 28, 4ºA, Madrid"></div>
+        <button class="btn btn-primary btn-sm" onclick="alert('Datos de facturación guardados.')">Guardar</button>
+      </div>
+    </div>
+
+    <!-- MÉTODO DE PAGO -->
+    <div class="st-section">
+      <div class="st-section-label">Método de pago</div>
+      <div class="st-card">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--slate-100)">
+          <span style="font-size:1.4rem">💳</span>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:.8rem;font-weight:600;color:var(--slate-900)">Visa •••• •••• •••• 4242</div>
+            <div style="font-size:.68rem;color:var(--slate-400)">Expira 09/2028 · Predeterminada</div>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="alert('Gestión de tarjetas disponible en versión completa.')">Cambiar</button>
+        </div>
+        <div style="margin-top:12px">
+          <div style="font-size:.68rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Últimos pagos</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--slate-100);font-size:.78rem">
+            <span style="color:var(--slate-600)">Contacto #1847 · 12 Mar 2026</span>
+            <span style="font-weight:700;color:var(--slate-900)">€49</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.78rem">
+            <span style="color:var(--slate-600)">Contacto #1293 · 28 Feb 2026</span>
+            <span style="font-weight:700;color:var(--slate-900)">€49</span>
+          </div>
+        </div>
+        <div style="margin-top:10px"><button class="btn btn-outline btn-sm" onclick="alert('Funcionalidad disponible en versión completa.')">+ Añadir nueva tarjeta</button></div>
+      </div>
+    </div>
+
+    <!-- NOTIFICACIONES -->
+    <div class="st-section">
+      <div class="st-section-label">Notificaciones</div>
+      <div class="st-card">
+        <div class="st-row"><div class="st-row-info"><h5>Nuevo candidato que encaja</h5><p>Match ≥70% con alguna oferta tuya</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Contacto desbloqueado</h5><p>Confirmación de pago realizado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Candidato completa tu reto</h5><p>Cuando termina un ejercicio personalizado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Resumen semanal del pool</h5><p>Nuevos candidatos con skills relevantes</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Novedades de TalentPact</h5><p>Nuevas funciones y mejoras</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+      </div>
+    </div>
+
+    <!-- SEGURIDAD -->
+    <div class="st-section">
+      <div class="st-section-label">Seguridad y cuenta</div>
+      <div class="st-card">
+        <div class="st-row"><div class="st-row-info"><h5>Contraseña</h5><p>Última actualización: hace 3 meses</p></div><button class="btn btn-outline btn-sm" onclick="alert('Recibirás un email para restablecer tu contraseña.')">Cambiar</button></div>
+        <div class="st-row"><div class="st-row-info"><h5>Verificación en 2 pasos</h5><p>Protege el acceso a tu cuenta</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Sesiones activas</h5><p>Chrome · macOS · Barcelona — Activa</p></div><button class="btn btn-outline btn-sm" onclick="alert('Cerrar todas las sesiones remotas.')">Cerrar otras</button></div>
+        <div class="st-row"><div class="st-row-info"><h5>Registro de actividad</h5><p>Accesos y cambios de la cuenta</p></div><button class="btn btn-outline btn-sm" onclick="alert('Historial disponible en versión completa.')">Ver log →</button></div>
+      </div>
+      <div class="st-danger">
+        <div class="st-danger-title">⚠️ Zona de peligro</div>
+        <p>Pausar desactiva temporalmente tus ofertas y oculta tu empresa del pool.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="alert('Tu cuenta se pausará. Los candidatos no verán tus ofertas.')">Pausar cuenta</button>
+          <button class="btn btn-danger btn-sm" onclick="alert('Esta acción es irreversible. Contacta con soporte.')">Eliminar cuenta</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>
 
 <!-- ═══ PROFILE MODAL ═══ -->
 <div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-label="Perfil de candidato"><div class="job-modal" style="max-width:580px"><div id="profileContent"></div></div></div>
@@ -1365,21 +1671,28 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 <div id="explorar" class="search-sec">
   <div class="search-inner">
     <div class="reveal"><div class="section-label">Retos y habilidades</div><h2 class="section-title display">Demuestra lo que sabes.</h2><p class="section-desc">Retos universales que evalúan tus habilidades reales. Completa los que quieras y genera tu perfil verificado.</p></div>
-    <div class="search-bar-wrap reveal d1"><span class="search-icon">🔍</span><input class="search-bar" id="exSearchInput" type="search" aria-label="Buscar retos y habilidades" placeholder="Busca retos: marketing, python, liderazgo, excel…" oninput="filterCommonExLanding()"><button class="search-clear" id="exSearchClear" onclick="clearExSearch()">✕</button></div>
-    <div class="filters-row reveal d1" id="exCategoryFilters">
-      <button class="filter-btn active" onclick="setExCategory('all',this)">Todos</button>
-      <button class="filter-btn" onclick="setExCategory('soft',this)">Soft Skills</button>
-      <button class="filter-btn" onclick="setExCategory('sector',this)">Por Sector</button>
+
+    <!-- TWO-PANE RETOS LAYOUT -->
+    <div class="rpl-wrap reveal d1">
+      <!-- Sidebar: lista de retos -->
+      <aside class="rpl-sidebar">
+        <div class="rpl-sidebar-top">
+          <div class="search-bar-wrap" style="margin:0 0 8px"><span class="search-icon">🔍</span><input class="search-bar" id="exSearchInput" type="search" aria-label="Buscar retos" placeholder="Buscar: liderazgo, python…" oninput="filterCommonExLanding()" style="font-size:.78rem;padding:9px 12px 9px 38px"><button class="search-clear" id="exSearchClear" onclick="clearExSearch()">✕</button></div>
+          <div class="rpl-count" id="exResultsCount"></div>
+          <div class="rpl-cat-filters" id="exCategoryFilters">
+            <button class="rpl-cat-btn active" onclick="setExCategory('all',this)">Todos</button>
+            <button class="rpl-cat-btn" onclick="setExCategory('soft',this)">Soft Skills</button>
+            <button class="rpl-cat-btn" onclick="setExCategory('sector',this)">Por Sector</button>
+          </div>
+        </div>
+        <div class="rpl-list" id="landingCommonGrid"></div>
+      </aside>
+
+      <!-- Panel derecho: preview del reto seleccionado -->
+      <div class="rpl-preview" id="rplPreview">
+        <div class="rpl-preview-empty"><span>👈</span><p>Selecciona un reto para ver su contenido</p></div>
+      </div>
     </div>
-    <div class="filters-row reveal d1" style="margin-top:-12px;margin-bottom:16px" id="exLevelFilters">
-      <span style="font-size:.6875rem;color:var(--slate-400);font-weight:600;padding:6px 0">NIVEL:</span>
-      <button class="filter-btn active" onclick="setExLevel('all',this)" style="font-size:.6875rem;padding:4px 10px">Todos</button>
-      <button class="filter-btn" onclick="setExLevel('basico',this)" style="font-size:.6875rem;padding:4px 10px;border-color:var(--emerald-200);color:var(--emerald-600)">Básico</button>
-      <button class="filter-btn" onclick="setExLevel('intermedio',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(245,158,11,.3);color:var(--amber-500)">Intermedio</button>
-      <button class="filter-btn" onclick="setExLevel('avanzado',this)" style="font-size:.6875rem;padding:4px 10px;border-color:rgba(239,68,68,.2);color:var(--red-500)">Avanzado</button>
-    </div>
-    <div class="results-meta" id="exResultsCount"></div>
-    <div class="common-ex-grid" id="landingCommonGrid"></div>
 
     <div class="reveal" style="margin-top:56px"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
     <div class="search-bar-wrap reveal d1"><span class="search-icon">🔍</span><input class="search-bar" id="searchInput" type="search" aria-label="Buscar ofertas de empleo" placeholder="Busca por rol, sector o skill…" oninput="filterJobs()"><button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button></div>
@@ -3749,8 +4062,11 @@ function processPayment(){
   },1500);
 }
 
+// ═══ RETOS PANEL LAYOUT (landing) ═══
 let _exCategoryLanding='all';
 let _exLevelLanding='all';
+let _selectedLandingRetoId=null;
+let _selectedLandingExIdx=0;
 
 function renderLandingCommon(filter='',cat='all',level='all'){
   const el=document.getElementById('landingCommonGrid');
@@ -3758,29 +4074,69 @@ function renderLandingCommon(filter='',cat='all',level='all'){
   let list=COMMON_EXERCISES.filter(ce=>Array.isArray(ce.exercises)&&ce.exercises.length);
   if(cat==='soft')list=list.filter(ce=>ce.category==='soft');
   else if(cat==='sector')list=list.filter(ce=>ce.category==='sector');
-  if(level!=='all'){
-    list=list.filter(ce=>ce.exercises.some(e=>e.difficulty===level));
-  }
-  if(filter){
-    const q=filter.toLowerCase();
-    list=list.filter(ce=>(ce.title+' '+ce.desc+' '+(ce.searchTerms||'')+' '+(ce.skill||'')).toLowerCase().includes(q));
-  }
+  if(level!=='all')list=list.filter(ce=>ce.exercises.some(e=>e.difficulty===level));
+  if(filter){const q=filter.toLowerCase();list=list.filter(ce=>(ce.title+' '+ce.desc+' '+(ce.searchTerms||'')+' '+(ce.skill||'')).toLowerCase().includes(q));}
   const countEl=document.getElementById('exResultsCount');
-  if(countEl)countEl.textContent=`${list.length} reto${list.length!==1?'s':''} disponible${list.length!==1?'s':''}`;
-  if(!list.length){el.innerHTML='<div style="text-align:center;padding:24px;color:var(--slate-400);grid-column:1/-1"><p>No hay retos que coincidan con tu búsqueda.</p></div>';return;}
+  if(countEl)countEl.textContent=`${list.length} reto${list.length!==1?'s':''}`;
+  if(!list.length){
+    el.innerHTML='<div style="padding:20px;text-align:center;color:var(--slate-400);font-size:.75rem">No hay retos que coincidan.</div>';
+    const prev=document.getElementById('rplPreview');
+    if(prev)prev.innerHTML='<div class="rpl-preview-empty"><span>🔍</span><p>Sin resultados para tu búsqueda.</p></div>';
+    return;
+  }
+  const dotColor=l=>l==='basico'?'var(--emerald-500)':l==='intermedio'?'var(--amber-500)':'var(--red-500)';
+  const buildRow=ce=>{
+    const levels=[...new Set(ce.exercises.map(e=>e.difficulty))];
+    const dots=levels.map(l=>`<span class="rpl-dot" style="background:${dotColor(l)}"></span>`).join('');
+    const sub=ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').slice(0,2).join(' · ')||ce.category==='sector'?'Por Sector':'Soft Skill';
+    return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${ce.icon}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${sub}</div></div><div class="rpl-dots">${dots}</div></div>`;
+  };
+  const softList=list.filter(ce=>ce.category==='soft');
+  const sectorList=list.filter(ce=>ce.category==='sector');
   let h='';
-  const tagsOf=ce=>(ce.tags||[]).filter(t=>t!=='Universal'&&t!=='Sector');
-  list.forEach(ce=>{
-    const catBadge=ce.category==='sector'?`<span class="cex-tag" style="background:var(--blue-100);color:var(--blue-500);border:1px solid rgba(59,130,246,.15)">Sector</span>`:`<span class="cex-tag universal">Universal</span>`;
-    const levels=ce.exercises.map(e=>e.difficulty).filter((v,i,a)=>a.indexOf(v)===i);
-    const levelBadges=levels.map(l=>{
-      const cls=l==='basico'?'difficulty-basico':l==='intermedio'?'difficulty-intermedio':'difficulty-avanzado';
-      const label=l==='basico'?'Básico':l==='intermedio'?'Intermedio':'Avanzado';
-      return`<span class="cex-tag ex-meta-pill ${cls}" style="font-size:.55rem;padding:2px 6px">${label}</span>`;
-    }).join('');
-    h+=`<div class="common-ex-card" onclick="openAuth('candidate')"><span class="cex-icon">${ce.icon}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta">${catBadge}${levelBadges}${tagsOf(ce).map(t=>`<span class="cex-tag">${t}</span>`).join('')}</div></div>`;
-  });
+  if(cat!=='sector'&&softList.length){h+=`<div class="rpl-group-label">Soft Skills Universales</div>`;softList.forEach(ce=>{h+=buildRow(ce);});}
+  if(cat!=='soft'&&sectorList.length){h+=`<div class="rpl-group-label" style="margin-top:6px">Por Sector</div>`;sectorList.forEach(ce=>{h+=buildRow(ce);});}
   el.innerHTML=h;
+  // Auto-select: keep current selection if still visible, otherwise first item
+  const stillVisible=_selectedLandingRetoId&&list.find(c=>c.id===_selectedLandingRetoId);
+  selectLandingReto(stillVisible?_selectedLandingRetoId:list[0].id);
+}
+
+function buildLandingExBody(ce,idx){
+  const ex=ce.exercises[idx];if(!ex)return'';
+  const hardSkills=(ex.skills?.hard||[]).slice(0,3);
+  const softSkills=(ex.skills?.soft||[]).slice(0,2);
+  const allSkills=[...hardSkills,...softSkills];
+  const timerMins=ex.timeLimit?Math.floor(ex.timeLimit/60):8;
+  const timerStr=timerMins+':00';
+  return`<div class="rpl-pv-warn"><span>⚠️</span> El escenario se revelará cuando pulses "Empezar". El timer empieza al instante.</div><div class="rpl-pv-center"><span class="rpl-pv-big-icon">${ce.icon}</span><div class="rpl-pv-ex-title">${ex.title}</div><p class="rpl-pv-ex-desc">${ex.briefing}</p><div class="rpl-pv-skills">${allSkills.map(s=>`<span class="rpl-pv-skill-tag">${s.toUpperCase()}</span>`).join('')}</div><div class="rpl-pv-cta"><button class="rpl-pv-cta-btn" onclick="openAuth('candidate')">Únete para empezar →</button></div></div>`;
+}
+
+function selectLandingReto(id){
+  const ce=COMMON_EXERCISES.find(c=>c.id===id);if(!ce)return;
+  _selectedLandingRetoId=id;_selectedLandingExIdx=0;
+  document.querySelectorAll('.rpl-item').forEach(el=>el.classList.remove('active'));
+  const item=document.getElementById('rplItem_'+id);
+  if(item){item.classList.add('active');item.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  const preview=document.getElementById('rplPreview');if(!preview)return;
+  const ex=ce.exercises[0];if(!ex)return;
+  const diffLabel=ex.difficulty==='basico'?'Básico':ex.difficulty==='intermedio'?'Intermedio':'Avanzado';
+  const timerMins=ex.timeLimit?Math.floor(ex.timeLimit/60):8;
+  const exTabs=ce.exercises.map((e,i)=>`<button class="rpl-ex-tab${i===0?' active':''}" onclick="selectLandingEx(${i})">${e.num}. ${e.title.length>22?e.title.slice(0,22)+'…':e.title}</button>`).join('');
+  preview.innerHTML=`<div class="rpl-pv-topbar"><div class="rpl-pv-title">${ce.title} — ${ex.title}</div><div class="rpl-pv-right"><span class="rpl-pv-badge ${ex.difficulty}">${diffLabel.toUpperCase()}</span><span class="rpl-pv-exnum">Ejercicio 1 de ${ce.exercises.length}</span><span class="rpl-pv-timer">⏱ ${timerMins}:00</span></div></div><div class="rpl-ex-tabs">${exTabs}</div><div class="rpl-pv-body" id="rplPreviewBody">${buildLandingExBody(ce,0)}</div>`;
+}
+
+function selectLandingEx(idx){
+  _selectedLandingExIdx=idx;
+  const ce=COMMON_EXERCISES.find(c=>c.id===_selectedLandingRetoId);if(!ce)return;
+  const ex=ce.exercises[idx];if(!ex)return;
+  document.querySelectorAll('.rpl-ex-tab').forEach((t,i)=>t.classList.toggle('active',i===idx));
+  const diffLabel=ex.difficulty==='basico'?'Básico':ex.difficulty==='intermedio'?'Intermedio':'Avanzado';
+  const timerMins=ex.timeLimit?Math.floor(ex.timeLimit/60):8;
+  const topbar=document.querySelector('.rpl-pv-topbar');
+  if(topbar)topbar.innerHTML=`<div class="rpl-pv-title">${ce.title} — ${ex.title}</div><div class="rpl-pv-right"><span class="rpl-pv-badge ${ex.difficulty}">${diffLabel.toUpperCase()}</span><span class="rpl-pv-exnum">Ejercicio ${idx+1} de ${ce.exercises.length}</span><span class="rpl-pv-timer">⏱ ${timerMins}:00</span></div>`;
+  const body=document.getElementById('rplPreviewBody');
+  if(body)body.innerHTML=buildLandingExBody(ce,idx);
 }
 
 function filterCommonExLanding(){
@@ -3791,15 +4147,13 @@ function filterCommonExLanding(){
 
 function setExCategory(cat,btn){
   _exCategoryLanding=cat;
-  document.querySelectorAll('#exCategoryFilters .filter-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('#exCategoryFilters .rpl-cat-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   filterCommonExLanding();
 }
 
 function setExLevel(level,btn){
   _exLevelLanding=level;
-  document.querySelectorAll('#exLevelFilters .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
   filterCommonExLanding();
 }
 
@@ -3808,6 +4162,7 @@ function clearExSearch(){
   document.getElementById('exSearchClear').classList.remove('show');
   renderLandingCommon('',_exCategoryLanding,_exLevelLanding);
 }
+
 function renderEmpPool(){let h='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Top Skills</th><th></th></tr></thead><tbody>';CANDIDATES.forEach(c=>{h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${c.i}</div>#${1000+parseInt(c.id.slice(1))*111}</div></td><td>${c.sector}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${s.n}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${c.id}')">Ver perfil</button></td></tr>`;});h+='</tbody></table>';document.getElementById('empPool').innerHTML=h;}
 function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${c.i}</div><div class="cp-info"><h3>Candidato anónimo</h3><div class="cp-meta">${c.sector} · Score: ${c.score} · Perfil ciego</div></div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${s.n}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="alert('Solicitud enviada. Se notificará al candidato.');closeM('profileModal')">Solicitar contacto →</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
 
@@ -3913,7 +4268,38 @@ function toggleAccessMenu(){const d=document.getElementById('accessDrop'),b=docu
 function closeAccessMenu(){document.getElementById('accessDrop').classList.remove('show');document.getElementById('accessBtn').classList.remove('open');}
 document.addEventListener('click',function(e){if(!e.target.closest('.nav-access'))closeAccessMenu();});
 function goTo(id){const el=document.getElementById(id);if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-70,behavior:'smooth'});}}
-function goHome(){closeDash('dashCandidate');closeDash('dashEmpresa');closeAdmin();closeAuth('authCandidate');closeAuth('authEmpresa');window.scrollTo({top:0,behavior:'smooth'});}
+function goHome(){closeDash('dashCandidate');closeDash('dashEmpresa');closeAdmin();closeAuth('authCandidate');closeAuth('authEmpresa');closeSettings('cand');closeSettings('emp');window.scrollTo({top:0,behavior:'smooth'});}
+
+// ═══ SETTINGS DRAWER ═══
+function openSettings(type){
+  const id=type==='cand'?'stDrawerCand':'stDrawerEmp';
+  const ov=type==='cand'?'stOverlayCand':'stOverlayEmp';
+  const d=document.getElementById(id);
+  const o=document.getElementById(ov);
+  if(d)d.classList.add('open');
+  if(o)o.classList.add('open');
+  if(type==='cand')updateStCandIncentives();
+}
+function closeSettings(type){
+  const id=type==='cand'?'stDrawerCand':'stDrawerEmp';
+  const ov=type==='cand'?'stOverlayCand':'stOverlayEmp';
+  const d=document.getElementById(id);
+  const o=document.getElementById(ov);
+  if(d)d.classList.remove('open');
+  if(o)o.classList.remove('open');
+}
+function updateStCandIncentives(){
+  const done=(candidateProfile&&candidateProfile.completedCommon)||[];
+  const q=done.filter(c=>c.score>=75);
+  const el=document.getElementById('stCandEarned');
+  const desc=document.getElementById('stCandEarnedDesc');
+  if(el)el.textContent='€'+(q.length*100);
+  if(desc){
+    if(q.length===0)desc.textContent='Completa retos avanzados con score ≥75 para ganar €100 c/u.';
+    else if(q.length>=3)desc.textContent='¡Máximo alcanzado! 3 × €100 ganados. ¡Enhorabuena!';
+    else desc.textContent=q.length+' reto'+(q.length>1?'s':'')+' calificado'+(q.length>1?'s':'')+' · €'+((3-q.length)*100)+' disponibles aún.';
+  }
+}
 function openContact(){document.getElementById('cform').style.display='block';document.getElementById('csucc').style.display='none';document.getElementById('cmodal').classList.add('open');}
 function submitContact(){
   const name=document.getElementById('cf-name').value.trim();
@@ -3932,7 +4318,7 @@ document.getElementById('cmodal').addEventListener('click',function(e){if(e.targ
 document.getElementById('jobModal').addEventListener('click',function(e){if(e.target===this)closeJobModal();});
 document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeM('profileModal');});
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePayModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSettings('cand');closeSettings('emp');closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
 document.getElementById('adminLoginModal').addEventListener('click',function(e){if(e.target===this)closeAdminLogin();});
 const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
