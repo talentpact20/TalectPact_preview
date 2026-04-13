@@ -4,7 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TalentPact — Prove. Connect. Hire.</title>
-<script>if('scrollRestoration'in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+<script>
+// Forzar scroll al top en desktop y móvil (iOS Safari incluido)
+if('scrollRestoration'in history)history.scrollRestoration='manual';
+function _scrollTop(){window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0;}
+_scrollTop();
+document.addEventListener('DOMContentLoaded',_scrollTop);
+window.addEventListener('load',function(){_scrollTop();setTimeout(_scrollTop,50);setTimeout(_scrollTop,200);});
+// iOS Safari bfcache (back/forward cache)
+window.addEventListener('pageshow',function(e){if(e.persisted||performance.navigation&&performance.navigation.type===2)_scrollTop();});
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JN1K33D5YZ"></script>
 <script>
 window.dataLayer=window.dataLayer||[];
@@ -4324,7 +4333,7 @@ document.getElementById('jobModal').addEventListener('click',function(e){if(e.ta
 document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeM('profileModal');});
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePayModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSettings('cand');closeSettings('emp');closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
-window.addEventListener('load',function(){window.scrollTo(0,0);});
+window.addEventListener('load',function(){if(typeof _scrollTop==='function'){_scrollTop();setTimeout(_scrollTop,100);}});
 document.getElementById('adminLoginModal').addEventListener('click',function(e){if(e.target===this)closeAdminLogin();});
 const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
