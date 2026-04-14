@@ -107,6 +107,9 @@ exports.handler = async (event) => {
     parsed.overall = String(parsed.overall || "");
     parsed.aiPowered = true;
     parsed.modelUsed = selectedModel;
+    parsed.configuredModel = configuredModel;
+    parsed.usedConfiguredModel = selectedModel === configuredModel;
+    parsed.triedModels = triedModels;
 
     return jsonResponse(200, parsed);
   } catch (err) {
