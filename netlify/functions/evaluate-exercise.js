@@ -33,12 +33,23 @@ exports.handler = async (event) => {
       })
     });
 
-    const raw = await apiRes.json();
+    const rawText = await apiRes.text();
+    let raw;
+    try {
+      raw = JSON.parse(rawText || "{}");
+    } catch (_err) {
+      raw = { non_json_body: rawText?.slice(0, 1200) || "" };
+    }
     if (!apiRes.ok) {
+      console.error("Anthropic error:", {
+        status: apiRes.status,
+        body: raw
+      });
       return jsonResponse(502, {
         error: "Anthropic API request failed",
         anthropic_status: apiRes.status,
-        details: raw?.error?.message || "Unknown Anthropic error"
+        details: raw?.error?.message || "Unknown Anthropic error",
+        anthropic_type: raw?.error?.type || null
       });
     }
 
