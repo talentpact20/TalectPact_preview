@@ -4,7 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TalentPact — Prove. Connect. Hire.</title>
-<script>if('scrollRestoration'in history)history.scrollRestoration='manual';window.scrollTo(0,0);</script>
+<script>
+if('scrollRestoration'in history)history.scrollRestoration='manual';
+var _st_iv=null;
+function _scrollTop(){
+  window.scrollTo(0,0);
+  document.documentElement.scrollTop=0;
+  document.body.scrollTop=0;
+}
+function _startScrollGuard(){
+  _scrollTop();
+  if(_st_iv)clearInterval(_st_iv);
+  var _n=0;
+  _st_iv=setInterval(function(){
+    _scrollTop();
+    if(++_n>=60)clearInterval(_st_iv); // 3s a 50ms — cubre primera carga Y recarga
+  },50);
+}
+_startScrollGuard();
+document.addEventListener('DOMContentLoaded',_scrollTop);
+// pageshow dispara en carga inicial, recarga y vuelta atrás (bfcache)
+window.addEventListener('pageshow',function(){_startScrollGuard();});
+</script>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-JN1K33D5YZ"></script>
 <script>
 window.dataLayer=window.dataLayer||[];
@@ -13,7 +34,7 @@ gtag('js',new Date());
 gtag('config','G-JN1K33D5YZ');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&family=Anybody:ital,wght@0,800;0,900;1,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&family=Anybody:ital,wght@0,800;0,900;1,800&display=optional" rel="stylesheet">
 <style>
 :root{
   --slate-950:#0a0f1a;--slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;
@@ -29,7 +50,8 @@ gtag('config','G-JN1K33D5YZ');
   --shadow-xl:0 20px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+html{scroll-behavior:auto;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;overflow-anchor:none}
+body{overflow-anchor:none}
 body{background:var(--white);color:var(--slate-900);font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;line-height:1.6;overflow-x:hidden}
 
 /* ── TYPOGRAPHY ── */
@@ -834,7 +856,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   .access-dropdown{width:260px;right:-8px}
 
   /* ── HERO ── */
-  .hero{padding:90px 16px 50px;min-height:auto}
+  .hero{padding:90px 16px 60px;min-height:100vh;min-height:100svh}
   .hero h1{font-size:2rem;line-height:1.15}
   .hero-sub{font-size:.9rem;margin-bottom:24px}
   .hero-badge{font-size:.7rem;padding:5px 12px 5px 6px;margin-bottom:20px}
@@ -4122,7 +4144,7 @@ function selectLandingReto(id){
   _selectedLandingRetoId=id;_selectedLandingExIdx=0;
   document.querySelectorAll('.rpl-item').forEach(el=>el.classList.remove('active'));
   const item=document.getElementById('rplItem_'+id);
-  if(item){item.classList.add('active');item.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  if(item){item.classList.add('active');}
   const preview=document.getElementById('rplPreview');if(!preview)return;
   const ex=ce.exercises[0];if(!ex)return;
   const diffLabel=ex.difficulty==='basico'?'Básico':ex.difficulty==='intermedio'?'Intermedio':'Avanzado';
@@ -4324,7 +4346,7 @@ document.getElementById('jobModal').addEventListener('click',function(e){if(e.ta
 document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeM('profileModal');});
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePayModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSettings('cand');closeSettings('emp');closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
-window.addEventListener('load',function(){window.scrollTo(0,0);});
+window.addEventListener('load',function(){if(typeof _scrollTop==='function')_scrollTop();});
 document.getElementById('adminLoginModal').addEventListener('click',function(e){if(e.target===this)closeAdminLogin();});
 const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
@@ -4894,16 +4916,17 @@ function submitBugReport(){
   document.getElementById('bugDesc').value = '';
 }
 
-// Explorar (landing): pintar retos y ofertas cuando el DOM está listo (evita race con el parser y asegura reflow tras layout)
+// Explorar (landing): pintar retos y ofertas. Se lanza tras el evento load para no interferir con el scroll reset.
 function initPublicExplore(){
   try{filterCommonExLanding();}catch(e){console.error('filterCommonExLanding',e);}
   try{filterJobs();}catch(e){console.error('filterJobs',e);}
+  // Tras el reflow del grid, forzar de nuevo el scroll al top
+  if(typeof _scrollTop==='function'){_scrollTop();setTimeout(_scrollTop,50);setTimeout(_scrollTop,150);}
 }
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',function(){requestAnimationFrame(initPublicExplore);});
-}else{
-  requestAnimationFrame(initPublicExplore);
-}
+// Esperar al load completo (fuentes, CSS) antes de pintar el grid, para que los _scrollTop previos ya hayan actuado
+window.addEventListener('load',function(){
+  setTimeout(initPublicExplore,0);
+});
 </script>
 
 <section style="margin-top:32px;padding:40px 20px;border-top:1px solid var(--slate-100);background:linear-gradient(180deg,#f8fafc 0%,#ffffff 100%);text-align:center">
