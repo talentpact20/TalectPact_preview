@@ -3829,9 +3829,15 @@ ${response}
 IMPORTANTE: Si la respuesta es incoherente, basura, o no aborda el escenario, puntúa 0-10. No seas condescendiente. Evalúa como lo haría un director de RRHH exigente.
 Responde SOLO con JSON.`;
 
+  // TODO: Sustituye por tu clave real antes de desplegar
+  const ANTHROPIC_API_KEY = "REEMPLAZA_AQUI_TU_API_KEY";
   const res=await fetch("https://api.anthropic.com/v1/messages",{
     method:"POST",
-    headers:{"Content-Type":"application/json"},
+    headers:{
+      "Content-Type":"application/json",
+      "x-api-key":ANTHROPIC_API_KEY,
+      "anthropic-version":"2023-06-01"
+    },
     body:JSON.stringify({
       model:"claude-sonnet-4-20250514",
       max_tokens:1000,
