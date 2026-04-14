@@ -4,7 +4,7 @@ exports.handler = async (event) => {
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  const model = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-latest";
+  const configuredModel = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-latest";
   if (!apiKey) {
     return jsonResponse(500, { error: "Missing ANTHROPIC_API_KEY in environment variables" });
   }
@@ -18,38 +18,68 @@ exports.handler = async (event) => {
       return jsonResponse(400, { error: "systemPrompt and userPrompt are required" });
     }
 
-    const apiRes = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01"
-      },
-      body: JSON.stringify({
-        model,
-        max_tokens: 1000,
-        system: systemPrompt,
-        messages: [{ role: "user", content: userPrompt }]
-      })
-    });
+    const triedModels = [];
+    const modelCandidates = uniqueModels([
+      configuredModel,
+      "claude-3-5-sonnet-latest",
+      "claude-3-5-haiku-latest",
+      "claude-sonnet-4-20250514"
+    ]);
+    let apiRes = null;
+    let raw = null;
+    let selectedModel = null;
 
-    const rawText = await apiRes.text();
-    let raw;
-    try {
-      raw = JSON.parse(rawText || "{}");
-    } catch (_err) {
-      raw = { non_json_body: rawText?.slice(0, 1200) || "" };
+    for (const model of modelCandidates) {
+      triedModels.push(model);
+      const attemptRes = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          "x-api-key": apiKey,
+          "anthropic-version": "2023-06-01"
+        },
+        body: JSON.stringify({
+          model,
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{ role: "user", content: userPrompt }]
+        })
+      });
+      const rawText = await attemptRes.text();
+      let parsedBody;
+      try {
+        parsedBody = JSON.parse(rawText || "{}");
+      } catch (_err) {
+        parsedBody = { non_json_body: rawText?.slice(0, 1200) || "" };
+      }
+
+      if (attemptRes.ok) {
+        apiRes = attemptRes;
+        raw = parsedBody;
+        selectedModel = model;
+        break;
+      }
+
+      const errType = parsedBody?.error?.type || null;
+      if (errType !== "not_found_error") {
+        apiRes = attemptRes;
+        raw = parsedBody;
+        break;
+      }
     }
-    if (!apiRes.ok) {
+
+    if (!apiRes || !apiRes.ok) {
       console.error("Anthropic error:", {
-        status: apiRes.status,
-        body: raw
+        status: apiRes?.status || 0,
+        body: raw,
+        tried_models: triedModels
       });
       return jsonResponse(502, {
         error: "Anthropic API request failed",
-        anthropic_status: apiRes.status,
+        anthropic_status: apiRes?.status || 0,
         details: raw?.error?.message || "Unknown Anthropic error",
-        anthropic_type: raw?.error?.type || null
+        anthropic_type: raw?.error?.type || null,
+        tried_models: triedModels
       });
     }
 
@@ -76,6 +106,7 @@ exports.handler = async (event) => {
     }
     parsed.overall = String(parsed.overall || "");
     parsed.aiPowered = true;
+    parsed.modelUsed = selectedModel;
 
     return jsonResponse(200, parsed);
   } catch (err) {
@@ -95,4 +126,8 @@ function jsonResponse(statusCode, payload) {
     headers: { "content-type": "application/json" },
     body: JSON.stringify(payload)
   };
+}
+
+function uniqueModels(models) {
+  return [...new Set(models.filter(Boolean))];
 }
