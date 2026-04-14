@@ -3829,21 +3829,16 @@ ${response}
 IMPORTANTE: Si la respuesta es incoherente, basura, o no aborda el escenario, puntúa 0-10. No seas condescendiente. Evalúa como lo haría un director de RRHH exigente.
 Responde SOLO con JSON.`;
 
-  const res=await fetch("https://api.anthropic.com/v1/messages",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      model:"claude-sonnet-4-20250514",
-      max_tokens:1000,
-      messages:[{role:"user",content:userPrompt}],
-      system:systemPrompt
-    })
+  const res=await fetch('/.netlify/functions/evaluate-exercise',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({systemPrompt,userPrompt})
   });
-
-  const data=await res.json();
-  const text=data.content?.map(c=>c.text||'').join('')||'';
-  const clean=text.replace(/```json|```/g,'').trim();
-  const parsed=JSON.parse(clean);
+  if(!res.ok){
+    const err=await res.json().catch(()=>({error:'Error desconocido en evaluación IA'}));
+    throw new Error(err.error||'Error en evaluación IA');
+  }
+  const parsed=await res.json();
   
   // Validate scores — NO default to 50, default to 0
   parsed.score=Math.max(0,Math.min(100,Math.round(parsed.score||0)));
@@ -4728,18 +4723,20 @@ REGLAS:
 - Sé amable y profesional`;
 
   try{
-    const res=await fetch("https://api.anthropic.com/v1/messages",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
+    const res=await fetch('/.netlify/functions/support-chat',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:300,
-        system:systemPrompt,
+        systemPrompt,
         messages:_aiChatHistory.slice(-10)
       })
     });
+    if(!res.ok){
+      const err=await res.json().catch(()=>({error:'Error desconocido en chat IA'}));
+      throw new Error(err.error||'Error en chat IA');
+    }
     const data=await res.json();
-    const reply=data.content?.map(c=>c.text||'').join('')||'Disculpa, no he podido procesar tu mensaje. ¿Puedes reformularlo?';
+    const reply=data.reply||'Disculpa, no he podido procesar tu mensaje. ¿Puedes reformularlo?';
     _aiChatHistory.push({role:'assistant',content:reply});
     document.getElementById('aiTyping')?.remove();
     body.innerHTML+=`<div class="ai-msg ai-msg-bot">${reply.replace(/</g,'&lt;').replace(/\n/g,'<br>')}</div>`;
