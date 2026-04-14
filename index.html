@@ -10,7 +10,7 @@ var _st_iv=null;
 function _scrollTop(){
   window.scrollTo(0,0);
   document.documentElement.scrollTop=0;
-  document.body.scrollTop=0;
+  if(document.body)document.body.scrollTop=0;
 }
 function _startScrollGuard(){
   _scrollTop();
@@ -3836,7 +3836,7 @@ Responde SOLO con JSON.`;
   });
   if(!res.ok){
     const err=await res.json().catch(()=>({error:'Error desconocido en evaluación IA'}));
-    throw new Error(err.error||'Error en evaluación IA');
+    throw new Error((err.error||'Error en evaluación IA')+(err.details?': '+err.details:''));
   }
   const parsed=await res.json();
   

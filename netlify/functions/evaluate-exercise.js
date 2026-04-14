@@ -37,6 +37,7 @@ exports.handler = async (event) => {
     if (!apiRes.ok) {
       return jsonResponse(502, {
         error: "Anthropic API request failed",
+        anthropic_status: apiRes.status,
         details: raw?.error?.message || "Unknown Anthropic error"
       });
     }
