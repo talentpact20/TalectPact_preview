@@ -529,6 +529,11 @@ nav a.nl:hover{color:var(--slate-900)}
 .cta-sec h2 em{font-style:italic;color:var(--emerald-400)}
 .cta-sec p{color:var(--slate-400);max-width:440px;margin:0 auto 32px;font-size:.9375rem}
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.beta-cta{background:white;border-top:1px solid var(--slate-200);border-bottom:1px solid var(--slate-200)}
+.beta-cta::before{display:none}
+.beta-cta h2{color:var(--slate-900)}
+.beta-cta h2 em{color:var(--slate-900)}
+.beta-cta p{color:var(--slate-600)}
 
 /* ── FOOTER ── */
 footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:var(--slate-400)}
@@ -1739,6 +1744,13 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
 <!-- CTA -->
 <div class="cta-sec"><h2 class="display">¿Listo para contratar<br>por <em>talento real?</em></h2><p>Skills-based hiring para empresas que quieren contratar mejor.</p><div class="cta-btns"><button class="btn btn-primary btn-lg" onclick="openAuth('candidate')">Soy candidato →</button><button class="btn btn-white btn-lg" onclick="openAuth('empresa')">Soy empresa</button></div></div>
+<section class="cta-sec beta-cta">
+  <h2 class="display">Accede a la <em>beta gratuita</em></h2>
+  <p>Rellena esta breve encuesta para clientes y te daremos acceso prioritario a TalentPact.</p>
+  <div class="cta-btns">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScULQvDbB5M4pbUA-Ec60U1wyOF_yxOd3dDWe6L_ZY_HMACgA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">Acceder a la beta →</a>
+  </div>
+</section>
 <footer>
   <div class="footer-main">
     <div class="footer-brand">
@@ -1774,15 +1786,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <a href="/cdn-cgi/l/email-protection#5139343d3d3e1125303d343f25213032257f383e"><span class="__cf_email__" data-cfemail="345c5158585b74405558515a40445557401a5d5b">[email&#160;protected]</span></a>
       <a href="#">Barcelona, España</a>
       <a href="#">+34 900 000 000</a>
-    </div>
-  </div>
-  <div style="max-width:1200px;margin:0 auto;padding:0 24px 24px">
-    <div style="border:1px solid var(--slate-700);background:var(--slate-800);border-radius:14px;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
-      <div>
-        <p style="margin:0 0 4px;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-400);font-weight:700">Beta TalentPact</p>
-        <p style="margin:0;color:var(--slate-200);font-size:.86rem;line-height:1.5">Accede a la beta gratuita completando la encuesta para clientes.</p>
-      </div>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLScULQvDbB5M4pbUA-Ec60U1wyOF_yxOd3dDWe6L_ZY_HMACgA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn btn-white">Accede a la beta gratuita</a>
     </div>
   </div>
   <div class="footer-bottom">
