@@ -228,6 +228,36 @@ nav a.nl:hover{color:var(--slate-900)}
 /* Plan bar */
 .st-plan-bar{height:4px;background:var(--slate-100);border-radius:2px;overflow:hidden;margin:3px 0 10px}
 .st-plan-bar-fill{height:100%;border-radius:2px}
+/* ── SUSCRIPCIÓN EMPRESA ── */
+.emp-sub-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:4px}
+.emp-sub-card{border:1.5px solid var(--slate-200);border-radius:12px;padding:18px 16px;background:white;position:relative;transition:box-shadow .2s,border-color .2s}
+.emp-sub-card.current{border-color:var(--blue-400);background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.emp-sub-card.popular{border-color:var(--emerald-400)}
+.emp-sub-badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--emerald-500);color:white;font-size:.6rem;font-weight:700;letter-spacing:.06em;padding:2px 10px;border-radius:20px;white-space:nowrap}
+.emp-sub-badge.current-badge{background:var(--blue-500)}
+.emp-sub-name{font-size:.75rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.emp-sub-price{font-size:1.5rem;font-weight:800;color:var(--slate-900);line-height:1;margin-bottom:2px}
+.emp-sub-price span{font-size:.75rem;font-weight:500;color:var(--slate-500)}
+.emp-sub-desc{font-size:.7rem;color:var(--slate-500);margin-bottom:12px;line-height:1.4}
+.emp-sub-features{list-style:none;padding:0;margin:0 0 14px;display:flex;flex-direction:column;gap:5px}
+.emp-sub-features li{font-size:.72rem;color:var(--slate-600);display:flex;gap:6px;align-items:flex-start}
+.emp-sub-features li::before{content:'✓';color:var(--emerald-500);font-weight:700;flex-shrink:0;margin-top:1px}
+.emp-sub-features li.no::before{content:'✕';color:var(--slate-300)}
+.emp-sub-features li.no{color:var(--slate-400)}
+.emp-sub-btn{width:100%;padding:8px 12px;border-radius:8px;font-size:.75rem;font-weight:600;border:1.5px solid var(--slate-200);background:white;color:var(--slate-700);cursor:pointer;transition:all .2s}
+.emp-sub-btn:hover{border-color:var(--blue-400);color:var(--blue-600)}
+.emp-sub-btn.active{background:var(--blue-500);color:white;border-color:var(--blue-500);cursor:default}
+.emp-sub-btn.cta{background:var(--slate-900);color:white;border-color:var(--slate-900)}
+.emp-sub-btn.cta:hover{background:var(--slate-700)}
+.emp-sub-usage{background:var(--slate-50);border:1px solid var(--slate-200);border-radius:10px;padding:14px 16px;margin-top:4px}
+.emp-sub-usage-title{font-size:.7rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.emp-sub-usage-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.emp-sub-usage-row:last-child{margin-bottom:0}
+.emp-sub-usage-label{font-size:.72rem;color:var(--slate-600);flex:1}
+.emp-sub-usage-val{font-size:.72rem;font-weight:600;color:var(--slate-800);white-space:nowrap}
+.emp-sub-usage-bar{flex:2;height:5px;background:var(--slate-200);border-radius:3px;overflow:hidden}
+.emp-sub-usage-fill{height:100%;border-radius:3px;transition:width .4s ease}
+@media(max-width:700px){.emp-sub-wrap{grid-template-columns:1fr}}
 /* Danger zone */
 .st-danger{border:1.5px solid rgba(239,68,68,.18);border-radius:12px;padding:14px 16px;background:rgba(239,68,68,.018);margin-top:4px}
 .st-danger-title{font-size:.7rem;font-weight:700;color:#ef4444;margin-bottom:5px}
@@ -1408,6 +1438,97 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   <!-- Estadísticas siempre visibles -->
   <div class="dash-stats"><div class="dash-stat-card"><div class="dsc-val" style="color:var(--blue-500)" id="empStatOffers">4</div><div class="dsc-lbl">Ofertas activas</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--emerald-600)">127</div><div class="dsc-lbl">Candidatos en pool</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--amber-500)">23</div><div class="dsc-lbl">Score >80</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--slate-400)">€0</div><div class="dsc-lbl">Contactos desbloqueados</div></div></div>
 
+    <!-- SUSCRIPCIÓN -->
+    <div class="dash-section">
+      <div class="dash-section-head">
+        <div class="dash-section-title">Plan de suscripción</div>
+        <span style="font-size:.72rem;color:var(--slate-400)">Plan actual: <strong style="color:var(--blue-500)">Free</strong></span>
+      </div>
+
+      <!-- Uso actual -->
+      <div class="emp-sub-usage" style="margin-bottom:16px">
+        <div class="emp-sub-usage-title">Actividad este mes</div>
+        <div class="emp-sub-usage-row">
+          <div class="emp-sub-usage-label">Ofertas publicadas</div>
+          <div class="emp-sub-usage-bar"><div class="emp-sub-usage-fill" style="width:80%;background:var(--amber-400)"></div></div>
+          <div class="emp-sub-usage-val">4 activas</div>
+        </div>
+        <div class="emp-sub-usage-row">
+          <div class="emp-sub-usage-label">Contactos desbloqueados</div>
+          <div class="emp-sub-usage-bar"><div class="emp-sub-usage-fill" style="width:0%;background:var(--emerald-400)"></div></div>
+          <div class="emp-sub-usage-val">0 · €49 c/u</div>
+        </div>
+        <div class="emp-sub-usage-row">
+          <div class="emp-sub-usage-label">Candidatos visibles en pool</div>
+          <div class="emp-sub-usage-bar"><div class="emp-sub-usage-fill" style="width:100%;background:var(--blue-400)"></div></div>
+          <div class="emp-sub-usage-val">Ilimitado</div>
+        </div>
+      </div>
+
+      <!-- Planes -->
+      <div class="emp-sub-wrap">
+
+        <!-- FREE -->
+        <div class="emp-sub-card current">
+          <div class="emp-sub-badge current-badge">Plan actual</div>
+          <div class="emp-sub-name">Free</div>
+          <div class="emp-sub-price">€0 <span>/ mes</span></div>
+          <div class="emp-sub-desc">Accede al pool y publica ofertas. Paga solo cuando contrates.</div>
+          <ul class="emp-sub-features">
+            <li>Ofertas ilimitadas</li>
+            <li>Pool completo de candidatos</li>
+            <li>Desbloqueo por contacto: <strong>€49</strong></li>
+            <li>Retos comunes de plataforma</li>
+            <li class="no">Contactos incluidos en mensual</li>
+            <li class="no">Retos a medida</li>
+            <li class="no">Soporte prioritario</li>
+          </ul>
+          <button class="emp-sub-btn active">Plan activo</button>
+        </div>
+
+        <!-- PRO -->
+        <div class="emp-sub-card popular">
+          <div class="emp-sub-badge">Más popular</div>
+          <div class="emp-sub-name">Pro</div>
+          <div class="emp-sub-price">€199 <span>/ mes</span></div>
+          <div class="emp-sub-desc">Para equipos de RRHH con contratación activa y recurrente.</div>
+          <ul class="emp-sub-features">
+            <li>Ofertas ilimitadas</li>
+            <li>Pool completo de candidatos</li>
+            <li><strong>5 contactos incluidos</strong>/mes</li>
+            <li>Desbloqueo adicional: €49/contacto</li>
+            <li>Retos comunes de plataforma</li>
+            <li>Analytics avanzado</li>
+            <li class="no">Soporte prioritario</li>
+          </ul>
+          <button class="emp-sub-btn cta" onclick="alert('Contacta con hola@talentpact.com para activar el Plan Pro.')">Activar Pro →</button>
+        </div>
+
+        <!-- ENTERPRISE -->
+        <div class="emp-sub-card">
+          <div class="emp-sub-name">Enterprise</div>
+          <div class="emp-sub-price">€499 <span>/ mes</span></div>
+          <div class="emp-sub-desc">Volumen alto de selección, retos a medida y soporte dedicado.</div>
+          <ul class="emp-sub-features">
+            <li>Ofertas ilimitadas</li>
+            <li>Pool completo de candidatos</li>
+            <li><strong>Contactos ilimitados</strong></li>
+            <li>Retos a medida: desde <strong>€299</strong>/vacante</li>
+            <li>Retos comunes de plataforma</li>
+            <li>Analytics avanzado + exportación</li>
+            <li>Soporte prioritario 24h</li>
+          </ul>
+          <button class="emp-sub-btn cta" onclick="alert('Contacta con hola@talentpact.com para activar Enterprise.')">Contratar Enterprise →</button>
+        </div>
+
+      </div>
+
+      <!-- Nota retos a medida -->
+      <p style="font-size:.7rem;color:var(--slate-400);margin-top:10px;text-align:center">
+        ¿Necesitas retos diseñados a medida para una vacante específica? Disponibles desde <strong style="color:var(--slate-600)">€299/vacante</strong> en cualquier plan. <a href="mailto:hola@talentpact.com" style="color:var(--blue-500)">Contáctanos →</a>
+      </p>
+    </div>
+
     <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label>Salario</label><input type="text" id="pj-salary" placeholder="22.000€ - 28.000€"></div><div class="pj-field"><label>Modalidad</label><select id="pj-mode"><option>Remoto</option><option>Híbrido</option><option>Presencial</option></select></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
     <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">Selecciona qué habilidades verificadas necesita el candidato. Escribe para filtrar.</p><input class="search-bar" id="pjSkillSearch" type="text" placeholder="Buscar skill: python, excel, liderazgo…" oninput="renderPjSkills()" style="font-size:.78rem;padding:8px 12px;margin-bottom:8px;width:100%;box-sizing:border-box"><div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><button class="filter-btn active" onclick="setPjSkillCat('all',this)" style="font-size:.65rem;padding:3px 8px">Todos</button><button class="filter-btn" onclick="setPjSkillCat('soft',this)" style="font-size:.65rem;padding:3px 8px">Soft Skills</button><button class="filter-btn" onclick="setPjSkillCat('sector',this)" style="font-size:.65rem;padding:3px 8px">Sectoriales</button><button class="filter-btn" onclick="setPjSkillCat('selected',this)" style="font-size:.65rem;padding:3px 8px">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
     <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)">🟢 Básico <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)">🟡 Intermedio <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)">🔴 Avanzado <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥75)</span></div></div></div>
@@ -1488,20 +1609,21 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       </div>
     </div>
 
-    <!-- INCENTIVOS -->
+    <!-- SUSCRIPCIÓN CANDIDATO -->
     <div class="st-section">
-      <div class="st-section-label">Incentivos económicos</div>
+      <div class="st-section-label">Mi suscripción</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--emerald-50);border-radius:10px;margin-bottom:14px">
-          <div style="font-family:'Sora',sans-serif;font-size:1.75rem;font-weight:800;color:var(--emerald-700);line-height:1" id="stCandEarned">€0</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--emerald-50);border-radius:10px;margin-bottom:14px">
           <div>
-            <div style="font-size:.78rem;font-weight:700;color:var(--emerald-700)">Ganados</div>
-            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px" id="stCandEarnedDesc">Completa retos avanzados con score ≥75 para ganar €100 c/u.</div>
+            <div style="font-size:.78rem;font-weight:700;color:var(--emerald-700)">Plan actual: <span style="font-size:.85rem">Free</span></div>
+            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px">TalentPact es 100% gratuito. Hasta 5 retos por semana.</div>
           </div>
+          <span style="font-size:.65rem;font-weight:700;background:var(--emerald-100);color:var(--emerald-700);padding:4px 10px;border-radius:20px">GRATIS</span>
         </div>
-        <div class="st-grid">
-          <div class="st-field"><label>Nombre titular</label><input type="text" placeholder="Ana Casanova"></div>
-          <div class="st-field"><label>Método de cobro</label><select><option>Transferencia IBAN</option><option>PayPal</option></select></div>
+        <div style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;padding:12px 14px;">
+          <div style="font-size:.72rem;font-weight:700;color:var(--slate-700);margin-bottom:6px">Premium — Para usuarios con uso intensivo</div>
+          <div style="font-size:.7rem;color:var(--slate-500);margin-bottom:10px;line-height:1.5">Si realizas <strong>más de 5 retos por semana</strong>, desbloquea la suscripción Premium para acceso ilimitado, prioridad en el pool y acceso anticipado a nuevos retos.</div>
+          <button class="btn btn-primary btn-sm" onclick="alert('Próximamente disponible. Contacta con hola@talentpact.com para más info.')">Conocer Premium →</button>
         </div>
         <div class="st-field"><label>IBAN / Email PayPal</label><input type="text" placeholder="ES00 0000 0000 0000 0000 0000"></div>
         <button class="btn btn-primary btn-sm" onclick="alert('Datos de cobro guardados.')">Guardar datos de cobro</button>
@@ -4330,16 +4452,7 @@ function closeSettings(type){
   if(o)o.classList.remove('open');
 }
 function updateStCandIncentives(){
-  const done=(candidateProfile&&candidateProfile.completedCommon)||[];
-  const q=done.filter(c=>c.score>=75);
-  const el=document.getElementById('stCandEarned');
-  const desc=document.getElementById('stCandEarnedDesc');
-  if(el)el.textContent='€'+(q.length*100);
-  if(desc){
-    if(q.length===0)desc.textContent='Completa retos avanzados con score ≥75 para ganar €100 c/u.';
-    else if(q.length>=3)desc.textContent='¡Máximo alcanzado! 3 × €100 ganados. ¡Enhorabuena!';
-    else desc.textContent=q.length+' reto'+(q.length>1?'s':'')+' calificado'+(q.length>1?'s':'')+' · €'+((3-q.length)*100)+' disponibles aún.';
-  }
+  // TalentPact es gratis para candidatos; no hay pago por retos
 }
 function openContact(){document.getElementById('cform').style.display='block';document.getElementById('csucc').style.display='none';document.getElementById('cmodal').classList.add('open');}
 function submitContact(){
@@ -4718,9 +4831,10 @@ SOBRE TALENTPACT:
 - Para ver el contacto real de un candidato, la empresa paga €49 por desbloqueo
 - Hay 102 categorías de retos con 3 niveles (Básico, Intermedio, Avanzado)
 - Los retos tienen briefing previo, countdown y timer — el candidato no sabe el escenario hasta que empieza
-- Las empresas pueden elegir Plan Free, Pro (€199/mes, 5 contactos incluidos) o Enterprise (€499/mes, ilimitado)
+- Las empresas pueden elegir Plan Free, Pro (€199/mes, 5 contactos incluidos) o Enterprise (€499/mes, contactos ilimitados)
 - TalentPact cobra un 10-12% take-rate cuando se produce una contratación
-- Los candidatos reciben €100 por completar retos avanzados con score ≥75
+- Para candidatos: TalentPact es 100% gratuito. Pueden hacer hasta 5 retos por semana gratis; si superan ese límite, necesitan suscripción Premium
+- Los candidatos NO reciben ningún pago económico por completar retos
 
 REGLAS:
 - Responde SIEMPRE en español (a menos que te escriban en otro idioma)
@@ -4782,7 +4896,7 @@ const CHAT_FAQ={
   'retos':['Los retos son ejercicios prácticos cronometrados que evalúan tus habilidades reales. Hay 3 niveles: Básico, Intermedio y Avanzado. Cada reto tiene una pantalla de briefing que no revela el escenario hasta que pulses "Empezar". Una vez empieza, el timer cuenta hacia atrás y no se puede pausar.','Tenemos 102 retos en 25 áreas: desde soft skills (liderazgo, comunicación) hasta técnicos (React, Python, SQL). Completa los que quieras para construir tu perfil.'],
   'desbloquear':['Las empresas pagan €49 por desbloquear el contacto real de un candidato. Tu perfil es 100% anónimo hasta que una empresa paga. Cuando desbloquean tu perfil, te notificamos por email.','Si eres empresa: ve a una oferta → Ver candidatos → Desbloquear. Solo pagas si realmente quieres contactar.'],
   'problema':['Lamento que tengas un problema. Puedes reportarlo de dos formas:\n\n1. Ve a tu dashboard → pestaña "Soporte" → "Reportar un Problema"\n2. Escríbenos a soporte@talentpact.io\n\nRespondemos en menos de 24h. Si es un problema con un score, incluye el nombre del reto y tu respuesta.'],
-  'precio':['Para empresas:\n• Desbloqueo individual: €49/contacto\n• Plan Pro: €199/mes (5 contactos incluidos)\n• Plan Enterprise: €499/mes (ilimitado)\n• Retos a medida: desde €299/vacante\n\nPara candidatos: TalentPact es 100% gratis. Además, al completar retos avanzados con score ≥75, recibes €100.'],
+  'precio':['Para empresas:\n• Desbloqueo individual: €49/contacto\n• Plan Pro: €199/mes (5 contactos incluidos)\n• Plan Enterprise: €499/mes (contactos ilimitados)\n• Retos a medida: desde €299/vacante\n\nPara candidatos: TalentPact es 100% gratuito (hasta 5 retos/semana). Si superas ese límite, hay una suscripción Premium disponible.'],
   'score':['Tu score se calcula con IA (Claude de Anthropic). Evalúa: relevancia, profundidad, estructura y aplicabilidad de tu respuesta. La escala va de 0 a 100:\n• 0-25: Insuficiente\n• 26-45: Por debajo del mínimo\n• 46-65: Aceptable\n• 66-80: Buen nivel junior\n• 81-100: Excelente'],
   'perfil':['Tu perfil muestra todas las skills que has desbloqueado con sus scores. Las empresas ven tu perfil de forma anónima (solo ven "Candidato #XXXX" + tus scores). Para completar tu perfil, haz retos comunes — cada uno desbloquea una skill.'],
   'default':['No estoy seguro de entender tu pregunta. Puedo ayudarte con:\n• Cómo funcionan los retos\n• Scores y evaluación IA\n• Precios para empresas\n• Tu perfil y skills\n• Reportar problemas\n\n¿Sobre qué quieres saber más?']
