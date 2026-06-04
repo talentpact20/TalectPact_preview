@@ -5,9 +5,18 @@ Evaluador dinámico basado en Chain of Thought con rúbricas por reto.
 
 import json
 import time
-import os
 from pathlib import Path
 from anthropic import Anthropic
+
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
+from rich.text import Text
+from rich.rule import Rule
+from rich import box
+from rich.columns import Columns
+from rich.padding import Padding
 
 # ─── Configuración ────────────────────────────────────────────────────────────
 DB_PATH = Path(__file__).parent / "mock_database.json"
@@ -15,6 +24,7 @@ MODEL_ID = "claude-sonnet-4-6"
 MAX_TOKENS = 2048
 
 client = Anthropic()
+console = Console()
 
 # ─── Carga de base de datos ────────────────────────────────────────────────────
 
@@ -90,6 +100,24 @@ def build_respuesta_texto(respuesta: dict) -> str:
     return "\n\n".join(lines)
 
 
+# ─── Helpers visuales ─────────────────────────────────────────────────────────
+
+def score_color(score: int) -> str:
+    if score >= 80:
+        return "bold green"
+    if score >= 50:
+        return "bold yellow"
+    if score > 0:
+        return "bold red"
+    return "bold white on red"
+
+
+def score_bar(score: int, width: int = 30) -> str:
+    filled = int((score / 100) * width)
+    bar = "█" * filled + "░" * (width - filled)
+    return bar
+
+
 # ─── Llamada al modelo ─────────────────────────────────────────────────────────
 
 def evaluate_submission(submission: dict, reto: dict) -> dict:
@@ -122,7 +150,6 @@ def evaluate_submission(submission: dict, reto: dict) -> dict:
 
     raw_content = response.content[0].text.strip()
 
-    # Extrae el JSON aunque el modelo añada texto extra
     json_start = raw_content.find("{")
     json_end = raw_content.rfind("}") + 1
     evaluation = json.loads(raw_content[json_start:json_end])
@@ -141,70 +168,199 @@ def evaluate_submission(submission: dict, reto: dict) -> dict:
     }
 
 
+def print_result(result: dict, reto: dict):
+    ev = result["evaluation"]
+    meta = result["metadata"]
+    score = ev.get("skill_score", 0)
+    alerta = ev.get("alerta_seguridad")
+    feedback = ev.get("feedback", "")
+    razonamiento = ev.get("razonamiento", {})
+    parciales = ev.get("puntuaciones_parciales", {})
+
+    color = score_color(score)
+    bar = score_bar(score)
+
+    # ── Cabecera del candidato ──────────────────────────────────────────────
+    titulo = f"[bold cyan]{result['submission_id']}[/]  ·  {reto['titulo']}"
+    candidato_label = f"Candidato anónimo: [dim]{result['candidato_id']}[/]"
+    console.print(Panel(f"{titulo}\n{candidato_label}", style="cyan", box=box.ROUNDED))
+
+    # ── Alerta de seguridad ─────────────────────────────────────────────────
+    if alerta:
+        console.print(Panel(
+            f"[bold red]⚠  PROMPT INJECTION DETECTADO[/]\n\n{alerta}",
+            style="red",
+            box=box.HEAVY,
+            title="[bold red]ALERTA DE SEGURIDAD[/]"
+        ))
+
+    # ── Score principal ─────────────────────────────────────────────────────
+    score_text = Text()
+    score_text.append(f"  {score}", style=f"{color} size:20")
+    score_text.append(" / 100\n\n", style="bold white")
+    score_text.append(f"  {bar}  {score}%", style=color)
+
+    console.print(Panel(score_text, title="[bold]SKILL SCORE[/]", box=box.DOUBLE_EDGE, padding=(1, 2)))
+
+    # ── Puntuaciones por criterio ───────────────────────────────────────────
+    if parciales:
+        criterios_table = Table(box=box.SIMPLE, show_header=True, header_style="bold magenta")
+        criterios_table.add_column("Criterio", style="dim", min_width=30)
+        criterios_table.add_column("Score parcial", justify="center", min_width=14)
+        criterios_table.add_column("Razonamiento IA", min_width=50)
+
+        criterio_keys = list(parciales.keys())
+        razon_values = list(razonamiento.values())
+
+        for i, (crit, pts) in enumerate(parciales.items()):
+            razon = razon_values[i] if i < len(razon_values) else ""
+            razon_short = razon[:120] + "..." if len(razon) > 120 else razon
+            pts_color = score_color(int(pts)) if isinstance(pts, (int, float)) else "white"
+            criterios_table.add_row(
+                crit.replace("_", " ").title(),
+                Text(f"{pts}/100", style=pts_color),
+                f"[dim]{razon_short}[/]"
+            )
+
+        console.print(Panel(criterios_table, title="[bold magenta]CHAIN OF THOUGHT — Razonamiento por criterio[/]", box=box.ROUNDED))
+
+    # ── Feedback ────────────────────────────────────────────────────────────
+    console.print(Panel(
+        f"[italic]{feedback}[/]",
+        title="[bold yellow]FEEDBACK AL CANDIDATO[/]",
+        style="yellow",
+        box=box.ROUNDED,
+        padding=(1, 2)
+    ))
+
+    # ── Metadatos técnicos ──────────────────────────────────────────────────
+    meta_text = (
+        f"[dim]Modelo: {meta['model']}  |  "
+        f"Latencia: {meta['latency_ms']} ms  |  "
+        f"Tokens: {meta['input_tokens']} in / {meta['output_tokens']} out  |  "
+        f"Coste estimado: €{(meta['input_tokens']*3 + meta['output_tokens']*15) / 1_000_000:.4f}[/]"
+    )
+    console.print(Padding(meta_text, (0, 2, 1, 2)))
+
+
 # ─── Runner principal ──────────────────────────────────────────────────────────
 
 def run_evaluation_pipeline():
     db = load_database()
     submissions = db["respuestas_candidatos"]
 
-    print("=" * 70)
-    print("  TALENTPACT — AGENTE EVALUADOR (PoC Entrega 2)")
-    print(f"  Modelo: {MODEL_ID} | Submissions: {len(submissions)}")
-    print("=" * 70)
+    # ── Banner ──────────────────────────────────────────────────────────────
+    console.print()
+    console.print(Panel(
+        "[bold green]TALENTPACT[/]  ·  [white]Agente Evaluador IA[/]\n"
+        "[dim]Skills-Based Hiring · PoC Entrega 2 · Máster Data Science 2025-26[/]\n\n"
+        f"[cyan]Modelo:[/] {MODEL_ID}   [cyan]Rúbricas dinámicas:[/] {len(db['retos_catalogo'])} retos   [cyan]Submissions:[/] {len(submissions)}",
+        style="green",
+        box=box.DOUBLE_EDGE,
+        padding=(1, 4),
+    ))
+    console.print()
 
     all_results = []
 
-    for submission in submissions:
+    for i, submission in enumerate(submissions):
         reto_id = submission["reto_id"]
         reto = get_rubrica(db, reto_id)
 
         if reto is None:
-            print(f"\n[ERROR] Reto {reto_id} no encontrado en el catálogo. Saltando.")
+            console.print(f"[red]ERROR:[/] Reto {reto_id} no encontrado. Saltando.")
             continue
 
-        print(f"\n▶  Evaluando {submission['submission_id']} | Reto: {reto_id} | Candidato: {submission['candidato_anonimo_id']}")
+        console.print(Rule(f"[bold]Evaluación {i+1} de {len(submissions)}[/]", style="cyan"))
+        console.print()
 
-        try:
-            result = evaluate_submission(submission, reto)
-            all_results.append(result)
+        # Spinner mientras la IA evalúa
+        with Progress(
+            SpinnerColumn(style="cyan"),
+            TextColumn("[cyan]Agente Evaluador analizando respuesta..."),
+            TimeElapsedColumn(),
+            console=console,
+            transient=True,
+        ) as progress:
+            progress.add_task("evaluating", total=None)
+            try:
+                result = evaluate_submission(submission, reto)
+            except json.JSONDecodeError as e:
+                console.print(f"[red]ERROR JSON:[/] {e}")
+                continue
+            except Exception as e:
+                console.print(f"[red]ERROR:[/] {e}")
+                continue
 
-            score = result["evaluation"].get("skill_score", "N/A")
-            latency = result["metadata"]["latency_ms"]
-            alerta = result["evaluation"].get("alerta_seguridad")
+        all_results.append(result)
+        print_result(result, reto)
 
-            print(f"   Skill Score : {score}/100")
-            print(f"   Latencia    : {latency} ms")
-            print(f"   Tokens      : {result['metadata']['input_tokens']} in / {result['metadata']['output_tokens']} out")
-
-            if alerta:
-                print(f"   ⚠  ALERTA DE SEGURIDAD: {alerta}")
-
-            feedback = result["evaluation"].get("feedback", "")
-            print(f"   Feedback    : {feedback[:120]}{'...' if len(feedback) > 120 else ''}")
-
-        except json.JSONDecodeError as e:
-            print(f"   [ERROR] No se pudo parsear la respuesta JSON del modelo: {e}")
-        except Exception as e:
-            print(f"   [ERROR] Fallo en la evaluación: {e}")
-
-    # Guarda resultados
+    # ── Guardar resultados ──────────────────────────────────────────────────
     output_path = Path(__file__).parent / "evaluation_results.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, ensure_ascii=False, indent=2)
 
-    print("\n" + "=" * 70)
-    print(f"  Resultados guardados en: {output_path}")
-    print("=" * 70)
+    # ── Tabla resumen final ─────────────────────────────────────────────────
+    console.print()
+    console.print(Rule("[bold green]RESUMEN FINAL[/]", style="green"))
+    console.print()
 
-    # Resumen estadístico
-    if all_results:
-        scores = [r["evaluation"].get("skill_score", 0) for r in all_results]
-        latencies = [r["metadata"]["latency_ms"] for r in all_results]
-        print(f"\n  RESUMEN")
-        print(f"  Scores       : {scores}")
-        print(f"  Media score  : {sum(scores)/len(scores):.1f}")
-        print(f"  Latencia avg : {sum(latencies)/len(latencies):.0f} ms")
-        print(f"  Latencia max : {max(latencies):.0f} ms")
+    summary_table = Table(box=box.ROUNDED, show_header=True, header_style="bold green", padding=(0, 1))
+    summary_table.add_column("ID", style="dim", min_width=10)
+    summary_table.add_column("Reto", min_width=12)
+    summary_table.add_column("Candidato", min_width=14)
+    summary_table.add_column("Skill Score", justify="center", min_width=14)
+    summary_table.add_column("Barra", min_width=22)
+    summary_table.add_column("Latencia", justify="right", min_width=12)
+    summary_table.add_column("Coste €", justify="right", min_width=10)
+    summary_table.add_column("Alerta", justify="center", min_width=8)
+
+    scores = []
+    latencies = []
+    costes = []
+
+    for r in all_results:
+        score = r["evaluation"].get("skill_score", 0)
+        lat = r["metadata"]["latency_ms"]
+        coste = (r["metadata"]["input_tokens"] * 3 + r["metadata"]["output_tokens"] * 15) / 1_000_000
+        alerta_flag = "⚠ SÍ" if r["evaluation"].get("alerta_seguridad") else "—"
+        alerta_style = "bold red" if r["evaluation"].get("alerta_seguridad") else "dim"
+
+        scores.append(score)
+        latencies.append(lat)
+        costes.append(coste)
+
+        summary_table.add_row(
+            r["submission_id"],
+            r["reto_id"],
+            r["candidato_id"],
+            Text(f"{score}/100", style=score_color(score)),
+            Text(score_bar(score, 20), style=score_color(score)),
+            f"{lat:.0f} ms",
+            f"€{coste:.4f}",
+            Text(alerta_flag, style=alerta_style),
+        )
+
+    console.print(summary_table)
+    console.print()
+
+    # Estadísticas agregadas
+    stats = Table(box=box.SIMPLE, show_header=False, padding=(0, 2))
+    stats.add_column("Métrica", style="bold cyan")
+    stats.add_column("Valor", style="white")
+    stats.add_column("Objetivo MVP", style="dim")
+
+    legitimate = [s for s in scores if s > 0]
+    stats.add_row("Score medio (candidatos legítimos)", f"{sum(legitimate)/len(legitimate):.1f} / 100", "—")
+    stats.add_row("Discriminación (mejor vs peor legítimo)", f"{max(legitimate) - min(legitimate)} puntos", "> 40 pts")
+    stats.add_row("Latencia media", f"{sum(latencies)/len(latencies):.0f} ms", "< 12.000 ms")
+    stats.add_row("Latencia máxima", f"{max(latencies):.0f} ms", "< 12.000 ms")
+    stats.add_row("Coste medio por evaluación", f"€{sum(costes)/len(costes):.4f}", "< €0,04")
+    stats.add_row("Coste total ejecución", f"€{sum(costes):.4f}", "—")
+    stats.add_row("Prompt Injection detectados", f"{sum(1 for r in all_results if r['evaluation'].get('alerta_seguridad'))}/{len(all_results)}", "100% detección")
+
+    console.print(Panel(stats, title="[bold green]MÉTRICAS DE LA PoC[/]", box=box.ROUNDED))
+    console.print(f"\n[dim]Resultados completos guardados en:[/] [cyan]{output_path}[/]\n")
 
     return all_results
 

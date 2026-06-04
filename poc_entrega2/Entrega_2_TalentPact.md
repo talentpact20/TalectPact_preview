@@ -204,24 +204,78 @@ Para evaluaciones de alto valor (e.g., candidatos finalistas), implementar un se
 
 ---
 
-### 3.2 Riesgos Regulatorios: EU AI Act
+### 3.2 Marco de Compliance Integral
 
-**Clasificación del sistema:** TalentPact cae en la categoría de **"Sistema de IA de Alto Riesgo"** según el Anexo III del EU AI Act (Regulación UE 2024/1689), específicamente en el ámbito de *"empleo, gestión de trabajadores y acceso al empleo autónomo"* (Punto 4 del Anexo).
+TalentPact opera en la intersección de cuatro marcos regulatorios. El cuadro siguiente resume el estado de cada uno y las acciones concretas requeridas antes del lanzamiento comercial.
 
-Esto implica las siguientes obligaciones antes del despliegue en producción:
+---
 
-| Obligación | Artículo EU AI Act | Estado en esta PoC |
+#### RC-01: EU AI Act — Sistema de Alto Riesgo (CRÍTICO)
+
+**Clasificación:** Anexo III, punto 4.a — sistemas de IA en procesos de selección y evaluación de candidatos para el empleo.
+
+| Obligación | Artículo | Estado en esta PoC |
 |---|---|---|
 | Evaluación de Conformidad | Art. 43 | Pendiente |
 | Registro en base de datos EU | Art. 49 | Pendiente |
-| Supervisión humana (human oversight) | Art. 14 | Parcial: se prevé revisión en zona de duda ±5 pts del umbral |
-| Transparencia hacia candidatos | Art. 50 | Parcial: el sistema anónimo requiere aviso explícito |
-| Gestión de sesgos y datasets de entrenamiento | Art. 10 | No aplica directamente (usamos modelo base de Anthropic) |
-| Logs y trazabilidad | Art. 12 | Implementado: `evaluation_results.json` con razonamiento completo |
+| Supervisión humana (human-in-the-loop) | Art. 14 | Parcial: revisión manual en zona ±5 pts del umbral de corte |
+| Transparencia hacia candidatos | Art. 50 | Pendiente: aviso explícito de evaluación asistida por IA |
+| Gestión de sesgos | Art. 10 | Mitigado: Constitutional AI en system prompt + Fairness Metric objetivo > 0,80 |
+| Logs y trazabilidad | Art. 12 | **Implementado:** `evaluation_results.json` con Chain of Thought completo por evaluación |
 
-**Acción inmediata requerida:** Incluir en los términos de participación de TalentPact una declaración explícita de que *"las evaluaciones son asistidas por IA y revisables a petición del candidato"*, conforme al Art. 50.
+**Acción inmediata:** añadir en los términos de participación la declaración *"las evaluaciones son asistidas por IA y revisables a petición del candidato"* (Art. 50). Anthropic actúa como proveedor GPAI (Capítulo V); TalentPact asume las obligaciones del deployer (Art. 26).
 
-**Nota sobre el proveedor:** Anthropic (Claude) es un proveedor de modelo de propósito general (GPAI) bajo el Capítulo V del AI Act. TalentPact, como deployer, asume las obligaciones del Art. 26 como operador de sistema de alto riesgo.
+---
+
+#### RC-02: RGPD + LOPDGDD — Privacidad por Diseño (CRÍTICO)
+
+TalentPact procesa datos personales sensibles: perfiles de candidatos, resultados de evaluación y decisiones de contratación. El RGPD (Reglamento UE 2016/679) y su transposición española LOPDGDD (LO 3/2018) exigen:
+
+| Medida | Implementación en TalentPact | Estado |
+|---|---|---|
+| Consentimiento explícito granular | Casilla de verificación separada antes del desbloqueo de datos | Pendiente producción |
+| Anonimización de perfil candidato | UUID v4 asignado; nombre, edad, género y foto cifrados hasta desbloqueo de pago | Diseñado en arquitectura |
+| Derecho al olvido automatizado | Pipeline de borrado completo (perfil + trazas) con SLA 72h desde el dashboard | Pendiente producción |
+| Retention policy | Datos de evaluación máx. 24 meses; anonimización irreversible a partir del mes 12 | Pendiente producción |
+| Auditoría de accesos (LOPDGDD) | Log de timestamp + IP + admin cuando un superadmin suplanta a un usuario | Parcial: estructura prevista |
+| Acuerdos de confidencialidad | Firma obligatoria antes de acceso al panel de soporte | Pendiente |
+
+**Riesgo específico del Agente Evaluador:** el razonamiento CoT almacenado en `evaluation_results.json` puede contener fragmentos de la respuesta del candidato. Estos ficheros deben tratarse como datos personales bajo el RGPD y estar sujetos a la misma retention policy que el perfil.
+
+---
+
+#### RC-03: LSSI — Identificación y Comunicaciones Comerciales (ALTA)
+
+La Ley 34/2002 de Servicios de la Sociedad de la Información obliga a TalentPact a:
+
+| Obligación LSSI | Acción requerida | Estado |
+|---|---|---|
+| Aviso Legal completo | Incluir en el pie de talentpact.es: NIF, razón social, dirección y datos registrales de la empresa titular | Pendiente |
+| Opt-in comunicaciones comerciales | El opt-in para "Novedades de TalentPact" no puede estar premarcado por defecto | Pendiente revisión |
+| Identificación de comunicaciones | Todos los emails de marketing deben incluir identificación del remitente y enlace de baja | Pendiente |
+
+---
+
+#### RC-04: PCI DSS — Seguridad de Pagos (ALTA)
+
+TalentPact gestiona cobros por desbloqueo de contactos (€49/contacto) y suscripciones (Free, Pro, Enterprise). El estándar PCI DSS aplica a cualquier sistema que procese, transmita o almacene datos de tarjeta:
+
+| Requisito PCI DSS | Implementación en TalentPact | Estado |
+|---|---|---|
+| No almacenar números de tarjeta completos | Delegación total a Stripe (tokenización); TalentPact solo almacena el token | Diseñado |
+| Transmisión cifrada | HTTPS con TLS 1.2+ en todos los endpoints de pago | Pendiente auditoría |
+| Pasarela tokenizada | Stripe Connect como única vía de cobro; cero datos de tarjeta en base de datos propia | Diseñado |
+
+---
+
+#### Resumen de prioridades de compliance pre-lanzamiento
+
+| Normativa | Prioridad | Bloqueante para go-live | Responsable |
+|---|---|---|---|
+| EU AI Act (registro + transparencia) | Crítica | Sí | Equipo técnico + legal |
+| RGPD/LOPDGDD (consentimiento + olvido) | Crítica | Sí | Equipo técnico |
+| LSSI (Aviso Legal + opt-in) | Alta | Sí | Equipo legal |
+| PCI DSS (tokenización Stripe) | Alta | Sí | Equipo técnico |
 
 ---
 
@@ -261,6 +315,6 @@ Esta PoC demuestra que el patrón **Dynamic Prompting + Chain of Thought** es la
 1. **Escala sin coste de ingeniería:** Los 102 retos se gestionan desde la base de datos, no desde el código. Añadir el reto 103 no requiere un solo commit.
 2. **Es auditable por diseño:** El campo `razonamiento` del output permite a cualquier stakeholder —HR, candidato, auditor de AI Act— entender la base de cada score.
 3. **Los riesgos son conocidos y mitigables:** Prompt Injection, varianza de scores y rate limits son problemas resueltos o en vía de solución con las medidas descritas.
-4. **Cumplimiento regulatorio incorporado desde el diseño:** Identificar TalentPact como sistema de alto riesgo en fase de PoC permite diseñar el cumplimiento del AI Act como parte del producto, no como un parche posterior.
+4. **Compliance by design en cuatro capas:** la identificación en fase PoC de los cuatro marcos regulatorios aplicables (EU AI Act, RGPD/LOPDGDD, LSSI, PCI DSS) permite integrar los requisitos legales como parte del producto desde el primer día, evitando el coste exponencialmente mayor de añadirlos a posteriori.
 
-El siguiente paso es ejecutar el evaluador con respuestas reales de candidatos beta, completar las métricas de la sección 2.1 y afinar las rúbricas siguiendo la estrategia de calibración en 3 fases.
+El siguiente paso es ejecutar el evaluador con respuestas reales de candidatos beta, completar las métricas de la sección 2.1 y afinar las rúbricas siguiendo la estrategia de calibración en 3 fases. En paralelo, iniciar el proceso de registro como sistema de alto riesgo ante la autoridad competente española (AESIA) conforme al AI Act.
