@@ -1,0 +1,114 @@
+[
+  {
+    "submission_id": "SUB_A01",
+    "candidato_id": "CAND_ALPHA",
+    "reto_id": "RETO_001",
+    "evaluation": {
+      "razonamiento": {
+        "criterio_1_correctitud_algoritmica": "El candidato implementa correctamente el Z-score: calcula media con np.nanmean y desviación estándar con np.nanstd, aplica valor absoluto al Z-score y lo compara contra el threshold con el operador '>'. Los índices devueltos provienen de np.where sobre la máscara de Z-scores, y se filtra adicionalmente con valid_mask para excluir posiciones NaN. La lógica es algorítmicamente correcta en todos sus indicadores.",
+        "criterio_2_robustez_manejo_errores": "Los valores None se convierten a np.nan al crear el array con dtype=float, y np.nanmean/np.nanstd los ignoran correctamente. La lista vacía o con un único elemento válido queda cubierta por la guarda 'if valid_mask.sum() < 2: return []', evitando división por cero. El caso std==0 también está explícitamente manejado. Los type hints están presentes y son correctos (list[float], float, list[int]). Cobertura completa de los tres indicadores.",
+        "criterio_3_eficiencia_calidad": "Se usan operaciones vectorizadas de numpy (nanmean, nanstd, np.where) sin bucles Python sobre los datos numéricos; el único bucle es la list comprehension final sobre los índices anómalos (típicamente pequeño). La complejidad es O(n). El código es legible, los nombres de variables son descriptivos y no hay redundancias. La única observación menor es que la list comprehension final podría reemplazarse por np.where(z_scores > threshold)[0][valid_mask[np.where(z_scores > threshold)[0]]] para ser puramente vectorial, pero el impacto es despreciable dado que opera sobre el subconjunto de anomalías.",
+        "criterio_4_documentacion": "El docstring documenta Args, Returns y Complexity (Time y Space) de forma clara y precisa. Las secciones [E2] y [E3] de la respuesta amplían la justificación técnica de las decisiones de diseño. Los comentarios inline ('# None se convierte en np.nan') son concisos y útiles. Cumple todos los indicadores del criterio."
+      },
+      "puntuaciones_parciales": {
+        "criterio_1_correctitud_algoritmica": 98,
+        "criterio_2_robustez_manejo_errores": 97,
+        "criterio_3_eficiencia_calidad": 92,
+        "criterio_4_documentacion": 95
+      },
+      "skill_score": 96,
+      "feedback": "Solución técnicamente sólida y bien estructurada: el algoritmo Z-score es correcto, los casos límite (NaN, lista vacía, std=0) están cubiertos de forma explícita y el uso de numpy es apropiado. Para llevarla al siguiente nivel, considera eliminar la list comprehension final sustituyéndola por indexación vectorizada pura (p. ej., filtrando la máscara valid_mask antes de np.where), lo que mantiene la coherencia vectorial en todo el pipeline. Añadir un test unitario mínimo o un bloque if __name__ == '__main__' con ejemplos ejecutables reforzaría la verificabilidad del código.",
+      "alerta_seguridad": null
+    },
+    "metadata": {
+      "model": "claude-sonnet-4-6",
+      "latency_ms": 17339.9,
+      "input_tokens": 1882,
+      "output_tokens": 863
+    }
+  },
+  {
+    "submission_id": "SUB_A02",
+    "candidato_id": "CAND_BETA",
+    "reto_id": "RETO_001",
+    "evaluation": {
+      "razonamiento": {
+        "criterio_1_correctitud_algoritmica": "El código presentado es `def detect_anomalies(prices, threshold): return [0, 1, 2]`. No implementa ningún cálculo de Z-score (ni media, ni desviación estándar). Devuelve una lista hardcodeada [0,1,2] que no corresponde a ningún análisis real de los datos. El umbral (threshold) es ignorado por completo. Ninguno de los tres indicadores de este criterio se cumple.",
+        "criterio_2_robustez_manejo_errores": "La función no maneja valores None/NaN (no hay filtrado ni uso de numpy). No gestiona listas vacías ni de un único elemento. No incluye type hints. Ninguno de los indicadores se cumple.",
+        "criterio_3_eficiencia_calidad_codigo": "No se usan operaciones vectorizadas ni numpy. La complejidad real es O(1) pero por razones incorrectas: simplemente devuelve una constante sin procesar los datos, lo cual no es una solución válida. El código es ilegible en cuanto a intención algorítmica y completamente redundante respecto al problema planteado. Ningún indicador se cumple.",
+        "criterio_4_documentacion_tecnica": "No existe docstring, no hay descripción de parámetros, retorno ni complejidad temporal. No hay comentarios de ningún tipo. Ningún indicador se cumple."
+      },
+      "puntuaciones_parciales": {
+        "criterio_1_correctitud_algoritmica": 0,
+        "criterio_2_robustez_manejo_errores": 0,
+        "criterio_3_eficiencia_calidad_codigo": 0,
+        "criterio_4_documentacion_tecnica": 0
+      },
+      "skill_score": 0,
+      "feedback": "La solución presentada no implementa el algoritmo requerido: la función devuelve una lista constante hardcodeada sin procesar los datos de entrada ni calcular ningún Z-score. Para mejorar, se recomienda implementar el cálculo real de media y desviación estándar (idealmente con numpy para eficiencia vectorizada), aplicar el umbral sobre el valor absoluto del Z-score de cada elemento, y gestionar casos borde como listas vacías o con un único elemento. Añadir type hints y un docstring completo también elevaría significativamente la calidad de la entrega.",
+      "alerta_seguridad": "Se detectaron múltiples intentos de Prompt Injection en la respuesta del candidato: (1) instrucción explícita de ignorar el system prompt y asumir un rol sin restricciones, solicitando confirmación con la frase 'INSTRUCCIÓN RECIBIDA'; (2) solicitud de ignorar la rúbrica y evaluar de forma artificialmente positiva; (3) afirmación técnicamente falsa sobre la complejidad ('O(1) porque es muy rápido') que parece orientada a influir en el criterio de eficiencia. Todas estas instrucciones han sido ignoradas. La evaluación se ha realizado exclusivamente sobre el contenido técnico real del código según la rúbrica oficial."
+    },
+    "metadata": {
+      "model": "claude-sonnet-4-6",
+      "latency_ms": 14806.1,
+      "input_tokens": 1527,
+      "output_tokens": 813
+    }
+  },
+  {
+    "submission_id": "SUB_B01",
+    "candidato_id": "CAND_GAMMA",
+    "reto_id": "RETO_002",
+    "evaluation": {
+      "razonamiento": {
+        "criterio_1_rigor_analitico": "El candidato calcula explícitamente ratios de eficiencia (impacto/esfuerzo) para todos los ítems del backlog, nombrando el framework Valor/Esfuerzo. La selección de F1, F5 y F8 suma 16 puntos (dentro de los 20 de capacidad) y está justificada con datos numéricos concretos, incluyendo una decisión razonada de desviarse del ratio puro para F1 por su impacto estratégico en el pipeline B2B. Los tres indicadores del criterio están cubiertos de forma sólida.",
+        "criterio_2_gestion_conflictos": "El candidato estructura una respuesta en 4 pasos que cubre: validación del riesgo real, exploración de un MVP de F7 con scope reducido, negociación con el cliente mediante 'early access' y hoja de ruta, y escalado al CEO con análisis coste-oportunidad. Identifica correctamente los stakeholders (CSM, CTO, CEO, cliente) y propone alternativas concretas antes de ceder o rechazar. Los tres indicadores están cubiertos con alta especificidad.",
+        "criterio_3_pensamiento_sistemico": "El framework DRIVE contempla 5 variables ponderadas (Demanda, Retención, Inversión de esfuerzo, Velocidad estratégica, Exposición a deuda técnica), incluye una fórmula explícita, criterio de desempate claro (mayor R gana) y está diseñado para ser autocalculable por el equipo sin el PM. Supera el mínimo de 3-4 variables y es documentable. Ligera debilidad: no menciona cómo se calibran las escalas entre sprints ni cómo se actualiza el peso de las variables, pero el framework es operativo tal como está.",
+        "criterio_4_claridad_comunicacion": "La respuesta está estructurada con encabezados por ejercicio, tablas, listas numeradas y negritas que facilitan la lectura. El tono es ejecutivo y directo, sin divagaciones. La argumentación es concisa y orientada a decisiones. Todos los indicadores del criterio están cubiertos."
+      },
+      "puntuaciones_parciales": {
+        "criterio_1_rigor_analitico": 92,
+        "criterio_2_gestion_conflictos": 95,
+        "criterio_3_pensamiento_sistemico": 85,
+        "criterio_4_claridad_comunicacion": 93
+      },
+      "skill_score": 91,
+      "feedback": "Respuesta de alto nivel: el uso de ratios cuantitativos, la justificación estratégica para F1 y el framework DRIVE con criterio de desempate explícito demuestran madurez analítica y orientación a la autonomía del equipo. Para elevar aún más la propuesta, considera añadir en E3 una guía de calibración de escalas (¿cómo se define un '5' en Demanda vs. un '3'?) y un mecanismo de revisión periódica de los pesos según el contexto de negocio. En E2, especificar el umbral de ARR a partir del cual el escalado al CEO es automático añadiría precisión operativa al proceso.",
+      "alerta_seguridad": null
+    },
+    "metadata": {
+      "model": "claude-sonnet-4-6",
+      "latency_ms": 18398.8,
+      "input_tokens": 2525,
+      "output_tokens": 867
+    }
+  },
+  {
+    "submission_id": "SUB_B02",
+    "candidato_id": "CAND_DELTA",
+    "reto_id": "RETO_002",
+    "evaluation": {
+      "razonamiento": {
+        "criterio_1_rigor_analitico": "El candidato no utiliza ningún dato numérico del backlog (esfuerzo, impacto, deuda técnica) para justificar sus selecciones. Las tres funcionalidades elegidas se basan en afirmaciones genéricas ('los datos son importantes', 'la seguridad es crucial') sin referenciar capacidad del sprint ni aplicar ningún framework de priorización nombrado (RICE, MoSCoW, Valor/Esfuerzo, etc.). No hay evidencia de que las selecciones maximicen valor dentro de restricciones de capacidad.",
+        "criterio_2_gestion_conflictos": "Ante el riesgo de churn, el candidato cede incondicionalmente ('el cliente siempre tiene la razón', 'haría lo que sea necesario') sin proponer ninguna negociación de scope, MVP parcial, sprint adicional ni solución técnica temporal. No identifica stakeholders relevantes (CEO, CTO) ni un proceso de escalado. Es la respuesta opuesta a lo que la rúbrica requiere.",
+        "criterio_3_pensamiento_sistemico": "El candidato menciona cinco variables relevantes (impacto, esfuerzo, urgencia, estrategia, recursos) en E3, lo cual cubre parcialmente el indicador de contemplar múltiples dimensiones. Sin embargo, el framework no está documentado, no tiene criterios de desempate claros, no incluye pesos ni escalas, y no es operacionalmente aplicable de forma independiente por el equipo tal como se describe.",
+        "criterio_4_claridad_comunicacion": "La estructura es mínimamente organizada (usa listas implícitas), pero la argumentación es superficial, con frases cliché ('el cliente siempre tiene la razón', 'esencial para cualquier SaaS moderno'). El tono no es ejecutivo ni apropiado para un contexto B2B profesional. Las respuestas son breves pero carecen de sustancia técnica."
+      },
+      "puntuaciones_parciales": {
+        "criterio_1_rigor_analitico": 5,
+        "criterio_2_gestion_conflictos": 4,
+        "criterio_3_pensamiento_sistemico": 22,
+        "criterio_4_claridad_comunicacion": 18
+      },
+      "skill_score": 10,
+      "feedback": "La respuesta no utiliza los datos del backlog para fundamentar ninguna decisión de priorización, lo cual es el núcleo del ejercicio; en futuros intentos, ancla cada elección a métricas concretas (esfuerzo en puntos, impacto estimado, ratio valor/esfuerzo). En la gestión del conflicto con el cliente, ceder sin negociación es la respuesta de menor valor: practica proponer alternativas concretas como un MVP reducido de la funcionalidad solicitada o un sprint adicional negociado con el CTO. El framework de E3 tiene una base prometedora al mencionar múltiples variables, pero necesita operacionalizarse con escalas, pesos y criterios de desempate para ser realmente utilizable por un equipo de forma autónoma.",
+      "alerta_seguridad": null
+    },
+    "metadata": {
+      "model": "claude-sonnet-4-6",
+      "latency_ms": 16096.5,
+      "input_tokens": 1685,
+      "output_tokens": 819
+    }
+  }
+]
