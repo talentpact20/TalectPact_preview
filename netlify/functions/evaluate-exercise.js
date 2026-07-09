@@ -4,7 +4,7 @@ exports.handler = async (event) => {
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  const configuredModel = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-latest";
+  const configuredModel = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6";
   if (!apiKey) {
     return jsonResponse(500, { error: "Missing ANTHROPIC_API_KEY in environment variables" });
   }
@@ -21,9 +21,10 @@ exports.handler = async (event) => {
     const triedModels = [];
     const modelCandidates = uniqueModels([
       configuredModel,
-      "claude-3-5-sonnet-latest",
-      "claude-3-5-haiku-latest",
-      "claude-sonnet-4-20250514"
+      "claude-sonnet-4-6",
+      "claude-sonnet-4-5",
+      "claude-3-7-sonnet-latest",
+      "claude-3-5-sonnet-latest"
     ]);
     let apiRes = null;
     let raw = null;
@@ -110,6 +111,7 @@ exports.handler = async (event) => {
     parsed.configuredModel = configuredModel;
     parsed.usedConfiguredModel = selectedModel === configuredModel;
     parsed.triedModels = triedModels;
+    parsed.usage = raw.usage || null; // { input_tokens, output_tokens } para el cálculo de coste
 
     return jsonResponse(200, parsed);
   } catch (err) {

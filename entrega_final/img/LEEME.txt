@@ -1,0 +1,34 @@
+CAPTURAS PARA EL INFORME TÉCNICO
+================================
+
+Guarda aquí tus capturas de pantalla con EXACTAMENTE estos nombres
+(en PNG o JPG; si usas .jpg cambia también la extensión en el .md):
+
+1) captura-correccion.png
+   Qué capturar: la vista del CANDIDATO justo después de enviar un
+   ejercicio, mostrando el Skill Score (0-100) y el feedback por criterio
+   que ha generado la IA.
+
+2) captura-costes.png
+   Qué capturar: el panel de SUPERADMIN → IA & Costes → "Historial de
+   evaluaciones", donde se ve el coste real y los tokens de cada
+   evaluación. (Superadmin: contraseña admin2026.)
+
+3) captura-injection.png   (opcional pero recomendable)
+   Qué capturar: el resultado de enviar un intento de prompt injection,
+   donde la IA lo penaliza con una puntuación mínima.
+
+CÓMO HACER LA CAPTURA (macOS):
+  - Región: Cmd + Shift + 4  (arrastra para seleccionar la zona)
+  - Ventana: Cmd + Shift + 4, luego barra espaciadora y clic en la ventana
+  Renombra el archivo resultante al nombre de la lista de arriba y muévelo
+  a esta carpeta (entrega_final/img/).
+
+DESPUÉS DE AÑADIR LAS CAPTURAS:
+  Regenera el HTML/PDF ejecutando desde la carpeta entrega_final:
+      node build_informe_html.js
+  y vuelve a exportar INFORME_TECNICO_FINAL.html a PDF (Cmd+P).
+
+Si no añades la captura-injection.png, borra esa sección (A.3) del
+archivo INFORME_TECNICO_FINAL.md antes de regenerar, para que no quede
+una imagen rota.

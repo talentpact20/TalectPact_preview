@@ -1,0 +1,123 @@
+# TalentPact — Skills-Based Hiring con IA
+
+> Marketplace europeo de talento **100 % anónimo**: los candidatos demuestran sus habilidades con retos prácticos **evaluados en tiempo real por IA** y las empresas acceden a perfiles pre-validados bajo un modelo **pay-per-result** (€49/contacto).
+
+Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & IA
+**Autores:** Xavier Griñó, Ivan Sánchez
+
+---
+
+## 1. Qué hay en este repositorio
+
+| Componente | Ruta | Descripción |
+|---|---|---|
+| **Producto web** | `index.html` | Aplicación completa (candidato · empresa · superadmin). HTML/CSS/JS sin framework. |
+| **Corrección IA (backend)** | `netlify/functions/evaluate-exercise.js` | Función serverless que llama a la API de Anthropic (Claude) para evaluar respuestas. |
+| **Chatbot de soporte** | `netlify/functions/support-chat.js` | Función serverless del asistente conversacional. |
+| **Persistencia** | dentro de `index.html` (módulo `TP`) | Capa de persistencia en `localStorage` (perfil, pool de talento, desbloqueos, audit trail de evaluaciones). |
+| **PoC del Agente Evaluador** | `poc_entrega2/` | Prototipo en Python (Entrega 2) que demuestra el motor de evaluación con Dynamic Prompting + Chain of Thought. |
+| **Entregables** | `entrega_final/` | Informe técnico final, guion de demo y batería de Q&A. |
+
+---
+
+## 2. Instalación y uso — Producto web
+
+El producto es una web estática + funciones serverless de Netlify. La corrección con IA requiere una clave de API de Anthropic.
+
+### 2.1 Requisitos
+
+- [Node.js](https://nodejs.org/) ≥ 18
+- [Netlify CLI](https://docs.netlify.com/cli/get-started/): `npm install -g netlify-cli`
+- Una **API key de Anthropic** ([console.anthropic.com](https://console.anthropic.com/))
+
+### 2.2 Ejecución en local
+
+Hay dos formas. La corrección IA requiere que las funciones serverless estén activas (no basta con abrir el HTML).
+
+**Opción A — Sin instalar nada (recomendada para la demo):** un mini-servidor en Node puro incluido en el repo.
+
+```bash
+# Desde la raíz del repositorio (Node >= 18)
+export ANTHROPIC_API_KEY="sk-ant-..."
+node serve-demo.js          # abre http://localhost:8888
+```
+
+`serve-demo.js` sirve `index.html` y ejecuta las funciones de `netlify/functions/` en `/.netlify/functions/*`, replicando `netlify dev` sin dependencias.
+
+**Opción B — Netlify CLI:**
+
+```bash
+npm install -g netlify-cli   # requiere permisos (puede necesitar sudo)
+export ANTHROPIC_API_KEY="sk-ant-..."
+export ANTHROPIC_MODEL="claude-sonnet-4-6"   # opcional; modelo por defecto
+netlify dev
+```
+
+> **Modelo:** el modelo por defecto es `claude-sonnet-4-6`. Modelos antiguos como `claude-3-5-sonnet-latest` pueden devolver `not_found_error` si ya no están disponibles en tu cuenta. Ajusta `ANTHROPIC_MODEL` si tu cuenta usa otro identificador.
+
+> **Nota:** abrir `index.html` con doble clic (protocolo `file://`) carga la web pero **no** la corrección IA, porque las funciones serverless no están disponibles. En ese caso la app degrada con elegancia a una puntuación heurística local (`fallbackScore`).
+
+### 2.3 Despliegue (Netlify)
+
+1. Conecta el repositorio en Netlify.
+2. En *Site settings → Environment variables* define `ANTHROPIC_API_KEY` (y opcionalmente `ANTHROPIC_MODEL`).
+3. Deploy. `netlify.toml` ya apunta el directorio de funciones a `netlify/functions`.
+
+### 2.4 Cómo se usa
+
+- **Candidato:** entra al portal de candidato → elige un reto → responde → la IA evalúa y devuelve un *Skill Score* (0-100) con feedback por criterio. El progreso se guarda y aparece en el pool de talento.
+- **Empresa:** entra al portal de empresa → consulta el pool anónimo → desbloquea el contacto de un candidato (€49, pago simulado).
+- **Superadmin:** panel de métricas de negocio e IA, incluyendo un bloque de **datos reales** alimentado por las evaluaciones registradas en esta instalación.
+
+### 2.5 Persistencia de datos
+
+El módulo `TP` (en `index.html`) persiste en `localStorage` del navegador:
+`profile` (perfil del candidato), `pool` (candidatos evaluados), `unlocks` (contactos desbloqueados), `empJobs` (ofertas publicadas) y `evals` (audit trail de evaluaciones IA).
+
+Para reiniciar el estado de una demo, en la consola del navegador:
+
+```js
+TP.reset(); location.reload();
+```
+
+> En producción esta capa se sustituye por **Supabase (PostgreSQL + Row Level Security)** según el Project Charter; `localStorage` se usa aquí para una demo 100 % reproducible y sin infraestructura externa.
+
+---
+
+## 3. Instalación y uso — PoC del Agente Evaluador (Python)
+
+La PoC (`poc_entrega2/`) demuestra de forma aislada y reproducible el motor de evaluación.
+
+### 3.1 Requisitos
+
+- Python ≥ 3.10
+- API key de Anthropic
+
+### 3.2 Ejecución
+
+```bash
+cd poc_entrega2
+python -m venv .venv && source .venv/bin/activate   # opcional
+pip install -r requirements.txt
+
+export ANTHROPIC_API_KEY="sk-ant-..."
+python poc_evaluator.py
+```
+
+El script lee `mock_database.json` (catálogo de retos + respuestas de candidatos), evalúa cada *submission* con Claude aplicando la rúbrica del reto, imprime los resultados en terminal y guarda `evaluation_results.json`.
+
+### 3.3 Qué demuestra
+
+- **Dynamic Prompting:** un único pipeline evalúa retos heterogéneos inyectando la rúbrica en el system prompt en tiempo de ejecución.
+- **Chain of Thought:** razonamiento criterio a criterio antes del score (auditable).
+- **Detección de Prompt Injection:** marca intentos de manipulación en `alerta_seguridad`.
+- **Métricas:** latencia, tokens y coste por evaluación.
+
+---
+
+## 4. Documentación adicional
+
+- `entrega_final/INFORME_TECNICO_FINAL.md` — informe técnico final (arquitectura, métricas, reflexión crítica).
+- `entrega_final/GUION_DEMO.md` — guion paso a paso de la demo.
+- `entrega_final/QA_DEFENSA.md` — preguntas y respuestas para la defensa.
+- `poc_entrega2/Entrega_2_TalentPact.md` — documento de la Entrega 2 (prototipo y resultados).

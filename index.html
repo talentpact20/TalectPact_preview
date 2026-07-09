@@ -1977,12 +1977,14 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <!-- PAGE B: IA & Costes -->
       <div class="admin-page" id="adminPage-ai">
         <div style="margin-bottom:20px"><h2 style="color:white;font-size:1.2rem;font-weight:800">Monitorización IA & Costes</h2><p style="color:#6b7280;font-size:.78rem">Control de gastos en proveedores de IA y calidad de evaluaciones</p></div>
+        <div id="admAiRealData" style="margin-bottom:16px;padding:14px 18px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:10px"></div>
         <div class="admin-metrics" id="admAiMetrics"></div>
         <div class="admin-overview-grid">
           <div class="admin-card"><div class="admin-card-header"><div class="admin-card-title">💸 Coste por evaluación (por tipo de reto)</div></div><div class="admin-card-body"><div id="admAiCosts" style="padding:0"></div></div></div>
           <div class="admin-card"><div class="admin-card-header"><div class="admin-card-title">⚠️ Alertas de coste</div></div><div class="admin-card-body"><div id="admAiAlerts" style="padding:16px 18px"></div></div></div>
         </div>
         <div class="admin-card"><div class="admin-card-header"><div class="admin-card-title">🚨 Retos con más quejas / apelaciones</div></div><div class="admin-card-body"><div id="admAiAppeals" style="padding:0"></div></div></div>
+        <div class="admin-card"><div class="admin-card-header"><div class="admin-card-title">🧾 Historial de evaluaciones · audit trail (AI Act Art. 12)</div></div><div class="admin-card-body"><div id="admAiHistory" style="padding:16px 18px;max-height:420px;overflow:auto"></div></div></div>
       </div>
 
       <!-- PAGE C: Master Library -->
@@ -2493,6 +2495,91 @@ let candidateProfile={
   completedCommon:[],
   completedCustom:[]
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// PERSISTENCIA LOCAL — TalentPact
+// Capa de persistencia real que sobrevive a recargas del navegador.
+// En producción se sustituye por Supabase (PostgreSQL + RLS) según el Project
+// Charter; aquí usamos localStorage para una demo 100% reproducible y sin
+// infraestructura externa. Si localStorage no está disponible, el sistema
+// degrada con elegancia a memoria (la app sigue funcionando sin persistir).
+// ═══════════════════════════════════════════════════════════════════════════
+const TP_NS='talentpact:v1:';
+const TP={
+  _ok:null,
+  available(){
+    if(TP._ok!==null)return TP._ok;
+    try{const k=TP_NS+'__t';localStorage.setItem(k,'1');localStorage.removeItem(k);TP._ok=true;}
+    catch(e){TP._ok=false;}
+    return TP._ok;
+  },
+  save(key,val){if(!TP.available())return false;try{localStorage.setItem(TP_NS+key,JSON.stringify(val));return true;}catch(e){console.warn('TP.save',key,e);return false;}},
+  load(key,def){if(!TP.available())return def;try{const r=localStorage.getItem(TP_NS+key);return r?JSON.parse(r):def;}catch(e){return def;}},
+  // Log de evaluaciones IA — trazabilidad / audit trail (AI Act Art. 12)
+  logEval(entry){const log=TP.load('evals',[]);log.push(Object.assign({ts:new Date().toISOString()},entry));if(log.length>200)log.splice(0,log.length-200);TP.save('evals',log);return log;},
+  getEvals(){return TP.load('evals',[]);},
+  saveProfile(){TP.save('profile',{skills:candidateProfile.skills,completedCommon:candidateProfile.completedCommon,completedCustom:candidateProfile.completedCustom});},
+  savePool(){TP.save('pool',CANDIDATES.filter(c=>c._dynamic));},
+  saveUnlocks(){TP.save('unlocks',CANDIDATES.filter(c=>c._unlocked).map(c=>c.id));},
+  saveEmpJobs(){TP.save('empJobs',empPostedJobs);},
+  reset(){if(!TP.available())return;['profile','pool','unlocks','empJobs','evals'].forEach(k=>{try{localStorage.removeItem(TP_NS+k);}catch(e){}});console.info('TalentPact: persistencia reiniciada. Recarga la página.');},
+  hydrate(){
+    if(!TP.available()){console.warn('TalentPact: localStorage no disponible — persistencia desactivada (modo memoria).');return;}
+    const p=TP.load('profile',null);
+    if(p){
+      if(p.skills)Object.keys(p.skills).forEach(k=>{if(candidateProfile.skills[k])candidateProfile.skills[k]=p.skills[k];});
+      if(Array.isArray(p.completedCommon))candidateProfile.completedCommon=p.completedCommon;
+      if(Array.isArray(p.completedCustom))candidateProfile.completedCustom=p.completedCustom;
+    }
+    TP.load('pool',[]).forEach(d=>{if(!CANDIDATES.find(c=>c.id===d.id))CANDIDATES.unshift(d);});
+    TP.load('unlocks',[]).forEach(id=>{const c=CANDIDATES.find(x=>x.id===id);if(c)c._unlocked=true;});
+    const jobs=TP.load('empJobs',[]);
+    if(Array.isArray(jobs)&&jobs.length)empPostedJobs=jobs;
+  }
+};
+
+// Escapa texto para insertarlo de forma segura en HTML (respuestas de candidatos).
+function escHtml(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+
+// Registra una evaluación en el audit trail persistente (respuesta + feedback completo).
+// Coste estimado por evaluación IA (~€0,019) coherente con la PoC (Entrega 2).
+function recordEval(ex,score,aiPowered,response,feedback){
+  try{
+    const fb=feedback||{};
+    const cost=(fb&&typeof fb.costEUR==='number')?fb.costEUR:(aiPowered?0.019:0);
+    TP.logEval({
+      job:(activeJob&&activeJob.title)||'—',
+      sector:(activeJob&&activeJob.sector)||'—',
+      exTitle:(ex&&ex.title)||'—',
+      type:(ex&&ex.type)||'—',
+      score:Math.round(score||0),
+      aiPowered:!!aiPowered,
+      estCost:cost,
+      costReal:(fb&&typeof fb.costEUR==='number'),
+      tokensIn:(fb&&fb.tokensIn)||null,
+      tokensOut:(fb&&fb.tokensOut)||null,
+      response:(response||'').toString().slice(0,4000),
+      criteria:Array.isArray(fb.criteria)?fb.criteria.map(c=>({name:c.name,score:c.score,comment:c.comment})):[],
+      overall:fb.overall||''
+    });
+  }catch(e){/* nunca bloquear la evaluación por un fallo de logging */}
+}
+
+// Upsert del perfil propio en el pool de talento anónimo visible para empresas.
+// Convierte las skills desbloqueadas del candidato en una entrada real del pool.
+function syncMyPoolEntry(){
+  const unlocked=Object.entries(candidateProfile.skills).filter(([k,v])=>v.unlocked&&v.score>0);
+  if(!unlocked.length)return;
+  const skills=unlocked.map(([n,v])=>({n,v:v.score})).sort((a,b)=>b.v-a.v).slice(0,6);
+  const avg=Math.round(skills.reduce((a,s)=>a+s.v,0)/skills.length);
+  let me=CANDIDATES.find(c=>c.id==='me');
+  if(me){me.skills=skills;me.score=avg;}
+  else CANDIDATES.unshift({id:'me',i:'YO',sector:'Tu perfil',score:avg,skills,_dynamic:true,_mine:true});
+  TP.savePool();
+}
+
+// Rehidratar el estado persistido al cargar la app (perfil, pool, desbloqueos, ofertas)
+TP.hydrate();
 
 // ═══ COMMON/UNIVERSAL EXERCISES ═══
 const COMMON_EXERCISES=[
@@ -3839,6 +3926,7 @@ async function submitEx(i){
     let hits=0;answers.forEach((a,j)=>{if(a===correct[j])hits++;});
     const sc=Math.min(100,Math.round((hits/correct.length)*90)+10);
     exResults[i]={score:sc,time:_exTimeLeft?((getExercises(activeJob)[i].timeLimit||300)-_exTimeLeft):120,feedback:{overall:`Has acertado ${hits} de ${correct.length} secuencias.`,criteria:[{name:'Aciertos',score:Math.round((hits/correct.length)*100),comment:`${hits}/${correct.length} respuestas correctas`},{name:'Razonamiento lógico',score:sc,comment:sc>80?'Excelente capacidad de reconocimiento de patrones.':sc>60?'Buen nivel de razonamiento. Practica secuencias más complejas.':'Necesitas mejorar el reconocimiento de patrones numéricos y lógicos.'}],aiPowered:false}};
+    recordEval(ex,sc,false,'Test de patrones (selección de opciones)',exResults[i].feedback);
     switchEx(i);return;
   }else if(ex.type==='audio'||ex.type==='video'||ex.type==='image_audit'){
     if(_recState.elapsed<5){alert('Graba al menos 5 segundos antes de enviar.');return;}
@@ -3867,6 +3955,7 @@ async function submitEx(i){
     const result=await evaluateWithAI(ex, candidateResponse, evaluationType);
     clearInterval(stepInterval);
     exResults[i]={score:result.score,time:_exTimeLeft?((ex.timeLimit||300)-_exTimeLeft):120,feedback:result};
+    recordEval(ex,result.score,result.aiPowered!==false,candidateResponse,result);
     switchEx(i);
   }catch(err){
     clearInterval(stepInterval);
@@ -3874,6 +3963,7 @@ async function submitEx(i){
     // Fallback to rubric-based scoring
     const fallback=fallbackScore(ex,candidateResponse);
     exResults[i]={score:fallback.score,time:_exTimeLeft?((ex.timeLimit||300)-_exTimeLeft):120,feedback:fallback};
+    recordEval(ex,fallback.score,false,candidateResponse,fallback);
     switchEx(i);
   }
 }
@@ -3973,6 +4063,13 @@ Responde SOLO con JSON.`;
   parsed.score=Math.max(0,Math.min(100,Math.round(parsed.score||0)));
   if(parsed.criteria){parsed.criteria.forEach(c=>{c.score=Math.max(0,Math.min(100,Math.round(c.score||0)));});}
   parsed.aiPowered=true;
+  // Coste real de la evaluación a partir de los tokens (tarifa claude-sonnet-4-6:
+  // $3 / MTok input, $15 / MTok output). Si no hay usage, se estima después.
+  if(parsed.usage){
+    const ti=parsed.usage.input_tokens||0, to=parsed.usage.output_tokens||0;
+    parsed.tokensIn=ti; parsed.tokensOut=to;
+    parsed.costEUR=(ti*3 + to*15)/1000000;
+  }
   return parsed;
 }
 
@@ -4096,6 +4193,9 @@ function showFinal(){const el=getExercises(activeJob),sc=el.map((_,i)=>exResults
   }else{
     candidateProfile.completedCustom.push({id:activeJob.id,score:avg,title:activeJob.title});
   }
+  // Persistencia: guardar progreso del candidato y publicarlo en el pool de talento
+  TP.saveProfile();
+  syncMyPoolEntry();
   document.getElementById('exNav').innerHTML='';document.getElementById('jmProgress').innerHTML='';
   const isCommon=activeJob._isCommon;
   const hasPending=isCommon&&_pendingJobId;
@@ -4210,6 +4310,7 @@ function processPayment(){
   btn.textContent='Procesando pago…';btn.disabled=true;
   setTimeout(()=>{
     c._unlocked=true;
+    TP.saveUnlocks();
     closePayModal();
     btn.textContent='Pagar y desbloquear →';btn.disabled=false;
     // Show success with real data
@@ -4411,6 +4512,7 @@ function publishJob(){
     requiredLevel:pjLevel,
     exerciseConfig:pjExConfigVal
   });
+  TP.saveEmpJobs();
   
   pjSkills=[];pjReqSkills=[];pjExConfigVal='common+custom';pjLevel='basico';
   document.getElementById('pj-skills-list').innerHTML='';
@@ -4608,6 +4710,51 @@ function renderAdminMetrics(){
 // ═══ B. IA & COSTES ═══
 function renderAdminAI(){
   const a=ADMIN_AI;
+  // ── Datos REALES persistidos en esta instalación (audit trail localStorage) ──
+  const real=TP.getEvals();
+  const realCount=real.length;
+  const realAvg=realCount?Math.round(real.reduce((s,e)=>s+(e.score||0),0)/realCount):0;
+  const realCost=real.reduce((s,e)=>s+(e.estCost||0),0);
+  const realAi=real.filter(e=>e.aiPowered).length;
+  const realBanner=document.getElementById('admAiRealData');
+  if(realBanner){
+    realBanner.innerHTML=realCount
+      ?`<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center"><div style="font-size:.7rem;color:var(--emerald-400);font-weight:700;text-transform:uppercase;letter-spacing:.04em">● Datos reales (esta instalación)</div><div style="color:#cbd5e1;font-size:.8rem"><strong style="color:white">${realCount}</strong> evaluaciones registradas</div><div style="color:#cbd5e1;font-size:.8rem">Score medio real <strong style="color:white">${realAvg}/100</strong></div><div style="color:#cbd5e1;font-size:.8rem"><strong style="color:white">${realAi}</strong> con IA (Claude)</div><div style="color:#cbd5e1;font-size:.8rem">Coste real total <strong style="color:var(--emerald-400)">€${realCost.toFixed(4)}</strong></div></div>`
+      :`<div style="color:#6b7280;font-size:.78rem">Sin evaluaciones reales registradas todavía. Completa un reto como candidato y aparecerán aquí (persistidas en localStorage).</div>`;
+  }
+  // ── Historial de evaluaciones (respuesta + feedback completo) ──
+  const hist=document.getElementById('admAiHistory');
+  if(hist){
+    if(!realCount){
+      hist.innerHTML='<div style="color:#6b7280;font-size:.78rem">Sin evaluaciones registradas todavía. Cada ejercicio que un candidato complete aparecerá aquí con su respuesta y el feedback de la IA.</div>';
+    }else{
+      hist.innerHTML=real.slice().reverse().slice(0,50).map(e=>{
+        const d=new Date(e.ts);
+        const fecha=isNaN(d)?'':d.toLocaleString('es-ES',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
+        const sc=e.score||0;
+        const col=sc>=80?'var(--emerald-400)':sc>=50?'var(--amber-500)':'var(--red-500)';
+        const cost=typeof e.estCost==='number'?e.estCost:0;
+        const costLabel=cost>0?`€${cost.toFixed(4)}`:'—';
+        const tokTip=(e.tokensIn||e.tokensOut)?`${e.tokensIn||0} in / ${e.tokensOut||0} out · `:'';
+        const crit=(e.criteria||[]).map(c=>`<div style="display:flex;justify-content:space-between;gap:10px;padding:3px 0"><span style="color:#cbd5e1">${escHtml(c.name)}</span><span style="font-family:JetBrains Mono,monospace;color:#94a3b8">${c.score}/100</span></div>${c.comment?`<div style="color:#6b7280;font-size:.7rem;margin:0 0 6px">${escHtml(c.comment)}</div>`:''}`).join('');
+        return `<details style="border:1px solid #1f2937;border-radius:8px;margin-bottom:8px;padding:0 12px">
+          <summary style="cursor:pointer;padding:10px 0;display:flex;align-items:center;gap:12px;list-style:none">
+            <span style="font-family:JetBrains Mono,monospace;font-weight:700;color:${col};min-width:34px">${sc}</span>
+            <span style="color:white;font-weight:600;font-size:.8rem">${escHtml(e.exTitle)}</span>
+            <span style="color:#6b7280;font-size:.7rem">${escHtml(e.job)} · ${escHtml(e.sector)}</span>
+            <span style="font-family:JetBrains Mono,monospace;color:var(--emerald-400);font-size:.7rem;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.18);border-radius:5px;padding:1px 7px">${costLabel}</span>
+            <span style="margin-left:auto;color:#6b7280;font-size:.7rem">${fecha}${e.aiPowered?' · IA':''}</span>
+          </summary>
+          <div style="padding:6px 0 12px">
+            <div style="font-size:.7rem;color:#6b7280;margin-bottom:8px;font-family:JetBrains Mono,monospace">Coste ${e.costReal?'real':'estimado'}: ${costLabel}${cost>0?`  ·  ${tokTip}modelo claude-sonnet-4-6`:''}</div>
+            ${e.overall?`<div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:6px;padding:8px 10px;margin-bottom:8px;color:#cbd5e1;font-size:.75rem"><strong style="color:#60a5fa">Feedback IA:</strong> ${escHtml(e.overall)}</div>`:''}
+            ${crit?`<div style="margin-bottom:8px">${crit}</div>`:''}
+            ${e.response?`<div style="font-size:.66rem;color:#6b7280;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Respuesta del candidato</div><div style="background:#0b1220;border:1px solid #1f2937;border-radius:6px;padding:8px 10px;color:#94a3b8;font-size:.72rem;white-space:pre-wrap;max-height:160px;overflow:auto">${escHtml(e.response)}</div>`:''}
+          </div>
+        </details>`;
+      }).join('');
+    }
+  }
   document.getElementById('admAiMetrics').innerHTML=`
     <div class="admin-metric"><div class="am-label">Coste total IA (mes)</div><div class="am-val">€${a.totalCost.toFixed(2)}</div><div class="am-change" style="color:#6b7280">${a.totalCalls.toLocaleString()} evaluaciones</div></div>
     <div class="admin-metric"><div class="am-label">Coste medio/eval</div><div class="am-val">€${a.avgCostPerEval.toFixed(3)}</div><div class="am-change am-up">Margen: €${a.marginPerContact.toFixed(2)}/contacto</div></div>
