@@ -8,7 +8,8 @@
     "dev": "node serve-demo.js",
     "doctor": "node tfm/tech/scripts/doctor.js",
     "deploy:contract": "node tfm/tech/scripts/deploy-contract.js",
-    "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run"
+    "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run",
+    "test:supabase": "node tfm/tech/scripts/test-supabase.js"
   },
   "dependencies": {
     "ethers": "^6.13.0"
