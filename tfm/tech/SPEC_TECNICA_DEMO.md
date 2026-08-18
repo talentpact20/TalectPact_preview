@@ -180,13 +180,15 @@ Página pública simple: el candidato o la empresa pega el JSON del CV (o sube e
 
 ## 8. Plan de implementación (F2)
 
-1. **Supabase:** crear proyecto (región UE), tablas y RLS. Añadir cliente `@supabase/supabase-js` a las funciones.
-2. **Persistir evaluaciones:** enganchar `save-evaluation` tras la corrección IA en `index.html` (hoy `recordEval` va a `localStorage`; se duplica a Supabase).
-3. **Contrato:** compilar y desplegar `SkillPassRegistry` en Polygon Amoy (Remix o Hardhat). Guardar dirección.
-4. **Emisión + anclaje:** `issue-credential` + `anchor-credential` con ethers.js.
-5. **Verificador:** `verify.html` + `verify-credential`.
-6. **UX en el producto:** botón "Generar mi CV verificable en blockchain" en el portal de candidato + panel que muestra el estado (anclado, txHash, enlace al explorador).
-7. **Ensayo + vídeo de respaldo** del flujo completo para la defensa.
+1. ✅ **Supabase:** proyecto creado (región UE) con tablas, Auth y RLS. Las funciones hablan con PostgREST vía `fetch` (sin dependencia extra).
+2. ✅ **Persistir evaluaciones:** `save-evaluation` enganchado tras la corrección IA, con sincronización de subida del progreso local.
+3. ⬜ **Contrato:** compilar y desplegar `SkillPassRegistry` en Polygon Amoy. Ya no hace falta Remix: `npm run deploy:contract` compila con solc, despliega y registra la dirección. **Bloqueado por la wallet de testnet.**
+4. ✅ **Emisión + anclaje:** `issue-credential` + `anchor-credential` con ethers.js v6, firmando server-side. Sin probar en red hasta el paso 3.
+5. ✅ **Verificador:** `verify.html` + `verify-credential`.
+6. ✅ **UX en el producto:** tarjeta "Tu SkillPass verificable" en el portal de candidato, con estado, hash, enlace al explorador y descarga del CV en JSON.
+7. ⬜ **Ensayo + vídeo de respaldo** del flujo completo para la defensa.
+
+> Diagnóstico en cualquier momento: `npm run doctor` comprueba las cuatro capas (IA, datos, RPC/wallet, contrato) y dice exactamente qué falta. Guía paso a paso en `SETUP_CHECKLIST.md`.
 
 ## 9. Riesgos del demo y mitigación
 

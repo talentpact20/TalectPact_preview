@@ -5,9 +5,16 @@ node_modules/
 .env
 .env.*
 *.local
+# ...excepto la plantilla sin secretos, que sí se versiona.
+!.env.example
 
 # Sistema
 .DS_Store
 
 # Netlify
 .netlify/
+
+# Artefactos de compilación del contrato (regenerables: npm run compile:contract).
+# El registro del despliegue sí se versiona: documenta la dirección en Amoy.
+tfm/tech/build/*
+!tfm/tech/build/deployment-amoy.json

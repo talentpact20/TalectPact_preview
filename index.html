@@ -1350,6 +1350,36 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       </div>
       <p id="candProfileFootnote" style="font-size:.75rem;color:var(--slate-500);margin-top:14px;text-align:center;line-height:1.5">Cada skill se desbloquea al completar su reto asociado. Usa el botón de arriba o la pestaña <strong>Retos</strong> para elegir por dónde empezar.</p>
     </div>
+
+    <!-- SkillPass verificable en blockchain (credencial anclada en Polygon Amoy) -->
+    <div class="skill-profile-card" id="spChainCard" style="margin-top:18px">
+      <div class="sp-header" style="margin-bottom:14px;padding-bottom:12px">
+        <div class="sp-avatar" style="background:var(--slate-900,#0f172a);color:#34d399;font-size:1.25rem">⛓</div>
+        <div class="sp-info">
+          <h3>Tu SkillPass verificable</h3>
+          <div class="sp-meta">Convierte tus skills validadas por IA en una credencial sellada en blockchain</div>
+        </div>
+      </div>
+
+      <p style="font-size:.8125rem;color:var(--slate-600);line-height:1.6;margin-bottom:14px">
+        Se publica únicamente la <strong>huella criptográfica</strong> (hash) de tu CV en la red pública
+        <strong>Polygon Amoy</strong>. Tus datos personales nunca salen de la base de datos europea, así que la
+        credencial es imposible de falsificar y sigue cumpliendo el RGPD.
+      </p>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button type="button" class="btn btn-primary" id="spChainBtn" onclick="generateSkillPass()">Generar mi CV verificable</button>
+        <a class="btn btn-outline btn-sm" href="verify.html" target="_blank" rel="noopener">Abrir verificador público</a>
+        <button type="button" class="btn btn-outline btn-sm" id="spChainDownload" onclick="downloadSkillPass()" style="display:none">Descargar CV (JSON)</button>
+      </div>
+
+      <div id="spChainStatus" style="display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:.8125rem;line-height:1.6"></div>
+
+      <div id="spChainResult" style="display:none;margin-top:12px;border:1px solid var(--slate-200);border-radius:10px;overflow:hidden">
+        <div style="padding:10px 14px;background:var(--slate-50);font-size:.6875rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em">Credencial</div>
+        <div style="padding:12px 14px;font-size:.75rem;color:var(--slate-700);line-height:1.8;word-break:break-all" id="spChainMeta"></div>
+      </div>
+    </div>
   </div>
 
   <!-- TAB: Retos Comunes -->
@@ -2594,6 +2624,118 @@ const TPCloud={
     }catch(e){console.warn('TPCloud.loadProgress',e);}
   }
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SkillPass — credencial verificable anclada en blockchain (Polygon Amoy)
+// Flujo: issue-credential (compone el CV + hash) → anchor-credential (tx on-chain)
+// On-chain solo viaja el hash; el CV completo vive off-chain en Supabase (RGPD).
+// ═══════════════════════════════════════════════════════════════════════════
+const SkillPass={
+  cred:null,   // { credentialId, cvJson, cvHash, txHash, anchoredAt }
+  EXPLORER:'https://amoy.polygonscan.com/tx/',
+
+  _status(kind,html){
+    const el=document.getElementById('spChainStatus'); if(!el)return;
+    const styles={
+      info:{bg:'var(--slate-50)',fg:'var(--slate-700)',bd:'var(--slate-200)'},
+      ok:{bg:'var(--emerald-50)',fg:'var(--emerald-600)',bd:'var(--emerald-100)'},
+      error:{bg:'#fef2f2',fg:'#b91c1c',bd:'#fecaca'}
+    };
+    const st=styles[kind]||styles.info;
+    el.style.display='block';
+    el.style.background=st.bg; el.style.color=st.fg; el.style.border='1px solid '+st.bd;
+    el.innerHTML=html;
+  },
+
+  _busy(on,label){
+    const b=document.getElementById('spChainBtn'); if(!b)return;
+    b.disabled=on; b.style.opacity=on?'.6':''; b.style.cursor=on?'wait':'';
+    if(label)b.textContent=label;
+  },
+
+  _render(){
+    const c=SkillPass.cred; if(!c)return;
+    const meta=document.getElementById('spChainMeta');
+    const box=document.getElementById('spChainResult');
+    const dl=document.getElementById('spChainDownload');
+    const skills=(c.cvJson&&c.cvJson.skills)||[];
+    let html='<div><strong>Skills certificadas:</strong> '+skills.length+' · '+
+      escHtml(skills.map(s=>s.skill+' ('+s.score+')').join(', '))+'</div>'+
+      '<div style="margin-top:6px"><strong>Hash del CV:</strong> <code style="font-size:.6875rem">'+escHtml(c.cvHash)+'</code></div>';
+    if(c.txHash){
+      const fecha=c.anchoredAt?new Date(c.anchoredAt).toLocaleString('es-ES'):'';
+      html+='<div style="margin-top:6px"><strong>Anclado:</strong> '+escHtml(fecha)+'</div>'+
+        '<div style="margin-top:6px"><strong>Transacción:</strong> <a href="'+SkillPass.EXPLORER+encodeURIComponent(c.txHash)+
+        '" target="_blank" rel="noopener" style="color:var(--emerald-600)">'+escHtml(c.txHash.slice(0,18))+'… ↗</a></div>';
+    }
+    meta.innerHTML=html;
+    box.style.display='block';
+    if(dl)dl.style.display='inline-flex';
+  },
+
+  async generate(){
+    const unlocked=Object.values(candidateProfile.skills||{}).filter(s=>s&&s.unlocked).length;
+    if(!unlocked){
+      SkillPass._status('info','Aún no tienes ninguna skill validada. Completa al menos un reto y vuelve aquí para sellar tu credencial.');
+      return;
+    }
+    let user=null;
+    try{ user=await TPCloud.currentUser(); }catch(e){}
+    if(!user){
+      SkillPass._status('info','Necesitas iniciar sesión: la credencial se emite sobre las evaluaciones guardadas en tu cuenta, no sobre el progreso local de este navegador.');
+      return;
+    }
+
+    try{
+      SkillPass._busy(true,'Emitiendo credencial…');
+      SkillPass._status('info','① Componiendo tu SkillPass CV y calculando su huella criptográfica…');
+      const issued=await TPCloud._post('issue-credential',{userId:user.id,email:user.email});
+      if(issued.error){
+        SkillPass._status('error','No se pudo emitir la credencial: '+escHtml(issued.error)+
+          (issued.details?'<br><span style="opacity:.75">'+escHtml(issued.details)+'</span>':''));
+        return;
+      }
+      SkillPass.cred={credentialId:issued.credentialId,cvJson:issued.cvJson,cvHash:issued.cvHash,
+                      txHash:issued.txHash||null,anchoredAt:issued.anchoredAt||null};
+      SkillPass._render();
+
+      if(issued.anchored){
+        SkillPass._status('ok','Tu SkillPass ya estaba sellado en blockchain. El CV no ha cambiado, así que su anclaje sigue siendo válido.');
+        return;
+      }
+
+      SkillPass._busy(true,'Anclando en blockchain…');
+      SkillPass._status('info','② Enviando la huella a Polygon Amoy y esperando confirmación de la red…');
+      const anchored=await TPCloud._post('anchor-credential',{credentialId:issued.credentialId});
+      if(anchored.error){
+        SkillPass._status('error','La credencial se emitió, pero no se pudo anclar: '+escHtml(anchored.error)+
+          (anchored.details?'<br><span style="opacity:.75">'+escHtml(anchored.details)+'</span>':''));
+        return;
+      }
+      SkillPass.cred.txHash=anchored.txHash;
+      SkillPass.cred.anchoredAt=anchored.anchoredAt;
+      SkillPass._render();
+      SkillPass._status('ok','SkillPass sellado en blockchain (bloque '+escHtml(String(anchored.blockNumber))+
+        '). Descarga el JSON y cualquier empresa podrá verificarlo por su cuenta en el verificador público.');
+    }catch(e){
+      SkillPass._status('error','Error de red al generar la credencial: '+escHtml(e.message||String(e)));
+    }finally{
+      SkillPass._busy(false,'Regenerar mi CV verificable');
+    }
+  },
+
+  download(){
+    const c=SkillPass.cred; if(!c||!c.cvJson)return;
+    const blob=new Blob([JSON.stringify(c.cvJson,null,2)],{type:'application/json'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='skillpass-'+c.cvHash.slice(2,10)+'.json';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  }
+};
+function generateSkillPass(){return SkillPass.generate();}
+function downloadSkillPass(){return SkillPass.download();}
 
 // Escapa texto para insertarlo de forma segura en HTML (respuestas de candidatos).
 function escHtml(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}

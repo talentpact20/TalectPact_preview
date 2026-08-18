@@ -1,67 +1,112 @@
-# Checklist de puesta en marcha del demo (lo que necesito de ti)
+# Checklist de puesta en marcha del demo
 
-Para construir el *vertical slice* real necesito unas cuentas y claves externas (todo **gratis**). Sigue estos pasos y pásame los valores marcados con 🔑. Yo me encargo de todo el código.
+Estado del flujo **IA evalúa → se persiste → se sella en blockchain → se verifica**.
+El código está completo; lo que falta son credenciales externas (todas **gratis**).
+
+| Capa | Estado | Qué falta |
+|---|---|---|
+| ① IA — evaluación de retos | ✅ Funcionando en producción | — |
+| ② Supabase — persistencia + Auth | ✅ Proyecto creado y en uso | La `service_role key` en tu `.env` local |
+| ③ Blockchain — anclaje | 🔨 Código listo, **sin desplegar** | Wallet + gas + desplegar el contrato |
+| ④ Verificador público | ✅ `verify.html` construido | Depende de ③ |
+
+En cualquier momento puedes ver qué te falta con:
+
+```bash
+npm install     # solo la primera vez
+npm run doctor
+```
 
 ---
 
-## Paso 1 — Supabase (persistencia) · ~10 min
+## Paso 0 — Tu archivo `.env` · ~1 min
 
-1. Crea una cuenta en [supabase.com](https://supabase.com) (gratis).
-2. **New project** → elige región **UE** (Frankfurt o Ireland) por RGPD. Ponle contraseña a la BD.
-3. Cuando esté listo, ve a **SQL Editor** → pega el contenido de `supabase_schema.sql` → **Run**. Esto crea las tablas.
-4. Ve a **Project Settings → API** y copia:
-   - 🔑 **Project URL** (algo como `https://xxxx.supabase.co`)
-   - 🔑 **service_role key** (la secreta, NO la anon) — la usarán solo las funciones del servidor.
+Todas las claves viven en un único archivo `.env` en la raíz (ignorado por git, nunca se sube).
+
+```bash
+cp .env.example .env      # PowerShell: Copy-Item .env.example .env
+```
+
+Ábrelo y ve rellenando los valores según avanzas por los pasos siguientes.
+Tanto el servidor local (`npm run dev`) como los scripts lo leen automáticamente.
+
+## Paso 1 — Supabase (persistencia) · ✅ ya hecho, falta 1 clave
+
+El proyecto ya existe y la app lo está usando (cuentas, progreso y evaluaciones).
+Solo necesitas la clave secreta para poder ejecutar el backend en local:
+
+1. Entra en [supabase.com](https://supabase.com) → tu proyecto.
+2. **Project Settings → API** y copia:
+   - **Project URL** → `SUPABASE_URL`
+   - **service_role key** (la secreta, NO la anon) → `SUPABASE_SERVICE_KEY`
+3. Comprueba que las tablas están creadas: **SQL Editor** → pega `supabase_schema.sql`
+   y después `supabase_schema_auth.sql` → **Run**. Ambos son idempotentes, se pueden
+   volver a ejecutar sin romper nada.
 
 ## Paso 2 — Wallet de testnet (emisor de credenciales) · ~10 min
 
 1. Instala la extensión **MetaMask** ([metamask.io](https://metamask.io)) si no la tienes.
 2. Crea una wallet **nueva y solo para esto** (no uses una con fondos reales). Guarda la frase semilla.
-3. Añade la red **Polygon Amoy** (testnet). Puedes hacerlo automáticamente en [chainlist.org](https://chainlist.org) buscando "Amoy" y conectando MetaMask.
-4. Copia:
-   - 🔑 **Dirección pública** de la wallet (`0x...`)
-   - 🔑 **Clave privada** (MetaMask → ⋮ → Detalles de la cuenta → Exportar clave privada). ⚠️ Es de testnet y sin valor, pero aun así trátala como secreta.
+3. Añade la red **Polygon Amoy** (testnet): en [chainlist.org](https://chainlist.org) busca "Amoy" y conecta MetaMask.
+4. Copia al `.env`:
+   - Dirección pública (`0x...`) → `ISSUER_ADDRESS`
+   - Clave privada (MetaMask → ⋮ → Detalles de la cuenta → Exportar clave privada) → `ISSUER_PRIVATE_KEY`
+
+   ⚠️ Es de testnet y sin valor real, pero trátala como secreta igualmente.
 
 ## Paso 3 — Fondos de testnet (gas gratis) · ~5 min
 
-1. Ve a un *faucet* de Polygon Amoy, por ejemplo el [faucet oficial de Polygon](https://faucet.polygon.technology/) o el de Alchemy.
-2. Pega tu dirección pública y solicita **POL de test** (gratis). Con una pequeña cantidad basta para cientos de anclajes.
+1. Ve al [faucet oficial de Polygon](https://faucet.polygon.technology/) (o el de Alchemy).
+2. Pega tu dirección pública y solicita **POL de test**. Con una cantidad mínima bastan cientos de anclajes.
+3. Verifica que llegó: `npm run doctor` te dirá el saldo.
 
-## Paso 4 — RPC de Polygon Amoy · ~5 min
+## Paso 4 — RPC de Polygon Amoy · ~0-5 min
 
-Necesitamos un endpoint para hablar con la red. Opciones:
-- Público (rápido para empezar): `https://rpc-amoy.polygon.technology`
-- O crea una cuenta gratis en [Alchemy](https://alchemy.com) / [Infura](https://infura.io) → crea una app en la red **Polygon Amoy** → copia:
-  - 🔑 **RPC URL** (recomendado por fiabilidad).
+- Por defecto se usa el público `https://rpc-amoy.polygon.technology` — no tienes que hacer nada.
+- Si falla o va lento: crea una app gratis en [Alchemy](https://alchemy.com) o [Infura](https://infura.io)
+  en la red **Polygon Amoy** y pega su URL en `POLYGON_AMOY_RPC`.
 
-## Paso 5 — Despliegue del contrato (lo hago yo contigo)
+## Paso 5 — Desplegar el contrato · ~2 min
 
-Con tu wallet y el RPC, desplegamos `contracts/SkillPassRegistry.sol` en Amoy (vía Remix, en 5 min, o con un script). Obtendremos:
-- 🔑 **Dirección del contrato desplegado** (`0x...`).
+Ya no hace falta Remix. Con el `.env` de los pasos 2-4 relleno:
 
----
+```bash
+npm run compile:contract   # opcional: compila sin desplegar, para comprobar
+npm run deploy:contract
+```
 
-## Resumen: valores que necesito (variables de entorno)
+El script compila `contracts/SkillPassRegistry.sol` con solc, lo despliega firmando con tu
+wallet, guarda el registro en `tfm/tech/build/deployment-amoy.json` y te imprime la línea
+exacta que tienes que pegar en el `.env`:
 
-Cuando los tengas, pásamelos (o mételos tú en Netlify → *Site settings → Environment variables*):
+```
+SKILLPASS_CONTRACT_ADDRESS=0x...
+```
+
+## Paso 6 — Comprobar el flujo completo
+
+```bash
+npm run doctor    # debe salir todo en verde
+npm run dev       # http://localhost:8888
+```
+
+En el panel de candidato: completa un reto → **Generar mi CV verificable** → obtienes el hash
+y el enlace a la transacción en Amoy PolygonScan. Descarga el JSON y pégalo en
+`http://localhost:8888/verify.html` para comprobar la verificación desde fuera.
+
+## Paso 7 — Producción (Netlify)
+
+Copia las mismas variables en **Netlify → Site settings → Environment variables**:
 
 | Variable | De dónde sale | Secreta |
 |---|---|---|
+| `ANTHROPIC_API_KEY` | console.anthropic.com | **Sí** |
 | `SUPABASE_URL` | Paso 1 | No |
 | `SUPABASE_SERVICE_KEY` | Paso 1 | **Sí** |
 | `ISSUER_PRIVATE_KEY` | Paso 2 | **Sí** |
 | `ISSUER_ADDRESS` | Paso 2 | No |
-| `POLYGON_AMOY_RPC` | Paso 4 | No |
+| `POLYGON_AMOY_RPC` | Paso 4 (opcional) | No |
 | `SKILLPASS_CONTRACT_ADDRESS` | Paso 5 | No |
 
-> **Seguridad:** las claves secretas van SOLO en variables de entorno (local o Netlify), nunca en el código ni en el repo. La wallet es de testnet y sin valor real, pero mantenemos la disciplina.
-
-## Mientras tanto, yo voy construyendo
-
-Sin bloquearnos por las claves, puedo dejar listo:
-- Las 4 funciones serverless (`save-evaluation`, `issue-credential`, `anchor-credential`, `verify-credential`).
-- La página `verify.html` (verificador público).
-- El botón "Generar mi CV verificable" en el portal de candidato.
-- El soporte de dependencias (`@supabase/supabase-js`, `ethers`) en el servidor de demo.
-
-En cuanto me pases los 🔑, conectamos y probamos el flujo completo end-to-end.
+> **Seguridad:** las claves secretas van SOLO en el `.env` local o en Netlify, nunca en el
+> código ni en el repositorio. La wallet es de testnet y sin valor real, pero mantenemos la disciplina.

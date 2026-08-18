@@ -17,8 +17,8 @@ Este directorio contiene todo el trabajo del Trabajo Fin de Máster: el **busine
 | Capa | Qué es | Estado |
 |---|---|---|
 | **① Corrección con IA** | Motor de evaluación (Dynamic Prompting + Chain of Thought) que puntúa 102 tipos de reto sin código específico | ✅ **Construido y funcionando** (Claude, función serverless) |
-| **② Persistencia real** | Base de datos (Supabase/Postgres UE) que guarda perfiles, evaluaciones y credenciales | 🔨 **A construir** (hoy solo `localStorage`) |
-| **③ CV inmutable en blockchain** | Credencial verificable: se ancla el *hash* del CV en una blockchain, dato personal off-chain (RGPD) | 🔨 **A construir** (testnet) |
+| **② Persistencia real** | Base de datos (Supabase/Postgres UE) que guarda perfiles, evaluaciones y credenciales | ✅ **Construido y en uso** (Supabase Auth + tablas, con `localStorage` como respaldo local) |
+| **③ CV inmutable en blockchain** | Credencial verificable: se ancla el *hash* del CV en una blockchain, dato personal off-chain (RGPD) | 🔨 **Código completo, pendiente de desplegar** (contrato, funciones, UI y verificador listos; falta la wallet de testnet — ver `tech/SETUP_CHECKLIST.md`) |
 
 **Innovación financiera secundaria (solo en el plan, no se construye):** pagos pay-per-result con escrow/stablecoin (MiCA/PSD2) y visión de reputación profesional portable.
 
@@ -30,6 +30,21 @@ Este directorio contiene todo el trabajo del Trabajo Fin de Máster: el **busine
 - **Persistencia:** **Supabase** (Postgres + RLS, región UE, tier gratuito).
 - **Blockchain:** testnet gratuita (propuesta: **Polygon Amoy**), anclaje de hash + Verifiable Credential. Ver `tech/SPEC_TECNICA_DEMO.md`.
 - **Patrón RGPD:** datos personales off-chain; solo el hash on-chain (reconcilia inmutabilidad con derecho al olvido).
+
+## 3.1 Estado del demo técnico (agosto 2026)
+
+| Pieza | Dónde vive | Estado |
+|---|---|---|
+| Contrato `SkillPassRegistry` | `tech/contracts/SkillPassRegistry.sol` | ✅ Escrito y compilando (solc 0.8.36, sin avisos) |
+| Script de despliegue | `tech/scripts/deploy-contract.js` (`npm run deploy:contract`) | ✅ Listo — sustituye al paso manual con Remix |
+| Diagnóstico de configuración | `tech/scripts/doctor.js` (`npm run doctor`) | ✅ Listo |
+| Emisión de credencial | `netlify/functions/issue-credential.js` | ✅ Con cuentas reales (Supabase Auth) y reutilización si el CV no cambió |
+| Anclaje on-chain | `netlify/functions/anchor-credential.js` | ✅ Escrito — sin probar hasta desplegar el contrato |
+| Verificación | `netlify/functions/verify-credential.js` + `verify.html` | ✅ Escrito — sin probar hasta desplegar el contrato |
+| Botón en el portal de candidato | `index.html` → tarjeta "Tu SkillPass verificable" | ✅ Construido |
+| **Contrato desplegado en Amoy** | — | ⬜ **Bloqueante**: requiere wallet de testnet + gas del faucet |
+
+Todo lo pendiente está detallado paso a paso en `tech/SETUP_CHECKLIST.md`.
 
 ## 4. Estructura de entregables que pide el enunciado
 

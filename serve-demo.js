@@ -5,10 +5,12 @@
  * estáticos (index.html, etc.) y ejecuta las funciones serverless de
  * netlify/functions/ en los endpoints /.netlify/functions/<nombre>.
  *
- * Requisitos: Node >= 18 (usa fetch global) y la variable ANTHROPIC_API_KEY.
+ * Requisitos: Node >= 18 (usa fetch global) y un archivo `.env` en la raiz
+ * (copialo de `.env.example`). Las variables ya exportadas en el shell tienen
+ * prioridad sobre las del `.env`.
  *
  * Uso:
- *   export ANTHROPIC_API_KEY="sk-ant-..."
+ *   cp .env.example .env   &&   rellena los valores
  *   node serve-demo.js
  *   # abre http://localhost:8888
  */
@@ -16,6 +18,28 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+
+// --- Carga de .env (sin dependencias) ---------------------------------------
+// Netlify inyecta sus propias variables de entorno; en local las leemos del
+// archivo `.env` de la raiz. Lo ya presente en el entorno NO se sobrescribe.
+function loadDotEnv(file) {
+  if (!fs.existsSync(file)) return 0;
+  let loaded = 0;
+  for (const raw of fs.readFileSync(file, "utf8").split(/\r?\n/)) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    const eq = line.indexOf("=");
+    if (eq === -1) continue;
+    const key = line.slice(0, eq).trim().replace(/^export\s+/, "");
+    let value = line.slice(eq + 1).trim();
+    if (/^".*"$/.test(value) || /^'.*'$/.test(value)) value = value.slice(1, -1);
+    if (!key || process.env[key] !== undefined) continue;
+    process.env[key] = value;
+    loaded++;
+  }
+  return loaded;
+}
+const DOTENV_COUNT = loadDotEnv(path.join(__dirname, ".env"));
 
 const PORT = process.env.PORT || 8888;
 const ROOT = __dirname;
@@ -95,11 +119,21 @@ const server = http.createServer((req, res) => {
   serveStatic(req, res);
 });
 
+function envState(name) {
+  return process.env[name] ? "✓" : "✗";
+}
+
 server.listen(PORT, () => {
-  const hasKey = !!process.env.ANTHROPIC_API_KEY;
-  console.log("\n  TalentPact — servidor de demo");
+  console.log("");
+  console.log("  TalentPact — servidor de demo");
   console.log("  ▶ http://localhost:" + PORT);
-  console.log("  ▶ Funciones: /.netlify/functions/evaluate-exercise, /.netlify/functions/support-chat");
-  console.log("  ▶ ANTHROPIC_API_KEY: " + (hasKey ? "detectada ✓" : "NO detectada ✗ (la corrección IA fallará)"));
+  console.log("  ▶ Verificador público: http://localhost:" + PORT + "/verify.html");
+  console.log("  ▶ .env: " + (DOTENV_COUNT ? DOTENV_COUNT + " variable(s) cargada(s)" : "no encontrado (copia .env.example)"));
+  console.log("");
+  console.log("    IA          ANTHROPIC_API_KEY " + envState("ANTHROPIC_API_KEY"));
+  console.log("    Datos       SUPABASE_URL " + envState("SUPABASE_URL") + "   SUPABASE_SERVICE_KEY " + envState("SUPABASE_SERVICE_KEY"));
+  console.log("    Blockchain  ISSUER_PRIVATE_KEY " + envState("ISSUER_PRIVATE_KEY") + "   SKILLPASS_CONTRACT_ADDRESS " + envState("SKILLPASS_CONTRACT_ADDRESS"));
+  console.log("");
+  console.log("  Diagnóstico completo:  npm run doctor");
   console.log("");
 });
