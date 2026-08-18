@@ -3,7 +3,7 @@ exports.handler = async (event) => {
     return jsonResponse(405, { error: "Method not allowed" });
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.anthropicapikey || process.env.ANTHROPIC_KEY;
   const configuredModel = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6";
   if (!apiKey) {
     return jsonResponse(500, { error: "Missing ANTHROPIC_API_KEY in environment variables" });

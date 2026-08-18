@@ -24,8 +24,12 @@ function jsonResponse(statusCode, payload) {
 
 // ─── Supabase REST (PostgREST) ───────────────────────────────────────────────
 function supabaseEnv() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_KEY;
+  // Tolerante a distintos nombres (mayúsculas/minúsculas) por comodidad de despliegue.
+  const url = process.env.SUPABASE_URL || process.env.supabaseurl || process.env.SUPABASE_PROJECT_URL;
+  const key =
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.supabaseservicekey ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) {
     throw new Error("Faltan SUPABASE_URL o SUPABASE_SERVICE_KEY en variables de entorno");
   }
