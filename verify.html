@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TalentPact · Verificador de CV</title>
+<style>
+  :root { --bg:#0b1020; --card:#141b33; --line:#26304f; --txt:#e8ecf7; --mut:#93a0c2; --ok:#22c55e; --bad:#ef4444; --brand:#6d8bff; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; background:var(--bg); color:var(--txt); min-height:100vh; }
+  .wrap { max-width:720px; margin:0 auto; padding:48px 20px; }
+  .brand { font-weight:800; letter-spacing:.5px; font-size:20px; }
+  .brand span { color:var(--brand); }
+  h1 { font-size:26px; margin:18px 0 6px; }
+  p.sub { color:var(--mut); margin:0 0 24px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; }
+  label { display:block; font-size:13px; color:var(--mut); margin-bottom:8px; }
+  textarea { width:100%; min-height:200px; background:#0d1428; color:var(--txt); border:1px solid var(--line); border-radius:12px; padding:14px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; resize:vertical; }
+  button { margin-top:16px; width:100%; background:var(--brand); color:#fff; border:0; border-radius:12px; padding:14px 18px; font-size:15px; font-weight:700; cursor:pointer; }
+  button:disabled { opacity:.6; cursor:default; }
+  .result { margin-top:22px; border-radius:14px; padding:18px; display:none; }
+  .result.show { display:block; }
+  .result.ok { background:rgba(34,197,94,.12); border:1px solid rgba(34,197,94,.4); }
+  .result.bad { background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.4); }
+  .result h3 { margin:0 0 6px; font-size:18px; }
+  .result .ico { font-size:34px; }
+  .hash { font-family:ui-monospace,monospace; font-size:12px; color:var(--mut); word-break:break-all; margin-top:8px; }
+  .foot { color:var(--mut); font-size:12px; margin-top:28px; text-align:center; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">talent<span>pact</span></div>
+    <h1>Verificador de credenciales</h1>
+    <p class="sub">Pega aquí el CV verificable (SkillPass) de un candidato. Comprobaremos contra la blockchain que es auténtico y no ha sido manipulado.</p>
+
+    <div class="card">
+      <label for="cv">CV verificable (JSON)</label>
+      <textarea id="cv" placeholder='{ "type": "TalentPactSkillPass", ... }'></textarea>
+      <button id="btn">Verificar en blockchain</button>
+    </div>
+
+    <div class="result" id="res">
+      <div class="ico" id="ico"></div>
+      <h3 id="rtitle"></h3>
+      <div id="rtext"></div>
+      <div class="hash" id="rhash"></div>
+    </div>
+
+    <div class="foot">TalentPact · Credenciales verificables ancladas en blockchain · Solo el hash se almacena on-chain (sin datos personales).</div>
+  </div>
+
+<script>
+const btn = document.getElementById('btn');
+const res = document.getElementById('res');
+btn.addEventListener('click', async () => {
+  const raw = document.getElementById('cv').value.trim();
+  if (!raw) return;
+  btn.disabled = true; btn.textContent = 'Verificando…';
+  res.className = 'result';
+  try {
+    let cvJson;
+    try { cvJson = JSON.parse(raw); }
+    catch (e) { return showBad('El texto pegado no es un JSON válido.', ''); }
+
+    const r = await fetch('/.netlify/functions/verify-credential', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ cvJson })
+    });
+    const data = await r.json();
+    if (!r.ok) return showBad(data.error || 'Error en la verificación', data.details || '');
+
+    if (data.verified) {
+      showOk(data.anchoredAt, data.cvHash);
+    } else {
+      showBad(data.reason || 'La credencial no es auténtica o fue modificada.', data.cvHash);
+    }
+  } catch (err) {
+    showBad('No se pudo contactar con el verificador.', err.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Verificar en blockchain';
+  }
+});
+
+function showOk(anchoredAt, hash) {
+  res.className = 'result show ok';
+  document.getElementById('ico').textContent = '✅';
+  document.getElementById('rtitle').textContent = 'Credencial auténtica y verificada';
+  const fecha = anchoredAt ? new Date(anchoredAt).toLocaleString('es-ES') : '';
+  document.getElementById('rtext').textContent = 'Sellada en blockchain' + (fecha ? ' el ' + fecha : '') + '. El CV no ha sido manipulado.';
+  document.getElementById('rhash').textContent = hash ? 'Hash: ' + hash : '';
+}
+function showBad(msg, hash) {
+  res.className = 'result show bad';
+  document.getElementById('ico').textContent = '❌';
+  document.getElementById('rtitle').textContent = 'No verificado';
+  document.getElementById('rtext').textContent = msg;
+  document.getElementById('rhash').textContent = hash ? 'Hash calculado: ' + hash : '';
+}
+</script>
+</body>
+</html>

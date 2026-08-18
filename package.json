@@ -1,0 +1,15 @@
+{
+  "name": "talentpact",
+  "version": "1.0.0",
+  "description": "TalentPact — marketplace de talento anónimo con evaluación IA y credenciales verificables en blockchain",
+  "private": true,
+  "scripts": {
+    "demo": "node serve-demo.js"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^27.1.1"
+  }
+}
