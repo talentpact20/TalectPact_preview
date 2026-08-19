@@ -1368,7 +1368,9 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
         <button type="button" class="btn btn-primary" id="spChainBtn" onclick="generateSkillPass()">Generar mi CV verificable</button>
-        <button type="button" class="btn btn-outline btn-sm" id="spChainDownload" onclick="downloadSkillPass()" style="display:none">Descargar CV (JSON)</button>
+        <button type="button" class="btn btn-outline btn-sm" id="spChainDownload" onclick="downloadSkillPass()" style="display:none">Descargar JSON</button>
+        <button type="button" class="btn btn-outline btn-sm" id="spChainPdf" onclick="downloadSkillPassPdf()" style="display:none">Descargar PDF</button>
+        <button type="button" class="btn btn-outline btn-sm" id="spChainShare" onclick="copySkillPassLink()" style="display:none">Copiar enlace público</button>
       </div>
 
       <div id="spChainStatus" style="display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:.8125rem;line-height:1.6"></div>
@@ -2701,6 +2703,8 @@ const SkillPass={
     meta.innerHTML=html;
     box.style.display='block';
     if(dl)dl.style.display='inline-flex';
+    const pdf=document.getElementById('spChainPdf'); if(pdf)pdf.style.display='inline-flex';
+    const sh=document.getElementById('spChainShare'); if(sh)sh.style.display='inline-flex';
   },
 
   async generate(){
@@ -2746,7 +2750,7 @@ const SkillPass={
       SkillPass.cred.anchoredAt=anchored.anchoredAt;
       SkillPass._render();
       SkillPass._status('ok','SkillPass sellado en blockchain (bloque '+escHtml(String(anchored.blockNumber))+
-        '). Descarga el JSON y cualquier empresa podrá verificarlo por su cuenta en el verificador público.');
+        '). Descarga el PDF o copia el enlace público para enseñarlo en otras plataformas.';
     }catch(e){
       SkillPass._status('error','Error de red al generar la credencial: '+escHtml(e.message||String(e)));
     }finally{
@@ -2762,10 +2766,78 @@ const SkillPass={
     a.download='skillpass-'+c.cvHash.slice(2,10)+'.json';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+  },
+
+  shareUrl(){
+    const c=SkillPass.cred; if(!c||!c.cvHash)return '';
+    return (location.origin||'')+'/verify.html?h='+encodeURIComponent(c.cvHash);
+  },
+
+  copyLink(){
+    const url=SkillPass.shareUrl(); if(!url)return;
+    const done=()=>SkillPass._status('ok','Enlace copiado. Cualquiera puede abrirlo y verificar el SkillPass en blockchain, sin cuenta TalentPact.<br><code style="font-size:.72rem;word-break:break-all">'+escHtml(url)+'</code>');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(done).catch(()=>{ prompt('Copia este enlace:',url); done(); });
+    }else{ prompt('Copia este enlace:',url); done(); }
+  },
+
+  pdf(){
+    const c=SkillPass.cred; if(!c||!c.cvJson)return;
+    const skills=(c.cvJson.skills||[]);
+    const url=SkillPass.shareUrl();
+    const qr='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(url);
+    const fecha=c.anchoredAt?new Date(c.anchoredAt).toLocaleString('es-ES'):new Date().toLocaleString('es-ES');
+    const rows=skills.map(s=>'<tr><td>'+escHtml(s.skill)+'</td><td style="text-align:right;font-weight:700">'+(s.score!=null?s.score:'—')+'</td></tr>').join('');
+    const w=window.open('','_blank');
+    if(!w){alert('Permite ventanas emergentes para generar el PDF.');return;}
+    w.document.write(`<!doctype html><html lang="es"><head><meta charset="utf-8"><title>SkillPass TalentPact</title>
+<style>
+  @page { size: A4; margin: 18mm; }
+  body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:#0f172a;margin:0;padding:28px}
+  .sheet{max-width:720px;margin:0 auto;border:1px solid #e2e8f0;border-radius:16px;padding:32px 36px}
+  .brand{font-weight:800;letter-spacing:.4px;font-size:18px}.brand span{color:#059669}
+  h1{font-size:22px;margin:18px 0 4px}
+  .sub{color:#64748b;font-size:13px;margin:0 0 22px}
+  table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13px}
+  th,td{padding:8px 0;border-bottom:1px solid #e2e8f0}
+  th{text-align:left;font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
+  .meta{font-size:11px;color:#475569;word-break:break-all;line-height:1.55}
+  .row{display:flex;gap:24px;align-items:flex-start;margin-top:8px}
+  .qr{width:140px;height:140px;border:1px solid #e2e8f0;border-radius:8px}
+  .ok{display:inline-block;background:#ecfdf5;color:#047857;border:1px solid #a7f3d0;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700}
+  .foot{margin-top:22px;font-size:11px;color:#94a3b8;line-height:1.5}
+  @media print { button{display:none} body{padding:0} .sheet{border:none} }
+</style></head><body>
+<div class="sheet">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <div class="brand">talent<span>pact</span></div>
+    <span class="ok">SkillPass verificable</span>
+  </div>
+  <h1>Credencial de habilidades</h1>
+  <p class="sub">Portable · sellada en blockchain (Ethereum Sepolia) · sin datos personales on-chain</p>
+  <table><thead><tr><th>Skill verificada por IA</th><th style="text-align:right">Score</th></tr></thead><tbody>${rows||'<tr><td colspan="2">Sin skills</td></tr>'}</tbody></table>
+  <div class="row">
+    <div class="meta" style="flex:1">
+      <div><strong>Emitido:</strong> ${escHtml(fecha)}</div>
+      <div><strong>Sujeto:</strong> ${escHtml((c.cvJson&&c.cvJson.subject)||'did:talentpact:candidate')}</div>
+      <div><strong>Hash:</strong> ${escHtml(c.cvHash||'')}</div>
+      ${c.txHash?`<div><strong>Tx:</strong> ${escHtml(c.txHash)}</div>`:''}
+      <div style="margin-top:8px"><strong>Enlace de verificación:</strong><br>${escHtml(url)}</div>
+    </div>
+    <div><img class="qr" alt="QR verificación" src="${qr}"><div style="font-size:10px;color:#94a3b8;text-align:center;margin-top:4px">Escanea para verificar</div></div>
+  </div>
+  <p class="foot">Cualquier plataforma puede comprobar esta credencial abriendo el enlace o el QR. El hash on-chain demuestra que el documento no ha sido alterado. Los datos personales del candidato no se publican en la cadena (RGPD).</p>
+</div>
+<div style="text-align:center;margin-top:18px"><button onclick="window.print()" style="padding:10px 18px;border-radius:10px;border:0;background:#059669;color:#fff;font-weight:700;cursor:pointer">Guardar como PDF…</button></div>
+<script>setTimeout(function(){window.print();},400);</script>
+</body></html>`);
+    w.document.close();
   }
 };
 function generateSkillPass(){return SkillPass.generate();}
 function downloadSkillPass(){return SkillPass.download();}
+function downloadSkillPassPdf(){return SkillPass.pdf();}
+function copySkillPassLink(){return SkillPass.copyLink();}
 
 // Escapa texto para insertarlo de forma segura en HTML (respuestas de candidatos).
 function escHtml(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
