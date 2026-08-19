@@ -63,13 +63,64 @@ netlify dev
 2. En *Site settings → Environment variables* define `ANTHROPIC_API_KEY` (y opcionalmente `ANTHROPIC_MODEL`).
 3. Deploy. `netlify.toml` ya apunta el directorio de funciones a `netlify/functions`.
 
-### 2.4 Cómo se usa
+### 2.4 Acceso con Google / LinkedIn (OAuth)
+
+El botón **Google** del modal de candidato usa **Supabase Auth** (`signInWithOAuth`).
+El código ya está integrado en `index.html`; falta únicamente habilitar el proveedor
+en los paneles de Google y Supabase. Mientras no lo esté, el botón se muestra
+atenuado y explica al usuario que use email o el acceso de invitado.
+
+**1) Google Cloud Console** — https://console.cloud.google.com/apis/credentials
+
+- *Crear credenciales → ID de cliente de OAuth → Aplicación web*.
+- **Orígenes autorizados de JavaScript:** `http://localhost:8888` y la URL del sitio en producción.
+- **URI de redirección autorizados:** `https://vqyqedmizxqneniynxqp.supabase.co/auth/v1/callback`
+- Copia el *Client ID* y el *Client Secret*.
+
+**2) Supabase** — *Authentication → Sign In / Providers → Google*
+
+- Activa el proveedor y pega el Client ID y el Client Secret.
+
+**3) Supabase** — *Authentication → URL Configuration*
+
+- **Site URL:** la URL de producción del sitio.
+- **Redirect URLs:** añade `http://localhost:8888/**` y `https://<tu-sitio>/**`.
+  La app vuelve a `window.location.origin + pathname`; si esa URL no está en la
+  lista, Supabase redirige al *Site URL* y se pierde el destino.
+
+**Comprobar que está activo** (sin abrir el navegador):
+
+```bash
+npm run check:google                       # comprueba http://localhost:8888/
+npm run check:google -- https://tu-sitio   # comprueba también producción
+```
+
+El script dice, uno por uno, qué falta: si el proveedor está apagado, si Google
+acepta el Client ID, qué redirect URI recibirá Google y a qué URL volverá la
+sesión después del login.
+
+La app consulta `/auth/v1/settings` cada vez que se abre el modal de acceso, así
+que el botón se enciende solo en cuanto Google quede habilitado: no hay que
+volver a tocar el código ni volver a desplegar.
+
+Para **LinkedIn** el proceso es idéntico con el proveedor `linkedin_oidc`
+(LinkedIn Developers → app → *Sign In with LinkedIn using OpenID Connect*).
+
+### 2.5 Cómo se usa
 
 - **Candidato:** entra al portal de candidato → elige un reto → responde → la IA evalúa y devuelve un *Skill Score* (0-100) con feedback por criterio. El progreso se guarda y aparece en el pool de talento.
-- **Empresa:** entra al portal de empresa → consulta el pool anónimo → desbloquea el contacto de un candidato (€49, pago simulado).
+- **Empresa:** crea una cuenta corporativa (empresa, contacto, cargo, tamaño) → publica ofertas con las skills exigidas → consulta el pool anónimo → desbloquea el contacto de un candidato (€49, pago simulado) y recibe su ficha de contacto.
 - **Superadmin:** panel de métricas de negocio e IA, incluyendo un bloque de **datos reales** alimentado por las evaluaciones registradas en esta instalación.
 
-### 2.5 Persistencia de datos
+**Modelo de cuentas.** Los dos portales comparten el mismo Supabase Auth; lo que
+los separa es `user_metadata.role` (`candidate` | `empresa`), que se fija al
+crear la cuenta. Cada portal rechaza a quien no le corresponde y lo redirige al
+suyo, así que no hacen falta tablas ni proyectos adicionales. Los datos de la
+empresa (nombre, persona de contacto, cargo, tamaño) viajan en ese mismo
+`user_metadata`. Ambos portales conservan un acceso **de invitado** sin cuenta
+para poder recorrer la demo sin registrarse.
+
+### 2.6 Persistencia de datos
 
 El módulo `TP` (en `index.html`) persiste en `localStorage` del navegador:
 `profile` (perfil del candidato), `pool` (candidatos evaluados), `unlocks` (contactos desbloqueados), `empJobs` (ofertas publicadas) y `evals` (audit trail de evaluaciones IA).
