@@ -57,12 +57,15 @@ function normalizePrivateKey(pk) {
   return "0x" + clean;
 }
 
-const AMOY = {
-  chainId: 80002,
-  name: "Polygon Amoy",
-  defaultRpc: "https://rpc-amoy.polygon.technology",
-  explorer: "https://amoy.polygonscan.com",
-  faucet: "https://faucet.polygon.technology/"
+// Sepolia: mismos contratos EVM, faucet de Google (solo Gmail, sin comprar crypto).
+// Polygon Amoy se deja como alternativa cuando hay POL de testnet.
+const CHAIN = {
+  chainId: 11155111,
+  name: "Ethereum Sepolia",
+  slug: "ethereum-sepolia",
+  defaultRpc: "https://ethereum-sepolia-rpc.publicnode.com",
+  explorer: "https://sepolia.etherscan.io",
+  faucet: "https://cloud.google.com/application/web3/faucet/ethereum/sepolia"
 };
 
-module.exports = { ROOT, loadDotEnv, env, requireEnv, normalizePrivateKey, AMOY };
+module.exports = { ROOT, loadDotEnv, env, requireEnv, normalizePrivateKey, CHAIN, AMOY: CHAIN };

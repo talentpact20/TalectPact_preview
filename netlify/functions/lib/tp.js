@@ -136,7 +136,10 @@ function getEthers() {
 }
 
 function getProvider() {
-  const rpc = process.env.POLYGON_AMOY_RPC || "https://rpc-amoy.polygon.technology";
+  const rpc =
+    process.env.SEPOLIA_RPC ||
+    process.env.POLYGON_AMOY_RPC ||
+    "https://ethereum-sepolia-rpc.publicnode.com";
   const { ethers } = getEthers();
   return new ethers.JsonRpcProvider(rpc);
 }

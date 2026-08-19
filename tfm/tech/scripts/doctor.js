@@ -11,7 +11,7 @@
  */
 const fs = require("fs");
 const path = require("path");
-const { ROOT, loadDotEnv, env, normalizePrivateKey, AMOY } = require("./lib-env");
+const { ROOT, loadDotEnv, env, normalizePrivateKey, CHAIN } = require("./lib-env");
 
 const n = loadDotEnv();
 const results = [];
@@ -60,17 +60,17 @@ async function checkSupabase() {
 
 async function checkChain() {
   const { ethers } = require("ethers");
-  const rpc = env("POLYGON_AMOY_RPC") || AMOY.defaultRpc;
+  const rpc = env("SEPOLIA_RPC") || env("POLYGON_AMOY_RPC") || CHAIN.defaultRpc;
   let provider;
   try {
     provider = new ethers.JsonRpcProvider(rpc);
     const net = await provider.getNetwork();
-    if (Number(net.chainId) !== AMOY.chainId) {
-      fail("blockchain", `el RPC responde chainId ${net.chainId}, se esperaba ${AMOY.chainId} (${AMOY.name}).`);
+    if (Number(net.chainId) !== CHAIN.chainId) {
+      fail("blockchain", `el RPC responde chainId ${net.chainId}, se esperaba ${CHAIN.chainId} (${CHAIN.name}).`);
       return;
     }
     const block = await provider.getBlockNumber();
-    ok("blockchain", `RPC ${AMOY.name} respondiendo (bloque ${block})`);
+    ok("blockchain", `RPC ${CHAIN.name} respondiendo (bloque ${block})`);
   } catch (e) {
     fail("blockchain", `RPC inalcanzable (${rpc}): ${e.message}`);
     return;
@@ -84,9 +84,9 @@ async function checkChain() {
     try {
       wallet = new ethers.Wallet(normalizePrivateKey(pk), provider);
       const balance = await provider.getBalance(wallet.address);
-      const pol = ethers.formatEther(balance);
-      if (balance === 0n) fail("blockchain", `wallet emisora ${wallet.address} sin gas. Faucet: ${AMOY.faucet}`);
-      else ok("blockchain", `wallet emisora ${wallet.address} con ${pol} POL`);
+      const eth = ethers.formatEther(balance);
+      if (balance === 0n) fail("blockchain", `wallet emisora ${wallet.address} sin gas. Faucet: ${CHAIN.faucet}`);
+      else ok("blockchain", `wallet emisora ${wallet.address} con ${eth} ETH`);
       const declared = env("ISSUER_ADDRESS");
       if (declared && declared.toLowerCase() !== wallet.address.toLowerCase()) {
         warn("blockchain", `ISSUER_ADDRESS (${declared}) no coincide con la clave privada (${wallet.address}).`);
@@ -117,7 +117,7 @@ async function checkChain() {
       ok("blockchain", "la wallet del .env es el emisor autorizado del contrato");
     }
     console.log("");
-    console.log("  Explorer: " + AMOY.explorer + "/address/" + address);
+    console.log("  Explorer: " + CHAIN.explorer + "/address/" + address);
   } catch (e) {
     fail("blockchain", `no se pudo leer el contrato: ${e.message}`);
   }

@@ -5,7 +5,7 @@
  */
 const { jsonResponse, sb, getContract } = require("./lib/tp");
 
-const EXPLORER = "https://amoy.polygonscan.com/tx/";
+const EXPLORER = "https://sepolia.etherscan.io/tx/";
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });

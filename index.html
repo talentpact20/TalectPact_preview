@@ -1363,7 +1363,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
       <p style="font-size:.8125rem;color:var(--slate-600);line-height:1.6;margin-bottom:14px">
         Se publica únicamente la <strong>huella criptográfica</strong> (hash) de tu CV en la red pública
-        <strong>Polygon Amoy</strong>. Tus datos personales nunca salen de la base de datos europea, así que la
+        <strong>Ethereum Sepolia</strong> (testnet). Tus datos personales nunca salen de la base de datos europea, así que la
         credencial es imposible de falsificar y sigue cumpliendo el RGPD.
       </p>
 
@@ -2632,7 +2632,7 @@ const TPCloud={
 // ═══════════════════════════════════════════════════════════════════════════
 const SkillPass={
   cred:null,   // { credentialId, cvJson, cvHash, txHash, anchoredAt }
-  EXPLORER:'https://amoy.polygonscan.com/tx/',
+  EXPLORER:'https://sepolia.etherscan.io/tx/',
 
   _status(kind,html){
     const el=document.getElementById('spChainStatus'); if(!el)return;
@@ -2705,7 +2705,7 @@ const SkillPass={
       }
 
       SkillPass._busy(true,'Anclando en blockchain…');
-      SkillPass._status('info','② Enviando la huella a Polygon Amoy y esperando confirmación de la red…');
+      SkillPass._status('info','② Enviando la huella a Ethereum Sepolia y esperando confirmación de la red…');
       const anchored=await TPCloud._post('anchor-credential',{credentialId:issued.credentialId});
       if(anchored.error){
         SkillPass._status('error','La credencial se emitió, pero no se pudo anclar: '+escHtml(anchored.error)+

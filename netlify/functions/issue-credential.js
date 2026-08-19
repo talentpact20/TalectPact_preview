@@ -78,7 +78,7 @@ exports.handler = async (event) => {
       profile_id: profile.id,
       cv_json: cvJson,
       cv_hash: cvHash,
-      chain: "polygon-amoy"
+      chain: "ethereum-sepolia"
     });
     const row = Array.isArray(inserted) ? inserted[0] : inserted;
 
