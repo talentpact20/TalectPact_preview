@@ -506,6 +506,21 @@ nav a.nl:hover{color:var(--slate-900)}
 .a-field .hint{font-size:.6875rem;color:var(--slate-400);margin-top:1px}
 .auth-submit .btn{width:100%;justify-content:center;padding:11px 20px;font-size:.875rem}
 .auth-submit .btn[disabled]{opacity:.65;cursor:progress}
+.st-msg{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:.72rem;line-height:1.45}
+.st-msg.show{display:block}
+.st-msg.ok{background:var(--emerald-50);border:1px solid var(--emerald-100);color:var(--emerald-700)}
+.st-msg.err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}
+.st-msg.info{background:var(--slate-50);border:1px solid var(--slate-200);color:var(--slate-600)}
+.st-soon{font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--slate-100);color:var(--slate-500);border:1px solid var(--slate-200);padding:4px 9px;border-radius:20px;white-space:nowrap;flex:none}
+.st-note{font-size:.68rem;color:var(--slate-400);line-height:1.5;margin-top:12px;padding-top:11px;border-top:1px solid var(--slate-100)}
+.st-inline-form{display:none;flex-direction:column;gap:9px;margin-top:11px;padding:13px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:9px}
+.st-inline-form.show{display:flex}
+.st-inline-form .st-actions{display:flex;gap:8px;flex-wrap:wrap}
+.st-kv{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:.75rem;padding:7px 0;border-bottom:1px solid var(--slate-100)}
+.st-kv:last-child{border-bottom:0}
+.st-kv span{color:var(--slate-500)}
+.st-kv strong{color:var(--slate-900);font-weight:700;text-align:right}
+.st-empty{font-size:.72rem;color:var(--slate-400);padding:10px 0;text-align:center}
 .a-pw{position:relative;display:flex}
 .a-pw input{padding-right:64px}
 .a-pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:4px 8px;border-radius:6px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.6875rem;font-weight:600;color:var(--slate-400);cursor:pointer}
@@ -1610,43 +1625,45 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-topbar-icon" style="background:var(--emerald-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       <div>
         <h2>Ajustes</h2>
-        <p>Cuenta de candidato · Ana Casanova</p>
+        <p id="stCandWho">Cuenta de candidato</p>
       </div>
     </div>
     <button class="st-close" onclick="closeSettings('cand')">✕</button>
   </div>
   <div class="st-body">
 
-    <!-- PERFIL -->
+    <!-- DATOS PERSONALES — se leen y se guardan en Supabase -->
     <div class="st-section">
       <div class="st-section-label">Datos personales</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Nombre</label><input type="text" value="Ana"></div>
-          <div class="st-field"><label>Apellido</label><input type="text" value="Casanova"></div>
+          <div class="st-field"><label>Nombre</label><input type="text" id="st-cand-name" autocomplete="given-name"></div>
+          <div class="st-field"><label>Apellido</label><input type="text" id="st-cand-last" autocomplete="family-name"></div>
         </div>
-        <div class="st-field"><label>Email</label><input type="email" value="ana.casanova@email.com"></div>
+        <div class="st-field"><label>Email</label><input type="email" id="st-cand-email" autocomplete="email"></div>
         <div class="st-grid">
-          <div class="st-field"><label>Sector preferido</label><select><option>IT / Dev</option><option selected>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option></select></div>
-          <div class="st-field"><label>Ciudad</label><input type="text" placeholder="Barcelona…"></div>
+          <div class="st-field"><label>Sector preferido</label><select id="st-cand-sector"><option value="">Sin especificar</option><option>IT / Dev</option><option>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div>
+          <div class="st-field"><label>Ciudad</label><input type="text" id="st-cand-city" placeholder="Barcelona…"></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>LinkedIn</label><input type="url" placeholder="linkedin.com/in/…"></div>
-          <div class="st-field"><label>GitHub / Portafolio</label><input type="url" placeholder="github.com/…"></div>
+          <div class="st-field"><label>LinkedIn</label><input type="url" id="st-cand-linkedin" placeholder="linkedin.com/in/…"></div>
+          <div class="st-field"><label>Teléfono</label><input type="tel" id="st-cand-phone" placeholder="+34 600 000 000"></div>
         </div>
-        <div style="margin-top:4px"><button class="btn btn-primary btn-sm" onclick="alert('Perfil guardado.')">Guardar cambios</button></div>
+        <div class="st-field"><label>GitHub / Portafolio</label><input type="url" id="st-cand-portfolio" placeholder="github.com/…"></div>
+        <div style="margin-top:4px"><button class="btn btn-primary btn-sm" id="st-cand-save" onclick="saveCandSettings()">Guardar cambios</button></div>
+        <div class="st-msg" id="st-cand-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
-    <!-- PRIVACIDAD -->
+    <!-- PRIVACIDAD — cada opción cambia de verdad lo que ven las empresas -->
     <div class="st-section">
       <div class="st-section-label">Privacidad</div>
       <div class="st-card">
-        <div style="background:var(--emerald-50);border-radius:8px;padding:9px 12px;font-size:.7rem;color:var(--emerald-700);margin-bottom:12px;display:flex;gap:8px">🔒 <span>Tu nombre y contacto son siempre anónimos hasta que una empresa pague por desbloquearte <em>y tú aceptes</em>.</span></div>
-        <div class="st-row"><div class="st-row-info"><h5>Visible en el pool de talento</h5><p>Las empresas pueden encontrar tu perfil</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Recibir solicitudes de contacto</h5><p>Empresas pueden pagarte para desbloquearte</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Aparecer en ranking público</h5><p>Tu posición anónima en el leaderboard</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Notificar cuando me desbloqueen</h5><p>Email inmediato al ser desbloqueado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div style="background:var(--emerald-50);border-radius:8px;padding:9px 12px;font-size:.7rem;color:var(--emerald-700);margin-bottom:12px;display:flex;gap:8px">🔒 <span>Tu nombre y tu contacto son siempre anónimos hasta que una empresa paga por desbloquearte.</span></div>
+        <div class="st-row"><div class="st-row-info"><h5>Visible en el pool de talento</h5><p>Si lo desactivas, tu perfil desaparece del listado de las empresas</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-poolVisible" onchange="setPref('cand','poolVisible',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Aceptar solicitudes de contacto</h5><p>Si lo desactivas, las empresas no pueden desbloquear tus datos</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-allowContact" onchange="setPref('cand','allowContact',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Aparecer en el ranking público</h5><p>Tu posición anónima en el leaderboard</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-publicRanking" onchange="setPref('cand','publicRanking',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-msg" id="st-pref-cand-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
@@ -1654,32 +1671,26 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Notificaciones</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Resultado de reto completado</h5><p>Score y feedback por email</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Empresa desbloqueó tu contacto</h5><p>Alerta inmediata</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Nuevas ofertas que encajan</h5><p>Match ≥70% con tus skills</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Recordatorio retos pendientes</h5><p>Resumen semanal</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Novedades de TalentPact</h5><p>Nuevas funciones y retos</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Resultado de reto completado</h5><p>Score y feedback por email</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyResult" onchange="setPref('cand','notifyResult',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Una empresa desbloquea tu contacto</h5><p>Aviso inmediato</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyUnlock" onchange="setPref('cand','notifyUnlock',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Nuevas ofertas que encajan</h5><p>Match ≥70% con tus skills</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyMatches" onchange="setPref('cand','notifyMatches',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Resumen semanal</h5><p>Retos pendientes y novedades</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyWeekly" onchange="setPref('cand','notifyWeekly',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <p class="st-note">Estas preferencias se guardan en tu cuenta. El envío de correos todavía no está conectado en esta versión preliminar, así que de momento solo determinan qué recibirás cuando lo esté.</p>
       </div>
     </div>
 
-    <!-- SUSCRIPCIÓN CANDIDATO -->
+    <!-- PLAN -->
     <div class="st-section">
-      <div class="st-section-label">Mi suscripción</div>
+      <div class="st-section-label">Mi plan</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--emerald-50);border-radius:10px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--emerald-50);border-radius:10px">
           <div>
             <div style="font-size:.78rem;font-weight:700;color:var(--emerald-700)">Plan actual: <span style="font-size:.85rem">Free</span></div>
-            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px">TalentPact es 100% gratuito. Hasta 5 retos por semana.</div>
+            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px">TalentPact es gratuito para candidatos. Sin límite de retos.</div>
           </div>
           <span style="font-size:.65rem;font-weight:700;background:var(--emerald-100);color:var(--emerald-700);padding:4px 10px;border-radius:20px">GRATIS</span>
         </div>
-        <div style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;padding:12px 14px;">
-          <div style="font-size:.72rem;font-weight:700;color:var(--slate-700);margin-bottom:6px">Premium — Para usuarios con uso intensivo</div>
-          <div style="font-size:.7rem;color:var(--slate-500);margin-bottom:10px;line-height:1.5">Si realizas <strong>más de 5 retos por semana</strong>, desbloquea la suscripción Premium para acceso ilimitado, prioridad en el pool y acceso anticipado a nuevos retos.</div>
-          <button class="btn btn-primary btn-sm" onclick="alert('Próximamente disponible. Contacta con hola@talentpact.com para más info.')">Conocer Premium →</button>
-        </div>
-        <div class="st-field"><label>IBAN / Email PayPal</label><input type="text" placeholder="ES00 0000 0000 0000 0000 0000"></div>
-        <button class="btn btn-primary btn-sm" onclick="alert('Datos de cobro guardados.')">Guardar datos de cobro</button>
+        <p class="st-note">No hay planes de pago para candidatos ni cobros que configurar: el modelo de negocio cobra a las empresas por desbloquear un contacto.</p>
       </div>
     </div>
 
@@ -1687,17 +1698,49 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Seguridad y acceso</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Contraseña</h5><p>Última actualización: hace 1 mes</p></div><button class="btn btn-outline btn-sm" onclick="alert('Recibirás un email para restablecer tu contraseña.')">Cambiar</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Verificación en 2 pasos</h5><p>Protege tu cuenta con un segundo factor</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Sesiones activas</h5><p>Chrome · macOS · Barcelona — Ahora</p></div><button class="btn btn-outline btn-sm" onclick="alert('Cerrar sesiones en otros dispositivos.')">Cerrar otras</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Exportar mis datos</h5><p>Retos, scores y perfil completo</p></div><button class="btn btn-outline btn-sm" onclick="alert('Tu archivo estará listo en 24h y se enviará por email.')">Exportar →</button></div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Contraseña</h5><p id="st-cand-pw-meta">Cambia tu contraseña de acceso</p></div>
+          <button class="btn btn-outline btn-sm" onclick="togglePwForm('cand')">Cambiar</button>
+        </div>
+        <div class="st-inline-form" id="st-cand-pw-form">
+          <div class="st-field"><label>Nueva contraseña</label><input type="password" id="st-cand-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
+          <div class="st-field"><label>Repite la contraseña</label><input type="password" id="st-cand-pw2" autocomplete="new-password"></div>
+          <div class="st-actions">
+            <button class="btn btn-primary btn-sm" id="st-cand-pw-btn" onclick="changePassword('cand')">Guardar contraseña</button>
+            <button class="btn btn-ghost btn-sm" onclick="togglePwForm('cand')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-cand-pw-msg" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-info"><h5>Sesión actual</h5><p id="st-cand-session">—</p></div>
+          <button class="btn btn-outline btn-sm" id="st-cand-others" onclick="closeOtherSessions('cand')">Cerrar otras</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Descargar mis datos</h5><p>Perfil, skills, retos y evaluaciones en un archivo JSON (RGPD, art. 20)</p></div>
+          <button class="btn btn-outline btn-sm" id="st-cand-export" onclick="exportMyData()">Descargar</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Verificación en dos pasos</h5><p>Requiere una app de autenticación (TOTP). Aún no implementado.</p></div>
+          <span class="st-soon">No disponible</span>
+        </div>
+        <div class="st-msg" id="st-cand-sec-msg" role="status" aria-live="polite"></div>
       </div>
+
       <div class="st-danger">
         <div class="st-danger-title">⚠️ Zona de peligro</div>
-        <p>Si eliminas tu cuenta perderás todos tus retos, scores y ranking. Irreversible.</p>
+        <p>Ocultar el perfil lo retira del pool, pero conserva tus retos y tus scores. Eliminar la cuenta borra todo de forma permanente.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="alert('Tu perfil se ocultará temporalmente del pool.')">Ocultar perfil</button>
-          <button class="btn btn-danger btn-sm" onclick="alert('Esta acción es irreversible. Contacta con soporte.')">Eliminar cuenta</button>
+          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="hideMyProfile()">Ocultar perfil</button>
+          <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('cand')">Eliminar cuenta</button>
+        </div>
+        <div class="st-inline-form" id="st-cand-del-form">
+          <div class="st-field"><label>Escribe ELIMINAR para confirmar</label><input type="text" id="st-cand-del-word" placeholder="ELIMINAR"></div>
+          <div class="st-actions">
+            <button class="btn btn-danger btn-sm" id="st-cand-del-btn" onclick="deleteAccount('cand')">Eliminar definitivamente</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleDeleteForm('cand')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-cand-del-msg" role="status" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -1713,47 +1756,48 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-topbar-icon" style="background:var(--blue-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       <div>
         <h2>Ajustes</h2>
-        <p>Cuenta de empresa · TechCorp S.L.</p>
+        <p id="stEmpWho">Cuenta de empresa</p>
       </div>
     </div>
     <button class="st-close" onclick="closeSettings('emp')">✕</button>
   </div>
   <div class="st-body">
 
-    <!-- PERFIL EMPRESA -->
+    <!-- PERFIL DE EMPRESA — se guarda en la cuenta de Supabase -->
     <div class="st-section">
       <div class="st-section-label">Perfil de empresa</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Nombre de empresa</label><input type="text" value="TechCorp S.L."></div>
-          <div class="st-field"><label>Sector principal</label><select><option selected>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
+          <div class="st-field"><label>Nombre de empresa</label><input type="text" id="st-emp-company" autocomplete="organization"></div>
+          <div class="st-field"><label>Sector principal</label><select id="st-emp-sector"><option value="">Sin especificar</option><option>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>Tamaño</label><select><option>1-10</option><option selected>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
-          <div class="st-field"><label>Web corporativa</label><input type="url" placeholder="https://techcorp.com"></div>
+          <div class="st-field"><label>Tamaño</label><select id="st-emp-size"><option value="">Sin especificar</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
+          <div class="st-field"><label>Web corporativa</label><input type="url" id="st-emp-web" placeholder="https://tuempresa.com"></div>
         </div>
-        <div class="st-field"><label>Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
-        <button class="btn btn-primary btn-sm" onclick="alert('Perfil guardado.')">Guardar cambios</button>
+        <div class="st-grid">
+          <div class="st-field"><label>Persona de contacto</label><input type="text" id="st-emp-contact" autocomplete="name"></div>
+          <div class="st-field"><label>Cargo</label><input type="text" id="st-emp-position" placeholder="RRHH, CTO…"></div>
+        </div>
+        <div class="st-field"><label>Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" id="st-emp-desc" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
+        <button class="btn btn-primary btn-sm" id="st-emp-save" onclick="saveEmpSettings()">Guardar cambios</button>
+        <div class="st-msg" id="st-emp-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
-    <!-- PLAN Y USO -->
+    <!-- USO REAL DE LA CUENTA -->
     <div class="st-section">
-      <div class="st-section-label">Plan y estadísticas</div>
+      <div class="st-section-label">Plan y uso</div>
       <div class="st-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
           <div>
             <span style="font-size:.65rem;font-weight:700;background:var(--slate-100);color:var(--slate-600);padding:3px 9px;border-radius:5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em">FREE</span>
-            <div style="font-size:.68rem;color:var(--slate-400);margin-top:4px">Plan actual</div>
+            <div style="font-size:.68rem;color:var(--slate-400);margin-top:4px">Plan actual · pago por contacto desbloqueado</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="alert('Planes Pro disponibles próximamente.')">Actualizar a Pro →</button>
+          <span class="st-soon">Planes Pro: no disponibles</span>
         </div>
-        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Contactos desbloqueados este mes</span><strong style="color:var(--slate-900)">2 / 5</strong></div>
-        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:40%;background:var(--emerald-500)"></div></div>
-        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Ofertas activas</span><strong style="color:var(--slate-900)">4 / 5</strong></div>
-        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:80%;background:var(--amber-500)"></div></div>
-        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Candidatos en pool visibles</span><strong style="color:var(--emerald-600)">Ilimitado</strong></div>
-        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:100%;background:var(--emerald-500)"></div></div>
+        <div id="st-emp-usage"></div>
+        <p class="st-note">Cifras reales de esta cuenta, calculadas a partir de tus ofertas y de los contactos que has desbloqueado.</p>
       </div>
     </div>
 
@@ -1762,42 +1806,32 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-section-label">Datos de facturación</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Razón social</label><input type="text" value="TechCorp S.L."></div>
-          <div class="st-field"><label>CIF / NIF</label><input type="text" placeholder="B-12345678"></div>
+          <div class="st-field"><label>Razón social</label><input type="text" id="st-emp-legal"></div>
+          <div class="st-field"><label>CIF / NIF</label><input type="text" id="st-emp-taxid" placeholder="B-12345678"></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>Email de facturación</label><input type="email" placeholder="contabilidad@techcorp.com"></div>
-          <div class="st-field"><label>Teléfono</label><input type="tel" placeholder="+34 91 000 0000"></div>
+          <div class="st-field"><label>Email de facturación</label><input type="email" id="st-emp-billmail" placeholder="contabilidad@tuempresa.com"></div>
+          <div class="st-field"><label>Teléfono</label><input type="tel" id="st-emp-phone" placeholder="+34 91 000 0000"></div>
         </div>
-        <div class="st-field"><label>Dirección fiscal</label><input type="text" placeholder="Calle Gran Vía, 28, 4ºA, Madrid"></div>
-        <button class="btn btn-primary btn-sm" onclick="alert('Datos de facturación guardados.')">Guardar</button>
+        <div class="st-field"><label>Dirección fiscal</label><input type="text" id="st-emp-address" placeholder="Calle Gran Vía 28, 4ºA, Madrid"></div>
+        <button class="btn btn-primary btn-sm" id="st-emp-bill-save" onclick="saveEmpBilling()">Guardar datos de facturación</button>
+        <div class="st-msg" id="st-emp-bill-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
-    <!-- MÉTODO DE PAGO -->
+    <!-- PAGOS -->
     <div class="st-section">
-      <div class="st-section-label">Método de pago</div>
+      <div class="st-section-label">Pagos</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--slate-100)">
-          <span style="font-size:1.4rem">💳</span>
+        <div style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:9px;margin-bottom:14px">
           <div style="flex:1;min-width:0">
-            <div style="font-size:.8rem;font-weight:600;color:var(--slate-900)">Visa •••• •••• •••• 4242</div>
-            <div style="font-size:.68rem;color:var(--slate-400)">Expira 09/2028 · Predeterminada</div>
+            <div style="font-size:.75rem;font-weight:700;color:var(--slate-700)">Cobro con tarjeta</div>
+            <div style="font-size:.68rem;color:var(--slate-500);margin-top:2px">Sin pasarela de pago conectada: los desbloqueos de esta preview son simulados y no generan ningún cargo.</div>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="alert('Gestión de tarjetas disponible en versión completa.')">Cambiar</button>
+          <span class="st-soon">Simulado</span>
         </div>
-        <div style="margin-top:12px">
-          <div style="font-size:.68rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Últimos pagos</div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--slate-100);font-size:.78rem">
-            <span style="color:var(--slate-600)">Contacto #1847 · 12 Mar 2026</span>
-            <span style="font-weight:700;color:var(--slate-900)">€49</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.78rem">
-            <span style="color:var(--slate-600)">Contacto #1293 · 28 Feb 2026</span>
-            <span style="font-weight:700;color:var(--slate-900)">€49</span>
-          </div>
-        </div>
-        <div style="margin-top:10px"><button class="btn btn-outline btn-sm" onclick="alert('Funcionalidad disponible en versión completa.')">+ Añadir nueva tarjeta</button></div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Contactos desbloqueados</div>
+        <div id="st-emp-payments"></div>
       </div>
     </div>
 
@@ -1805,11 +1839,12 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Notificaciones</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Nuevo candidato que encaja</h5><p>Match ≥70% con alguna oferta tuya</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Contacto desbloqueado</h5><p>Confirmación de pago realizado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Candidato completa tu reto</h5><p>Cuando termina un ejercicio personalizado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Resumen semanal del pool</h5><p>Nuevos candidatos con skills relevantes</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Novedades de TalentPact</h5><p>Nuevas funciones y mejoras</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Nuevo candidato que encaja</h5><p>Match ≥70% con alguna de tus ofertas</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyMatch" onchange="setPref('emp','notifyMatch',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Contacto desbloqueado</h5><p>Confirmación de cada desbloqueo</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyUnlock" onchange="setPref('emp','notifyUnlock',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Candidato completa un reto tuyo</h5><p>Cuando termina un ejercicio personalizado</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyChallenge" onchange="setPref('emp','notifyChallenge',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Resumen semanal del pool</h5><p>Nuevos candidatos con skills relevantes</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyWeekly" onchange="setPref('emp','notifyWeekly',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <p class="st-note">Se guardan en tu cuenta. El envío de correos aún no está conectado en esta versión preliminar.</p>
+        <div class="st-msg" id="st-pref-emp-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
@@ -1817,17 +1852,49 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Seguridad y cuenta</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Contraseña</h5><p>Última actualización: hace 3 meses</p></div><button class="btn btn-outline btn-sm" onclick="alert('Recibirás un email para restablecer tu contraseña.')">Cambiar</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Verificación en 2 pasos</h5><p>Protege el acceso a tu cuenta</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Sesiones activas</h5><p>Chrome · macOS · Barcelona — Activa</p></div><button class="btn btn-outline btn-sm" onclick="alert('Cerrar todas las sesiones remotas.')">Cerrar otras</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Registro de actividad</h5><p>Accesos y cambios de la cuenta</p></div><button class="btn btn-outline btn-sm" onclick="alert('Historial disponible en versión completa.')">Ver log →</button></div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Contraseña</h5><p>Cambia la contraseña de acceso al portal</p></div>
+          <button class="btn btn-outline btn-sm" onclick="togglePwForm('emp')">Cambiar</button>
+        </div>
+        <div class="st-inline-form" id="st-emp-pw-form">
+          <div class="st-field"><label>Nueva contraseña</label><input type="password" id="st-emp-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
+          <div class="st-field"><label>Repite la contraseña</label><input type="password" id="st-emp-pw2" autocomplete="new-password"></div>
+          <div class="st-actions">
+            <button class="btn btn-primary btn-sm" id="st-emp-pw-btn" onclick="changePassword('emp')">Guardar contraseña</button>
+            <button class="btn btn-ghost btn-sm" onclick="togglePwForm('emp')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-emp-pw-msg" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-info"><h5>Sesión actual</h5><p id="st-emp-session">—</p></div>
+          <button class="btn btn-outline btn-sm" id="st-emp-others" onclick="closeOtherSessions('emp')">Cerrar otras</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Descargar los datos de la cuenta</h5><p>Perfil, ofertas publicadas y desbloqueos, en JSON</p></div>
+          <button class="btn btn-outline btn-sm" id="st-emp-export" onclick="exportEmpData()">Descargar</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Registro de actividad</h5><p>Requiere auditoría en servidor. Aún no implementado.</p></div>
+          <span class="st-soon">No disponible</span>
+        </div>
+        <div class="st-msg" id="st-emp-sec-msg" role="status" aria-live="polite"></div>
       </div>
+
       <div class="st-danger">
         <div class="st-danger-title">⚠️ Zona de peligro</div>
-        <p>Pausar desactiva temporalmente tus ofertas y oculta tu empresa del pool.</p>
+        <p>Pausar retira tus ofertas del listado de candidatos sin borrarlas. Eliminar la cuenta borra todo de forma permanente.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="alert('Tu cuenta se pausará. Los candidatos no verán tus ofertas.')">Pausar cuenta</button>
-          <button class="btn btn-danger btn-sm" onclick="alert('Esta acción es irreversible. Contacta con soporte.')">Eliminar cuenta</button>
+          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" id="st-emp-pause" onclick="toggleEmpPause()">Pausar cuenta</button>
+          <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('emp')">Eliminar cuenta</button>
+        </div>
+        <div class="st-inline-form" id="st-emp-del-form">
+          <div class="st-field"><label>Escribe ELIMINAR para confirmar</label><input type="text" id="st-emp-del-word" placeholder="ELIMINAR"></div>
+          <div class="st-actions">
+            <button class="btn btn-danger btn-sm" id="st-emp-del-btn" onclick="deleteAccount('emp')">Eliminar definitivamente</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleDeleteForm('emp')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-emp-del-msg" role="status" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -2591,7 +2658,10 @@ const TP={
   savePool(){TP.save('pool',CANDIDATES.filter(c=>c._dynamic));},
   saveUnlocks(){TP.save('unlocks',CANDIDATES.filter(c=>c._unlocked).map(c=>c.id));},
   saveEmpJobs(){TP.save('empJobs',empPostedJobs);},
-  reset(){if(!TP.available())return;['profile','pool','unlocks','empJobs','evals'].forEach(k=>{try{localStorage.removeItem(TP_NS+k);}catch(e){}});console.info('TalentPact: persistencia reiniciada. Recarga la página.');},
+  // Historial de desbloqueos: es lo que alimenta "Pagos" en el panel de empresa.
+  logPayment(entry){const l=TP.load('payments',[]);l.push(Object.assign({ts:new Date().toISOString()},entry));if(l.length>200)l.splice(0,l.length-200);TP.save('payments',l);return l;},
+  getPayments(){return TP.load('payments',[]);},
+  reset(){if(!TP.available())return;['profile','pool','unlocks','empJobs','evals','payments','prefs:cand','prefs:emp'].forEach(k=>{try{localStorage.removeItem(TP_NS+k);}catch(e){}});console.info('TalentPact: persistencia reiniciada. Recarga la página.');},
   hydrate(){
     if(!TP.available()){console.warn('TalentPact: localStorage no disponible — persistencia desactivada (modo memoria).');return;}
     const p=TP.load('profile',null);
@@ -2648,6 +2718,37 @@ const TPCloud={
     if(provider==='google')opts.queryParams={prompt:'select_account'};
     const {error}=await c.auth.signInWithOAuth({provider,options:opts});
     if(error){ try{sessionStorage.removeItem('tp_oauth_pending');}catch(e){} throw error; }
+  },
+  // ── Gestion de la cuenta (todo esto son llamadas reales a Supabase Auth) ──
+  async updatePassword(password){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {error}=await c.auth.updateUser({password}); if(error)throw error; return true;
+  },
+  async updateEmail(email){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {error}=await c.auth.updateUser({email}); if(error)throw error; return true;
+  },
+  // Fusiona claves en user_metadata sin pisar lo que ya hubiera.
+  async saveMeta(patch){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {data,error}=await c.auth.updateUser({data:patch}); if(error)throw error;
+    const u=data&&data.user;
+    if(u){ if(tpUser&&tpUser.id===u.id)tpUser=u; if(tpCompany&&tpCompany.id===u.id)tpCompany=u; }
+    return u;
+  },
+  // Cierra la sesion en el resto de dispositivos, manteniendo la de aqui.
+  async signOutOthers(){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {error}=await c.auth.signOut({scope:'others'}); if(error)throw error; return true;
+  },
+  // El borrado necesita la service key, asi que va por una funcion de servidor.
+  // Se manda el token de sesion, nunca un userId: el servidor decide a quien borra.
+  async deleteAccount(){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {data}=await c.auth.getSession();
+    const token=data&&data.session&&data.session.access_token;
+    if(!token)throw new Error('No hay sesion activa');
+    return TPCloud._post('delete-account',{accessToken:token});
   },
   // Marca el tipo de cuenta (candidate | empresa) en el propio usuario de Auth.
   // Es lo que permite que un mismo proyecto Supabase sirva a los dos portales
@@ -2849,6 +2950,13 @@ function recordEval(ex,score,aiPowered,response,feedback){
 // Upsert del perfil propio en el pool de talento anónimo visible para empresas.
 // Convierte las skills desbloqueadas del candidato en una entrada real del pool.
 function syncMyPoolEntry(){
+  // Si el candidato se ha ocultado, su ficha sale del pool de las empresas.
+  if(!prefIsOn('cand','poolVisible',true)){
+    const i=CANDIDATES.findIndex(c=>c.id==='me');
+    if(i>=0)CANDIDATES.splice(i,1);
+    TP.savePool();
+    return;
+  }
   const unlocked=Object.entries(candidateProfile.skills).filter(([k,v])=>v.unlocked&&v.score>0);
   if(!unlocked.length)return;
   const skills=unlocked.map(([n,v])=>({n,v:v.score})).sort((a,b)=>b.v-a.v).slice(0,6);
@@ -3970,7 +4078,9 @@ function renderJobMatches(){
 
 // ═══ RENDER ═══
 function renderJobs(list){const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');document.getElementById('resultsCount').textContent=`${list.length} oferta${list.length!==1?'s':''} de empresas`;if(!list.length){g.innerHTML='';nr.style.display='block';return;}nr.style.display='none';g.innerHTML=list.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return`<div class="job-card" onclick="openAuth('candidate')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em">Skills requeridos:</div><div class="job-tags">${req.map(s=>`<span class="job-tag" style="border:1px solid var(--emerald-100);background:var(--emerald-50);color:var(--emerald-600)">${s}</span>`).join('')}${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?`<div class="job-company"><div class="job-company-dot" style="background:var(--slate-200);color:var(--slate-600)">${co.logo}</div>${co.name} · ${co.size} empleados</div>`:''}<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span class="level-badge ${levelCls}">${levelLabel}</span><span class="ex-config-badge ${configCls}">${configLabel}</span></div></div>`;}).join('');}
-function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(empPostedJobs);if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}
+// Ofertas visibles para los candidatos: se excluyen las de cuentas pausadas.
+function publicJobs(){ return empPostedJobs.filter(j=>!j.paused); }
+function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(publicJobs());if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}
 function setSector(s,btn){currentSector=s;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterJobs();}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClear').classList.remove('show');filterJobs();}
 
@@ -4671,6 +4781,378 @@ function capsHint(ev,id){
   el.classList.toggle('show',ev.getModifierState('CapsLock'));
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// AJUSTES DE CUENTA — candidato y empresa
+// Todo lo de estos paneles opera de verdad: los datos se leen y se escriben en
+// Supabase (perfil + user_metadata) y las preferencias cambian de verdad lo que
+// ve la otra parte. Lo que no tiene backend en esta version se marca como
+// "No disponible" en la interfaz en lugar de fingir que funciona.
+// ═══════════════════════════════════════════════════════════════════════════
+
+function stMsg(id,kind,text){
+  const el=document.getElementById(id); if(!el)return;
+  if(!kind||!text){ el.className='st-msg'; el.textContent=''; return; }
+  el.className='st-msg show '+kind; el.textContent=text;
+}
+const _val=(id,v)=>{const e=document.getElementById(id); if(!e)return ''; if(v!==undefined)e.value=v==null?'':v; return (e.value||'').trim();};
+
+// ─── Preferencias ─────────────────────────────────────────────────────────
+const PREF_DEFAULTS={
+  cand:{poolVisible:true,allowContact:true,publicRanking:true,notifyResult:true,notifyUnlock:true,notifyMatches:true,notifyWeekly:false},
+  emp:{notifyMatch:true,notifyUnlock:true,notifyChallenge:true,notifyWeekly:false,paused:false}
+};
+const TPPrefs={
+  _v:{cand:null,emp:null},
+  all(role){
+    if(TPPrefs._v[role])return TPPrefs._v[role];
+    const u=role==='cand'?tpUser:tpCompany;
+    const cloud=(u&&u.user_metadata&&u.user_metadata.prefs)||null;
+    const local=TP.load('prefs:'+role,null);
+    TPPrefs._v[role]=Object.assign({},PREF_DEFAULTS[role],local||{},cloud||{});
+    return TPPrefs._v[role];
+  },
+  get(role,key){ return TPPrefs.all(role)[key]; },
+  invalidate(){ TPPrefs._v={cand:null,emp:null}; },
+  // Guarda siempre en local (para el modo invitado) y, si hay cuenta, en Supabase.
+  async set(role,key,val){
+    const p=TPPrefs.all(role); p[key]=val;
+    TP.save('prefs:'+role,p);
+    const u=role==='cand'?tpUser:tpCompany;
+    if(!u)return 'local';
+    try{ await TPCloud.saveMeta({prefs:p}); return 'cloud'; }catch(e){ console.warn('[TP] prefs',e); return 'error'; }
+  }
+};
+// Lectura tolerante: si se consulta antes de que el bloque este inicializado,
+// devuelve el valor por defecto en vez de reventar.
+function prefIsOn(role,key,def){
+  try{ const v=TPPrefs.get(role,key); return v===undefined?def:v; }catch(e){ return def; }
+}
+// Caja de mensajes de la misma tarjeta donde esta el interruptor.
+function _prefBox(role,key){
+  const t=document.getElementById('pref-'+role+'-'+key);
+  const card=t&&t.closest('.st-card');
+  let box=card&&card.querySelector('.st-msg');
+  if(card&&!box){ box=document.createElement('div'); box.className='st-msg'; box.id='autoprefmsg-'+role+'-'+key; card.appendChild(box); }
+  return box?(box.id||(box.id='autoprefmsg-'+role+'-'+key)):null;
+}
+async function setPref(role,key,val){
+  const box=_prefBox(role,key);
+  const r=await TPPrefs.set(role,key,val);
+  applyPrefEffects(role);
+  if(box){
+    if(r==='cloud')stMsg(box,'ok','Guardado en tu cuenta.');
+    else if(r==='local')stMsg(box,'info','Guardado en este navegador (estás como invitado).');
+    else stMsg(box,'err','Guardado aquí, pero no se pudo sincronizar con tu cuenta.');
+  }
+}
+// Repinta lo que depende de las preferencias.
+function applyPrefEffects(role){
+  if(role==='cand'){
+    syncMyPoolEntry();
+    const d=document.getElementById('dashCandidate');
+    if(d&&d.classList.contains('open')){ try{renderRanking('all');}catch(e){} }
+  }else{
+    const d=document.getElementById('dashEmpresa');
+    if(d&&d.classList.contains('open')){ try{renderEmpJobs();renderEmpUsage();}catch(e){} }
+  }
+}
+
+// ─── Sesion: descripcion honesta de lo que sabemos ────────────────────────
+function sessionLine(user){
+  if(!user)return 'Estás explorando como invitado (sin cuenta).';
+  const ua=navigator.userAgent||'';
+  const nav=/Edg\//.test(ua)?'Edge':/Chrome\//.test(ua)?'Chrome':/Firefox\//.test(ua)?'Firefox':/Safari\//.test(ua)?'Safari':'Navegador';
+  const os=/Windows/.test(ua)?'Windows':/Mac OS/.test(ua)?'macOS':/Android/.test(ua)?'Android':/iPhone|iPad/.test(ua)?'iOS':/Linux/.test(ua)?'Linux':'—';
+  const last=user.last_sign_in_at?new Date(user.last_sign_in_at).toLocaleString('es-ES'):'—';
+  return nav+' · '+os+' · último acceso: '+last;
+}
+
+// ─── Panel de candidato ───────────────────────────────────────────────────
+function loadCandSettings(){
+  const who=document.getElementById('stCandWho');
+  const m=(tpUser&&tpUser.user_metadata)||{};
+  const full=(m.full_name||'').trim();
+  const parts=full?full.split(/\s+/):[];
+  if(who)who.textContent=tpUser?('Cuenta de candidato · '+(full||tpUser.email)):'Explorando como invitado (sin cuenta)';
+  _val('st-cand-name',parts[0]||'');
+  _val('st-cand-last',parts.slice(1).join(' '));
+  _val('st-cand-email',(tpUser&&tpUser.email)||'');
+  _val('st-cand-sector',m.sector||'');
+  _val('st-cand-city',m.city||'');
+  _val('st-cand-linkedin',m.linkedin||'');
+  _val('st-cand-phone',m.phone||'');
+  _val('st-cand-portfolio',m.portfolio||'');
+  const sess=document.getElementById('st-cand-session'); if(sess)sess.textContent=sessionLine(tpUser);
+  ['st-cand-others','st-cand-export'].forEach(id=>{const b=document.getElementById(id); if(b&&id==='st-cand-others')b.disabled=!tpUser;});
+  const p=TPPrefs.all('cand');
+  Object.keys(PREF_DEFAULTS.cand).forEach(k=>{const el=document.getElementById('pref-cand-'+k); if(el)el.checked=!!p[k];});
+  stMsg('st-cand-msg', tpUser?'':'info', tpUser?'':'Estás como invitado: para guardar tus datos crea una cuenta o inicia sesión.');
+  // El perfil de la nube puede traer datos que no estan en user_metadata.
+  if(tpUser){
+    TPCloud.getProgress(tpUser).then(function(r){
+      const pr=r&&r.profile; if(!pr)return;
+      if(!_val('st-cand-name')&&pr.full_name){ const q=pr.full_name.split(/\s+/); _val('st-cand-name',q[0]||''); _val('st-cand-last',q.slice(1).join(' ')); }
+      if(!_val('st-cand-sector')&&pr.sector)_val('st-cand-sector',pr.sector);
+      if(!_val('st-cand-phone')&&pr.phone)_val('st-cand-phone',pr.phone);
+      if(!_val('st-cand-linkedin')&&pr.linkedin)_val('st-cand-linkedin',pr.linkedin);
+    }).catch(function(){});
+  }
+}
+
+async function saveCandSettings(){
+  const name=_val('st-cand-name'), last=_val('st-cand-last');
+  const email=_val('st-cand-email'), sector=_val('st-cand-sector');
+  const city=_val('st-cand-city'), linkedin=_val('st-cand-linkedin');
+  const phone=_val('st-cand-phone'), portfolio=_val('st-cand-portfolio');
+  const fullName=(name+' '+last).trim();
+  stMsg('st-cand-msg','','');
+  if(!name){ stMsg('st-cand-msg','err','El nombre no puede quedar vacío.'); return; }
+  if(email&&!isEmailValid(email)){ stMsg('st-cand-msg','err','El email no tiene un formato válido.'); return; }
+
+  if(!tpUser){
+    TP.save('guestProfile',{fullName,sector,city,linkedin,phone,portfolio});
+    const el=document.getElementById('candName'); if(el)el.textContent=fullName||'Candidato';
+    stMsg('st-cand-msg','info','Guardado en este navegador. Crea una cuenta para conservarlo en cualquier dispositivo.');
+    return;
+  }
+  const done=btnBusy('st-cand-save','Guardando…');
+  try{
+    await TPCloud.saveMeta({full_name:fullName,sector,city,linkedin,phone,portfolio});
+    const r=await TPCloud.saveProfile(tpUser,{fullName,sector,phone,linkedin});
+    if(r&&r.error)throw new Error(r.details||r.error);
+    let extra='';
+    if(email&&email!==tpUser.email){
+      await TPCloud.updateEmail(email);
+      extra=' Te hemos enviado un correo a '+email+' para confirmar el cambio de email.';
+    }
+    const el=document.getElementById('candName'); if(el)el.textContent=fullName||tpUser.email;
+    const av=document.getElementById('candAvatar'); if(av)av.textContent=((fullName||'C').trim()[0]||'C').toUpperCase();
+    stMsg('st-cand-msg','ok','Cambios guardados.'+extra);
+  }catch(e){ stMsg('st-cand-msg','err','No se pudo guardar: '+authErrorText(e)); }
+  finally{ done(); }
+}
+
+// ─── Panel de empresa ─────────────────────────────────────────────────────
+function loadEmpSettings(){
+  const m=(tpCompany&&tpCompany.user_metadata)||{};
+  const who=document.getElementById('stEmpWho');
+  if(who)who.textContent=tpCompany?('Cuenta de empresa · '+companyName()):'Explorando como invitado (sin cuenta)';
+  _val('st-emp-company',m.company||'');
+  _val('st-emp-sector',m.sector||'');
+  _val('st-emp-size',m.size||'');
+  _val('st-emp-web',m.web||'');
+  _val('st-emp-contact',m.contact_name||'');
+  _val('st-emp-position',m.position||'');
+  _val('st-emp-desc',m.description||'');
+  const b=m.billing||{};
+  _val('st-emp-legal',b.legal||m.company||'');
+  _val('st-emp-taxid',b.taxId||'');
+  _val('st-emp-billmail',b.email||'');
+  _val('st-emp-phone',b.phone||'');
+  _val('st-emp-address',b.address||'');
+  const sess=document.getElementById('st-emp-session'); if(sess)sess.textContent=sessionLine(tpCompany);
+  const others=document.getElementById('st-emp-others'); if(others)others.disabled=!tpCompany;
+  const p=TPPrefs.all('emp');
+  Object.keys(PREF_DEFAULTS.emp).forEach(k=>{const el=document.getElementById('pref-emp-'+k); if(el)el.checked=!!p[k];});
+  const pause=document.getElementById('st-emp-pause'); if(pause)pause.textContent=p.paused?'Reactivar cuenta':'Pausar cuenta';
+  stMsg('st-emp-msg', tpCompany?'':'info', tpCompany?'':'Estás como invitado: para guardar los datos de tu empresa crea una cuenta.');
+  renderEmpUsage(); renderEmpPayments();
+}
+
+async function saveEmpSettings(){
+  const company=_val('st-emp-company');
+  stMsg('st-emp-msg','','');
+  if(!company){ stMsg('st-emp-msg','err','El nombre de la empresa no puede quedar vacío.'); return; }
+  if(!tpCompany){ stMsg('st-emp-msg','info','Estás como invitado: crea una cuenta de empresa para guardar estos datos.'); return; }
+  const done=btnBusy('st-emp-save','Guardando…');
+  try{
+    await TPCloud.saveMeta({
+      company,
+      sector:_val('st-emp-sector'),
+      size:_val('st-emp-size'),
+      web:_val('st-emp-web'),
+      contact_name:_val('st-emp-contact'),
+      position:_val('st-emp-position'),
+      description:_val('st-emp-desc')
+    });
+    applyCompanyIdentity();
+    const who=document.getElementById('stEmpWho'); if(who)who.textContent='Cuenta de empresa · '+companyName();
+    stMsg('st-emp-msg','ok','Perfil de empresa guardado.');
+  }catch(e){ stMsg('st-emp-msg','err','No se pudo guardar: '+authErrorText(e)); }
+  finally{ done(); }
+}
+
+async function saveEmpBilling(){
+  stMsg('st-emp-bill-msg','','');
+  if(!tpCompany){ stMsg('st-emp-bill-msg','info','Estás como invitado: crea una cuenta para guardar los datos de facturación.'); return; }
+  const mail=_val('st-emp-billmail');
+  if(mail&&!isEmailValid(mail)){ stMsg('st-emp-bill-msg','err','El email de facturación no tiene un formato válido.'); return; }
+  const done=btnBusy('st-emp-bill-save','Guardando…');
+  try{
+    await TPCloud.saveMeta({billing:{
+      legal:_val('st-emp-legal'), taxId:_val('st-emp-taxid'),
+      email:mail, phone:_val('st-emp-phone'), address:_val('st-emp-address')
+    }});
+    stMsg('st-emp-bill-msg','ok','Datos de facturación guardados en tu cuenta.');
+  }catch(e){ stMsg('st-emp-bill-msg','err','No se pudo guardar: '+authErrorText(e)); }
+  finally{ done(); }
+}
+
+// Uso real de la cuenta: nada de cifras inventadas.
+function renderEmpUsage(){
+  const box=document.getElementById('st-emp-usage'); if(!box)return;
+  const mine=(typeof myPostedJobs==='function')?myPostedJobs():[];
+  const pays=myPayments();
+  const rows=[
+    ['Ofertas publicadas por ti',mine.length],
+    ['Ofertas activas ahora',mine.filter(j=>!j.paused).length],
+    ['Contactos desbloqueados',pays.length],
+    ['Importe acumulado (simulado)','€'+(pays.length*49)],
+    ['Candidatos visibles en el pool',CANDIDATES.length]
+  ];
+  box.innerHTML=rows.map(r=>'<div class="st-kv"><span>'+escHtml(r[0])+'</span><strong>'+escHtml(String(r[1]))+'</strong></div>').join('');
+}
+function myPayments(){
+  const k=(typeof companyKey==='function')?companyKey():'guest';
+  return TP.getPayments().filter(p=>!p.owner||p.owner===k);
+}
+function renderEmpPayments(){
+  const box=document.getElementById('st-emp-payments'); if(!box)return;
+  const pays=myPayments().slice().reverse();
+  if(!pays.length){ box.innerHTML='<div class="st-empty">Todavía no has desbloqueado ningún contacto.</div>'; return; }
+  box.innerHTML=pays.map(function(p){
+    const f=p.ts?new Date(p.ts).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'}):'—';
+    return '<div class="st-kv"><span>'+escHtml(p.label||('Contacto '+(p.candId||'')))+' · '+escHtml(f)+'</span><strong>€'+escHtml(String(p.amount||49))+'</strong></div>';
+  }).join('');
+}
+
+// ─── Seguridad (comun a los dos paneles) ──────────────────────────────────
+function togglePwForm(role){
+  const f=document.getElementById('st-'+role+'-pw-form'); if(!f)return;
+  f.classList.toggle('show');
+  stMsg('st-'+role+'-pw-msg','','');
+}
+async function changePassword(role){
+  const box='st-'+role+'-pw-msg';
+  const user=role==='cand'?tpUser:tpCompany;
+  const a=(document.getElementById('st-'+role+'-pw1')||{}).value||'';
+  const b=(document.getElementById('st-'+role+'-pw2')||{}).value||'';
+  stMsg(box,'','');
+  if(!user){ stMsg(box,'err','Estás como invitado: no hay ninguna cuenta a la que cambiarle la contraseña.'); return; }
+  if(a.length<8){ stMsg(box,'err','La contraseña debe tener al menos 8 caracteres.'); return; }
+  if(a!==b){ stMsg(box,'err','Las dos contraseñas no coinciden.'); return; }
+  const done=btnBusy('st-'+role+'-pw-btn','Guardando…');
+  try{
+    await TPCloud.updatePassword(a);
+    document.getElementById('st-'+role+'-pw1').value='';
+    document.getElementById('st-'+role+'-pw2').value='';
+    stMsg(box,'ok','Contraseña actualizada. Úsala la próxima vez que entres.');
+  }catch(e){ stMsg(box,'err',authErrorText(e)); }
+  finally{ done(); }
+}
+async function closeOtherSessions(role){
+  const box='st-'+role+'-sec-msg';
+  const user=role==='cand'?tpUser:tpCompany;
+  stMsg(box,'','');
+  if(!user){ stMsg(box,'err','No hay ninguna sesión iniciada.'); return; }
+  const done=btnBusy('st-'+role+'-others','Cerrando…');
+  try{ await TPCloud.signOutOthers(); stMsg(box,'ok','Cerradas las sesiones abiertas en otros dispositivos. Esta sigue activa.'); }
+  catch(e){ stMsg(box,'err',authErrorText(e)); }
+  finally{ done(); }
+}
+
+function downloadJson(filename,obj){
+  try{
+    const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },0);
+    return true;
+  }catch(e){ console.warn('[TP] descarga',e); return false; }
+}
+
+// Portabilidad de datos (RGPD art. 20): se genera en el navegador, sin esperas.
+async function exportMyData(){
+  const box='st-cand-sec-msg';
+  const done=btnBusy('st-cand-export','Preparando…');
+  try{
+    const data={
+      generado:new Date().toISOString(),
+      origen:'TalentPact — exportación de datos personales (RGPD art. 20)',
+      cuenta:tpUser?{id:tpUser.id,email:tpUser.email,alta:tpUser.created_at,metadatos:tpUser.user_metadata||{}}:'sesión de invitado: solo datos de este navegador',
+      preferencias:TPPrefs.all('cand'),
+      skills:candidateProfile.skills,
+      retosCompletados:candidateProfile.completedCommon,
+      evaluacionesIA:TP.getEvals()
+    };
+    if(tpUser){ try{ data.datosEnLaNube=await TPCloud.getProgress(tpUser); }catch(e){ data.datosEnLaNube='no disponible ('+((e&&e.message)||e)+')'; } }
+    const bien=downloadJson('talentpact-mis-datos.json',data);
+    stMsg(box,bien?'ok':'err',bien?'Archivo descargado: talentpact-mis-datos.json':'El navegador ha bloqueado la descarga.');
+  }catch(e){ stMsg(box,'err','No se pudo generar el archivo: '+((e&&e.message)||e)); }
+  finally{ done(); }
+}
+async function exportEmpData(){
+  const box='st-emp-sec-msg';
+  const done=btnBusy('st-emp-export','Preparando…');
+  try{
+    const data={
+      generado:new Date().toISOString(),
+      origen:'TalentPact — exportación de datos de la cuenta de empresa',
+      cuenta:tpCompany?{id:tpCompany.id,email:tpCompany.email,alta:tpCompany.created_at,metadatos:tpCompany.user_metadata||{}}:'sesión de invitado',
+      preferencias:TPPrefs.all('emp'),
+      ofertas:(typeof myPostedJobs==='function')?myPostedJobs():[],
+      desbloqueos:myPayments()
+    };
+    downloadJson('talentpact-empresa.json',data);
+    stMsg(box,'ok','Archivo descargado: talentpact-empresa.json');
+  }catch(e){ stMsg(box,'err','No se pudo generar el archivo: '+((e&&e.message)||e)); }
+  finally{ done(); }
+}
+
+function toggleDeleteForm(role){
+  const f=document.getElementById('st-'+role+'-del-form'); if(!f)return;
+  f.classList.toggle('show');
+  stMsg('st-'+role+'-del-msg','','');
+}
+async function deleteAccount(role){
+  const box='st-'+role+'-del-msg';
+  const user=role==='cand'?tpUser:tpCompany;
+  const word=((document.getElementById('st-'+role+'-del-word')||{}).value||'').trim().toUpperCase();
+  stMsg(box,'','');
+  if(word!=='ELIMINAR'){ stMsg(box,'err','Escribe ELIMINAR para confirmar.'); return; }
+  if(!user){ stMsg(box,'err','Estás como invitado: no hay ninguna cuenta que borrar. Para vaciar este navegador ejecuta TP.reset() en la consola.'); return; }
+  const done=btnBusy('st-'+role+'-del-btn','Eliminando…');
+  try{
+    const r=await TPCloud.deleteAccount();
+    if(!r||!r.ok)throw new Error((r&&(r.details||r.error))||'respuesta inesperada del servidor');
+    await TPCloud.signOut();
+    TPPrefs.invalidate();
+    if(role==='cand'){ tpUser=null; closeSettings('cand'); closeDash('dashCandidate'); }
+    else { tpCompany=null; closeSettings('emp'); closeDash('dashEmpresa'); }
+    goHome();
+  }catch(e){ stMsg(box,'err','No se pudo eliminar la cuenta: '+((e&&e.message)||e)); }
+  finally{ done(); }
+}
+
+// Atajo de la zona de peligro: es exactamente el interruptor de privacidad.
+async function hideMyProfile(){
+  const el=document.getElementById('pref-cand-poolVisible'); if(el)el.checked=false;
+  await setPref('cand','poolVisible',false);
+  stMsg('st-cand-sec-msg','ok','Tu perfil ya no aparece en el pool. Puedes volver a activarlo en Privacidad.');
+}
+// Pausar la cuenta de empresa retira sus ofertas del listado publico.
+async function toggleEmpPause(){
+  const now=!prefIsOn('emp','paused',false);
+  await setPref('emp','paused',now);
+  myPostedJobs().forEach(function(j){ j.paused=now; });
+  TP.saveEmpJobs();
+  const b=document.getElementById('st-emp-pause'); if(b)b.textContent=now?'Reactivar cuenta':'Pausar cuenta';
+  stMsg('st-emp-sec-msg','ok',now?'Cuenta pausada: tus ofertas ya no se muestran a los candidatos.':'Cuenta reactivada: tus ofertas vuelven a estar visibles.');
+  try{ renderEmpJobs(); renderEmpUsage(); }catch(e){}
+}
+
 // Lanza el flujo OAuth. signInWithOAuth navega fuera de la página, así que el
 // resto del proceso lo recoge el bootstrap de sesión al volver.
 async function oauthLogin(provider,role){
@@ -4838,7 +5320,9 @@ function showOfferCandidates(jobId){
       <div class="oc-actions">
         ${unlocked
           ?`<button class="btn-unlock unlocked">✓ Contacto desbloqueado</button>`
-          :`<button class="btn-unlock" onclick="unlockContact('${ca.id}')">🔓 Desbloquear · €49</button>`
+          :(candidateAcceptsContact(ca)
+            ?`<button class="btn-unlock" onclick="unlockContact('${ca.id}')">🔓 Desbloquear · €49</button>`
+            :`<button class="btn-unlock" disabled style="opacity:.55;cursor:not-allowed">No acepta contactos</button>`)
         }
       </div>
     </div>`;
@@ -4855,9 +5339,19 @@ function hideOfferCandidates(){
 let _payingForCand=null;
 let _payingForJob=null;
 
+// Un candidato puede cerrar la puerta desde Ajustes -> Privacidad; cuando lo
+// hace, su ficha sigue visible pero no se puede comprar su contacto.
+function candidateAcceptsContact(c){
+  if(!c||!c._mine)return true;          // solo aplica a tu propia ficha
+  return prefIsOn('cand','allowContact',true);
+}
 function unlockContact(candId){
   const c=CANDIDATES.find(p=>p.id===candId);
   if(!c)return;
+  if(!candidateAcceptsContact(c)){
+    alert('Este candidato no acepta solicitudes de contacto ahora mismo.');
+    return;
+  }
   _payingForCand=c;
   document.getElementById('payAvatar').textContent=c.i;
   document.getElementById('payName').textContent='Candidato #'+(1000+Math.floor(Date.now()/1000)%900);
@@ -4929,6 +5423,13 @@ function processPayment(){
   setTimeout(()=>{
     c._unlocked=true;
     TP.saveUnlocks();
+    TP.logPayment({
+      owner:(typeof companyKey==='function')?companyKey():'guest',
+      ownerName:(typeof companyName==='function')?companyName():'',
+      candId:c.id,
+      label:'Contacto '+(c.i||c.id)+' · score '+(c.score||'—'),
+      amount:49
+    });
     closePayModal();
     btn.textContent='Pagar y desbloquear →';btn.disabled=false;
     // Ficha de contacto en una tarjeta propia (antes: un alert que además
@@ -5043,7 +5544,7 @@ function clearExSearch(){
 }
 
 function renderEmpPool(){let h='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Top Skills</th><th></th></tr></thead><tbody>';CANDIDATES.forEach(c=>{h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${c.i}</div>#${1000+parseInt(c.id.slice(1))*111}</div></td><td>${c.sector}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${s.n}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${c.id}')">Ver perfil</button></td></tr>`;});h+='</tbody></table>';document.getElementById('empPool').innerHTML=h;}
-function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${c.i}</div><div class="cp-info"><h3>Candidato anónimo</h3><div class="cp-meta">${c.sector} · Score: ${c.score} · Perfil ciego</div></div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${s.n}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="alert('Solicitud enviada. Se notificará al candidato.');closeM('profileModal')">Solicitar contacto →</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
+function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${c.i}</div><div class="cp-info"><h3>Candidato anónimo</h3><div class="cp-meta">${c.sector} · Score: ${c.score} · Perfil ciego</div></div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${s.n}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${c.id}')">Desbloquear contacto · €49 →</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
 
 // ═══ POST JOB ═══
 let pjExConfigVal='common+custom';
@@ -5160,7 +5661,8 @@ function openSettings(type){
   const o=document.getElementById(ov);
   if(d)d.classList.add('open');
   if(o)o.classList.add('open');
-  if(type==='cand')updateStCandIncentives();
+  if(type==='cand'){ updateStCandIncentives(); loadCandSettings(); }
+  else loadEmpSettings();
 }
 function closeSettings(type){
   const id=type==='cand'?'stDrawerCand':'stDrawerEmp';
@@ -5735,6 +6237,8 @@ function renderRanking(sector,btn){
   }
   
   let list=RANKING_DATA.slice();
+  // Preferencia de privacidad: si la desactivas, tu fila desaparece del leaderboard.
+  if(!prefIsOn('cand','publicRanking',true))list=list.filter(r=>r.id!=='you');
   if(sector&&sector!=='all')list=list.filter(r=>r.sector===sector||r.id==='you');
   list.sort((a,b)=>b.score-a.score);
   

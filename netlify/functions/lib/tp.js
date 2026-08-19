@@ -60,7 +60,8 @@ const sb = {
   insert: (table, row) =>
     sbRequest("POST", table, { body: row, prefer: "return=representation" }),
   update: (table, query, patch) =>
-    sbRequest("PATCH", `${table}?${query}`, { body: patch, prefer: "return=representation" })
+    sbRequest("PATCH", `${table}?${query}`, { body: patch, prefer: "return=representation" }),
+  remove: (table, query) => sbRequest("DELETE", `${table}?${query}`)
 };
 
 /** Devuelve el perfil con ese display_name; lo crea si no existe. */
@@ -179,6 +180,7 @@ function hashCv(cvJson) {
 
 module.exports = {
   jsonResponse,
+  supabaseEnv,
   sb,
   ensureProfile,
   ensureProfileByUser,

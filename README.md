@@ -120,7 +120,44 @@ empresa (nombre, persona de contacto, cargo, tamaño) viajan en ese mismo
 `user_metadata`. Ambos portales conservan un acceso **de invitado** sin cuenta
 para poder recorrer la demo sin registrarse.
 
-### 2.6 Persistencia de datos
+### 2.6 Gestión de cuentas y perfiles
+
+Ambos paneles de **Ajustes** (candidato y empresa) operan contra Supabase; no son
+maquetas. Lo que hace cada bloque:
+
+| Bloque | Qué hace de verdad |
+|---|---|
+| Datos personales / perfil de empresa | Lee y escribe `user_metadata` (Supabase Auth) y la tabla `profiles` vía `save-profile`. |
+| Cambio de email | `auth.updateUser({email})` — Supabase envía el correo de confirmación. |
+| Cambio de contraseña | `auth.updateUser({password})`, con validación de longitud y coincidencia. |
+| Cerrar otras sesiones | `auth.signOut({scope:'others'})` — cierra el resto de dispositivos, no el actual. |
+| Descargar mis datos | Genera un JSON en el navegador con perfil, skills, retos y evaluaciones (RGPD art. 20). |
+| Eliminar cuenta | Función `delete-account`: borra credenciales, evaluaciones, perfil y usuario de Auth. |
+| Privacidad (candidato) | Cada interruptor cambia lo que ve la empresa: salir del pool, salir del ranking, o dejar de aceptar desbloqueos. |
+| Pausar cuenta (empresa) | Retira sus ofertas del listado público sin borrarlas. |
+| Plan, uso y pagos (empresa) | Cifras calculadas de sus ofertas y desbloqueos reales, no valores fijos. |
+
+Las preferencias se guardan en `user_metadata.prefs` cuando hay sesión y siempre
+en `localStorage`, para que el modo invitado también las conserve.
+
+**Seguridad del borrado.** `delete-account` no acepta un `userId`: recibe el
+*access token* de la sesión y pregunta a Supabase de quién es. Así una petición
+manipulada no puede borrar la cuenta de otra persona. Requiere
+`SUPABASE_SERVICE_KEY` en el servidor; si falta, responde 503 con un mensaje
+explícito en lugar de fingir que ha borrado algo.
+
+**Lo que todavía NO está conectado** (se muestra marcado como *No disponible* o
+*Simulado* en la interfaz, nunca como si funcionara):
+
+- **Envío de correos.** No hay proveedor de email conectado, así que las
+  preferencias de notificación se guardan pero no se envía nada.
+- **Pasarela de pago.** Los desbloqueos de €49 son simulados y no generan cargo;
+  sí quedan registrados en el historial de la cuenta.
+- **Verificación en dos pasos (TOTP)** y **registro de actividad**: requieren
+  trabajo de servidor que queda fuera de esta preview.
+- **Planes Pro / Enterprise**: no hay facturación recurrente.
+
+### 2.7 Persistencia de datos
 
 El módulo `TP` (en `index.html`) persiste en `localStorage` del navegador:
 `profile` (perfil del candidato), `pool` (candidatos evaluados), `unlocks` (contactos desbloqueados), `empJobs` (ofertas publicadas) y `evals` (audit trail de evaluaciones IA).
