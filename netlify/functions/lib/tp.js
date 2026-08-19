@@ -106,6 +106,33 @@ async function ensureProfileByUser(userId, fields = {}) {
   return Array.isArray(created) ? created[0] : created;
 }
 
+const COMPANY_FIELDS = ["email", "company_name", "contact_name", "job_title", "company_size"];
+function pickCompanyFields(fields = {}) {
+  const out = {};
+  for (const k of COMPANY_FIELDS) {
+    if (fields[k] != null && fields[k] !== "") out[k] = fields[k];
+  }
+  return out;
+}
+
+/** Devuelve (creando o actualizando) la ficha de empresa vinculada a Auth. */
+async function ensureCompanyByUser(userId, fields = {}) {
+  if (!userId) throw new Error("userId requerido");
+  const found = await sb.select("companies", `user_id=eq.${userId}&select=*&limit=1`);
+  const patch = pickCompanyFields(fields);
+  if (Array.isArray(found) && found.length) {
+    if (Object.keys(patch).length) {
+      const upd = await sb.update("companies", `user_id=eq.${userId}`, patch);
+      return Array.isArray(upd) ? upd[0] : found[0];
+    }
+    return found[0];
+  }
+  const row = Object.assign({ user_id: userId }, patch);
+  if (!row.company_name) row.company_name = fields.contact_name || fields.email || "Empresa";
+  const created = await sb.insert("companies", row);
+  return Array.isArray(created) ? created[0] : created;
+}
+
 // ─── Canonicalización JSON (orden de claves estable) ─────────────────────────
 function canonicalize(value) {
   if (Array.isArray(value)) return value.map(canonicalize);
@@ -169,6 +196,7 @@ module.exports = {
   sb,
   ensureProfile,
   ensureProfileByUser,
+  ensureCompanyByUser,
   canonicalJson,
   hashCv,
   getProvider,

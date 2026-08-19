@@ -1299,7 +1299,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   <div class="auth-form-side"><div class="auth-form-wrap empresa-accent"><button class="auth-back" onclick="closeAuth('authEmpresa')">← Volver</button><h1>Portal empresa.</h1><p class="auth-subtitle">Accede al pool de talento evaluado.</p>
     <div class="auth-tabs" id="empTabs"><button class="auth-tab active" onclick="switchAuthTab('emp','login',this)">Iniciar sesión</button><button class="auth-tab" onclick="switchAuthTab('emp','register',this)">Crear cuenta</button></div>
     <div class="auth-form" id="emp-login"><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-login-email"></div><div class="a-field"><label>Contraseña</label><input type="password" placeholder="••••••••" id="emp-login-pw"></div><div class="auth-submit"><button class="btn btn-dark btn-lg" onclick="loginEmpresa()">Acceder →</button></div></div>
-    <div class="auth-form" id="emp-register" style="display:none"><div class="a-field"><label>Empresa</label><input type="text" placeholder="Tu empresa S.L."></div><div class="a-field-row"><div class="a-field"><label>Tu nombre</label><input type="text" placeholder="Nombre"></div><div class="a-field"><label>Cargo</label><input type="text" placeholder="RRHH, CTO…"></div></div><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com"></div><div class="a-field"><label>Contraseña</label><input type="password" placeholder="Mín. 8 caracteres"></div><div class="a-field"><label>Tamaño</label><select><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div><div class="auth-submit"><button class="btn btn-dark btn-lg" onclick="loginEmpresa()">Crear cuenta →</button></div></div>
+    <div class="auth-form" id="emp-register" style="display:none"><div class="a-field"><label>Empresa</label><input type="text" placeholder="Tu empresa S.L." id="emp-reg-company"></div><div class="a-field-row"><div class="a-field"><label>Tu nombre</label><input type="text" placeholder="Nombre" id="emp-reg-name"></div><div class="a-field"><label>Cargo</label><input type="text" placeholder="RRHH, CTO…" id="emp-reg-role"></div></div><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-reg-email"></div><div class="a-field"><label>Contraseña</label><input type="password" placeholder="Mín. 8 caracteres" id="emp-reg-pw"></div><div class="a-field"><label>Tamaño</label><select id="emp-reg-size"><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div><div class="auth-submit"><button class="btn btn-dark btn-lg" onclick="registerEmpresa()">Crear cuenta →</button></div></div>
     <div class="auth-success" id="emp-success"><h3>¡Cuenta creada!</h3><p>Redirigiendo al panel…</p></div>
     <div class="auth-footer" id="emp-footer">¿Eres candidato? <a href="#" onclick="closeAuth('authEmpresa');openAuth('candidate')">Accede aquí</a></div>
   </div></div>
@@ -1362,14 +1362,12 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       </div>
 
       <p style="font-size:.8125rem;color:var(--slate-600);line-height:1.6;margin-bottom:14px">
-        Se publica únicamente la <strong>huella criptográfica</strong> (hash) de tu CV en la red pública
-        <strong>Ethereum Sepolia</strong> (testnet). Tus datos personales nunca salen de la base de datos europea, así que la
-        credencial es imposible de falsificar y sigue cumpliendo el RGPD.
+        Generas y descargas tu SkillPass. <strong>La empresa lo verifica</strong> en su panel (o en el verificador público)
+        comprobando el hash en blockchain. Tus datos personales no salen de la base de datos europea.
       </p>
 
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
         <button type="button" class="btn btn-primary" id="spChainBtn" onclick="generateSkillPass()">Generar mi CV verificable</button>
-        <a class="btn btn-outline btn-sm" href="verify.html" target="_blank" rel="noopener">Abrir verificador público</a>
         <button type="button" class="btn btn-outline btn-sm" id="spChainDownload" onclick="downloadSkillPass()" style="display:none">Descargar CV (JSON)</button>
       </div>
 
@@ -1462,7 +1460,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 </div><!-- /dash-body --></div><!-- /dashCandidate -->
 
 <!-- ═══ DASH EMPRESA ═══ -->
-<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar" style="border-bottom-color:var(--slate-200)"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--blue-100);color:var(--blue-500)">TC</div>TechCorp<button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashEmpresa')">Cerrar sesión</button></div></div>
+<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar" style="border-bottom-color:var(--slate-200)"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--blue-100);color:var(--blue-500)" id="empAvatar">TC</div><span id="empName">TechCorp</span><button class="dash-gear-btn" onclick="logoutEmp()" title="Cerrar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button><button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashEmpresa')">Cerrar sesión</button></div></div>
 
 <div class="dash-body">
   <!-- Estadísticas siempre visibles -->
@@ -1564,6 +1562,22 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)">🟢 Básico <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)">🟡 Intermedio <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)">🔴 Avanzado <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥75)</span></div></div></div>
     <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>📋 Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🏢 Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🎯 Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
     </div><div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" onclick="publishJob()">Publicar oferta →</button><button class="btn btn-outline" onclick="togglePostJob()">Cancelar</button></div></div></div></div>
+
+    <div class="dash-section" id="empVerifySection" style="margin-top:8px">
+      <div class="dash-section-head">
+        <div class="dash-section-title">Verificar SkillPass de un candidato</div>
+      </div>
+      <p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:12px;line-height:1.55">
+        El candidato te envía su CV verificable (JSON). Aquí se comprueba contra la blockchain que el hash coincide
+        y no ha sido manipulado. Solo se publica la huella criptográfica; los datos personales siguen en Europa (RGPD).
+      </p>
+      <textarea id="empVerifyJson" rows="7" placeholder='Pega aquí el JSON del SkillPass…' style="width:100%;font-family:ui-monospace,Menlo,monospace;font-size:.75rem;padding:12px;border:1px solid var(--slate-200);border-radius:10px;resize:vertical;background:white"></textarea>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center">
+        <button type="button" class="btn btn-primary" id="empVerifyBtn" onclick="verifySkillPassAtCompany()">Verificar en blockchain</button>
+        <a class="btn btn-outline btn-sm" href="verify.html" target="_blank" rel="noopener">Abrir verificador público</a>
+      </div>
+      <div id="empVerifyStatus" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;font-size:.8125rem;line-height:1.6"></div>
+    </div>
 
     <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Mis ofertas</div></div><div id="empJobsList"></div></div>
 
@@ -2576,6 +2590,7 @@ const TP={
 const TP_SUPABASE_URL='https://vqyqedmizxqneniynxqp.supabase.co';
 const TP_SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxeXFlZG1penhxbmVuaXlueHFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NjY4MDUsImV4cCI6MjEwMjU0MjgwNX0.T8WfrAOKjol_L7Nls2-Z7SvkxNjnuJdgzAQrjDdQebk';
 let tpUser=null;
+let tpRole=null; // 'candidate' | 'company'
 const TPCloud={
   _c:null,
   client(){ if(TPCloud._c)return TPCloud._c; if(!(window.supabase&&window.supabase.createClient)){console.warn('Supabase JS no cargado');return null;} TPCloud._c=window.supabase.createClient(TP_SUPABASE_URL,TP_SUPABASE_ANON); return TPCloud._c; },
@@ -2585,6 +2600,8 @@ const TPCloud={
   async signOut(){ const c=TPCloud.client(); if(c){try{await c.auth.signOut();}catch(e){}} },
   _post(fn,body){ return fetch('/.netlify/functions/'+fn,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()); },
   saveProfile(user,fields){ return TPCloud._post('save-profile',Object.assign({userId:user.id,email:user.email},fields)); },
+  saveCompany(user,fields){ return TPCloud._post('save-company',Object.assign({userId:user.id,email:user.email},fields)); },
+  getCompany(user){ return TPCloud._post('get-company',{userId:user.id}); },
   saveEvaluation(user,ev){ return TPCloud._post('save-evaluation',Object.assign({userId:user.id},ev)); },
   getProgress(user){ return TPCloud._post('get-progress',{userId:user.id}); },
   // Rehidrata candidateProfile desde la nube y refresca la cabecera del panel.
@@ -2624,6 +2641,19 @@ const TPCloud={
     }catch(e){console.warn('TPCloud.loadProgress',e);}
   }
 };
+
+function applyCompanyToUI(company,user){
+  const nm=(company&&(company.company_name||company.contact_name))||(user&&user.email)||'Empresa';
+  const nameEl=document.getElementById('empName'); if(nameEl)nameEl.textContent=nm;
+  const avEl=document.getElementById('empAvatar'); if(avEl)avEl.textContent=(nm.trim()[0]||'E').toUpperCase();
+}
+async function loadCompanyIntoUI(user){
+  try{
+    const r=await TPCloud.getCompany(user);
+    if(r&&r.company)applyCompanyToUI(r.company,user);
+    else applyCompanyToUI(null,user);
+  }catch(e){console.warn('loadCompany',e); applyCompanyToUI(null,user);}
+}
 
 // ═══════════════════════════════════════════════════════════════════════════
 // SkillPass — credencial verificable anclada en blockchain (Polygon Amoy)
@@ -2781,7 +2811,7 @@ function syncMyPoolEntry(){
 TP.hydrate();
 
 // Si hay sesión de Supabase activa, restaurar el usuario y su progreso desde la nube.
-(async()=>{ try{ const u=await TPCloud.currentUser(); if(u){ tpUser=u; await TPCloud.loadProgressIntoProfile(u); } }catch(e){} })();
+(async()=>{ try{ const u=await TPCloud.currentUser(); if(u){ tpUser=u; tpRole=(u.user_metadata&&u.user_metadata.role)||null; if(tpRole==='company') await loadCompanyIntoUI(u); else await TPCloud.loadProgressIntoProfile(u); } }catch(e){} })();
 
 // ═══ COMMON/UNIVERSAL EXERCISES ═══
 const COMMON_EXERCISES=[
@@ -4431,7 +4461,11 @@ function showFinal(){const el=getExercises(activeJob),sc=el.map((_,i)=>exResults
 function closeJobModal(){document.getElementById('jobModal').classList.remove('open');}
 
 // ═══ AUTH ═══
-function openAuth(t){ if(t==='candidate'&&tpUser){openDashCand();return;} document.getElementById(t==='candidate'?'authCandidate':'authEmpresa').classList.add('open');document.body.style.overflow='hidden';}
+function openAuth(t){
+  if(t==='candidate'&&tpUser&&tpRole!=='company'){openDashCand();return;}
+  if(t==='empresa'&&tpUser&&tpRole==='company'){openDashEmp();return;}
+  document.getElementById(t==='candidate'?'authCandidate':'authEmpresa').classList.add('open');document.body.style.overflow='hidden';
+}
 function closeAuth(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
 function switchAuthTab(pre,tab,btn){btn.parentElement.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');const l=document.getElementById(pre+'-login'),r=document.getElementById(pre+'-register');if(l)l.style.display=tab==='login'?'flex':'none';if(r)r.style.display=tab==='register'?'flex':'none';}
 
@@ -4441,6 +4475,7 @@ async function loginCandidate(){
   if(!email||!pw){alert('Introduce tu email y contraseña.');return;}
   try{
     tpUser=await TPCloud.signIn(email,pw);
+    tpRole='candidate';
     await TPCloud.loadProgressIntoProfile(tpUser);
     closeAuth('authCandidate');openDashCand();
   }catch(e){alert('No se pudo iniciar sesión: '+((e&&e.message)||e));}
@@ -4457,17 +4492,76 @@ async function registerCandidate(){
   if(!name||!email||!pw){alert('Nombre, email y contraseña son obligatorios.');return;}
   if(pw.length<6){alert('La contraseña debe tener al menos 6 caracteres.');return;}
   try{
-    const data=await TPCloud.signUp(email,pw,{full_name:fullName,sector});
+    const data=await TPCloud.signUp(email,pw,{full_name:fullName,sector,role:'candidate'});
     if(!data.session){ alert('Cuenta creada. Revisa tu email para confirmarla y luego inicia sesión.'); return; }
     tpUser=data.user;
+    tpRole='candidate';
     await TPCloud.saveProfile(tpUser,{fullName,sector,phone,linkedin});
     await TPCloud.loadProgressIntoProfile(tpUser);
     closeAuth('authCandidate');openDashCand();
   }catch(e){alert('No se pudo crear la cuenta: '+((e&&e.message)||e));}
 }
 function guestCandidate(){closeAuth('authCandidate');openDashCand();}
-async function logoutCand(){ await TPCloud.signOut(); tpUser=null; closeDash('dashCandidate'); goHome(); }
-function loginEmpresa(){closeAuth('authEmpresa');openDashEmp();}
+async function logoutCand(){ await TPCloud.signOut(); tpUser=null; tpRole=null; closeDash('dashCandidate'); goHome(); }
+async function loginEmpresa(){
+  const email=(document.getElementById('emp-login-email').value||'').trim();
+  const pw=document.getElementById('emp-login-pw').value||'';
+  if(!email||!pw){alert('Introduce el email corporativo y la contraseña.');return;}
+  try{
+    tpUser=await TPCloud.signIn(email,pw);
+    tpRole='company';
+    await loadCompanyIntoUI(tpUser);
+    closeAuth('authEmpresa');openDashEmp();
+  }catch(e){alert('No se pudo iniciar sesión: '+((e&&e.message)||e));}
+}
+async function registerEmpresa(){
+  const companyName=(document.getElementById('emp-reg-company').value||'').trim();
+  const contactName=(document.getElementById('emp-reg-name').value||'').trim();
+  const jobTitle=(document.getElementById('emp-reg-role').value||'').trim();
+  const email=(document.getElementById('emp-reg-email').value||'').trim();
+  const pw=document.getElementById('emp-reg-pw').value||'';
+  const companySize=document.getElementById('emp-reg-size').value||'';
+  if(!companyName||!email||!pw){alert('Empresa, email y contraseña son obligatorios.');return;}
+  if(pw.length<6){alert('La contraseña debe tener al menos 6 caracteres.');return;}
+  try{
+    const data=await TPCloud.signUp(email,pw,{role:'company',company_name:companyName,contact_name:contactName});
+    if(!data.session){ alert('Cuenta creada. Revisa tu email para confirmarla y luego inicia sesión.'); return; }
+    tpUser=data.user;
+    tpRole='company';
+    await TPCloud.saveCompany(tpUser,{companyName,contactName,jobTitle,companySize});
+    applyCompanyToUI({company_name:companyName,contact_name:contactName},tpUser);
+    closeAuth('authEmpresa');openDashEmp();
+  }catch(e){alert('No se pudo crear la cuenta de empresa: '+((e&&e.message)||e));}
+}
+async function logoutEmp(){ await TPCloud.signOut(); tpUser=null; tpRole=null; closeDash('dashEmpresa'); goHome(); }
+
+async function verifySkillPassAtCompany(){
+  const raw=(document.getElementById('empVerifyJson').value||'').trim();
+  const st=document.getElementById('empVerifyStatus');
+  const btn=document.getElementById('empVerifyBtn');
+  if(!raw){alert('Pega el JSON del SkillPass del candidato.');return;}
+  let cvJson;
+  try{ cvJson=JSON.parse(raw); }catch(e){ if(st){st.style.display='block';st.style.background='#fef2f2';st.style.color='#b91c1c';st.style.border='1px solid #fecaca';st.textContent='El texto pegado no es un JSON válido.';} return; }
+  if(btn){btn.disabled=true;btn.textContent='Verificando…';}
+  try{
+    const data=await TPCloud._post('verify-credential',{cvJson});
+    if(st){
+      st.style.display='block';
+      if(data&&data.verified){
+        st.style.background='var(--emerald-50)';st.style.color='var(--emerald-600)';st.style.border='1px solid var(--emerald-100)';
+        const fecha=data.anchoredAt?new Date(data.anchoredAt).toLocaleString('es-ES'):'';
+        st.innerHTML='<strong>Credencial auténtica.</strong> Sellada en blockchain'+(fecha?' el '+escHtml(fecha):'')+'. El CV no ha sido manipulado.<div style="margin-top:6px;word-break:break-all;font-size:.75rem">Hash: <code>'+escHtml(data.cvHash||'')+'</code></div>';
+      }else{
+        st.style.background='#fef2f2';st.style.color='#b91c1c';st.style.border='1px solid #fecaca';
+        st.innerHTML='<strong>No verificado.</strong> '+(escHtml((data&&(data.reason||data.error))||'La credencial no es auténtica o fue modificada.'));
+      }
+    }
+  }catch(e){
+    if(st){st.style.display='block';st.style.background='#fef2f2';st.style.color='#b91c1c';st.style.border='1px solid #fecaca';st.textContent='Error de red: '+(e.message||e);}
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Verificar en blockchain';}
+  }
+}
 
 // ═══ DASHBOARDS ═══
 function openDashCand(){document.getElementById('dashCandidate').classList.add('open');document.body.style.overflow='hidden';
