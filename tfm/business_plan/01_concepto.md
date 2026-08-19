@@ -39,8 +39,8 @@ TalentPact no es una única innovación, sino tres capas que se refuerzan entre 
 | Capa | Qué aporta | Estado |
 |---|---|---|
 | **① Evaluación con IA** | Motor que corrige 102 tipos de reto con una sola arquitectura (Dynamic Prompting + Chain of Thought), objetivo y sin sesgo, a **~€0,02 por evaluación** | ✅ Construido y funcionando (PoC + producto en vivo) |
-| **② Persistencia y perfil verificado** | Base de datos que consolida el histórico de evaluaciones en un perfil de habilidades fiable y auditable | 🔨 En construcción (Supabase) |
-| **③ CV inmutable en blockchain** | La habilidad validada se convierte en una **credencial verificable** (Verifiable Credential) cuyo *hash* se ancla en blockchain: el candidato la posee, es imposible de falsificar y cualquier empresa la verifica sin intermediarios | 🔨 En construcción (innovación diferencial del TFM) |
+| **② Persistencia y perfil verificado** | Base de datos que consolida el histórico de evaluaciones en un perfil de habilidades fiable y auditable | ✅ Construido (Supabase Auth + tablas en UE) |
+| **③ CV inmutable en blockchain** | La habilidad validada se convierte en una **credencial verificable** (Verifiable Credential) cuyo *hash* se ancla en blockchain: el candidato la posee, es imposible de falsificar y cualquier empresa la verifica sin intermediarios | ✅ Demo real en Ethereum Sepolia (contrato `SkillPassRegistry` + verificador público) |
 
 **La tesis fintech del proyecto:** igual que las fintech convirtieron el dinero y los activos en objetos digitales programables y verificables, TalentPact convierte la **habilidad profesional en un activo digital verificable y propiedad del individuo**. Pasamos de la *economía de las acreditaciones* (títulos que hay que creerse) a la *economía de las evidencias* (competencias comprobadas y certificadas criptográficamente).
 

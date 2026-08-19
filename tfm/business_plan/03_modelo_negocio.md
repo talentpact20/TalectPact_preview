@@ -11,7 +11,7 @@
 | **Fuentes de ingreso** | 5 palancas: €49/contacto (pay-per-result), Pro €199/mes, Enterprise €499/mes, retos a medida €299/vacante, Premium candidato €5/reto extra. |
 | **Recursos clave** | El motor de evaluación IA, el catálogo de 102 retos + rúbricas, la base de datos de talento verificado, la infraestructura de credenciales blockchain, el equipo. |
 | **Actividades clave** | Desarrollo y calibración del motor IA, curación del catálogo de retos, adquisición B2B, emisión y anclaje de credenciales, compliance (AI Act/RGPD). |
-| **Socios clave** | Anthropic (API Claude), Supabase/Vercel (infra), Stripe (pagos), red blockchain (L2), asesoría legal (AI Act/RGPD). |
+| **Socios clave** | Anthropic (API Claude), Supabase (datos UE), Netlify (app + funciones), Stripe (pagos, visión comercial), red blockchain (demo en Ethereum Sepolia; producción prevista en L2), asesoría legal (AI Act/RGPD). |
 | **Estructura de costes** | COGS (API IA ~€0,02/eval + Stripe 2 % + gas blockchain), SG&A (salarios, marketing/CAC, infra, legal/compliance). |
 
 ## 3.2 Propuesta de valor por segmento
@@ -40,7 +40,7 @@
 - Coste de anclaje en blockchain: marginal en L2 (céntimos por credencial; en testnet, €0).
 
 **SG&A (coste fijo/estructural):**
-- Salarios (principal partida): €4.800/mes año 1 (4 fundadores lean) → €12.200 (año 2) → €17.500 (año 3).
+- Salarios (principal partida): €4.800/mes año 1 (dos socios + dos primeras contrataciones presupuestadas, lean) → €12.200 (año 2) → €17.500 (año 3).
 - Marketing y CAC: creciente con la adquisición B2B.
 - Infraestructura (Supabase + Vercel), licencias SaaS, legal/compliance (RGPD + AI Act).
 
@@ -70,4 +70,4 @@ Métricas del modelo financiero base (36 meses):
 
 ---
 
-*Cifras: modelo financiero TalentPact (base case, 36 meses). Ver `tfm/ASSETS_EXISTENTES.md`.*
+*Cifras: modelo financiero TalentPact (base case, 36 meses). Ver `tfm/assets/TalentPact_modelo_financiero.xlsx` y el apartado 4.*

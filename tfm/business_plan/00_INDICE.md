@@ -1,13 +1,15 @@
 # Business Plan — TalentPact · Índice maestro
 
-Documento compilado del business plan del TFM. Cada sección se redacta en su propio fichero y al final se ensambla aquí.
+Documento compilado (para leer o imprimir a PDF): `../TalentPact_TFM_Business_Plan.html`.
+
+Cada sección se redacta en su propio fichero; el HTML se regenera con `python3 build_doc.py`.
 
 ---
 
 ## Portada
 - Título, autores, máster, fecha, logo.
 
-## Resumen ejecutivo (1-2 págs)
+## Resumen ejecutivo (1-2 págs) → `00_resumen_ejecutivo.md`
 - Problema, solución, innovación (IA + CV blockchain), mercado, modelo de ingresos, tracción/PoC, cifras financieras clave, ask de financiación.
 
 ## 1. Concepto de negocio → `01_concepto.md`

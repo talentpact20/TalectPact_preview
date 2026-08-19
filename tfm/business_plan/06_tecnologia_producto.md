@@ -21,14 +21,16 @@ TalentPact no es un mockup: es un **producto funcional** con un motor de IA que 
                                     └───────────┬─────────────────┘
                                                  │  SkillPass CV (JSON)
                                                  ▼
-                    ③ BLOCKCHAIN    hash(CV) ──▶ contrato en L2 (anclaje)
+                    ③ BLOCKCHAIN    hash(CV) ──▶ SkillPassRegistry (Sepolia)
                                                  │  + Verifiable Credential
                                                  ▼
                     ④ VERIFICADOR   empresa/tercero recomputa hash y verifica on-chain
                                                  → ✅ Verificado / ❌ Manipulado
 ```
 
-**Stack:** frontend web (HTML/JS, migrable a Next.js), funciones serverless (Netlify/Vercel), **Supabase** (Postgres + Row Level Security, región UE), **API de Anthropic (Claude)** para la evaluación, **Stripe** para pagos y **red blockchain L2** (Polygon) para el anclaje de credenciales.
+**Stack actual del demo:** frontend web (HTML/JS), funciones serverless en **Netlify**, **Supabase** (Postgres + Auth + RLS, región UE), **API de Anthropic (Claude)** para la evaluación, contrato **`SkillPassRegistry`** en **Ethereum Sepolia** (testnet). Stripe y una L2 de producción (p. ej. Polygon) están en el roadmap comercial, no en el vertical slice del TFM.
+
+Se eligió Sepolia frente a Polygon Amoy porque los *faucets* de Amoy exigían crypto de mainnet; Sepolia permite anclar de verdad a coste €0 y enseñar la transacción en Etherscan. El contrato y el patrón (hash on-chain / dato off-chain) son los mismos que se llevarían a L2.
 
 ## 6.2 El motor de evaluación con IA (núcleo, ya funcionando)
 
@@ -47,13 +49,14 @@ El corazón de TalentPact es un agente evaluador que puntúa **102 tipos de reto
 
 ## 6.3 Persistencia y datos (Supabase)
 
-El MVP actual guarda el estado en `localStorage` (perfecto para demo, pero no multiusuario ni multidispositivo). La evolución a producto real —y requisito para la capa blockchain— es **Supabase (PostgreSQL + RLS)** en región UE:
+El prototipo guardaba el estado en `localStorage`. El producto del TFM ya usa **Supabase (PostgreSQL + Auth + RLS)** en región UE, con `localStorage` como respaldo local de la demo:
 
-- **`profiles`** — perfiles anónimos de candidatos (alias público; datos sensibles cifrados/anonimizados).
-- **`evaluations`** — audit trail de cada evaluación IA (score, criterios, razonamiento, tokens, coste) → cumple el Art. 12 del AI Act (trazabilidad).
-- **`credentials`** — CV verificables emitidos, con su hash y su referencia on-chain.
+- **`profiles`** — perfiles de candidatos (cuenta real; alias público).
+- **`companies`** — cuentas de empresa.
+- **`evaluations`** — audit trail de cada evaluación IA (score, criterios, razonamiento, tokens, coste) → Art. 12 del AI Act.
+- **`credentials`** — SkillPass emitidos, con hash, tx y bloque.
 
-RLS garantiza que cada candidato solo accede a sus propios datos, y la región UE cubre la residencia de datos del RGPD.
+La región UE cubre la residencia de datos del RGPD. El esquema está en `tfm/tech/supabase_schema*.sql`.
 
 ## 6.4 Innovación blockchain: el CV inmutable y verificable ⭐
 
@@ -61,12 +64,12 @@ Es la **aportación diferencial del TFM** y el puente natural entre el producto 
 
 ### Qué es
 
-Cuando un candidato acumula habilidades validadas por IA, TalentPact emite un **SkillPass**: una **credencial verificable** (siguiendo el estándar W3C *Verifiable Credentials*) que certifica *"esta persona validó SQL con 87/100 el 05/09/2026, evaluada con la rúbrica X"*. Se calcula el **hash** de esa credencial y se **ancla en una blockchain** (L2 Polygon). El candidato posee su credencial y cualquier empresa puede **verificarla sin depender de TalentPact**.
+Cuando un candidato acumula habilidades validadas por IA, TalentPact emite un **SkillPass**: una **credencial verificable** (inspirada en el estándar W3C *Verifiable Credentials*) que certifica, por ejemplo, *"esta persona validó SQL con 87/100 el 05/09/2026, evaluada con la rúbrica X"*. Se calcula el **hash** keccak256 de esa credencial y se **ancla** en el contrato `SkillPassRegistry`. El candidato posee el JSON/PDF y el enlace; cualquier empresa comprueba el sello **sin cuenta TalentPact**.
 
 ### Cómo funciona (y por qué es privado)
 
 ```
-CV verificado (JSON)  ──keccak256──▶  hash (bytes32)  ──tx──▶  contrato SkillPassRegistry (blockchain)
+CV verificado (JSON)  ──keccak256──▶  hash (bytes32)  ──tx──▶  SkillPassRegistry (Ethereum Sepolia)
    [vive OFF-CHAIN en Supabase]                                    [solo el hash vive ON-CHAIN]
 ```
 
@@ -87,7 +90,14 @@ El choque clásico "inmutabilidad de blockchain vs. derecho al olvido" se resuel
 
 ### Demo real (lo que se enseña en la defensa)
 
-Un *vertical slice* funcional para un candidato: responder reto → IA corrige → se guarda en Supabase → se genera el SkillPass → se ancla su hash en **testnet (Polygon Amoy)** → un **verificador público** comprueba la credencial contra la cadena, con enlace al explorador de bloques. Detalle de implementación en `tfm/tech/SPEC_TECNICA_DEMO.md`.
+Un *vertical slice* **ya desplegado**:
+
+1. El candidato responde un reto → Claude corrige y se guarda en Supabase.
+2. Pulsa **Sellar mi SkillPass** → se emite el JSON, se calcula el hash y se ancla en **Ethereum Sepolia**.
+3. Descarga PDF certificado, JSON o copia el enlace `verify.html?h=0x…`.
+4. La empresa (panel o página pública) pega JSON/hash/enlace y ve si el sello es auténtico.
+
+Contrato: `0x85418F3d978e691C0f784bA63E4cB2826478f73A` · explorador: [Sepolia Etherscan](https://sepolia.etherscan.io/address/0x85418F3d978e691C0f784bA63E4cB2826478f73A). Detalle en `tfm/tech/SPEC_TECNICA_DEMO.md` y `tfm/tech/build/deployment-sepolia.json`.
 
 ## 6.5 Innovación financiera: pay-per-result y liquidación (visión)
 
@@ -97,10 +107,11 @@ Más allá del CV, el modelo de ingresos **pay-per-result** es en sí una innova
 
 | Horizonte | Hitos |
 |---|---|
-| **Corto (0-3 meses)** | De prototipo a producto: persistencia Supabase, credencial blockchain (mainnet L2), Stripe Connect, autenticación completa. |
-| **Medio (4-6 meses)** | Beta privada: 10 empresas y 100 candidatos activos, primeras transacciones reales, *streaming* del score, calibración de rúbricas. |
-| **Largo (7-12 meses)** | Lanzamiento público, escalado del catálogo a 102 retos, equipo 5-8 personas, expansión a Portugal, objetivo €25K MRR. |
-| **Visión** | Estándar europeo de credenciales de habilidades (interoperabilidad con EU Digital Identity Wallet / eIDAS 2.0) y liquidación programable de pagos. |
+| **Hecho (demo TFM)** | Auth real, persistencia Supabase, evaluación IA en producción, SkillPass anclado en Sepolia, verificador público. |
+| **Corto (0-3 meses)** | DPIA + aviso AI Act, calibración humana del score, Stripe, llevar el contrato a una L2 de producción. |
+| **Medio (4-6 meses)** | Beta de pago: primeras empresas reales, *streaming* del score, rúbricas más ancladas. |
+| **Largo (7-12 meses)** | Lanzamiento público, catálogo completo, equipo según el plan financiero, expansión Iberia. |
+| **Visión** | Interoperar el SkillPass con EU Digital Identity Wallet / eIDAS 2.0 y, más tarde, liquidación programable (escrow). |
 
 ---
 
