@@ -12,7 +12,7 @@
  */
 const fs = require("fs");
 const path = require("path");
-const { ROOT, loadDotEnv, env, requireEnv, normalizePrivateKey, AMOY } = require("./lib-env");
+const { ROOT, loadDotEnv, env, requireEnv, normalizePrivateKey, CHAIN } = require("./lib-env");
 
 loadDotEnv();
 
@@ -56,7 +56,7 @@ function compile() {
 }
 
 async function main() {
-  console.log("\n  Despliegue de " + CONTRACT_NAME + " en " + AMOY.name + "\n");
+  console.log("\n  Despliegue de " + CONTRACT_NAME + " en " + CHAIN.name + "\n");
 
   console.log("  1. Compilando " + path.relative(ROOT, CONTRACT_PATH) + " ...");
   const { abi, bytecode, compiler } = compile();
@@ -70,7 +70,7 @@ async function main() {
   }
 
   const { ethers } = require("ethers");
-  const rpc = env("POLYGON_AMOY_RPC") || AMOY.defaultRpc;
+  const rpc = env("SEPOLIA_RPC") || env("POLYGON_AMOY_RPC") || CHAIN.defaultRpc;
   const pk = normalizePrivateKey(
     requireEnv("ISSUER_PRIVATE_KEY", "Paso 2 del SETUP_CHECKLIST: exporta la clave de la wallet de testnet.")
   );
@@ -82,9 +82,9 @@ async function main() {
   const network = await provider.getNetwork();
   console.log("     RPC:        " + rpc);
   console.log("     chainId:    " + network.chainId);
-  if (Number(network.chainId) !== AMOY.chainId) {
+  if (Number(network.chainId) !== CHAIN.chainId) {
     throw new Error(
-      `El RPC responde chainId ${network.chainId}, pero se esperaba ${AMOY.chainId} (${AMOY.name}). Revisa POLYGON_AMOY_RPC.`
+      `El RPC responde chainId ${network.chainId}, pero se esperaba ${CHAIN.chainId} (${CHAIN.name}). Revisa SEPOLIA_RPC.`
     );
   }
 
@@ -97,7 +97,7 @@ async function main() {
   const balance = await provider.getBalance(wallet.address);
   console.log("     saldo:      " + ethers.formatEther(balance) + " POL");
   if (balance === 0n) {
-    throw new Error("La wallet no tiene POL de testnet. Pide gas gratis en " + AMOY.faucet);
+    throw new Error("La wallet no tiene ETH de Sepolia. Pide gas gratis (solo Gmail) en " + CHAIN.faucet);
   }
 
   console.log("\n  3. Desplegando ...");
@@ -115,30 +115,30 @@ async function main() {
   console.log("     direccion:  " + address);
   console.log("     bloque:     " + receipt.blockNumber);
   console.log("     gas usado:  " + receipt.gasUsed.toString());
-  console.log("     explorer:   " + AMOY.explorer + "/address/" + address);
+  console.log("     explorer:   " + CHAIN.explorer + "/address/" + address);
 
   console.log("\n  Ultimo paso — anade esta linea a tu .env (y a Netlify):\n");
   console.log("     SKILLPASS_CONTRACT_ADDRESS=" + address + "\n");
 
   fs.writeFileSync(
-    path.join(BUILD_DIR, "deployment-amoy.json"),
+    path.join(BUILD_DIR, "deployment-sepolia.json"),
     JSON.stringify(
       {
         contractName: CONTRACT_NAME,
-        chain: "polygon-amoy",
-        chainId: AMOY.chainId,
+        chain: CHAIN.slug,
+        chainId: CHAIN.chainId,
         address,
         issuer: wallet.address,
         txHash: tx.hash,
         blockNumber: receipt.blockNumber,
         deployedAt: new Date().toISOString(),
-        explorer: AMOY.explorer + "/address/" + address
+        explorer: CHAIN.explorer + "/address/" + address
       },
       null,
       2
     )
   );
-  console.log("  Registro guardado en tfm/tech/build/deployment-amoy.json\n");
+  console.log("  Registro guardado en tfm/tech/build/deployment-sepolia.json\n");
 }
 
 main().catch((err) => {

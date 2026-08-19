@@ -18,3 +18,4 @@ node_modules/
 # El registro del despliegue sí se versiona: documenta la dirección en Amoy.
 tfm/tech/build/*
 !tfm/tech/build/deployment-amoy.json
+!tfm/tech/build/deployment-sepolia.json

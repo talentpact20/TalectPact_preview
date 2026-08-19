@@ -32,7 +32,7 @@
   <div class="wrap">
     <div class="brand">talent<span>pact</span></div>
     <h1>Verificador de credenciales</h1>
-    <p class="sub">Pega aquí el CV verificable (SkillPass) de un candidato. Comprobaremos contra la blockchain que es auténtico y no ha sido manipulado.</p>
+    <p class="sub">Pega el CV verificable (JSON) o abre un enlace público con el hash. Comprobamos contra la blockchain que es auténtico y no ha sido manipulado.</p>
 
     <div class="card">
       <label for="cv">CV verificable (JSON)</label>
@@ -53,25 +53,22 @@
 <script>
 const btn = document.getElementById('btn');
 const res = document.getElementById('res');
-btn.addEventListener('click', async () => {
-  const raw = document.getElementById('cv').value.trim();
-  if (!raw) return;
+
+async function verifyPayload(payload) {
   btn.disabled = true; btn.textContent = 'Verificando…';
   res.className = 'result';
   try {
-    let cvJson;
-    try { cvJson = JSON.parse(raw); }
-    catch (e) { return showBad('El texto pegado no es un JSON válido.', ''); }
-
     const r = await fetch('/.netlify/functions/verify-credential', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ cvJson })
+      body: JSON.stringify(payload)
     });
     const data = await r.json();
     if (!r.ok) return showBad(data.error || 'Error en la verificación', data.details || '');
-
     if (data.verified) {
-      showOk(data.anchoredAt, data.cvHash);
+      const extra = (data.skills && data.skills.length)
+        ? ' Skills: ' + data.skills.map(s => s.skill + ' (' + s.score + ')').join(', ') + '.'
+        : '';
+      showOk(data.anchoredAt, data.cvHash, extra);
     } else {
       showBad(data.reason || 'La credencial no es auténtica o fue modificada.', data.cvHash);
     }
@@ -80,14 +77,30 @@ btn.addEventListener('click', async () => {
   } finally {
     btn.disabled = false; btn.textContent = 'Verificar en blockchain';
   }
+}
+
+btn.addEventListener('click', async () => {
+  const raw = document.getElementById('cv').value.trim();
+  if (!raw) return;
+  let cvJson;
+  try { cvJson = JSON.parse(raw); }
+  catch (e) { return showBad('El texto pegado no es un JSON válido.', ''); }
+  verifyPayload({ cvJson });
 });
 
-function showOk(anchoredAt, hash) {
+(function autoFromHash(){
+  const h = new URLSearchParams(location.search).get('h') || new URLSearchParams(location.search).get('hash');
+  if (!h) return;
+  document.getElementById('cv').placeholder = 'Verificando por hash público…';
+  verifyPayload({ cvHash: h });
+})();
+
+function showOk(anchoredAt, hash, extra) {
   res.className = 'result show ok';
   document.getElementById('ico').textContent = '✅';
   document.getElementById('rtitle').textContent = 'Credencial auténtica y verificada';
   const fecha = anchoredAt ? new Date(anchoredAt).toLocaleString('es-ES') : '';
-  document.getElementById('rtext').textContent = 'Sellada en blockchain' + (fecha ? ' el ' + fecha : '') + '. El CV no ha sido manipulado.';
+  document.getElementById('rtext').textContent = 'Sellada en blockchain' + (fecha ? ' el ' + fecha : '') + '. El CV no ha sido manipulado.' + (extra || '');
   document.getElementById('rhash').textContent = hash ? 'Hash: ' + hash : '';
 }
 function showBad(msg, hash) {
