@@ -10,8 +10,11 @@ if(location.hash)try{history.replaceState(null,'',location.pathname+(location.se
 var _st_iv=null;
 function _scrollTop(){
   window.scrollTo(0,0);
-  document.documentElement.scrollTop=0;
-  document.body.scrollTop=0;
+  // Este script corre en <head>: document.body todavia no existe en la primera
+  // llamada. Sin la guarda, el TypeError abortaba el resto del bloque y los
+  // listeners de DOMContentLoaded y pageshow no llegaban a registrarse.
+  if(document.documentElement)document.documentElement.scrollTop=0;
+  if(document.body)document.body.scrollTop=0;
 }
 function _stopScrollGuard(){
   if(_st_iv){clearInterval(_st_iv);_st_iv=null;}
@@ -502,11 +505,43 @@ nav a.nl:hover{color:var(--slate-900)}
 .a-field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .a-field .hint{font-size:.6875rem;color:var(--slate-400);margin-top:1px}
 .auth-submit .btn{width:100%;justify-content:center;padding:11px 20px;font-size:.875rem}
+.auth-submit .btn[disabled]{opacity:.65;cursor:progress}
+.st-msg{display:none;margin-top:10px;padding:9px 12px;border-radius:8px;font-size:.72rem;line-height:1.45}
+.st-msg.show{display:block}
+.st-msg.ok{background:var(--emerald-50);border:1px solid var(--emerald-100);color:var(--emerald-700)}
+.st-msg.err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}
+.st-msg.info{background:var(--slate-50);border:1px solid var(--slate-200);color:var(--slate-600)}
+.st-soon{font-size:.6rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--slate-100);color:var(--slate-500);border:1px solid var(--slate-200);padding:4px 9px;border-radius:20px;white-space:nowrap;flex:none}
+.st-note{font-size:.68rem;color:var(--slate-400);line-height:1.5;margin-top:12px;padding-top:11px;border-top:1px solid var(--slate-100)}
+.st-inline-form{display:none;flex-direction:column;gap:9px;margin-top:11px;padding:13px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:9px}
+.st-inline-form.show{display:flex}
+.st-inline-form .st-actions{display:flex;gap:8px;flex-wrap:wrap}
+.st-kv{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:.75rem;padding:7px 0;border-bottom:1px solid var(--slate-100)}
+.st-kv:last-child{border-bottom:0}
+.st-kv span{color:var(--slate-500)}
+.st-kv strong{color:var(--slate-900);font-weight:700;text-align:right}
+.st-empty{font-size:.72rem;color:var(--slate-400);padding:10px 0;text-align:center}
+.a-pw{position:relative;display:flex}
+.a-pw input{padding-right:64px}
+.a-pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:4px 8px;border-radius:6px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.6875rem;font-weight:600;color:var(--slate-400);cursor:pointer}
+.a-pw-toggle:hover{color:var(--emerald-600);background:var(--slate-100)}
+.a-caps{display:none;font-size:.6875rem;color:var(--amber-500);margin-top:2px}
+.a-caps.show{display:block}
 .auth-divider{display:flex;align-items:center;gap:12px;margin:2px 0}.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--slate-200)}.auth-divider span{font-size:.75rem;color:var(--slate-400)}
 .auth-social{display:flex;gap:8px}
 .auth-social-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border:1.5px solid var(--slate-200);border-radius:8px;background:white;font-family:'Plus Jakarta Sans',sans-serif;font-size:.78rem;font-weight:500;color:var(--slate-600);cursor:pointer;transition:all .15s}
 .auth-social-btn:hover{border-color:var(--slate-400);background:var(--slate-50)}
 .auth-social-btn svg{width:16px;height:16px}
+.auth-social-btn:disabled{cursor:wait;opacity:.6}
+.auth-social-btn.is-off{opacity:.62}
+.auth-oauth-msg{display:none;margin-top:10px;padding:10px 12px;border-radius:8px;font-size:.72rem;line-height:1.45}
+.auth-oauth-msg.show{display:block}
+.auth-oauth-msg.err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}
+.auth-oauth-msg.info{background:var(--slate-50);border:1px solid var(--slate-200);color:var(--slate-600)}
+.auth-oauth-msg.ok{background:var(--emerald-50);border:1px solid var(--emerald-100);color:var(--emerald-600)}
+.auth-guest{text-align:center;margin-top:14px;font-size:.72rem}
+.auth-guest a{color:var(--slate-400);text-decoration:none;font-weight:500;border-bottom:1px dashed var(--slate-300);cursor:pointer}
+.auth-guest a:hover{color:var(--emerald-600);border-bottom-color:var(--emerald-200)}
 .auth-footer{text-align:center;font-size:.78rem;color:var(--slate-400);margin-top:18px}.auth-footer a{color:var(--emerald-600);font-weight:600;text-decoration:none}
 .auth-success{display:none;text-align:center;padding:16px 0}.auth-success.show{display:block;animation:fadeUp .4s ease both}
 .auth-success h3{font-family:'Sora',sans-serif;font-weight:800;font-size:1.375rem;margin-bottom:6px;color:var(--emerald-600)}
@@ -880,6 +915,9 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 .pay-header{background:var(--slate-900);padding:24px;text-align:center}
 .pay-header h3{color:white;font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;margin-bottom:4px}
 .pay-header p{color:var(--slate-400);font-size:.78rem}
+.ct-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 12px;border:1px solid var(--slate-200);border-radius:8px;margin-bottom:8px;background:var(--slate-50)}
+.ct-k{font-size:.6875rem;font-weight:700;color:var(--slate-400);text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.ct-v{font-size:.8125rem;font-weight:600;color:var(--slate-900);text-align:right;word-break:break-word}
 .pay-candidate-preview{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 14px;margin-top:14px}
 .pay-candidate-preview .pcp-avatar{width:36px;height:36px;border-radius:9px;background:rgba(16,185,129,.15);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.75rem;color:var(--emerald-400)}
 .pay-candidate-preview .pcp-info{color:rgba(255,255,255,.6);font-size:.75rem}.pay-candidate-preview .pcp-info strong{color:white;display:block;font-size:.8125rem}
@@ -1328,8 +1366,8 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   <div class="auth-brand auth-brand-cand"><div class="auth-brand-grid"></div><div class="auth-brand-content"><h2>Demuestra lo que <em>sabes hacer.</em></h2><p>Sin CV. Sin sesgos. Completa retos prácticos y genera tu perfil de habilidades verificado.</p><div class="auth-brand-features"><div class="auth-feat"><div class="auth-feat-icon">🔒</div><div><h4>Perfil 100% anónimo</h4><p>Las empresas solo ven tus skills y puntuaciones.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">⚡</div><div><h4>Retos prácticos reales</h4><p>Sandboxes que replican situaciones laborales.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">📊</div><div><h4>Ranking y visibilidad</h4><p>Mejor puntuación = más visibilidad ante empresas.</p></div></div></div></div></div>
   <div class="auth-form-side"><div class="auth-form-wrap"><button class="auth-back" onclick="closeAuth('authCandidate')">← Volver</button><h1>Bienvenido.</h1><p class="auth-subtitle">Accede o crea tu cuenta para empezar los retos.</p>
     <div class="auth-tabs" id="candTabs"><button class="auth-tab active" onclick="switchAuthTab('cand','login',this)">Iniciar sesión</button><button class="auth-tab" onclick="switchAuthTab('cand','register',this)">Crear cuenta</button></div>
-    <div class="auth-form" id="cand-login"><div class="a-field"><label>Email</label><input type="email" placeholder="tu@email.com" id="cand-login-email"></div><div class="a-field"><label>Contraseña</label><input type="password" placeholder="••••••••" id="cand-login-pw"></div><div class="auth-submit"><button class="btn btn-primary btn-lg" onclick="loginCandidate()">Iniciar sesión →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button class="auth-social-btn" onclick="guestCandidate()"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button><button class="auth-social-btn" onclick="guestCandidate()"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</button></div></div>
-    <div class="auth-form" id="cand-register" style="display:none"><div class="a-field-row"><div class="a-field"><label>Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name"></div><div class="a-field"><label>Apellido</label><input type="text" placeholder="Apellido" id="reg-last"></div></div><div class="a-field"><label>Email</label><input type="email" placeholder="tu@email.com" id="reg-email"></div><div class="a-field"><label>Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone"><span class="hint" style="font-size:.65rem;color:var(--slate-400)">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label>LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin"></div><div class="a-field"><label>Contraseña</label><input type="password" placeholder="Mín. 8 caracteres" id="reg-pw"></div><div class="a-field"><label>Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div style="background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:8px;padding:10px 12px;font-size:.72rem;color:var(--emerald-600);margin-bottom:4px">🔒 Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button class="btn btn-primary btn-lg" onclick="registerCandidate()">Crear cuenta →</button></div></div>
+    <div class="auth-form" id="cand-login"><div class="a-field"><label>Email</label><input type="email" placeholder="tu@email.com" id="cand-login-email" autocomplete="email" onkeydown="if(event.key==='Enter')loginCandidate()"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="cand-login-pw" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginCandidate()" onkeyup="capsHint(event,'cand-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('cand-login-pw',this)">Ver</button></div><div class="a-caps" id="cand-login-caps">Bloq Mayús está activado.</div></div><div class="auth-submit"><button class="btn btn-primary btn-lg" id="candLoginBtn" onclick="loginCandidate()">Iniciar sesión →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button class="auth-social-btn" id="btnGoogleAuth" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button><button class="auth-social-btn" id="btnLinkedinAuth" onclick="oauthLogin('linkedin_oidc')"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</button></div><div class="auth-oauth-msg" id="candAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestCandidate()">Explorar como invitado (sin cuenta) →</a></div></div>
+    <div class="auth-form" id="cand-register" style="display:none"><div class="a-field-row"><div class="a-field"><label>Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name"></div><div class="a-field"><label>Apellido</label><input type="text" placeholder="Apellido" id="reg-last"></div></div><div class="a-field"><label>Email</label><input type="email" placeholder="tu@email.com" id="reg-email"></div><div class="a-field"><label>Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone"><span class="hint" style="font-size:.65rem;color:var(--slate-400)">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label>LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="reg-pw" autocomplete="new-password"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div></div><div class="a-field"><label>Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div style="background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:8px;padding:10px 12px;font-size:.72rem;color:var(--emerald-600);margin-bottom:4px">🔒 Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button class="btn btn-primary btn-lg" id="candRegBtn" onclick="registerCandidate()">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></div>
     <div class="auth-success" id="cand-success"><h3>¡Bienvenido!</h3><p>Redirigiendo a tu panel…</p></div>
     <div class="auth-footer" id="cand-footer">¿Eres empresa? <a href="#" onclick="closeAuth('authCandidate');openAuth('empresa')">Accede aquí</a></div>
   </div></div>
@@ -1340,15 +1378,15 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   <div class="auth-brand auth-brand-emp"><div class="auth-brand-grid"></div><div class="auth-brand-content"><h2>Contrata por <em>capacidad real.</em></h2><p>Pool de candidatos evaluados por skills. Sin CV. Sin sesgos. Solo talento demostrado.</p><div class="auth-brand-features"><div class="auth-feat"><div class="auth-feat-icon">🎯</div><div><h4>Perfiles ciegos</h4><p>Solo ves skills, scores y ranking.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">💰</div><div><h4>Success fee</h4><p>Solo pagas cuando contratas.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">🔒</div><div><h4>Kill Switch</h4><p>Al contratar, el perfil desaparece del pool.</p></div></div></div></div></div>
   <div class="auth-form-side"><div class="auth-form-wrap empresa-accent"><button class="auth-back" onclick="closeAuth('authEmpresa')">← Volver</button><h1>Portal empresa.</h1><p class="auth-subtitle">Accede al pool de talento evaluado.</p>
     <div class="auth-tabs" id="empTabs"><button class="auth-tab active" onclick="switchAuthTab('emp','login',this)">Iniciar sesión</button><button class="auth-tab" onclick="switchAuthTab('emp','register',this)">Crear cuenta</button></div>
-    <div class="auth-form" id="emp-login"><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-login-email"></div><div class="a-field"><label>Contraseña</label><input type="password" placeholder="••••••••" id="emp-login-pw"></div><div class="auth-submit"><button class="btn btn-dark btn-lg" onclick="loginEmpresa()">Acceder →</button></div></div>
-    <div class="auth-form" id="emp-register" style="display:none"><div class="a-field"><label>Empresa</label><input type="text" placeholder="Tu empresa S.L." id="emp-reg-company"></div><div class="a-field-row"><div class="a-field"><label>Tu nombre</label><input type="text" placeholder="Nombre" id="emp-reg-name"></div><div class="a-field"><label>Cargo</label><input type="text" placeholder="RRHH, CTO…" id="emp-reg-role"></div></div><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-reg-email"></div><div class="a-field"><label>Contraseña</label><input type="password" placeholder="Mín. 8 caracteres" id="emp-reg-pw"></div><div class="a-field"><label>Tamaño</label><select id="emp-reg-size"><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div><div class="auth-submit"><button class="btn btn-dark btn-lg" onclick="registerEmpresa()">Crear cuenta →</button></div></div>
+    <div class="auth-form" id="emp-login"><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-login-email" autocomplete="email" onkeydown="if(event.key==='Enter')loginEmpresa()"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="emp-login-pw" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginEmpresa()" onkeyup="capsHint(event,'emp-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-login-pw',this)">Ver</button></div><div class="a-caps" id="emp-login-caps">Bloq Mayús está activado.</div></div><div class="auth-submit"><button class="btn btn-dark btn-lg" id="empLoginBtn" onclick="loginEmpresa()">Acceder →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button class="auth-social-btn" id="btnGoogleEmp" onclick="oauthLogin('google','empresa')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continuar con Google</button></div><div class="auth-oauth-msg" id="empAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestEmpresa()">Explorar el panel como invitado (sin cuenta) →</a></div></div>
+    <div class="auth-form" id="emp-register" style="display:none"><div class="a-field"><label>Empresa</label><input type="text" placeholder="Tu empresa S.L." id="emp-reg-company" autocomplete="organization"></div><div class="a-field-row"><div class="a-field"><label>Tu nombre</label><input type="text" placeholder="Nombre" id="emp-reg-name" autocomplete="name"></div><div class="a-field"><label>Cargo</label><input type="text" placeholder="RRHH, CTO…" id="emp-reg-position" autocomplete="organization-title"></div></div><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-reg-email" autocomplete="email"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="emp-reg-pw" autocomplete="new-password"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-reg-pw',this)">Ver</button></div></div><div class="a-field"><label>Tamaño</label><select id="emp-reg-size"><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div><div class="auth-submit"><button class="btn btn-dark btn-lg" id="empRegBtn" onclick="registerEmpresa()">Crear cuenta →</button></div><div class="auth-oauth-msg" id="empRegMsg" role="status" aria-live="polite"></div></div>
     <div class="auth-success" id="emp-success"><h3>¡Cuenta creada!</h3><p>Redirigiendo al panel…</p></div>
     <div class="auth-footer" id="emp-footer">¿Eres candidato? <a href="#" onclick="closeAuth('authEmpresa');openAuth('candidate')">Accede aquí</a></div>
   </div></div>
 </div></div>
 
 <!-- ═══ DASH CANDIDATO ═══ -->
-<div class="dash-overlay" id="dashCandidate" role="main" aria-label="Panel de candidato"><div class="dash-topbar"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600)" id="candAvatar">AC</div><span id="candName">Ana C.</span><button class="dash-gear-btn" onclick="logoutCand()" title="Cerrar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button><button class="dash-gear-btn" onclick="openSettings('cand')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashCandidate')">Cerrar sesión</button></div></div>
+<div class="dash-overlay" id="dashCandidate" role="main" aria-label="Panel de candidato"><div class="dash-topbar"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600)" id="candAvatar">—</div><span id="candName">Mi perfil</span><button class="dash-gear-btn" onclick="logoutCand()" title="Cerrar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button><button class="dash-gear-btn" onclick="openSettings('cand')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashCandidate')">Cerrar sesión</button></div></div>
 <div class="dash-body">
   <div class="dash-stats">
     <div class="dash-stat-card"><div class="dsc-val" style="color:var(--emerald-600)" id="cDashCompleted">0</div><div class="dsc-lbl">Retos completados</div></div>
@@ -1494,7 +1532,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 </div><!-- /dash-body --></div><!-- /dashCandidate -->
 
 <!-- ═══ DASH EMPRESA ═══ -->
-<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar" style="border-bottom-color:var(--slate-200)"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--blue-100);color:var(--blue-500)" id="empAvatar">TC</div><span id="empName">TechCorp</span><button class="dash-gear-btn" onclick="logoutEmp()" title="Cerrar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button><button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashEmpresa')">Cerrar sesión</button></div></div>
+<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar" style="border-bottom-color:var(--slate-200)"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--blue-100);color:var(--blue-500)" id="empAvatar">TC</div><span id="empName">TechCorp</span><button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="logoutEmp()">Cerrar sesión</button></div></div>
 
 <div class="dash-body">
   <!-- Estadísticas siempre visibles -->
@@ -1637,43 +1675,45 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-topbar-icon" style="background:var(--emerald-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       <div>
         <h2>Ajustes</h2>
-        <p>Cuenta de candidato · Ana Casanova</p>
+        <p id="stCandWho">Cuenta de candidato</p>
       </div>
     </div>
     <button class="st-close" onclick="closeSettings('cand')">✕</button>
   </div>
   <div class="st-body">
 
-    <!-- PERFIL -->
+    <!-- DATOS PERSONALES — se leen y se guardan en Supabase -->
     <div class="st-section">
       <div class="st-section-label">Datos personales</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Nombre</label><input type="text" value="Ana"></div>
-          <div class="st-field"><label>Apellido</label><input type="text" value="Casanova"></div>
+          <div class="st-field"><label>Nombre</label><input type="text" id="st-cand-name" autocomplete="given-name"></div>
+          <div class="st-field"><label>Apellido</label><input type="text" id="st-cand-last" autocomplete="family-name"></div>
         </div>
-        <div class="st-field"><label>Email</label><input type="email" value="ana.casanova@email.com"></div>
+        <div class="st-field"><label>Email</label><input type="email" id="st-cand-email" autocomplete="email"></div>
         <div class="st-grid">
-          <div class="st-field"><label>Sector preferido</label><select><option>IT / Dev</option><option selected>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option></select></div>
-          <div class="st-field"><label>Ciudad</label><input type="text" placeholder="Barcelona…"></div>
+          <div class="st-field"><label>Sector preferido</label><select id="st-cand-sector"><option value="">Sin especificar</option><option>IT / Dev</option><option>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div>
+          <div class="st-field"><label>Ciudad</label><input type="text" id="st-cand-city" placeholder="Barcelona…"></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>LinkedIn</label><input type="url" placeholder="linkedin.com/in/…"></div>
-          <div class="st-field"><label>GitHub / Portafolio</label><input type="url" placeholder="github.com/…"></div>
+          <div class="st-field"><label>LinkedIn</label><input type="url" id="st-cand-linkedin" placeholder="linkedin.com/in/…"></div>
+          <div class="st-field"><label>Teléfono</label><input type="tel" id="st-cand-phone" placeholder="+34 600 000 000"></div>
         </div>
-        <div style="margin-top:4px"><button class="btn btn-primary btn-sm" onclick="alert('Perfil guardado.')">Guardar cambios</button></div>
+        <div class="st-field"><label>GitHub / Portafolio</label><input type="url" id="st-cand-portfolio" placeholder="github.com/…"></div>
+        <div style="margin-top:4px"><button class="btn btn-primary btn-sm" id="st-cand-save" onclick="saveCandSettings()">Guardar cambios</button></div>
+        <div class="st-msg" id="st-cand-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
-    <!-- PRIVACIDAD -->
+    <!-- PRIVACIDAD — cada opción cambia de verdad lo que ven las empresas -->
     <div class="st-section">
       <div class="st-section-label">Privacidad</div>
       <div class="st-card">
-        <div style="background:var(--emerald-50);border-radius:8px;padding:9px 12px;font-size:.7rem;color:var(--emerald-700);margin-bottom:12px;display:flex;gap:8px">🔒 <span>Tu nombre y contacto son siempre anónimos hasta que una empresa pague por desbloquearte <em>y tú aceptes</em>.</span></div>
-        <div class="st-row"><div class="st-row-info"><h5>Visible en el pool de talento</h5><p>Las empresas pueden encontrar tu perfil</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Recibir solicitudes de contacto</h5><p>Empresas pueden pagarte para desbloquearte</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Aparecer en ranking público</h5><p>Tu posición anónima en el leaderboard</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Notificar cuando me desbloqueen</h5><p>Email inmediato al ser desbloqueado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
+        <div style="background:var(--emerald-50);border-radius:8px;padding:9px 12px;font-size:.7rem;color:var(--emerald-700);margin-bottom:12px;display:flex;gap:8px">🔒 <span>Tu nombre y tu contacto son siempre anónimos hasta que una empresa paga por desbloquearte.</span></div>
+        <div class="st-row"><div class="st-row-info"><h5>Visible en el pool de talento</h5><p>Si lo desactivas, tu perfil desaparece del listado de las empresas</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-poolVisible" onchange="setPref('cand','poolVisible',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Aceptar solicitudes de contacto</h5><p>Si lo desactivas, las empresas no pueden desbloquear tus datos</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-allowContact" onchange="setPref('cand','allowContact',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Aparecer en el ranking público</h5><p>Tu posición anónima en el leaderboard</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-publicRanking" onchange="setPref('cand','publicRanking',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-msg" id="st-pref-cand-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
@@ -1681,32 +1721,26 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Notificaciones</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Resultado de reto completado</h5><p>Score y feedback por email</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Empresa desbloqueó tu contacto</h5><p>Alerta inmediata</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Nuevas ofertas que encajan</h5><p>Match ≥70% con tus skills</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Recordatorio retos pendientes</h5><p>Resumen semanal</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Novedades de TalentPact</h5><p>Nuevas funciones y retos</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Resultado de reto completado</h5><p>Score y feedback por email</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyResult" onchange="setPref('cand','notifyResult',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Una empresa desbloquea tu contacto</h5><p>Aviso inmediato</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyUnlock" onchange="setPref('cand','notifyUnlock',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Nuevas ofertas que encajan</h5><p>Match ≥70% con tus skills</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyMatches" onchange="setPref('cand','notifyMatches',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Resumen semanal</h5><p>Retos pendientes y novedades</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-notifyWeekly" onchange="setPref('cand','notifyWeekly',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <p class="st-note">Estas preferencias se guardan en tu cuenta. El envío de correos todavía no está conectado en esta versión preliminar, así que de momento solo determinan qué recibirás cuando lo esté.</p>
       </div>
     </div>
 
-    <!-- SUSCRIPCIÓN CANDIDATO -->
+    <!-- PLAN -->
     <div class="st-section">
-      <div class="st-section-label">Mi suscripción</div>
+      <div class="st-section-label">Mi plan</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--emerald-50);border-radius:10px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--emerald-50);border-radius:10px">
           <div>
             <div style="font-size:.78rem;font-weight:700;color:var(--emerald-700)">Plan actual: <span style="font-size:.85rem">Free</span></div>
-            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px">TalentPact es 100% gratuito. Hasta 5 retos por semana.</div>
+            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px">TalentPact es gratuito para candidatos. Sin límite de retos.</div>
           </div>
           <span style="font-size:.65rem;font-weight:700;background:var(--emerald-100);color:var(--emerald-700);padding:4px 10px;border-radius:20px">GRATIS</span>
         </div>
-        <div style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:8px;padding:12px 14px;">
-          <div style="font-size:.72rem;font-weight:700;color:var(--slate-700);margin-bottom:6px">Premium — Para usuarios con uso intensivo</div>
-          <div style="font-size:.7rem;color:var(--slate-500);margin-bottom:10px;line-height:1.5">Si realizas <strong>más de 5 retos por semana</strong>, desbloquea la suscripción Premium para acceso ilimitado, prioridad en el pool y acceso anticipado a nuevos retos.</div>
-          <button class="btn btn-primary btn-sm" onclick="alert('Próximamente disponible. Contacta con hola@talentpact.com para más info.')">Conocer Premium →</button>
-        </div>
-        <div class="st-field"><label>IBAN / Email PayPal</label><input type="text" placeholder="ES00 0000 0000 0000 0000 0000"></div>
-        <button class="btn btn-primary btn-sm" onclick="alert('Datos de cobro guardados.')">Guardar datos de cobro</button>
+        <p class="st-note">No hay planes de pago para candidatos ni cobros que configurar: el modelo de negocio cobra a las empresas por desbloquear un contacto.</p>
       </div>
     </div>
 
@@ -1714,17 +1748,49 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Seguridad y acceso</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Contraseña</h5><p>Última actualización: hace 1 mes</p></div><button class="btn btn-outline btn-sm" onclick="alert('Recibirás un email para restablecer tu contraseña.')">Cambiar</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Verificación en 2 pasos</h5><p>Protege tu cuenta con un segundo factor</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Sesiones activas</h5><p>Chrome · macOS · Barcelona — Ahora</p></div><button class="btn btn-outline btn-sm" onclick="alert('Cerrar sesiones en otros dispositivos.')">Cerrar otras</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Exportar mis datos</h5><p>Retos, scores y perfil completo</p></div><button class="btn btn-outline btn-sm" onclick="alert('Tu archivo estará listo en 24h y se enviará por email.')">Exportar →</button></div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Contraseña</h5><p id="st-cand-pw-meta">Cambia tu contraseña de acceso</p></div>
+          <button class="btn btn-outline btn-sm" onclick="togglePwForm('cand')">Cambiar</button>
+        </div>
+        <div class="st-inline-form" id="st-cand-pw-form">
+          <div class="st-field"><label>Nueva contraseña</label><input type="password" id="st-cand-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
+          <div class="st-field"><label>Repite la contraseña</label><input type="password" id="st-cand-pw2" autocomplete="new-password"></div>
+          <div class="st-actions">
+            <button class="btn btn-primary btn-sm" id="st-cand-pw-btn" onclick="changePassword('cand')">Guardar contraseña</button>
+            <button class="btn btn-ghost btn-sm" onclick="togglePwForm('cand')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-cand-pw-msg" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-info"><h5>Sesión actual</h5><p id="st-cand-session">—</p></div>
+          <button class="btn btn-outline btn-sm" id="st-cand-others" onclick="closeOtherSessions('cand')">Cerrar otras</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Descargar mis datos</h5><p>Perfil, skills, retos y evaluaciones en un archivo JSON (RGPD, art. 20)</p></div>
+          <button class="btn btn-outline btn-sm" id="st-cand-export" onclick="exportMyData()">Descargar</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Verificación en dos pasos</h5><p>Requiere una app de autenticación (TOTP). Aún no implementado.</p></div>
+          <span class="st-soon">No disponible</span>
+        </div>
+        <div class="st-msg" id="st-cand-sec-msg" role="status" aria-live="polite"></div>
       </div>
+
       <div class="st-danger">
         <div class="st-danger-title">⚠️ Zona de peligro</div>
-        <p>Si eliminas tu cuenta perderás todos tus retos, scores y ranking. Irreversible.</p>
+        <p>Ocultar el perfil lo retira del pool, pero conserva tus retos y tus scores. Eliminar la cuenta borra todo de forma permanente.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="alert('Tu perfil se ocultará temporalmente del pool.')">Ocultar perfil</button>
-          <button class="btn btn-danger btn-sm" onclick="alert('Esta acción es irreversible. Contacta con soporte.')">Eliminar cuenta</button>
+          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="hideMyProfile()">Ocultar perfil</button>
+          <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('cand')">Eliminar cuenta</button>
+        </div>
+        <div class="st-inline-form" id="st-cand-del-form">
+          <div class="st-field"><label>Escribe ELIMINAR para confirmar</label><input type="text" id="st-cand-del-word" placeholder="ELIMINAR"></div>
+          <div class="st-actions">
+            <button class="btn btn-danger btn-sm" id="st-cand-del-btn" onclick="deleteAccount('cand')">Eliminar definitivamente</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleDeleteForm('cand')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-cand-del-msg" role="status" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -1740,47 +1806,48 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-topbar-icon" style="background:var(--blue-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       <div>
         <h2>Ajustes</h2>
-        <p>Cuenta de empresa · TechCorp S.L.</p>
+        <p id="stEmpWho">Cuenta de empresa</p>
       </div>
     </div>
     <button class="st-close" onclick="closeSettings('emp')">✕</button>
   </div>
   <div class="st-body">
 
-    <!-- PERFIL EMPRESA -->
+    <!-- PERFIL DE EMPRESA — se guarda en la cuenta de Supabase -->
     <div class="st-section">
       <div class="st-section-label">Perfil de empresa</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Nombre de empresa</label><input type="text" value="TechCorp S.L."></div>
-          <div class="st-field"><label>Sector principal</label><select><option selected>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
+          <div class="st-field"><label>Nombre de empresa</label><input type="text" id="st-emp-company" autocomplete="organization"></div>
+          <div class="st-field"><label>Sector principal</label><select id="st-emp-sector"><option value="">Sin especificar</option><option>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>Tamaño</label><select><option>1-10</option><option selected>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
-          <div class="st-field"><label>Web corporativa</label><input type="url" placeholder="https://techcorp.com"></div>
+          <div class="st-field"><label>Tamaño</label><select id="st-emp-size"><option value="">Sin especificar</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
+          <div class="st-field"><label>Web corporativa</label><input type="url" id="st-emp-web" placeholder="https://tuempresa.com"></div>
         </div>
-        <div class="st-field"><label>Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
-        <button class="btn btn-primary btn-sm" onclick="alert('Perfil guardado.')">Guardar cambios</button>
+        <div class="st-grid">
+          <div class="st-field"><label>Persona de contacto</label><input type="text" id="st-emp-contact" autocomplete="name"></div>
+          <div class="st-field"><label>Cargo</label><input type="text" id="st-emp-position" placeholder="RRHH, CTO…"></div>
+        </div>
+        <div class="st-field"><label>Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" id="st-emp-desc" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
+        <button class="btn btn-primary btn-sm" id="st-emp-save" onclick="saveEmpSettings()">Guardar cambios</button>
+        <div class="st-msg" id="st-emp-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
-    <!-- PLAN Y USO -->
+    <!-- USO REAL DE LA CUENTA -->
     <div class="st-section">
-      <div class="st-section-label">Plan y estadísticas</div>
+      <div class="st-section-label">Plan y uso</div>
       <div class="st-card">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
           <div>
             <span style="font-size:.65rem;font-weight:700;background:var(--slate-100);color:var(--slate-600);padding:3px 9px;border-radius:5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em">FREE</span>
-            <div style="font-size:.68rem;color:var(--slate-400);margin-top:4px">Plan actual</div>
+            <div style="font-size:.68rem;color:var(--slate-400);margin-top:4px">Plan actual · pago por contacto desbloqueado</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="alert('Planes Pro disponibles próximamente.')">Actualizar a Pro →</button>
+          <span class="st-soon">Planes Pro: no disponibles</span>
         </div>
-        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Contactos desbloqueados este mes</span><strong style="color:var(--slate-900)">2 / 5</strong></div>
-        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:40%;background:var(--emerald-500)"></div></div>
-        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Ofertas activas</span><strong style="color:var(--slate-900)">4 / 5</strong></div>
-        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:80%;background:var(--amber-500)"></div></div>
-        <div style="font-size:.72rem;color:var(--slate-500);display:flex;justify-content:space-between;margin-bottom:3px"><span>Candidatos en pool visibles</span><strong style="color:var(--emerald-600)">Ilimitado</strong></div>
-        <div class="st-plan-bar"><div class="st-plan-bar-fill" style="width:100%;background:var(--emerald-500)"></div></div>
+        <div id="st-emp-usage"></div>
+        <p class="st-note">Cifras reales de esta cuenta, calculadas a partir de tus ofertas y de los contactos que has desbloqueado.</p>
       </div>
     </div>
 
@@ -1789,42 +1856,32 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-section-label">Datos de facturación</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Razón social</label><input type="text" value="TechCorp S.L."></div>
-          <div class="st-field"><label>CIF / NIF</label><input type="text" placeholder="B-12345678"></div>
+          <div class="st-field"><label>Razón social</label><input type="text" id="st-emp-legal"></div>
+          <div class="st-field"><label>CIF / NIF</label><input type="text" id="st-emp-taxid" placeholder="B-12345678"></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>Email de facturación</label><input type="email" placeholder="contabilidad@techcorp.com"></div>
-          <div class="st-field"><label>Teléfono</label><input type="tel" placeholder="+34 91 000 0000"></div>
+          <div class="st-field"><label>Email de facturación</label><input type="email" id="st-emp-billmail" placeholder="contabilidad@tuempresa.com"></div>
+          <div class="st-field"><label>Teléfono</label><input type="tel" id="st-emp-phone" placeholder="+34 91 000 0000"></div>
         </div>
-        <div class="st-field"><label>Dirección fiscal</label><input type="text" placeholder="Calle Gran Vía, 28, 4ºA, Madrid"></div>
-        <button class="btn btn-primary btn-sm" onclick="alert('Datos de facturación guardados.')">Guardar</button>
+        <div class="st-field"><label>Dirección fiscal</label><input type="text" id="st-emp-address" placeholder="Calle Gran Vía 28, 4ºA, Madrid"></div>
+        <button class="btn btn-primary btn-sm" id="st-emp-bill-save" onclick="saveEmpBilling()">Guardar datos de facturación</button>
+        <div class="st-msg" id="st-emp-bill-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
-    <!-- MÉTODO DE PAGO -->
+    <!-- PAGOS -->
     <div class="st-section">
-      <div class="st-section-label">Método de pago</div>
+      <div class="st-section-label">Pagos</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--slate-100)">
-          <span style="font-size:1.4rem">💳</span>
+        <div style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:9px;margin-bottom:14px">
           <div style="flex:1;min-width:0">
-            <div style="font-size:.8rem;font-weight:600;color:var(--slate-900)">Visa •••• •••• •••• 4242</div>
-            <div style="font-size:.68rem;color:var(--slate-400)">Expira 09/2028 · Predeterminada</div>
+            <div style="font-size:.75rem;font-weight:700;color:var(--slate-700)">Cobro con tarjeta</div>
+            <div style="font-size:.68rem;color:var(--slate-500);margin-top:2px">Sin pasarela de pago conectada: los desbloqueos de esta preview son simulados y no generan ningún cargo.</div>
           </div>
-          <button class="btn btn-outline btn-sm" onclick="alert('Gestión de tarjetas disponible en versión completa.')">Cambiar</button>
+          <span class="st-soon">Simulado</span>
         </div>
-        <div style="margin-top:12px">
-          <div style="font-size:.68rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Últimos pagos</div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--slate-100);font-size:.78rem">
-            <span style="color:var(--slate-600)">Contacto #1847 · 12 Mar 2026</span>
-            <span style="font-weight:700;color:var(--slate-900)">€49</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:.78rem">
-            <span style="color:var(--slate-600)">Contacto #1293 · 28 Feb 2026</span>
-            <span style="font-weight:700;color:var(--slate-900)">€49</span>
-          </div>
-        </div>
-        <div style="margin-top:10px"><button class="btn btn-outline btn-sm" onclick="alert('Funcionalidad disponible en versión completa.')">+ Añadir nueva tarjeta</button></div>
+        <div style="font-size:.68rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Contactos desbloqueados</div>
+        <div id="st-emp-payments"></div>
       </div>
     </div>
 
@@ -1832,11 +1889,12 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Notificaciones</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Nuevo candidato que encaja</h5><p>Match ≥70% con alguna oferta tuya</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Contacto desbloqueado</h5><p>Confirmación de pago realizado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Candidato completa tu reto</h5><p>Cuando termina un ejercicio personalizado</p></div><label class="st-tog"><input type="checkbox" checked><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Resumen semanal del pool</h5><p>Nuevos candidatos con skills relevantes</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Novedades de TalentPact</h5><p>Nuevas funciones y mejoras</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Nuevo candidato que encaja</h5><p>Match ≥70% con alguna de tus ofertas</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyMatch" onchange="setPref('emp','notifyMatch',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Contacto desbloqueado</h5><p>Confirmación de cada desbloqueo</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyUnlock" onchange="setPref('emp','notifyUnlock',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Candidato completa un reto tuyo</h5><p>Cuando termina un ejercicio personalizado</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyChallenge" onchange="setPref('emp','notifyChallenge',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <div class="st-row"><div class="st-row-info"><h5>Resumen semanal del pool</h5><p>Nuevos candidatos con skills relevantes</p></div><label class="st-tog"><input type="checkbox" id="pref-emp-notifyWeekly" onchange="setPref('emp','notifyWeekly',this.checked)"><span class="st-tog-sl"></span></label></div>
+        <p class="st-note">Se guardan en tu cuenta. El envío de correos aún no está conectado en esta versión preliminar.</p>
+        <div class="st-msg" id="st-pref-emp-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
 
@@ -1844,17 +1902,49 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="st-section">
       <div class="st-section-label">Seguridad y cuenta</div>
       <div class="st-card">
-        <div class="st-row"><div class="st-row-info"><h5>Contraseña</h5><p>Última actualización: hace 3 meses</p></div><button class="btn btn-outline btn-sm" onclick="alert('Recibirás un email para restablecer tu contraseña.')">Cambiar</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Verificación en 2 pasos</h5><p>Protege el acceso a tu cuenta</p></div><label class="st-tog"><input type="checkbox"><span class="st-tog-sl"></span></label></div>
-        <div class="st-row"><div class="st-row-info"><h5>Sesiones activas</h5><p>Chrome · macOS · Barcelona — Activa</p></div><button class="btn btn-outline btn-sm" onclick="alert('Cerrar todas las sesiones remotas.')">Cerrar otras</button></div>
-        <div class="st-row"><div class="st-row-info"><h5>Registro de actividad</h5><p>Accesos y cambios de la cuenta</p></div><button class="btn btn-outline btn-sm" onclick="alert('Historial disponible en versión completa.')">Ver log →</button></div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Contraseña</h5><p>Cambia la contraseña de acceso al portal</p></div>
+          <button class="btn btn-outline btn-sm" onclick="togglePwForm('emp')">Cambiar</button>
+        </div>
+        <div class="st-inline-form" id="st-emp-pw-form">
+          <div class="st-field"><label>Nueva contraseña</label><input type="password" id="st-emp-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
+          <div class="st-field"><label>Repite la contraseña</label><input type="password" id="st-emp-pw2" autocomplete="new-password"></div>
+          <div class="st-actions">
+            <button class="btn btn-primary btn-sm" id="st-emp-pw-btn" onclick="changePassword('emp')">Guardar contraseña</button>
+            <button class="btn btn-ghost btn-sm" onclick="togglePwForm('emp')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-emp-pw-msg" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="st-row">
+          <div class="st-row-info"><h5>Sesión actual</h5><p id="st-emp-session">—</p></div>
+          <button class="btn btn-outline btn-sm" id="st-emp-others" onclick="closeOtherSessions('emp')">Cerrar otras</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Descargar los datos de la cuenta</h5><p>Perfil, ofertas publicadas y desbloqueos, en JSON</p></div>
+          <button class="btn btn-outline btn-sm" id="st-emp-export" onclick="exportEmpData()">Descargar</button>
+        </div>
+        <div class="st-row">
+          <div class="st-row-info"><h5>Registro de actividad</h5><p>Requiere auditoría en servidor. Aún no implementado.</p></div>
+          <span class="st-soon">No disponible</span>
+        </div>
+        <div class="st-msg" id="st-emp-sec-msg" role="status" aria-live="polite"></div>
       </div>
+
       <div class="st-danger">
         <div class="st-danger-title">⚠️ Zona de peligro</div>
-        <p>Pausar desactiva temporalmente tus ofertas y oculta tu empresa del pool.</p>
+        <p>Pausar retira tus ofertas del listado de candidatos sin borrarlas. Eliminar la cuenta borra todo de forma permanente.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="alert('Tu cuenta se pausará. Los candidatos no verán tus ofertas.')">Pausar cuenta</button>
-          <button class="btn btn-danger btn-sm" onclick="alert('Esta acción es irreversible. Contacta con soporte.')">Eliminar cuenta</button>
+          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" id="st-emp-pause" onclick="toggleEmpPause()">Pausar cuenta</button>
+          <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('emp')">Eliminar cuenta</button>
+        </div>
+        <div class="st-inline-form" id="st-emp-del-form">
+          <div class="st-field"><label>Escribe ELIMINAR para confirmar</label><input type="text" id="st-emp-del-word" placeholder="ELIMINAR"></div>
+          <div class="st-actions">
+            <button class="btn btn-danger btn-sm" id="st-emp-del-btn" onclick="deleteAccount('emp')">Eliminar definitivamente</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleDeleteForm('emp')">Cancelar</button>
+          </div>
+          <div class="st-msg" id="st-emp-del-msg" role="status" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -2170,6 +2260,21 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="processPayment()">Pagar y desbloquear →</button>
       <div class="pay-secure">Pago seguro con encriptación SSL de 256-bit</div>
       <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px;font-size:.75rem" onclick="closePayModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTACTO DESBLOQUEADO ═══ -->
+<div class="pay-modal" id="contactModal" role="dialog" aria-modal="true" aria-label="Contacto desbloqueado">
+  <div class="pay-box">
+    <div class="pay-header" style="background:var(--emerald-600)">
+      <h3>Contacto desbloqueado</h3>
+      <p>Ya puedes escribir al candidato. Se le ha notificado tu interés.</p>
+    </div>
+    <div class="pay-body">
+      <div id="contactFields"></div>
+      <button class="btn btn-primary btn-lg" id="contactCopyBtn" style="width:100%;justify-content:center;margin-top:12px" onclick="copyContact()">Copiar datos de contacto</button>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px;font-size:.75rem" onclick="closeContactModal()">Cerrar</button>
     </div>
   </div>
 </div>
@@ -2603,7 +2708,10 @@ const TP={
   savePool(){TP.save('pool',CANDIDATES.filter(c=>c._dynamic));},
   saveUnlocks(){TP.save('unlocks',CANDIDATES.filter(c=>c._unlocked).map(c=>c.id));},
   saveEmpJobs(){TP.save('empJobs',empPostedJobs);},
-  reset(){if(!TP.available())return;['profile','pool','unlocks','empJobs','evals'].forEach(k=>{try{localStorage.removeItem(TP_NS+k);}catch(e){}});console.info('TalentPact: persistencia reiniciada. Recarga la página.');},
+  // Historial de desbloqueos: es lo que alimenta "Pagos" en el panel de empresa.
+  logPayment(entry){const l=TP.load('payments',[]);l.push(Object.assign({ts:new Date().toISOString()},entry));if(l.length>200)l.splice(0,l.length-200);TP.save('payments',l);return l;},
+  getPayments(){return TP.load('payments',[]);},
+  reset(){if(!TP.available())return;['profile','pool','unlocks','empJobs','evals','payments','prefs:cand','prefs:emp'].forEach(k=>{try{localStorage.removeItem(TP_NS+k);}catch(e){}});console.info('TalentPact: persistencia reiniciada. Recarga la página.');},
   hydrate(){
     if(!TP.available()){console.warn('TalentPact: localStorage no disponible — persistencia desactivada (modo memoria).');return;}
     const p=TP.load('profile',null);
@@ -2625,8 +2733,8 @@ const TP={
 // ═══════════════════════════════════════════════════════════════════════════
 const TP_SUPABASE_URL='https://vqyqedmizxqneniynxqp.supabase.co';
 const TP_SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxeXFlZG1penhxbmVuaXlueHFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NjY4MDUsImV4cCI6MjEwMjU0MjgwNX0.T8WfrAOKjol_L7Nls2-Z7SvkxNjnuJdgzAQrjDdQebk';
-let tpUser=null;
-let tpRole=null; // 'candidate' | 'company'
+let tpUser=null;      // sesión de candidato
+let tpCompany=null;   // sesión de empresa
 const TPCloud={
   _c:null,
   client(){ if(TPCloud._c)return TPCloud._c; if(!(window.supabase&&window.supabase.createClient)){console.warn('Supabase JS no cargado');return null;} TPCloud._c=window.supabase.createClient(TP_SUPABASE_URL,TP_SUPABASE_ANON); return TPCloud._c; },
@@ -2634,6 +2742,80 @@ const TPCloud={
   async signUp(email,password,meta){ const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible'); const {data,error}=await c.auth.signUp({email,password,options:{data:meta||{}}}); if(error)throw error; return data; },
   async signIn(email,password){ const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible'); const {data,error}=await c.auth.signInWithPassword({email,password}); if(error)throw error; return data.user; },
   async signOut(){ const c=TPCloud.client(); if(c){try{await c.auth.signOut();}catch(e){}} },
+
+  // ── Acceso social (Google / LinkedIn) ────────────────────────────────────
+  // Los proveedores activos se leen del propio proyecto Supabase (endpoint
+  // público /auth/v1/settings), así el botón se activa solo en cuanto se
+  // habilita Google en el panel de Supabase: no hay que tocar este código.
+  _prov:null,
+  async providers(){
+    if(TPCloud._prov)return TPCloud._prov;
+    try{
+      const r=await fetch(TP_SUPABASE_URL+'/auth/v1/settings',{headers:{apikey:TP_SUPABASE_ANON}});
+      const j=await r.json();
+      TPCloud._prov=(j&&j.external)||{};
+    }catch(e){ console.warn('[TP] providers',e); TPCloud._prov={}; }
+    return TPCloud._prov;
+  },
+  // URL a la que Supabase devuelve al usuario tras el consentimiento. Debe estar
+  // en Supabase → Authentication → URL Configuration → Redirect URLs.
+  redirectUrl(){ return window.location.origin+window.location.pathname; },
+  async signInWithProvider(provider,role){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    try{ sessionStorage.setItem('tp_oauth_pending',role||'candidate'); }catch(e){}
+    const opts={redirectTo:TPCloud.redirectUrl()};
+    // 'select_account' evita que Google reutilice en silencio la última cuenta.
+    if(provider==='google')opts.queryParams={prompt:'select_account'};
+    const {error}=await c.auth.signInWithOAuth({provider,options:opts});
+    if(error){ try{sessionStorage.removeItem('tp_oauth_pending');}catch(e){} throw error; }
+  },
+  // ── Gestion de la cuenta (todo esto son llamadas reales a Supabase Auth) ──
+  async updatePassword(password){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {error}=await c.auth.updateUser({password}); if(error)throw error; return true;
+  },
+  async updateEmail(email){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {error}=await c.auth.updateUser({email}); if(error)throw error; return true;
+  },
+  // Fusiona claves en user_metadata sin pisar lo que ya hubiera.
+  async saveMeta(patch){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {data,error}=await c.auth.updateUser({data:patch}); if(error)throw error;
+    const u=data&&data.user;
+    if(u){ if(tpUser&&tpUser.id===u.id)tpUser=u; if(tpCompany&&tpCompany.id===u.id)tpCompany=u; }
+    return u;
+  },
+  // Cierra la sesion en el resto de dispositivos, manteniendo la de aqui.
+  async signOutOthers(){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {error}=await c.auth.signOut({scope:'others'}); if(error)throw error; return true;
+  },
+  // El borrado necesita la service key, asi que va por una funcion de servidor.
+  // Se manda el token de sesion, nunca un userId: el servidor decide a quien borra.
+  async deleteAccount(){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const {data}=await c.auth.getSession();
+    const token=data&&data.session&&data.session.access_token;
+    if(!token)throw new Error('No hay sesion activa');
+    return TPCloud._post('delete-account',{accessToken:token});
+  },
+  // Marca el tipo de cuenta (candidate | empresa) en el propio usuario de Auth.
+  // Es lo que permite que un mismo proyecto Supabase sirva a los dos portales
+  // sin tablas adicionales, y que cada portal rechace a quien no le corresponde.
+  async setRole(role){
+    const c=TPCloud.client(); if(!c)return;
+    try{ await c.auth.updateUser({data:{role}}); }catch(e){ console.warn('[TP] setRole',e); }
+  },
+  // Tras un login social Supabase ya trae nombre y avatar en user_metadata:
+  // los persistimos para que el panel no arranque con el perfil vacío.
+  async syncOAuthProfile(user){
+    try{
+      const m=user.user_metadata||{};
+      const fullName=((m.full_name||m.name||(user.email||'').split('@')[0])||'').trim();
+      if(fullName)await TPCloud.saveProfile(user,{fullName});
+    }catch(e){ console.warn('[TP] syncOAuthProfile',e); }
+  },
   _post(fn,body){ return fetch('/.netlify/functions/'+fn,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()); },
   saveProfile(user,fields){ return TPCloud._post('save-profile',Object.assign({userId:user.id,email:user.email},fields)); },
   saveCompany(user,fields){ return TPCloud._post('save-company',Object.assign({userId:user.id,email:user.email},fields)); },
@@ -2803,7 +2985,8 @@ const SkillPass={
       SkillPass.cred.txHash=anchored.txHash;
       SkillPass.cred.anchoredAt=anchored.anchoredAt;
       SkillPass._render();
-      SkillPass._status('ok','SkillPass sellado. Descarga el PDF certificado o copia el enlace para enseñarlo fuera de TalentPact.');
+      SkillPass._status('ok','SkillPass sellado'+(anchored.blockNumber?' (bloque '+escHtml(String(anchored.blockNumber))+')':'')+
+        '. Descarga el PDF certificado o copia el enlace para enseñarlo fuera de TalentPact.');
     }catch(e){
       SkillPass._status('error','Error de red al generar la credencial: '+escHtml(e.message||String(e)));
     }finally{
@@ -2897,6 +3080,13 @@ function recordEval(ex,score,aiPowered,response,feedback){
 // Upsert del perfil propio en el pool de talento anónimo visible para empresas.
 // Convierte las skills desbloqueadas del candidato en una entrada real del pool.
 function syncMyPoolEntry(){
+  // Si el candidato se ha ocultado, su ficha sale del pool de las empresas.
+  if(!prefIsOn('cand','poolVisible',true)){
+    const i=CANDIDATES.findIndex(c=>c.id==='me');
+    if(i>=0)CANDIDATES.splice(i,1);
+    TP.savePool();
+    return;
+  }
   const unlocked=Object.entries(candidateProfile.skills).filter(([k,v])=>v.unlocked&&v.score>0);
   if(!unlocked.length)return;
   const skills=unlocked.map(([n,v])=>({n,v:v.score})).sort((a,b)=>b.v-a.v).slice(0,6);
@@ -2910,8 +3100,54 @@ function syncMyPoolEntry(){
 // Rehidratar el estado persistido al cargar la app (perfil, pool, desbloqueos, ofertas)
 TP.hydrate();
 
-// Si hay sesión de Supabase activa, restaurar el usuario y su progreso desde la nube.
-(async()=>{ try{ const u=await TPCloud.currentUser(); if(u){ tpUser=u; tpRole=(u.user_metadata&&u.user_metadata.role)||null; if(tpRole==='company') await loadCompanyIntoUI(u); else await TPCloud.loadProgressIntoProfile(u); } }catch(e){} })();
+// Proveedores sociales soportados: etiqueta visible e id del botón en cada portal.
+const OAUTH_LABEL={google:'Google',linkedin_oidc:'LinkedIn'};
+const OAUTH_BTN={
+  candidate:{google:'btnGoogleAuth',linkedin_oidc:'btnLinkedinAuth'},
+  empresa:{google:'btnGoogleEmp'}
+};
+// Cajas de mensaje inline (una por formulario) que sustituyen a los alert().
+const AUTH_MSG_BOX={candidate:'candAuthMsg',empresa:'empAuthMsg',candReg:'candRegMsg',empReg:'empRegMsg'};
+
+// Arranque de sesión. Cubre dos casos:
+//  a) vuelta de un login social: la URL trae ?code=… (PKCE) o #access_token y
+//     supabase-js ya ha canjeado la sesión → limpiamos la URL y abrimos el panel.
+//  b) sesión previa guardada: restauramos usuario y progreso desde la nube.
+(async()=>{
+  const qs=new URLSearchParams(window.location.search);
+  const hs=new URLSearchParams((window.location.hash||'').replace(/^#/,''));
+  const oauthErr=qs.get('error_description')||qs.get('error')||hs.get('error_description')||hs.get('error');
+  const backFromOAuth=!!(qs.get('code')||hs.get('access_token')||oauthErr);
+  let pending=null;
+  try{ pending=sessionStorage.getItem('tp_oauth_pending'); sessionStorage.removeItem('tp_oauth_pending'); }catch(e){}
+
+  if(oauthErr){
+    cleanAuthUrl();
+    const portal=pending==='empresa'?'empresa':'candidate';
+    openAuth(portal);
+    authMsg('err','No se pudo completar el acceso: '+oauthErr,portal);
+    return;
+  }
+  try{
+    const u=await TPCloud.currentUser();
+    if(!u)return;
+    if(backFromOAuth)cleanAuthUrl();
+    // El rol puede venir del registro o, en un login social, de la intención
+    // guardada antes de salir a Google (sessionStorage 'tp_oauth_pending').
+    let role=(u.user_metadata||{}).role;
+    if(!role&&pending){ role=pending; await TPCloud.setRole(role); }
+
+    if(role==='empresa'){
+      tpCompany=u;
+      if(backFromOAuth||pending){ closeAuth('authEmpresa'); openDashEmp(); }
+      return;
+    }
+    tpUser=u;
+    if(backFromOAuth||pending)await TPCloud.syncOAuthProfile(u);
+    await TPCloud.loadProgressIntoProfile(u);
+    if(backFromOAuth||pending){ closeAuth('authCandidate'); openDashCand(); }
+  }catch(e){ console.warn('[TP] restaurar sesión',e); }
+})();
 
 // ═══ COMMON/UNIVERSAL EXERCISES ═══
 const COMMON_EXERCISES=[
@@ -3972,7 +4208,9 @@ function renderJobMatches(){
 
 // ═══ RENDER ═══
 function renderJobs(list){const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');document.getElementById('resultsCount').textContent=`${list.length} oferta${list.length!==1?'s':''} de empresas`;if(!list.length){g.innerHTML='';nr.style.display='block';return;}nr.style.display='none';g.innerHTML=list.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return`<div class="job-card" onclick="openAuth('candidate')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em">Skills requeridos:</div><div class="job-tags">${req.map(s=>`<span class="job-tag" style="border:1px solid var(--emerald-100);background:var(--emerald-50);color:var(--emerald-600)">${s}</span>`).join('')}${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?`<div class="job-company"><div class="job-company-dot" style="background:var(--slate-200);color:var(--slate-600)">${co.logo}</div>${co.name} · ${co.size} empleados</div>`:''}<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span class="level-badge ${levelCls}">${levelLabel}</span><span class="ex-config-badge ${configCls}">${configLabel}</span></div></div>`;}).join('');}
-function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(empPostedJobs);if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}
+// Ofertas visibles para los candidatos: se excluyen las de cuentas pausadas.
+function publicJobs(){ return empPostedJobs.filter(j=>!j.paused); }
+function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(publicJobs());if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}
 function setSector(s,btn){currentSector=s;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterJobs();}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClear').classList.remove('show');filterJobs();}
 
@@ -4562,9 +4800,12 @@ function closeJobModal(){document.getElementById('jobModal').classList.remove('o
 
 // ═══ AUTH ═══
 function openAuth(t){
-  if(t==='candidate'&&tpUser&&tpRole!=='company'){openDashCand();return;}
-  if(t==='empresa'&&tpUser&&tpRole==='company'){openDashEmp();return;}
-  document.getElementById(t==='candidate'?'authCandidate':'authEmpresa').classList.add('open');document.body.style.overflow='hidden';
+  if(t==='candidate'&&tpUser){openDashCand();return;}
+  if(t==='empresa'&&tpCompany){openDashEmp();return;}
+  document.getElementById(t==='candidate'?'authCandidate':'authEmpresa').classList.add('open');
+  document.body.style.overflow='hidden';
+  clearAuthMsgs();
+  refreshOAuthButtons(t==='candidate'?'candidate':'empresa');
 }
 function closeAuth(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
 function switchAuthTab(pre,tab,btn){btn.parentElement.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');const l=document.getElementById(pre+'-login'),r=document.getElementById(pre+'-register');if(l)l.style.display=tab==='login'?'flex':'none';if(r)r.style.display=tab==='register'?'flex':'none';}
@@ -4572,13 +4813,25 @@ function switchAuthTab(pre,tab,btn){btn.parentElement.querySelectorAll('.auth-ta
 async function loginCandidate(){
   const email=(document.getElementById('cand-login-email').value||'').trim();
   const pw=document.getElementById('cand-login-pw').value||'';
-  if(!email||!pw){alert('Introduce tu email y contraseña.');return;}
+  authMsg('');
+  if(!isEmailValid(email)){authMsg('err','Introduce un email válido.');return;}
+  if(!pw){authMsg('err','Introduce tu contraseña.');return;}
+  const done=btnBusy('candLoginBtn','Accediendo…');
   try{
-    tpUser=await TPCloud.signIn(email,pw);
-    tpRole='candidate';
+    const u=await TPCloud.signIn(email,pw);
+    // Un email de empresa no debe acabar en el panel de candidato (ni al revés).
+    if((u.user_metadata||{}).role==='empresa'){
+      await TPCloud.signOut();
+      authMsg('err','Esa cuenta es de empresa. Entra desde el portal de empresa.');
+      return;
+    }
+    tpUser=u;
+    if(!(u.user_metadata||{}).role)await TPCloud.setRole('candidate');
+    authMsg('ok','Sesión iniciada. Abriendo tu panel…');
     await TPCloud.loadProgressIntoProfile(tpUser);
     closeAuth('authCandidate');openDashCand();
-  }catch(e){alert('No se pudo iniciar sesión: '+((e&&e.message)||e));}
+  }catch(e){ authMsg('err',authErrorText(e)); }
+  finally{ done(); }
 }
 async function registerCandidate(){
   const name=(document.getElementById('reg-name').value||'').trim();
@@ -4589,51 +4842,547 @@ async function registerCandidate(){
   const pw=document.getElementById('reg-pw').value||'';
   const sector=document.getElementById('reg-sector').value||'';
   const fullName=(name+' '+last).trim();
-  if(!name||!email||!pw){alert('Nombre, email y contraseña son obligatorios.');return;}
-  if(pw.length<6){alert('La contraseña debe tener al menos 6 caracteres.');return;}
+  authMsg('','','candReg');
+  if(!name){authMsg('err','Escribe tu nombre.','candReg');return;}
+  if(!isEmailValid(email)){authMsg('err','Introduce un email válido.','candReg');return;}
+  if(pw.length<8){authMsg('err','La contraseña debe tener al menos 8 caracteres.','candReg');return;}
+  const done=btnBusy('candRegBtn','Creando cuenta…');
   try{
     const data=await TPCloud.signUp(email,pw,{full_name:fullName,sector,role:'candidate'});
-    if(!data.session){ alert('Cuenta creada. Revisa tu email para confirmarla y luego inicia sesión.'); return; }
+    if(!data.session){ authMsg('info','Cuenta creada. Confirma el email que te hemos enviado y vuelve a entrar.','candReg'); return; }
     tpUser=data.user;
-    tpRole='candidate';
+    authMsg('ok','Cuenta creada. Abriendo tu panel…','candReg');
     await TPCloud.saveProfile(tpUser,{fullName,sector,phone,linkedin});
     await TPCloud.loadProgressIntoProfile(tpUser);
     closeAuth('authCandidate');openDashCand();
-  }catch(e){alert('No se pudo crear la cuenta: '+((e&&e.message)||e));}
+  }catch(e){ authMsg('err',authErrorText(e),'candReg'); }
+  finally{ done(); }
 }
-function guestCandidate(){closeAuth('authCandidate');openDashCand();}
-async function logoutCand(){ await TPCloud.signOut(); tpUser=null; tpRole=null; closeDash('dashCandidate'); goHome(); }
+function guestCandidate(){clearAuthMsgs();closeAuth('authCandidate');openDashCand();}
+
+// ═══ ACCESO SOCIAL (Google / LinkedIn vía Supabase Auth) ═══
+// Mensaje inline dentro de un formulario de acceso (sustituye a los alert()).
+// box: 'candidate' | 'empresa' | 'candReg' | 'empReg'
+function authMsg(kind,text,box){
+  const el=document.getElementById(AUTH_MSG_BOX[box||'candidate']); if(!el)return;
+  if(!kind||!text){ el.className='auth-oauth-msg'; el.textContent=''; return; }
+  el.className='auth-oauth-msg show '+kind; el.textContent=text;
+}
+function clearAuthMsgs(){ Object.keys(AUTH_MSG_BOX).forEach(k=>authMsg('','',k)); }
+
+const isEmailValid=v=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v||'');
+
+// Traduce los errores de Supabase Auth a algo accionable en castellano.
+function authErrorText(e){
+  const m=((e&&e.message)||String(e||'')).toLowerCase();
+  if(m.includes('invalid login credentials'))return 'Email o contraseña incorrectos.';
+  if(m.includes('email not confirmed'))return 'Tu email todavía no está confirmado. Revisa tu bandeja de entrada.';
+  if(m.includes('already registered')||m.includes('already exists'))return 'Ya existe una cuenta con ese email. Inicia sesión.';
+  if(m.includes('password should be at least'))return 'La contraseña es demasiado corta.';
+  if(m.includes('invalid email')||m.includes('unable to validate email'))return 'El email no tiene un formato válido.';
+  if(m.includes('rate limit')||m.includes('too many'))return 'Demasiados intentos seguidos. Espera un minuto y vuelve a probar.';
+  if(m.includes('failed to fetch')||m.includes('networkerror')||m.includes('load failed'))return 'Sin conexión con el servidor de cuentas. Comprueba tu red.';
+  if(m.includes('auth no disponible'))return 'El servicio de cuentas no ha cargado. Recarga la página.';
+  return (e&&e.message)||'Ha ocurrido un error inesperado.';
+}
+
+// Deja un botón en estado "trabajando" y devuelve la función que lo restaura.
+function btnBusy(id,label){
+  const b=document.getElementById(id);
+  if(!b)return function(){};
+  const prev=b.innerHTML,wasOff=b.disabled;
+  b.disabled=true; b.textContent=label;
+  return function(){ b.disabled=wasOff; b.innerHTML=prev; };
+}
+
+function togglePw(id,btn){
+  const i=document.getElementById(id); if(!i)return;
+  const show=i.type==='password';
+  i.type=show?'text':'password';
+  btn.textContent=show?'Ocultar':'Ver';
+  btn.setAttribute('aria-label',show?'Ocultar contraseña':'Mostrar contraseña');
+  i.focus();
+}
+
+// Aviso de Bloq Mayús: la causa más habitual de "mi contraseña no funciona".
+function capsHint(ev,id){
+  const el=document.getElementById(id);
+  if(!el||!ev||!ev.getModifierState)return;
+  el.classList.toggle('show',ev.getModifierState('CapsLock'));
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// AJUSTES DE CUENTA — candidato y empresa
+// Todo lo de estos paneles opera de verdad: los datos se leen y se escriben en
+// Supabase (perfil + user_metadata) y las preferencias cambian de verdad lo que
+// ve la otra parte. Lo que no tiene backend en esta version se marca como
+// "No disponible" en la interfaz en lugar de fingir que funciona.
+// ═══════════════════════════════════════════════════════════════════════════
+
+function stMsg(id,kind,text){
+  const el=document.getElementById(id); if(!el)return;
+  if(!kind||!text){ el.className='st-msg'; el.textContent=''; return; }
+  el.className='st-msg show '+kind; el.textContent=text;
+}
+const _val=(id,v)=>{const e=document.getElementById(id); if(!e)return ''; if(v!==undefined)e.value=v==null?'':v; return (e.value||'').trim();};
+
+// ─── Preferencias ─────────────────────────────────────────────────────────
+const PREF_DEFAULTS={
+  cand:{poolVisible:true,allowContact:true,publicRanking:true,notifyResult:true,notifyUnlock:true,notifyMatches:true,notifyWeekly:false},
+  emp:{notifyMatch:true,notifyUnlock:true,notifyChallenge:true,notifyWeekly:false,paused:false}
+};
+const TPPrefs={
+  _v:{cand:null,emp:null},
+  all(role){
+    if(TPPrefs._v[role])return TPPrefs._v[role];
+    const u=role==='cand'?tpUser:tpCompany;
+    const cloud=(u&&u.user_metadata&&u.user_metadata.prefs)||null;
+    const local=TP.load('prefs:'+role,null);
+    TPPrefs._v[role]=Object.assign({},PREF_DEFAULTS[role],local||{},cloud||{});
+    return TPPrefs._v[role];
+  },
+  get(role,key){ return TPPrefs.all(role)[key]; },
+  invalidate(){ TPPrefs._v={cand:null,emp:null}; },
+  // Guarda siempre en local (para el modo invitado) y, si hay cuenta, en Supabase.
+  async set(role,key,val){
+    const p=TPPrefs.all(role); p[key]=val;
+    TP.save('prefs:'+role,p);
+    const u=role==='cand'?tpUser:tpCompany;
+    if(!u)return 'local';
+    try{ await TPCloud.saveMeta({prefs:p}); return 'cloud'; }catch(e){ console.warn('[TP] prefs',e); return 'error'; }
+  }
+};
+// Lectura tolerante: si se consulta antes de que el bloque este inicializado,
+// devuelve el valor por defecto en vez de reventar.
+function prefIsOn(role,key,def){
+  try{ const v=TPPrefs.get(role,key); return v===undefined?def:v; }catch(e){ return def; }
+}
+// Caja de mensajes de la misma tarjeta donde esta el interruptor.
+function _prefBox(role,key){
+  const t=document.getElementById('pref-'+role+'-'+key);
+  const card=t&&t.closest('.st-card');
+  let box=card&&card.querySelector('.st-msg');
+  if(card&&!box){ box=document.createElement('div'); box.className='st-msg'; box.id='autoprefmsg-'+role+'-'+key; card.appendChild(box); }
+  return box?(box.id||(box.id='autoprefmsg-'+role+'-'+key)):null;
+}
+async function setPref(role,key,val){
+  const box=_prefBox(role,key);
+  const r=await TPPrefs.set(role,key,val);
+  applyPrefEffects(role);
+  if(box){
+    if(r==='cloud')stMsg(box,'ok','Guardado en tu cuenta.');
+    else if(r==='local')stMsg(box,'info','Guardado en este navegador (estás como invitado).');
+    else stMsg(box,'err','Guardado aquí, pero no se pudo sincronizar con tu cuenta.');
+  }
+}
+// Repinta lo que depende de las preferencias.
+function applyPrefEffects(role){
+  if(role==='cand'){
+    syncMyPoolEntry();
+    const d=document.getElementById('dashCandidate');
+    if(d&&d.classList.contains('open')){ try{renderRanking('all');}catch(e){} }
+  }else{
+    const d=document.getElementById('dashEmpresa');
+    if(d&&d.classList.contains('open')){ try{renderEmpJobs();renderEmpUsage();}catch(e){} }
+  }
+}
+
+// ─── Sesion: descripcion honesta de lo que sabemos ────────────────────────
+function sessionLine(user){
+  if(!user)return 'Estás explorando como invitado (sin cuenta).';
+  const ua=navigator.userAgent||'';
+  const nav=/Edg\//.test(ua)?'Edge':/Chrome\//.test(ua)?'Chrome':/Firefox\//.test(ua)?'Firefox':/Safari\//.test(ua)?'Safari':'Navegador';
+  const os=/Windows/.test(ua)?'Windows':/Mac OS/.test(ua)?'macOS':/Android/.test(ua)?'Android':/iPhone|iPad/.test(ua)?'iOS':/Linux/.test(ua)?'Linux':'—';
+  const last=user.last_sign_in_at?new Date(user.last_sign_in_at).toLocaleString('es-ES'):'—';
+  return nav+' · '+os+' · último acceso: '+last;
+}
+
+// ─── Panel de candidato ───────────────────────────────────────────────────
+function loadCandSettings(){
+  const who=document.getElementById('stCandWho');
+  const m=(tpUser&&tpUser.user_metadata)||{};
+  const full=(m.full_name||'').trim();
+  const parts=full?full.split(/\s+/):[];
+  if(who)who.textContent=tpUser?('Cuenta de candidato · '+(full||tpUser.email)):'Explorando como invitado (sin cuenta)';
+  _val('st-cand-name',parts[0]||'');
+  _val('st-cand-last',parts.slice(1).join(' '));
+  _val('st-cand-email',(tpUser&&tpUser.email)||'');
+  _val('st-cand-sector',m.sector||'');
+  _val('st-cand-city',m.city||'');
+  _val('st-cand-linkedin',m.linkedin||'');
+  _val('st-cand-phone',m.phone||'');
+  _val('st-cand-portfolio',m.portfolio||'');
+  const sess=document.getElementById('st-cand-session'); if(sess)sess.textContent=sessionLine(tpUser);
+  ['st-cand-others','st-cand-export'].forEach(id=>{const b=document.getElementById(id); if(b&&id==='st-cand-others')b.disabled=!tpUser;});
+  const p=TPPrefs.all('cand');
+  Object.keys(PREF_DEFAULTS.cand).forEach(k=>{const el=document.getElementById('pref-cand-'+k); if(el)el.checked=!!p[k];});
+  stMsg('st-cand-msg', tpUser?'':'info', tpUser?'':'Estás como invitado: para guardar tus datos crea una cuenta o inicia sesión.');
+  // El perfil de la nube puede traer datos que no estan en user_metadata.
+  if(tpUser){
+    TPCloud.getProgress(tpUser).then(function(r){
+      const pr=r&&r.profile; if(!pr)return;
+      if(!_val('st-cand-name')&&pr.full_name){ const q=pr.full_name.split(/\s+/); _val('st-cand-name',q[0]||''); _val('st-cand-last',q.slice(1).join(' ')); }
+      if(!_val('st-cand-sector')&&pr.sector)_val('st-cand-sector',pr.sector);
+      if(!_val('st-cand-phone')&&pr.phone)_val('st-cand-phone',pr.phone);
+      if(!_val('st-cand-linkedin')&&pr.linkedin)_val('st-cand-linkedin',pr.linkedin);
+    }).catch(function(){});
+  }
+}
+
+async function saveCandSettings(){
+  const name=_val('st-cand-name'), last=_val('st-cand-last');
+  const email=_val('st-cand-email'), sector=_val('st-cand-sector');
+  const city=_val('st-cand-city'), linkedin=_val('st-cand-linkedin');
+  const phone=_val('st-cand-phone'), portfolio=_val('st-cand-portfolio');
+  const fullName=(name+' '+last).trim();
+  stMsg('st-cand-msg','','');
+  if(!name){ stMsg('st-cand-msg','err','El nombre no puede quedar vacío.'); return; }
+  if(email&&!isEmailValid(email)){ stMsg('st-cand-msg','err','El email no tiene un formato válido.'); return; }
+
+  if(!tpUser){
+    TP.save('guestProfile',{fullName,sector,city,linkedin,phone,portfolio});
+    const el=document.getElementById('candName'); if(el)el.textContent=fullName||'Candidato';
+    stMsg('st-cand-msg','info','Guardado en este navegador. Crea una cuenta para conservarlo en cualquier dispositivo.');
+    return;
+  }
+  const done=btnBusy('st-cand-save','Guardando…');
+  try{
+    await TPCloud.saveMeta({full_name:fullName,sector,city,linkedin,phone,portfolio});
+    const r=await TPCloud.saveProfile(tpUser,{fullName,sector,phone,linkedin});
+    if(r&&r.error)throw new Error(r.details||r.error);
+    let extra='';
+    if(email&&email!==tpUser.email){
+      await TPCloud.updateEmail(email);
+      extra=' Te hemos enviado un correo a '+email+' para confirmar el cambio de email.';
+    }
+    const el=document.getElementById('candName'); if(el)el.textContent=fullName||tpUser.email;
+    const av=document.getElementById('candAvatar'); if(av)av.textContent=((fullName||'C').trim()[0]||'C').toUpperCase();
+    stMsg('st-cand-msg','ok','Cambios guardados.'+extra);
+  }catch(e){ stMsg('st-cand-msg','err','No se pudo guardar: '+authErrorText(e)); }
+  finally{ done(); }
+}
+
+// ─── Panel de empresa ─────────────────────────────────────────────────────
+function loadEmpSettings(){
+  const m=(tpCompany&&tpCompany.user_metadata)||{};
+  const who=document.getElementById('stEmpWho');
+  if(who)who.textContent=tpCompany?('Cuenta de empresa · '+companyName()):'Explorando como invitado (sin cuenta)';
+  _val('st-emp-company',m.company||'');
+  _val('st-emp-sector',m.sector||'');
+  _val('st-emp-size',m.size||'');
+  _val('st-emp-web',m.web||'');
+  _val('st-emp-contact',m.contact_name||'');
+  _val('st-emp-position',m.position||'');
+  _val('st-emp-desc',m.description||'');
+  const b=m.billing||{};
+  _val('st-emp-legal',b.legal||m.company||'');
+  _val('st-emp-taxid',b.taxId||'');
+  _val('st-emp-billmail',b.email||'');
+  _val('st-emp-phone',b.phone||'');
+  _val('st-emp-address',b.address||'');
+  const sess=document.getElementById('st-emp-session'); if(sess)sess.textContent=sessionLine(tpCompany);
+  const others=document.getElementById('st-emp-others'); if(others)others.disabled=!tpCompany;
+  const p=TPPrefs.all('emp');
+  Object.keys(PREF_DEFAULTS.emp).forEach(k=>{const el=document.getElementById('pref-emp-'+k); if(el)el.checked=!!p[k];});
+  const pause=document.getElementById('st-emp-pause'); if(pause)pause.textContent=p.paused?'Reactivar cuenta':'Pausar cuenta';
+  stMsg('st-emp-msg', tpCompany?'':'info', tpCompany?'':'Estás como invitado: para guardar los datos de tu empresa crea una cuenta.');
+  renderEmpUsage(); renderEmpPayments();
+}
+
+async function saveEmpSettings(){
+  const company=_val('st-emp-company');
+  stMsg('st-emp-msg','','');
+  if(!company){ stMsg('st-emp-msg','err','El nombre de la empresa no puede quedar vacío.'); return; }
+  if(!tpCompany){ stMsg('st-emp-msg','info','Estás como invitado: crea una cuenta de empresa para guardar estos datos.'); return; }
+  const done=btnBusy('st-emp-save','Guardando…');
+  try{
+    await TPCloud.saveMeta({
+      company,
+      sector:_val('st-emp-sector'),
+      size:_val('st-emp-size'),
+      web:_val('st-emp-web'),
+      contact_name:_val('st-emp-contact'),
+      position:_val('st-emp-position'),
+      description:_val('st-emp-desc')
+    });
+    applyCompanyIdentity();
+    const who=document.getElementById('stEmpWho'); if(who)who.textContent='Cuenta de empresa · '+companyName();
+    stMsg('st-emp-msg','ok','Perfil de empresa guardado.');
+  }catch(e){ stMsg('st-emp-msg','err','No se pudo guardar: '+authErrorText(e)); }
+  finally{ done(); }
+}
+
+async function saveEmpBilling(){
+  stMsg('st-emp-bill-msg','','');
+  if(!tpCompany){ stMsg('st-emp-bill-msg','info','Estás como invitado: crea una cuenta para guardar los datos de facturación.'); return; }
+  const mail=_val('st-emp-billmail');
+  if(mail&&!isEmailValid(mail)){ stMsg('st-emp-bill-msg','err','El email de facturación no tiene un formato válido.'); return; }
+  const done=btnBusy('st-emp-bill-save','Guardando…');
+  try{
+    await TPCloud.saveMeta({billing:{
+      legal:_val('st-emp-legal'), taxId:_val('st-emp-taxid'),
+      email:mail, phone:_val('st-emp-phone'), address:_val('st-emp-address')
+    }});
+    stMsg('st-emp-bill-msg','ok','Datos de facturación guardados en tu cuenta.');
+  }catch(e){ stMsg('st-emp-bill-msg','err','No se pudo guardar: '+authErrorText(e)); }
+  finally{ done(); }
+}
+
+// Uso real de la cuenta: nada de cifras inventadas.
+function renderEmpUsage(){
+  const box=document.getElementById('st-emp-usage'); if(!box)return;
+  const mine=(typeof myPostedJobs==='function')?myPostedJobs():[];
+  const pays=myPayments();
+  const rows=[
+    ['Ofertas publicadas por ti',mine.length],
+    ['Ofertas activas ahora',mine.filter(j=>!j.paused).length],
+    ['Contactos desbloqueados',pays.length],
+    ['Importe acumulado (simulado)','€'+(pays.length*49)],
+    ['Candidatos visibles en el pool',CANDIDATES.length]
+  ];
+  box.innerHTML=rows.map(r=>'<div class="st-kv"><span>'+escHtml(r[0])+'</span><strong>'+escHtml(String(r[1]))+'</strong></div>').join('');
+}
+function myPayments(){
+  const k=(typeof companyKey==='function')?companyKey():'guest';
+  return TP.getPayments().filter(p=>!p.owner||p.owner===k);
+}
+function renderEmpPayments(){
+  const box=document.getElementById('st-emp-payments'); if(!box)return;
+  const pays=myPayments().slice().reverse();
+  if(!pays.length){ box.innerHTML='<div class="st-empty">Todavía no has desbloqueado ningún contacto.</div>'; return; }
+  box.innerHTML=pays.map(function(p){
+    const f=p.ts?new Date(p.ts).toLocaleDateString('es-ES',{day:'2-digit',month:'short',year:'numeric'}):'—';
+    return '<div class="st-kv"><span>'+escHtml(p.label||('Contacto '+(p.candId||'')))+' · '+escHtml(f)+'</span><strong>€'+escHtml(String(p.amount||49))+'</strong></div>';
+  }).join('');
+}
+
+// ─── Seguridad (comun a los dos paneles) ──────────────────────────────────
+function togglePwForm(role){
+  const f=document.getElementById('st-'+role+'-pw-form'); if(!f)return;
+  f.classList.toggle('show');
+  stMsg('st-'+role+'-pw-msg','','');
+}
+async function changePassword(role){
+  const box='st-'+role+'-pw-msg';
+  const user=role==='cand'?tpUser:tpCompany;
+  const a=(document.getElementById('st-'+role+'-pw1')||{}).value||'';
+  const b=(document.getElementById('st-'+role+'-pw2')||{}).value||'';
+  stMsg(box,'','');
+  if(!user){ stMsg(box,'err','Estás como invitado: no hay ninguna cuenta a la que cambiarle la contraseña.'); return; }
+  if(a.length<8){ stMsg(box,'err','La contraseña debe tener al menos 8 caracteres.'); return; }
+  if(a!==b){ stMsg(box,'err','Las dos contraseñas no coinciden.'); return; }
+  const done=btnBusy('st-'+role+'-pw-btn','Guardando…');
+  try{
+    await TPCloud.updatePassword(a);
+    document.getElementById('st-'+role+'-pw1').value='';
+    document.getElementById('st-'+role+'-pw2').value='';
+    stMsg(box,'ok','Contraseña actualizada. Úsala la próxima vez que entres.');
+  }catch(e){ stMsg(box,'err',authErrorText(e)); }
+  finally{ done(); }
+}
+async function closeOtherSessions(role){
+  const box='st-'+role+'-sec-msg';
+  const user=role==='cand'?tpUser:tpCompany;
+  stMsg(box,'','');
+  if(!user){ stMsg(box,'err','No hay ninguna sesión iniciada.'); return; }
+  const done=btnBusy('st-'+role+'-others','Cerrando…');
+  try{ await TPCloud.signOutOthers(); stMsg(box,'ok','Cerradas las sesiones abiertas en otros dispositivos. Esta sigue activa.'); }
+  catch(e){ stMsg(box,'err',authErrorText(e)); }
+  finally{ done(); }
+}
+
+function downloadJson(filename,obj){
+  try{
+    const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url; a.download=filename;
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); },0);
+    return true;
+  }catch(e){ console.warn('[TP] descarga',e); return false; }
+}
+
+// Portabilidad de datos (RGPD art. 20): se genera en el navegador, sin esperas.
+async function exportMyData(){
+  const box='st-cand-sec-msg';
+  const done=btnBusy('st-cand-export','Preparando…');
+  try{
+    const data={
+      generado:new Date().toISOString(),
+      origen:'TalentPact — exportación de datos personales (RGPD art. 20)',
+      cuenta:tpUser?{id:tpUser.id,email:tpUser.email,alta:tpUser.created_at,metadatos:tpUser.user_metadata||{}}:'sesión de invitado: solo datos de este navegador',
+      preferencias:TPPrefs.all('cand'),
+      skills:candidateProfile.skills,
+      retosCompletados:candidateProfile.completedCommon,
+      evaluacionesIA:TP.getEvals()
+    };
+    if(tpUser){ try{ data.datosEnLaNube=await TPCloud.getProgress(tpUser); }catch(e){ data.datosEnLaNube='no disponible ('+((e&&e.message)||e)+')'; } }
+    const bien=downloadJson('talentpact-mis-datos.json',data);
+    stMsg(box,bien?'ok':'err',bien?'Archivo descargado: talentpact-mis-datos.json':'El navegador ha bloqueado la descarga.');
+  }catch(e){ stMsg(box,'err','No se pudo generar el archivo: '+((e&&e.message)||e)); }
+  finally{ done(); }
+}
+async function exportEmpData(){
+  const box='st-emp-sec-msg';
+  const done=btnBusy('st-emp-export','Preparando…');
+  try{
+    const data={
+      generado:new Date().toISOString(),
+      origen:'TalentPact — exportación de datos de la cuenta de empresa',
+      cuenta:tpCompany?{id:tpCompany.id,email:tpCompany.email,alta:tpCompany.created_at,metadatos:tpCompany.user_metadata||{}}:'sesión de invitado',
+      preferencias:TPPrefs.all('emp'),
+      ofertas:(typeof myPostedJobs==='function')?myPostedJobs():[],
+      desbloqueos:myPayments()
+    };
+    downloadJson('talentpact-empresa.json',data);
+    stMsg(box,'ok','Archivo descargado: talentpact-empresa.json');
+  }catch(e){ stMsg(box,'err','No se pudo generar el archivo: '+((e&&e.message)||e)); }
+  finally{ done(); }
+}
+
+function toggleDeleteForm(role){
+  const f=document.getElementById('st-'+role+'-del-form'); if(!f)return;
+  f.classList.toggle('show');
+  stMsg('st-'+role+'-del-msg','','');
+}
+async function deleteAccount(role){
+  const box='st-'+role+'-del-msg';
+  const user=role==='cand'?tpUser:tpCompany;
+  const word=((document.getElementById('st-'+role+'-del-word')||{}).value||'').trim().toUpperCase();
+  stMsg(box,'','');
+  if(word!=='ELIMINAR'){ stMsg(box,'err','Escribe ELIMINAR para confirmar.'); return; }
+  if(!user){ stMsg(box,'err','Estás como invitado: no hay ninguna cuenta que borrar. Para vaciar este navegador ejecuta TP.reset() en la consola.'); return; }
+  const done=btnBusy('st-'+role+'-del-btn','Eliminando…');
+  try{
+    const r=await TPCloud.deleteAccount();
+    if(!r||!r.ok)throw new Error((r&&(r.details||r.error))||'respuesta inesperada del servidor');
+    await TPCloud.signOut();
+    TPPrefs.invalidate();
+    if(role==='cand'){ tpUser=null; closeSettings('cand'); closeDash('dashCandidate'); }
+    else { tpCompany=null; closeSettings('emp'); closeDash('dashEmpresa'); }
+    goHome();
+  }catch(e){ stMsg(box,'err','No se pudo eliminar la cuenta: '+((e&&e.message)||e)); }
+  finally{ done(); }
+}
+
+// Atajo de la zona de peligro: es exactamente el interruptor de privacidad.
+async function hideMyProfile(){
+  const el=document.getElementById('pref-cand-poolVisible'); if(el)el.checked=false;
+  await setPref('cand','poolVisible',false);
+  stMsg('st-cand-sec-msg','ok','Tu perfil ya no aparece en el pool. Puedes volver a activarlo en Privacidad.');
+}
+// Pausar la cuenta de empresa retira sus ofertas del listado publico.
+async function toggleEmpPause(){
+  const now=!prefIsOn('emp','paused',false);
+  await setPref('emp','paused',now);
+  myPostedJobs().forEach(function(j){ j.paused=now; });
+  TP.saveEmpJobs();
+  const b=document.getElementById('st-emp-pause'); if(b)b.textContent=now?'Reactivar cuenta':'Pausar cuenta';
+  stMsg('st-emp-sec-msg','ok',now?'Cuenta pausada: tus ofertas ya no se muestran a los candidatos.':'Cuenta reactivada: tus ofertas vuelven a estar visibles.');
+  try{ renderEmpJobs(); renderEmpUsage(); }catch(e){}
+}
+
+// Lanza el flujo OAuth. signInWithOAuth navega fuera de la página, así que el
+// resto del proceso lo recoge el bootstrap de sesión al volver.
+async function oauthLogin(provider,role){
+  const portal=role==='empresa'?'empresa':'candidate';
+  const label=OAUTH_LABEL[provider]||provider;
+  const btn=document.getElementById((OAUTH_BTN[portal]||{})[provider]);
+  if(btn)btn.disabled=true;
+  authMsg('info','Conectando con '+label+'…',portal);
+  try{
+    const prov=await TPCloud.providers();
+    if(prov[provider]===false){
+      authMsg('err','El acceso con '+label+' todavía no está activado en el proyecto. Entra con email y contraseña o explora como invitado.',portal);
+      return;
+    }
+    await TPCloud.signInWithProvider(provider,portal);
+  }catch(e){
+    authMsg('err','No se pudo iniciar el acceso con '+label+': '+authErrorText(e),portal);
+  }finally{
+    if(btn)btn.disabled=false;
+  }
+}
+
+// Atenúa los proveedores aún no habilitados en Supabase (sin ocultarlos: al
+// pulsarlos el usuario recibe la explicación en vez de un error opaco).
+async function refreshOAuthButtons(portal){
+  try{
+    const prov=await TPCloud.providers();
+    const map=OAUTH_BTN[portal||'candidate']||{};
+    Object.keys(map).forEach(p=>{
+      const b=document.getElementById(map[p]); if(!b)return;
+      const on=prov[p]!==false;
+      b.classList.toggle('is-off',!on);
+      b.title=on?('Continuar con '+OAUTH_LABEL[p]):(OAUTH_LABEL[p]+': proveedor pendiente de activar en Supabase');
+    });
+  }catch(e){}
+}
+
+// Quita de la URL los parámetros que deja el proveedor tras el redirect.
+function cleanAuthUrl(){
+  try{
+    const url=new URL(window.location.href);
+    ['code','state','error','error_code','error_description','provider_token'].forEach(k=>url.searchParams.delete(k));
+    history.replaceState({},document.title,url.pathname+(url.search||''));
+  }catch(e){}
+}
+async function logoutCand(){
+  await TPCloud.signOut();
+  tpUser=null;
+  TPPrefs.invalidate();
+  applyCandidateIdentity();   // borra el nombre del que se va
+  closeDash('dashCandidate');
+  goHome();
+}
+// El portal de empresa usa el mismo Supabase Auth que el de candidato; lo que
+// separa a los dos es user_metadata.role, que se fija al crear la cuenta.
 async function loginEmpresa(){
   const email=(document.getElementById('emp-login-email').value||'').trim();
   const pw=document.getElementById('emp-login-pw').value||'';
-  if(!email||!pw){alert('Introduce el email corporativo y la contraseña.');return;}
+  authMsg('','','empresa');
+  if(!isEmailValid(email)){authMsg('err','Introduce un email corporativo válido.','empresa');return;}
+  if(!pw){authMsg('err','Introduce tu contraseña.','empresa');return;}
+  const done=btnBusy('empLoginBtn','Accediendo…');
   try{
-    tpUser=await TPCloud.signIn(email,pw);
-    tpRole='company';
-    await loadCompanyIntoUI(tpUser);
+    const u=await TPCloud.signIn(email,pw);
+    const role=(u.user_metadata||{}).role;
+    if(role==='candidate'){
+      await TPCloud.signOut();
+      authMsg('err','Esa cuenta es de candidato. Entra desde el portal de candidato.','empresa');
+      return;
+    }
+    tpCompany=u;
+    if(!role)await TPCloud.setRole('empresa');   // cuentas creadas antes de esta versión
+    authMsg('ok','Sesión iniciada. Abriendo el panel…','empresa');
     closeAuth('authEmpresa');openDashEmp();
-  }catch(e){alert('No se pudo iniciar sesión: '+((e&&e.message)||e));}
+  }catch(e){ authMsg('err',authErrorText(e),'empresa'); }
+  finally{ done(); }
 }
+
 async function registerEmpresa(){
-  const companyName=(document.getElementById('emp-reg-company').value||'').trim();
-  const contactName=(document.getElementById('emp-reg-name').value||'').trim();
-  const jobTitle=(document.getElementById('emp-reg-role').value||'').trim();
+  const company=(document.getElementById('emp-reg-company').value||'').trim();
+  const name=(document.getElementById('emp-reg-name').value||'').trim();
+  const position=(document.getElementById('emp-reg-position').value||'').trim();
   const email=(document.getElementById('emp-reg-email').value||'').trim();
   const pw=document.getElementById('emp-reg-pw').value||'';
-  const companySize=document.getElementById('emp-reg-size').value||'';
-  if(!companyName||!email||!pw){alert('Empresa, email y contraseña son obligatorios.');return;}
-  if(pw.length<6){alert('La contraseña debe tener al menos 6 caracteres.');return;}
+  const size=document.getElementById('emp-reg-size').value||'';
+  authMsg('','','empReg');
+  if(!company){authMsg('err','Indica el nombre de la empresa.','empReg');return;}
+  if(!name){authMsg('err','Indica tu nombre.','empReg');return;}
+  if(!isEmailValid(email)){authMsg('err','Introduce un email corporativo válido.','empReg');return;}
+  if(pw.length<8){authMsg('err','La contraseña debe tener al menos 8 caracteres.','empReg');return;}
+  const done=btnBusy('empRegBtn','Creando cuenta…');
   try{
-    const data=await TPCloud.signUp(email,pw,{role:'company',company_name:companyName,contact_name:contactName});
-    if(!data.session){ alert('Cuenta creada. Revisa tu email para confirmarla y luego inicia sesión.'); return; }
-    tpUser=data.user;
-    tpRole='company';
-    await TPCloud.saveCompany(tpUser,{companyName,contactName,jobTitle,companySize});
-    applyCompanyToUI({company_name:companyName,contact_name:contactName},tpUser);
+    const data=await TPCloud.signUp(email,pw,{role:'empresa',company,contact_name:name,position,size,full_name:name});
+    if(!data.session){ authMsg('info','Cuenta creada. Confirma el email que te hemos enviado y vuelve a entrar.','empReg'); return; }
+    tpCompany=data.user;
+    authMsg('ok','Cuenta creada. Abriendo el panel…','empReg');
     closeAuth('authEmpresa');openDashEmp();
-  }catch(e){alert('No se pudo crear la cuenta de empresa: '+((e&&e.message)||e));}
+  }catch(e){ authMsg('err',authErrorText(e),'empReg'); }
+  finally{ done(); }
 }
-async function logoutEmp(){ await TPCloud.signOut(); tpUser=null; tpRole=null; closeDash('dashEmpresa'); goHome(); }
 
 async function verifySkillPassAtCompany(){
   const raw=(document.getElementById('empVerifyJson').value||'').trim();
@@ -4669,8 +5418,56 @@ async function verifySkillPassAtCompany(){
   }
 }
 
+function guestEmpresa(){clearAuthMsgs();closeAuth('authEmpresa');openDashEmp();}
+async function logoutEmp(){
+  await TPCloud.signOut();
+  tpCompany=null;
+  TPPrefs.invalidate();
+  applyCompanyIdentity();
+  closeDash('dashEmpresa');
+  goHome();
+}
+
+function candidateName(){
+  const m=(tpUser&&tpUser.user_metadata)||{};
+  const nombre=(m.full_name||'').trim();
+  if(nombre)return nombre;
+  const local=TP.load('guestProfile',null);
+  if(local&&(local.fullName||'').trim())return local.fullName.trim();
+  if(tpUser&&tpUser.email)return tpUser.email.split('@')[0];
+  return 'Mi perfil';
+}
+function applyCandidateIdentity(){
+  const nombre=candidateName();
+  const el=document.getElementById('candName'); if(el)el.textContent=nombre;
+  const av=document.getElementById('candAvatar');
+  if(av){
+    const ini=nombre.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('');
+    av.textContent=tpUser?((ini||nombre.slice(0,2)).toUpperCase()):'—';
+  }
+}
+
+function companyName(){
+  const m=(tpCompany&&tpCompany.user_metadata)||{};
+  const raw=(m.company||'').trim();
+  if(raw)return raw;
+  if(tpCompany&&tpCompany.email)return tpCompany.email.split('@')[0];
+  return 'TechCorp';
+}
+function companyKey(){ return tpCompany?tpCompany.id:'guest'; }
+function applyCompanyIdentity(){
+  const name=companyName();
+  const el=document.getElementById('empName'); if(el)el.textContent=name;
+  const av=document.getElementById('empAvatar');
+  if(av){
+    const ini=name.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('');
+    av.textContent=(ini||name.slice(0,2)).toUpperCase();
+  }
+}
+
 // ═══ DASHBOARDS ═══
 function openDashCand(){document.getElementById('dashCandidate').classList.add('open');document.body.style.overflow='hidden';
+  applyCandidateIdentity();
   updateCandProfile();renderCommonExercises();renderJobMatches();renderOnboarding();renderRanking('all');renderFAQ();
   // Render all company job offers
   let h='';
@@ -4687,8 +5484,11 @@ function openDashCand(){document.getElementById('dashCandidate').classList.add('
   document.querySelectorAll('#candDashTabs .dash-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   document.querySelectorAll('[id^="candTab-"]').forEach((c,i)=>c.classList.toggle('active',i===0));
 }
-function openDashEmp(){document.getElementById('dashEmpresa').classList.add('open');document.body.style.overflow='hidden';renderEmpJobs();renderEmpPool();}
-function renderEmpJobs(){const my=JOBS.filter(j=>j.company==='c1').concat(empPostedJobs);
+function openDashEmp(){document.getElementById('dashEmpresa').classList.add('open');document.body.style.overflow='hidden';applyCompanyIdentity();renderEmpJobs();renderEmpPool();}
+// Las ofertas sin `owner` son las guardadas antes de que existieran las cuentas
+// de empresa: se siguen mostrando para no perder el historial de la demo.
+function myPostedJobs(){ const k=companyKey(); return empPostedJobs.filter(j=>!j.owner||j.owner===k); }
+function renderEmpJobs(){const my=JOBS.filter(j=>j.company==='c1').concat(myPostedJobs());
   document.getElementById('empStatOffers').textContent=my.length;
   let h='<table class="dash-table"><thead><tr><th>Puesto</th><th>Sector</th><th>Candidatos</th><th>Status</th><th></th></tr></thead><tbody>';
   my.forEach(j=>{const nc=8+(j.id.charCodeAt(0)%18);h+=`<tr><td><strong>${j.title}</strong></td><td>${j.sector}</td><td><strong style="color:var(--emerald-600)">${nc}</strong></td><td><span class="status-active">Activa</span></td><td><button class="btn btn-primary btn-sm" onclick="showOfferCandidates('${j.id}')">Ver candidatos →</button></td></tr>`;});
@@ -4716,7 +5516,9 @@ function showOfferCandidates(jobId){
       <div class="oc-actions">
         ${unlocked
           ?`<button class="btn-unlock unlocked">✓ Contacto desbloqueado</button>`
-          :`<button class="btn-unlock" onclick="unlockContact('${ca.id}')">🔓 Desbloquear · €49</button>`
+          :(candidateAcceptsContact(ca)
+            ?`<button class="btn-unlock" onclick="unlockContact('${ca.id}')">🔓 Desbloquear · €49</button>`
+            :`<button class="btn-unlock" disabled style="opacity:.55;cursor:not-allowed">No acepta contactos</button>`)
         }
       </div>
     </div>`;
@@ -4733,14 +5535,61 @@ function hideOfferCandidates(){
 let _payingForCand=null;
 let _payingForJob=null;
 
+// Un candidato puede cerrar la puerta desde Ajustes -> Privacidad; cuando lo
+// hace, su ficha sigue visible pero no se puede comprar su contacto.
+function candidateAcceptsContact(c){
+  if(!c||!c._mine)return true;          // solo aplica a tu propia ficha
+  return prefIsOn('cand','allowContact',true);
+}
 function unlockContact(candId){
   const c=CANDIDATES.find(p=>p.id===candId);
   if(!c)return;
+  if(!candidateAcceptsContact(c)){
+    alert('Este candidato no acepta solicitudes de contacto ahora mismo.');
+    return;
+  }
   _payingForCand=c;
   document.getElementById('payAvatar').textContent=c.i;
   document.getElementById('payName').textContent='Candidato #'+(1000+Math.floor(Date.now()/1000)%900);
   document.getElementById('payMeta').textContent='Score: '+c.score+' · '+c.sector;
   document.getElementById('payModal').classList.add('open');
+}
+
+// Datos de contacto de la demo. Se derivan del id del candidato para que sean
+// estables entre recargas; en producción vendrían de la fila de `profiles`.
+const CONTACT_NAMES=['Ana García Martínez','Carlos López Ruiz','María Fernández Torres','Javier Sánchez Díaz','Laura Moreno Gil','Pablo Navarro Cruz','Sofía Herrera Vega','Daniel Jiménez Ramos'];
+function _slug(t){ return (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z]/g,''); }
+function candidateContact(c){
+  const id=String((c&&c.id)||'');
+  let h=0; for(let i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))>>>0;
+  const name=CONTACT_NAMES[h%CONTACT_NAMES.length];
+  const p=name.split(' ');
+  return {
+    name,
+    email:_slug(p[0])+'.'+_slug(p[1])+'@email.com',
+    phone:'+34 6'+String(h%100000000).padStart(8,'0'),
+    linkedin:'linkedin.com/in/'+_slug(p[0])+'-'+_slug(p[1])
+  };
+}
+let _lastContact=null;
+function showContactCard(c){
+  const d=candidateContact(c);
+  _lastContact=d;
+  document.getElementById('contactFields').innerHTML=
+    [['Nombre',d.name],['Email',d.email],['Teléfono',d.phone],['LinkedIn',d.linkedin]]
+      .map(function(f){return '<div class="ct-row"><span class="ct-k">'+f[0]+'</span><span class="ct-v">'+escHtml(f[1])+'</span></div>';}).join('');
+  const b=document.getElementById('contactCopyBtn'); if(b)b.textContent='Copiar datos de contacto';
+  document.getElementById('contactModal').classList.add('open');
+}
+function closeContactModal(){ document.getElementById('contactModal').classList.remove('open'); }
+function copyContact(){
+  if(!_lastContact)return;
+  const d=_lastContact;
+  const txt=d.name+'\n'+d.email+'\n'+d.phone+'\n'+d.linkedin;
+  const b=document.getElementById('contactCopyBtn');
+  const done=function(){ if(b){ b.textContent='✓ Copiado'; setTimeout(function(){b.textContent='Copiar datos de contacto';},1600); } };
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(done).catch(done);
+  else done();
 }
 
 function closePayModal(){
@@ -4770,14 +5619,18 @@ function processPayment(){
   setTimeout(()=>{
     c._unlocked=true;
     TP.saveUnlocks();
+    TP.logPayment({
+      owner:(typeof companyKey==='function')?companyKey():'guest',
+      ownerName:(typeof companyName==='function')?companyName():'',
+      candId:c.id,
+      label:'Contacto '+(c.i||c.id)+' · score '+(c.score||'—'),
+      amount:49
+    });
     closePayModal();
     btn.textContent='Pagar y desbloquear →';btn.disabled=false;
-    // Show success with real data
-    const names=['Ana García Martínez','Carlos López Ruiz','María Fernández Torres','Javier Sánchez Díaz','Laura Moreno Gil','Pablo Navarro Cruz','Sofía Herrera Vega','Daniel Jiménez Ramos'];
-    const name=names[candId.charCodeAt(1)%names.length];
-    const email=name.split(' ')[0].toLowerCase()+'.'+name.split(' ')[1]?.toLowerCase()+'@email.com';
-    const phone='+34 6'+(12345678+candId.charCodeAt(0)*1234567).toString().slice(0,8);
-    alert('✅ ¡Contacto desbloqueado!\n\n👤 '+name+'\n📧 '+email+'\n📱 '+phone+'\n🔗 linkedin.com/in/'+name.split(' ')[0].toLowerCase()+'-'+name.split(' ')[1]?.toLowerCase()+'\n\nSe ha notificado al candidato de tu interés.');
+    // Ficha de contacto en una tarjeta propia (antes: un alert que además
+    // fallaba, porque candId es un parámetro de unlockContact y aquí no existe).
+    showContactCard(c);
     // Re-render candidates
     const title=document.getElementById('empOfferCandTitle').textContent.replace('Candidatos para: ','');
     const job=JOBS.concat(empPostedJobs).find(j=>j.title===title);
@@ -4887,7 +5740,7 @@ function clearExSearch(){
 }
 
 function renderEmpPool(){let h='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Top Skills</th><th></th></tr></thead><tbody>';CANDIDATES.forEach(c=>{h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${c.i}</div>#${1000+parseInt(c.id.slice(1))*111}</div></td><td>${c.sector}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${s.n}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${c.id}')">Ver perfil</button></td></tr>`;});h+='</tbody></table>';document.getElementById('empPool').innerHTML=h;}
-function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${c.i}</div><div class="cp-info"><h3>Candidato anónimo</h3><div class="cp-meta">${c.sector} · Score: ${c.score} · Perfil ciego</div></div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${s.n}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="alert('Solicitud enviada. Se notificará al candidato.');closeM('profileModal')">Solicitar contacto →</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
+function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${c.i}</div><div class="cp-info"><h3>Candidato anónimo</h3><div class="cp-meta">${c.sector} · Score: ${c.score} · Perfil ciego</div></div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${s.n}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${c.id}')">Desbloquear contacto · €49 →</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
 
 // ═══ POST JOB ═══
 let pjExConfigVal='common+custom';
@@ -4961,6 +5814,8 @@ function publishJob(){
   
   empPostedJobs.push({
     id:'cj_'+Date.now(),
+    owner:companyKey(),
+    ownerName:companyName(),
     title:t,
     sector:s,
     badge:bm[s]||'jb-it',
@@ -5002,7 +5857,8 @@ function openSettings(type){
   const o=document.getElementById(ov);
   if(d)d.classList.add('open');
   if(o)o.classList.add('open');
-  if(type==='cand')updateStCandIncentives();
+  if(type==='cand'){ updateStCandIncentives(); loadCandSettings(); }
+  else loadEmpSettings();
 }
 function closeSettings(type){
   const id=type==='cand'?'stDrawerCand':'stDrawerEmp';
@@ -5033,7 +5889,7 @@ document.getElementById('cmodal').addEventListener('click',function(e){if(e.targ
 document.getElementById('jobModal').addEventListener('click',function(e){if(e.target===this)closeJobModal();});
 document.getElementById('profileModal').addEventListener('click',function(e){if(e.target===this)closeM('profileModal');});
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePayModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSettings('cand');closeSettings('emp');closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeContactModal();closeSettings('cand');closeSettings('emp');closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
 window.addEventListener('load',function(){if(typeof _scrollTop==='function')_scrollTop();});
 document.getElementById('adminLoginModal').addEventListener('click',function(e){if(e.target===this)closeAdminLogin();});
 const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
@@ -5577,6 +6433,8 @@ function renderRanking(sector,btn){
   }
   
   let list=RANKING_DATA.slice();
+  // Preferencia de privacidad: si la desactivas, tu fila desaparece del leaderboard.
+  if(!prefIsOn('cand','publicRanking',true))list=list.filter(r=>r.id!=='you');
   if(sector&&sector!=='all')list=list.filter(r=>r.sector===sector||r.id==='you');
   list.sort((a,b)=>b.score-a.score);
   

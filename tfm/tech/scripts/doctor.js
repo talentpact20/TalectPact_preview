@@ -50,6 +50,8 @@ async function checkSupabase() {
         headers: { apikey: key, authorization: `Bearer ${key}` }
       });
       if (res.ok) ok("datos", `tabla ${table} accesible`);
+      else if (res.status === 401 || res.status === 403)
+        fail("datos", `tabla ${table} -> HTTP ${res.status}. La clave no es la service_role (¿pegaste la anon?).`);
       else fail("datos", `tabla ${table} -> HTTP ${res.status}. Ejecuta tfm/tech/supabase_schema.sql en el SQL Editor.`);
     } catch (e) {
       fail("datos", `no se pudo contactar con Supabase: ${e.message}`);
@@ -147,6 +149,7 @@ async function main() {
     process.exit(1);
   }
   console.log(`  Todo conectado (${warns} aviso(s)). Flujo IA -> Supabase -> anclaje -> verificacion operativo.\n`);
+  console.log("  Prueba a fondo de la capa de datos:  npm run test:supabase\n");
 }
 
 main().catch((e) => { console.error("\n  Error inesperado: " + e.message + "\n"); process.exit(1); });

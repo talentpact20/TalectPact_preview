@@ -6,7 +6,7 @@ El código está completo; lo que falta son credenciales externas (todas **grati
 | Capa | Estado | Qué falta |
 |---|---|---|
 | ① IA — evaluación de retos | ✅ Funcionando en producción | — |
-| ② Supabase — persistencia + Auth | ✅ Proyecto creado y en uso | La `service_role key` en tu `.env` local |
+| ② Supabase — persistencia + Auth | ✅ Proyecto creado, esquema completo verificado | La `service_role key` en tu `.env` local |
 | ③ Blockchain — anclaje | 🔨 Código listo, **sin desplegar** | Wallet + gas + desplegar el contrato |
 | ④ Verificador público | ✅ `verify.html` construido | Depende de ③ |
 
@@ -30,18 +30,26 @@ cp .env.example .env      # PowerShell: Copy-Item .env.example .env
 Ábrelo y ve rellenando los valores según avanzas por los pasos siguientes.
 Tanto el servidor local (`npm run dev`) como los scripts lo leen automáticamente.
 
-## Paso 1 — Supabase (persistencia) · ✅ ya hecho, falta 1 clave
+## Paso 1 — Supabase (persistencia) · ✅ esquema verificado, falta 1 clave
 
-El proyecto ya existe y la app lo está usando (cuentas, progreso y evaluaciones).
-Solo necesitas la clave secreta para poder ejecutar el backend en local:
+**No hay que ejecutar ningún SQL.** Comprobado contra el proyecto real: las tres tablas
+(`profiles`, `evaluations`, `credentials`) existen con todas sus columnas, incluidas las
+que añade `supabase_schema_auth.sql`. Los dos `.sql` de este directorio quedan como
+documentación del esquema y para reconstruirlo desde cero si hiciera falta.
+
+Lo único que falta es la clave secreta para poder ejecutar el backend en local:
 
 1. Entra en [supabase.com](https://supabase.com) → tu proyecto.
-2. **Project Settings → API** y copia:
-   - **Project URL** → `SUPABASE_URL`
-   - **service_role key** (la secreta, NO la anon) → `SUPABASE_SERVICE_KEY`
-3. Comprueba que las tablas están creadas: **SQL Editor** → pega `supabase_schema.sql`
-   y después `supabase_schema_auth.sql` → **Run**. Ambos son idempotentes, se pueden
-   volver a ejecutar sin romper nada.
+2. **Project Settings → API** → copia la **service_role key** (la secreta, NO la anon)
+   → pégala en `SUPABASE_SERVICE_KEY` del `.env`.
+3. Comprueba que todo funciona de punta a punta:
+
+```bash
+npm run test:supabase
+```
+
+Crea un candidato de prueba, guarda evaluaciones, compone su SkillPass CV, verifica el
+hash y la unicidad de credenciales, y **borra todo lo que ha creado** al terminar.
 
 ## Paso 2 — Wallet de testnet (emisor de credenciales) · ~10 min
 

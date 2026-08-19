@@ -64,7 +64,8 @@ const sb = {
   insert: (table, row) =>
     sbRequest("POST", table, { body: row, prefer: "return=representation" }),
   update: (table, query, patch) =>
-    sbRequest("PATCH", `${table}?${query}`, { body: patch, prefer: "return=representation" })
+    sbRequest("PATCH", `${table}?${query}`, { body: patch, prefer: "return=representation" }),
+  remove: (table, query) => sbRequest("DELETE", `${table}?${query}`)
 };
 
 /** Devuelve el perfil con ese display_name; lo crea si no existe. */
@@ -88,6 +89,15 @@ function pickProfileFields(fields = {}) {
   return out;
 }
 
+/**
+ * Alias público y anónimo derivado del id de usuario. El nombre real y el email
+ * viven en sus propias columnas; `display_name` es lo que puede verse desde
+ * fuera, así que nunca debe contener datos personales (premisa de anonimato).
+ */
+function anonymousAlias(userId) {
+  return "Candidato #" + String(userId).replace(/-/g, "").slice(0, 4).toUpperCase();
+}
+
 /** Devuelve (creando o actualizando) el perfil vinculado a un usuario de Auth. */
 async function ensureProfileByUser(userId, fields = {}) {
   if (!userId) throw new Error("userId requerido");
@@ -96,14 +106,25 @@ async function ensureProfileByUser(userId, fields = {}) {
   if (Array.isArray(found) && found.length) {
     if (Object.keys(patch).length) {
       const upd = await sb.update("profiles", `user_id=eq.${userId}`, patch);
-      return Array.isArray(upd) ? upd[0] : found[0];
+      // Si el PATCH no devolvió filas, nos quedamos con lo que ya habíamos leído:
+      // devolver undefined haría estallar a quien espere `profile.id`.
+      if (Array.isArray(upd) && upd[0]) return upd[0];
+      return found[0];
     }
     return found[0];
   }
   const row = Object.assign({ user_id: userId }, patch);
-  if (!row.display_name) row.display_name = fields.full_name || fields.email || "Candidato";
-  const created = await sb.insert("profiles", row);
-  return Array.isArray(created) ? created[0] : created;
+  if (!row.display_name) row.display_name = anonymousAlias(userId);
+  try {
+    const created = await sb.insert("profiles", row);
+    return Array.isArray(created) ? created[0] : created;
+  } catch (err) {
+    // `user_id` es único: si dos peticiones del mismo usuario llegan a la vez,
+    // una de las dos choca. No es un fallo real — releemos el perfil ganador.
+    const retry = await sb.select("profiles", `user_id=eq.${userId}&select=*&limit=1`);
+    if (Array.isArray(retry) && retry.length) return retry[0];
+    throw err;
+  }
 }
 
 const COMPANY_FIELDS = ["email", "company_name", "contact_name", "job_title", "company_size"];
@@ -193,6 +214,7 @@ function hashCv(cvJson) {
 
 module.exports = {
   jsonResponse,
+  supabaseEnv,
   sb,
   ensureProfile,
   ensureProfileByUser,
