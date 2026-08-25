@@ -18,6 +18,7 @@ Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & I
 | **SkillPass (credencial)** | `netlify/functions/issue-credential.js` · `anchor-credential.js` · `verify-credential.js` | Emisión del CV verificable, anclaje de su hash en blockchain y verificación pública. |
 | **Contrato** | `tfm/tech/contracts/SkillPassRegistry.sol` | Registro de huellas en Ethereum Sepolia. Solo hashes: ningún dato personal on-chain. |
 | **Verificador público** | `verify.html` | Página sin cuenta donde cualquiera comprueba un SkillPass. |
+| **Pagos (Stripe)** | `netlify/functions/create-checkout-session.js` · `stripe-webhook.js` · `confirm-checkout.js` | Cobro del desbloqueo de contacto vía Stripe Checkout y concesión del acceso solo tras confirmar el pago. |
 | **PoC del Agente Evaluador** | `poc_entrega2/` | Prototipo en Python (Entrega 2) que demuestra el motor de evaluación con Dynamic Prompting + Chain of Thought. |
 | **Entregables** | `entrega_final/` | Informe técnico final, guion de demo y batería de Q&A. |
 
@@ -154,8 +155,9 @@ explícito en lugar de fingir que ha borrado algo.
 
 - **Envío de correos.** No hay proveedor de email conectado, así que las
   preferencias de notificación se guardan pero no se envía nada.
-- **Pasarela de pago.** Los desbloqueos de €49 son simulados y no generan cargo;
-  sí quedan registrados en el historial de la cuenta.
+- **Cobros reales.** La pasarela **ya está conectada** (Stripe Checkout, ver §4),
+  pero en modo de prueba: no se cobra nada. No debe pasarse a producción hasta
+  que los datos de contacto que se entregan sean reales.
 - **Verificación en dos pasos (TOTP)** y **registro de actividad**: requieren
   trabajo de servidor que queda fuera de esta preview.
 - **Planes Pro / Enterprise**: no hay facturación recurrente.
@@ -252,16 +254,108 @@ deja de validar.
 
 ---
 
-## 4. Instalación y uso — PoC del Agente Evaluador (Python)
+## 4. Pagos — desbloqueo de contacto con Stripe
+
+El modelo de negocio cobra **€49 por contacto desbloqueado**. La pasarela es
+**Stripe Checkout** (página alojada por Stripe).
+
+### 4.1 Por qué Checkout y no un formulario propio
+
+Ningún dato de tarjeta pasa por TalentPact: el usuario los introduce en el
+dominio de Stripe. Es lo que mantiene el proyecto en el **SAQ-A** de PCI DSS,
+que es exactamente lo que asume el plan de negocio
+(`tfm/business_plan/07_regulacion_compliance.md`). El modal de pago no contiene
+—ni debe volver a contener— campos de número de tarjeta, caducidad o CVC.
+
+### 4.2 Dos reglas que sostienen todo lo demás
+
+1. **El importe lo fija el servidor.** `UNLOCK_PRICE` vive en
+   `netlify/functions/lib/tp.js`. Si el precio viniera del navegador, se podría
+   pagar un céntimo cambiando una variable en la consola.
+2. **El desbloqueo no se concede en el cliente.** `create-checkout-session` solo
+   deja una fila en `unlocks` con estado `pending`. Quien la pasa a `paid` es
+   Stripe: el webhook, o `confirm-checkout` preguntando a la API de Stripe al
+   volver del pago. Antes bastaba con escribir `_unlocked=true` en la consola.
+
+### 4.3 Estados de un desbloqueo
+
+| Estado | Qué significa |
+|---|---|
+| `pending` | Sesión de pago creada. No da acceso a nada. |
+| `paid` | Stripe confirmó el cobro. Es el único estado que desbloquea el contacto. |
+| `expired` | El usuario abandonó y la sesión caducó. |
+| `failed` | Pago diferido (SEPA) que acabó rechazado. |
+
+Un índice único impide que una empresa pague dos veces por el mismo candidato:
+si ya lo desbloqueó, `create-checkout-session` devuelve `alreadyUnlocked` sin
+abrir Stripe.
+
+### 4.4 Configuración
+
+Crear la cuenta de Stripe es gratis y **no pide tarjeta**. Las claves están en
+[dashboard.stripe.com/test/apikeys](https://dashboard.stripe.com/test/apikeys)
+con el interruptor de *modo de prueba* activado.
+
+```bash
+STRIPE_SECRET_KEY=sk_test_...      # ⚠️ secreta, solo servidor
+STRIPE_WEBHOOK_SECRET=whsec_...    # firma del webhook
+```
+
+**Webhook en producción** — Stripe → *Developers → Webhooks → Add endpoint*:
+
+```
+https://<tu-sitio>/.netlify/functions/stripe-webhook
+```
+
+Eventos: `checkout.session.completed`, `checkout.session.expired`,
+`checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`.
+
+**Webhook en local** — con la [CLI de Stripe](https://stripe.com/docs/stripe-cli):
+
+```bash
+stripe listen --forward-to localhost:8888/.netlify/functions/stripe-webhook
+```
+
+Sin webhook la demo funciona igual (`confirm-checkout` verifica contra Stripe al
+volver), pero si el usuario cierra la pestaña antes de volver, su desbloqueo se
+queda en `pending`.
+
+### 4.5 Probarlo
+
+```bash
+npm run doctor     # comprueba la clave contra la API de Stripe y avisa del modo
+npm run demo
+```
+
+Entra como empresa → pool de talento → **Desbloquear contacto** → *Pagar con
+Stripe*. En modo de prueba usa la tarjeta **4242 4242 4242 4242**, cualquier
+fecha futura y cualquier CVC ([más tarjetas](https://stripe.com/docs/testing)).
+No hay banco ni cobro: son números que solo existen dentro del entorno de
+pruebas de Stripe.
+
+Para comprobar que el pago manda de verdad, abre la consola y escribe
+`CANDIDATES[0]._unlocked=true`: la ficha no se abre, porque el acceso lo decide
+el servidor.
+
+> ⚠️ **No pongas claves `sk_live_` todavía.** Los datos de contacto que se
+> entregan tras pagar son ficticios: `candidateContact()` (en `index.html`) los
+> genera a partir del id del candidato. Cobrar dinero real por ellos sería
+> cobrar por datos inventados. `npm run doctor` bloquea explícitamente esa
+> combinación. Antes de pasar a producción hay que servir los contactos reales
+> desde la tabla `profiles`.
+
+---
+
+## 5. Instalación y uso — PoC del Agente Evaluador (Python)
 
 La PoC (`poc_entrega2/`) demuestra de forma aislada y reproducible el motor de evaluación.
 
-### 4.1 Requisitos
+### 5.1 Requisitos
 
 - Python ≥ 3.10
 - API key de Anthropic
 
-### 4.2 Ejecución
+### 5.2 Ejecución
 
 ```bash
 cd poc_entrega2
@@ -274,7 +368,7 @@ python poc_evaluator.py
 
 El script lee `mock_database.json` (catálogo de retos + respuestas de candidatos), evalúa cada *submission* con Claude aplicando la rúbrica del reto, imprime los resultados en terminal y guarda `evaluation_results.json`.
 
-### 4.3 Qué demuestra
+### 5.3 Qué demuestra
 
 - **Dynamic Prompting:** un único pipeline evalúa retos heterogéneos inyectando la rúbrica en el system prompt en tiempo de ejecución.
 - **Chain of Thought:** razonamiento criterio a criterio antes del score (auditable).
@@ -283,7 +377,7 @@ El script lee `mock_database.json` (catálogo de retos + respuestas de candidato
 
 ---
 
-## 5. Documentación adicional
+## 6. Documentación adicional
 
 - `entrega_final/INFORME_TECNICO_FINAL.md` — informe técnico final (arquitectura, métricas, reflexión crítica).
 - `entrega_final/GUION_DEMO.md` — guion paso a paso de la demo.

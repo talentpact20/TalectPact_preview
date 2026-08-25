@@ -863,6 +863,22 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   .sp-pass-seal i{width:46px;height:46px;font-size:.52rem}
 }
 
+/* ── Pagos (Stripe Checkout) ── */
+.pay-gateway{border:1px solid var(--slate-200);border-radius:12px;padding:12px 14px;margin-bottom:14px;background:var(--slate-50)}
+.pay-gateway-row{display:flex;align-items:center;gap:10px}
+.pay-gateway-logo{font-family:'Sora',sans-serif;font-weight:800;font-size:.8125rem;color:#635bff;
+  background:#fff;border:1px solid #e0defe;border-radius:6px;padding:3px 9px;flex-shrink:0}
+.pay-gateway-txt{font-size:.75rem;color:var(--slate-600);line-height:1.5}
+.pay-testmode{display:none;margin-top:10px;padding:9px 11px;border-radius:8px;font-size:.72rem;line-height:1.55;
+  background:var(--amber-100);color:#92400e;border:1px solid #fde68a}
+.pay-testmode code{font-family:'JetBrains Mono',monospace;font-size:.7rem;background:rgba(255,255,255,.6);padding:1px 4px;border-radius:3px}
+.pay-status{display:none;margin:10px 0;padding:11px 13px;border-radius:10px;font-size:.78rem;line-height:1.55}
+.pay-status.show{display:block}
+.pay-status.info{background:var(--slate-100);color:var(--slate-700);border:1px solid var(--slate-200)}
+.pay-status.warn{background:var(--amber-100);color:#92400e;border:1px solid #fde68a}
+.pay-status.err{background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+.pay-status code{font-family:'JetBrains Mono',monospace;font-size:.7rem}
+
 /* ── SKILLPASS: seccion de la landing ── */
 .sp-sec{max-width:none;padding:0;margin:0}
 .sp-sec-inner{max-width:1200px;margin:0 auto;padding:96px 24px}
@@ -2451,23 +2467,20 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
           <div class="pay-feature">Notificación al candidato de tu interés</div>
         </div>
       </div>
-      <div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Método de pago</div>
-      <div class="pay-methods">
-        <div class="pay-method selected" onclick="selectPayModalMethod(this)">💳 Tarjeta</div>
-        <div class="pay-method" onclick="selectPayModalMethod(this)">🏦 Transfer.</div>
-        <div class="pay-method" onclick="selectPayModalMethod(this)">📱 Bizum</div>
-      </div>
-      <div id="payCardFields">
-        <div class="pay-form-field"><label>Número de tarjeta</label><input type="text" placeholder="4242 4242 4242 4242" maxlength="19" oninput="formatCard(this)"></div>
-        <div class="pay-form-row">
-          <div class="pay-form-field"><label>Expiración</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
-          <div class="pay-form-field"><label>CVC</label><input type="text" placeholder="123" maxlength="4"></div>
+      <!-- Ningún campo de tarjeta vive aquí: los datos se introducen en la
+           página de Stripe. Es lo que mantiene a TalentPact en el SAQ-A. -->
+      <div class="pay-gateway" id="payGateway">
+        <div class="pay-gateway-row">
+          <span class="pay-gateway-logo">Stripe</span>
+          <span class="pay-gateway-txt">Te llevamos a la página segura de Stripe para introducir la tarjeta.</span>
         </div>
+        <div class="pay-testmode" id="payTestMode">Modo de pruebas — no se cobra nada. Tarjeta de prueba: <code>4242 4242 4242 4242</code>, cualquier fecha futura y cualquier CVC.</div>
       </div>
-      <div class="pay-total"><span>Total a pagar</span><span class="total-amount">€49,00</span></div>
-      <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center" onclick="processPayment()">Pagar y desbloquear →</button>
-      <div class="pay-secure">Pago seguro con encriptación SSL de 256-bit</div>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px;font-size:.75rem" onclick="closePayModal()">Cancelar</button>
+      <div class="pay-total"><span>Total a pagar</span><span class="total-amount" id="payTotalAmount">49,00 €</span></div>
+      <div class="pay-status" id="payStatus" role="status" aria-live="polite"></div>
+      <button class="btn btn-primary btn-lg" id="payBtn" style="width:100%;justify-content:center" onclick="processPayment()">Pagar con Stripe →</button>
+      <div class="pay-secure">TalentPact no ve ni almacena tu tarjeta en ningún momento.</div>
+      <button type="button" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px;font-size:.75rem" onclick="closePayModal()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -3721,6 +3734,14 @@ function syncMyPoolEntry(){
 
 // Rehidratar el estado persistido al cargar la app (perfil, pool, desbloqueos, ofertas)
 TP.hydrate();
+
+// Vuelta de Stripe Checkout. Se ejecuta despues de que la app este montada, y
+// se traga cualquier error: un fallo aqui no debe impedir que cargue la web.
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(function(){
+    try{ handlePaymentReturn(); }catch(e){ console.warn('[TP] retorno de pago',e); }
+  },400);
+});
 
 // Proveedores sociales soportados: etiqueta visible e id del botón en cada portal.
 const OAUTH_LABEL={google:'Google',linkedin_oidc:'LinkedIn'};
@@ -6396,7 +6417,14 @@ function openDashCand(){document.getElementById('dashCandidate').classList.add('
   document.querySelectorAll('#candDashTabs .dash-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   document.querySelectorAll('[id^="candTab-"]').forEach((c,i)=>c.classList.toggle('active',i===0));
 }
-function openDashEmp(){document.getElementById('dashEmpresa').classList.add('open');document.body.style.overflow='hidden';applyCompanyIdentity();renderEmpJobs();renderEmpPool();}
+function openDashEmp(){
+  document.getElementById('dashEmpresa').classList.add('open');
+  document.body.style.overflow='hidden';
+  applyCompanyIdentity();renderEmpJobs();renderEmpPool();
+  // Los desbloqueos los manda el servidor, no localStorage: si esta cuenta pago
+  // desde otro dispositivo, el contacto tiene que seguir estando desbloqueado.
+  Pay.sync().then(function(r){ if(r&&r.unlocks)renderEmpPool(); }).catch(function(){});
+}
 // Las ofertas sin `owner` son las guardadas antes de que existieran las cuentas
 // de empresa: se siguen mostrando para no perder el historial de la demo.
 function myPostedJobs(){ const k=companyKey(); return empPostedJobs.filter(j=>!j.owner||j.owner===k); }
@@ -6464,6 +6492,8 @@ function unlockContact(candId){
   document.getElementById('payAvatar').textContent=c.i;
   document.getElementById('payName').textContent='Candidato #'+(1000+Math.floor(Date.now()/1000)%900);
   document.getElementById('payMeta').textContent='Score: '+c.score+' · '+c.sector;
+  Pay._status('');
+  Pay.applyGateway();          // pinta el importe y el aviso de modo pruebas
   document.getElementById('payModal').classList.add('open');
 }
 
@@ -6509,45 +6539,147 @@ function closePayModal(){
   _payingForCand=null;
 }
 
-function selectPayModalMethod(el){
-  el.parentElement.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('selected'));
-  el.classList.add('selected');
-  const isCard=el.textContent.includes('Tarjeta');
-  document.getElementById('payCardFields').style.display=isCard?'block':'none';
-}
+// ═══════════════════════════════════════════════════════════════════════════
+// PAGOS — Stripe Checkout (pagina alojada)
+//
+// TalentPact no toca datos de tarjeta en ningún momento: se crea una sesión de
+// Checkout en el servidor y se redirige a Stripe. El importe lo fija el
+// servidor, no el navegador.
+//
+// El desbloqueo NO se concede aquí. Esta función solo lleva al pago; quien
+// marca el contacto como desbloqueado es el webhook de Stripe (o la
+// verificación contra su API al volver). Antes bastaba con `c._unlocked=true`
+// desde la consola.
+// ═══════════════════════════════════════════════════════════════════════════
+const Pay={
+  gateway:null,        // {configured,testMode,amount} según lo dice el servidor
+  paidRefs:new Set(),  // desbloqueos confirmados, tal y como los da el servidor
 
-function formatCard(input){
-  let v=input.value.replace(/\D/g,'');
-  v=v.match(/.{1,4}/g)?.join(' ')||v;
-  input.value=v;
-}
+  _status(kind,html){
+    const el=document.getElementById('payStatus'); if(!el)return;
+    if(!kind){ el.className='pay-status'; el.innerHTML=''; return; }
+    el.className='pay-status show '+kind;
+    el.innerHTML=html;
+  },
 
-function processPayment(){
+  _busy(on,label){
+    const b=document.getElementById('payBtn'); if(!b)return;
+    b.disabled=on;
+    if(label)b.textContent=label;
+  },
+
+  /** Refleja en el modal lo que el servidor dice de la pasarela. */
+  applyGateway(g){
+    if(g)Pay.gateway=g;
+    const tm=document.getElementById('payTestMode');
+    const total=document.getElementById('payTotalAmount');
+    if(total&&Pay.gateway&&Pay.gateway.amount)total.textContent=Pay.gateway.amount;
+    if(!tm)return;
+    // Solo se anuncia el modo de pruebas cuando el servidor confirma que lo es.
+    tm.style.display=(Pay.gateway&&Pay.gateway.testMode===true)?'block':'none';
+  },
+
+  /** Trae del servidor los desbloqueos ya pagados y los aplica al pool. */
+  async sync(sessionId){
+    let user=null;
+    try{ user=await TPCloud.currentUser(); }catch(e){}
+    if(!user)return null;
+    let r=null;
+    try{ r=await TPCloud._postAuth('confirm-checkout',sessionId?{sessionId}:{}); }
+    catch(e){ console.warn('[TP] confirm-checkout',e); return null; }
+    if(r&&r.stripe)Pay.applyGateway(r.stripe);
+    if(r&&Array.isArray(r.unlocks)){
+      Pay.paidRefs=new Set(r.unlocks.map(u=>String(u.candidate_ref)));
+      // La verdad es la del servidor: se reconstruye el estado local a partir de ella.
+      CANDIDATES.forEach(c=>{ c._unlocked=Pay.paidRefs.has(String(c.id)); });
+      if(typeof TP!=='undefined'&&TP.saveUnlocks)TP.saveUnlocks();
+    }
+    return r;
+  }
+};
+
+async function processPayment(){
   if(!_payingForCand)return;
   const c=_payingForCand;
-  // Simulated payment processing
-  const btn=document.querySelector('#payModal .btn-primary');
-  btn.textContent='Procesando pago…';btn.disabled=true;
-  setTimeout(()=>{
-    c._unlocked=true;
-    TP.saveUnlocks();
-    TP.logPayment({
-      owner:(typeof companyKey==='function')?companyKey():'guest',
-      ownerName:(typeof companyName==='function')?companyName():'',
-      candId:c.id,
-      label:'Contacto '+(c.i||c.id)+' · score '+(c.score||'—'),
-      amount:49
+  Pay._status('');
+
+  let user=null;
+  try{ user=await TPCloud.currentUser(); }catch(e){}
+  if(!user){
+    Pay._status('warn','Necesitas una cuenta de empresa para pagar: el desbloqueo queda ligado a ella. '+
+      'En modo invitado no hay a quién asociar la compra.');
+    return;
+  }
+
+  Pay._busy(true,'Abriendo Stripe…');
+  try{
+    const r=await TPCloud._postAuth('create-checkout-session',{
+      candidateRef:String(c.id),
+      candidateLabel:'Candidato '+(c.i||c.id)+' · score '+(c.score||'—'),
+      returnUrl:location.origin+location.pathname
     });
-    closePayModal();
-    btn.textContent='Pagar y desbloquear →';btn.disabled=false;
-    // Ficha de contacto en una tarjeta propia (antes: un alert que además
-    // fallaba, porque candId es un parámetro de unlockContact y aquí no existe).
-    showContactCard(c);
-    // Re-render candidates
-    const title=document.getElementById('empOfferCandTitle').textContent.replace('Candidatos para: ','');
-    const job=JOBS.concat(empPostedJobs).find(j=>j.title===title);
-    if(job)showOfferCandidates(job.id);
-  },1500);
+
+    if(r&&r.code==='stripe_not_configured'){
+      Pay._status('warn','<strong>Pasarela de pago no configurada.</strong> Este entorno no tiene claves de Stripe, '+
+        'así que no se puede cobrar ni desbloquear nada. Configura <code>STRIPE_SECRET_KEY</code> en el servidor.');
+      return;
+    }
+    if(r&&r.error){ Pay._status('err','<strong>No se pudo iniciar el pago.</strong> '+escHtml(r.error)); return; }
+
+    if(r&&r.alreadyUnlocked){
+      // Ya pagado antes: se abre la ficha sin cobrar de nuevo.
+      Pay.paidRefs.add(String(c.id));
+      c._unlocked=true; TP.saveUnlocks();
+      closePayModal();
+      showContactCard(c);
+      return;
+    }
+
+    if(r&&r.url){
+      Pay._status('info','Redirigiendo a Stripe…');
+      location.href=r.url;      // salimos de la página: no restauramos el botón
+      return;
+    }
+    Pay._status('err','Stripe no devolvió una URL de pago. Vuelve a intentarlo.');
+  }catch(e){
+    Pay._status('err','Error de red al contactar con la pasarela: '+escHtml(e.message||String(e)));
+  }finally{
+    Pay._busy(false,'Pagar con Stripe →');
+  }
+}
+
+// Vuelta de Stripe: ?pay=success&session_id=… o ?pay=cancel
+async function handlePaymentReturn(){
+  const qs=new URLSearchParams(location.search);
+  const state=qs.get('pay');
+  if(!state)return;
+  const sessionId=qs.get('session_id')||'';
+  // La URL se limpia siempre: recargar no debe repetir el flujo.
+  try{
+    const u=new URL(location.href);
+    ['pay','session_id'].forEach(k=>u.searchParams.delete(k));
+    history.replaceState({},document.title,u.pathname+(u.search||''));
+  }catch(e){}
+
+  if(state==='cancel'){
+    openDashEmp();
+    Pay._status('warn','Pago cancelado. No se ha cobrado nada.');
+    return;
+  }
+  if(state!=='success')return;
+
+  openDashEmp();
+  const r=await Pay.sync(sessionId);
+  if(r&&r.paid){
+    const ref=String(r.candidateRef||'');
+    const c=CANDIDATES.find(x=>String(x.id)===ref);
+    if(c){ c._unlocked=true; TP.saveUnlocks(); showContactCard(c); }
+    if(typeof renderEmpPool==='function')renderEmpPool();
+  }else if(r&&r.sessionStatus&&r.sessionStatus!=='paid'){
+    // Métodos diferidos (SEPA) pueden tardar en confirmar.
+    alert('El pago aún no está confirmado por Stripe (estado: '+r.sessionStatus+'). '+
+          'En cuanto se confirme, el contacto aparecerá desbloqueado.');
+  }
 }
 
 // ═══ RETOS PANEL LAYOUT (landing) ═══

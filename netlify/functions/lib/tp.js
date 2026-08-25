@@ -290,6 +290,48 @@ function hashCv(cvJson) {
   return ethers.keccak256(ethers.toUtf8Bytes(canonicalJson(cvJson)));
 }
 
+// ─── Stripe (pagos) ──────────────────────────────────────────────────────────
+/**
+ * Precio del desbloqueo de contacto. Vive aquí y no en el cliente: el importe
+ * lo fija el servidor al crear la sesión de Checkout, así que manipular el
+ * navegador no cambia lo que se cobra.
+ */
+const UNLOCK_PRICE = {
+  amountCents: Number(process.env.UNLOCK_PRICE_CENTS || 4900),
+  currency: (process.env.UNLOCK_CURRENCY || "eur").toLowerCase(),
+  label: "Desbloqueo de contacto — TalentPact"
+};
+
+function stripeConfigured() {
+  return !!process.env.STRIPE_SECRET_KEY;
+}
+
+/** ¿Son claves de producción? Sirve para avisar en la interfaz. */
+function stripeLiveMode() {
+  return /^sk_live_/.test(process.env.STRIPE_SECRET_KEY || "");
+}
+
+let _stripe = null;
+function getStripe() {
+  if (_stripe) return _stripe;
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) throw new Error("Falta STRIPE_SECRET_KEY en variables de entorno");
+  // Carga perezosa: las funciones que no cobran no deben pagar el arranque.
+  const Stripe = require("stripe");
+  _stripe = Stripe(key, { apiVersion: "2024-06-20", maxNetworkRetries: 2 });
+  return _stripe;
+}
+
+/** Importe formateado para mostrarlo (4900 -> "49,00 €"). */
+function formatAmount(cents, currency) {
+  const value = (Number(cents) || 0) / 100;
+  try {
+    return new Intl.NumberFormat("es-ES", { style: "currency", currency: (currency || "eur").toUpperCase() }).format(value);
+  } catch (_e) {
+    return value.toFixed(2) + " " + (currency || "eur").toUpperCase();
+  }
+}
+
 module.exports = {
   jsonResponse,
   supabaseEnv,
@@ -310,5 +352,10 @@ module.exports = {
   CHAIN,
   explorerTx,
   explorerAddress,
-  SKILLPASS_ABI
+  SKILLPASS_ABI,
+  UNLOCK_PRICE,
+  stripeConfigured,
+  stripeLiveMode,
+  getStripe,
+  formatAmount
 };

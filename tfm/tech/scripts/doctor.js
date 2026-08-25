@@ -6,6 +6,7 @@
  *   2. Supabase alcanzable y tablas creadas
  *   3. RPC de Ethereum Sepolia y saldo de la wallet emisora
  *   4. Contrato desplegado y con el emisor correcto
+ *   5. Stripe: claves presentes y si son de prueba o de produccion
  *
  * Uso:  npm run doctor
  */
@@ -125,6 +126,57 @@ async function checkChain() {
   }
 }
 
+async function checkStripe() {
+  const key = env("STRIPE_SECRET_KEY");
+  if (!key) {
+    warn("pagos", "STRIPE_SECRET_KEY no configurada: el desbloqueo de contacto no podra cobrarse.");
+    return;
+  }
+  const live = /^sk_live_/.test(key);
+  const test = /^sk_test_/.test(key);
+  if (!live && !test) {
+    fail("pagos", "STRIPE_SECRET_KEY no parece una clave valida (deberia empezar por sk_test_ o sk_live_).");
+    return;
+  }
+
+  // Se comprueba contra la API que la clave sirve de verdad, no solo su forma.
+  try {
+    const res = await fetch("https://api.stripe.com/v1/balance", {
+      headers: { authorization: "Bearer " + key }
+    });
+    if (res.status === 401) {
+      fail("pagos", "Stripe rechaza la clave (401). Revisa que la copiaste entera y del modo correcto.");
+      return;
+    }
+    if (!res.ok) {
+      warn("pagos", `Stripe respondio HTTP ${res.status} al comprobar la clave.`);
+      return;
+    }
+    ok("pagos", `Stripe conectado en modo ${live ? "PRODUCCION (cobros reales)" : "prueba (no se cobra nada)"}`);
+  } catch (e) {
+    warn("pagos", "No se pudo contactar con Stripe: " + e.message);
+    return;
+  }
+
+  if (live) {
+    fail(
+      "pagos",
+      "Claves de PRODUCCION con datos de contacto simulados: index.html los genera con candidateContact(). " +
+        "Cobrar por ellos seria cobrar por datos inventados. Usa sk_test_ hasta que los contactos sean reales."
+    );
+  }
+
+  if (!env("STRIPE_WEBHOOK_SECRET")) {
+    warn(
+      "pagos",
+      "STRIPE_WEBHOOK_SECRET no configurada: sin webhook el desbloqueo solo se confirma cuando el " +
+        "usuario vuelve del pago. Si cierra la pestana, se queda en 'pending'."
+    );
+  } else {
+    ok("pagos", "STRIPE_WEBHOOK_SECRET presente (los cobros se confirman aunque el usuario cierre la pestana)");
+  }
+}
+
 const ICON = { ok: "[ok]  ", warn: "[warn]", fail: "[FALLA]" };
 
 async function main() {
@@ -133,6 +185,7 @@ async function main() {
   await checkAI();
   await checkSupabase();
   await checkChain();
+  await checkStripe();
 
   console.log("");
   let lastArea = null;
