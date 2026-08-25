@@ -1,0 +1,22 @@
+{
+  "name": "talentpact",
+  "version": "1.0.0",
+  "description": "TalentPact — marketplace de talento anónimo con evaluación IA y credenciales verificables en blockchain",
+  "private": true,
+  "scripts": {
+    "demo": "node serve-demo.js",
+    "dev": "node serve-demo.js",
+    "doctor": "node tfm/tech/scripts/doctor.js",
+    "deploy:contract": "node tfm/tech/scripts/deploy-contract.js",
+    "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run",
+    "test:supabase": "node tfm/tech/scripts/test-supabase.js",
+    "check:google": "node tfm/tech/scripts/check-google-auth.js"
+  },
+  "dependencies": {
+    "ethers": "^6.13.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^27.1.1",
+    "solc": "^0.8.36"
+  }
+}

@@ -1,0 +1,5 @@
+# TalentPact — PoC del Agente Evaluador (Entrega 2)
+# Python >= 3.10 (requiere sintaxis de tipos `dict | None`)
+
+anthropic>=0.39.0   # SDK oficial de Anthropic (cliente de la API de Claude)
+rich>=13.7.0        # Render de la salida en terminal (paneles, tablas, barras)

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TalentPact · Verificar SkillPass</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Plus+Jakarta+Sans:wght@500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --ok:#34d399; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; font-family:'Plus Jakarta Sans',system-ui,sans-serif; color:#e2e8f0;
+    background:radial-gradient(900px 400px at 15% -10%,rgba(52,211,153,.22),transparent 50%),
+               radial-gradient(700px 360px at 100% 0%,rgba(5,150,105,.18),transparent 46%), #07151a; }
+  .wrap { max-width:760px; margin:0 auto; padding:40px 20px 64px; }
+  .brand { font-family:'Sora',sans-serif; font-weight:800; font-size:20px; letter-spacing:.3px; }
+  .brand span { color:#34d399; }
+  h1 { font-family:'Sora',sans-serif; font-size:28px; margin:16px 0 8px; letter-spacing:-.03em; }
+  .sub { color:#94a3b8; margin:0 0 28px; line-height:1.55; max-width:540px; }
+  .card { background:rgba(15,23,42,.55); border:1px solid rgba(167,243,208,.16); border-radius:18px; padding:20px; backdrop-filter:blur(10px); }
+  label { display:block; font-size:12px; color:#86efac; margin-bottom:8px; letter-spacing:.06em; text-transform:uppercase; font-weight:700; }
+  textarea { width:100%; min-height:120px; background:#04110e; color:#d1fae5; border:1px solid rgba(167,243,208,.2); border-radius:12px; padding:14px; font-family:'JetBrains Mono',monospace; font-size:12px; resize:vertical; }
+  button { margin-top:14px; width:100%; background:linear-gradient(180deg,#10b981,#059669); color:#042f2e; border:0; border-radius:12px; padding:14px 18px; font-size:15px; font-weight:800; cursor:pointer; font-family:'Sora',sans-serif; }
+  button:disabled { opacity:.6; cursor:default; }
+  .pass { margin-top:22px; border-radius:20px; overflow:hidden; border:1px solid #14532d; display:none; }
+  .pass.show { display:block; }
+  .sp { background:radial-gradient(1200px 280px at 10% -20%,rgba(52,211,153,.28),transparent 55%), linear-gradient(165deg,#06281f 0%,#0b3d30 42%,#0f172a 100%); color:#ecfdf5; padding:24px; position:relative; }
+  .sp::after { content:''; position:absolute; inset:10px; border:1px solid rgba(167,243,208,.18); border-radius:14px; pointer-events:none; }
+  .top { display:flex; justify-content:space-between; gap:12px; position:relative; z-index:1; }
+  .kicker { font-size:11px; color:#a7f3d0; letter-spacing:.14em; text-transform:uppercase; font-weight:700; }
+  h2 { font-family:'Sora',sans-serif; font-size:26px; margin:6px 0 6px; }
+  .lead { color:#cbd5e1; font-size:14px; max-width:420px; line-height:1.5; }
+  .seal { width:74px; height:74px; border-radius:50%; background:conic-gradient(from 210deg,#34d399,#059669,#a7f3d0,#34d399); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .seal i { width:58px; height:58px; border-radius:50%; background:#06281f; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#a7f3d0; text-align:center; line-height:1.15; font-style:normal; font-family:'Sora',sans-serif; }
+  .chips { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:10px; margin:18px 0; position:relative; z-index:1; }
+  .chip { background:rgba(255,255,255,.06); border:1px solid rgba(167,243,208,.16); border-radius:12px; padding:10px 12px; }
+  .chip-top { display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px; }
+  .chip-top strong { font-family:'Sora',sans-serif; font-size:18px; color:#6ee7b7; }
+  .bar { height:5px; background:rgba(255,255,255,.1); border-radius:99px; overflow:hidden; }
+  .bar i { display:block; height:100%; background:#34d399; }
+  .lvl { font-size:10px; color:#94a3b8; margin-top:5px; text-transform:uppercase; }
+  .foot { display:flex; gap:16px; justify-content:space-between; align-items:flex-end; position:relative; z-index:1; border-top:1px solid rgba(167,243,208,.12); padding-top:10px; }
+  .meta { font-family:'JetBrains Mono',monospace; font-size:11px; color:#86efac; word-break:break-all; line-height:1.55; }
+  .qr { width:92px; height:92px; border-radius:10px; background:#fff; padding:6px; }
+  .bad { margin-top:18px; display:none; background:rgba(127,29,29,.35); border:1px solid #f87171; color:#fecaca; border-radius:14px; padding:16px; }
+  .bad.show { display:block; }
+  .tiny { color:#64748b; font-size:12px; text-align:center; margin-top:28px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">talent<span>pact</span></div>
+    <h1>Verificar SkillPass</h1>
+    <p class="sub">Un sello criptográfico de habilidades. Cualquiera puede comprobarlo aquí — sin cuenta, sin LinkedIn, sin fiarse de un PDF recortable.</p>
+    <div class="card">
+      <label for="cv">JSON, hash o enlace</label>
+      <textarea id="cv" placeholder="Pega el JSON, un hash 0x… o deja que el enlace ?h= lo rellene solo"></textarea>
+      <button id="btn">Comprobar sello on-chain</button>
+    </div>
+    <div class="pass" id="pass"></div>
+    <div class="bad" id="bad"></div>
+    <p class="tiny">On-chain solo viaja el hash. Los datos personales permanecen off-chain (RGPD). Ethereum Sepolia · demo TFM.</p>
+  </div>
+<script>
+const btn=document.getElementById('btn');
+const pass=document.getElementById('pass');
+const bad=document.getElementById('bad');
+function chip(s){
+  const n=Number(s.score)||0, lvl=n>=75?'Avanzado':n>=50?'Intermedio':'En progreso';
+  return '<div class="chip"><div class="chip-top"><span>'+esc(s.skill||'')+'</span><strong>'+n+'</strong></div><div class="bar"><i style="width:'+Math.max(6,Math.min(100,n))+'%"></i></div><div class="lvl">'+lvl+'</div></div>';
+}
+function esc(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+async function verifyPayload(payload){
+  btn.disabled=true; btn.textContent='Consultando la cadena…';
+  pass.className='pass'; bad.className='bad';
+  try{
+    const r=await fetch('/.netlify/functions/verify-credential',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const data=await r.json();
+    if(!r.ok||!data.verified){
+      bad.className='bad show';
+      bad.textContent=(data&& (data.reason||data.error))||'No se pudo verificar.';
+      return;
+    }
+    const url=location.origin+'/verify.html?h='+encodeURIComponent(data.cvHash||'');
+    const qr='https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(url);
+    const fecha=data.anchoredAt?new Date(data.anchoredAt).toLocaleString('es-ES'):'';
+    const skills=data.skills||[];
+    pass.className='pass show';
+    pass.innerHTML='<div class="sp"><div class="top"><div><div class="kicker">Verifiable credential</div><h2>SkillPass auténtico</h2><p class="lead">Sello on-chain válido. Esta credencial no ha sido alterada.</p></div><div class="seal"><i>Sello<br>on-chain</i></div></div><div class="chips">'+(skills.map(chip).join('')||'')+'</div><div class="foot"><div class="meta">'+(fecha?'<div>Anclado · '+esc(fecha)+'</div>':'')+'<div>Hash · '+esc(data.cvHash||'')+'</div>'+(data.txHash?'<div>Tx · '+esc(data.txHash.slice(0,22))+'…</div>':'')+'</div><img class="qr" alt="QR" src="'+qr+'"></div></div>';
+  }catch(err){
+    bad.className='bad show'; bad.textContent='No se pudo contactar con el verificador. '+err.message;
+  }finally{
+    btn.disabled=false; btn.textContent='Comprobar sello on-chain';
+  }
+}
+btn.addEventListener('click',()=>{
+  const raw=document.getElementById('cv').value.trim();
+  if(!raw)return;
+  const hash=raw.match(/0x[a-fA-F0-9]{64}/);
+  if(raw.startsWith('{')||raw.startsWith('[')){
+    try{ verifyPayload({cvJson:JSON.parse(raw)}); }catch(e){ bad.className='bad show'; bad.textContent='JSON no válido.'; }
+  }else if(hash){ verifyPayload({cvHash:hash[0]}); }
+  else { bad.className='bad show'; bad.textContent='Pega un JSON, un hash 0x… o abre un enlace ?h='; }
+});
+(function(){
+  const h=new URLSearchParams(location.search).get('h')||new URLSearchParams(location.search).get('hash');
+  if(!h)return;
+  document.getElementById('cv').value=h;
+  verifyPayload({cvHash:h});
+})();
+</script>
+</body>
+</html>

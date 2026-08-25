@@ -1,0 +1,11 @@
+{
+  "contractName": "SkillPassRegistry",
+  "chain": "ethereum-sepolia",
+  "chainId": 11155111,
+  "address": "0x85418F3d978e691C0f784bA63E4cB2826478f73A",
+  "issuer": "0x80cEB844bB4382BB586495721b9431014A285c0F",
+  "txHash": "0x0408bef73c350caea921e837df1133a14bc46ed158327676dec07756aaae4f5e",
+  "blockNumber": 11523380,
+  "deployedAt": "2026-08-19T16:59:26.634Z",
+  "explorer": "https://sepolia.etherscan.io/address/0x85418F3d978e691C0f784bA63E4cB2826478f73A"
+}
