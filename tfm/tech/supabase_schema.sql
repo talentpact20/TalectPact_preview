@@ -43,12 +43,18 @@ create table if not exists credentials (
   profile_id   uuid not null references profiles(id) on delete cascade,
   cv_json      jsonb not null,                         -- el SkillPass CV completo (off-chain)
   cv_hash      text  not null,                         -- keccak256(cv_json) en hex (0x...)
-  chain        text  not null default 'polygon-amoy',
+  chain        text  not null default 'ethereum-sepolia',  -- debe coincidir con CHAIN.slug
   tx_hash      text,                                   -- transacción de anclaje
   block_number bigint,
   anchored_at  timestamptz,
   created_at   timestamptz not null default now()
 );
+-- Instalaciones anteriores tienen el default antiguo ('polygon-amoy') y quiza
+-- filas con ese valor. `create table if not exists` no las corrige, asi que si
+-- vienes de una version previa ejecuta a mano:
+--   alter table credentials alter column chain set default 'ethereum-sepolia';
+--   update credentials set chain = 'ethereum-sepolia' where chain = 'polygon-amoy';
+
 create index if not exists idx_credentials_profile on credentials(profile_id);
 create unique index if not exists uq_credentials_hash on credentials(cv_hash);
 

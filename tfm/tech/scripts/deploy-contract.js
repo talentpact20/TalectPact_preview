@@ -1,5 +1,5 @@
 /**
- * deploy-contract — compila y despliega SkillPassRegistry.sol en Polygon Amoy.
+ * deploy-contract — compila y despliega SkillPassRegistry.sol en Ethereum Sepolia.
  *
  * Sustituye al paso manual con Remix del SETUP_CHECKLIST: compila con solc,
  * firma con la wallet emisora del .env y deja la direccion resultante lista
@@ -8,7 +8,7 @@
  * Uso:   npm run deploy:contract
  *        npm run deploy:contract -- --dry-run     (solo compila, no despliega)
  *
- * Requiere en .env:  ISSUER_PRIVATE_KEY   (y opcionalmente POLYGON_AMOY_RPC)
+ * Requiere en .env:  ISSUER_PRIVATE_KEY   (y opcionalmente SEPOLIA_RPC)
  */
 const fs = require("fs");
 const path = require("path");

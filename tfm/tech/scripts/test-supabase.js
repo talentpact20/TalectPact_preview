@@ -13,7 +13,7 @@ const { loadDotEnv, env } = require("./lib-env");
 loadDotEnv();
 
 const tp = require("../../../netlify/functions/lib/tp");
-const { sb, ensureProfileByUser, hashCv } = tp;
+const { sb, ensureProfileByUser, hashCv, CHAIN } = tp;
 
 const TEST_SKILL = "__test__SQL";
 let created = { profileId: null, userId: null };
@@ -123,14 +123,14 @@ async function run() {
     profile_id: profile.id,
     cv_json: cvJson,
     cv_hash: cvHash,
-    chain: "polygon-amoy"
+    chain: CHAIN.slug
   });
   const credRow = Array.isArray(cred) ? cred[0] : cred;
   step("credencial persistida", credRow.id);
 
   // 6. El indice unico sobre cv_hash debe impedir duplicados
   try {
-    await sb.insert("credentials", { profile_id: profile.id, cv_json: cvJson, cv_hash: cvHash, chain: "polygon-amoy" });
+    await sb.insert("credentials", { profile_id: profile.id, cv_json: cvJson, cv_hash: cvHash, chain: CHAIN.slug });
     bad("unicidad de cv_hash", "se admitio una credencial duplicada");
   } catch (_e) {
     step("unicidad de cv_hash", "el duplicado se rechaza (correcto)");

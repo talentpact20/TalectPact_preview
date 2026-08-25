@@ -1,21 +1,41 @@
 /**
  * issue-credential — compone el "SkillPass CV" a partir de las evaluaciones
  * de un candidato, calcula su hash y lo guarda en Supabase (aún sin anclar).
- * Body: { userId? , profileName? }   — userId es el camino real (Supabase Auth);
- *                                      profileName es el modo demo/anónimo.
+ *
+ * Body: {}  — no hace falta nada; el candidato se deduce del token.
+ * Cabecera: Authorization: Bearer <access token de Supabase>
+ *
+ * El `userId` ya no se acepta desde el cliente: se lee del token. Antes se
+ * podía emitir la credencial de cualquier candidato pasando su id, o incluso
+ * su alias público (`Candidato #A1B2`), que es adivinable.
+ *
  * Devuelve: { credentialId, cvJson, cvHash, reused, anchored, txHash? }
  */
-const { jsonResponse, sb, ensureProfile, ensureProfileByUser, canonicalJson, hashCv } = require("./lib/tp");
+const {
+  jsonResponse, sb, authUser, ensureProfileByUser, canonicalJson, hashCv,
+  CHAIN, explorerTx
+} = require("./lib/tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
   if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed" });
 
+  let b;
+  try { b = JSON.parse(event.body || "{}"); }
+  catch (_e) { return jsonResponse(400, { error: "Body JSON no válido" }); }
+
+  let user;
+  try { user = await authUser(event, b); }
+  catch (err) { return jsonResponse(500, { error: "No se pudo validar la sesión", details: err.message }); }
+  if (!user) {
+    return jsonResponse(401, {
+      error: "Necesitas iniciar sesión para emitir tu SkillPass",
+      details: "Falta la cabecera Authorization: Bearer <access token> o el token ha caducado."
+    });
+  }
+
   try {
-    const b = JSON.parse(event.body || "{}");
-    const profile = b.userId
-      ? await ensureProfileByUser(b.userId, b)
-      : await ensureProfile(b.profileName);
+    const profile = await ensureProfileByUser(user.id, { email: user.email });
 
     const evals = await sb.select(
       "evaluations",
@@ -53,9 +73,15 @@ exports.handler = async (event) => {
         credentialId: match.id,
         cvJson: match.cv_json,
         cvHash: match.cv_hash,
-        anchored: !!match.tx_hash,
+        chain: match.chain || CHAIN.slug,
+        // `anchored` solo es cierto cuando la transacción está confirmada; con
+        // tx difundida pero sin bloque el sellado sigue en curso.
+        anchored: !!(match.tx_hash && match.block_number != null),
+        pending: !!(match.tx_hash && match.block_number == null),
         txHash: match.tx_hash || null,
-        anchoredAt: match.anchored_at || null
+        blockNumber: match.block_number != null ? Number(match.block_number) : null,
+        anchoredAt: match.anchored_at || null,
+        explorerUrl: match.tx_hash ? explorerTx(match.tx_hash) : null
       });
     }
 
@@ -78,7 +104,7 @@ exports.handler = async (event) => {
       profile_id: profile.id,
       cv_json: cvJson,
       cv_hash: cvHash,
-      chain: "ethereum-sepolia"
+      chain: CHAIN.slug
     });
     const row = Array.isArray(inserted) ? inserted[0] : inserted;
 
@@ -88,7 +114,9 @@ exports.handler = async (event) => {
       credentialId: row && row.id,
       cvJson,
       cvHash,
-      anchored: false
+      chain: CHAIN.slug,
+      anchored: false,
+      pending: false
     });
   } catch (err) {
     return jsonResponse(500, { error: "No se pudo emitir la credencial", details: err.message });

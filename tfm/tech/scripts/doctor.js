@@ -4,7 +4,7 @@
  * Revisa, sin modificar nada, que cada capa este realmente conectada:
  *   1. .env presente y variables cargadas
  *   2. Supabase alcanzable y tablas creadas
- *   3. RPC de Polygon Amoy y saldo de la wallet emisora
+ *   3. RPC de Ethereum Sepolia y saldo de la wallet emisora
  *   4. Contrato desplegado y con el emisor correcto
  *
  * Uso:  npm run doctor

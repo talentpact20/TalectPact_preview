@@ -2,8 +2,9 @@
  * Utilidades compartidas de TalentPact para las funciones serverless.
  * - Respuestas JSON
  * - Cliente REST de Supabase (sin dependencias; usa fetch global de Node >= 18)
+ * - Autenticación: identificar al usuario a partir de su access token
  * - Canonicalización de JSON (para hashes reproducibles)
- * - Helpers de blockchain (ethers)
+ * - Helpers de blockchain (ethers) y configuración de la red
  *
  * Este archivo vive en un subdirectorio `lib/` para que Netlify NO lo trate
  * como un endpoint de función.
@@ -15,8 +16,8 @@ function jsonResponse(statusCode, payload) {
     headers: {
       "content-type": "application/json",
       "access-control-allow-origin": "*",
-      "access-control-allow-headers": "content-type",
-      "access-control-allow-methods": "POST, OPTIONS"
+      "access-control-allow-headers": "content-type, authorization",
+      "access-control-allow-methods": "GET, POST, OPTIONS"
     },
     body: JSON.stringify(payload)
   };
@@ -67,6 +68,47 @@ const sb = {
     sbRequest("PATCH", `${table}?${query}`, { body: patch, prefer: "return=representation" }),
   remove: (table, query) => sbRequest("DELETE", `${table}?${query}`)
 };
+
+// ─── Autenticación ───────────────────────────────────────────────────────────
+/**
+ * Identifica al usuario a partir de su access token de Supabase.
+ *
+ * El cliente nunca dice quién es: manda su token y aquí se le pregunta a
+ * Supabase. Así una petición manipulada no puede actuar en nombre de otro.
+ * Devuelve null si el token falta, ha caducado o no es válido.
+ */
+async function userFromToken(accessToken) {
+  if (!accessToken || typeof accessToken !== "string") return null;
+  const { url, key } = supabaseEnv();
+  try {
+    const res = await fetch(`${url}/auth/v1/user`, {
+      headers: { apikey: key, authorization: `Bearer ${accessToken}` }
+    });
+    if (!res.ok) return null;
+    const user = await res.json();
+    return user && user.id ? user : null;
+  } catch (_e) {
+    return null;
+  }
+}
+
+/**
+ * Extrae el token de una petición: cabecera `Authorization: Bearer …` o, por
+ * compatibilidad con las llamadas antiguas, el campo `accessToken` del body.
+ */
+function tokenFromEvent(event, body) {
+  const h = (event && event.headers) || {};
+  const raw = h.authorization || h.Authorization || "";
+  const m = /^Bearer\s+(.+)$/i.exec(String(raw).trim());
+  if (m) return m[1];
+  if (body && typeof body.accessToken === "string") return body.accessToken;
+  return null;
+}
+
+/** Usuario autenticado de la petición, o null. */
+function authUser(event, body) {
+  return userFromToken(tokenFromEvent(event, body));
+}
 
 /** Devuelve el perfil con ese display_name; lo crea si no existe. */
 async function ensureProfile(displayName) {
@@ -172,6 +214,41 @@ function canonicalJson(value) {
 }
 
 // ─── Blockchain (ethers) ─────────────────────────────────────────────────────
+/**
+ * Red donde vive SkillPassRegistry. Una sola fuente de verdad: el explorador,
+ * el RPC por defecto y el `slug` que se guarda en Supabase salen todos de aquí.
+ * Debe coincidir con `CHAIN` en tfm/tech/scripts/lib-env.js, que es lo que usan
+ * los scripts de despliegue y diagnóstico.
+ */
+const CHAIN = {
+  chainId: 11155111,
+  name: "Ethereum Sepolia",
+  slug: "ethereum-sepolia",
+  defaultRpc: "https://ethereum-sepolia-rpc.publicnode.com",
+  explorer: "https://sepolia.etherscan.io"
+};
+
+const explorerTx = (hash) => `${CHAIN.explorer}/tx/${hash}`;
+const explorerAddress = (addr) => `${CHAIN.explorer}/address/${addr}`;
+
+/** ¿Es un bytes32 con formato válido? Evita que ethers reviente con un 500. */
+function isHash32(v) {
+  return typeof v === "string" && /^0x[0-9a-fA-F]{64}$/.test(v.trim());
+}
+
+/** ¿Es un UUID? Los ids de Supabase lo son; validarlo evita inyección en filtros PostgREST. */
+function isUuid(v) {
+  return typeof v === "string" && /^[0-9a-fA-F-]{36}$/.test(v.trim()) &&
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v.trim());
+}
+
+/** ¿Está la capa blockchain configurada en este entorno? */
+function chainConfigured({ signer = false } = {}) {
+  if (!process.env.SKILLPASS_CONTRACT_ADDRESS) return false;
+  if (signer && !process.env.ISSUER_PRIVATE_KEY) return false;
+  return true;
+}
+
 const SKILLPASS_ABI = [
   "function anchor(bytes32 cvHash) external",
   "function isAnchored(bytes32 cvHash) external view returns (bool exists, uint256 timestamp)",
@@ -184,12 +261,13 @@ function getEthers() {
 }
 
 function getProvider() {
-  const rpc =
-    process.env.SEPOLIA_RPC ||
-    process.env.POLYGON_AMOY_RPC ||
-    "https://ethereum-sepolia-rpc.publicnode.com";
+  // POLYGON_AMOY_RPC se sigue aceptando por compatibilidad con despliegues
+  // antiguos, pero la red efectiva es siempre CHAIN (Sepolia).
+  const rpc = process.env.SEPOLIA_RPC || process.env.POLYGON_AMOY_RPC || CHAIN.defaultRpc;
   const { ethers } = getEthers();
-  return new ethers.JsonRpcProvider(rpc);
+  // `staticNetwork` fija la red: ethers se ahorra el eth_chainId de sondeo en
+  // cada arranque en frío, que en una función serverless es latencia pura.
+  return new ethers.JsonRpcProvider(rpc, CHAIN.chainId, { staticNetwork: true });
 }
 
 function getContract({ signer = false } = {}) {
@@ -216,6 +294,9 @@ module.exports = {
   jsonResponse,
   supabaseEnv,
   sb,
+  userFromToken,
+  tokenFromEvent,
+  authUser,
   ensureProfile,
   ensureProfileByUser,
   ensureCompanyByUser,
@@ -223,5 +304,11 @@ module.exports = {
   hashCv,
   getProvider,
   getContract,
+  chainConfigured,
+  isHash32,
+  isUuid,
+  CHAIN,
+  explorerTx,
+  explorerAddress,
   SKILLPASS_ABI
 };

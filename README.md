@@ -15,6 +15,9 @@ Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & I
 | **Corrección IA (backend)** | `netlify/functions/evaluate-exercise.js` | Función serverless que llama a la API de Anthropic (Claude) para evaluar respuestas. |
 | **Chatbot de soporte** | `netlify/functions/support-chat.js` | Función serverless del asistente conversacional. |
 | **Persistencia** | dentro de `index.html` (módulo `TP`) | Capa de persistencia en `localStorage` (perfil, pool de talento, desbloqueos, audit trail de evaluaciones). |
+| **SkillPass (credencial)** | `netlify/functions/issue-credential.js` · `anchor-credential.js` · `verify-credential.js` | Emisión del CV verificable, anclaje de su hash en blockchain y verificación pública. |
+| **Contrato** | `tfm/tech/contracts/SkillPassRegistry.sol` | Registro de huellas en Ethereum Sepolia. Solo hashes: ningún dato personal on-chain. |
+| **Verificador público** | `verify.html` | Página sin cuenta donde cualquiera comprueba un SkillPass. |
 | **PoC del Agente Evaluador** | `poc_entrega2/` | Prototipo en Python (Entrega 2) que demuestra el motor de evaluación con Dynamic Prompting + Chain of Thought. |
 | **Entregables** | `entrega_final/` | Informe técnico final, guion de demo y batería de Q&A. |
 
@@ -172,16 +175,93 @@ TP.reset(); location.reload();
 
 ---
 
-## 3. Instalación y uso — PoC del Agente Evaluador (Python)
+## 3. SkillPass — credencial verificable en blockchain
+
+El SkillPass es la respuesta a "¿cómo sé que esa nota es real?". Un PDF se edita; un
+sello criptográfico no.
+
+### 3.1 Cómo funciona
+
+1. **Emisión** (`issue-credential`) — compone un CV en JSON con el mejor resultado por
+   skill del candidato y calcula su `keccak256`. El JSON se canonicaliza (claves
+   ordenadas) para que el hash sea reproducible: el mismo CV siempre da el mismo hash.
+2. **Anclaje** (`anchor-credential`) — envía **solo el hash** al contrato
+   `SkillPassRegistry`. Los datos personales nunca salen de Supabase (UE).
+3. **Verificación** (`verify-credential` / `verify.html`) — recalcula el hash del JSON
+   recibido y pregunta al contrato si está anclado. Si alguien retocó un punto de una
+   nota, el hash cambia y el sello no aparece.
+
+**Por qué solo el hash.** Una blockchain es inmutable y el RGPD exige poder borrar. La
+huella no es un dato personal y el CV real vive off-chain, donde sí puede eliminarse:
+al borrarlo, el hash on-chain queda huérfano y deja de significar nada.
+
+### 3.2 Red y contrato
+
+| | |
+|---|---|
+| Red | **Ethereum Sepolia** (testnet, chainId 11155111) |
+| Contrato | [`0x85418F3d978e691C0f784bA63E4cB2826478f73A`](https://sepolia.etherscan.io/address/0x85418F3d978e691C0f784bA63E4cB2826478f73A) |
+| Registro del despliegue | `tfm/tech/build/deployment-sepolia.json` |
+| Faucet | [Google Cloud Web3](https://cloud.google.com/application/web3/faucet/ethereum/sepolia) — solo pide cuenta de Google |
+
+> Se eligió Sepolia y no Polygon Amoy porque los faucets de Amoy exigían saldo de
+> mainnet. La red está definida una sola vez en `CHAIN` (en
+> `netlify/functions/lib/tp.js` y `tfm/tech/scripts/lib-env.js`); **ambos deben moverse
+> a la vez** si se cambia de cadena.
+
+### 3.3 El sellado no es instantáneo
+
+Un bloque de Sepolia tarda ~12 s y Netlify corta las funciones síncronas a 10 s. Por eso
+`anchor-credential` **no espera** a la confirmación: difunde la transacción, guarda el
+`tx_hash` y responde `pending`; el frontend consulta hasta que la red confirma. El enlace
+a Etherscan ya funciona desde el primer segundo.
+
+Volver a llamar a `anchor-credential` con la misma credencial es **idempotente**: si la
+transacción ya se difundió recoge su recibo, y si el hash ya está anclado reconcilia el
+registro — en ningún caso reenvía la transacción ni vuelve a gastar gas.
+
+### 3.4 Quién puede hacer qué
+
+| Función | Requiere sesión | Por qué |
+|---|---|---|
+| `issue-credential` | **Sí** | El candidato sale del *access token*, no de un `userId` del cliente. Si no, cualquiera podría emitir la credencial de otro. |
+| `anchor-credential` | **Sí** | Cada anclaje gasta gas de la wallet emisora. Además solo ancla credenciales del propio usuario. |
+| `verify-credential` | No | Verificar es público a propósito: exigir cuenta destruiría el sentido de una credencial verificable. Solo lee, no gasta gas. |
+
+Las funciones que exigen sesión leen la cabecera `Authorization: Bearer <access token>` y
+le preguntan a Supabase de quién es — el mismo patrón que `delete-account`.
+
+### 3.5 Probarlo
+
+```bash
+npm run doctor            # comprueba IA, datos, RPC/wallet y contrato
+npm run demo              # http://localhost:8888
+```
+
+En el portal de candidato: completa un reto → **Sellar mi SkillPass**. Obtienes el JSON,
+un PDF certificado, un QR y un enlace público. Pega cualquiera de ellos en
+`http://localhost:8888/verify.html` (o en la sección **SkillPass** de la portada) para
+comprobarlo desde fuera.
+
+Para ver que el sello es real, edita una nota del JSON descargado y vuelve a verificarlo:
+deja de validar.
+
+> El QR se genera en el propio navegador (`TPQr`, en `index.html` y `verify.html`).
+> Antes se pedía a `api.qrserver.com`, lo que enviaba el hash de cada credencial a un
+> tercero cada vez que se pintaba la tarjeta.
+
+---
+
+## 4. Instalación y uso — PoC del Agente Evaluador (Python)
 
 La PoC (`poc_entrega2/`) demuestra de forma aislada y reproducible el motor de evaluación.
 
-### 3.1 Requisitos
+### 4.1 Requisitos
 
 - Python ≥ 3.10
 - API key de Anthropic
 
-### 3.2 Ejecución
+### 4.2 Ejecución
 
 ```bash
 cd poc_entrega2
@@ -194,7 +274,7 @@ python poc_evaluator.py
 
 El script lee `mock_database.json` (catálogo de retos + respuestas de candidatos), evalúa cada *submission* con Claude aplicando la rúbrica del reto, imprime los resultados en terminal y guarda `evaluation_results.json`.
 
-### 3.3 Qué demuestra
+### 4.3 Qué demuestra
 
 - **Dynamic Prompting:** un único pipeline evalúa retos heterogéneos inyectando la rúbrica en el system prompt en tiempo de ejecución.
 - **Chain of Thought:** razonamiento criterio a criterio antes del score (auditable).
@@ -203,7 +283,7 @@ El script lee `mock_database.json` (catálogo de retos + respuestas de candidato
 
 ---
 
-## 4. Documentación adicional
+## 5. Documentación adicional
 
 - `entrega_final/INFORME_TECNICO_FINAL.md` — informe técnico final (arquitectura, métricas, reflexión crítica).
 - `entrega_final/GUION_DEMO.md` — guion paso a paso de la demo.

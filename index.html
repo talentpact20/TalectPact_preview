@@ -525,6 +525,33 @@ nav a.nl:hover{color:var(--slate-900)}
 .a-pw input{padding-right:64px}
 .a-pw-toggle{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;padding:4px 8px;border-radius:6px;font-family:'Plus Jakarta Sans',sans-serif;font-size:.6875rem;font-weight:600;color:var(--slate-400);cursor:pointer}
 .a-pw-toggle:hover{color:var(--emerald-600);background:var(--slate-100)}
+/* ── Cuentas: errores por campo, fuerza de contrasena, recuperacion ── */
+.a-err{display:none;font-size:.6875rem;color:#b91c1c;margin-top:3px;line-height:1.45}
+.a-err.show{display:block}
+.a-field input[aria-invalid="true"],.a-field select[aria-invalid="true"]{border-color:#fca5a5;background:#fff5f5}
+.a-field input[aria-invalid="true"]:focus,.a-field select[aria-invalid="true"]:focus{outline-color:#ef4444}
+.a-forgot{text-align:right;margin-top:-6px}
+.a-forgot a{font-size:.72rem;color:var(--slate-500);text-decoration:none;font-weight:600;cursor:pointer;border-bottom:1px solid transparent}
+.a-forgot a:hover{color:var(--emerald-600);border-bottom-color:var(--emerald-200)}
+.empresa-accent .a-forgot a:hover{color:var(--slate-900);border-bottom-color:var(--slate-300)}
+.auth-recover-lead{font-size:.8125rem;color:var(--slate-500);line-height:1.6;margin:-4px 0 4px}
+/* Medidor de fuerza: informa, no bloquea. El unico requisito real son 8 caracteres. */
+.pw-meter{display:none;margin-top:6px}
+.pw-meter.show{display:block}
+.pw-meter-bar{height:4px;border-radius:99px;background:var(--slate-200);overflow:hidden}
+.pw-meter-bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .25s ease,background .25s ease}
+.pw-meter-lbl{font-size:.6875rem;margin-top:4px;color:var(--slate-500)}
+.pw-meter.s1 .pw-meter-bar i{width:25%;background:#ef4444}.pw-meter.s1 .pw-meter-lbl{color:#b91c1c}
+.pw-meter.s2 .pw-meter-bar i{width:50%;background:#f59e0b}.pw-meter.s2 .pw-meter-lbl{color:#b45309}
+.pw-meter.s3 .pw-meter-bar i{width:75%;background:#10b981}.pw-meter.s3 .pw-meter-lbl{color:var(--emerald-600)}
+.pw-meter.s4 .pw-meter-bar i{width:100%;background:#059669}.pw-meter.s4 .pw-meter-lbl{color:var(--emerald-600)}
+/* La pantalla de nueva contrasena no tiene panel de marca: una sola columna. */
+/* En una sola columna no hay panel de marca que cubra el fondo: sin esto se ve
+   la portada por detras y no parece un dialogo a pantalla completa. */
+.auth-split-single{justify-content:center;background:var(--slate-50)}
+.auth-split-single .auth-form-side{max-width:560px;background:transparent}
+.auth-social-btn.is-off{opacity:.5}
+.auth-caps-note{font-size:.6875rem;color:var(--slate-400);margin-top:10px;text-align:center}
 .a-caps{display:none;font-size:.6875rem;color:var(--amber-500);margin-top:2px}
 .a-caps.show{display:block}
 .auth-divider{display:flex;align-items:center;gap:12px;margin:2px 0}.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--slate-200)}.auth-divider span{font-size:.75rem;color:var(--slate-400)}
@@ -819,7 +846,10 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 .sp-pass-foot{display:flex;gap:16px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;position:relative;z-index:1;padding-top:8px;border-top:1px solid rgba(167,243,208,.12)}
 .sp-pass-meta{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#86efac;line-height:1.55;word-break:break-all;flex:1;min-width:180px}
 .sp-pass-meta a{color:#6ee7b7}
-.sp-pass-qr{width:88px;height:88px;border-radius:10px;background:#fff;padding:6px;flex-shrink:0}
+.sp-pass-qr{width:88px;height:88px;border-radius:10px;background:#fff;padding:6px;flex-shrink:0;box-sizing:border-box}
+.sp-pass-qr svg{display:block;width:100%;height:100%}
+.sp-pass-seal.pending{background:conic-gradient(from 210deg,#fbbf24,#d97706,#fde68a,#fbbf24);box-shadow:0 0 0 6px rgba(120,53,15,.45),0 10px 24px rgba(217,119,6,.32)}
+.sp-pass-seal.pending i{color:#fde68a}
 .sp-pass-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .sp-pass-note{font-size:.78rem;color:var(--slate-500);line-height:1.55;margin:0 0 14px}
 .emp-verify-box{background:linear-gradient(180deg,#f8fffc,#fff);border:1.5px dashed #a7f3d0;border-radius:16px;padding:18px}
@@ -831,6 +861,78 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   .sp-pass h3{font-size:1.1rem}
   .sp-pass-seal{width:58px;height:58px}
   .sp-pass-seal i{width:46px;height:46px;font-size:.52rem}
+}
+
+/* ── SKILLPASS: seccion de la landing ── */
+.sp-sec{max-width:none;padding:0;margin:0}
+.sp-sec-inner{max-width:1200px;margin:0 auto;padding:96px 24px}
+.sp-sec-band{background:
+  radial-gradient(900px 420px at 8% -10%,rgba(52,211,153,.20),transparent 55%),
+  radial-gradient(700px 380px at 100% 10%,rgba(16,185,129,.13),transparent 50%),
+  linear-gradient(165deg,#06281f 0%,#0b3d30 38%,#0f172a 100%);
+  color:#e2e8f0}
+.sp-sec-band .section-label{color:#6ee7b7}
+.sp-sec-band .section-title{color:#f8fafc}
+/* .gradient-text solo esta definido dentro de .hero h1; sobre el fondo oscuro
+   hace falta su propia rampa, si no el span sale en blanco plano. */
+.sp-sec-band .gradient-text{background:linear-gradient(135deg,#6ee7b7 0%,#34d399 45%,#22d3ee 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sp-sec-band .section-desc{color:#94a3b8;max-width:620px}
+.sp-sec-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:40px;align-items:start;margin-top:44px}
+
+/* Los tres pasos del sello */
+.sp-steps{list-style:none;display:flex;flex-direction:column;gap:0;position:relative}
+.sp-steps li{display:flex;gap:16px;padding:0 0 26px;position:relative}
+.sp-steps li:last-child{padding-bottom:0}
+.sp-steps li::before{content:'';position:absolute;left:17px;top:38px;bottom:0;width:1px;background:linear-gradient(180deg,rgba(52,211,153,.5),rgba(52,211,153,.06))}
+.sp-steps li:last-child::before{display:none}
+.sp-step-n{width:35px;height:35px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Sora',sans-serif;font-weight:800;font-size:.8125rem;color:#06281f;
+  background:linear-gradient(180deg,#6ee7b7,#10b981);box-shadow:0 0 0 4px rgba(16,185,129,.14);position:relative;z-index:1}
+.sp-steps h3{font-family:'Sora',sans-serif;font-size:.9375rem;font-weight:700;color:#ecfdf5;margin-bottom:5px}
+.sp-steps p{font-size:.8125rem;color:#94a3b8;line-height:1.6}
+.sp-steps code{font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#6ee7b7;background:rgba(16,185,129,.1);padding:1px 5px;border-radius:4px}
+
+/* Verificador en vivo */
+.sp-verify{background:rgba(15,23,42,.5);border:1px solid rgba(167,243,208,.16);border-radius:var(--radius-xl);padding:22px;backdrop-filter:blur(10px)}
+.sp-verify-kicker{font-family:'JetBrains Mono',monospace;font-size:.6875rem;color:#6ee7b7;text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.sp-verify h3{font-family:'Sora',sans-serif;font-size:1.125rem;font-weight:800;color:#f8fafc;margin-bottom:6px;letter-spacing:-.02em}
+.sp-verify>p{font-size:.8125rem;color:#94a3b8;line-height:1.6;margin-bottom:14px}
+.sp-verify label{display:block;font-size:.6875rem;color:#86efac;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:7px}
+.sp-verify textarea{width:100%;min-height:88px;background:#04110e;color:#d1fae5;border:1px solid rgba(167,243,208,.2);
+  border-radius:12px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:.75rem;resize:vertical}
+.sp-verify textarea::placeholder{color:#3f6b5c}
+.sp-verify textarea:focus-visible{outline:2px solid var(--emerald-400);outline-offset:1px}
+.sp-verify-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.sp-verify-btn{background:linear-gradient(180deg,#10b981,#059669);color:#042f2e;border:0;border-radius:10px;
+  padding:11px 18px;font-family:'Sora',sans-serif;font-size:.875rem;font-weight:800;cursor:pointer}
+.sp-verify-btn:disabled{opacity:.6;cursor:default}
+.sp-verify-alt{color:#86efac;font-size:.8125rem;text-decoration:none;border-bottom:1px solid rgba(134,239,172,.35)}
+.sp-verify-alt:hover{color:#d1fae5}
+.sp-verify-out{display:none;margin-top:14px;padding:13px 15px;border-radius:12px;font-size:.8125rem;line-height:1.6}
+.sp-verify-out.busy{background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.25);color:#cbd5e1}
+.sp-verify-out.ok{background:rgba(16,185,129,.12);border:1px solid rgba(52,211,153,.4);color:#a7f3d0}
+.sp-verify-out.bad{background:rgba(127,29,29,.28);border:1px solid rgba(248,113,113,.45);color:#fecaca}
+.sp-verify-out strong{color:#fff;font-family:'Sora',sans-serif}
+.sp-verify-out code{font-family:'JetBrains Mono',monospace;font-size:.72rem;background:rgba(0,0,0,.25);padding:1px 5px;border-radius:4px}
+.sp-verify-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sp-verify-chip{font-size:.72rem;background:rgba(255,255,255,.07);border:1px solid rgba(167,243,208,.2);
+  border-radius:99px;padding:3px 10px;color:#d1fae5}
+.sp-verify-chip b{color:#6ee7b7;font-family:'Sora',sans-serif}
+.sp-verify-link{display:inline-block;margin-top:10px;color:#6ee7b7;font-size:.78rem;text-decoration:none;border-bottom:1px solid rgba(110,231,183,.4)}
+
+/* Franja de datos comprobables */
+.sp-facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:40px;
+  border-top:1px solid rgba(167,243,208,.14);padding-top:26px}
+.sp-fact h4{font-family:'Sora',sans-serif;font-size:.8125rem;font-weight:700;color:#ecfdf5;margin-bottom:5px}
+.sp-fact p{font-size:.78rem;color:#94a3b8;line-height:1.6}
+.sp-fact a{color:#6ee7b7;text-decoration:none;border-bottom:1px solid rgba(110,231,183,.35);
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;word-break:break-all}
+
+@media(max-width:900px){
+  .sp-sec-grid{grid-template-columns:1fr;gap:30px}
+  .sp-facts{grid-template-columns:1fr;gap:18px}
+  .sp-sec-inner{padding:64px 24px}
 }
 
 /* ── COMMON EXERCISES GRID ── */
@@ -1357,29 +1459,58 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
 <nav id="mainNav">
   <div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div>
-  <ul><li><a class="nl" onclick="goTo('explorar')">Explorar</a></li><li><a class="nl" onclick="goTo('features')">Cómo funciona</a></li><li><a class="nl" onclick="openContact()">Contacto</a></li></ul>
+  <ul><li><a class="nl" onclick="goTo('explorar')">Explorar</a></li><li><a class="nl" onclick="goTo('features')">Cómo funciona</a></li><li><a class="nl" onclick="goTo('skillpass')">SkillPass</a></li><li><a class="nl" onclick="openContact()">Contacto</a></li></ul>
   <div class="nav-auth"><div class="nav-access"><button class="nav-access-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menú de acceso" onclick="toggleAccessMenu()" id="accessBtn">Acceder <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button><div class="access-dropdown" id="accessDrop"><div class="access-option" onclick="closeAccessMenu();openAuth('candidate')"><div class="access-icon" style="background:var(--emerald-50);color:var(--emerald-600)">🎯</div><div><h4>Soy Candidato</h4><p>Completa retos y genera tu perfil de skills</p></div></div><div class="access-option" onclick="closeAccessMenu();openAuth('empresa')"><div class="access-icon" style="background:var(--blue-100);color:var(--blue-500)">🏢</div><div><h4>Soy Empresa</h4><p>Publica ofertas y accede al pool de talento</p></div></div><div class="access-option" onclick="closeAccessMenu();openAdmin()" style="border-top:1px solid var(--slate-100)"><div class="access-icon" style="background:rgba(239,68,68,.08);color:#ef4444">⚙️</div><div><h4>Admin</h4><p>Panel de administración</p></div></div></div></div></div>
 </nav>
 
 <!-- ═══ AUTH CANDIDATO ═══ -->
-<div class="auth-overlay" id="authCandidate" role="dialog" aria-modal="true" aria-label="Registro de candidato"><div class="auth-split">
+<div class="auth-overlay" id="authCandidate" role="dialog" aria-modal="true" aria-label="Acceso de candidato"><div class="auth-split">
   <div class="auth-brand auth-brand-cand"><div class="auth-brand-grid"></div><div class="auth-brand-content"><h2>Demuestra lo que <em>sabes hacer.</em></h2><p>Sin CV. Sin sesgos. Completa retos prácticos y genera tu perfil de habilidades verificado.</p><div class="auth-brand-features"><div class="auth-feat"><div class="auth-feat-icon">🔒</div><div><h4>Perfil 100% anónimo</h4><p>Las empresas solo ven tus skills y puntuaciones.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">⚡</div><div><h4>Retos prácticos reales</h4><p>Sandboxes que replican situaciones laborales.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">📊</div><div><h4>Ranking y visibilidad</h4><p>Mejor puntuación = más visibilidad ante empresas.</p></div></div></div></div></div>
-  <div class="auth-form-side"><div class="auth-form-wrap"><button class="auth-back" onclick="closeAuth('authCandidate')">← Volver</button><h1>Bienvenido.</h1><p class="auth-subtitle">Accede o crea tu cuenta para empezar los retos.</p>
-    <div class="auth-tabs" id="candTabs"><button class="auth-tab active" onclick="switchAuthTab('cand','login',this)">Iniciar sesión</button><button class="auth-tab" onclick="switchAuthTab('cand','register',this)">Crear cuenta</button></div>
-    <div class="auth-form" id="cand-login"><div class="a-field"><label>Email</label><input type="email" placeholder="tu@email.com" id="cand-login-email" autocomplete="email" onkeydown="if(event.key==='Enter')loginCandidate()"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="cand-login-pw" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginCandidate()" onkeyup="capsHint(event,'cand-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('cand-login-pw',this)">Ver</button></div><div class="a-caps" id="cand-login-caps">Bloq Mayús está activado.</div></div><div class="auth-submit"><button class="btn btn-primary btn-lg" id="candLoginBtn" onclick="loginCandidate()">Iniciar sesión →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button class="auth-social-btn" id="btnGoogleAuth" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button><button class="auth-social-btn" id="btnLinkedinAuth" onclick="oauthLogin('linkedin_oidc')"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</button></div><div class="auth-oauth-msg" id="candAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestCandidate()">Explorar como invitado (sin cuenta) →</a></div></div>
-    <div class="auth-form" id="cand-register" style="display:none"><div class="a-field-row"><div class="a-field"><label>Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name"></div><div class="a-field"><label>Apellido</label><input type="text" placeholder="Apellido" id="reg-last"></div></div><div class="a-field"><label>Email</label><input type="email" placeholder="tu@email.com" id="reg-email"></div><div class="a-field"><label>Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone"><span class="hint" style="font-size:.65rem;color:var(--slate-400)">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label>LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="reg-pw" autocomplete="new-password"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div></div><div class="a-field"><label>Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div style="background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:8px;padding:10px 12px;font-size:.72rem;color:var(--emerald-600);margin-bottom:4px">🔒 Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button class="btn btn-primary btn-lg" id="candRegBtn" onclick="registerCandidate()">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></div>
+  <div class="auth-form-side"><div class="auth-form-wrap"><button class="auth-back" onclick="closeAuth('authCandidate')">← Volver</button><h1 id="candAuthTitle">Bienvenido.</h1><p class="auth-subtitle" id="candAuthSub">Accede o crea tu cuenta para empezar los retos.</p>
+    <div class="auth-tabs" id="candTabs" role="tablist" aria-label="Acceso o alta"><button type="button" class="auth-tab active" id="candTabLogin" role="tab" aria-selected="true" aria-controls="cand-login" onclick="switchAuthTab('cand','login',this)" onkeydown="authTabKeys(event)">Iniciar sesión</button><button type="button" class="auth-tab" id="candTabReg" role="tab" aria-selected="false" aria-controls="cand-register" tabindex="-1" onclick="switchAuthTab('cand','register',this)" onkeydown="authTabKeys(event)">Crear cuenta</button></div>
+    <form class="auth-form" id="cand-login" role="tabpanel" aria-labelledby="candTabLogin" novalidate onsubmit="event.preventDefault();loginCandidate()"><div class="a-field"><label for="cand-login-email">Email</label><input type="email" placeholder="tu@email.com" id="cand-login-email" name="username" autocomplete="username"><div class="a-err" id="cand-login-email-err"></div></div><div class="a-field"><label for="cand-login-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="cand-login-pw" name="password" autocomplete="current-password" onkeyup="capsHint(event,'cand-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('cand-login-pw',this)">Ver</button></div><div class="a-err" id="cand-login-pw-err"></div><div class="a-caps" id="cand-login-caps">Bloq Mayús está activado.</div></div><div class="a-forgot"><a href="#" onclick="event.preventDefault();showRecover('cand',true)">¿Olvidaste tu contraseña?</a></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candLoginBtn">Iniciar sesión →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button type="button" class="auth-social-btn" id="btnGoogleAuth" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button><button type="button" class="auth-social-btn" id="btnLinkedinAuth" onclick="oauthLogin('linkedin_oidc')"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</button></div><div class="auth-oauth-msg" id="candAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestCandidate()">Explorar como invitado (sin cuenta) →</a></div></form><form class="auth-form" id="cand-recover" style="display:none" novalidate onsubmit="event.preventDefault();sendRecovery('cand')"><p class="auth-recover-lead">Escribe el email de tu cuenta y te enviamos un enlace para elegir una contraseña nueva. El enlace caduca en una hora y solo sirve una vez.</p><div class="a-field"><label for="cand-rec-email">Email</label><input type="email" id="cand-rec-email" name="username" autocomplete="username" placeholder="tu@email.com" aria-describedby="cand-rec-email-err"><div class="a-err" id="cand-rec-email-err"></div></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRecBtn">Enviar enlace →</button></div><div class="auth-oauth-msg" id="candRecMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a href="#" onclick="event.preventDefault();showRecover('cand',false)">← Volver a iniciar sesión</a></div></form>
+    <form class="auth-form" id="cand-register" role="tabpanel" aria-labelledby="candTabReg" novalidate onsubmit="event.preventDefault();registerCandidate()" style="display:none"><div class="a-field-row"><div class="a-field"><label for="reg-name">Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name" autocomplete="given-name"><div class="a-err" id="reg-name-err"></div></div><div class="a-field"><label for="reg-last">Apellido</label><input type="text" placeholder="Apellido" id="reg-last" autocomplete="family-name"></div></div><div class="a-field"><label for="reg-email">Email</label><input type="email" placeholder="tu@email.com" id="reg-email" name="username" autocomplete="username"><div class="a-err" id="reg-email-err"></div></div><div class="a-field"><label for="reg-phone">Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone" autocomplete="tel"><span class="hint" style="font-size:.65rem;color:var(--slate-400)">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label for="reg-linkedin">LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin" autocomplete="url"></div><div class="a-field"><label for="reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="reg-pw" autocomplete="new-password" oninput="pwStrength('reg-pw','reg-strength')" onkeyup="capsHint(event,'reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div><div class="pw-meter" id="reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="reg-pw-err"></div></div><div class="a-field"><label for="reg-sector">Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div style="background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:8px;padding:10px 12px;font-size:.72rem;color:var(--emerald-600);margin-bottom:4px">🔒 Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></form>
     <div class="auth-success" id="cand-success"><h3>¡Bienvenido!</h3><p>Redirigiendo a tu panel…</p></div>
     <div class="auth-footer" id="cand-footer">¿Eres empresa? <a href="#" onclick="closeAuth('authCandidate');openAuth('empresa')">Accede aquí</a></div>
   </div></div>
 </div></div>
 
+<!-- ═══ NUEVA CONTRASEÑA (vuelta del enlace de recuperación) ═══ -->
+<div class="auth-overlay" id="authRecovery" role="dialog" aria-modal="true" aria-labelledby="recTitle">
+  <div class="auth-split auth-split-single">
+    <div class="auth-form-side">
+      <div class="auth-form-wrap">
+        <h1 id="recTitle">Nueva contraseña.</h1>
+        <p class="auth-subtitle">Has entrado desde el enlace de recuperación. Elige una contraseña nueva para <strong id="recEmail">tu cuenta</strong>.</p>
+        <form class="auth-form" id="rec-form" novalidate onsubmit="event.preventDefault();applyNewPassword()">
+          <!-- Campo de usuario oculto: sin el, el gestor de contrasenas no puede
+               asociar la contrasena nueva con la cuenta correcta. -->
+          <input type="email" id="recUser" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
+          <div class="a-field"><label for="rec-pw1">Nueva contraseña</label>
+            <div class="a-pw"><input type="password" id="rec-pw1" name="password" autocomplete="new-password" placeholder="Mín. 8 caracteres" oninput="pwStrength('rec-pw1','rec-strength')" onkeyup="capsHint(event,'rec-caps')">
+            <button type="button" class="a-pw-toggle" onclick="togglePw('rec-pw1',this)">Ver</button></div>
+            <div class="pw-meter" id="rec-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div>
+            <div class="a-caps" id="rec-caps">Bloq Mayús está activado.</div>
+            <div class="a-err" id="rec-pw1-err"></div></div>
+          <div class="a-field"><label for="rec-pw2">Repite la contraseña</label>
+            <input type="password" id="rec-pw2" name="password" autocomplete="new-password" placeholder="••••••••" aria-describedby="rec-pw2-err">
+            <div class="a-err" id="rec-pw2-err"></div></div>
+          <div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="recBtn">Guardar y entrar →</button></div>
+          <div class="auth-oauth-msg" id="recMsg" role="status" aria-live="polite"></div>
+        </form>
+        <div class="auth-guest"><a href="#" onclick="event.preventDefault();cancelRecovery()">Cancelar y volver al inicio</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ AUTH EMPRESA ═══ -->
-<div class="auth-overlay" id="authEmpresa" role="dialog" aria-modal="true" aria-label="Registro de empresa"><div class="auth-split">
+<div class="auth-overlay" id="authEmpresa" role="dialog" aria-modal="true" aria-label="Acceso de empresa"><div class="auth-split">
   <div class="auth-brand auth-brand-emp"><div class="auth-brand-grid"></div><div class="auth-brand-content"><h2>Contrata por <em>capacidad real.</em></h2><p>Pool de candidatos evaluados por skills. Sin CV. Sin sesgos. Solo talento demostrado.</p><div class="auth-brand-features"><div class="auth-feat"><div class="auth-feat-icon">🎯</div><div><h4>Perfiles ciegos</h4><p>Solo ves skills, scores y ranking.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">💰</div><div><h4>Success fee</h4><p>Solo pagas cuando contratas.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">🔒</div><div><h4>Kill Switch</h4><p>Al contratar, el perfil desaparece del pool.</p></div></div></div></div></div>
-  <div class="auth-form-side"><div class="auth-form-wrap empresa-accent"><button class="auth-back" onclick="closeAuth('authEmpresa')">← Volver</button><h1>Portal empresa.</h1><p class="auth-subtitle">Accede al pool de talento evaluado.</p>
-    <div class="auth-tabs" id="empTabs"><button class="auth-tab active" onclick="switchAuthTab('emp','login',this)">Iniciar sesión</button><button class="auth-tab" onclick="switchAuthTab('emp','register',this)">Crear cuenta</button></div>
-    <div class="auth-form" id="emp-login"><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-login-email" autocomplete="email" onkeydown="if(event.key==='Enter')loginEmpresa()"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="emp-login-pw" autocomplete="current-password" onkeydown="if(event.key==='Enter')loginEmpresa()" onkeyup="capsHint(event,'emp-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-login-pw',this)">Ver</button></div><div class="a-caps" id="emp-login-caps">Bloq Mayús está activado.</div></div><div class="auth-submit"><button class="btn btn-dark btn-lg" id="empLoginBtn" onclick="loginEmpresa()">Acceder →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button class="auth-social-btn" id="btnGoogleEmp" onclick="oauthLogin('google','empresa')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continuar con Google</button></div><div class="auth-oauth-msg" id="empAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestEmpresa()">Explorar el panel como invitado (sin cuenta) →</a></div></div>
-    <div class="auth-form" id="emp-register" style="display:none"><div class="a-field"><label>Empresa</label><input type="text" placeholder="Tu empresa S.L." id="emp-reg-company" autocomplete="organization"></div><div class="a-field-row"><div class="a-field"><label>Tu nombre</label><input type="text" placeholder="Nombre" id="emp-reg-name" autocomplete="name"></div><div class="a-field"><label>Cargo</label><input type="text" placeholder="RRHH, CTO…" id="emp-reg-position" autocomplete="organization-title"></div></div><div class="a-field"><label>Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-reg-email" autocomplete="email"></div><div class="a-field"><label>Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="emp-reg-pw" autocomplete="new-password"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-reg-pw',this)">Ver</button></div></div><div class="a-field"><label>Tamaño</label><select id="emp-reg-size"><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div><div class="auth-submit"><button class="btn btn-dark btn-lg" id="empRegBtn" onclick="registerEmpresa()">Crear cuenta →</button></div><div class="auth-oauth-msg" id="empRegMsg" role="status" aria-live="polite"></div></div>
+  <div class="auth-form-side"><div class="auth-form-wrap empresa-accent"><button class="auth-back" onclick="closeAuth('authEmpresa')">← Volver</button><h1 id="empAuthTitle">Portal empresa.</h1><p class="auth-subtitle" id="empAuthSub">Accede al pool de talento evaluado.</p>
+    <div class="auth-tabs" id="empTabs" role="tablist" aria-label="Acceso o alta"><button type="button" class="auth-tab active" id="empTabLogin" role="tab" aria-selected="true" aria-controls="emp-login" onclick="switchAuthTab('emp','login',this)" onkeydown="authTabKeys(event)">Iniciar sesión</button><button type="button" class="auth-tab" id="empTabReg" role="tab" aria-selected="false" aria-controls="emp-register" tabindex="-1" onclick="switchAuthTab('emp','register',this)" onkeydown="authTabKeys(event)">Crear cuenta</button></div>
+    <form class="auth-form" id="emp-login" role="tabpanel" aria-labelledby="empTabLogin" novalidate onsubmit="event.preventDefault();loginEmpresa()"><div class="a-field"><label for="emp-login-email">Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-login-email" name="username" autocomplete="username"><div class="a-err" id="emp-login-email-err"></div></div><div class="a-field"><label for="emp-login-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="emp-login-pw" name="password" autocomplete="current-password" onkeyup="capsHint(event,'emp-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-login-pw',this)">Ver</button></div><div class="a-err" id="emp-login-pw-err"></div><div class="a-caps" id="emp-login-caps">Bloq Mayús está activado.</div></div><div class="a-forgot"><a href="#" onclick="event.preventDefault();showRecover('emp',true)">¿Olvidaste tu contraseña?</a></div><div class="auth-submit"><button type="submit" class="btn btn-dark btn-lg" id="empLoginBtn">Acceder →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button type="button" class="auth-social-btn" id="btnGoogleEmp" onclick="oauthLogin('google','empresa')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continuar con Google</button></div><div class="auth-oauth-msg" id="empAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestEmpresa()">Explorar el panel como invitado (sin cuenta) →</a></div></form><form class="auth-form" id="emp-recover" style="display:none" novalidate onsubmit="event.preventDefault();sendRecovery('emp')"><p class="auth-recover-lead">Escribe el email de tu cuenta y te enviamos un enlace para elegir una contraseña nueva. El enlace caduca en una hora y solo sirve una vez.</p><div class="a-field"><label for="emp-rec-email">Email</label><input type="email" id="emp-rec-email" name="username" autocomplete="username" placeholder="tu@email.com" aria-describedby="emp-rec-email-err"><div class="a-err" id="emp-rec-email-err"></div></div><div class="auth-submit"><button type="submit" class="btn btn-dark btn-lg" id="empRecBtn">Enviar enlace →</button></div><div class="auth-oauth-msg" id="empRecMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a href="#" onclick="event.preventDefault();showRecover('emp',false)">← Volver a iniciar sesión</a></div></form>
+    <form class="auth-form" id="emp-register" role="tabpanel" aria-labelledby="empTabReg" novalidate onsubmit="event.preventDefault();registerEmpresa()" style="display:none"><div class="a-field"><label for="emp-reg-company">Empresa</label><input type="text" placeholder="Tu empresa S.L." id="emp-reg-company" autocomplete="organization"><div class="a-err" id="emp-reg-company-err"></div></div><div class="a-field-row"><div class="a-field"><label for="emp-reg-name">Tu nombre</label><input type="text" placeholder="Nombre" id="emp-reg-name" autocomplete="name"><div class="a-err" id="emp-reg-name-err"></div></div><div class="a-field"><label for="emp-reg-position">Cargo</label><input type="text" placeholder="RRHH, CTO…" id="emp-reg-position" autocomplete="organization-title"></div></div><div class="a-field"><label for="emp-reg-email">Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-reg-email" name="username" autocomplete="username"><div class="a-err" id="emp-reg-email-err"></div></div><div class="a-field"><label for="emp-reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="emp-reg-pw" autocomplete="new-password" oninput="pwStrength('emp-reg-pw','emp-reg-strength')" onkeyup="capsHint(event,'emp-reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-reg-pw',this)">Ver</button></div><div class="pw-meter" id="emp-reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="emp-reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="emp-reg-pw-err"></div></div><div class="a-field"><label for="emp-reg-size">Tamaño</label><select id="emp-reg-size"><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div><div class="auth-submit"><button type="submit" class="btn btn-dark btn-lg" id="empRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="empRegMsg" role="status" aria-live="polite"></div></form>
     <div class="auth-success" id="emp-success"><h3>¡Cuenta creada!</h3><p>Redirigiendo al panel…</p></div>
     <div class="auth-footer" id="emp-footer">¿Eres candidato? <a href="#" onclick="closeAuth('authEmpresa');openAuth('candidate')">Accede aquí</a></div>
   </div></div>
@@ -1687,19 +1818,19 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-section-label">Datos personales</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Nombre</label><input type="text" id="st-cand-name" autocomplete="given-name"></div>
-          <div class="st-field"><label>Apellido</label><input type="text" id="st-cand-last" autocomplete="family-name"></div>
+          <div class="st-field"><label for="st-cand-name">Nombre</label><input type="text" id="st-cand-name" autocomplete="given-name"></div>
+          <div class="st-field"><label for="st-cand-last">Apellido</label><input type="text" id="st-cand-last" autocomplete="family-name"></div>
         </div>
-        <div class="st-field"><label>Email</label><input type="email" id="st-cand-email" autocomplete="email"></div>
+        <div class="st-field"><label for="st-cand-email">Email</label><input type="email" id="st-cand-email" autocomplete="email"></div>
         <div class="st-grid">
-          <div class="st-field"><label>Sector preferido</label><select id="st-cand-sector"><option value="">Sin especificar</option><option>IT / Dev</option><option>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div>
-          <div class="st-field"><label>Ciudad</label><input type="text" id="st-cand-city" placeholder="Barcelona…"></div>
+          <div class="st-field"><label for="st-cand-sector">Sector preferido</label><select id="st-cand-sector"><option value="">Sin especificar</option><option>IT / Dev</option><option>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div>
+          <div class="st-field"><label for="st-cand-city">Ciudad</label><input type="text" id="st-cand-city" placeholder="Barcelona…"></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>LinkedIn</label><input type="url" id="st-cand-linkedin" placeholder="linkedin.com/in/…"></div>
-          <div class="st-field"><label>Teléfono</label><input type="tel" id="st-cand-phone" placeholder="+34 600 000 000"></div>
+          <div class="st-field"><label for="st-cand-linkedin">LinkedIn</label><input type="url" id="st-cand-linkedin" placeholder="linkedin.com/in/…"></div>
+          <div class="st-field"><label for="st-cand-phone">Teléfono</label><input type="tel" id="st-cand-phone" placeholder="+34 600 000 000"></div>
         </div>
-        <div class="st-field"><label>GitHub / Portafolio</label><input type="url" id="st-cand-portfolio" placeholder="github.com/…"></div>
+        <div class="st-field"><label for="st-cand-portfolio">GitHub / Portafolio</label><input type="url" id="st-cand-portfolio" placeholder="github.com/…"></div>
         <div style="margin-top:4px"><button class="btn btn-primary btn-sm" id="st-cand-save" onclick="saveCandSettings()">Guardar cambios</button></div>
         <div class="st-msg" id="st-cand-msg" role="status" aria-live="polite"></div>
       </div>
@@ -1752,15 +1883,15 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
           <div class="st-row-info"><h5>Contraseña</h5><p id="st-cand-pw-meta">Cambia tu contraseña de acceso</p></div>
           <button class="btn btn-outline btn-sm" onclick="togglePwForm('cand')">Cambiar</button>
         </div>
-        <div class="st-inline-form" id="st-cand-pw-form">
-          <div class="st-field"><label>Nueva contraseña</label><input type="password" id="st-cand-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
-          <div class="st-field"><label>Repite la contraseña</label><input type="password" id="st-cand-pw2" autocomplete="new-password"></div>
+        <form class="st-inline-form" id="st-cand-pw-form" novalidate onsubmit="event.preventDefault();changePassword('cand')"><input type="email" id="st-cand-pw-user" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
+          <div class="st-field"><label for="st-cand-pw1">Nueva contraseña</label><input type="password" id="st-cand-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
+          <div class="st-field"><label for="st-cand-pw2">Repite la contraseña</label><input type="password" id="st-cand-pw2" autocomplete="new-password"></div>
           <div class="st-actions">
-            <button class="btn btn-primary btn-sm" id="st-cand-pw-btn" onclick="changePassword('cand')">Guardar contraseña</button>
-            <button class="btn btn-ghost btn-sm" onclick="togglePwForm('cand')">Cancelar</button>
+            <button type="submit" class="btn btn-primary btn-sm" id="st-cand-pw-btn">Guardar contraseña</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="togglePwForm('cand')">Cancelar</button>
           </div>
           <div class="st-msg" id="st-cand-pw-msg" role="status" aria-live="polite"></div>
-        </div>
+        </form>
 
         <div class="st-row">
           <div class="st-row-info"><h5>Sesión actual</h5><p id="st-cand-session">—</p></div>
@@ -1785,7 +1916,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
           <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('cand')">Eliminar cuenta</button>
         </div>
         <div class="st-inline-form" id="st-cand-del-form">
-          <div class="st-field"><label>Escribe ELIMINAR para confirmar</label><input type="text" id="st-cand-del-word" placeholder="ELIMINAR"></div>
+          <div class="st-field"><label for="st-cand-del-word">Escribe ELIMINAR para confirmar</label><input type="text" id="st-cand-del-word" placeholder="ELIMINAR"></div>
           <div class="st-actions">
             <button class="btn btn-danger btn-sm" id="st-cand-del-btn" onclick="deleteAccount('cand')">Eliminar definitivamente</button>
             <button class="btn btn-ghost btn-sm" onclick="toggleDeleteForm('cand')">Cancelar</button>
@@ -1818,18 +1949,18 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-section-label">Perfil de empresa</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Nombre de empresa</label><input type="text" id="st-emp-company" autocomplete="organization"></div>
-          <div class="st-field"><label>Sector principal</label><select id="st-emp-sector"><option value="">Sin especificar</option><option>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
+          <div class="st-field"><label for="st-emp-company">Nombre de empresa</label><input type="text" id="st-emp-company" autocomplete="organization"></div>
+          <div class="st-field"><label for="st-emp-sector">Sector principal</label><select id="st-emp-sector"><option value="">Sin especificar</option><option>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>Tamaño</label><select id="st-emp-size"><option value="">Sin especificar</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
-          <div class="st-field"><label>Web corporativa</label><input type="url" id="st-emp-web" placeholder="https://tuempresa.com"></div>
+          <div class="st-field"><label for="st-emp-size">Tamaño</label><select id="st-emp-size"><option value="">Sin especificar</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
+          <div class="st-field"><label for="st-emp-web">Web corporativa</label><input type="url" id="st-emp-web" placeholder="https://tuempresa.com"></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>Persona de contacto</label><input type="text" id="st-emp-contact" autocomplete="name"></div>
-          <div class="st-field"><label>Cargo</label><input type="text" id="st-emp-position" placeholder="RRHH, CTO…"></div>
+          <div class="st-field"><label for="st-emp-contact">Persona de contacto</label><input type="text" id="st-emp-contact" autocomplete="name"></div>
+          <div class="st-field"><label for="st-emp-position">Cargo</label><input type="text" id="st-emp-position" placeholder="RRHH, CTO…"></div>
         </div>
-        <div class="st-field"><label>Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" id="st-emp-desc" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
+        <div class="st-field"><label for="st-emp-desc">Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" id="st-emp-desc" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
         <button class="btn btn-primary btn-sm" id="st-emp-save" onclick="saveEmpSettings()">Guardar cambios</button>
         <div class="st-msg" id="st-emp-msg" role="status" aria-live="polite"></div>
       </div>
@@ -1856,14 +1987,14 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div class="st-section-label">Datos de facturación</div>
       <div class="st-card">
         <div class="st-grid">
-          <div class="st-field"><label>Razón social</label><input type="text" id="st-emp-legal"></div>
-          <div class="st-field"><label>CIF / NIF</label><input type="text" id="st-emp-taxid" placeholder="B-12345678"></div>
+          <div class="st-field"><label for="st-emp-legal">Razón social</label><input type="text" id="st-emp-legal"></div>
+          <div class="st-field"><label for="st-emp-taxid">CIF / NIF</label><input type="text" id="st-emp-taxid" placeholder="B-12345678"></div>
         </div>
         <div class="st-grid">
-          <div class="st-field"><label>Email de facturación</label><input type="email" id="st-emp-billmail" placeholder="contabilidad@tuempresa.com"></div>
-          <div class="st-field"><label>Teléfono</label><input type="tel" id="st-emp-phone" placeholder="+34 91 000 0000"></div>
+          <div class="st-field"><label for="st-emp-billmail">Email de facturación</label><input type="email" id="st-emp-billmail" placeholder="contabilidad@tuempresa.com"></div>
+          <div class="st-field"><label for="st-emp-phone">Teléfono</label><input type="tel" id="st-emp-phone" placeholder="+34 91 000 0000"></div>
         </div>
-        <div class="st-field"><label>Dirección fiscal</label><input type="text" id="st-emp-address" placeholder="Calle Gran Vía 28, 4ºA, Madrid"></div>
+        <div class="st-field"><label for="st-emp-address">Dirección fiscal</label><input type="text" id="st-emp-address" placeholder="Calle Gran Vía 28, 4ºA, Madrid"></div>
         <button class="btn btn-primary btn-sm" id="st-emp-bill-save" onclick="saveEmpBilling()">Guardar datos de facturación</button>
         <div class="st-msg" id="st-emp-bill-msg" role="status" aria-live="polite"></div>
       </div>
@@ -1906,15 +2037,15 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
           <div class="st-row-info"><h5>Contraseña</h5><p>Cambia la contraseña de acceso al portal</p></div>
           <button class="btn btn-outline btn-sm" onclick="togglePwForm('emp')">Cambiar</button>
         </div>
-        <div class="st-inline-form" id="st-emp-pw-form">
-          <div class="st-field"><label>Nueva contraseña</label><input type="password" id="st-emp-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
-          <div class="st-field"><label>Repite la contraseña</label><input type="password" id="st-emp-pw2" autocomplete="new-password"></div>
+        <form class="st-inline-form" id="st-emp-pw-form" novalidate onsubmit="event.preventDefault();changePassword('emp')"><input type="email" id="st-emp-pw-user" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
+          <div class="st-field"><label for="st-emp-pw1">Nueva contraseña</label><input type="password" id="st-emp-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
+          <div class="st-field"><label for="st-emp-pw2">Repite la contraseña</label><input type="password" id="st-emp-pw2" autocomplete="new-password"></div>
           <div class="st-actions">
-            <button class="btn btn-primary btn-sm" id="st-emp-pw-btn" onclick="changePassword('emp')">Guardar contraseña</button>
-            <button class="btn btn-ghost btn-sm" onclick="togglePwForm('emp')">Cancelar</button>
+            <button type="submit" class="btn btn-primary btn-sm" id="st-emp-pw-btn">Guardar contraseña</button>
+            <button type="button" class="btn btn-ghost btn-sm" onclick="togglePwForm('emp')">Cancelar</button>
           </div>
           <div class="st-msg" id="st-emp-pw-msg" role="status" aria-live="polite"></div>
-        </div>
+        </form>
 
         <div class="st-row">
           <div class="st-row-info"><h5>Sesión actual</h5><p id="st-emp-session">—</p></div>
@@ -1939,7 +2070,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
           <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('emp')">Eliminar cuenta</button>
         </div>
         <div class="st-inline-form" id="st-emp-del-form">
-          <div class="st-field"><label>Escribe ELIMINAR para confirmar</label><input type="text" id="st-emp-del-word" placeholder="ELIMINAR"></div>
+          <div class="st-field"><label for="st-emp-del-word">Escribe ELIMINAR para confirmar</label><input type="text" id="st-emp-del-word" placeholder="ELIMINAR"></div>
           <div class="st-actions">
             <button class="btn btn-danger btn-sm" id="st-emp-del-btn" onclick="deleteAccount('emp')">Eliminar definitivamente</button>
             <button class="btn btn-ghost btn-sm" onclick="toggleDeleteForm('emp')">Cancelar</button>
@@ -1993,6 +2124,79 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="feature-card"><div class="feature-icon fi-red">06</div><h3>Match & Kill Switch</h3><p>Al ser contratado, tu perfil desaparece del pool. Talento siempre activo.</p></div>
   </div>
 </div>
+
+<!-- SKILLPASS — CREDENCIAL VERIFICABLE -->
+<section id="skillpass" class="sp-sec sp-sec-band">
+  <div class="sp-sec-inner">
+    <div class="reveal">
+      <div class="section-label">Credencial verificable</div>
+      <h2 class="section-title display">Un CV que <span class="gradient-text">nadie puede retocar.</span></h2>
+      <p class="section-desc">Un PDF se edita en dos minutos y un perfil de LinkedIn lo escribe uno mismo. Cuando superas un reto en TalentPact, el resultado se sella criptográficamente y su huella queda anclada en blockchain: cualquier empresa comprueba en segundos que es auténtico — sin llamarte, sin creerte y sin cuenta en TalentPact.</p>
+    </div>
+
+    <div class="sp-sec-grid reveal d1">
+      <ol class="sp-steps">
+        <li>
+          <span class="sp-step-n">1</span>
+          <div>
+            <h3>La IA evalúa tu reto</h3>
+            <p>Cada skill recibe una puntuación con feedback criterio a criterio. El razonamiento queda registrado, así que la nota se puede auditar.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sp-step-n">2</span>
+          <div>
+            <h3>Tu SkillPass genera una huella</h3>
+            <p>Se compone un CV en JSON con tu mejor resultado por skill y se calcula su <code>keccak256</code>. Cambia un solo punto de una nota y la huella cambia entera.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sp-step-n">3</span>
+          <div>
+            <h3>La huella se ancla on-chain</h3>
+            <p>Solo el hash viaja a la blockchain, nunca tus datos. Queda con fecha y no se puede borrar ni reescribir — tampoco por nosotros.</p>
+          </div>
+        </li>
+        <li>
+          <span class="sp-step-n">4</span>
+          <div>
+            <h3>Cualquiera lo comprueba</h3>
+            <p>Compartes un enlace, un QR o el JSON. Quien lo reciba recalcula la huella y la busca en el contrato. Si no coincide, no hay sello.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="sp-verify">
+        <div class="sp-verify-kicker">Pruébalo ahora</div>
+        <h3>Verifica un SkillPass</h3>
+        <p>Si tienes un hash, un JSON o un enlace de verificación, compruébalo aquí mismo. La consulta solo lee la cadena: no hace falta cuenta ni cartera, y no deja rastro.</p>
+        <label for="lpVerifyInput">Hash, JSON o enlace</label>
+        <textarea id="lpVerifyInput" placeholder="0x… · el JSON del SkillPass · o el enlace /verify.html?h=…"></textarea>
+        <div class="sp-verify-actions">
+          <button type="button" class="sp-verify-btn" id="lpVerifyBtn" onclick="verifyOnLanding()">Comprobar sello</button>
+          <a class="sp-verify-alt" href="verify.html" target="_blank" rel="noopener">Abrir el verificador completo →</a>
+        </div>
+        <div class="sp-verify-out" id="lpVerifyOut" role="status" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="sp-facts reveal d2">
+      <div class="sp-fact">
+        <h4>Solo el hash sale de Europa</h4>
+        <p>On-chain se publica una huella de 32 bytes. El CV y tus datos personales viven off-chain, en la UE, y siguen siendo borrables — así el anclaje inmutable convive con el RGPD.</p>
+      </div>
+      <div class="sp-fact">
+        <h4>Contrato abierto y auditable</h4>
+        <p>SkillPassRegistry, desplegado en Ethereum Sepolia. Puedes leerlo tú mismo:<br>
+          <a href="https://sepolia.etherscan.io/address/0x85418F3d978e691C0f784bA63E4cB2826478f73A" target="_blank" rel="noopener">0x85418F3d978e691C0f784bA63E4cB2826478f73A</a></p>
+      </div>
+      <div class="sp-fact">
+        <h4>Verificar es gratis y anónimo</h4>
+        <p>Comprobar un sello solo lee el contrato: no gasta gas, no requiere registro y no le dice a nadie qué credencial has mirado.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- EXPLORAR -->
 <div id="explorar" class="search-sec">
@@ -2068,6 +2272,8 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <a href="#" onclick="openAuth('candidate')">Para candidatos</a>
       <a href="#" onclick="openAuth('empresa')">Para empresas</a>
       <a href="#" onclick="goTo('features')">Cómo funciona</a>
+      <a href="#" onclick="goTo('skillpass')">SkillPass verificable</a>
+      <a href="verify.html">Verificar una credencial</a>
       <a href="#">Pricing</a>
       <a href="#">API</a>
     </div>
@@ -2209,7 +2415,9 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div style="font-size:2rem;margin-bottom:12px">🔐</div>
       <h3 style="font-family:'Sora',sans-serif;font-weight:800;margin-bottom:4px">Acceso Superadmin</h3>
       <p style="font-size:.8125rem;color:var(--slate-500);margin-bottom:20px">Introduce la contraseña de administrador</p>
-      <input type="password" id="adminPwInput" placeholder="Contraseña…" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-size:.875rem;text-align:center;outline:none;font-family:'Plus Jakarta Sans',sans-serif" onkeydown="if(event.key==='Enter')submitAdminLogin()">
+      <form id="adminLoginForm" novalidate onsubmit="event.preventDefault();submitAdminLogin()"><!-- El panel no tiene usuarios: la identidad es el propio rol. Declararla
+     permite que el gestor de contraseñas guarde la clave. -->
+<input type="text" name="username" value="superadmin" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none"><input type="password" id="adminPwInput" name="password" autocomplete="current-password" placeholder="Contraseña…" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-size:.875rem;text-align:center;outline:none;font-family:'Plus Jakarta Sans',sans-serif"></form>
       <div id="adminPwError" style="color:var(--red-500);font-size:.75rem;margin-top:8px;display:none">Contraseña incorrecta</div>
       <div style="display:flex;gap:8px;margin-top:16px">
         <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="submitAdminLogin()">Entrar →</button>
@@ -2735,6 +2943,10 @@ const TP_SUPABASE_URL='https://vqyqedmizxqneniynxqp.supabase.co';
 const TP_SUPABASE_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZxeXFlZG1penhxbmVuaXlueHFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NjY4MDUsImV4cCI6MjEwMjU0MjgwNX0.T8WfrAOKjol_L7Nls2-Z7SvkxNjnuJdgzAQrjDdQebk';
 let tpUser=null;      // sesión de candidato
 let tpCompany=null;   // sesión de empresa
+// Elemento que tenía el foco antes de abrir un modal de acceso, para
+// devolvérselo al cerrar. Se declara aquí y no junto a openAuth porque el IIFE
+// de arranque lo usa antes: con `let` más abajo caía en la zona muerta temporal.
+let _authOpener=null;
 const TPCloud={
   _c:null,
   client(){ if(TPCloud._c)return TPCloud._c; if(!(window.supabase&&window.supabase.createClient)){console.warn('Supabase JS no cargado');return null;} TPCloud._c=window.supabase.createClient(TP_SUPABASE_URL,TP_SUPABASE_ANON); return TPCloud._c; },
@@ -2768,6 +2980,17 @@ const TPCloud={
     if(provider==='google')opts.queryParams={prompt:'select_account'};
     const {error}=await c.auth.signInWithOAuth({provider,options:opts});
     if(error){ try{sessionStorage.removeItem('tp_oauth_pending');}catch(e){} throw error; }
+  },
+  // Envia el correo de recuperacion. El enlace vuelve a esta misma pagina con
+  // ?tp=recovery, que es lo que dispara la pantalla de nueva contrasena: no
+  // dependemos de sessionStorage porque el enlace suele abrirse desde el correo,
+  // a menudo en otro navegador o pestana.
+  async resetPassword(email){
+    const c=TPCloud.client(); if(!c)throw new Error('Auth no disponible');
+    const back=TPCloud.redirectUrl()+'?tp=recovery';
+    const {error}=await c.auth.resetPasswordForEmail(email,{redirectTo:back});
+    if(error)throw error;
+    return true;
   },
   // ── Gestion de la cuenta (todo esto son llamadas reales a Supabase Auth) ──
   async updatePassword(password){
@@ -2817,6 +3040,26 @@ const TPCloud={
     }catch(e){ console.warn('[TP] syncOAuthProfile',e); }
   },
   _post(fn,body){ return fetch('/.netlify/functions/'+fn,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()); },
+  // Token de la sesión actual (null en modo invitado).
+  async accessToken(){
+    const c=TPCloud.client(); if(!c)return null;
+    try{ const {data}=await c.auth.getSession(); return (data&&data.session&&data.session.access_token)||null; }
+    catch(e){ return null; }
+  },
+  // Igual que _post pero firmando con el token de sesión. Las funciones que
+  // gastan gas o tocan credenciales no aceptan un userId del cliente: preguntan
+  // a Supabase de quién es el token. Así nadie actúa en nombre de otro.
+  async _postAuth(fn,body){
+    const token=await TPCloud.accessToken();
+    const headers={'Content-Type':'application/json'};
+    if(token)headers['Authorization']='Bearer '+token;
+    const r=await fetch('/.netlify/functions/'+fn,{method:'POST',headers,body:JSON.stringify(body||{})});
+    const text=await r.text();
+    // Un 502 de Netlify devuelve HTML: sin esto, JSON.parse rompería el flujo
+    // con un error críptico en vez de decir qué pasó.
+    try{ return JSON.parse(text); }
+    catch(e){ return {error:'El servidor devolvió una respuesta no válida (HTTP '+r.status+')',details:text.slice(0,200)}; }
+  },
   saveProfile(user,fields){ return TPCloud._post('save-profile',Object.assign({userId:user.id,email:user.email},fields)); },
   saveCompany(user,fields){ return TPCloud._post('save-company',Object.assign({userId:user.id,email:user.email},fields)); },
   getCompany(user){ return TPCloud._post('get-company',{userId:user.id}); },
@@ -2874,18 +3117,319 @@ async function loadCompanyIntoUI(user){
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// SkillPass — credencial verificable anclada en blockchain (Polygon Amoy)
+// ═══════════════════════════════════════════════════════════════════════════
+// TPQr — generador de códigos QR local (sin servicios de terceros).
+// El QR de un SkillPass contiene el hash de la credencial: enviarlo a una API
+// externa filtraría metadatos de cada candidato, así que se dibuja aquí mismo.
+// Modo byte · corrección de errores M · versiones 1-15 · salida SVG.
+// ═══════════════════════════════════════════════════════════════════════════
+var TPQr=(function(){
+  // ── GF(256) para Reed-Solomon ──
+  var EXP=new Array(512),LOG=new Array(256);
+  (function(){var x=1;for(var i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&0x100)x^=0x11d;}
+   for(var j=255;j<512;j++)EXP[j]=EXP[j-255];})();
+  function mul(a,b){return (a===0||b===0)?0:EXP[LOG[a]+LOG[b]];}
+
+  function rsGen(n){
+    var g=[1];
+    for(var i=0;i<n;i++){
+      var h=new Array(g.length+1);
+      for(var k=0;k<h.length;k++){
+        h[k]=(k<g.length?g[k]:0)^(k>0?mul(g[k-1],EXP[i]):0);
+      }
+      g=h;
+    }
+    return g;
+  }
+  function rsEncode(data,ecLen){
+    var gen=rsGen(ecLen),res=new Array(ecLen);
+    for(var i=0;i<ecLen;i++)res[i]=0;
+    for(var d=0;d<data.length;d++){
+      var factor=data[d]^res[0];
+      res.shift();res.push(0);
+      if(factor!==0)for(var j=0;j<ecLen;j++)res[j]^=mul(gen[j+1],factor);
+    }
+    return res;
+  }
+
+  // [ecCodewordsPorBloque, bloquesG1, datosG1, bloquesG2, datosG2] — nivel M.
+  var ECC_M=[null,
+    [10,1,16,0,0],[16,1,28,0,0],[26,1,44,0,0],[18,2,32,0,0],[24,2,43,0,0],
+    [16,4,27,0,0],[18,4,31,0,0],[22,2,38,2,39],[22,3,36,2,37],[26,4,43,1,44],
+    [30,1,50,4,51],[22,6,36,2,37],[22,8,37,1,38],[24,4,40,5,41],[24,5,41,5,42]];
+  var ALIGN=[null,[],[6,18],[6,22],[6,26],[6,30],[6,34],[6,22,38],[6,24,42],
+    [6,26,46],[6,28,50],[6,30,54],[6,32,58],[6,34,62],[6,26,46,66],[6,26,48,70]];
+
+  function utf8(s){
+    var out=[];
+    for(var i=0;i<s.length;i++){
+      var c=s.charCodeAt(i);
+      if(c<0x80)out.push(c);
+      else if(c<0x800){out.push(0xc0|(c>>6),0x80|(c&63));}
+      else if(c>=0xd800&&c<0xdc00&&i+1<s.length){
+        var c2=s.charCodeAt(++i),cp=0x10000+((c-0xd800)<<10)+(c2-0xdc00);
+        out.push(0xf0|(cp>>18),0x80|((cp>>12)&63),0x80|((cp>>6)&63),0x80|(cp&63));
+      }
+      else out.push(0xe0|(c>>12),0x80|((c>>6)&63),0x80|(c&63));
+    }
+    return out;
+  }
+
+  function bchDigit(d){var n=0;while(d!==0){n++;d>>>=1;}return n;}
+  function formatInfo(data){ // BCH(15,5) + máscara estándar
+    var d=data<<10;
+    while(bchDigit(d)-bchDigit(0x537)>=0)d^=0x537<<(bchDigit(d)-bchDigit(0x537));
+    return ((data<<10)|d)^0x5412;
+  }
+  function versionInfo(ver){ // BCH(18,6)
+    var d=ver<<12;
+    while(bchDigit(d)-bchDigit(0x1F25)>=0)d^=0x1F25<<(bchDigit(d)-bchDigit(0x1F25));
+    return (ver<<12)|d;
+  }
+
+  function maskFn(n,i,j){
+    switch(n){
+      case 0:return (i+j)%2===0;
+      case 1:return i%2===0;
+      case 2:return j%3===0;
+      case 3:return (i+j)%3===0;
+      case 4:return (Math.floor(i/2)+Math.floor(j/3))%2===0;
+      case 5:return ((i*j)%2)+((i*j)%3)===0;
+      case 6:return (((i*j)%2)+((i*j)%3))%2===0;
+      default:return (((i+j)%2)+((i*j)%3))%2===0;
+    }
+  }
+
+  function penalty(m){
+    var n=m.length,score=0,i,j,run,k;
+    // N1 — cinco o más módulos seguidos del mismo color.
+    for(i=0;i<n;i++){
+      run=1;
+      for(j=1;j<n;j++){
+        if(m[i][j]===m[i][j-1])run++;
+        else{if(run>=5)score+=3+(run-5);run=1;}
+      }
+      if(run>=5)score+=3+(run-5);
+      run=1;
+      for(j=1;j<n;j++){
+        if(m[j][i]===m[j-1][i])run++;
+        else{if(run>=5)score+=3+(run-5);run=1;}
+      }
+      if(run>=5)score+=3+(run-5);
+    }
+    // N2 — bloques 2x2 del mismo color.
+    for(i=0;i<n-1;i++)for(j=0;j<n-1;j++){
+      var v=m[i][j];
+      if(v===m[i][j+1]&&v===m[i+1][j]&&v===m[i+1][j+1])score+=3;
+    }
+    // N3 — patrón 1:1:3:1:1 con cuatro módulos claros a un lado.
+    var pat=[1,0,1,1,1,0,1,0,0,0,0],pat2=[0,0,0,0,1,0,1,1,1,0,1];
+    for(i=0;i<n;i++)for(j=0;j<=n-11;j++){
+      var okA=true,okB=true,okC=true,okD=true;
+      for(k=0;k<11;k++){
+        if(m[i][j+k]!==pat[k])okA=false;
+        if(m[i][j+k]!==pat2[k])okB=false;
+        if(m[j+k][i]!==pat[k])okC=false;
+        if(m[j+k][i]!==pat2[k])okD=false;
+      }
+      if(okA)score+=40; if(okB)score+=40; if(okC)score+=40; if(okD)score+=40;
+    }
+    // N4 — desviación respecto al 50% de módulos oscuros.
+    var dark=0;
+    for(i=0;i<n;i++)for(j=0;j<n;j++)if(m[i][j])dark++;
+    score+=Math.floor(Math.abs(dark*100/(n*n)-50)/5)*10;
+    return score;
+  }
+
+  /** Matriz de módulos (0/1) del QR que codifica `text`. */
+  function matrix(text){
+    var bytes=utf8(String(text)),ver=-1,spec=null,cap=0;
+    for(var v=1;v<ECC_M.length;v++){
+      var s=ECC_M[v],total=s[1]*s[2]+s[3]*s[4],countBits=v<10?8:16;
+      if(4+countBits+8*bytes.length<=total*8){ver=v;spec=s;cap=total;break;}
+    }
+    if(ver<0)throw new Error('Texto demasiado largo para un QR de versión 15');
+
+    // ── Flujo de bits: modo byte + longitud + datos + relleno ──
+    var bits=[];
+    function put(val,len){for(var i=len-1;i>=0;i--)bits.push((val>>i)&1);}
+    put(4,4);
+    put(bytes.length,ver<10?8:16);
+    for(var b=0;b<bytes.length;b++)put(bytes[b],8);
+    var capBits=cap*8;
+    put(0,Math.min(4,capBits-bits.length));
+    while(bits.length%8)bits.push(0);
+    var dataCw=[];
+    for(var i=0;i<bits.length;i+=8){
+      var byte=0;
+      for(var j=0;j<8;j++)byte=(byte<<1)|bits[i+j];
+      dataCw.push(byte);
+    }
+    var pad=[0xEC,0x11],p=0;
+    while(dataCw.length<cap)dataCw.push(pad[p++%2]);
+
+    // ── Bloques + Reed-Solomon + entrelazado ──
+    var blocks=[],ecBlocks=[],off=0,bi;
+    for(bi=0;bi<spec[1];bi++){var d1=dataCw.slice(off,off+spec[2]);off+=spec[2];blocks.push(d1);ecBlocks.push(rsEncode(d1,spec[0]));}
+    for(bi=0;bi<spec[3];bi++){var d2=dataCw.slice(off,off+spec[4]);off+=spec[4];blocks.push(d2);ecBlocks.push(rsEncode(d2,spec[0]));}
+    var out=[],maxD=Math.max(spec[2],spec[4]);
+    for(i=0;i<maxD;i++)for(bi=0;bi<blocks.length;bi++)if(i<blocks[bi].length)out.push(blocks[bi][i]);
+    for(i=0;i<spec[0];i++)for(bi=0;bi<ecBlocks.length;bi++)out.push(ecBlocks[bi][i]);
+
+    // ── Patrones fijos ──
+    var size=17+4*ver,m=[],res=[],r,c;
+    for(r=0;r<size;r++){m.push(new Array(size).fill(0));res.push(new Array(size).fill(false));}
+
+    function finder(fr,fc){
+      for(var i=-1;i<=7;i++)for(var j=-1;j<=7;j++){
+        var rr=fr+i,cc=fc+j;
+        if(rr<0||cc<0||rr>=size||cc>=size)continue;
+        var on=(i>=0&&i<=6&&(j===0||j===6))||(j>=0&&j<=6&&(i===0||i===6))||(i>=2&&i<=4&&j>=2&&j<=4);
+        m[rr][cc]=on?1:0;res[rr][cc]=true;
+      }
+    }
+    finder(0,0);finder(0,size-7);finder(size-7,0);
+
+    for(i=0;i<size;i++){
+      if(!res[6][i]){m[6][i]=(i%2===0)?1:0;res[6][i]=true;}
+      if(!res[i][6]){m[i][6]=(i%2===0)?1:0;res[i][6]=true;}
+    }
+
+    var ap=ALIGN[ver];
+    for(var a=0;a<ap.length;a++)for(var bb=0;bb<ap.length;bb++){
+      var ar=ap[a],ac=ap[bb];
+      if((ar===6&&ac===6)||(ar===6&&ac===size-7)||(ar===size-7&&ac===6))continue;
+      for(i=-2;i<=2;i++)for(j=-2;j<=2;j++){
+        m[ar+i][ac+j]=(Math.max(Math.abs(i),Math.abs(j))!==1)?1:0;
+        res[ar+i][ac+j]=true;
+      }
+    }
+
+    // Módulo oscuro fijo + zonas reservadas de formato y versión.
+    m[size-8][8]=1;res[size-8][8]=true;
+    for(i=0;i<9;i++){res[8][i]=true;res[i][8]=true;}
+    for(i=0;i<8;i++){res[8][size-1-i]=true;res[size-1-i][8]=true;}
+    if(ver>=7){
+      for(i=0;i<6;i++)for(j=0;j<3;j++){res[i][size-11+j]=true;res[size-11+j][i]=true;}
+    }
+
+    // ── Colocación de datos en zigzag desde abajo a la derecha ──
+    var dir=-1,row=size-1,idx=0;
+    for(var col=size-1;col>0;col-=2){
+      if(col===6)col--;
+      for(;;){
+        for(var k=0;k<2;k++){
+          var cc2=col-k;
+          if(!res[row][cc2]){
+            var bit=0;
+            if(idx<out.length*8)bit=(out[idx>>3]>>(7-(idx&7)))&1;
+            idx++;
+            m[row][cc2]=bit;
+          }
+        }
+        row+=dir;
+        if(row<0||row>=size){row-=dir;dir=-dir;break;}
+      }
+    }
+
+    // ── Máscara: se prueban las 8 y gana la de menor penalización ──
+    var best=null,bestScore=Infinity,bestMask=0;
+    for(var mask=0;mask<8;mask++){
+      var cand=[];
+      for(r=0;r<size;r++){
+        cand.push(m[r].slice());
+        for(c=0;c<size;c++)if(!res[r][c]&&maskFn(mask,r,c))cand[r][c]^=1;
+      }
+      applyFormat(cand,mask,size);
+      if(ver>=7)applyVersion(cand,ver,size);
+      var sc=penalty(cand);
+      if(sc<bestScore){bestScore=sc;best=cand;bestMask=mask;}
+    }
+    return best;
+  }
+
+  function applyFormat(cand,mask,size){
+    var bits=formatInfo((0<<3)|mask); // nivel M = 0
+    for(var i=0;i<15;i++){
+      var on=((bits>>i)&1)===1?1:0;
+      if(i<6)cand[i][8]=on;
+      else if(i<8)cand[i+1][8]=on;
+      else cand[size-15+i][8]=on;
+    }
+    for(var j=0;j<15;j++){
+      var on2=((bits>>j)&1)===1?1:0;
+      if(j<8)cand[8][size-j-1]=on2;
+      else if(j<9)cand[8][15-j-1+1]=on2;
+      else cand[8][15-j-1]=on2;
+    }
+    cand[size-8][8]=1;
+  }
+  function applyVersion(cand,ver,size){
+    var bits=versionInfo(ver);
+    for(var i=0;i<18;i++){
+      var on=((bits>>i)&1)===1?1:0;
+      cand[Math.floor(i/3)][(i%3)+size-8-3]=on;
+      cand[(i%3)+size-8-3][Math.floor(i/3)]=on;
+    }
+  }
+
+  /** SVG autocontenido con el QR de `text`. */
+  function svg(text,opts){
+    opts=opts||{};
+    var m=matrix(text),n=m.length,q=opts.quiet==null?3:opts.quiet,total=n+2*q;
+    var fg=opts.fg||'#0f172a',bg=opts.bg||'#ffffff';
+    var d='';
+    for(var r=0;r<n;r++){
+      var c=0;
+      while(c<n){
+        if(!m[r][c]){c++;continue;}
+        var start=c;
+        while(c<n&&m[r][c])c++;
+        d+='M'+(start+q)+' '+(r+q)+'h'+(c-start)+'v1h-'+(c-start)+'z';
+      }
+    }
+    var label=opts.label||'Código QR';
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+total+' '+total+
+      '" shape-rendering="crispEdges" role="img" aria-label="'+
+      String(label).replace(/[&<>"]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch];})+
+      '"><rect width="'+total+'" height="'+total+'" fill="'+bg+'"/><path d="'+d+'" fill="'+fg+'"/></svg>';
+  }
+
+  return {matrix:matrix,svg:svg};
+})();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SkillPass — credencial verificable anclada en blockchain (Ethereum Sepolia)
 // Flujo: issue-credential (compone el CV + hash) → anchor-credential (tx on-chain)
 // On-chain solo viaja el hash; el CV completo vive off-chain en Supabase (RGPD).
+//
+// El sellado no es instantáneo: un bloque de Sepolia tarda ~12 s y Netlify corta
+// las funciones a 10 s, así que el servidor responde `pending` en cuanto difunde
+// la transacción y aquí se consulta hasta que la red la confirma. El txHash es
+// válido y enlazable desde el primer segundo.
 // ═══════════════════════════════════════════════════════════════════════════
 const SkillPass={
-  cred:null,   // { credentialId, cvJson, cvHash, txHash, anchoredAt }
-  EXPLORER:'https://sepolia.etherscan.io/tx/',
+  cred:null,   // { credentialId, cvJson, cvHash, txHash, blockNumber, anchoredAt, pending }
+  chain:{name:'Ethereum Sepolia',explorer:'https://sepolia.etherscan.io',contractUrl:null},
+  POLL_MS:5000,
+  POLL_TRIES:18,   // ~90 s: margen de sobra para uno o dos bloques de Sepolia
+
+  txUrl(h){ return h?(SkillPass.chain.explorer+'/tx/'+encodeURIComponent(h)):''; },
+
+  // El servidor es la fuente de verdad sobre la red: si mañana se cambia de
+  // cadena, la interfaz lo refleja sin tocar este archivo.
+  _learnChain(r){
+    if(!r)return;
+    if(r.chainName)SkillPass.chain.name=r.chainName;
+    if(r.contractUrl)SkillPass.chain.contractUrl=r.contractUrl;
+    if(r.explorerUrl){ const m=/^(https?:\/\/[^/]+)/.exec(r.explorerUrl); if(m)SkillPass.chain.explorer=m[1]; }
+  },
 
   _status(kind,html){
     const el=document.getElementById('spChainStatus'); if(!el)return;
     const styles={
       info:{bg:'var(--slate-50)',fg:'var(--slate-700)',bd:'var(--slate-200)'},
+      warn:{bg:'#fffbeb',fg:'#b45309',bd:'#fde68a'},
       ok:{bg:'var(--emerald-50)',fg:'var(--emerald-600)',bd:'var(--emerald-100)'},
       error:{bg:'#fef2f2',fg:'#b91c1c',bd:'#fecaca'}
     };
@@ -2893,6 +3437,14 @@ const SkillPass={
     el.style.display='block';
     el.style.background=st.bg; el.style.color=st.fg; el.style.border='1px solid '+st.bd;
     el.innerHTML=html;
+  },
+
+  // Los errores del servidor llegan como {error, details}: se muestran los dos,
+  // porque el `details` es justo lo que dice qué variable falta o qué revirtió.
+  _statusError(prefix,r){
+    SkillPass._status('error','<strong>'+escHtml(prefix)+'</strong>'+
+      ((r&&r.error)?': '+escHtml(r.error):'')+
+      ((r&&r.details)?'<br><span style="opacity:.75">'+escHtml(r.details)+'</span>':''));
   },
 
   _busy(on,label){
@@ -2906,6 +3458,12 @@ const SkillPass={
     return (location.origin||'')+'/verify.html?h='+encodeURIComponent(c.cvHash);
   },
 
+  _txLine(){
+    const c=SkillPass.cred;
+    if(!c||!c.txHash)return '';
+    return ' (<a href="'+SkillPass.txUrl(c.txHash)+'" target="_blank" rel="noopener">ver la transacción</a>)';
+  },
+
   _chip(s){
     const n=Number(s.score)||0;
     const cls=n>=75?'high':n>=50?'mid':'low';
@@ -2913,25 +3471,43 @@ const SkillPass={
     return '<div class="sp-pass-chip"><div class="sp-pass-chip-top"><span>'+escHtml(s.skill||'')+'</span><strong class="'+cls+'">'+n+'</strong></div><div class="sp-pass-bar"><i class="'+cls+'" style="width:'+Math.max(6,Math.min(100,n))+'%"></i></div><div class="sp-pass-lvl">'+lvl+'</div></div>';
   },
 
+  // QR dibujado en el navegador. Antes se pedía a api.qrserver.com, lo que
+  // enviaba el hash de cada credencial a un tercero en cada render.
+  _qrHtml(url){
+    if(!url)return '';
+    try{
+      return '<div class="sp-pass-qr">'+TPQr.svg(url,{fg:'#06281f',bg:'#ffffff',quiet:2,label:'Código QR para verificar este SkillPass'})+'</div>';
+    }catch(e){ console.warn('[TP] QR',e); return ''; }
+  },
+
   cardHtml(c, opts){
     opts=opts||{};
     const skills=(c.cvJson&&c.cvJson.skills)||c.skills||[];
     const url=opts.url||(c.cvHash?((location.origin||'')+'/verify.html?h='+encodeURIComponent(c.cvHash)):'');
-    const qr=url?'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data='+encodeURIComponent(url):'';
     const fecha=c.anchoredAt?new Date(c.anchoredAt).toLocaleString('es-ES'):'';
-    const sealed=!!(c.txHash||opts.verified);
+    const pending=!!c.pending&&!c.anchoredAt;
+    // Solo se declara sellado cuando la cadena lo confirma: tener txHash
+    // difundido todavía no es una garantía.
+    const sealed=!pending&&!!(c.anchoredAt||opts.verified);
+    const sealTxt=sealed?'Sello<br>on-chain':(pending?'Sellado<br>en curso':'Pendiente<br>de sello');
+    const lead=sealed
+      ? 'Habilidades demostradas con IA y selladas en blockchain. Portable a cualquier plataforma.'
+      : (pending?'Transacción enviada a la red. El sello queda firme en cuanto se confirme el bloque.'
+               :'Habilidades demostradas con IA. Aún sin sellar en blockchain.');
     return '<div class="sp-pass-wrap"><div class="sp-pass">'+
       '<div class="sp-pass-top"><div><div class="sp-pass-kicker">TalentPact · verifiable credential</div>'+
       '<div class="sp-pass-brand">talent<span>pact</span></div>'+
       '<h3>SkillPass</h3>'+
-      '<p class="sp-pass-lead">Habilidades demostradas con IA y selladas en blockchain. Portable a cualquier plataforma.</p></div>'+
-      '<div class="sp-pass-seal"><i>'+(sealed?'Sello<br>on-chain':'Pendiente<br>de sello')+'</i></div></div>'+
+      '<p class="sp-pass-lead">'+lead+'</p></div>'+
+      '<div class="sp-pass-seal'+(pending?' pending':'')+'"><i>'+sealTxt+'</i></div></div>'+
       '<div class="sp-pass-chips">'+(skills.map(SkillPass._chip).join('')||'<div class="sp-pass-chip">Sin skills</div>')+'</div>'+
       '<div class="sp-pass-foot"><div class="sp-pass-meta">'+
+      '<div>Red · '+escHtml(SkillPass.chain.name)+'</div>'+
       (fecha?'<div>Anclado · '+escHtml(fecha)+'</div>':'')+
+      (c.blockNumber?'<div>Bloque · '+escHtml(String(c.blockNumber))+'</div>':'')+
       (c.cvHash?'<div>Hash · '+escHtml(c.cvHash)+'</div>':'')+
-      (c.txHash?'<div>Tx · <a href="'+SkillPass.EXPLORER+encodeURIComponent(c.txHash)+'" target="_blank" rel="noopener">'+escHtml(c.txHash.slice(0,20))+'…</a></div>':'')+
-      '</div>'+(qr?'<img class="sp-pass-qr" alt="QR" src="'+qr+'">':'')+'</div></div></div>';
+      (c.txHash?'<div>Tx · <a href="'+SkillPass.txUrl(c.txHash)+'" target="_blank" rel="noopener">'+escHtml(c.txHash.slice(0,20))+'…</a></div>':'')+
+      '</div>'+SkillPass._qrHtml(url)+'</div></div></div>';
   },
 
   _render(){
@@ -2941,6 +3517,35 @@ const SkillPass={
     const dl=document.getElementById('spChainDownload'); if(dl)dl.style.display='inline-flex';
     const pdf=document.getElementById('spChainPdf'); if(pdf)pdf.style.display='inline-flex';
     const sh=document.getElementById('spChainShare'); if(sh)sh.style.display='inline-flex';
+  },
+
+  /** Vuelca en la credencial lo que acaba de decir el servidor y repinta. */
+  _apply(r){
+    const c=SkillPass.cred; if(!c||!r)return;
+    if(r.txHash)c.txHash=r.txHash;
+    if(r.blockNumber!=null)c.blockNumber=r.blockNumber;
+    if(r.anchoredAt)c.anchoredAt=r.anchoredAt;
+    c.pending=!!r.pending;
+    SkillPass._learnChain(r);
+    SkillPass._render();
+  },
+
+  /**
+   * Consulta hasta que la red confirme. Cada llamada a anchor-credential con la
+   * misma credencial es idempotente: si ya hay transacción difundida, recoge su
+   * recibo en vez de enviar otra (y de gastar gas otra vez).
+   */
+  async _awaitConfirmation(credentialId){
+    for(let i=0;i<SkillPass.POLL_TRIES;i++){
+      await new Promise(r=>setTimeout(r,SkillPass.POLL_MS));
+      const r=await TPCloud._postAuth('anchor-credential',{credentialId});
+      if(r&&r.error)return r;
+      SkillPass._apply(r);
+      if(r&&!r.pending)return r;
+      SkillPass._status('warn','② Transacción en la red'+SkillPass._txLine()+
+        '. Esperando confirmación… ('+((i+1)*SkillPass.POLL_MS/1000)+' s)');
+    }
+    return null;
   },
 
   async generate(){
@@ -2959,34 +3564,48 @@ const SkillPass={
     try{
       SkillPass._busy(true,'Emitiendo credencial…');
       SkillPass._status('info','① Componiendo tu SkillPass CV y calculando su huella criptográfica…');
-      const issued=await TPCloud._post('issue-credential',{userId:user.id,email:user.email});
-      if(issued.error){
-        SkillPass._status('error','No se pudo emitir la credencial: '+escHtml(issued.error)+
-          (issued.details?'<br><span style="opacity:.75">'+escHtml(issued.details)+'</span>':''));
-        return;
-      }
+      // Sin userId: el servidor lo deduce del token de sesión.
+      const issued=await TPCloud._postAuth('issue-credential',{});
+      if(issued.error){ SkillPass._statusError('No se pudo emitir la credencial',issued); return; }
+      SkillPass._learnChain(issued);
       SkillPass.cred={credentialId:issued.credentialId,cvJson:issued.cvJson,cvHash:issued.cvHash,
-                      txHash:issued.txHash||null,anchoredAt:issued.anchoredAt||null};
+                      txHash:issued.txHash||null,blockNumber:issued.blockNumber||null,
+                      anchoredAt:issued.anchoredAt||null,pending:!!issued.pending};
       SkillPass._render();
 
       if(issued.anchored){
-        SkillPass._status('ok','Tu SkillPass ya estaba sellado en blockchain. El CV no ha cambiado, así que su anclaje sigue siendo válido.');
+        SkillPass._status('ok','Tu SkillPass ya estaba sellado en blockchain'+SkillPass._txLine()+
+          '. El CV no ha cambiado, así que su anclaje sigue siendo válido.');
         return;
       }
 
-      SkillPass._busy(true,'Anclando en blockchain…');
-      SkillPass._status('info','② Enviando la huella a Ethereum Sepolia y esperando confirmación de la red…');
-      const anchored=await TPCloud._post('anchor-credential',{credentialId:issued.credentialId});
-      if(anchored.error){
-        SkillPass._status('error','La credencial se emitió, pero no se pudo anclar: '+escHtml(anchored.error)+
-          (anchored.details?'<br><span style="opacity:.75">'+escHtml(anchored.details)+'</span>':''));
-        return;
+      let res;
+      if(issued.pending){
+        // Un intento anterior dejó la transacción difundida sin confirmar.
+        SkillPass._status('warn','② Ya había un sellado en curso'+SkillPass._txLine()+'. Esperando a que la red lo confirme…');
+        res={pending:true,txHash:issued.txHash};
+      }else{
+        SkillPass._busy(true,'Anclando en blockchain…');
+        SkillPass._status('info','② Enviando la huella a '+escHtml(SkillPass.chain.name)+' y esperando confirmación de la red…');
+        res=await TPCloud._postAuth('anchor-credential',{credentialId:issued.credentialId});
+        if(res.error){ SkillPass._statusError('La credencial se emitió, pero no se pudo anclar',res); return; }
+        SkillPass._apply(res);
       }
-      SkillPass.cred.txHash=anchored.txHash;
-      SkillPass.cred.anchoredAt=anchored.anchoredAt;
-      SkillPass._render();
-      SkillPass._status('ok','SkillPass sellado'+(anchored.blockNumber?' (bloque '+escHtml(String(anchored.blockNumber))+')':'')+
-        '. Descarga el PDF certificado o copia el enlace para enseñarlo fuera de TalentPact.');
+
+      if(res.pending){
+        SkillPass._busy(true,'Esperando confirmación…');
+        const done=await SkillPass._awaitConfirmation(issued.credentialId);
+        if(done&&done.error){ SkillPass._statusError('La transacción se envió, pero la confirmación falló',done); return; }
+        if(!done){
+          SkillPass._status('warn','② Transacción enviada'+SkillPass._txLine()+', pero la red aún no la ha confirmado. '+
+            'No se pierde nada: vuelve a pulsar el botón en un minuto y se recogerá el recibo sin gastar gas de nuevo.');
+          return;
+        }
+        res=done;
+      }
+
+      SkillPass._status('ok','SkillPass sellado'+(res.blockNumber?' (bloque '+escHtml(String(res.blockNumber))+')':'')+
+        SkillPass._txLine()+'. Descarga el PDF certificado o copia el enlace para enseñarlo fuera de TalentPact.');
     }catch(e){
       SkillPass._status('error','Error de red al generar la credencial: '+escHtml(e.message||String(e)));
     }finally{
@@ -3024,6 +3643,7 @@ const SkillPass={
       '.sp-pass-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:18px;position:relative;z-index:1}'+
       '.sp-pass-brand{font-family:Sora,sans-serif;font-weight:800;font-size:18px}.sp-pass-brand span{color:#34d399}'+
       '.sp-pass-seal{width:78px;height:78px;border-radius:50%;background:conic-gradient(from 210deg,#34d399,#059669,#a7f3d0,#34d399);display:flex;align-items:center;justify-content:center}'+
+      '.sp-pass-seal.pending{background:conic-gradient(from 210deg,#fbbf24,#d97706,#fde68a,#fbbf24)}'+
       '.sp-pass-seal i{width:62px;height:62px;border-radius:50%;background:#06281f;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a7f3d0;text-align:center;line-height:1.15;font-style:normal;font-family:Sora,sans-serif}'+
       '.sp-pass h3{font-family:Sora,sans-serif;font-size:28px;margin:4px 0}.sp-pass-kicker{font-size:11px;color:#a7f3d0;letter-spacing:.14em;text-transform:uppercase;font-weight:700}'+
       '.sp-pass-lead{font-size:13px;color:#cbd5e1;max-width:420px;line-height:1.5}'+
@@ -3036,7 +3656,9 @@ const SkillPass={
       '.sp-pass-lvl{font-size:10px;color:#94a3b8;margin-top:5px;text-transform:uppercase}'+
       '.sp-pass-foot{display:flex;gap:16px;justify-content:space-between;align-items:flex-end;position:relative;z-index:1;border-top:1px solid rgba(167,243,208,.12);padding-top:10px}'+
       '.sp-pass-meta{font-family:"JetBrains Mono",monospace;font-size:10px;color:#86efac;line-height:1.55;word-break:break-all}'+
-      '.sp-pass-qr{width:96px;height:96px;border-radius:10px;background:#fff;padding:6px}'+
+      '.sp-pass-meta a{color:#6ee7b7}'+
+      '.sp-pass-qr{width:96px;height:96px;border-radius:10px;background:#fff;padding:6px;box-sizing:border-box}'+
+      '.sp-pass-qr svg{display:block;width:100%;height:100%}'+
       '.hint{text-align:center;margin-top:16px;font-size:12px;color:#64748b}'+
       '@media print{button,.hint{display:none}body{background:#fff;padding:0}}</style></head><body>'+
       card+'<p class="hint">En el diálogo elige <strong>Guardar como PDF</strong>.</p>'+
@@ -3107,7 +3729,7 @@ const OAUTH_BTN={
   empresa:{google:'btnGoogleEmp'}
 };
 // Cajas de mensaje inline (una por formulario) que sustituyen a los alert().
-const AUTH_MSG_BOX={candidate:'candAuthMsg',empresa:'empAuthMsg',candReg:'candRegMsg',empReg:'empRegMsg'};
+const AUTH_MSG_BOX={candidate:'candAuthMsg',empresa:'empAuthMsg',candReg:'candRegMsg',empReg:'empRegMsg',candRec:'candRecMsg',empRec:'empRecMsg',rec:'recMsg'};
 
 // Arranque de sesión. Cubre dos casos:
 //  a) vuelta de un login social: la URL trae ?code=… (PKCE) o #access_token y
@@ -3118,6 +3740,15 @@ const AUTH_MSG_BOX={candidate:'candAuthMsg',empresa:'empAuthMsg',candReg:'candRe
   const hs=new URLSearchParams((window.location.hash||'').replace(/^#/,''));
   const oauthErr=qs.get('error_description')||qs.get('error')||hs.get('error_description')||hs.get('error');
   const backFromOAuth=!!(qs.get('code')||hs.get('access_token')||oauthErr);
+
+  // Vuelta del enlace de recuperación. Supabase ya ha canjeado una sesión
+  // temporal, pero NO se abre ningún panel: primero hay que fijar la contraseña
+  // nueva. El marcador va en la URL (?tp=recovery) y no en sessionStorage,
+  // porque el enlace se abre desde el correo, a menudo en otro navegador.
+  if(!oauthErr&&(qs.get('tp')==='recovery'||hs.get('type')==='recovery')){
+    await openRecoveryScreen();
+    return;
+  }
   let pending=null;
   try{ pending=sessionStorage.getItem('tp_oauth_pending'); sessionStorage.removeItem('tp_oauth_pending'); }catch(e){}
 
@@ -4802,20 +5433,244 @@ function closeJobModal(){document.getElementById('jobModal').classList.remove('o
 function openAuth(t){
   if(t==='candidate'&&tpUser){openDashCand();return;}
   if(t==='empresa'&&tpCompany){openDashEmp();return;}
-  document.getElementById(t==='candidate'?'authCandidate':'authEmpresa').classList.add('open');
+  _authOpener=document.activeElement;
+  const pre=t==='candidate'?'cand':'emp';
+  const ov=document.getElementById(t==='candidate'?'authCandidate':'authEmpresa');
+  ov.classList.add('open');
   document.body.style.overflow='hidden';
   clearAuthMsgs();
+  // Si la vez anterior se quedo en "recuperar contrasena", se vuelve al login.
+  showRecover(pre,false);
+  const tabs=document.getElementById(pre==='cand'?'candTabs':'empTabs');
+  const first=tabs&&tabs.querySelector('.auth-tab');
+  if(first&&!first.classList.contains('active'))switchAuthTab(pre,'login',first);
+  else focusFirstField(document.getElementById(pre+'-login'));
+  clearFieldErrors(pre+'-login'); clearFieldErrors(pre+'-register');
   refreshOAuthButtons(t==='candidate'?'candidate':'empresa');
 }
-function closeAuth(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
-function switchAuthTab(pre,tab,btn){btn.parentElement.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');const l=document.getElementById(pre+'-login'),r=document.getElementById(pre+'-register');if(l)l.style.display=tab==='login'?'flex':'none';if(r)r.style.display=tab==='register'?'flex':'none';}
+
+function closeAuth(id){
+  const ov=document.getElementById(id); if(!ov)return;
+  const wasOpen=ov.classList.contains('open');
+  ov.classList.remove('open');
+  document.body.style.overflow='';
+  // Devolver el foco evita que el lector de pantalla acabe al principio del documento.
+  if(wasOpen&&_authOpener&&document.contains(_authOpener)){
+    try{ _authOpener.focus({preventScroll:true}); }catch(e){}
+    _authOpener=null;
+  }
+}
+
+// Trampa de foco: con aria-modal="true" el Tab no debe salirse del dialogo.
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Tab')return;
+  const ov=document.querySelector('.auth-overlay.open'); if(!ov)return;
+  const f=[].slice.call(ov.querySelectorAll('a[href],button:not([disabled]),input:not([type=hidden]),select,textarea,[tabindex]:not([tabindex="-1"])'))
+            .filter(el=>el.offsetParent!==null);
+  if(!f.length)return;
+  const first=f[0],last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+});
+function switchAuthTab(pre,tab,btn){
+  btn.parentElement.querySelectorAll('.auth-tab').forEach(t=>{
+    const on=t===btn;
+    t.classList.toggle('active',on);
+    t.setAttribute('aria-selected',on?'true':'false');
+    t.tabIndex=on?0:-1;          // solo la pestaña activa entra en el orden de tabulación
+  });
+  const l=document.getElementById(pre+'-login'),
+        r=document.getElementById(pre+'-register'),
+        rec=document.getElementById(pre+'-recover');
+  if(l)l.style.display=tab==='login'?'flex':'none';
+  if(r)r.style.display=tab==='register'?'flex':'none';
+  if(rec)rec.style.display='none';   // cambiar de pestaña sale de la recuperación
+  clearAuthMsgs();
+  focusFirstField(tab==='login'?l:r);
+}
+
+// Flechas para moverse entre pestañas, como espera un lector de pantalla.
+function authTabKeys(ev){
+  if(ev.key!=='ArrowLeft'&&ev.key!=='ArrowRight')return;
+  const tabs=[].slice.call(ev.currentTarget.parentElement.querySelectorAll('.auth-tab'));
+  const i=tabs.indexOf(ev.currentTarget);
+  const next=tabs[(i+(ev.key==='ArrowRight'?1:tabs.length-1))%tabs.length];
+  if(next){ ev.preventDefault(); next.focus(); next.click(); }
+}
+
+// Enfoca el primer campo vacío del formulario; si están todos llenos, el primero.
+function focusFirstField(form){
+  if(!form||form.style.display==='none')return;
+  const fields=[].slice.call(form.querySelectorAll('input:not([type=hidden]),select,textarea'));
+  if(!fields.length)return;
+  const target=fields.find(f=>!f.value)||fields[0];
+  // El foco se aplaza: si el modal aún se está abriendo, el navegador lo ignora.
+  setTimeout(()=>{ try{ target.focus({preventScroll:true}); }catch(e){ target.focus(); } },60);
+}
+
+// ═══ RECUPERACIÓN DE CONTRASEÑA ═══
+// Alterna entre el formulario de acceso y el de "envíame un enlace".
+function showRecover(pre,on){
+  const login=document.getElementById(pre+'-login');
+  const reg=document.getElementById(pre+'-register');
+  const rec=document.getElementById(pre+'-recover');
+  const tabs=document.getElementById(pre==='cand'?'candTabs':'empTabs');
+  if(!login||!rec)return;
+  clearAuthMsgs();
+  authMsg('','',pre==='cand'?'candRec':'empRec');
+  const title=document.getElementById(pre+'AuthTitle');
+  const sub=document.getElementById(pre+'AuthSub');
+  // Se guarda el encabezado original la primera vez para poder restaurarlo.
+  if(title&&!title.dataset.original)title.dataset.original=title.textContent;
+  if(sub&&!sub.dataset.original)sub.dataset.original=sub.textContent;
+
+  if(on){
+    // Arrastra el email ya escrito: pedirlo dos veces es fricción gratuita.
+    const typed=(document.getElementById(pre+'-login-email')||{}).value||'';
+    const box=document.getElementById(pre+'-rec-email');
+    if(box&&typed&&!box.value)box.value=typed;
+    login.style.display='none';
+    if(reg)reg.style.display='none';
+    rec.style.display='flex';
+    if(tabs)tabs.style.display='none';   // no son pestañas de este paso
+    if(title)title.textContent='Recuperar acceso.';
+    if(sub)sub.textContent='Te mandamos un enlace para elegir una contraseña nueva.';
+    focusFirstField(rec);
+  }else{
+    rec.style.display='none';
+    login.style.display='flex';
+    if(tabs)tabs.style.display='flex';
+    if(title&&title.dataset.original)title.textContent=title.dataset.original;
+    if(sub&&sub.dataset.original)sub.textContent=sub.dataset.original;
+    focusFirstField(login);
+  }
+}
+
+async function sendRecovery(pre){
+  const box=pre==='cand'?'candRec':'empRec';
+  const input=document.getElementById(pre+'-rec-email');
+  const email=((input||{}).value||'').trim();
+  authMsg('','',box);
+  if(!fieldValid(pre+'-rec-email',isEmailValid(email),'Introduce el email con el que creaste la cuenta.'))return;
+  const done=btnBusy(pre+'RecBtn','Enviando…');
+  try{
+    await TPCloud.resetPassword(email);
+    // Nunca se confirma si el email existe: eso permitiría enumerar cuentas.
+    authMsg('ok','Si hay una cuenta con '+email+', el enlace ya va de camino. Revisa también la carpeta de spam.',box);
+  }catch(e){
+    authMsg('err',authErrorText(e),box);
+  }finally{ done(); }
+}
+
+// Al volver del enlace, Supabase ya ha canjeado una sesión de recuperación:
+// aquí solo se fija la contraseña nueva.
+async function applyNewPassword(){
+  const a=(document.getElementById('rec-pw1')||{}).value||'';
+  const b=(document.getElementById('rec-pw2')||{}).value||'';
+  authMsg('','','rec');
+  if(!fieldValid('rec-pw1',a.length>=8,'La contraseña debe tener al menos 8 caracteres.'))return;
+  if(!fieldValid('rec-pw2',a===b,'Las dos contraseñas no coinciden.'))return;
+  const done=btnBusy('recBtn','Guardando…');
+  try{
+    await TPCloud.updatePassword(a);
+    authMsg('ok','Contraseña actualizada. Abriendo tu panel…','rec');
+    const u=await TPCloud.currentUser();
+    closeAuth('authRecovery');
+    cleanAuthUrl();
+    if(u&&(u.user_metadata||{}).role==='empresa'){ tpCompany=u; openDashEmp(); }
+    else if(u){ tpUser=u; await TPCloud.loadProgressIntoProfile(u); openDashCand(); }
+    else openAuth('candidate');
+  }catch(e){
+    // El enlace caduca en una hora y solo sirve una vez.
+    const m=((e&&e.message)||'').toLowerCase();
+    if(m.includes('expired')||m.includes('invalid')||m.includes('session')){
+      authMsg('err','El enlace de recuperación ha caducado o ya se usó. Pide uno nuevo desde «¿Olvidaste tu contraseña?».','rec');
+    }else authMsg('err',authErrorText(e),'rec');
+  }finally{ done(); }
+}
+
+// Abre la pantalla de nueva contraseña y comprueba que la sesión de
+// recuperación existe de verdad antes de dejar escribir nada.
+async function openRecoveryScreen(){
+  const ov=document.getElementById('authRecovery'); if(!ov)return;
+  _authOpener=null;
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+  let u=null;
+  try{ u=await TPCloud.currentUser(); }catch(e){}
+  const em=document.getElementById('recEmail');
+  if(em)em.textContent=(u&&u.email)||'tu cuenta';
+  const hidden=document.getElementById('recUser');
+  if(hidden)hidden.value=(u&&u.email)||'';
+  if(!u){
+    // Sin sesión el enlace ya no vale: decirlo ahora, no tras escribir la contraseña.
+    authMsg('err','Este enlace de recuperación ha caducado o ya se usó. Vuelve al inicio y pide uno nuevo desde «¿Olvidaste tu contraseña?».','rec');
+    const b=document.getElementById('recBtn'); if(b)b.disabled=true;
+    return;
+  }
+  focusFirstField(document.getElementById('rec-form'));
+}
+
+function cancelRecovery(){
+  closeAuth('authRecovery');
+  cleanAuthUrl();
+  TPCloud.signOut().catch(()=>{});   // la sesión de recuperación no debe quedar viva
+  goHome();
+}
+
+// ═══ VALIDACIÓN POR CAMPO ═══
+// Marca el campo y escribe el motivo debajo, en vez de un único mensaje global
+// que obliga a adivinar cuál de los seis campos está mal.
+function fieldError(id,msg){
+  const input=document.getElementById(id);
+  const box=document.getElementById(id+'-err');
+  if(input){
+    input.setAttribute('aria-invalid',msg?'true':'false');
+    if(box)input.setAttribute('aria-describedby',id+'-err');
+  }
+  if(box){ box.textContent=msg||''; box.classList.toggle('show',!!msg); }
+  return !msg;
+}
+/** Comprueba una condición, pinta el error si falla y enfoca el campo. */
+function fieldValid(id,cond,msg){
+  fieldError(id,cond?'':msg);
+  if(!cond){ const el=document.getElementById(id); if(el)el.focus(); }
+  return cond;
+}
+function clearFieldErrors(formId){
+  const f=document.getElementById(formId); if(!f)return;
+  f.querySelectorAll('.a-err').forEach(b=>{ b.textContent=''; b.classList.remove('show'); });
+  f.querySelectorAll('[aria-invalid]').forEach(i=>i.setAttribute('aria-invalid','false'));
+}
+
+// ═══ FUERZA DE CONTRASEÑA ═══
+// Orientativa: el único requisito real siguen siendo 8 caracteres. Puntúa
+// longitud y variedad, y penaliza los patrones más habituales.
+function pwStrength(inputId,meterId){
+  const v=((document.getElementById(inputId)||{}).value)||'';
+  const m=document.getElementById(meterId); if(!m)return;
+  if(!v){ m.className='pw-meter'; return; }
+  let score=0;
+  if(v.length>=8)score++;
+  if(v.length>=12)score++;
+  if(/[a-z]/.test(v)&&/[A-Z]/.test(v))score++;
+  if(/\d/.test(v)&&/[^\w\s]/.test(v))score++;
+  if(v.length<8)score=0;
+  if(/^(.)\1+$/.test(v)||/^(123456|password|contrasena|contraseña|qwerty|111111)/i.test(v))score=Math.min(score,1);
+  const lvl=Math.max(1,Math.min(4,score));
+  const txt=['','Débil: añade longitud','Mejorable: mezcla mayúsculas y números','Buena','Muy buena'][lvl];
+  m.className='pw-meter show s'+lvl;
+  const lbl=m.querySelector('.pw-meter-lbl');
+  if(lbl)lbl.textContent=v.length<8?'Mínimo 8 caracteres':txt;
+}
 
 async function loginCandidate(){
   const email=(document.getElementById('cand-login-email').value||'').trim();
   const pw=document.getElementById('cand-login-pw').value||'';
   authMsg('');
-  if(!isEmailValid(email)){authMsg('err','Introduce un email válido.');return;}
-  if(!pw){authMsg('err','Introduce tu contraseña.');return;}
+  clearFieldErrors('cand-login');
+  if(!fieldValid('cand-login-email',isEmailValid(email),'Introduce un email válido.'))return;
+  if(!fieldValid('cand-login-pw',!!pw,'Escribe tu contraseña.'))return;
   const done=btnBusy('candLoginBtn','Accediendo…');
   try{
     const u=await TPCloud.signIn(email,pw);
@@ -4843,9 +5698,10 @@ async function registerCandidate(){
   const sector=document.getElementById('reg-sector').value||'';
   const fullName=(name+' '+last).trim();
   authMsg('','','candReg');
-  if(!name){authMsg('err','Escribe tu nombre.','candReg');return;}
-  if(!isEmailValid(email)){authMsg('err','Introduce un email válido.','candReg');return;}
-  if(pw.length<8){authMsg('err','La contraseña debe tener al menos 8 caracteres.','candReg');return;}
+  clearFieldErrors('cand-register');
+  if(!fieldValid('reg-name',!!name,'Escribe tu nombre.'))return;
+  if(!fieldValid('reg-email',isEmailValid(email),'Introduce un email válido.'))return;
+  if(!fieldValid('reg-pw',pw.length>=8,'La contraseña debe tener al menos 8 caracteres.'))return;
   const done=btnBusy('candRegBtn','Creando cuenta…');
   try{
     const data=await TPCloud.signUp(email,pw,{full_name:fullName,sector,role:'candidate'});
@@ -5007,6 +5863,7 @@ function loadCandSettings(){
   _val('st-cand-name',parts[0]||'');
   _val('st-cand-last',parts.slice(1).join(' '));
   _val('st-cand-email',(tpUser&&tpUser.email)||'');
+  _val('st-cand-pw-user',(tpUser&&tpUser.email)||'');   // usuario oculto para el gestor de contraseñas
   _val('st-cand-sector',m.sector||'');
   _val('st-cand-city',m.city||'');
   _val('st-cand-linkedin',m.linkedin||'');
@@ -5067,6 +5924,7 @@ function loadEmpSettings(){
   const m=(tpCompany&&tpCompany.user_metadata)||{};
   const who=document.getElementById('stEmpWho');
   if(who)who.textContent=tpCompany?('Cuenta de empresa · '+companyName()):'Explorando como invitado (sin cuenta)';
+  _val('st-emp-pw-user',(tpCompany&&tpCompany.email)||'');   // usuario oculto para el gestor de contraseñas
   _val('st-emp-company',m.company||'');
   _val('st-emp-sector',m.sector||'');
   _val('st-emp-size',m.size||'');
@@ -5324,7 +6182,7 @@ async function refreshOAuthButtons(portal){
 function cleanAuthUrl(){
   try{
     const url=new URL(window.location.href);
-    ['code','state','error','error_code','error_description','provider_token'].forEach(k=>url.searchParams.delete(k));
+    ['code','state','error','error_code','error_description','provider_token','tp'].forEach(k=>url.searchParams.delete(k));
     history.replaceState({},document.title,url.pathname+(url.search||''));
   }catch(e){}
 }
@@ -5342,8 +6200,9 @@ async function loginEmpresa(){
   const email=(document.getElementById('emp-login-email').value||'').trim();
   const pw=document.getElementById('emp-login-pw').value||'';
   authMsg('','','empresa');
-  if(!isEmailValid(email)){authMsg('err','Introduce un email corporativo válido.','empresa');return;}
-  if(!pw){authMsg('err','Introduce tu contraseña.','empresa');return;}
+  clearFieldErrors('emp-login');
+  if(!fieldValid('emp-login-email',isEmailValid(email),'Introduce un email corporativo válido.'))return;
+  if(!fieldValid('emp-login-pw',!!pw,'Escribe tu contraseña.'))return;
   const done=btnBusy('empLoginBtn','Accediendo…');
   try{
     const u=await TPCloud.signIn(email,pw);
@@ -5369,10 +6228,11 @@ async function registerEmpresa(){
   const pw=document.getElementById('emp-reg-pw').value||'';
   const size=document.getElementById('emp-reg-size').value||'';
   authMsg('','','empReg');
-  if(!company){authMsg('err','Indica el nombre de la empresa.','empReg');return;}
-  if(!name){authMsg('err','Indica tu nombre.','empReg');return;}
-  if(!isEmailValid(email)){authMsg('err','Introduce un email corporativo válido.','empReg');return;}
-  if(pw.length<8){authMsg('err','La contraseña debe tener al menos 8 caracteres.','empReg');return;}
+  clearFieldErrors('emp-register');
+  if(!fieldValid('emp-reg-company',!!company,'Indica el nombre de la empresa.'))return;
+  if(!fieldValid('emp-reg-name',!!name,'Indica tu nombre.'))return;
+  if(!fieldValid('emp-reg-email',isEmailValid(email),'Introduce un email corporativo válido.'))return;
+  if(!fieldValid('emp-reg-pw',pw.length>=8,'La contraseña debe tener al menos 8 caracteres.'))return;
   const done=btnBusy('empRegBtn','Creando cuenta…');
   try{
     const data=await TPCloud.signUp(email,pw,{role:'empresa',company,contact_name:name,position,size,full_name:name});
@@ -5400,12 +6260,18 @@ async function verifySkillPassAtCompany(){
   if(card)card.innerHTML='';
   try{
     const data=await TPCloud._post('verify-credential',payload);
+    SkillPass._learnChain(data);
     if(st){
       st.style.display='block';
       if(data&&data.verified){
         st.style.background='var(--emerald-50)';st.style.color='var(--emerald-600)';st.style.border='1px solid var(--emerald-100)';
-        st.innerHTML='<strong>Sello auténtico.</strong> Esta credencial está anclada en blockchain y no ha sido manipulada.';
-        if(card) card.innerHTML=SkillPass.cardHtml({cvHash:data.cvHash,txHash:data.txHash,anchoredAt:data.anchoredAt,skills:data.skills||[]},{verified:true,url:(location.origin||'')+'/verify.html?h='+encodeURIComponent(data.cvHash||'')});
+        const fecha=data.anchoredAt?new Date(data.anchoredAt).toLocaleString('es-ES'):'';
+        // La fecha sale del contrato, no de la base de datos de TalentPact:
+        // es el dato que ni siquiera nosotros podemos retocar.
+        st.innerHTML='<strong>Sello auténtico.</strong> Esta credencial está anclada en '+escHtml(data.chainName||SkillPass.chain.name)+
+          (fecha?' desde el '+escHtml(fecha):'')+' y no ha sido manipulada.'+
+          (data.explorerUrl?' <a href="'+escHtml(data.explorerUrl)+'" target="_blank" rel="noopener">Ver la transacción</a>.':'');
+        if(card) card.innerHTML=SkillPass.cardHtml({cvHash:data.cvHash,txHash:data.txHash,blockNumber:data.blockNumber,anchoredAt:data.anchoredAt,skills:data.skills||[]},{verified:true,url:(location.origin||'')+'/verify.html?h='+encodeURIComponent(data.cvHash||'')});
       }else{
         st.style.background='#fef2f2';st.style.color='#b91c1c';st.style.border='1px solid #fecaca';
         st.innerHTML='<strong>No verificado.</strong> '+(escHtml((data&&(data.reason||data.error))||'La credencial no es auténtica o fue modificada.'));
@@ -5415,6 +6281,52 @@ async function verifySkillPassAtCompany(){
     if(st){st.style.display='block';st.style.background='#fef2f2';st.style.color='#b91c1c';st.textContent='Error de red: '+(e.message||e);}
   }finally{
     if(btn){btn.disabled=false;btn.textContent='Verificar sello';}
+  }
+}
+
+// Verificador de la landing: comprueba un SkillPass sin cuenta ni cartera.
+// Solo lee el contrato, asi que puede ofrecerse en publico sin coste ni riesgo.
+async function verifyOnLanding(){
+  const input=document.getElementById('lpVerifyInput');
+  const out=document.getElementById('lpVerifyOut');
+  const btn=document.getElementById('lpVerifyBtn');
+  if(!input||!out||!btn)return;
+  const show=(kind,html)=>{ out.style.display='block'; out.className='sp-verify-out '+kind; out.innerHTML=html; };
+  const raw=(input.value||'').trim();
+  if(!raw){ show('bad','Pega un hash <code>0x…</code>, el JSON del SkillPass o el enlace que te hayan pasado.'); return; }
+
+  let payload;
+  if(raw.startsWith('{')||raw.startsWith('[')){
+    try{ payload={cvJson:JSON.parse(raw)}; }
+    catch(e){ show('bad','Ese JSON no es válido: '+escHtml(e.message)); return; }
+  }else{
+    const m=raw.match(/0x[a-fA-F0-9]{64}/);   // sirve igual pegando el enlace ?h=…
+    if(!m){ show('bad','No reconozco ese formato. Necesito un hash de <code>0x</code> + 64 caracteres, el JSON completo, o el enlace de verificación.'); return; }
+    payload={cvHash:m[0]};
+  }
+
+  const label=btn.textContent;
+  btn.disabled=true; btn.textContent='Consultando la cadena…';
+  show('busy','Leyendo el contrato en la blockchain…');
+  try{
+    const data=await TPCloud._post('verify-credential',payload);
+    if(data&&data.verified){
+      const fecha=data.anchoredAt?new Date(data.anchoredAt).toLocaleString('es-ES'):'';
+      const chips=(data.skills||[]).slice(0,8).map(sk=>
+        '<span class="sp-verify-chip">'+escHtml(sk.skill||'')+' <b>'+(Number(sk.score)||0)+'</b></span>').join('');
+      show('ok','<strong>Sello auténtico.</strong> Anclado en '+escHtml(data.chainName||'la cadena')+
+        (fecha?' el '+escHtml(fecha):'')+' y sin alterar desde entonces.'+
+        (chips?'<div class="sp-verify-chips">'+chips+'</div>':'')+
+        (data.explorerUrl?'<a class="sp-verify-link" href="'+escHtml(data.explorerUrl)+'" target="_blank" rel="noopener">Ver la transacción en el explorador →</a>':''));
+    }else{
+      show('bad','<strong>Sin sello válido.</strong> '+
+        escHtml((data&&(data.reason||data.error))||'No se pudo verificar esta credencial.'));
+    }
+  }catch(e){
+    // Abrir el index con doble clic (file://) deja las funciones sin servir.
+    show('bad','No se pudo contactar con el verificador. '+escHtml(e.message||String(e)));
+  }finally{
+    btn.disabled=false; btn.textContent=label;
   }
 }
 

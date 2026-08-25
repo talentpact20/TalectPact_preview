@@ -55,7 +55,8 @@ hash y la unicidad de credenciales, y **borra todo lo que ha creado** al termina
 
 1. Instala la extensión **MetaMask** ([metamask.io](https://metamask.io)) si no la tienes.
 2. Crea una wallet **nueva y solo para esto** (no uses una con fondos reales). Guarda la frase semilla.
-3. Añade la red **Polygon Amoy** (testnet): en [chainlist.org](https://chainlist.org) busca "Amoy" y conecta MetaMask.
+3. Añade la red **Ethereum Sepolia** (testnet): MetaMask ya la trae — actívala en
+   *Configuración → Redes avanzadas → Mostrar redes de prueba*.
 4. Copia al `.env`:
    - Dirección pública (`0x...`) → `ISSUER_ADDRESS`
    - Clave privada (MetaMask → ⋮ → Detalles de la cuenta → Exportar clave privada) → `ISSUER_PRIVATE_KEY`
@@ -64,15 +65,18 @@ hash y la unicidad de credenciales, y **borra todo lo que ha creado** al termina
 
 ## Paso 3 — Fondos de testnet (gas gratis) · ~5 min
 
-1. Ve al [faucet oficial de Polygon](https://faucet.polygon.technology/) (o el de Alchemy).
-2. Pega tu dirección pública y solicita **POL de test**. Con una cantidad mínima bastan cientos de anclajes.
+1. Ve al [faucet de Google Cloud para Sepolia](https://cloud.google.com/application/web3/faucet/ethereum/sepolia).
+   Basta una cuenta de Google: no pide comprar cripto. (Se eligió Sepolia justo por
+   esto — los faucets de Polygon Amoy exigían saldo de mainnet.)
+2. Pega tu dirección pública y solicita **ETH de test**. Un anclaje cuesta del orden de
+   0,0001 ETH, así que con una petición sobra para cientos.
 3. Verifica que llegó: `npm run doctor` te dirá el saldo.
 
-## Paso 4 — RPC de Polygon Amoy · ~0-5 min
+## Paso 4 — RPC de Ethereum Sepolia · ~0-5 min
 
-- Por defecto se usa el público `https://rpc-amoy.polygon.technology` — no tienes que hacer nada.
+- Por defecto se usa el público `https://ethereum-sepolia-rpc.publicnode.com` — no tienes que hacer nada.
 - Si falla o va lento: crea una app gratis en [Alchemy](https://alchemy.com) o [Infura](https://infura.io)
-  en la red **Polygon Amoy** y pega su URL en `POLYGON_AMOY_RPC`.
+  en la red **Ethereum Sepolia** y pega su URL en `SEPOLIA_RPC`.
 
 ## Paso 5 — Desplegar el contrato · ~2 min
 
@@ -84,7 +88,7 @@ npm run deploy:contract
 ```
 
 El script compila `contracts/SkillPassRegistry.sol` con solc, lo despliega firmando con tu
-wallet, guarda el registro en `tfm/tech/build/deployment-amoy.json` y te imprime la línea
+wallet, guarda el registro en `tfm/tech/build/deployment-sepolia.json` y te imprime la línea
 exacta que tienes que pegar en el `.env`:
 
 ```
@@ -98,9 +102,15 @@ npm run doctor    # debe salir todo en verde
 npm run dev       # http://localhost:8888
 ```
 
-En el panel de candidato: completa un reto → **Generar mi CV verificable** → obtienes el hash
-y el enlace a la transacción en Amoy PolygonScan. Descarga el JSON y pégalo en
-`http://localhost:8888/verify.html` para comprobar la verificación desde fuera.
+En el panel de candidato: completa un reto → **Sellar mi SkillPass** → obtienes el hash
+y el enlace a la transacción en [Sepolia Etherscan](https://sepolia.etherscan.io).
+Descarga el JSON y pégalo en `http://localhost:8888/verify.html` para comprobar la
+verificación desde fuera.
+
+> **El sellado no es instantáneo.** Un bloque de Sepolia tarda ~12 s y Netlify corta las
+> funciones a 10 s, así que `anchor-credential` responde `pending` en cuanto difunde la
+> transacción y la interfaz consulta hasta que la red la confirma. El enlace a Etherscan
+> ya funciona desde el primer segundo; el sello se marca como firme al confirmarse.
 
 ## Paso 7 — Producción (Netlify)
 
@@ -113,7 +123,7 @@ Copia las mismas variables en **Netlify → Site settings → Environment variab
 | `SUPABASE_SERVICE_KEY` | Paso 1 | **Sí** |
 | `ISSUER_PRIVATE_KEY` | Paso 2 | **Sí** |
 | `ISSUER_ADDRESS` | Paso 2 | No |
-| `POLYGON_AMOY_RPC` | Paso 4 (opcional) | No |
+| `SEPOLIA_RPC` | Paso 4 (opcional) | No |
 | `SKILLPASS_CONTRACT_ADDRESS` | Paso 5 | No |
 
 > **Seguridad:** las claves secretas van SOLO en el `.env` local o en Netlify, nunca en el

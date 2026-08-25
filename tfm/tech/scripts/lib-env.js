@@ -58,7 +58,8 @@ function normalizePrivateKey(pk) {
 }
 
 // Sepolia: mismos contratos EVM, faucet de Google (solo Gmail, sin comprar crypto).
-// Polygon Amoy se deja como alternativa cuando hay POL de testnet.
+// Es la unica red del proyecto: netlify/functions/lib/tp.js define el mismo
+// CHAIN y ambos deben moverse a la vez si algun dia se cambia de cadena.
 const CHAIN = {
   chainId: 11155111,
   name: "Ethereum Sepolia",

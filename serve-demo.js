@@ -75,7 +75,12 @@ async function handleFunction(req, res, fnName) {
     const body = await readBody(req);
     delete require.cache[require.resolve(fnPath)]; // recarga en caliente
     const mod = require(fnPath);
-    const event = { httpMethod: req.method, body, headers: req.headers };
+    // Netlify entrega la query ya parseada; sin esto los endpoints GET
+    // (verify-credential?h=…) funcionan en produccion pero no en local.
+    const qs = new URL(req.url, "http://localhost").searchParams;
+    const queryStringParameters = {};
+    for (const [k, v] of qs) queryStringParameters[k] = v;
+    const event = { httpMethod: req.method, body, headers: req.headers, queryStringParameters };
     const result = await mod.handler(event, {});
     const headers = result.headers || { "content-type": "application/json" };
     res.writeHead(result.statusCode || 200, headers);
