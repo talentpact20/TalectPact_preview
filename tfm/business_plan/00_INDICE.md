@@ -1,8 +1,10 @@
 # Business Plan — TalentPact · Índice maestro
 
-Documento compilado (para leer o imprimir a PDF): `../TalentPact_TFM_Business_Plan.html`.
+Documento compilado (PDF): `../TalentPact_TFM_Business_Plan.pdf`.
 
-Cada sección se redacta en su propio fichero; el HTML se regenera con `python3 build_doc.py`.
+Universitat de Barcelona · Máster en Fintech, Mercados Financieros y Blockchain · Xavier Griñó · Ivan Sánchez · septiembre 2026 · talentpact.es
+
+Cada sección se redacta en su propio fichero; el HTML/PDF se regenera con `python3 build_doc.py`.
 
 ---
 
@@ -10,7 +12,10 @@ Cada sección se redacta en su propio fichero; el HTML se regenera con `python3 
 - Título, autores, máster, fecha, logo.
 
 ## Resumen ejecutivo (1-2 págs) → `00_resumen_ejecutivo.md`
-- Problema, solución, innovación (IA + CV blockchain), mercado, modelo de ingresos, tracción/PoC, cifras financieras clave, ask de financiación.
+- Problema, validación MVP, solución, mercado, modelo, cifras, alcance del TFM.
+
+## Objetivos y metodología → `00_objetivos_metodologia.md`
+- Objetivo general y específicos, hipótesis, fuentes de evidencia y límites.
 
 ## 1. Concepto de negocio → `01_concepto.md`
 - 1.1 El problema del mercado laboral (fricción, sesgo, coste, fraude de CV).
@@ -71,5 +76,7 @@ Cada sección se redacta en su propio fichero; el HTML se regenera con `python3 
 - 8.4 Riesgos regulatorios.
 - 8.5 Matriz de riesgos y plan de mitigación.
 
-## 9. Anexos
-- Resultados de la PoC, capturas del demo, transacción on-chain de ejemplo, referencias.
+## 9. Conclusiones y limitaciones → `09_conclusiones.md`
+
+## 10. Anexos
+- A. SkillPass on-chain · B. PoC de IA · C. Equipo · D. Extracto del modelo financiero · E. Referencias.

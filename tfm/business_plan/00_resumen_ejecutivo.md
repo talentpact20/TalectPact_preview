@@ -1,19 +1,17 @@
 # Resumen ejecutivo
 
-**TalentPact** es un marketplace europeo de talento **100 % anónimo**. El candidato demuestra habilidades con retos prácticos **corregidos por IA**; la empresa filtra un pool pre-validado y paga **solo por resultado** (€49 por contacto). Sobre esa base, el TFM añade la capa fintech: un **SkillPass** —credencial verificable cuyo *hash* se ancla en blockchain— que el candidato posee y cualquier tercero comprueba sin fiarse de un PDF.
+**TalentPact** es un marketplace europeo de talento **100 % anónimo**. El candidato demuestra habilidades con retos prácticos **corregidos por IA**; la empresa filtra un pool pre-validado y paga **solo por resultado** (€49 por contacto). La capa fintech del TFM es el **SkillPass**: credencial cuyo *hash* se ancla en blockchain y que un tercero verifica sin fiarse de un PDF.
 
-**El problema.** Contratar dura 42 días y cuesta ~€4.700 en España; el 78 % de los CVs mienten o exageran. El filtro sigue siendo un papel y una primera impresión.
+**El problema.** Contratar dura ~42 días y cuesta ~€4.700 en España; una fracción alta de CVs no es verificable (fuentes secundarias: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024). El filtro sigue siendo un papel.
 
-**La solución.** Tres capas ya demostradas en producto: (1) evaluación con Claude (~€0,02/ejercicio), (2) persistencia real en Supabase (UE) con cuentas de candidato y empresa, (3) sello on-chain en **Ethereum Sepolia** y verificador público.
+**Validación propia (MVP, 2026).** n ≈ 30 encuestas: ~90 % de candidatos interesados; **65 %** de empresas de la muestra dispuestas a sustituir la primera entrevista; **7/10** candidatos quieren anonimato al inicio. Criterio experto (≥5 profesionales, Hays). Tracción: 6 países y ~500 visitas en la primera semana. Muestra exploratoria, no probabilística (detalle en §2.4).
 
-**Mercado.** Enfoque España (2,46 M vacantes, 56 candidatos/vacante) sobre un TAM de software de *talent acquisition* de $169 B. Validación primaria: +90 % de candidatos interesados, 65 % de empresas dispuestas a sustituir la primera entrevista, tráfico de 6 países en la primera semana.
+**La solución construida.** (1) Evaluación con Claude (~€0,02/ejercicio), (2) persistencia en Supabase (UE), (3) sello on-chain en Ethereum Sepolia y verificador público. Producto: **talentpact.es**.
 
-**Modelo.** Cinco palancas (contacto €49, Pro €199, Enterprise €499, retos a medida €299, extra B2C €5). Margen bruto **~94 %**. LTV/CAC **11–17×**, *payback* < 2 meses.
+**Modelo.** Cinco palancas (€49, Pro €199, Enterprise €499, retos a medida €299, extra B2C €5). Margen bruto **~94 %**. LTV/CAC **11–17×**.
 
-**Finanzas (base case, Excel 17/04/2026).** Pre-seed **€180 k** + ENISA **€50 k**. 24 → 129 → 284 empresas (2026–2028). Ingreso neto €16 k / €109 k / €360 k. EBITDA negativo hasta **mayo 2028**; neto 2028 **+€34 k**. Caja nunca negativa (valle ~€38 k en abril 2028).
+**Finanzas (base, Excel 17/04/2026).** Pre-seed **€180 k** + ENISA **€50 k**. 24 → 129 → 284 empresas (2026–2028). Ingreso neto €16 k / €109 k / €360 k. Break-even **mayo 2028**; neto 2028 **+€34 k**. Extracto del modelo en anexo D.
 
-**Equipo.** Xavier Griñó (growth / comercial) e Ivan Sánchez (finanzas / producto-tech). Barcelona.
+**Equipo.** Xavier Griñó e Ivan Sánchez. Universitat de Barcelona. Máster en Fintech, Mercados Financieros y Blockchain. Septiembre 2026.
 
-**Ask del plan (no del TFM académico):** €180 k SAFE para 29 meses de *runway* de producto, no para un token. El SkillPass no es un criptoactivo (MiCA no aplica); los cobros irían por Stripe.
-
-**Lo que se defiende en septiembre:** un business plan completo y un demo vivo *IA → dato → sello → verificación*, no un mockup.
+**Alcance.** El SkillPass no es un criptoactivo (MiCA no aplica). El €180 k es del plan de negocio, no una petición al tribunal. Se defiende un plan coherente y un sello **ya verificable**.

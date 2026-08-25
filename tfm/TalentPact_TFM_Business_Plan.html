@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>TalentPact — Business Plan · TFM</title>
+<title>TalentPact — Business Plan · TFM · Universitat de Barcelona</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
 <style>
@@ -21,37 +21,29 @@ body{
 }
 .toolbar{
   position:sticky;top:0;z-index:20;display:flex;gap:10px;align-items:center;justify-content:space-between;
-  padding:10px 22px;background:rgba(6,40,31,.94);color:#ecfdf5;backdrop-filter:blur(10px);
+  padding:10px 22px;background:#111827;color:#f9fafb;
   font-family:Sora,sans-serif;font-size:13px;
 }
-.toolbar b{font-family:Sora,sans-serif}
+.toolbar b{font-family:Sora,sans-serif;font-weight:600}
 .toolbar button,.toolbar a.btn{
-  background:var(--em);color:#042f2e;border:0;border-radius:8px;padding:8px 14px;
+  background:#fff;color:#111827;border:0;border-radius:8px;padding:8px 14px;
   font-weight:700;cursor:pointer;font-family:Sora,sans-serif;text-decoration:none;font-size:13px;
 }
 .sheet{max-width:860px;margin:0 auto 48px;background:var(--white);box-shadow:0 18px 50px rgba(15,23,42,.12)}
 .cover{
-  min-height:100vh;background:
-    radial-gradient(900px 380px at 10% -10%,rgba(52,211,153,.28),transparent 55%),
-    linear-gradient(165deg,#06281f 0%,#0b3d30 45%,#0f172a 100%);
-  color:#ecfdf5;padding:56px 56px 48px;display:flex;flex-direction:column;justify-content:space-between;
+  min-height:100vh;background:#fff;color:var(--ink);
+  padding:64px 56px 56px;display:flex;flex-direction:column;justify-content:space-between;
   page-break-after:always;
 }
-.brand{font-family:Sora,sans-serif;font-weight:800;font-size:22px;letter-spacing:.3px}
-.brand span{color:#34d399}
-.kicker{font-family:Sora,sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a7f3d0;font-weight:700}
-.cover h1{font-family:Sora,sans-serif;font-size:42px;line-height:1.08;letter-spacing:-.03em;margin:18px 0 12px;font-weight:800}
-.cover h1 em{font-style:normal;color:#34d399}
-.cover .lead{max-width:520px;color:#cbd5e1;font-size:18px}
-.cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid rgba(167,243,208,.2);padding-top:22px;font-family:Sora,sans-serif;font-size:13px}
-.cover-meta small{display:block;color:#86efac;letter-spacing:.08em;text-transform:uppercase;font-size:10px;margin-bottom:4px}
-.seal{
-  width:86px;height:86px;border-radius:50%;
-  background:conic-gradient(from 210deg,#34d399,#059669,#a7f3d0,#34d399);
-  display:flex;align-items:center;justify-content:center;margin-left:auto;
-}
-.seal i{width:68px;height:68px;border-radius:50%;background:#06281f;display:flex;align-items:center;justify-content:center;
-  font-style:normal;font-family:Sora,sans-serif;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-align:center;line-height:1.2;color:#a7f3d0}
+.brand{font-family:Sora,sans-serif;font-weight:800;font-size:20px;letter-spacing:.2px}
+.ub{font-family:Sora,sans-serif;font-size:12.5px;color:#64748b;letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+.kicker{font-family:Sora,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#64748b;font-weight:700}
+.cover-rule{width:56px;height:2px;background:var(--ink);margin:28px 0 22px}
+.cover h1{font-family:Sora,sans-serif;font-size:34px;line-height:1.15;letter-spacing:-.03em;margin:0 0 16px;font-weight:700;max-width:22ch}
+.cover h1 em{font-style:italic;font-weight:600}
+.cover .lead{max-width:540px;color:var(--muted);font-size:17px}
+.cover-meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid var(--ink);padding-top:22px;font-family:Sora,sans-serif;font-size:13px}
+.cover-meta small{display:block;color:#64748b;letter-spacing:.08em;text-transform:uppercase;font-size:10px;margin-bottom:4px}
 
 .inner{padding:48px 56px 64px}
 .toc h2,.chapter>h1{font-family:Sora,sans-serif}
@@ -59,35 +51,35 @@ body{
 .toc ol{list-style:none;padding:0;margin:0}
 .toc li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-family:Sora,sans-serif;font-size:14.5px}
 .toc a{color:var(--ink);text-decoration:none}
-.toc a:hover{color:var(--em)}
-.toc .n{color:var(--em);font-weight:800;margin-right:10px}
+.toc a:hover{color:#111827}
+.toc .n{color:#111827;font-weight:800;margin-right:10px}
 
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0 8px}
-.kpi{background:var(--em-s);border:1px solid #a7f3d0;border-radius:12px;padding:12px 14px}
-.kpi b{display:block;font-family:Sora,sans-serif;font-size:20px;color:var(--em-d)}
+.kpi{background:#f8fafc;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font-family:Sora,sans-serif;font-size:20px;color:var(--ink)}
 .kpi span{font-size:11px;color:var(--muted);font-family:Sora,sans-serif}
 
 .chapter{page-break-before:always;padding-top:8px}
 .chapter>h1{
   font-size:28px;letter-spacing:-.03em;margin:0 0 8px;padding-bottom:14px;
-  border-bottom:3px solid var(--em);
+  border-bottom:2px solid var(--ink);
 }
-.num{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--em);margin-bottom:6px;font-weight:700}
+.num{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#64748b;margin-bottom:6px;font-weight:700}
 
 h2{font-family:Sora,sans-serif;font-size:18px;margin:28px 0 10px;letter-spacing:-.02em}
-h3{font-family:Sora,sans-serif;font-size:15.5px;margin:20px 0 8px;color:var(--em-d)}
+h3{font-family:Sora,sans-serif;font-size:15.5px;margin:20px 0 8px;color:var(--ink)}
 p{margin:0 0 12px}
 ul,ol{margin:0 0 14px;padding-left:22px}
 li{margin:0 0 5px}
 strong{font-weight:700}
-a{color:var(--em-d)}
+a{color:#0f172a}
 blockquote{
-  margin:16px 0;padding:12px 16px 12px 18px;background:var(--em-s);
-  border-left:4px solid var(--em);border-radius:0 10px 10px 0;color:var(--em-d);
+  margin:16px 0;padding:12px 16px 12px 18px;background:#f8fafc;
+  border-left:3px solid var(--ink);border-radius:0 10px 10px 0;color:var(--ink);
 }
 blockquote p:last-child{margin:0}
 table{width:100%;border-collapse:collapse;margin:12px 0 20px;font-size:13.5px;font-family:Sora,sans-serif}
-th{text-align:left;background:var(--em-d);color:#ecfdf5;padding:8px 10px;font-weight:600}
+th{text-align:left;background:#111827;color:#fff;padding:8px 10px;font-weight:600}
 td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 tr:nth-child(even) td{background:#f8fafc}
 code,pre{font-family:"JetBrains Mono",ui-monospace,monospace}
@@ -107,6 +99,10 @@ pre code{background:none;color:inherit;padding:0}
 .mono{font-family:"JetBrains Mono",monospace;font-size:12px;word-break:break-all;color:var(--em-d)}
 .refs{font-size:14px}
 .refs li{margin-bottom:8px}
+.footer-doc{
+  padding:22px 56px 36px;border-top:1px solid var(--line);color:var(--muted);
+  font-family:Sora,sans-serif;font-size:12px;
+}
 hr{border:0;border-top:1px solid var(--line);margin:22px 0}
 img{max-width:100%}
 *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
@@ -130,7 +126,7 @@ img{max-width:100%}
 </head>
 <body>
 <div class="toolbar">
-  <div><b>talent<span style="color:#34d399">pact</span></b> · Business Plan TFM</div>
+  <div><b>TalentPact</b> · TFM · Universitat de Barcelona</div>
   <div>
     <button type="button" onclick="window.print()">Guardar como PDF</button>
   </div>
@@ -138,39 +134,89 @@ img{max-width:100%}
 <article class="sheet">
   <header class="cover">
     <div>
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
-        <div>
-          <div class="brand">talent<span>pact</span></div>
-          <p class="kicker" style="margin-top:28px">Trabajo Fin de Máster · Septiembre 2026</p>
-        </div>
-        <div class="seal"><i>Skill<br/>Pass</i></div>
-      </div>
-      <h1>Contrata por<br/><em>habilidades reales.</em><br/>No por currículum.</h1>
-      <p class="lead">Plan de negocio de una fintech de talento anónimo: evaluación con IA, persistencia real y credencial verificable en blockchain.</p>
+      <p class="ub">Universitat de Barcelona</p>
+      <p class="kicker" style="margin-top:14px">Trabajo Fin de Máster · Septiembre 2026</p>
+      <div class="cover-rule"></div>
+      <h1>TalentPact: plan de negocio de una fintech de credenciales de habilidad verificables</h1>
+      <p class="lead">Marketplace de talento anónimo, evaluación por inteligencia artificial y sello criptográfico (SkillPass). Business plan y demostración funcional.</p>
     </div>
     <div class="cover-meta">
       <div><small>Programa</small>Máster en Fintech, Mercados Financieros y Blockchain</div>
       <div><small>Autores</small>Xavier Griñó · Ivan Sánchez</div>
-      <div><small>Documento</small>Business Plan · 8 apartados + anexos</div>
-      <div><small>Demo</small>talentpact20.netlify.app</div>
+      <div><small>Centro</small>Universitat de Barcelona</div>
+      <div><small>Producto</small>talentpact.es</div>
     </div>
   </header>
 
   <div class="inner">
     <nav class="toc" id="indice">
       <div class="num">Contenido</div>
-      <h2 style="font-family:Sora,sans-serif;font-size:28px;margin:0 0 18px;border-bottom:3px solid var(--em);padding-bottom:12px">Índice</h2>
-      <ol><li><a href="#cap-00"><span><span class="n">00</span>Resumen ejecutivo</span></a></li><li><a href="#cap-01"><span><span class="n">01</span>Concepto de negocio</span></a></li><li><a href="#cap-02"><span><span class="n">02</span>Estudio de mercado</span></a></li><li><a href="#cap-03"><span><span class="n">03</span>Modelo de negocio</span></a></li><li><a href="#cap-04"><span><span class="n">04</span>Plan financiero</span></a></li><li><a href="#cap-05"><span><span class="n">05</span>Marketing y ventas</span></a></li><li><a href="#cap-06"><span><span class="n">06</span>Tecnología y producto</span></a></li><li><a href="#cap-07"><span><span class="n">07</span>Regulación y compliance</span></a></li><li><a href="#cap-08"><span><span class="n">08</span>Riesgos y contingencias</span></a></li><li><a href="#cierre"><span><span class="n">—</span>Cierre</span></a></li><li><a href="#anexos"><span><span class="n">A–D</span>Anexos</span></a></li></ol>
+      <h2 style="font-family:Sora,sans-serif;font-size:28px;margin:0 0 18px;border-bottom:2px solid var(--ink);padding-bottom:12px">Índice</h2>
+      <ol><li><a href="#cap-00"><span><span class="n">00</span>Resumen ejecutivo</span></a></li><li><a href="#cap-M"><span><span class="n">M</span>Objetivos y metodología</span></a></li><li><a href="#cap-01"><span><span class="n">01</span>Concepto de negocio</span></a></li><li><a href="#cap-02"><span><span class="n">02</span>Estudio de mercado</span></a></li><li><a href="#cap-03"><span><span class="n">03</span>Modelo de negocio</span></a></li><li><a href="#cap-04"><span><span class="n">04</span>Plan financiero</span></a></li><li><a href="#cap-05"><span><span class="n">05</span>Marketing y ventas</span></a></li><li><a href="#cap-06"><span><span class="n">06</span>Tecnología y producto</span></a></li><li><a href="#cap-07"><span><span class="n">07</span>Regulación y compliance</span></a></li><li><a href="#cap-08"><span><span class="n">08</span>Riesgos y contingencias</span></a></li><li><a href="#cap-09"><span><span class="n">09</span>Conclusiones y limitaciones</span></a></li><li><a href="#anexos"><span><span class="n">A–E</span>Anexos</span></a></li></ol>
     </nav>
-    <section class="chapter" id="cap-00"><div class="num">Documento</div><h1>Resumen ejecutivo</h1><div class="kpis"><div class="kpi"><b>€49</b><span>por contacto</span></div><div class="kpi"><b>~94 %</b><span>margen bruto</span></div><div class="kpi"><b>11–17×</b><span>LTV / CAC</span></div><div class="kpi"><b>May 2028</b><span>break-even</span></div></div><p><strong>TalentPact</strong> es un marketplace europeo de talento <strong>100 % anónimo</strong>. El candidato demuestra habilidades con retos prácticos <strong>corregidos por IA</strong>; la empresa filtra un pool pre-validado y paga <strong>solo por resultado</strong> (€49 por contacto). Sobre esa base, el TFM añade la capa fintech: un <strong>SkillPass</strong> —credencial verificable cuyo <em>hash</em> se ancla en blockchain— que el candidato posee y cualquier tercero comprueba sin fiarse de un PDF.</p>
-<p><strong>El problema.</strong> Contratar dura 42 días y cuesta ~€4.700 en España; el 78 % de los CVs mienten o exageran. El filtro sigue siendo un papel y una primera impresión.</p>
-<p><strong>La solución.</strong> Tres capas ya demostradas en producto: (1) evaluación con Claude (~€0,02/ejercicio), (2) persistencia real en Supabase (UE) con cuentas de candidato y empresa, (3) sello on-chain en <strong>Ethereum Sepolia</strong> y verificador público.</p>
-<p><strong>Mercado.</strong> Enfoque España (2,46 M vacantes, 56 candidatos/vacante) sobre un TAM de software de <em>talent acquisition</em> de $169 B. Validación primaria: +90 % de candidatos interesados, 65 % de empresas dispuestas a sustituir la primera entrevista, tráfico de 6 países en la primera semana.</p>
-<p><strong>Modelo.</strong> Cinco palancas (contacto €49, Pro €199, Enterprise €499, retos a medida €299, extra B2C €5). Margen bruto <strong>~94 %</strong>. LTV/CAC <strong>11–17×</strong>, <em>payback</em> &lt; 2 meses.</p>
-<p><strong>Finanzas (base case, Excel 17/04/2026).</strong> Pre-seed <strong>€180 k</strong> + ENISA <strong>€50 k</strong>. 24 → 129 → 284 empresas (2026–2028). Ingreso neto €16 k / €109 k / €360 k. EBITDA negativo hasta <strong>mayo 2028</strong>; neto 2028 <strong>+€34 k</strong>. Caja nunca negativa (valle ~€38 k en abril 2028).</p>
-<p><strong>Equipo.</strong> Xavier Griñó (growth / comercial) e Ivan Sánchez (finanzas / producto-tech). Barcelona.</p>
-<p><strong>Ask del plan (no del TFM académico):</strong> €180 k SAFE para 29 meses de <em>runway</em> de producto, no para un token. El SkillPass no es un criptoactivo (MiCA no aplica); los cobros irían por Stripe.</p>
-<p><strong>Lo que se defiende en septiembre:</strong> un business plan completo y un demo vivo <em>IA → dato → sello → verificación</em>, no un mockup.</p></section><section class="chapter" id="cap-01"><div class="num">Apartado 1</div><h1>Concepto de negocio</h1><blockquote>
+    <section class="chapter" id="cap-00"><div class="num">Documento</div><h1>Resumen ejecutivo</h1><div class="kpis"><div class="kpi"><b>€49</b><span>por contacto</span></div><div class="kpi"><b>~94 %</b><span>margen bruto</span></div><div class="kpi"><b>11–17×</b><span>LTV / CAC</span></div><div class="kpi"><b>May 2028</b><span>break-even</span></div></div><p><strong>TalentPact</strong> es un marketplace europeo de talento <strong>100 % anónimo</strong>. El candidato demuestra habilidades con retos prácticos <strong>corregidos por IA</strong>; la empresa filtra un pool pre-validado y paga <strong>solo por resultado</strong> (€49 por contacto). La capa fintech del TFM es el <strong>SkillPass</strong>: credencial cuyo <em>hash</em> se ancla en blockchain y que un tercero verifica sin fiarse de un PDF.</p>
+<p><strong>El problema.</strong> Contratar dura ~42 días y cuesta ~€4.700 en España; una fracción alta de CVs no es verificable (fuentes secundarias: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024). El filtro sigue siendo un papel.</p>
+<p><strong>Validación propia (MVP, 2026).</strong> n ≈ 30 encuestas: ~90 % de candidatos interesados; <strong>65 %</strong> de empresas de la muestra dispuestas a sustituir la primera entrevista; <strong>7/10</strong> candidatos quieren anonimato al inicio. Criterio experto (≥5 profesionales, Hays). Tracción: 6 países y ~500 visitas en la primera semana. Muestra exploratoria, no probabilística (detalle en §2.4).</p>
+<p><strong>La solución construida.</strong> (1) Evaluación con Claude (~€0,02/ejercicio), (2) persistencia en Supabase (UE), (3) sello on-chain en Ethereum Sepolia y verificador público. Producto: <strong>talentpact.es</strong>.</p>
+<p><strong>Modelo.</strong> Cinco palancas (€49, Pro €199, Enterprise €499, retos a medida €299, extra B2C €5). Margen bruto <strong>~94 %</strong>. LTV/CAC <strong>11–17×</strong>.</p>
+<p><strong>Finanzas (base, Excel 17/04/2026).</strong> Pre-seed <strong>€180 k</strong> + ENISA <strong>€50 k</strong>. 24 → 129 → 284 empresas (2026–2028). Ingreso neto €16 k / €109 k / €360 k. Break-even <strong>mayo 2028</strong>; neto 2028 <strong>+€34 k</strong>. Extracto del modelo en anexo D.</p>
+<p><strong>Equipo.</strong> Xavier Griñó e Ivan Sánchez. Universitat de Barcelona. Máster en Fintech, Mercados Financieros y Blockchain. Septiembre 2026.</p>
+<p><strong>Alcance.</strong> El SkillPass no es un criptoactivo (MiCA no aplica). El €180 k es del plan de negocio, no una petición al tribunal. Se defiende un plan coherente y un sello <strong>ya verificable</strong>.</p></section><section class="chapter" id="cap-M"><div class="num">Marco del TFM</div><h1>Objetivos y metodología</h1><p>Este trabajo es un <strong>plan de negocio</strong> —el entregable que pide el enunciado del máster— y, a la vez, una <strong>demostración empírica</strong>: no se limita a describir una fintech, sino que construye el <em>vertical slice</em> IA → persistencia → sello en blockchain. Esta sección fija qué se pretende demostrar y con qué evidencia, para que el resto del documento no se lea como un <em>pitch</em>.</p>
+<h2>Objetivo general</h2>
+<p>Diseñar un plan de negocio viable para <strong>TalentPact</strong>, un marketplace europeo de talento anónimo con evaluación por inteligencia artificial y credencial verificable (<strong>SkillPass</strong>), y <strong>contrastarlo</strong> con un prototipo funcional desplegado (evaluación real, datos en la UE y anclaje de integridad en testnet).</p>
+<h2>Objetivos específicos</h2>
+<ol>
+<li>Identificar el problema de contratación basado en CV (fricción, sesgo, fraude de información) y formular una propuesta de valor <em>fintech</em>.</li>
+<li>Estimar el mercado (TAM/SAM/SOM) y situar a TalentPact frente a <em>sourcing</em> y <em>assessment</em>.</li>
+<li>Articular un modelo de ingresos <em>pay-per-result</em> y un plan financiero a 36 meses auditable.</li>
+<li>Validar la demanda con investigación primaria (encuestas, entrevistas, tracción del MVP) y explicitar sus límites.</li>
+<li>Implementar y documentar el flujo <strong>evaluar → guardar → sellar → verificar</strong>, reconciliando blockchain con el RGPD (hash on-chain / dato off-chain).</li>
+<li>Mapear obligaciones de AI Act, RGPD, LSSI y el no-alcance de MiCA/PSD2 en el diseño actual.</li>
+</ol>
+<h2>Pregunta e hipótesis de trabajo</h2>
+<p><strong>Pregunta.</strong> ¿Puede una plataforma de <em>skills-based hiring</em> convertir el resultado de una evaluación por IA en una <strong>prueba de integridad portable</strong>, verificable por un tercero sin cuenta, sin publicar datos personales en una cadena pública?</p>
+<p><strong>Hipótesis.</strong> Sí, si (a) la evaluación queda trazada off-chain, (b) on-chain solo se ancla el <em>hash</em> del documento, y (c) el verificador recompone el hash y lo compara con el registro. El prototipo en Ethereum Sepolia es la prueba de concepto; no pretende ser un criptoactivo ni un sistema de alto riesgo ya certificado.</p>
+<h2>Metodología</h2>
+<p>Se combinan cinco fuentes. Ninguna, por sí sola, basta; juntas cubren el enunciado (negocio) y el ángulo del máster (IA + blockchain).</p>
+<table>
+<thead>
+<tr>
+<th>Fuente</th>
+<th>Qué aporta</th>
+<th>Límite</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Revisión documental</strong></td>
+<td>Mercado (InfoJobs–Esade 2025, Mordor 2026, FMI), competencia, normas (AI Act, RGPD, MiCA)</td>
+<td>Cifras de “78 % de CVs falsos” (ResumeLab) y similares son <strong>secundarias</strong>: se citan como contexto, no como medición propia</td>
+</tr>
+<tr>
+<td><strong>Encuestas y landing (MVP, 2026)</strong></td>
+<td>n ≈ 30 cuestionarios; interés de candidatos (~90 %), disposición de empresas a sustituir la 1.ª entrevista (65 %), preferencia de anonimato (7/10)</td>
+<td>Muestra <strong>no probabilística</strong>, difundida en círculo cercano y landing: no se infiere a España. Detalle en §2.4</td>
+</tr>
+<tr>
+<td><strong>Entrevistas de criterio experto</strong></td>
+<td>≥3 empresas; ≥5 profesionales de RRHH, incluido un <em>headhunter</em> de Hays</td>
+<td>Cualitativo; las citas se atribuyen por rol, no por nombre</td>
+</tr>
+<tr>
+<td><strong>Modelo financiero</strong></td>
+<td>Excel base, 36 meses (17/04/2026): P&amp;L, caja, balance, unit economics</td>
+<td>Escenario <strong>base</strong>; no se presentan aquí los modos 0,8/1,3 del propio libro. El <code>.xlsx</code> es el anexo digital</td>
+</tr>
+<tr>
+<td><strong>Construcción del demo</strong></td>
+<td>Claude en producción, Supabase (UE), contrato <code>SkillPassRegistry</code> en Sepolia, <code>verify.html</code></td>
+<td>Testnet ≠ mainnet; el gas es €0; no hay pagos Stripe reales</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Criterio de éxito del TFM (no del plan de <em>fundraising</em>):</strong> que un tercero pueda comprobar un SkillPass emitido por el prototipo, y que el plan de negocio sea internamente coherente con ese producto. El <em>ask</em> de €180 k es del plan financiero, no una petición al tribunal.</p>
+<h2>Estructura del documento</h2>
+<p>Los apartados <strong>1–8</strong> siguen el enunciado (concepto, mercado, modelo, finanzas, marketing, tecnología, regulación, riesgos). El <strong>resumen ejecutivo</strong> abre; las <strong>conclusiones</strong> cierran. Los anexos recogen evidencia on-chain, capturas de la PoC de IA, el extracto del modelo financiero y la bibliografía.</p></section><section class="chapter" id="cap-01"><div class="num">Apartado 1</div><h1>Concepto de negocio</h1><blockquote>
 <p><strong>TalentPact</strong> es un marketplace europeo de talento <strong>100 % anónimo</strong> donde los candidatos demuestran sus habilidades con retos prácticos <strong>corregidos en tiempo real por inteligencia artificial</strong>, y el resultado se convierte en un <strong>CV inmutable y verificable en blockchain</strong> que el propio candidato posee. Las empresas acceden a un pool de perfiles pre-validados y pagan <strong>solo por resultado</strong> (€49 por contacto desbloqueado).</p>
 </blockquote>
 <hr>
@@ -440,19 +486,119 @@ img{max-width:100%}
 - <strong>Anonimato estructural:</strong> ningún competidor ofrece cribado ciego real; es a la vez propuesta de valor y mecanismo anti-sesgo (AI Act).
 - <strong>Doble red (two-sided):</strong> cuantos más candidatos, más atractivo para empresas, y viceversa → efecto de red y coste de cambio creciente.
 - <strong>Credencial verificable en blockchain:</strong> diferenciador único que además genera <em>lock-in</em> positivo (el candidato acumula su historial verificado en TalentPact).</p>
-<h2>2.4 Validación de la demanda (tracción real)</h2>
-<p>La hipótesis no es teórica: se ha validado con mercado real en tres frentes.</p>
-<p><strong>Validación del problema (encuestas y entrevistas):</strong>
-- +30 encuestas completadas; <strong>+90 % de candidatos interesados</strong> en el proyecto.
-- <strong>65 % de las empresas</strong> encuestadas dispuestas a sustituir la primera entrevista por la evaluación de TalentPact.
-- <strong>7 de cada 10 candidatos</strong> prefieren mantener el anonimato en las fases iniciales.
-- 80 % de los reclutadores admite que el CV no refleja la capacidad técnica del candidato.</p>
-<p><strong>Criterio experto:</strong>
-- Contacto con +3 empresas del sector y +5 profesionales de RRHH, incluido un <strong>headhunter de Hays</strong> y perfiles de RRHH con +10 años.
-- Conclusión de experto: <em>"Estamos pasando de la economía de las acreditaciones a la economía de las evidencias"</em> y <em>"el anonimato es la clave para desbloquear talento que hoy ignoramos"</em>.</p>
-<p><strong>Tracción de mercado:</strong>
-- MVP funcional público en talentpact.io.
-- Tráfico cualificado de <strong>6 países en la primera semana</strong> y <strong>+500 visitas</strong> a la web, validando el interés y la escalabilidad del modelo.</p>
+<h2>2.4 Validación de la demanda (investigación primaria)</h2>
+<p>La demanda no se da por supuesta: el equipo la contrastó al construir el MVP (presentación <em>TalentPact — Presentación MVP</em>, 2026, sección «Feedback recibido»; cifras reiteradas en el <em>Investor Deck</em> v2). Hubo <strong>tres frentes</strong>, alineados con la pregunta “¿el mercado necesita esto?”.</p>
+<h3>Método</h3>
+<table>
+<thead>
+<tr>
+<th>Frente</th>
+<th>Instrumento</th>
+<th>Pregunta que responde</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validación del problema</td>
+<td>Difusión en círculo cercano + encuestas en la <em>landing</em> + análisis de fricción del proceso de selección</td>
+<td>¿Es una necesidad percibida?</td>
+</tr>
+<tr>
+<td>Criterio experto</td>
+<td>Conversaciones con empresas y profesionales de RRHH / <em>headhunters</em></td>
+<td>¿La solución es creíble para quien contrata?</td>
+</tr>
+<tr>
+<td>Tracción</td>
+<td>Cuenta profesional de LinkedIn, <em>posts</em>, tráfico y analítica de la <em>landing</em></td>
+<td>¿El mercado reacciona sin campaña grande?</td>
+</tr>
+</tbody>
+</table>
+<p>No se dispone en este tomo del microdato (formulario crudo). Las magnitudes se toman de esas presentaciones y se tratan como <strong>investigación exploratoria</strong>, no como inferencia estadística a la población española.</p>
+<h3>Resultados de encuestas</h3>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Resultado</th>
+<th>Lectura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cuestionarios completados</td>
+<td><strong>n ≈ 30</strong></td>
+<td>Muestra pequeña</td>
+</tr>
+<tr>
+<td>Candidatos interesados en el proyecto</td>
+<td><strong>~90 %</strong></td>
+<td>Fuerte <em>willingness</em> a probar retos</td>
+</tr>
+<tr>
+<td>Empresas dispuestas a <strong>sustituir la primera entrevista</strong> por la evaluación TalentPact</td>
+<td><strong>65 %</strong></td>
+<td>Señal de <em>willingness to switch</em> en el lado que paga</td>
+</tr>
+<tr>
+<td>Candidatos que prefieren <strong>anonimato</strong> en las fases iniciales</td>
+<td><strong>7 de cada 10</strong></td>
+<td>Encaja con el diseño de perfil ciego</td>
+</tr>
+<tr>
+<td>Reclutadores que admiten que el CV <strong>no refleja</strong> la capacidad técnica</td>
+<td><strong>80 %</strong></td>
+<td>Confirma el diagnóstico del problema (declarativo)</td>
+</tr>
+</tbody>
+</table>
+<p>Citas recogidas en el MVP (roles, no nombres):</p>
+<blockquote>
+<p>«Hemos confirmado que el CV genera un cuello de botella crítico: las empresas pierden semanas en entrevistas fallidas por no tener una validación técnica previa.» — <em>perfil de autónomo</em></p>
+<p>«El sesgo de origen bloquea a candidatos brillantes: hay una predisposición total del talento a realizar retos prácticos a cambio de visibilidad real.» — <em>perfil junior</em></p>
+</blockquote>
+<h3>Criterio experto</h3>
+<table>
+<thead>
+<tr>
+<th>Alcance</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Empresas del sector contactadas</td>
+<td><strong>≥ 3</strong></td>
+</tr>
+<tr>
+<td>Profesionales de RRHH / selección</td>
+<td><strong>≥ 5</strong> (incluye perfiles con más de 10 años y un <em>headhunter</em> de <strong>Hays</strong>)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>«Estamos pasando de la economía de las acreditaciones (títulos) a la economía de las evidencias (retos técnicos comprobados).» — <em>profesional de RRHH, +10 años</em></p>
+<p>«Eliminar el nombre y la edad del primer impacto visual nos permite centrarnos en diversidad real. El anonimato es la clave para desbloquear talento que hoy ignoramos.» — <em>headhunter, Hays</em></p>
+</blockquote>
+<p>Los expertos coincidieron, según el MVP, en que un <em>score</em> verificado <strong>reduce el tiempo de cribado técnico</strong>.</p>
+<p>El <em>Investor Deck</em> v2 añade voz de demanda y de oferta (CTO de una SaaS de ~15 empleados; desarrolladora junior en búsqueda activa) en la misma línea: semanas de CVs sin contratar / no poder demostrarse. Se usan como <strong>ilustración</strong>, no como muestra representativa.</p>
+<h3>Tracción del landing / MVP</h3>
+<ul>
+<li>Prototipo público (entonces <code>talentpact.io</code>; producto de referencia <strong>talentpact.es</strong>).</li>
+<li>Tráfico cualificado de <strong>6 países en la primera semana</strong>.</li>
+<li><strong>+500 visitas</strong> a la web en ese arranque.</li>
+<li>Actividad en LinkedIn profesional (<em>posts</em> e interacciones) como canal de difusión, no como campaña de <em>paid</em>.</li>
+</ul>
+<p>Eso valida <strong>interés y alcance geográfico inicial</strong> del relato “retos técnicos + anonimato”. No valida conversión a €49 ni retención B2B.</p>
+<h3>Límites (imprescindibles en defensa)</h3>
+<ol>
+<li><strong>n ≈ 30</strong> y reclutamiento en círculo cercano + <em>landing</em>: sesgo de autoselección; el ~90 % de interés está <strong>inflado</strong> respecto a un muestreo aleatorio.</li>
+<li>Las preguntas exactas y los cruces (edad, sector, si pagaría) <strong>no están tabulados</strong> aquí.</li>
+<li>“80 % de reclutadores” es un resultado de <em>esta</em> ronda exploratoria, no un meta-análisis.</li>
+<li>Seis países y 500 visitas miden <strong>atención</strong>, no <em>willingness to pay</em>.</li>
+</ol>
+<p><strong>Conclusión de §2.4.</strong> Hay señal suficiente para un TFM y para un pre-seed <em>lean</em>: el problema se reconoce, el anonimato se valora, una mayoría de empresas de la muestra probaría sustituir la primera entrevista. No hay, todavía, evidencia de <em>product-market fit</em> de pago.</p>
 <h2>2.5 Segmentación y buyer personas</h2>
 <p><strong>Lado demanda (clientes de pago — empresas):</strong>
 - <em>Startups y pymes tech</em> (5-50 empleados) que contratan perfiles cualificados sin equipo de RRHH grande ni presupuesto para licencias caras. <strong>Segmento inicial prioritario.</strong>
@@ -1787,38 +1933,45 @@ más candidatos = pool mejor        más ofertas = más candidatos
 </tr>
 </tbody>
 </table>
-<p><strong>Riesgo residual aceptado:</strong> el TFM demuestra un <em>vertical slice</em> real (IA + datos + sello on-chain) en testnet, no un unicornio ni un sistema de alto riesgo ya registrado en Bruselas. Presentarlo así es más sólido que inflar el estado de madurez.</p></section>
+<p><strong>Riesgo residual aceptado:</strong> el TFM demuestra un <em>vertical slice</em> real (IA + datos + sello on-chain) en testnet, no un unicornio ni un sistema de alto riesgo ya registrado en Bruselas. Presentarlo así es más sólido que inflar el estado de madurez.</p></section><section class="chapter" id="cap-09"><div class="num">Cierre académico</div><h1>Conclusiones y limitaciones</h1><h2>Conclusiones</h2>
+<ol>
+<li>
+<p><strong>El problema es de evidencia, no de más CVs.</strong> Los datos secundarios (procesos de ~42 días, coste ~€4.700 en España, alta incidencia de información no verificable en el CV) y la investigación primaria del MVP coinciden: empresas y candidatos describen el mismo cuello de botella. TalentPact responde con cribado por <em>skill</em> demostrada, no por biografía.</p>
+</li>
+<li>
+<p><strong>El modelo económico es de margen, no de volumen inicial.</strong> <em>Gross margin</em> ~94 %, LTV/CAC 11–17× y <em>payback</em> &lt; 2 meses (modelo base) indican que el riesgo no es el coste de servir una evaluación (~€0,02), sino <strong>llenar el lado B2B</strong>. El break-even operativo se sitúa en <strong>mayo 2028</strong> (~125 empresas a ARPU ~€145), con caja que no se proyecta negativa si entra el pre-seed €180 k + ENISA €50 k.</p>
+</li>
+<li>
+<p><strong>La validación de demanda es real y pequeña.</strong> n ≈ 30, ~90 % de candidatos interesados, 65 % de empresas dispuestas a sustituir la primera entrevista, 7/10 a favor del anonimato, tracción de 6 países y ~500 visitas en la primera semana del landing. Eso <strong>justifica seguir</strong>; no justifica afirmar <em>product-market fit</em>. El círculo cercano y la landing sesgan al alza el interés.</p>
+</li>
+<li>
+<p><strong>La aportación fintech del TFM está construida, no solo descrita.</strong> El SkillPass ancla un hash en Ethereum Sepolia; el JSON permanece en la UE; <code>verify.html</code> permite a un tercero comprobar integridad sin cuenta. No hay token ni oferta al público: <strong>MiCA no aplica</strong> al diseño actual. Sepolia es demo; el patrón (hash huérfano al borrar el dato) es el que se llevaría a una L2 de producción.</p>
+</li>
+<li>
+<p><strong>El cumplimiento es <em>by design</em> y está incompleto para comercializar.</strong> Anonimato, logs de evaluación (Art. 12 AI Act) y hash-only on-chain cubren el relato. Faltan DPIA, aviso Art. 50, registro de sistema de alto riesgo y <em>ground truth</em> humano del Skill Score. Hasta entonces el producto debe permanecer en <em>preview</em>.</p>
+</li>
+<li>
+<p><strong>Los aprendizajes del MVP siguen vigentes</strong> (presentación MVP, 2026): la nota sin explicación no convence; el anonimato aumenta la disposición a probarse; hay que iterar el €49 con datos de piloto; de prototipo a producto el foco es estabilidad, no más <em>slides</em>.</p>
+</li>
+</ol>
+<h2>Limitaciones</h2>
+<ul>
+<li>Encuestas <strong>sin muestreo aleatorio</strong> ni cuestionario publicado en este tomo (las cifras salen de la presentación MVP y el <em>investor deck</em>).</li>
+<li>SAM europeo (€8–12 B) es <strong>estimación propia</strong> a partir de fuentes agregadas; no un <em>bottom-up</em> por país.</li>
+<li>El motor de IA <strong>no está calibrado</strong> contra un tribunal humano (κ de Cohen pendiente).</li>
+<li>El anclaje es <strong>testnet</strong>; una defensa no debe venderlo como inmutabilidad de <em>mainnet</em> ni como identidad soberana completa (el emisor sigue siendo TalentPact).</li>
+<li>El Excel asume mix de precios y <em>churn</em> que el mercado aún no ha contrastado con cobros reales.</li>
+</ul>
+<h2>Líneas futuras</h2>
+<p>Calibración humana del evaluador; Stripe y SL; contrato en L2 de producción; ficha estadística de una segunda oleada de encuestas; interoperar el SkillPass con la cartera de identidad europea (visión, no año 1).</p>
+<p>Lo que se defiende en septiembre es, por tanto: <strong>un business plan coherente + un sello criptográfico que ya se puede verificar</strong>. No un unicornio ni un sistema de IA certificado.</p></section>
     
-<section class="chapter" id="cierre">
-  <div class="num">Cierre</div>
-  <h1>Lo que se defiende</h1>
-  <p>Este trabajo no presenta un mockup ni un token. Presenta un <strong>plan de negocio completo</strong> y un <strong>producto que ya ejecuta</strong> el relato del máster:</p>
-  <ol>
-    <li>La IA evalúa un reto real (Claude, ~€0,02).</li>
-    <li>El resultado se guarda en una base de datos europea (Supabase).</li>
-    <li>El candidato sella un <strong>SkillPass</strong>: solo el hash viaja a Ethereum Sepolia.</li>
-    <li>Cualquiera verifica el sello en una página pública, sin cuenta TalentPact.</li>
-  </ol>
-  <div class="cards">
-    <div class="card">
-      <h3>Demo pública</h3>
-      <p><a href="https://talentpact20.netlify.app/">talentpact20.netlify.app</a></p>
-      <p class="caption">Candidato · empresa · SkillPass · verificador</p>
-    </div>
-    <div class="card">
-      <h3>Verificador</h3>
-      <p><a href="https://talentpact20.netlify.app/verify.html">verify.html</a></p>
-      <p class="caption">JSON, hash 0x… o enlace ?h=</p>
-    </div>
-  </div>
-</section>
-
 <section class="chapter" id="anexos">
   <div class="num">Anexos</div>
-  <h1>Evidencia del demo y fuentes</h1>
+  <h1>Evidencia, modelo financiero y fuentes</h1>
 
   <h2>A. SkillPass on-chain (Ethereum Sepolia)</h2>
-  <p>Contrato <code>SkillPassRegistry</code> desplegado el 19 de agosto de 2026. On-chain solo se publica el hash; el JSON vive off-chain (RGPD).</p>
+  <p>Contrato <code>SkillPassRegistry</code> desplegado el 19 de agosto de 2026. On-chain solo se publica el hash; el JSON vive off-chain (RGPD). Producto: <a href="https://talentpact.es">talentpact.es</a>.</p>
   <table>
     <tr><th>Campo</th><th>Valor</th></tr>
     <tr><td>Red</td><td>Ethereum Sepolia · chainId 11155111</td></tr>
@@ -1830,6 +1983,7 @@ más candidatos = pool mejor        más ofertas = más candidatos
     <a href="https://sepolia.etherscan.io/address/0x85418F3d978e691C0f784bA63E4cB2826478f73A">contrato</a> ·
     <a href="https://sepolia.etherscan.io/tx/0x0408bef73c350caea921e837df1133a14bc46ed158327676dec07756aaae4f5e">transacción</a>
   </p>
+  <p>Verificador público: <code>verify.html?h=0x…</code></p>
 
   <h2>B. Motor de IA — capturas de la PoC</h2>
   <div class="fig">
@@ -1856,30 +2010,91 @@ más candidatos = pool mejor        más ofertas = más candidatos
       <p>Finanzas y producto-tech. Modelo financiero, arquitectura, IA y SkillPass.</p>
     </div>
   </div>
-  <p class="caption">Barcelona. Máster en Fintech, Mercados Financieros y Blockchain. El investor deck citaba cuatro perfiles; este TFM lo firman únicamente los dos autores.</p>
+  <p class="caption">Universitat de Barcelona. El investor deck citaba cuatro perfiles; este TFM lo firman únicamente los dos autores.</p>
 
-  <h2>D. Referencias</h2>
+  <h2>D. Extracto del modelo financiero (escenario base)</h2>
+  <p>Fuente: <code>assets/TalentPact_modelo_financiero.xlsx</code>, 17/04/2026. No se reproducen las 36 columnas mensuales (ilegibles en PDF); sí el cierre anual, KPIs, caja y balance. El archivo Excel es el anexo digital de auditoría.</p>
+
+  <h3>D.1 Cuenta de resultados (€)</h3>
+  <table>
+    <thead><tr><th>Partida</th><th>2026</th><th>2027</th><th>2028</th></tr></thead>
+    <tbody>
+      <tr><td>Ingreso bruto</td><td>16.636</td><td>110.970</td><td>367.575</td></tr>
+      <tr><td>Ingreso neto</td><td>16.303</td><td>108.750</td><td>360.224</td></tr>
+      <tr><td>COGS</td><td>(1.063)</td><td>(7.262)</td><td>(22.428)</td></tr>
+      <tr><td>Gross profit</td><td>15.240</td><td>101.488</td><td>337.796</td></tr>
+      <tr><td>SG&amp;A</td><td>(77.761)</td><td>(187.884)</td><td>(292.629)</td></tr>
+      <tr><td>EBITDA</td><td>(62.521)</td><td>(86.396)</td><td>45.167</td></tr>
+      <tr><td>Resultado neto</td><td>(64.271)</td><td>(89.417)</td><td>34.178</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D.2 Clientes, rentabilidad unitaria y caja</h3>
+  <table>
+    <thead><tr><th>KPI</th><th>2026</th><th>2027</th><th>2028</th></tr></thead>
+    <tbody>
+      <tr><td>Empresas (dic)</td><td>24</td><td>129</td><td>284</td></tr>
+      <tr><td>Candidatos (dic)</td><td>746</td><td>3.607</td><td>8.746</td></tr>
+      <tr><td>ARR (dic)</td><td>41.973</td><td>224.878</td><td>496.530</td></tr>
+      <tr><td>Gross margin</td><td>93,5 %</td><td>93,3 %</td><td>93,8 %</td></tr>
+      <tr><td>CAC B2B (€)</td><td>238</td><td>195</td><td>256</td></tr>
+      <tr><td>LTV / CAC</td><td>11,5×</td><td>17,3×</td><td>15,2×</td></tr>
+      <tr><td>Caja 31 dic (€)</td><td>160.729</td><td>63.312</td><td>73.458</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D.3 Break-even y financiación</h3>
+  <table>
+    <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
+    <tbody>
+      <tr><td>Primer mes EBITDA ≥ 0</td><td>mayo 2028</td></tr>
+      <tr><td>Caja mínima (valle)</td><td>€38.003 (abril 2028)</td></tr>
+      <tr><td>Equity pre-seed (mes 1)</td><td>€180.000</td></tr>
+      <tr><td>ENISA no dilutivo (jun 2026)</td><td>€50.000</td></tr>
+      <tr><td>Deuda ENISA viva a dic-2028</td><td>€40.968</td></tr>
+      <tr><td>Pérdida acumulada hasta BE</td><td>−€153.688</td></tr>
+    </tbody>
+  </table>
+
+  <h3>D.4 Balance simplificado a 31 de diciembre (€)</h3>
+  <table>
+    <thead><tr><th></th><th>2026</th><th>2027</th><th>2028</th></tr></thead>
+    <tbody>
+      <tr><td>Inmovilizado (equipos)</td><td>5.000</td><td>13.000</td><td>28.000</td></tr>
+      <tr><td>Tesorería</td><td>160.729</td><td>63.312</td><td>73.458</td></tr>
+      <tr><td><strong>Total activo</strong></td><td>165.729</td><td>76.312</td><td>101.458</td></tr>
+      <tr><td>Capital pre-seed</td><td>180.000</td><td>180.000</td><td>180.000</td></tr>
+      <tr><td>Resultados acumulados + del ejercicio</td><td>(64.271)</td><td>(153.688)</td><td>(119.510)</td></tr>
+      <tr><td>Préstamo ENISA</td><td>50.000</td><td>50.000</td><td>40.968</td></tr>
+      <tr><td><strong>Pasivo + PN</strong></td><td>165.729</td><td>76.312</td><td>101.458</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">Hojas origen: Análisis, KPI Dashboard, P&amp;L, Cashflow, Balance. No se incluyen MODELO NORMAL mes a mes ni Full1.</p>
+
+  <h2>E. Referencias</h2>
   <ol class="refs">
-    <li>SHRM (2024). <em>Talent Acquisition Benchmarking</em> — duración media del proceso de contratación.</li>
-    <li>Glassdoor / Adecco — coste medio por contratación en España (~€4.700).</li>
-    <li>ResumeLab (2024) — incidencia de información falsa o exagerada en CVs (78 %).</li>
-    <li>Leadership IQ — fracasos de contratación atribuidos a soft skills (89 %).</li>
-    <li>InfoJobs–Esade (2025). Estado del mercado laboral en España (vacantes, candidatos/vacante, paro juvenil).</li>
+    <li>SHRM (2024). <em>Talent Acquisition Benchmarking</em>.</li>
+    <li>Glassdoor / Adecco Institute — coste medio por contratación en España.</li>
+    <li>ResumeLab (2024) — información falsa o exagerada en CVs.</li>
+    <li>Leadership IQ — fracasos de contratación y <em>soft skills</em>.</li>
+    <li>InfoJobs–Esade (2025). <em>Estado del mercado laboral en España</em>.</li>
     <li>Mordor Intelligence (2026). Mercado global de recruiting.</li>
-    <li>Future Market Insights — talent-acquisition technology (~$169 B, 2025).</li>
-    <li>Reglamento (UE) 2024/1689 (AI Act), Anexo III — sistemas de alto riesgo en empleo.</li>
+    <li>Future Market Insights — <em>talent-acquisition technology</em> (2025).</li>
+    <li>Vendr, Capterra, LinkedIn Recruiter pricing (2026); Equip Benchmark (feb 2026) — precios de competencia (MVP).</li>
+    <li>Reglamento (UE) 2024/1689 (AI Act), Anexo III.</li>
     <li>Reglamento (UE) 2016/679 (RGPD) y LOPDGDD.</li>
     <li>Ley 34/2002 (LSSI).</li>
-    <li>Reglamento (UE) 2023/1114 (MiCA) — se cita para delimitar que el SkillPass no es un criptoactivo ofertado al público.</li>
-    <li>W3C Verifiable Credentials Data Model; eIDAS 2.0 / EU Digital Identity Wallet (visión de interoperabilidad).</li>
-    <li>Modelo financiero TalentPact, escenario base, 17/04/2026 (anexo Excel en <code>tfm/assets/</code>).</li>
-    <li>Investigación primaria del equipo (2026): encuestas, entrevistas RRHH/Hays y tracción del MVP.</li>
+    <li>Reglamento (UE) 2023/1114 (MiCA).</li>
+    <li>W3C, <em>Verifiable Credentials Data Model</em>; eIDAS 2.0 / EU Digital Identity Wallet.</li>
+    <li>TalentPact, modelo financiero escenario base (17/04/2026), archivo Excel en <code>tfm/assets/</code>.</li>
+    <li>Equipo TalentPact (2026). <em>Presentación MVP</em> — sección «Feedback recibido» (encuestas, expertos, tracción).</li>
+    <li>Equipo TalentPact (2026). <em>Investor Deck</em> v2 — tracción y citas cualitativas.</li>
   </ol>
 </section>
 
   </div>
   <footer class="footer-doc">
-    TalentPact · Business Plan TFM · Xavier Griñó e Ivan Sánchez · Documento interno académico · Las cifras financieras proceden del modelo base (17/04/2026).
+    Universitat de Barcelona · Máster en Fintech, Mercados Financieros y Blockchain · Xavier Griñó e Ivan Sánchez · Septiembre 2026 · talentpact.es · Cifras: modelo base 17/04/2026.
   </footer>
 </article>
 </body>

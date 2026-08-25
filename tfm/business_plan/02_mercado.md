@@ -73,23 +73,68 @@ El mercado se divide hoy en dos categorías estancas —*sourcing* (encontrar) y
 - **Doble red (two-sided):** cuantos más candidatos, más atractivo para empresas, y viceversa → efecto de red y coste de cambio creciente.
 - **Credencial verificable en blockchain:** diferenciador único que además genera *lock-in* positivo (el candidato acumula su historial verificado en TalentPact).
 
-## 2.4 Validación de la demanda (tracción real)
+## 2.4 Validación de la demanda (investigación primaria)
 
-La hipótesis no es teórica: se ha validado con mercado real en tres frentes.
+La demanda no se da por supuesta: el equipo la contrastó al construir el MVP (presentación *TalentPact — Presentación MVP*, 2026, sección «Feedback recibido»; cifras reiteradas en el *Investor Deck* v2). Hubo **tres frentes**, alineados con la pregunta “¿el mercado necesita esto?”.
 
-**Validación del problema (encuestas y entrevistas):**
-- +30 encuestas completadas; **+90 % de candidatos interesados** en el proyecto.
-- **65 % de las empresas** encuestadas dispuestas a sustituir la primera entrevista por la evaluación de TalentPact.
-- **7 de cada 10 candidatos** prefieren mantener el anonimato en las fases iniciales.
-- 80 % de los reclutadores admite que el CV no refleja la capacidad técnica del candidato.
+### Método
 
-**Criterio experto:**
-- Contacto con +3 empresas del sector y +5 profesionales de RRHH, incluido un **headhunter de Hays** y perfiles de RRHH con +10 años.
-- Conclusión de experto: *"Estamos pasando de la economía de las acreditaciones a la economía de las evidencias"* y *"el anonimato es la clave para desbloquear talento que hoy ignoramos"*.
+| Frente | Instrumento | Pregunta que responde |
+|---|---|---|
+| Validación del problema | Difusión en círculo cercano + encuestas en la *landing* + análisis de fricción del proceso de selección | ¿Es una necesidad percibida? |
+| Criterio experto | Conversaciones con empresas y profesionales de RRHH / *headhunters* | ¿La solución es creíble para quien contrata? |
+| Tracción | Cuenta profesional de LinkedIn, *posts*, tráfico y analítica de la *landing* | ¿El mercado reacciona sin campaña grande? |
 
-**Tracción de mercado:**
-- MVP funcional público en talentpact.io.
-- Tráfico cualificado de **6 países en la primera semana** y **+500 visitas** a la web, validando el interés y la escalabilidad del modelo.
+No se dispone en este tomo del microdato (formulario crudo). Las magnitudes se toman de esas presentaciones y se tratan como **investigación exploratoria**, no como inferencia estadística a la población española.
+
+### Resultados de encuestas
+
+| Indicador | Resultado | Lectura |
+|---|---|---|
+| Cuestionarios completados | **n ≈ 30** | Muestra pequeña |
+| Candidatos interesados en el proyecto | **~90 %** | Fuerte *willingness* a probar retos |
+| Empresas dispuestas a **sustituir la primera entrevista** por la evaluación TalentPact | **65 %** | Señal de *willingness to switch* en el lado que paga |
+| Candidatos que prefieren **anonimato** en las fases iniciales | **7 de cada 10** | Encaja con el diseño de perfil ciego |
+| Reclutadores que admiten que el CV **no refleja** la capacidad técnica | **80 %** | Confirma el diagnóstico del problema (declarativo) |
+
+Citas recogidas en el MVP (roles, no nombres):
+
+> «Hemos confirmado que el CV genera un cuello de botella crítico: las empresas pierden semanas en entrevistas fallidas por no tener una validación técnica previa.» — *perfil de autónomo*
+
+> «El sesgo de origen bloquea a candidatos brillantes: hay una predisposición total del talento a realizar retos prácticos a cambio de visibilidad real.» — *perfil junior*
+
+### Criterio experto
+
+| Alcance | Resultado |
+|---|---|
+| Empresas del sector contactadas | **≥ 3** |
+| Profesionales de RRHH / selección | **≥ 5** (incluye perfiles con más de 10 años y un *headhunter* de **Hays**) |
+
+> «Estamos pasando de la economía de las acreditaciones (títulos) a la economía de las evidencias (retos técnicos comprobados).» — *profesional de RRHH, +10 años*
+
+> «Eliminar el nombre y la edad del primer impacto visual nos permite centrarnos en diversidad real. El anonimato es la clave para desbloquear talento que hoy ignoramos.» — *headhunter, Hays*
+
+Los expertos coincidieron, según el MVP, en que un *score* verificado **reduce el tiempo de cribado técnico**.
+
+El *Investor Deck* v2 añade voz de demanda y de oferta (CTO de una SaaS de ~15 empleados; desarrolladora junior en búsqueda activa) en la misma línea: semanas de CVs sin contratar / no poder demostrarse. Se usan como **ilustración**, no como muestra representativa.
+
+### Tracción del landing / MVP
+
+- Prototipo público (entonces `talentpact.io`; producto de referencia **talentpact.es**).
+- Tráfico cualificado de **6 países en la primera semana**.
+- **+500 visitas** a la web en ese arranque.
+- Actividad en LinkedIn profesional (*posts* e interacciones) como canal de difusión, no como campaña de *paid*.
+
+Eso valida **interés y alcance geográfico inicial** del relato “retos técnicos + anonimato”. No valida conversión a €49 ni retención B2B.
+
+### Límites (imprescindibles en defensa)
+
+1. **n ≈ 30** y reclutamiento en círculo cercano + *landing*: sesgo de autoselección; el ~90 % de interés está **inflado** respecto a un muestreo aleatorio.
+2. Las preguntas exactas y los cruces (edad, sector, si pagaría) **no están tabulados** aquí.
+3. “80 % de reclutadores” es un resultado de *esta* ronda exploratoria, no un meta-análisis.
+4. Seis países y 500 visitas miden **atención**, no *willingness to pay*.
+
+**Conclusión de §2.4.** Hay señal suficiente para un TFM y para un pre-seed *lean*: el problema se reconoce, el anonimato se valora, una mayoría de empresas de la muestra probaría sustituir la primera entrevista. No hay, todavía, evidencia de *product-market fit* de pago.
 
 ## 2.5 Segmentación y buyer personas
 
@@ -105,4 +150,4 @@ La hipótesis no es teórica: se ha validado con mercado real en tres frentes.
 
 ---
 
-*Fuentes: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024, Leadership IQ, InfoJobs-Esade 2025, Mordor Intelligence 2026, Future Market Insights. Datos de validación y tracción: investigación primaria del equipo (2026). Las estimaciones de SAM se marcan como propias y se refinarán con datos por país.*
+*Fuentes secundarias: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024, Leadership IQ, InfoJobs-Esade 2025, Mordor Intelligence 2026, Future Market Insights, Vendr/Capterra (precios, MVP). Investigación primaria: Presentación MVP 2026 («Feedback recibido») e Investor Deck v2. SAM: estimación propia.*
