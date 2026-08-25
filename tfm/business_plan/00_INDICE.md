@@ -56,9 +56,9 @@ Cada sección se redacta en su propio fichero; el HTML/PDF se regenera con `pyth
 
 ## 6. Tecnología y producto → `06_tecnologia_producto.md`
 - 6.1 Arquitectura del sistema (producto + IA + persistencia + blockchain).
-- 6.2 El motor de IA (Dynamic Prompting + CoT) — resultados reales de la PoC.
+- 6.2 **Innovación en la corrección de ejercicios con IA** (Dynamic Prompting, CoT, PoC, límites).
 - 6.3 Persistencia y datos (Supabase).
-- 6.4 **Innovación blockchain: el CV inmutable y verificable** (credencial, anclaje de hash, verificador).
+- 6.4 **Innovación blockchain: el SkillPass como prueba de integridad** (keccak256, contrato, modelo de confianza, RGPD).
 - 6.5 Innovación financiera (pagos pay-per-result / escrow — visión).
 - 6.6 Roadmap de producto.
 

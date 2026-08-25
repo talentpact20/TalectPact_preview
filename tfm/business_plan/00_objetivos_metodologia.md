@@ -12,8 +12,9 @@ Diseñar un plan de negocio viable para **TalentPact**, un marketplace europeo d
 2. Estimar el mercado (TAM/SAM/SOM) y situar a TalentPact frente a *sourcing* y *assessment*.
 3. Articular un modelo de ingresos *pay-per-result* y un plan financiero a 36 meses auditable.
 4. Validar la demanda con investigación primaria (encuestas, entrevistas, tracción del MVP) y explicitar sus límites.
-5. Implementar y documentar el flujo **evaluar → guardar → sellar → verificar**, reconciliando blockchain con el RGPD (hash on-chain / dato off-chain).
-6. Mapear obligaciones de AI Act, RGPD, LSSI y el no-alcance de MiCA/PSD2 en el diseño actual.
+5. Profundizar y demostrar el **motor de corrección con IA** (un agente, 102 retos vía Dynamic Prompting + CoT): coste, discriminación de calidad, *prompt injection* y límites (κ y *accuracy* pendientes).
+6. Implementar y documentar el flujo **evaluar → guardar → sellar → verificar**, con el SkillPass como ancla keccak256 en un contrato mínimo, reconciliando blockchain con el RGPD (hash on-chain / dato off-chain).
+7. Mapear obligaciones de AI Act, RGPD, LSSI y el no-alcance de MiCA/PSD2 en el diseño actual.
 
 ## Pregunta e hipótesis de trabajo
 
@@ -33,8 +34,8 @@ Se combinan cinco fuentes. Ninguna, por sí sola, basta; juntas cubren el enunci
 | **Modelo financiero** | Excel base, 36 meses (17/04/2026): P&L, caja, balance, unit economics | Escenario **base**; no se presentan aquí los modos 0,8/1,3 del propio libro. El `.xlsx` es el anexo digital |
 | **Construcción del demo** | Claude en producción, Supabase (UE), contrato `SkillPassRegistry` en Sepolia, `verify.html` | Testnet ≠ mainnet; el gas es €0; no hay pagos Stripe reales |
 
-**Criterio de éxito del TFM (no del plan de *fundraising*):** que un tercero pueda comprobar un SkillPass emitido por el prototipo, y que el plan de negocio sea internamente coherente con ese producto. El *ask* de €180 k es del plan financiero, no una petición al tribunal.
+**Criterio de éxito del TFM (no del plan de *fundraising*):** (i) documentar con rigor el evaluador de ejercicios (arquitectura + PoC + límites); (ii) que un tercero pueda comprobar un SkillPass emitido por el prototipo; (iii) que el plan de negocio sea internamente coherente con ese producto. El *ask* de €180 k es del plan financiero, no una petición al tribunal.
 
 ## Estructura del documento
 
-Los apartados **1–8** siguen el enunciado (concepto, mercado, modelo, finanzas, marketing, tecnología, regulación, riesgos). El **resumen ejecutivo** abre; las **conclusiones** cierran. Los anexos recogen evidencia on-chain, capturas de la PoC de IA, el extracto del modelo financiero y la bibliografía.
+Los apartados **1–8** siguen el enunciado (concepto, mercado, modelo, finanzas, marketing, tecnología, regulación, riesgos). El **resumen ejecutivo** abre; las **conclusiones** cierran. El núcleo académico del máster está en **§6.2 (IA)** y **§6.4 (blockchain)**; el resto del plan de negocio las contextualiza. Los anexos recogen evidencia on-chain, capturas de la PoC de IA, el extracto del modelo financiero y la bibliografía.
