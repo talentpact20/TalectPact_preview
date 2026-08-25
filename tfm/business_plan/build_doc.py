@@ -265,6 +265,8 @@ ANNEX = r"""
     <li>Ley 34/2002 (LSSI).</li>
     <li>Reglamento (UE) 2023/1114 (MiCA).</li>
     <li>W3C, <em>Verifiable Credentials Data Model</em>; eIDAS 2.0 / EU Digital Identity Wallet.</li>
+    <li>Zheng, L. et al. (2023). <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena</em>. NeurIPS / arXiv:2306.05685 — efecto halo y límites de los jueces LLM.</li>
+    <li>Bai, Y. et al. (2022). <em>Constitutional AI: Harmlessness from AI Feedback</em>. Anthropic — cláusula de equidad en el evaluador (relato de diseño, no auditoría DIR).</li>
     <li>TalentPact, modelo financiero escenario base (17/04/2026), archivo Excel en <code>tfm/assets/</code>.</li>
     <li>Equipo TalentPact (2026). <em>Presentación MVP</em> — sección «Feedback recibido» (encuestas, expertos, tracción).</li>
     <li>Equipo TalentPact (2026). <em>Investor Deck</em> v2 — tracción y citas cualitativas.</li>

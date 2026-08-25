@@ -8,11 +8,13 @@
 
 3. **La validación de demanda es real y pequeña.** n ≈ 30, ~90 % de candidatos interesados, 65 % de empresas dispuestas a sustituir la primera entrevista, 7/10 a favor del anonimato, tracción de 6 países y ~500 visitas en la primera semana del landing. Eso **justifica seguir**; no justifica afirmar *product-market fit*. El círculo cercano y la landing sesgan al alza el interés.
 
-4. **La aportación fintech del TFM está construida, no solo descrita.** El SkillPass ancla un hash en Ethereum Sepolia; el JSON permanece en la UE; `verify.html` permite a un tercero comprobar integridad sin cuenta. No hay token ni oferta al público: **MiCA no aplica** al diseño actual. Sepolia es demo; el patrón (hash huérfano al borrar el dato) es el que se llevaría a una L2 de producción.
+4. **La corrección con IA es un evaluador, no un chatbot.** Un solo agente puntúa catálogos heterogéneos vía Dynamic Prompting y CoT; la PoC mide ~€0,02/eval, 86 puntos de discriminación y bloqueo del *prompt injection* ensayado. No se afirma κ ≥ 0,65 ni ausencia de sesgo: se afirma un oráculo de scoring **inspeccionable** que hace posible el €49 y el sello posterior (§6.2).
 
-5. **El cumplimiento es *by design* y está incompleto para comercializar.** Anonimato, logs de evaluación (Art. 12 AI Act) y hash-only on-chain cubren el relato. Faltan DPIA, aviso Art. 50, registro de sistema de alto riesgo y *ground truth* humano del Skill Score. Hasta entonces el producto debe permanecer en *preview*.
+5. **La aportación blockchain está construida, no solo descrita.** El SkillPass ancla un keccak256 canónico en `SkillPassRegistry` (Sepolia); el JSON permanece en la UE; `verify.html` permite a un tercero comprobar integridad sin cuenta. No hay token ni oferta al público: **MiCA no aplica**. Sepolia no es *mainnet*; el patrón (hash huérfano al borrar el dato, emisor permissioned, lectura abierta) es el que se llevaría a una L2 (§6.4).
 
-6. **Los aprendizajes del MVP siguen vigentes** (presentación MVP, 2026): la nota sin explicación no convence; el anonimato aumenta la disposición a probarse; hay que iterar el €49 con datos de piloto; de prototipo a producto el foco es estabilidad, no más *slides*.
+6. **El cumplimiento es *by design* y está incompleto para comercializar.** Anonimato, logs de evaluación (Art. 12 AI Act) y hash-only on-chain cubren el relato. Faltan DPIA, aviso Art. 50, registro de sistema de alto riesgo y *ground truth* humano del Skill Score. Hasta entonces el producto debe permanecer en *preview*.
+
+7. **Los aprendizajes del MVP siguen vigentes** (presentación MVP, 2026): la nota sin explicación no convence; el anonimato aumenta la disposición a probarse; hay que iterar el €49 con datos de piloto; de prototipo a producto el foco es estabilidad, no más *slides*.
 
 ## Limitaciones
 
@@ -26,4 +28,4 @@
 
 Calibración humana del evaluador; Stripe y SL; contrato en L2 de producción; ficha estadística de una segunda oleada de encuestas; interoperar el SkillPass con la cartera de identidad europea (visión, no año 1).
 
-Lo que se defiende en septiembre es, por tanto: **un business plan coherente + un sello criptográfico que ya se puede verificar**. No un unicornio ni un sistema de IA certificado.
+Lo que se defiende en septiembre es, por tanto: **un business plan coherente + un evaluador de ejercicios con evidencia de PoC + un sello criptográfico que ya se puede verificar**. No un unicornio ni un sistema de IA certificado.

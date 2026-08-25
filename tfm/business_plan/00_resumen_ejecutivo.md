@@ -1,6 +1,6 @@
 # Resumen ejecutivo
 
-**TalentPact** es un marketplace europeo de talento **100 % anónimo**. El candidato demuestra habilidades con retos prácticos **corregidos por IA**; la empresa filtra un pool pre-validado y paga **solo por resultado** (€49 por contacto). La capa fintech del TFM es el **SkillPass**: credencial cuyo *hash* se ancla en blockchain y que un tercero verifica sin fiarse de un PDF.
+**TalentPact** es un marketplace europeo de talento **100 % anónimo**. El candidato demuestra habilidades con retos prácticos **corregidos por IA**; la empresa filtra un pool pre-validado y paga **solo por resultado** (€49 por contacto). Las dos aportaciones del máster son el **evaluador** (un agente, Dynamic Prompting + CoT, ~€0,02/ejercicio) y el **SkillPass** (keccak256 anclado on-chain; un tercero verifica el documento sin fiarse de un PDF).
 
 **El problema.** Contratar dura ~42 días y cuesta ~€4.700 en España; una fracción alta de CVs no es verificable (fuentes secundarias: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024). El filtro sigue siendo un papel.
 
@@ -14,4 +14,4 @@
 
 **Equipo.** Xavier Griñó e Ivan Sánchez. Universitat de Barcelona. Máster en Fintech, Mercados Financieros y Blockchain. Septiembre 2026.
 
-**Alcance.** El SkillPass no es un criptoactivo (MiCA no aplica). El €180 k es del plan de negocio, no una petición al tribunal. Se defiende un plan coherente y un sello **ya verificable**.
+**Alcance.** El SkillPass no es un criptoactivo (MiCA no aplica). El evaluador no está calibrado contra un tribunal humano (κ pendiente). El €180 k es del plan de negocio, no una petición al tribunal. Se defiende un plan coherente, una PoC de corrección y un sello **ya verificable**.
