@@ -6587,6 +6587,7 @@ const Pay={
     let r=null;
     try{ r=await TPCloud._postAuth('confirm-checkout',sessionId?{sessionId}:{}); }
     catch(e){ console.warn('[TP] confirm-checkout',e); return null; }
+    if(r&&r.error)console.warn('[TP] confirm-checkout:',r.error,r.details||'');
     if(r&&r.stripe)Pay.applyGateway(r.stripe);
     if(r&&Array.isArray(r.unlocks)){
       Pay.paidRefs=new Set(r.unlocks.map(u=>String(u.candidate_ref)));
@@ -6624,7 +6625,13 @@ async function processPayment(){
         'así que no se puede cobrar ni desbloquear nada. Configura <code>STRIPE_SECRET_KEY</code> en el servidor.');
       return;
     }
-    if(r&&r.error){ Pay._status('err','<strong>No se pudo iniciar el pago.</strong> '+escHtml(r.error)); return; }
+    if(r&&r.error){
+      // Se muestra tambien `details`: durante la puesta en marcha es justo lo
+      // que dice si falta la tabla `unlocks` o si la clave de Stripe no vale.
+      Pay._status('err','<strong>No se pudo iniciar el pago.</strong> '+escHtml(r.error)+
+        (r.details?'<br><span style="opacity:.8;font-size:.72rem">'+escHtml(r.details)+'</span>':''));
+      return;
+    }
 
     if(r&&r.alreadyUnlocked){
       // Ya pagado antes: se abre la ficha sin cobrar de nuevo.

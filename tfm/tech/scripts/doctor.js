@@ -45,7 +45,7 @@ async function checkSupabase() {
     fail("datos", "Faltan SUPABASE_URL o SUPABASE_SERVICE_KEY: no se puede emitir ni anclar nada.");
     return;
   }
-  for (const table of ["profiles", "evaluations", "credentials"]) {
+  for (const table of ["profiles", "evaluations", "credentials", "unlocks"]) {
     try {
       const res = await fetch(`${url.replace(/\/$/, "")}/rest/v1/${table}?select=id&limit=1`, {
         headers: { apikey: key, authorization: `Bearer ${key}` }
@@ -53,6 +53,12 @@ async function checkSupabase() {
       if (res.ok) ok("datos", `tabla ${table} accesible`);
       else if (res.status === 401 || res.status === 403)
         fail("datos", `tabla ${table} -> HTTP ${res.status}. La clave no es la service_role (¿pegaste la anon?).`);
+      else if (res.status === 404 || (res.status === 400 && table === "unlocks"))
+        fail(
+          "datos",
+          `tabla ${table} no existe. Ejecuta tfm/tech/supabase_schema.sql en el SQL Editor de Supabase` +
+            (table === "unlocks" ? " (es la tabla de pagos, se anadio despues: sin ella el cobro falla)." : ".")
+        );
       else fail("datos", `tabla ${table} -> HTTP ${res.status}. Ejecuta tfm/tech/supabase_schema.sql en el SQL Editor.`);
     } catch (e) {
       fail("datos", `no se pudo contactar con Supabase: ${e.message}`);

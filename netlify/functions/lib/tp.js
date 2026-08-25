@@ -318,7 +318,11 @@ function getStripe() {
   if (!key) throw new Error("Falta STRIPE_SECRET_KEY en variables de entorno");
   // Carga perezosa: las funciones que no cobran no deben pagar el arranque.
   const Stripe = require("stripe");
-  _stripe = Stripe(key, { apiVersion: "2024-06-20", maxNetworkRetries: 2 });
+  // Sin fijar apiVersion a proposito: stripe-node ya viene anclado a la
+  // version de API para la que fue construido. Forzar una antigua hace que
+  // la libreria construya peticiones con una forma y Stripe las interprete
+  // con otra. maxNetworkRetries cubre cortes de red puntuales.
+  _stripe = Stripe(key, { maxNetworkRetries: 2 });
   return _stripe;
 }
 
