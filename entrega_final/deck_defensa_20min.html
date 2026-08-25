@@ -286,8 +286,8 @@ ul.pts li.amber::before{background:var(--amber)}
     </div>
     <aside class="notes" data-t="0:30">
       <p><b>Xavier.</b> Buenos días. Somos Xavier Griñó e Ivan Sánchez y presentamos <b>TalentPact</b>.</p>
-      <p>En veinte minutos vamos a defender tres cosas: que el problema que atacamos es real y medible, que la tecnología que hemos construido funciona —y os la vamos a enseñar en vivo—, y que el modelo de negocio se sostiene.</p>
-      <p class="cue">Aviso de estructura: hablaremos unos nueve minutos, haremos una demo de seis, y cerraremos con negocio y límites.</p>
+      <p>En veinte minutos vamos a defender tres cosas: que el problema es real, que la tecnología —<b>IA de corrección y sello blockchain</b>— ya funciona y os la enseñamos en vivo, y que el plan de negocio se sostiene, incluido <b>el dinero de la ronda</b>.</p>
+      <p class="cue">Aviso de estructura: relato y tech, demo de seis minutos, negocio y límites, y cerramos con los 180.000 € de pre-seed. No es un cheque al tribunal: es el ask del plan que hemos modelado.</p>
     </aside>
   </section>
 
@@ -334,7 +334,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <h2>Cuatro fuerzas que convergen <em>en 2026.</em></h2>
       <div class="grid g2" style="margin-top:26px">
         <div class="card"><div class="k">Demanda de filtro</div><h3>El mercado está saturado</h3><p>56 candidatos por vacante. Las empresas no necesitan más CVs: necesitan una señal fiable de capacidad.</p></div>
-        <div class="card"><div class="k">Viabilidad técnica</div><h3>La IA ya es asequible</h3><p>Evaluar una respuesta abierta con feedback cuesta hoy <strong>1,4 céntimos</strong>, medido en producción. Hace tres años era inviable.</p></div>
+        <div class="card"><div class="k">Viabilidad técnica</div><h3>La IA ya es asequible</h3><p>Evaluar una respuesta abierta con feedback cuesta hoy <strong>~0,02 €</strong>, medido en la PoC. Hace tres años era inviable.</p></div>
         <div class="card"><div class="k">Presión regulatoria</div><h3>El EU AI Act está vigente</h3><p>Clasifica la contratación asistida por IA como <strong>alto riesgo</strong> y exige que sea auditable, explicable y no discriminatoria.</p></div>
         <div class="card"><div class="k">Estándar emergente</div><h3>Credenciales verificables</h3><p>W3C Verifiable Credentials, eIDAS 2.0 y la EU Digital Identity Wallet mueven el mercado hacia títulos que el individuo posee y cualquiera comprueba.</p></div>
       </div>
@@ -342,7 +342,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <div class="foot"><span>El problema</span><span>04</span></div>
     <aside class="notes" data-t="0:50">
       <p><b>Ivan.</b> ¿Por qué ahora? Porque convergen cuatro cosas que hace tres años no estaban juntas.</p>
-      <p><b>Una</b>, la saturación crea la demanda de filtro. <b>Dos</b>, la IA se ha vuelto asequible: evaluar una respuesta abierta nos cuesta <b>1,4 céntimos</b>, y eso lo hemos medido, no estimado.</p>
+      <p><b>Una</b>, la saturación crea la demanda de filtro. <b>Dos</b>, la IA se ha vuelto asequible: evaluar una respuesta abierta nos cuesta <b>unos 2 céntimos</b>, medido en la PoC — la misma cifra que usa el Excel.</p>
       <p><b>Tres</b>, el AI Act ya está vigente y clasifica esto como alto riesgo. Eso suele leerse como una barrera; para nosotros es lo contrario: si tu sistema ya es anónimo y trazable, la regulación te separa de quien no lo es.</p>
       <p><b>Y cuatro</b>, el estándar de credenciales verificables —W3C, eIDAS 2.0, la cartera de identidad europea— está madurando justo ahora. Es la base de nuestra capa fintech.</p>
     </aside>
@@ -377,7 +377,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <aside class="notes" data-t="0:50">
       <p><b>Ivan.</b> <b>Primera pieza:</b> el candidato no cuenta lo que sabe, lo resuelve. Retos que replican situaciones laborales reales, corregidos por IA, con un Skill Score explicable criterio a criterio.</p>
       <p><b>Segunda:</b> el perfil es ciego. La empresa ve habilidades y puntuaciones, nunca nombre, edad, género ni foto. Esto no es solo ético: es nuestro principal mecanismo anti-sesgo de cara al AI Act.</p>
-      <p><b>Tercera:</b> ese resultado se convierte en un <b>SkillPass</b>, una credencial verificable que pertenece al candidato y que cualquier empresa puede comprobar sin fiarse de nosotros. Es la parte fintech del trabajo y la veremos en detalle.</p>
+      <p><b>Tercera:</b> ese resultado se convierte en un <b>SkillPass</b>: un documento cuyo hash se ancla on-chain y que cualquier empresa comprueba sin cuenta. Integridad, no un NFT. Es la parte fintech y la veremos en detalle.</p>
       <p class="cue">Y el modelo: la empresa paga 49 € solo cuando quiere el contacto. Pago por resultado, sin licencia ni compromiso.</p>
     </aside>
   </section>
@@ -427,9 +427,9 @@ ul.pts li.amber::before{background:var(--amber)}
         <div>
           <p class="lede" style="margin-bottom:20px">En lugar de programar la lógica de cada reto, <strong>inyectamos su rúbrica en tiempo de ejecución</strong> dentro del prompt de sistema. El código es un pipeline genérico; lo que sabe evaluar es la rúbrica, y la rúbrica es un dato configurable.</p>
           <ul class="pts">
-            <li><strong>Chain of Thought:</strong> obliga a razonar criterio por criterio <em>antes</em> de la nota. Es lo que la hace auditable.</li>
-            <li><strong>Constitutional AI:</strong> cláusulas de equidad explícitas; la nota debe ser independiente de género, edad, origen o estilo.</li>
-            <li><strong>Temperatura cero:</strong> mismo input, mismo score. En un sistema que decide sobre empleo, no es negociable.</li>
+            <li><strong>Chain of Thought:</strong> obliga a razonar criterio por criterio <em>antes</em> de la nota. Es lo que la hace auditable (Art. 12 AI Act).</li>
+            <li><strong>Constitutional AI:</strong> cláusulas de equidad en el prompt. El DIR &gt; 0,80 <strong>aún no está medido</strong>: es diseño, no auditoría.</li>
+            <li><strong>Temperatura cero (PoC):</strong> mismo input, mismo score en el prototipo. En producción el parámetro aún no está fijado: es un hueco de una línea.</li>
           </ul>
         </div>
         <div>
@@ -452,7 +452,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <p>En lugar de programar la lógica de cada reto, buscamos su rúbrica en la base de datos y la <b>inyectamos en tiempo de ejecución</b> dentro del prompt de sistema.</p>
       <p>El principio, dicho en una frase: <b>la inteligencia evaluadora no vive en el código, vive en las rúbricas</b>. El código es un pipeline genérico y deliberadamente tonto.</p>
       <p>La consecuencia práctica está a la derecha: añadir el reto 103 es insertar una fila JSON. Cero líneas de código, cero modelos nuevos.</p>
-      <p>Sobre esa base aplicamos tres controles. <b>Chain of Thought</b> obliga al modelo a razonar criterio por criterio antes de puntuar — eso es lo que hace la evaluación auditable. <b>Constitutional AI</b> mete cláusulas de equidad explícitas. Y <b>temperatura cero</b> garantiza que el mismo input dé el mismo score.</p>
+      <p>Sobre esa base aplicamos tres controles. <b>Chain of Thought</b> obliga al modelo a razonar criterio por criterio antes de puntuar — eso es lo que hace la evaluación auditable. <b>Constitutional AI</b> mete cláusulas de equidad; no hemos medido el impacto dispar. Y <b>temperatura cero</b> está en la PoC; en la función de producción aún no se fuerza. Lo decimos para no vender determinismo que no está en el código.</p>
     </aside>
   </section>
 
@@ -464,23 +464,23 @@ ul.pts li.amber::before{background:var(--amber)}
       <table style="margin-top:20px">
         <thead><tr><th style="width:31%">Indicador</th><th class="num-col" style="width:15%">Objetivo</th><th class="num-col" style="width:17%">Medido</th><th style="width:37%">Estado</th></tr></thead>
         <tbody>
-          <tr><td>Coste por evaluación</td><td class="num-col">&lt; 0,04 €</td><td class="num-col"><strong>0,014 €</strong></td><td><span class="chip ok">Cumple</span></td></tr>
-          <tr><td>Detección de prompt injection</td><td class="num-col">100 %</td><td class="num-col"><strong>100 %</strong></td><td><span class="chip ok">Cumple</span></td></tr>
-          <tr><td>Capacidad de discriminación</td><td class="num-col">&gt; 40 pts</td><td class="num-col"><strong>83 pts</strong></td><td><span class="chip ok">Cumple</span></td></tr>
-          <tr><td>Tasa de rechazo del modelo</td><td class="num-col">&lt; 5 %</td><td class="num-col"><strong>0 %</strong></td><td><span class="chip ok">Cumple</span></td></tr>
-          <tr><td>Latencia extremo a extremo</td><td class="num-col">&lt; 12 s</td><td class="num-col">17-20 s</td><td><span class="chip warn">Fuera de objetivo — falta streaming</span></td></tr>
-          <tr><td>Concordancia con evaluador humano</td><td class="num-col">κ ≥ 0,65</td><td class="num-col">—</td><td><span class="chip wait">Sin validar — es nuestro siguiente hito</span></td></tr>
+          <tr><td>Coste por evaluación</td><td class="num-col">&lt; 0,04 €</td><td class="num-col"><strong>~0,02 €</strong></td><td><span class="chip ok">Cumple · Excel y PoC</span></td></tr>
+          <tr><td>Detección de prompt injection</td><td class="num-col">ataque clásico</td><td class="num-col"><strong>0 + alerta</strong></td><td><span class="chip ok">Cumple · corpus n = 4</span></td></tr>
+          <tr><td>Capacidad de discriminación</td><td class="num-col">separar calidad</td><td class="num-col"><strong>86 pts</strong></td><td><span class="chip ok">96 vs 10 · PoC</span></td></tr>
+          <tr><td>Tasa de rechazo del modelo</td><td class="num-col">&lt; 5 %</td><td class="num-col"><strong>0 %</strong></td><td><span class="chip ok">0/4 evaluaciones</span></td></tr>
+          <tr><td>Latencia extremo a extremo</td><td class="num-col">&lt; 12 s</td><td class="num-col">17–19 s</td><td><span class="chip warn">Fuera de objetivo — falta streaming</span></td></tr>
+          <tr><td>Concordancia con evaluador humano</td><td class="num-col">κ ≥ 0,65</td><td class="num-col">—</td><td><span class="chip wait">Sin validar — siguiente hito</span></td></tr>
         </tbody>
       </table>
-      <p style="margin-top:20px;font-size:15px"><strong>Margen sobre el precio:</strong> tres ejercicios por candidato cuestan <strong>4,2 céntimos</strong> de IA frente a los 49 € que paga la empresa. La partida de IA no condiciona el negocio ni a gran escala.</p>
+      <p style="margin-top:20px;font-size:15px"><strong>Margen sobre el precio:</strong> tres ejercicios por candidato cuestan <strong>~0,06 €</strong> de IA frente a los 49 € que paga la empresa. La partida de IA no condiciona el negocio ni a gran escala.</p>
     </div>
     <div class="foot"><span>El motor de IA</span><span>10</span></div>
     <aside class="notes" data-t="1:10">
       <p><b>Xavier.</b> Esta es la tabla que más nos importa, porque son <b>datos medidos en ejecuciones reales</b>, no proyecciones.</p>
-      <p>Cumplimos cuatro objetivos con holgura. El coste es <b>1,4 céntimos por evaluación</b> frente al objetivo de cuatro. La detección de prompt injection es del 100 %. Y la capacidad de discriminación es de <b>83 puntos</b>: el motor separa una respuesta senior de un 85 de un intento de manipulación que puntúa 2.</p>
-      <p>Y ahora lo que <b>no</b> cumplimos, que preferimos decirlo nosotros. La <b>latencia</b> está fuera de objetivo: 17-20 segundos medidos en local sin streaming. No es un límite arquitectónico, es una optimización pendiente.</p>
+      <p>Cumplimos el coste con holgura: <b>unos 2 céntimos por evaluación</b> frente al objetivo de cuatro — es la cifra del Excel y de la PoC. El ataque de <b>prompt injection</b> del corpus (n = 4) sale a nota 0 con alerta; no vendemos un 100 % de producción. Y la discriminación es de <b>86 puntos</b>: 96 frente a 10.</p>
+      <p>Y ahora lo que <b>no</b> cumplimos, que preferimos decirlo nosotros. La <b>latencia</b> está fuera de objetivo: 17-19 segundos medidos en local sin streaming. No es un límite arquitectónico, es una optimización pendiente.</p>
       <p class="cue">Y esta es la importante: <b>no hemos validado el score contra evaluadores humanos</b>. La kappa de Cohen está sin medir. Es nuestro principal riesgo de calidad y el siguiente hito del producto. Preferimos presentarlo así antes que afirmar una fiabilidad que no hemos demostrado.</p>
-      <p>Cierre: tres ejercicios por candidato cuestan 4,2 céntimos frente a 49 € de ingreso. La IA no condiciona el margen.</p>
+      <p>Cierre: tres ejercicios por candidato cuestan ~6 céntimos frente a 49 € de ingreso. La IA no condiciona el margen.</p>
     </aside>
   </section>
 
@@ -512,12 +512,13 @@ ul.pts li.amber::before{background:var(--amber)}
     <div class="body">
       <div class="num">ACTO IV</div>
       <h2>SkillPass: la capa <em>fintech.</em></h2>
-      <p class="lede">Si la evaluación es buena, el siguiente problema es de confianza: ¿cómo prueba el candidato ese resultado fuera de nuestra plataforma?</p>
+      <p class="lede">La IA produce una evidencia inspeccionable. La cadena prueba que <em>ese</em> documento no se ha tocado. Son dos problemas distintos; el máster exige los dos.</p>
     </div>
     <div class="foot"><span>SkillPass</span><span>12</span></div>
     <aside class="notes" data-t="0:15">
       <p><b>Ivan.</b> Vamos a la capa fintech, que es el eje de este máster.</p>
-      <p>Supongamos que la evaluación es buena. Aparece el siguiente problema, que es de <b>confianza</b>: ¿cómo demuestra el candidato ese resultado fuera de TalentPact?</p>
+      <p>La frase del trabajo: <b>la IA produce la evidencia; la cadena prueba que ese documento no se ha tocado</b>. Mezclar las dos en “el CV ya no se puede falsear” es el error que evitamos.</p>
+      <p>El problema de esta capa es de <b>integridad</b>: ¿cómo demuestra el candidato ese resultado fuera de TalentPact, sin que un PDF se edite?</p>
     </aside>
   </section>
 
@@ -533,20 +534,20 @@ ul.pts li.amber::before{background:var(--amber)}
             <li><strong>Un perfil de LinkedIn</strong> lo escribe el propio candidato. Es una declaración, no una prueba.</li>
             <li><strong>Un certificado alojado por nosotros</strong> obliga a la empresa a confiar en TalentPact — y a que TalentPact siga existiendo dentro de cinco años.</li>
           </ul>
-          <div class="claim" style="margin-top:28px">La credencial tiene que poder comprobarse <strong style="color:var(--accent)">sin confiar en quien la emitió.</strong></div>
+          <div class="claim" style="margin-top:28px">La credencial tiene que poder comprobarse <strong style="color:var(--accent)">sin cuenta TalentPact y sin fiarse de un PDF.</strong></div>
         </div>
         <div class="card" style="background:var(--deep);border-color:var(--deep)">
           <div class="k" style="color:var(--accent-bright)">Lo que resuelve la blockchain</div>
           <h3 style="color:#EAF5F0">Un sello que nadie puede reescribir</h3>
-          <p style="color:#9CBBB0">No usamos blockchain para almacenar el currículum, ni para emitir un token. La usamos para lo único que hace mejor que una base de datos: <strong style="color:#EAF5F0">dar fe de que un documento existía, con ese contenido exacto, en una fecha concreta</strong> — y que desde entonces nadie lo ha tocado, tampoco nosotros.</p>
+          <p style="color:#9CBBB0">No usamos blockchain para almacenar el currículum, ni para emitir un token. La usamos para lo único que hace mejor que una base de datos: <strong style="color:#EAF5F0">dar fe de que un documento existía, con ese contenido exacto, en una fecha concreta</strong> — integridad y no repudio temporal, no un NFT ni identidad soberana.</p>
         </div>
       </div>
     </div>
     <div class="foot"><span>SkillPass</span><span>13</span></div>
     <aside class="notes" data-t="0:45">
       <p><b>Ivan.</b> Las opciones habituales no sirven. Un <b>PDF</b> lo edita cualquiera. Un <b>perfil de LinkedIn</b> lo escribe el propio candidato: es una declaración, no una prueba. Y un <b>certificado alojado por nosotros</b> obliga a la empresa a confiar en TalentPact y a que TalentPact siga existiendo dentro de cinco años.</p>
-      <p>La credencial tiene que poder comprobarse <b>sin confiar en quien la emitió</b>.</p>
-      <p class="cue">Y quiero ser preciso en esto, porque es donde se cometen los excesos: no usamos blockchain para guardar el currículum ni para emitir un token. La usamos para lo único que hace mejor que una base de datos: <b>dar fe de que un documento existía, con ese contenido exacto, en una fecha concreta</b>, y que desde entonces nadie lo ha tocado. Tampoco nosotros.</p>
+      <p>La credencial tiene que poder comprobarse <b>sin cuenta TalentPact y sin fiarse de un PDF</b>.</p>
+      <p class="cue">Precisión, porque es donde se cometen los excesos: no usamos blockchain para guardar el currículum ni para emitir un token. Es <b>integridad + marca de tiempo</b>. Seguimos siendo el emisor: si la clave se compromete, se pueden anclar hashes falsos. Eso no es SSI completa.</p>
     </aside>
   </section>
 
@@ -563,14 +564,14 @@ ul.pts li.amber::before{background:var(--amber)}
       </div>
       <div class="grid g2" style="margin-top:26px">
         <div class="card"><div class="k">La tensión que resuelve</div><h3>Inmutable y borrable a la vez</h3><p>La blockchain es inmutable; el RGPD exige poder borrar. Una huella de 32 bytes no es un dato personal, y el CV real vive off-chain, donde sí se elimina. Al borrarlo, el hash queda huérfano y deja de significar nada.</p></div>
-        <div class="card"><div class="k">Lo que esto le da al candidato</div><h3>Una credencial que le pertenece</h3><p>Portable a cualquier plataforma, comprobable por cualquier empresa y válida aunque TalentPact desaparezca. Es el activo que el candidato se lleva consigo.</p></div>
+        <div class="card"><div class="k">Lo que esto le da al candidato</div><h3>Una evidencia portable</h3><p>Cualquier empresa pega el JSON o el hash y comprueba el sello. No hace falta cuenta. El emisor sigue siendo TalentPact; eIDAS / EUDI Wallet es hoja de ruta, no el demo.</p></div>
       </div>
     </div>
     <div class="foot"><span>SkillPass</span><span>14</span></div>
     <aside class="notes" data-t="1:00">
       <p><b>Ivan.</b> El mecanismo tiene cuatro pasos. <b>Uno</b>, componemos un JSON con el mejor resultado por habilidad, con las claves en orden estable para que el hash sea reproducible. <b>Dos</b>, calculamos su <b>keccak256</b>: cambia un punto de una nota y cambia la huella entera. <b>Tres</b>, anclamos <b>solo esos 32 bytes</b> en el contrato. <b>Cuatro</b>, cualquiera recalcula la huella del JSON que reciba y la busca en el contrato.</p>
       <p>Y aquí está la decisión de diseño que más nos ha costado, que resuelve una tensión real: <b>la blockchain es inmutable y el RGPD exige poder borrar</b>. La resolvemos porque una huella de 32 bytes no es un dato personal, y el CV real vive off-chain en la Unión Europea, donde sí se puede eliminar. Si el candidato ejerce su derecho al olvido, borramos el documento y el hash on-chain queda huérfano: deja de significar nada.</p>
-      <p class="cue">Para el candidato esto significa una credencial que <b>le pertenece</b>, que es portable y que sigue siendo válida aunque TalentPact desaparezca.</p>
+      <p class="cue">Para el candidato esto es una evidencia <b>portable</b>: JSON + hash. No vendemos que “le pertenece aunque desaparezcamos” como SSI: el emisor sigue siendo nuestra wallet. eIDAS es después.</p>
     </aside>
   </section>
 
@@ -589,7 +590,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <div class="grid g3" style="margin-top:26px">
         <div class="card"><div class="k">Decisión técnica</div><h3>Por qué Sepolia</h3><p>Los faucets de Polygon Amoy exigían cripto de mainnet. Sepolia permite anclar de verdad a coste cero y enseñar la transacción en Etherscan.</p></div>
         <div class="card"><div class="k">Alcance regulatorio</div><h3>El SkillPass no es un criptoactivo</h3><p>No es transferible, no tiene valor de mercado y no hay custodia. <strong>MiCA no aplica.</strong> Es una credencial, no un token.</p></div>
-        <div class="card"><div class="k">Honestidad</div><h3>Testnet, y lo decimos</h3><p>Es una red de pruebas. El contrato y el patrón —hash on-chain, dato off-chain— son idénticos a los que irían a una L2 en producción.</p></div>
+        <div class="card"><div class="k">Honestidad</div><h3>Testnet, y lo decimos</h3><p>Sepolia se puede resetear. El contrato y el patrón —hash on-chain, dato off-chain, emisor permissioned— son los que irían a una L2. No es mainnet ni SSI.</p></div>
       </div>
     </div>
     <div class="foot"><span>SkillPass</span><span>15</span></div>
@@ -726,23 +727,37 @@ ul.pts li.amber::before{background:var(--amber)}
     </aside>
   </section>
 
-  <!-- ══════════════ 21 · ROADMAP ══════════════ -->
-  <section class="slide" data-sec="Siguientes pasos">
+  <!-- ══════════════ 21 · LA RONDA ══════════════ -->
+  <section class="slide" data-sec="La ronda">
     <div class="body top">
-      <div class="eyebrow">Qué viene después de esta defensa</div>
-      <h2>El siguiente hito no es técnico: <em>es empírico.</em></h2>
-      <div class="grid g3" style="margin-top:26px">
-        <div class="card"><div class="k">Prioridad alta</div><h3>Calibración humana</h3><p>Tribunal de evaluadores y medición de la concordancia. Es lo que convierte una PoC sólida en un producto certificable.</p></div>
-        <div class="card"><div class="k">Prioridad alta</div><h3>Segundo evaluador independiente</h3><p>Un modelo de otro proveedor como juez, para medir alucinación y reducir la dependencia de un único proveedor.</p></div>
-        <div class="card"><div class="k">Prioridad media</div><h3>Producción</h3><p>Respuesta en streaming para bajar la latencia percibida, catálogo completo de retos y contrato en una L2.</p></div>
+      <div class="eyebrow">Cierre del plan · el dinero</div>
+      <h2>Pedimos <em>180.000 €</em> de pre-seed.</h2>
+      <p class="lede" style="margin-bottom:18px">SAFE, mes 1. Más <strong>50.000 €</strong> ENISA no dilutivo en mes 6. Capital total <strong>230.000 €</strong> para cruzar el break-even de <strong>mayo 2028</strong> (~125 empresas, ARPU ~145 €). No hay token ni ICO.</p>
+      <div class="split" style="grid-template-columns:1.15fr .85fr;align-items:start;gap:28px">
+        <div>
+          <table>
+            <thead><tr><th>Uso del pre-seed</th><th class="num-col">%</th><th class="num-col">Importe</th></tr></thead>
+            <tbody>
+              <tr><td>Producto y tech (IA, infra, SkillPass → L2)</td><td class="num-col">40 %</td><td class="num-col"><strong>72.000 €</strong></td></tr>
+              <tr><td>Sales &amp; marketing B2B (primeras cuentas)</td><td class="num-col">30 %</td><td class="num-col">54.000 €</td></tr>
+              <tr><td>Operaciones y legal (SL, RGPD, AI Act)</td><td class="num-col">15 %</td><td class="num-col">27.000 €</td></tr>
+              <tr><td>Compensación lean de socios</td><td class="num-col">10 %</td><td class="num-col">18.000 €</td></tr>
+              <tr><td>Buffer</td><td class="num-col">5 %</td><td class="num-col">9.000 €</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid" style="gap:12px">
+          <div class="card"><div class="k">Por qué no bootstrap</div><h3>CAC + compliance</h3><p>El CAC B2B existe (~238 € año 1) y el AI Act no se cumple gratis. Sin los 230 k el valle de 2028 no se cruza.</p></div>
+          <div class="card"><div class="k">Qué financia</div><h3>El siguiente hito empírico</h3><p>Calibración humana del score, Stripe, contrato en L2 y las 24 empresas de 2026. No más slides: ejecución.</p></div>
+          <div class="card" style="border-color:var(--amber);background:var(--amber-wash)"><div class="k" style="color:var(--amber)">Qué no es</div><h3>Una petición al tribunal</h3><p>Es el ask del plan de negocio que hemos modelado. El TFM se defiende igual si la ronda no entra.</p></div>
+        </div>
       </div>
-      <div class="claim" style="margin-top:34px">Lo que hoy es una arquitectura correcta y medida se convierte en un producto defendible el día que un humano confirme sus notas.</div>
     </div>
-    <div class="foot"><span>Siguientes pasos</span><span>21</span></div>
-    <aside class="notes" data-t="0:40">
-      <p><b>Ivan.</b> Y de ahí sale el roadmap, que está ordenado por lo que <b>desbloquea</b>, no por lo que apetece programar.</p>
-      <p>Lo primero es la <b>calibración humana</b>. Lo segundo, un <b>segundo evaluador</b> de otro proveedor, que nos da medida de alucinación e independencia de Anthropic. Y en prioridad media, lo de producción: streaming, catálogo completo y llevar el contrato a una L2.</p>
-      <p class="cue">La frase que resume el estado del trabajo: <b>lo que hoy es una arquitectura correcta y medida se convierte en un producto defendible el día que un humano confirme sus notas.</b></p>
+    <div class="foot"><span>La ronda</span><span>21</span></div>
+    <aside class="notes" data-t="1:05">
+      <p><b>Xavier.</b> Cerramos el power con el dinero. El plan que defendemos pide <b>180.000 euros de pre-seed</b>, formato SAFE, más <b>50.000 de ENISA</b> no dilutivo. En total 230.000 para llegar a mayo de 2028.</p>
+      <p>Uso de los 180 k, que es lo que un inversor pregunta: <b>40 % producto</b> —el motor de IA, la infra y llevar el SkillPass a una L2—. <b>30 % ventas B2B</b>, que es donde se rompe el modelo si no hay volumen. <b>15 % legal y SL</b>, porque somos alto riesgo. 10 % socios lean, 5 % colchón.</p>
+      <p class="cue">Frase que no podéis omitir: <b>no os estamos pidiendo el cheque a vosotros</b>. Es el ask del Excel. El trabajo académico ya está construido. Si la ronda no entra, el TFM sigue en pie; el break-even de 2028, no.</p>
     </aside>
   </section>
 
@@ -750,21 +765,20 @@ ul.pts li.amber::before{background:var(--amber)}
   <section class="slide cover" data-sec="Cierre">
     <div class="mark">talent<span>pact</span></div>
     <div class="body">
-      <h2 style="color:#EAF5F0;font-size:52px;max-width:22ch;margin-bottom:24px">Hemos construido la pieza que hacía falta demostrar.</h2>
-      <div class="grid g3" style="gap:26px;max-width:none">
-        <div class="stat"><div class="n" style="color:var(--accent-bright)">0,014<small style="color:#6E9587"> €</small></div><div class="l" style="color:#9CBBB0">por evaluación, medido en producción</div></div>
-        <div class="stat"><div class="n" style="color:var(--accent-bright)">83<small style="color:#6E9587"> pts</small></div><div class="l" style="color:#9CBBB0">de discriminación entre una respuesta senior y un fraude</div></div>
-        <div class="stat"><div class="n" style="color:var(--accent-bright)">100<small style="color:#6E9587"> %</small></div><div class="l" style="color:#9CBBB0">de los intentos de manipulación, detectados</div></div>
+      <p class="eyebrow" style="color:var(--accent-bright);margin-bottom:10px">Pre-seed · SAFE</p>
+      <h2 style="color:#EAF5F0;font-size:72px;max-width:none;margin-bottom:10px;letter-spacing:-.04em">180.000 €</h2>
+      <p class="sub" style="margin-bottom:28px;max-width:48ch">El dinero que el modelo necesita para que la IA y el SkillPass dejen de ser un TFM y pasen a las primeras 24 empresas.</p>
+      <div class="grid g3" style="gap:22px;max-width:none">
+        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:36px">~0,02 €</div><div class="l" style="color:#9CBBB0">por evaluación IA · PoC y Excel</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:36px">keccak256</div><div class="l" style="color:#9CBBB0">SkillPass anclado en Sepolia · ya verificable</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:36px">+ 50 k €</div><div class="l" style="color:#9CBBB0">ENISA no dilutivo · capital total 230 k</div></div>
       </div>
-      <p class="sub" style="margin-top:30px;max-width:60ch">Y un sello que cualquiera puede verificar hoy, en un contrato público, sin pedirnos permiso ni fiarse de nosotros.</p>
     </div>
-    <div class="meta"><div><dt>Gracias</dt><dd>Xavier Griñó · Ivan Sánchez — quedamos a vuestra disposición para preguntas</dd></div></div>
-    <aside class="notes" data-t="0:35">
-      <p><b>Xavier.</b> Cerramos.</p>
-      <p>El objetivo de este trabajo era demostrar que se puede evaluar talento de forma <b>fiable, barata y auditable</b>, y convertir el resultado en una credencial que no dependa de nosotros.</p>
-      <p>Lo hemos medido: <b>1,4 céntimos</b> por evaluación, <b>83 puntos</b> de discriminación entre una respuesta senior y un intento de fraude, y el <b>100 %</b> de los ataques de manipulación detectados.</p>
-      <p>Y hay un sello que podéis verificar hoy, en un contrato público, sin pedirnos permiso.</p>
-      <p class="cue">Lo que queda por delante es la validación humana, y sabemos exactamente cómo hacerla. Muchas gracias — quedamos a vuestra disposición.</p>
+    <div class="meta"><div><dt>Gracias</dt><dd>Xavier Griñó · Ivan Sánchez — quedamos a vuestra disposición</dd></div></div>
+    <aside class="notes" data-t="0:40">
+      <p><b>Xavier.</b> Cerramos con la cifra: <b>ciento ochenta mil euros</b>. Más cincuenta de ENISA.</p>
+      <p>Lo que hemos demostrado hoy: un evaluador a <b>dos céntimos</b>, un sello <b>keccak256</b> que podéis verificar sin pedirnos permiso, y un plan que con ese capital llega a mayo de 2028.</p>
+      <p class="cue">Muchas gracias. Quedamos a vuestra disposición.</p>
     </aside>
   </section>
 
