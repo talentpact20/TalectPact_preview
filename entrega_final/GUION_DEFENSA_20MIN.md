@@ -119,24 +119,21 @@ Y al mismo tiempo el paro juvenil está en el 24,9 %, el doble de la media europ
 **Ivan.** Vamos al núcleo técnico, que es donde está el trabajo del bloque de Data Science e IA.
 
       
-Todo lo que acabamos de contar descansa en una única pregunta: **¿puede una IA evaluar talento de forma fiable, justa y auditable?** Si la respuesta es no, no hay negocio.
+Todo lo que acabamos de contar descansa en una única pregunta: **¿puede una IA evaluar talento de forma justa, barata y auditable?** Si la respuesta es no, no hay negocio.
 
 ---
 
-## 08 · 102 retos radicalmente distintos, un solo evaluador.
+## 08 · Un catálogo heterogéneo, un solo evaluador.
 
 **El motor de IA** · 0:45 previstos · acumulado 4:22
 
-**Ivan.** El problema de ingeniería es este: nuestro catálogo tiene **102 retos radicalmente distintos**. Código Python, casos de negocio, negociación, análisis financiero.
+**Ivan.** El problema de ingeniería: el catálogo objetivo son **102 retos de dominios distintos**. Código Python, casos de negocio, negociación, análisis financiero. Un evaluador por tipo no escala.
 
       
-La tentación sería hacer un evaluador por tipo de reto, o entrenar modelos especializados. Eso no escala: 102 retos serían 102 piezas de software que mantener.
+Lo resolvemos con una arquitectura de cuatro agentes. **Analista, Generador y Sandbox son el diseño objetivo**; hoy no corren como servicios separados. El cuarto, el **Evaluador**, es el que hemos llevado a producción y el que produce la señal de valor del negocio.
 
       
-Lo resolvemos con una arquitectura de cuatro agentes. El Analista interpreta la oferta, el Generador crea el reto **y su rúbrica**, el Sandbox captura la respuesta. Y el cuarto, el **Evaluador**, es el que hemos llevado a producción y el que produce la señal de valor del negocio.
-
-      
-> **▶** Puente: la pregunta interesante es cómo un solo evaluador puede con los 102.
+> **▶** Puente: cómo un solo evaluador cubre un catálogo tan heterogéneo. Si preguntan por el código del Generador: arquitectura objetivo; lo que corre es el Evaluador más el catálogo.
 
 ---
 
@@ -147,19 +144,16 @@ Lo resolvemos con una arquitectura de cuatro agentes. El Analista interpreta la 
 **Ivan.** Aquí está el corazón técnico, y es la aportación de la que estamos más satisfechos: el **Dynamic Prompting**.
 
       
-En lugar de programar la lógica de cada reto, buscamos su rúbrica en la base de datos y la **inyectamos en tiempo de ejecución** dentro del prompt de sistema.
+En lugar de programar la lógica de cada reto, **inyectamos en tiempo de ejecución** el escenario, los datos y los criterios. El código es un pipeline genérico y deliberadamente tonto.
 
       
-El principio, dicho en una frase: **la inteligencia evaluadora no vive en el código, vive en las rúbricas**. El código es un pipeline genérico y deliberadamente tonto.
+A la derecha: en la **PoC** la rúbrica es un JSON del reto; en **producto**, criterios por tipo más el escenario. Ampliar el catálogo no exige un evaluador nuevo.
 
       
-La consecuencia práctica está a la derecha: añadir el reto 103 es insertar una fila JSON. Cero líneas de código, cero modelos nuevos.
+Tres controles. **Chain of Thought**: razonar criterio por criterio antes de puntuar. **Constitutional AI**: equidad en el prompt; el impacto dispar no está medido. **Temperatura cero**, fijada en producción y con un test que lo impide deshacer.
 
       
-Sobre esa base aplicamos tres controles. **Chain of Thought** obliga a razonar criterio por criterio antes de puntuar. **Constitutional AI** mete equidad en el prompt; el impacto dispar no está medido. Y **temperatura cero**, ya fijada en producción y con un test que lo impide deshacer.
-
-      
-> **▶** Pregunta que ya nos han hecho: **si dos personas contestan lo mismo, ¿sacan la misma nota?** Si el texto es idéntico, sí: es el diseño (equidad). Si es la misma idea con otras palabras, misma banda, no necesariamente el mismo entero — halo de longitud. El banco mide test-retest.
+> **▶** Si preguntan **¿cada reto tiene su rúbrica?** PoC sí. Producto: plantilla por tipo + escenario. Mismo texto → misma nota. Misma idea, otras palabras → misma banda. El Generador no corre hoy como servicio.
 
 ---
 
@@ -272,7 +266,7 @@ Tres precisiones que nos parecen importantes. **Por qué Sepolia:** nuestra prim
 **Xavier.** "Hasta aquí el relato. Ahora os lo enseñamos funcionando."
 
       
-**1 · Candidato (2:00)** — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: _"esto no es un if/else: es el modelo leyendo la respuesta contra una rúbrica"_. Luego una respuesta pobre → nota baja y el motivo.
+**1 · Candidato (2:00)** — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: _"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"_. Luego una respuesta pobre → nota baja y el motivo.
 
       
 **2 · Seguridad (1:00)** — Pegar el ataque de prompt injection. El evaluador lo identifica, lo penaliza y lo dice explícitamente.
@@ -393,7 +387,7 @@ Entra como candidato, elige un reto y pega la respuesta buena.
 
 > "Fijaos en lo que devuelve: no es una nota, es una nota **por criterio**, y cada
 > una con su justificación. Esto no es un `if/else` contando palabras clave: es el
-> modelo leyendo la respuesta contra la rúbrica de este reto concreto."
+> modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio."
 
 Repite con la respuesta pobre.
 
@@ -437,6 +431,9 @@ Panel de administración → historial de evaluaciones.
 ---
 
 ## Preguntas probables del tribunal
+
+**¿Cada reto tiene su propia rúbrica?**
+En la PoC, sí: JSON con criterios, pesos e indicadores distintos (Python ≠ backlog). En producto, los criterios salen del **tipo** de ejercicio (análisis, email, decisión, audio) y el escenario, la tabla y las keywords son de **ese** reto. No hay 102 rúbricas artesanales ni un modelo por oficio. Ampliar el catálogo no exige un evaluador nuevo.
 
 **Si dos personas contestan lo mismo, ¿reciben la misma puntuación?**
 Sí, **si el texto es idéntico** (mismo reto, misma rúbrica, mismo string). Eso es equidad, no un fallo: un humano tampoco debería premiar a uno y penalizar al otro por copiar palabra por palabra. Lo fuerza `temperature=0` (PoC y producción, con un test que lo impide deshacer) y el banco lo mide con *test-retest* (tres pasadas del mismo ítem). Un residual de pocos puntos sigue siendo posible: un LLM no es un `if`. En zona de corte, mediana de tres.

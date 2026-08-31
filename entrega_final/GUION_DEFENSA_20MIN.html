@@ -85,23 +85,21 @@ tbody tr:nth-child(even){ background:#f8fafc; }
 <h2>07 · El motor de evaluación. · corte de acto</h2>
 <p><strong>El motor de IA</strong> · 0:15 previstos · acumulado 3:37</p>
 <p><strong>Ivan.</strong> Vamos al núcleo técnico, que es donde está el trabajo del bloque de Data Science e IA.</p>
-<p>Todo lo que acabamos de contar descansa en una única pregunta: <strong>¿puede una IA evaluar talento de forma fiable, justa y auditable?</strong> Si la respuesta es no, no hay negocio.</p>
+<p>Todo lo que acabamos de contar descansa en una única pregunta: <strong>¿puede una IA evaluar talento de forma justa, barata y auditable?</strong> Si la respuesta es no, no hay negocio.</p>
 <hr/>
-<h2>08 · 102 retos radicalmente distintos, un solo evaluador.</h2>
+<h2>08 · Un catálogo heterogéneo, un solo evaluador.</h2>
 <p><strong>El motor de IA</strong> · 0:45 previstos · acumulado 4:22</p>
-<p><strong>Ivan.</strong> El problema de ingeniería es este: nuestro catálogo tiene <strong>102 retos radicalmente distintos</strong>. Código Python, casos de negocio, negociación, análisis financiero.</p>
-<p>La tentación sería hacer un evaluador por tipo de reto, o entrenar modelos especializados. Eso no escala: 102 retos serían 102 piezas de software que mantener.</p>
-<p>Lo resolvemos con una arquitectura de cuatro agentes. El Analista interpreta la oferta, el Generador crea el reto <strong>y su rúbrica</strong>, el Sandbox captura la respuesta. Y el cuarto, el <strong>Evaluador</strong>, es el que hemos llevado a producción y el que produce la señal de valor del negocio.</p>
-<blockquote><strong>▶</strong> Puente: la pregunta interesante es cómo un solo evaluador puede con los 102.</blockquote>
+<p><strong>Ivan.</strong> El problema de ingeniería: el catálogo objetivo son <strong>102 retos de dominios distintos</strong>. Código Python, casos de negocio, negociación, análisis financiero. Un evaluador por tipo no escala.</p>
+<p>Lo resolvemos con una arquitectura de cuatro agentes. <strong>Analista, Generador y Sandbox son el diseño objetivo</strong>; hoy no corren como servicios separados. El cuarto, el <strong>Evaluador</strong>, es el que hemos llevado a producción y el que produce la señal de valor del negocio.</p>
+<blockquote><strong>▶</strong> Puente: cómo un solo evaluador cubre un catálogo tan heterogéneo. Si preguntan por el código del Generador: arquitectura objetivo; lo que corre es el Evaluador más el catálogo.</blockquote>
 <hr/>
 <h2>09 · La inteligencia vive en los datos, no en el código.</h2>
 <p><strong>El motor de IA</strong> · 1:05 previstos · acumulado 5:27</p>
 <p><strong>Ivan.</strong> Aquí está el corazón técnico, y es la aportación de la que estamos más satisfechos: el <strong>Dynamic Prompting</strong>.</p>
-<p>En lugar de programar la lógica de cada reto, buscamos su rúbrica en la base de datos y la <strong>inyectamos en tiempo de ejecución</strong> dentro del prompt de sistema.</p>
-<p>El principio, dicho en una frase: <strong>la inteligencia evaluadora no vive en el código, vive en las rúbricas</strong>. El código es un pipeline genérico y deliberadamente tonto.</p>
-<p>La consecuencia práctica está a la derecha: añadir el reto 103 es insertar una fila JSON. Cero líneas de código, cero modelos nuevos.</p>
-<p>Sobre esa base aplicamos tres controles. <strong>Chain of Thought</strong> obliga a razonar criterio por criterio antes de puntuar. <strong>Constitutional AI</strong> mete equidad en el prompt; el impacto dispar no está medido. Y <strong>temperatura cero</strong>, ya fijada en producción y con un test que lo impide deshacer.</p>
-<blockquote><strong>▶</strong> Pregunta que ya nos han hecho: <strong>si dos personas contestan lo mismo, ¿sacan la misma nota?</strong> Si el texto es idéntico, sí: es el diseño (equidad). Si es la misma idea con otras palabras, misma banda, no necesariamente el mismo entero — halo de longitud. El banco mide test-retest.</blockquote>
+<p>En lugar de programar la lógica de cada reto, <strong>inyectamos en tiempo de ejecución</strong> el escenario, los datos y los criterios. El código es un pipeline genérico y deliberadamente tonto.</p>
+<p>A la derecha: en la <strong>PoC</strong> la rúbrica es un JSON del reto; en <strong>producto</strong>, criterios por tipo más el escenario. Ampliar el catálogo no exige un evaluador nuevo.</p>
+<p>Tres controles. <strong>Chain of Thought</strong>: razonar criterio por criterio antes de puntuar. <strong>Constitutional AI</strong>: equidad en el prompt; el impacto dispar no está medido. <strong>Temperatura cero</strong>, fijada en producción y con un test que lo impide deshacer.</p>
+<blockquote><strong>▶</strong> Si preguntan <strong>¿cada reto tiene su rúbrica?</strong> PoC sí. Producto: plantilla por tipo + escenario. Mismo texto → misma nota. Misma idea, otras palabras → misma banda. El Generador no corre hoy como servicio.</blockquote>
 <hr/>
 <h2>10 · Qué cumple y qué todavía no.</h2>
 <p><strong>El motor de IA</strong> · 0:55 previstos · acumulado 6:22</p>
@@ -148,7 +146,7 @@ tbody tr:nth-child(even){ background:#f8fafc; }
 <p><strong>Demostración</strong> · 5:30 previstos · acumulado 15:22</p>
 <blockquote><strong>▶</strong> ◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado más abajo, sección DEMO.</blockquote>
 <p><strong>Xavier.</strong> "Hasta aquí el relato. Ahora os lo enseñamos funcionando."</p>
-<p><strong>1 · Candidato (2:00)</strong> — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: _"esto no es un if/else: es el modelo leyendo la respuesta contra una rúbrica"_. Luego una respuesta pobre → nota baja y el motivo.</p>
+<p><strong>1 · Candidato (2:00)</strong> — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: _"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"_. Luego una respuesta pobre → nota baja y el motivo.</p>
 <p><strong>2 · Seguridad (1:00)</strong> — Pegar el ataque de prompt injection. El evaluador lo identifica, lo penaliza y lo dice explícitamente.</p>
 <p><strong>3 · SkillPass (2:00)</strong> — Sellar la credencial → enlace a Etherscan → abrir verify.html y comprobarla. <strong>Después editar una nota del JSON y volver a verificar: deja de validar.</strong> Ese contraste es el momento más fuerte de la demo.</p>
 <p><strong>4 · Trazabilidad (1:00)</strong> — Panel de administración → historial de evaluaciones con el coste real de cada una. Art. 12 del AI Act, implementado.</p>
@@ -197,7 +195,7 @@ node serve-demo.js          # http://localhost:8888</code></pre>
 <ol><li>Comprueba que la corrección con IA responde: haz una evaluación de prueba.</li><li>Deja el estado limpio: en la consola del navegador, <code>TP.reset(); location.reload();</code></li><li>Ten preparadas para pegar: <strong>una respuesta buena</strong>, <strong>una pobre</strong> y el <strong>texto del ataque</strong>.</li><li>Abre en pestañas aparte: <code>verify.html</code> y el contrato en Etherscan.</li><li><strong>Plan B</strong> en una terminal: <code>cd poc_entrega2 &amp;&amp; python poc_evaluator.py</code>.</li></ol>
 <h3>1 · Corrección real con IA — 2:00 · <strong>I</strong></h3>
 <p>Entra como candidato, elige un reto y pega la respuesta buena.</p>
-<blockquote>"Fijaos en lo que devuelve: no es una nota, es una nota <strong>por criterio</strong>, y cada<br/>una con su justificación. Esto no es un <code>if/else</code> contando palabras clave: es el<br/>modelo leyendo la respuesta contra la rúbrica de este reto concreto."</blockquote>
+<blockquote>"Fijaos en lo que devuelve: no es una nota, es una nota <strong>por criterio</strong>, y cada<br/>una con su justificación. Esto no es un <code>if/else</code> contando palabras clave: es el<br/>modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio."</blockquote>
 <p>Repite con la respuesta pobre.</p>
 <blockquote>"Y aquí baja a [nota] <strong>explicando por qué</strong>. Esa distancia entre las dos es la<br/>capacidad de discriminación que os enseñábamos medida en la tabla."</blockquote>
 <h3>2 · Seguridad: prompt injection — 1:00 · <strong>I</strong></h3>
@@ -213,6 +211,7 @@ node serve-demo.js          # http://localhost:8888</code></pre>
 <table><thead><tr><th>Falla</th><th>Qué haces</th></tr></thead><tbody><tr><td>La API de IA no responde</td><td>Terminal: <code>python poc_evaluator.py</code> — mismo motor, resultados reproducibles</td></tr><tr><td>La red o el RPC caen</td><td>Usa el SkillPass <strong>ya anclado</strong> y <code>verify.html</code> en local con el hash guardado</td></tr><tr><td>Todo lo demás</td><td>Pasa a la diapositiva 17 y sigue; no gastes tiempo depurando en directo</td></tr></tbody></table>
 <hr/>
 <h2>Preguntas probables del tribunal</h2>
+<p><strong>¿Cada reto tiene su propia rúbrica?</strong> En la PoC, sí: JSON con criterios, pesos e indicadores distintos (Python ≠ backlog). En producto, los criterios salen del <strong>tipo</strong> de ejercicio (análisis, email, decisión, audio) y el escenario, la tabla y las keywords son de <strong>ese</strong> reto. No hay 102 rúbricas artesanales ni un modelo por oficio. Ampliar el catálogo no exige un evaluador nuevo.</p>
 <p><strong>Si dos personas contestan lo mismo, ¿reciben la misma puntuación?</strong> Sí, <strong>si el texto es idéntico</strong> (mismo reto, misma rúbrica, mismo string). Eso es equidad, no un fallo: un humano tampoco debería premiar a uno y penalizar al otro por copiar palabra por palabra. Lo fuerza <code>temperature=0</code> (PoC y producción, con un test que lo impide deshacer) y el banco lo mide con <em>test-retest</em> (tres pasadas del mismo ítem). Un residual de pocos puntos sigue siendo posible: un LLM no es un <code>if</code>. En zona de corte, mediana de tres.</p>
 <p>Si “lo mismo” es <strong>la misma idea con otras palabras</strong>, la nota debe caer en la <strong>misma banda</strong>, no necesariamente en el mismo entero (halo de longitud, rúbricas con adjetivos). Eso se mitiga con anclas observables.</p>
 <p><strong>¿Cómo sabéis que el Skill Score es correcto si no lo habéis validado con humanos?</strong> No lo sabemos, y por eso no lo afirmamos. Lo que sí hemos medido es que discrimina <strong>87 puntos</strong> (96 vs 9), que el coste es <strong>€0,0165</strong>, que los ataques ensayados no compran la nota, y que hay <strong>84 tests</strong>. La concordancia con evaluadores humanos es el siguiente hito: el protocolo y el corpus ya están escritos.</p>

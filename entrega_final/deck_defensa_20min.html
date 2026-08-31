@@ -333,7 +333,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <div class="eyebrow">Por qué ahora y no hace tres años</div>
       <h2>Cuatro fuerzas que convergen <em>en 2026.</em></h2>
       <div class="grid g2" style="margin-top:26px">
-        <div class="card"><div class="k">Demanda de filtro</div><h3>El mercado está saturado</h3><p>56 candidatos por vacante. Las empresas no necesitan más CVs: necesitan una señal fiable de capacidad.</p></div>
+        <div class="card"><div class="k">Demanda de filtro</div><h3>El mercado está saturado</h3><p>56 candidatos por vacante. Las empresas no necesitan más CVs: necesitan una señal auditable de capacidad.</p></div>
         <div class="card"><div class="k">Viabilidad técnica</div><h3>La IA ya es asequible</h3><p>Evaluar una respuesta abierta cuesta <strong>€0,0165</strong> en la PoC (~€0,013 en producto). El Excel usa €0,02, a propósito por detrás.</p></div>
         <div class="card"><div class="k">Presión regulatoria</div><h3>El EU AI Act está vigente</h3><p>Clasifica la contratación asistida por IA como <strong>alto riesgo</strong> y exige que sea auditable, explicable y no discriminatoria.</p></div>
         <div class="card"><div class="k">Estándar emergente</div><h3>Credenciales verificables</h3><p>W3C Verifiable Credentials, eIDAS 2.0 y la EU Digital Identity Wallet mueven el mercado hacia títulos que el individuo posee y cualquiera comprueba.</p></div>
@@ -387,12 +387,12 @@ ul.pts li.amber::before{background:var(--amber)}
     <div class="body">
       <div class="num">ACTO III</div>
       <h2>El motor de <em>evaluación.</em></h2>
-      <p class="lede">Todo el modelo de negocio descansa en una pregunta: ¿puede una IA evaluar talento de forma fiable, justa y auditable?</p>
+      <p class="lede">Todo el modelo de negocio descansa en una pregunta: ¿puede una IA evaluar talento de forma justa, barata y auditable?</p>
     </div>
     <div class="foot"><span>El motor de IA</span><span>07</span></div>
     <aside class="notes" data-t="0:15">
       <p><b>Ivan.</b> Vamos al núcleo técnico, que es donde está el trabajo del bloque de Data Science e IA.</p>
-      <p>Todo lo que acabamos de contar descansa en una única pregunta: <b>¿puede una IA evaluar talento de forma fiable, justa y auditable?</b> Si la respuesta es no, no hay negocio.</p>
+      <p>Todo lo que acabamos de contar descansa en una única pregunta: <b>¿puede una IA evaluar talento de forma justa, barata y auditable?</b> Si la respuesta es no, no hay negocio.</p>
     </aside>
   </section>
 
@@ -400,8 +400,8 @@ ul.pts li.amber::before{background:var(--amber)}
   <section class="slide" data-sec="El motor de IA">
     <div class="body top">
       <div class="eyebrow">El problema de ingeniería</div>
-      <h2>102 retos radicalmente distintos, <em>un solo evaluador.</em></h2>
-      <p class="lede" style="margin-bottom:26px">Código Python, casos de negocio, negociación, análisis financiero, redacción. La solución ingenua —un evaluador por tipo de reto— no escala. La nuestra es una arquitectura de cuatro agentes de la que hemos llevado a producción el cuarto.</p>
+      <h2>Un catálogo heterogéneo, <em>un solo evaluador.</em></h2>
+      <p class="lede" style="margin-bottom:26px">Objetivo: 102 retos (código, negocio, negociación, finanzas). Un evaluador por tipo no escala. Cuatro agentes en el diseño; a producción hemos llevado el cuarto.</p>
       <div class="flow">
         <div class="step"><div class="n">01</div><h4>Analista</h4><p>Interpreta la oferta y extrae el vector de habilidades exigidas.</p></div>
         <div class="step"><div class="n">02</div><h4>Generador</h4><p>Crea el reto práctico y, sobre todo, <strong>su rúbrica</strong> de evaluación.</p></div>
@@ -411,10 +411,9 @@ ul.pts li.amber::before{background:var(--amber)}
     </div>
     <div class="foot"><span>El motor de IA</span><span>08</span></div>
     <aside class="notes" data-t="0:45">
-      <p><b>Ivan.</b> El problema de ingeniería es este: nuestro catálogo tiene <b>102 retos radicalmente distintos</b>. Código Python, casos de negocio, negociación, análisis financiero.</p>
-      <p>La tentación sería hacer un evaluador por tipo de reto, o entrenar modelos especializados. Eso no escala: 102 retos serían 102 piezas de software que mantener.</p>
-      <p>Lo resolvemos con una arquitectura de cuatro agentes. El Analista interpreta la oferta, el Generador crea el reto <b>y su rúbrica</b>, el Sandbox captura la respuesta. Y el cuarto, el <b>Evaluador</b>, es el que hemos llevado a producción y el que produce la señal de valor del negocio.</p>
-      <p class="cue">Puente: la pregunta interesante es cómo un solo evaluador puede con los 102.</p>
+      <p><b>Ivan.</b> El problema de ingeniería: el catálogo objetivo son <b>102 retos de dominios distintos</b>. Código Python, casos de negocio, negociación, análisis financiero. Un evaluador por tipo no escala.</p>
+      <p>Lo resolvemos con una arquitectura de cuatro agentes. <b>Analista, Generador y Sandbox son el diseño objetivo</b>; hoy no corren como servicios separados. El cuarto, el <b>Evaluador</b>, es el que hemos llevado a producción y el que produce la señal de valor del negocio.</p>
+      <p class="cue">Puente: la pregunta es cómo un solo evaluador cubre un catálogo tan heterogéneo. Si preguntan por el código del Generador: arquitectura objetivo; lo que corre es el Evaluador más el catálogo.</p>
     </aside>
   </section>
 
@@ -425,7 +424,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <h2>La inteligencia vive en los datos, <em>no en el código.</em></h2>
       <div class="split" style="margin-top:22px">
         <div>
-          <p class="lede" style="margin-bottom:20px">En lugar de programar la lógica de cada reto, <strong>inyectamos su rúbrica en tiempo de ejecución</strong> dentro del prompt de sistema. El código es un pipeline genérico; lo que sabe evaluar es la rúbrica, y la rúbrica es un dato configurable.</p>
+          <p class="lede" style="margin-bottom:20px">En lugar de programar la lógica de cada reto, <strong>inyectamos en tiempo de ejecución</strong> el escenario, los datos y los criterios. El código es un pipeline genérico; lo que sabe evaluar entra como dato.</p>
           <ul class="pts">
             <li><strong>Chain of Thought:</strong> obliga a razonar criterio por criterio <em>antes</em> de la nota. Es lo que la hace auditable (Art. 12 AI Act).</li>
             <li><strong>Constitutional AI:</strong> cláusulas de equidad en el prompt. El DIR aún <strong>no está medido</strong>.</li>
@@ -433,27 +432,27 @@ ul.pts li.amber::before{background:var(--amber)}
           </ul>
         </div>
         <div>
-          <div class="code"><span class="c">// Añadir el reto 103 no toca el código:</span><br>
+          <div class="code"><span class="c">// PoC: rúbrica JSON del reto. Producto: tipo + escenario.</span><br>
 {<br>
-&nbsp;&nbsp;<span class="hl">"id"</span>: <span class="hl">"common_negotiation"</span>,<br>
-&nbsp;&nbsp;<span class="hl">"rubrica"</span>: [<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">"Análisis de la posición"</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">"Uso del leverage"</span>,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">"Búsqueda de win-win"</span><br>
+&nbsp;&nbsp;<span class="hl">"type"</span>: <span class="hl">"analysis"</span>,<br>
+&nbsp;&nbsp;<span class="hl">"escenario"</span>: <span class="hl">"P&amp;L Q vs Q-1"</span>,<br>
+&nbsp;&nbsp;<span class="hl">"criterios"</span>: [<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">"métricas"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">"diagnóstico"</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl">"plan"</span><br>
 &nbsp;&nbsp;]<br>
 }</div>
-          <p style="margin-top:14px;font-size:14.5px"><strong>Cero líneas de código. Cero modelos nuevos.</strong> Es lo que permite pasar de 102 retos a 500 sin tocar la arquitectura.</p>
+          <p style="margin-top:14px;font-size:14.5px"><strong>No hay un modelo por reto.</strong> Ampliar el catálogo es dato; el motor no se toca.</p>
         </div>
       </div>
     </div>
     <div class="foot"><span>El motor de IA</span><span>09</span></div>
     <aside class="notes" data-t="1:05">
       <p><b>Ivan.</b> Aquí está el corazón técnico, y es la aportación de la que estamos más satisfechos: el <b>Dynamic Prompting</b>.</p>
-      <p>En lugar de programar la lógica de cada reto, buscamos su rúbrica en la base de datos y la <b>inyectamos en tiempo de ejecución</b> dentro del prompt de sistema.</p>
-      <p>El principio, dicho en una frase: <b>la inteligencia evaluadora no vive en el código, vive en las rúbricas</b>. El código es un pipeline genérico y deliberadamente tonto.</p>
-      <p>La consecuencia práctica está a la derecha: añadir el reto 103 es insertar una fila JSON. Cero líneas de código, cero modelos nuevos.</p>
-      <p>Sobre esa base aplicamos tres controles. <b>Chain of Thought</b> obliga a razonar criterio por criterio antes de puntuar. <b>Constitutional AI</b> mete equidad en el prompt; el impacto dispar no está medido. Y <b>temperatura cero</b>, ya fijada en producción y con un test que lo impide deshacer.</p>
-      <p class="cue">Pregunta que ya nos han hecho: <b>si dos personas contestan lo mismo, ¿sacan la misma nota?</b> Si el texto es idéntico, sí: es el diseño. Si es la misma idea con otras palabras, misma banda, no necesariamente el mismo entero — halo de longitud. El banco mide test-retest.</p>
+      <p>En lugar de programar la lógica de cada reto, <b>inyectamos en tiempo de ejecución</b> el escenario, los datos y los criterios. El código es un pipeline genérico y deliberadamente tonto.</p>
+      <p>A la derecha: en la <b>PoC</b> la rúbrica es un JSON del reto; en <b>producto</b>, criterios por tipo más el escenario. Ampliar el catálogo no exige un evaluador nuevo.</p>
+      <p>Tres controles. <b>Chain of Thought</b>: razonar criterio por criterio antes de puntuar. <b>Constitutional AI</b>: equidad en el prompt; el impacto dispar no está medido. <b>Temperatura cero</b>, fijada en producción y con un test que lo impide deshacer.</p>
+      <p class="cue">Si preguntan <b>¿cada reto tiene su rúbrica?</b> PoC sí. Producto: plantilla por tipo + escenario. Mismo texto → misma nota. Misma idea, otras palabras → misma banda. El Generador no corre hoy como servicio.</p>
     </aside>
   </section>
 
@@ -618,7 +617,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <aside class="notes" data-t="5:30">
       <p class="cue">◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado en GUION_DEFENSA_20MIN.md, sección DEMO.</p>
       <p><b>Xavier.</b> "Hasta aquí el relato. Ahora os lo enseñamos funcionando."</p>
-      <p><b>1 · Candidato (2:00)</b> — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: <i>"esto no es un if/else: es el modelo leyendo la respuesta contra una rúbrica"</i>. Luego una respuesta pobre → nota baja y el motivo.</p>
+      <p><b>1 · Candidato (2:00)</b> — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: <i>"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"</i>. Luego una respuesta pobre → nota baja y el motivo.</p>
       <p><b>2 · Seguridad (1:00)</b> — Pegar el ataque de prompt injection. El evaluador lo identifica, lo penaliza y lo dice explícitamente.</p>
       <p><b>3 · SkillPass (2:00)</b> — Sellar la credencial → enlace a Etherscan → abrir verify.html y comprobarla. <b>Después editar una nota del JSON y volver a verificar: deja de validar.</b> Ese contraste es el momento más fuerte de la demo.</p>
       <p><b>4 · Trazabilidad (1:00)</b> — Panel de administración → historial de evaluaciones con el coste real de cada una.</p>

@@ -23,7 +23,10 @@ LinkedIn busca pero no evalúa; HackerRank/Codility evalúan solo perfil técnic
 ## B. Solidez técnica
 
 **¿Cómo evaluáis 102 retos distintos sin 102 modelos?**
-Con **Dynamic Prompting**: un único pipeline genérico inyecta en tiempo de ejecución la rúbrica del reto en el system prompt. La "inteligencia" está en las rúbricas (datos), no en el código. Añadir el reto 103 no requiere un commit.
+Con **Dynamic Prompting**: un único pipeline inyecta en runtime el escenario, los datos y los criterios. No hay un modelo por reto. En la **PoC** la rúbrica es un JSON por reto; en **producto**, los criterios salen del tipo de ejercicio (análisis, email, decisión, audio) y el contenido es de ese caso. Añadir el reto 103 no exige un evaluador nuevo: en producto es una entrada de catálogo (dato), no lógica nueva.
+
+**¿Cada reto tiene su propia rúbrica?**
+PoC sí (criterios, pesos, indicadores, penalizaciones). Producto: plantilla por tipo + escenario de ese reto. Varios ítems del catálogo aún son la misma plantilla con el nombre de la skill cambiado; ahí discrimina sobre todo el texto del caso. El catálogo completo de 102, con rúbricas calibradas, es trabajo pendiente — lo decimos en límites.
 
 **Si dos personas contestan lo mismo, ¿sacan la misma nota?**
 Sí, **si el texto es idéntico** (mismo reto, misma rúbrica, mismo string). Eso es el requisito de equidad, no un bug. Lo fuerza `temperature=0` —en la PoC y en producción, con un test que impide que el parámetro se vuelva a perder— y el banco de pruebas lo comprueba con *test-retest* (tres pasadas del mismo ítem). Un residual de pocos puntos sigue siendo posible: un LLM no es un `if`. En zona de corte el *charter* prevé mediana de tres evaluaciones.
