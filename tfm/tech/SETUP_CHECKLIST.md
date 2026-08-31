@@ -128,3 +128,29 @@ Copia las mismas variables en **Netlify → Site settings → Environment variab
 
 > **Seguridad:** las claves secretas van SOLO en el `.env` local o en Netlify, nunca en el
 > código ni en el repositorio. La wallet es de testnet y sin valor real, pero mantenemos la disciplina.
+
+---
+
+## Comprobaciones de seguridad antes de abrir a usuarios reales
+
+```bash
+npm run check:rls                    # ¿qué ve la clave pública? (no escribe nada)
+npm run check:rls -- --probe-write   # concluyente: intenta una escritura anónima
+npm test                             # incluye el contrato y el flujo de pago
+```
+
+**Estado a 29/08/2026.** Las cuatro tablas existentes (`profiles`, `evaluations`,
+`credentials`, `companies`) rechazan la escritura anónima con 401: RLS funciona y
+la premisa de anonimato está comprobada, no supuesta.
+
+**Pendiente detectado por esa misma ejecución:** la tabla **`unlocks` no existe** en
+el proyecto de Supabase. Está definida al final de `supabase_schema.sql` pero ese
+bloque no se ha ejecutado. Sin ella, `create-checkout-session` falla al registrar el
+pago y **el cobro con Stripe no funciona en producción**. Para crearla:
+
+```sql
+-- SQL Editor de Supabase: copia el bloque "Desbloqueos de contacto"
+-- del final de tfm/tech/supabase_schema.sql y ejecútalo.
+```
+
+Después, `npm run check:rls` debería listar `unlocks` en lugar de decir que no existe.

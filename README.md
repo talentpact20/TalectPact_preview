@@ -20,7 +20,11 @@ Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & I
 | **Verificador público** | `verify.html` | Página sin cuenta donde cualquiera comprueba un SkillPass. |
 | **Pagos (Stripe)** | `netlify/functions/create-checkout-session.js` · `stripe-webhook.js` · `confirm-checkout.js` | Cobro del desbloqueo de contacto vía Stripe Checkout y concesión del acceso solo tras confirmar el pago. |
 | **PoC del Agente Evaluador** | `poc_entrega2/` | Prototipo en Python (Entrega 2) que demuestra el motor de evaluación con Dynamic Prompting + Chain of Thought. |
-| **Entregables** | `entrega_final/` | Informe técnico final, guion de demo y batería de Q&A. |
+| **Tests automáticos** | `tests/` | 84 casos con el *runner* nativo de Node. Sin claves, sin red, sin dependencias de testing. |
+| **Banco de pruebas del evaluador** | `tfm/tech/eval/` | Gold set de 12 ítems + métricas (κ cuadrática, MAE, Spearman, test-retest, bloqueo de inyección, coste). |
+| **Cifras canónicas** | `tfm/cifras_canonicas.json` | Fuente de verdad numérica del TFM. Si la memoria discrepa, manda este fichero. |
+| **Entregables** | `entrega_final/` | Informe técnico final, guion de demo, guiones de presentación, deck de defensa y batería de Q&A. |
+| **Business plan (TFM)** | `tfm/business_plan/` | Los ocho apartados del enunciado + resumen ejecutivo, metodología y conclusiones. |
 
 ---
 
@@ -346,16 +350,44 @@ el servidor.
 
 ---
 
-## 5. Instalación y uso — PoC del Agente Evaluador (Python)
+## 5. Tests y métricas
+
+Todo lo de este apartado corre **sin clave de API, sin red y sin base de datos**.
+
+```bash
+npm test                       # 84 casos, ~0,2 s
+npm run doctor                 # qué falta configurar (IA, datos, blockchain, pagos)
+npm run bench -- --dry-run     # enseña los prompts del banco de pruebas sin gastar nada
+npm run bench -- --offline     # recalcula las métricas desde la última ejecución guardada
+```
+
+Con `ANTHROPIC_API_KEY` en el entorno, `npm run bench` ejecuta el gold set completo (12 ítems × 3 repeticiones ≈ $0,65; imprime la estimación antes de empezar) y regenera `tfm/tech/eval/REPORT.md`.
+
+### 5.1 Qué cubre cada fichero de test
+
+| Fichero | Qué protege |
+|---|---|
+| `tests/evaluate-exercise.test.js` | Contrato del motor: `temperature=0`, notas acotadas a 0-100, nota ausente = 0, fallo explícito si el modelo devuelve prosa, cascada de modelos que no reintenta ante una clave revocada, clave de API fuera de la respuesta. |
+| `tests/skillpass.test.js` | El sello: hash determinista, independiente del orden de las claves, y que **cambiar un punto de una nota rompe la verificación**. |
+| `tests/quality-gate.test.js` | Filtro de calidad del cliente, extraído de `index.html` en tiempo de test. |
+| `tests/metrics.test.js` | La estadística del banco, contrastada contra valores calculados a mano. |
+| `tests/bench.test.js` | El propio banco de pruebas, con ejecuciones sintéticas. |
+| `tests/coherencia-docs.test.js` | Que las cifras de la memoria cuadren con los datos del repositorio. |
+
+El detalle del protocolo de medición está en [`tfm/tech/eval/README.md`](tfm/tech/eval/README.md).
+
+---
+
+## 6. Instalación y uso — PoC del Agente Evaluador (Python)
 
 La PoC (`poc_entrega2/`) demuestra de forma aislada y reproducible el motor de evaluación.
 
-### 5.1 Requisitos
+### 6.1 Requisitos
 
 - Python ≥ 3.10
 - API key de Anthropic
 
-### 5.2 Ejecución
+### 6.2 Ejecución
 
 ```bash
 cd poc_entrega2
@@ -368,7 +400,7 @@ python poc_evaluator.py
 
 El script lee `mock_database.json` (catálogo de retos + respuestas de candidatos), evalúa cada *submission* con Claude aplicando la rúbrica del reto, imprime los resultados en terminal y guarda `evaluation_results.json`.
 
-### 5.3 Qué demuestra
+### 6.3 Qué demuestra
 
 - **Dynamic Prompting:** un único pipeline evalúa retos heterogéneos inyectando la rúbrica en el system prompt en tiempo de ejecución.
 - **Chain of Thought:** razonamiento criterio a criterio antes del score (auditable).
@@ -377,9 +409,15 @@ El script lee `mock_database.json` (catálogo de retos + respuestas de candidato
 
 ---
 
-## 6. Documentación adicional
+## 7. Documentación adicional
 
-- `entrega_final/INFORME_TECNICO_FINAL.md` — informe técnico final (arquitectura, métricas, reflexión crítica).
+- `entrega_final/INFORME_TECNICO_FINAL.md` — informe técnico final (arquitectura, métricas, tests, reflexión crítica).
 - `entrega_final/GUION_DEMO.md` — guion paso a paso de la demo.
+- `entrega_final/GUION_DEFENSA_20MIN.md` + `deck_defensa_20min.html` — defensa de 20 minutos con cronómetro y notas del ponente.
 - `entrega_final/QA_DEFENSA.md` — preguntas y respuestas para la defensa.
+- `tfm/README.md` — índice del TFM (business plan + spec técnica del demo).
+- `tfm/tech/eval/README.md` — protocolo del banco de pruebas del evaluador y sus límites.
+- `tfm/cifras_canonicas.json` — fuente de verdad numérica.
 - `poc_entrega2/Entrega_2_TalentPact.md` — documento de la Entrega 2 (prototipo y resultados).
+
+> **Nota sobre `informe_final/`.** Es la versión de junio de 2026, anterior a la corrección de divisa y a la suite de tests. Se conserva como registro histórico de la entrega intermedia; el documento vigente es `entrega_final/INFORME_TECNICO_FINAL.md`.

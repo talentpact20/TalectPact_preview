@@ -1,0 +1,115 @@
+{
+  "_nota": "Fuente de verdad numérica del TFM. Si una cifra de la memoria no coincide con este fichero, manda este fichero. tests/coherencia-docs.test.js comprueba las que se pueden comprobar automáticamente.",
+  "version": "1.0",
+  "fecha": "2026-08-29",
+  "tipoCambio": {
+    "eurUsd": 1.09,
+    "nota": "Supuesto declarado, no cotización en vivo. La tarifa de Anthropic está en USD; todo importe en € del motor de IA sale de dividir por este valor."
+  },
+  "poc": {
+    "fuente": "poc_entrega2/evaluation_results.json (Entrega 2, junio 2026, claude-sonnet-4-6, temperature=0)",
+    "n": 4,
+    "scores": {
+      "SUB_A01": 96,
+      "SUB_A02": 0,
+      "SUB_B01": 92,
+      "SUB_B02": 9
+    },
+    "mediaLegitimos": 65.7,
+    "discriminacionPts": 87,
+    "latenciaMediaSeg": 17.0,
+    "latenciaMaxSeg": 19.6,
+    "costeMedioUsd": 0.018,
+    "costeMedioEur": 0.0165,
+    "costeTotalUsd": 0.0721,
+    "inyeccionesDetectadas": "1/1"
+  },
+  "producto": {
+    "fuente": "audit trail del panel de superadmin (agosto 2026); capturas en entrega_final/img/",
+    "costesUsd": [
+      0.0143,
+      0.0152,
+      0.0127
+    ],
+    "costeMedioUsd": 0.0141,
+    "costeMedioEur": 0.0129,
+    "scores": [
+      85,
+      81,
+      74
+    ],
+    "scoreInyeccion": 2,
+    "nota": "Las capturas son anteriores a la corrección de divisa: muestran los mismos importes con el símbolo €. Los importes medidos están en USD (tarifa de Anthropic)."
+  },
+  "costeIA": {
+    "medidoUsdPorEvaluacion": 0.018,
+    "medidoEurPorEvaluacion": 0.0165,
+    "supuestoModeloFinancieroEur": 0.02,
+    "notaSupuesto": "El plan financiero usa €0,02 como supuesto conservador; lo medido es menor. No se rebaja el supuesto para no repintar el Excel a la baja.",
+    "eurPorReto3Ejercicios": 0.05,
+    "eurMes10kEvaluaciones": 165,
+    "objetivoCharterEur": 0.04
+  },
+  "tests": {
+    "fuente": "npm test",
+    "ficheros": 8,
+    "casos": 84
+  },
+  "negocio": {
+    "fuente": "tfm/assets/TalentPact_modelo_financiero.xlsx (escenario base, 17/04/2026)",
+    "precioDesbloqueoEur": 49,
+    "planProEur": 199,
+    "planEnterpriseEur": 499,
+    "retoAMedidaEur": 299,
+    "extraB2CEur": 5,
+    "empresasCliente": {
+      "2026": 24,
+      "2027": 129,
+      "2028": 284
+    },
+    "ingresoNetoEur": {
+      "2026": 16000,
+      "2027": 109000,
+      "2028": 360000
+    },
+    "arrDicEur": {
+      "2026": 41973,
+      "2027": 224878,
+      "2028": 496530
+    },
+    "grossMarginPct": {
+      "2026": 93.5,
+      "2027": 93.3,
+      "2028": 93.8
+    },
+    "grossMarginResumenPct": 93.5,
+    "ltvCac": "11-17x",
+    "breakEven": "mayo 2028",
+    "ebitda2028Eur": 45000,
+    "netoInfo2028Eur": 34000,
+    "financiacion": {
+      "preSeedEur": 180000,
+      "enisaEur": 50000
+    }
+  },
+  "mercado": {
+    "diasContratacion": 42,
+    "fuenteDias": "SHRM 2024",
+    "costeContratacionEsEur": 4700,
+    "fuenteCoste": "Glassdoor / Adecco"
+  },
+  "validacion": {
+    "fuente": "encuestas y landing del MVP (2026); muestra no probabilística",
+    "n": 30,
+    "candidatosInteresadosPct": 90,
+    "empresasSustituyenPrimeraEntrevistaPct": 65,
+    "anonimatoPreferido": "7/10",
+    "paises": 6,
+    "visitasPrimeraSemana": 500
+  },
+  "blockchain": {
+    "red": "Ethereum Sepolia",
+    "chainId": 11155111,
+    "contrato": "0x85418F3d978e691C0f784bA63E4cB2826478f73A"
+  }
+}

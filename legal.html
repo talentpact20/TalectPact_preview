@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TalentPact · Aviso legal, privacidad y evaluación con IA</title>
+<meta name="description" content="Quién está detrás de TalentPact, qué datos tratamos, cómo evalúa la IA y qué sale exactamente a la blockchain.">
+<meta name="robots" content="index,follow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23059669'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--slate-900:#0f172a;--slate-700:#334155;--slate-600:#475569;--slate-500:#64748b;--slate-400:#94a3b8;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;--emerald-600:#059669;--emerald-500:#10b981;--emerald-50:#ecfdf5;--amber-500:#f59e0b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--slate-700);background:var(--slate-50);line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--emerald-600);font-weight:600;text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--emerald-500);outline-offset:2px;border-radius:4px}
+header{background:#fff;border-bottom:1px solid var(--slate-200);position:sticky;top:0;z-index:10;backdrop-filter:blur(12px)}
+.hwrap{max-width:880px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:9px;font-family:'Sora',sans-serif;font-weight:800;font-size:1.0625rem;color:var(--slate-900)}
+.brand span{color:var(--emerald-600)}
+.brand svg{width:26px;height:26px}
+.back{font-size:.8125rem}
+.wrap{max-width:880px;margin:0 auto;padding:56px 24px 80px}
+.kicker{font-family:'JetBrains Mono',monospace;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase;color:var(--emerald-600);font-weight:500;margin-bottom:14px}
+h1{font-family:'Sora',sans-serif;font-size:clamp(1.9rem,4.5vw,2.6rem);font-weight:800;letter-spacing:-.035em;color:var(--slate-900);line-height:1.12;margin-bottom:18px}
+.lead{font-size:1.0625rem;color:var(--slate-600);max-width:62ch;margin-bottom:14px}
+.updated{font-size:.8125rem;color:var(--slate-500);margin-bottom:36px}
+nav.toc{background:#fff;border:1px solid var(--slate-200);border-radius:14px;padding:22px 26px;margin-bottom:52px}
+nav.toc h2{font-family:'Sora',sans-serif;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--slate-500);font-weight:700;margin-bottom:14px}
+nav.toc ol{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);gap:9px 26px;counter-reset:t}
+nav.toc li{counter-increment:t;font-size:.875rem;display:flex;gap:10px}
+nav.toc li::before{content:counter(t,decimal-leading-zero);font-family:'JetBrains Mono',monospace;font-size:.75rem;color:var(--slate-400);font-weight:500}
+section{margin-bottom:56px;scroll-margin-top:84px}
+h2.sec{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:700;letter-spacing:-.025em;color:var(--slate-900);margin-bottom:8px;padding-top:8px;border-top:2px solid var(--slate-900);display:inline-block}
+h3{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700;color:var(--slate-900);margin:26px 0 8px}
+p{margin-bottom:14px;max-width:68ch}
+ul{margin:0 0 16px;padding-left:0;list-style:none;max-width:68ch}
+li{position:relative;padding-left:20px;margin-bottom:8px}
+ul>li::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--emerald-500)}
+strong{color:var(--slate-900);font-weight:600}
+code{font-family:'JetBrains Mono',monospace;font-size:.8125rem;background:var(--slate-100);border:1px solid var(--slate-200);border-radius:5px;padding:1px 6px;color:var(--slate-900);word-break:break-all}
+table{width:100%;border-collapse:collapse;margin:16px 0 20px;font-size:.875rem}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--slate-200);vertical-align:top}
+th{font-family:'Sora',sans-serif;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--slate-500);font-weight:700;background:#fff}
+td{color:var(--slate-600)}
+.tablewrap{overflow-x:auto;border:1px solid var(--slate-200);border-radius:12px;background:#fff}
+.tablewrap table{margin:0}
+.note{background:#fff;border:1px solid var(--slate-200);border-left:3px solid var(--amber-500);border-radius:0 12px 12px 0;padding:18px 22px;margin:20px 0}
+.note p:last-child{margin-bottom:0}
+.note strong{color:var(--slate-900)}
+.good{border-left-color:var(--emerald-500)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--slate-900);color:#fff;border:0;border-radius:9px;padding:11px 20px;font-family:inherit;font-size:.875rem;font-weight:600;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.88;text-decoration:none;color:#fff}
+.btn.ghost{background:#fff;color:var(--slate-900);border:1px solid var(--slate-200)}
+.consent-state{font-size:.8125rem;color:var(--slate-500);margin-top:12px}
+footer{border-top:1px solid var(--slate-200);background:#fff}
+.fwrap{max-width:880px;margin:0 auto;padding:28px 24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.8125rem;color:var(--slate-500)}
+@media(max-width:640px){nav.toc ol{grid-template-columns:1fr}.wrap{padding:36px 20px 60px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hwrap">
+    <a class="brand" href="/">
+      <svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg>
+      talent<span>pact</span>
+    </a>
+    <a class="back" href="/">← Volver a la web</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="kicker">Transparencia</div>
+  <h1>Quiénes somos, qué datos tratamos y cómo decide la IA.</h1>
+  <p class="lead">TalentPact evalúa a personas y eso afecta a su acceso al empleo. Esta página explica en castellano llano quién está detrás, qué información guardamos, cómo funciona la evaluación automática y qué sale exactamente a la blockchain.</p>
+  <p class="updated">Última actualización: 29 de agosto de 2026.</p>
+
+  <nav class="toc" aria-label="Índice">
+    <h2>En esta página</h2>
+    <ol>
+      <li><a href="#aviso">Aviso legal y titularidad</a></li>
+      <li><a href="#estado">Estado del servicio</a></li>
+      <li><a href="#privacidad">Privacidad y datos</a></li>
+      <li><a href="#ia">Cómo evalúa la IA</a></li>
+      <li><a href="#skillpass">El SkillPass y la blockchain</a></li>
+      <li><a href="#cookies">Cookies y analítica</a></li>
+      <li><a href="#condiciones">Condiciones de uso</a></li>
+      <li><a href="#contacto">Contacto y reclamaciones</a></li>
+    </ol>
+  </nav>
+
+  <section id="aviso">
+    <h2 class="sec">01 · Aviso legal y titularidad</h2>
+    <p>TalentPact es un <strong>proyecto académico en fase de preview</strong>, desarrollado por <strong>Xavier Griñó e Ivan Sánchez</strong> como Trabajo Fin de Máster del Máster en Fintech, Mercados Financieros y Blockchain de la Universitat de Barcelona.</p>
+    <p>A día de hoy <strong>no existe una sociedad mercantil constituida</strong> detrás del servicio. La titularidad y la responsabilidad del tratamiento corresponden a las dos personas físicas mencionadas, con contacto en <a href="mailto:hello@talentpact.io">hello@talentpact.io</a> (Barcelona, España).</p>
+    <div class="note">
+      <p><strong>Por qué lo decimos así.</strong> Lo habitual en un aviso legal es una razón social, un CIF y un domicilio fiscal. Aquí no los hay, y preferimos escribirlo antes que dejar la sección vacía o inventar una empresa. Cuando la sociedad se constituya, esta página se actualizará con sus datos registrales.</p>
+    </div>
+  </section>
+
+  <section id="estado">
+    <h2 class="sec">02 · Estado del servicio</h2>
+    <p>La plataforma está en desarrollo activo. Conviene saber tres cosas antes de usarla:</p>
+    <ul>
+      <li><strong>Los pagos no son reales.</strong> El desbloqueo de contacto se procesa en el entorno de pruebas de Stripe. No se carga ningún importe a ninguna tarjeta.</li>
+      <li><strong>Parte del contenido es de demostración.</strong> Las ofertas de empresas y buena parte del pool de candidatos que se ven en la web son datos de ejemplo, creados para enseñar cómo funciona el producto. Las empresas que aparecen en ellos no son clientes reales.</li>
+      <li><strong>Las evaluaciones sí son reales.</strong> Cuando completas un reto, tu respuesta se envía a un modelo de lenguaje y la puntuación que recibes es la que ha generado. No hay notas simuladas.</li>
+    </ul>
+  </section>
+
+  <section id="privacidad">
+    <h2 class="sec">03 · Privacidad y datos</h2>
+    <h3>Qué guardamos</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Dato</th><th>Para qué</th><th>Base jurídica (RGPD)</th></tr></thead>
+        <tbody>
+          <tr><td>Correo y contraseña</td><td>Crear y proteger tu cuenta</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
+          <tr><td>Nombre, sector, teléfono y LinkedIn</td><td>Ficha de contacto que una empresa ve <em>solo</em> tras desbloquearla. Todo salvo el sector es opcional</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
+          <tr><td>Tus respuestas a los retos</td><td>Evaluarlas y poder justificar la nota después</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
+          <tr><td>Puntuación, criterios y razonamiento de la IA</td><td>Explicabilidad y trazabilidad (art. 12 del Reglamento de IA)</td><td>Ejecución del servicio y obligación legal · art. 6.1.b y 6.1.c</td></tr>
+          <tr><td>Uso de la web (páginas, eventos)</td><td>Entender qué se usa y qué no</td><td>Consentimiento · art. 6.1.a</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Tu perfil es <strong>anónimo por defecto</strong>: hasta que una empresa paga por desbloquear el contacto, lo que ve es un alias del tipo <code>Candidato #A1B2</code>, tu sector y tus puntuaciones. Nunca tu nombre, tu foto, tu edad ni tu género.</p>
+
+    <h3>Con quién lo compartimos</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Proveedor</th><th>Qué trata</th><th>Dónde</th></tr></thead>
+        <tbody>
+          <tr><td>Supabase</td><td>Base de datos y autenticación</td><td>Unión Europea</td></tr>
+          <tr><td>Anthropic (Claude)</td><td>El texto de tu respuesta, para evaluarlo. Sin tu nombre ni tu correo</td><td>EE. UU. · cláusulas contractuales tipo</td></tr>
+          <tr><td>Stripe</td><td>Pagos de empresa. No vemos ni almacenamos números de tarjeta</td><td>EE. UU./UE · cláusulas contractuales tipo</td></tr>
+          <tr><td>Netlify</td><td>Alojamiento de la web y de las funciones</td><td>EE. UU. · cláusulas contractuales tipo</td></tr>
+          <tr><td>Google Analytics</td><td>Estadísticas de uso, <strong>solo si lo aceptas</strong></td><td>EE. UU. · cláusulas contractuales tipo</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>No vendemos datos personales ni los cedemos a terceros con fines publicitarios.</p>
+
+    <h3>Cuánto tiempo</h3>
+    <p>Conservamos los datos de la cuenta y las evaluaciones un <strong>máximo de 24 meses</strong> desde la última actividad, o hasta que pidas la supresión. El razonamiento que genera la IA puede citar fragmentos de tu respuesta, así que <strong>lo tratamos como dato personal</strong> y se borra con el mismo criterio: no es un registro eterno.</p>
+
+    <h3>Tus derechos</h3>
+    <p>Puedes ejercer acceso, rectificación, supresión, portabilidad, limitación y oposición. Dos de ellos están en el propio producto, sin escribir a nadie: en <strong>Ajustes de cuenta</strong> tienes <strong>Descargar mis datos</strong> (exporta tu perfil y tus evaluaciones en JSON) y <strong>Eliminar cuenta</strong>. Para el resto, escríbenos a <a href="mailto:hello@talentpact.io">hello@talentpact.io</a>.</p>
+  </section>
+
+  <section id="ia">
+    <h2 class="sec">04 · Cómo evalúa la IA</h2>
+    <p><strong>Te lo decimos antes de que empieces: tus respuestas las puntúa un sistema de inteligencia artificial.</strong> Este aviso cumple el artículo 50 del Reglamento europeo de IA, y lo damos porque evaluar a alguien para acceder a un empleo es, según el Anexo III de ese mismo Reglamento, un uso de <strong>alto riesgo</strong>.</p>
+
+    <h3>Cómo funciona, en concreto</h3>
+    <ul>
+      <li>Cada reto tiene una <strong>rúbrica</strong> con criterios y pesos definidos de antemano. La IA no improvisa qué valorar.</li>
+      <li>El modelo debe <strong>justificar cada criterio por separado</strong> antes de dar una nota global. Ese razonamiento se guarda y se puede consultar.</li>
+      <li>La evaluación es <strong>ciega</strong>: el modelo recibe tu respuesta y la rúbrica. No recibe tu nombre, tu edad, tu género, tu foto ni tu trayectoria.</li>
+      <li>Las instrucciones del sistema prohíben expresamente que el estilo de escritura, las faltas de ortografía o el idioma penalicen si el contenido es correcto.</li>
+      <li>La configuración es <strong>determinista</strong> (<code>temperature = 0</code>): la misma respuesta produce la misma nota.</li>
+    </ul>
+
+    <h3>La nota informa, no decide</h3>
+    <p>TalentPact <strong>no contrata ni descarta a nadie</strong>. La puntuación es una señal más para que una empresa decida con quién quiere hablar; la decisión sobre una persona la toma siempre una persona. Puedes pedirnos la explicación completa de cualquier evaluación tuya y solicitar que la revise un humano.</p>
+
+    <div class="note">
+      <p><strong>Lo que todavía no podemos afirmar.</strong> El evaluador no ha sido contrastado contra un tribunal de evaluadores humanos: no tenemos medido el grado de acuerdo con personas expertas, ni una auditoría de impacto dispar por grupos demográficos. Tenemos el protocolo de medición implementado y publicado, pero el resultado aún no existe. Mientras siga así, el servicio permanece en preview y ninguna decisión de contratación debería basarse únicamente en estas puntuaciones.</p>
+    </div>
+  </section>
+
+  <section id="skillpass">
+    <h2 class="sec">05 · El SkillPass y la blockchain</h2>
+    <p>Un SkillPass es un documento JSON con tus mejores puntuaciones por habilidad. De él calculamos una huella criptográfica (<code>keccak256</code>, 32 bytes) y <strong>publicamos únicamente esa huella</strong> en una blockchain pública.</p>
+    <ul>
+      <li><strong>Qué sale a la cadena:</strong> 32 bytes ilegibles y la fecha. Nada más.</li>
+      <li><strong>Qué no sale nunca:</strong> tu nombre, tu correo, tus respuestas, tus notas, tu sector. Todo eso vive off-chain, en la base de datos europea.</li>
+      <li><strong>Para qué sirve:</strong> cualquiera puede comprobar que un SkillPass no ha sido retocado, sin tener cuenta en TalentPact y sin fiarse de nosotros. Se hace en <a href="verify.html">la página de verificación</a>.</li>
+    </ul>
+    <p><strong>Cómo convive esto con el derecho al olvido.</strong> Una blockchain no se puede borrar, pero una huella sin su documento no dice nada de nadie: no es reversible ni permite identificar a una persona. Si pides la supresión, borramos el JSON y todos tus datos; la huella queda en la cadena convertida en un número sin significado.</p>
+    <p>La demostración actual funciona sobre la red de pruebas <strong>Ethereum Sepolia</strong>, con el contrato <code>0x85418F3d978e691C0f784bA63E4cB2826478f73A</code>. Es una testnet: sirve para probar el mecanismo, no ofrece las garantías de permanencia de una red principal.</p>
+  </section>
+
+  <section id="cookies">
+    <h2 class="sec">06 · Cookies y analítica</h2>
+    <p>Usamos dos cosas, y solo una necesita tu permiso.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Qué</th><th>Para qué</th><th>¿Pide permiso?</th></tr></thead>
+        <tbody>
+          <tr><td>Almacenamiento local de sesión (Supabase)</td><td>Mantenerte identificado entre páginas. Sin esto no puedes iniciar sesión</td><td>No: es imprescindible para el servicio que has pedido</td></tr>
+          <tr><td><code>talentpact:v1:*</code> en tu navegador</td><td>Tu progreso en los retos y tu elección sobre la analítica</td><td>No: se queda en tu equipo y no se comparte</td></tr>
+          <tr><td>Google Analytics 4</td><td>Saber qué secciones se usan</td><td><strong>Sí.</strong> No se descarga nada de Google hasta que aceptas</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Rechazar la analítica no limita ninguna funcionalidad, y cuesta exactamente lo mismo que aceptarla: un clic.</p>
+    <h3>Cambiar tu decisión</h3>
+    <p>Puedes revisarla cuando quieras:</p>
+    <p>
+      <button class="btn" onclick="tpSet('aceptado')">Aceptar analítica</button>
+      <button class="btn ghost" onclick="tpSet('rechazado')">Rechazar analítica</button>
+    </p>
+    <p class="consent-state" id="consentState" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="condiciones">
+    <h2 class="sec">07 · Condiciones de uso</h2>
+    <ul>
+      <li>El acceso de candidatos es <strong>gratuito</strong>. Las empresas pagan por desbloquear el contacto de un candidato; durante la preview, ese cobro no se ejecuta.</li>
+      <li>Al ser una preview, <strong>no garantizamos disponibilidad continua</strong> ni la conservación indefinida del historial. Descarga tus datos si te importan.</li>
+      <li>Intentar manipular la evaluación —por ejemplo, insertando instrucciones dirigidas al modelo dentro de una respuesta— se detecta, se registra y se puntúa como lo que es. Es motivo de exclusión.</li>
+      <li>Los contenidos de los retos y las rúbricas son propiedad de los autores del proyecto. Tus respuestas siguen siendo tuyas.</li>
+      <li>Legislación española y tribunales del domicilio del consumidor cuando la ley lo imponga.</li>
+    </ul>
+  </section>
+
+  <section id="contacto">
+    <h2 class="sec">08 · Contacto y reclamaciones</h2>
+    <p>Para cualquier asunto relacionado con tus datos, una evaluación concreta o esta página: <a href="mailto:hello@talentpact.io">hello@talentpact.io</a>. Respondemos en un plazo máximo de 30 días, como exige el RGPD.</p>
+    <div class="note good">
+      <p>Si crees que no hemos tratado bien tus datos, puedes reclamar ante la <strong>Agencia Española de Protección de Datos</strong> (<a href="https://www.aepd.es" target="_blank" rel="noopener noreferrer">aepd.es</a>). Preferimos que nos escribas primero, pero es tu derecho y no hace falta pasar por nosotros.</p>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="fwrap">
+    <span>© 2026 TalentPact · Proyecto en fase de preview</span>
+    <span><a href="/">Inicio</a> · <a href="verify.html">Verificar un SkillPass</a></span>
+  </div>
+</footer>
+
+<script>
+// Misma clave que usa la web principal, para que la decisión sea una sola.
+var CLAVE='talentpact:v1:consent';
+function leer(){ try{ return localStorage.getItem(CLAVE); }catch(e){ return null; } }
+function pintar(){
+  var el=document.getElementById('consentState');
+  var v=leer();
+  el.textContent = v==='aceptado'
+    ? 'Ahora mismo: analítica aceptada. Se cargará Google Analytics en tu próxima visita.'
+    : v==='rechazado'
+      ? 'Ahora mismo: analítica rechazada. No se carga nada de Google.'
+      : 'Ahora mismo: sin decidir. Hasta que decidas, no se carga nada de Google.';
+}
+function tpSet(v){ try{ localStorage.setItem(CLAVE,v); }catch(e){} pintar(); }
+pintar();
+</script>
+
+</body>
+</html>

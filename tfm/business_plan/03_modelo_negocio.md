@@ -12,7 +12,7 @@
 | **Recursos clave** | El motor de evaluación IA, el catálogo de 102 retos + rúbricas, la base de datos de talento verificado, la infraestructura de credenciales blockchain, el equipo. |
 | **Actividades clave** | Desarrollo y calibración del motor IA, curación del catálogo de retos, adquisición B2B, emisión y anclaje de credenciales, compliance (AI Act/RGPD). |
 | **Socios clave** | Anthropic (API Claude), Supabase (datos UE), Netlify (app + funciones), Stripe (pagos, visión comercial), red blockchain (demo en Ethereum Sepolia; producción prevista en L2), asesoría legal (AI Act/RGPD). |
-| **Estructura de costes** | COGS (API IA ~€0,02/eval + Stripe 2 % + gas blockchain), SG&A (salarios, marketing/CAC, infra, legal/compliance). |
+| **Estructura de costes** | COGS (API IA ~€0,0165/eval medido, €0,02 asumido + Stripe 2 % + gas blockchain), SG&A (salarios, marketing/CAC, infra, legal/compliance). |
 
 ## 3.2 Propuesta de valor por segmento
 
@@ -35,7 +35,7 @@
 ## 3.4 Estructura de costes
 
 **COGS (coste variable, escala con el uso):**
-- API de IA (Claude): **€0,02/evaluación**, ~€0,06/reto (3 ejercicios). Medido en producción.
+- API de IA (Claude): **€0,02/evaluación** como supuesto del modelo financiero; **medido $0,0180 ≈ €0,0165** (~€0,05/reto de 3 ejercicios). Ver §6.2.4.
 - Comisión de pago (Stripe): **2 %** sobre ingreso bruto.
 - Coste de anclaje en blockchain: marginal en L2 (céntimos por credencial; en testnet, €0).
 
@@ -44,7 +44,7 @@
 - Marketing y CAC: creciente con la adquisición B2B.
 - Infraestructura (Supabase + Vercel), licencias SaaS, legal/compliance (RGPD + AI Act).
 
-**Gross Margin ≈ 93-94 %** de forma sostenida: el negocio es un SaaS/marketplace de software puro, con COGS mínimo. El motor de evaluación es económicamente sostenible incluso a gran escala (~€140/mes de API a 10.000 evaluaciones/mes).
+**Gross Margin ≈ 93,5 %** de forma sostenida (93,3–93,8 % entre 2026 y 2028): el negocio es un SaaS/marketplace de software puro, con COGS mínimo. El motor de evaluación es económicamente sostenible incluso a gran escala: **~€165/mes** de API a 10.000 evaluaciones/mes al coste medido, ~€200/mes al supuesto del modelo financiero.
 
 ## 3.5 Canales de distribución
 

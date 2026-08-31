@@ -47,7 +47,7 @@ Con **284 empresas y ~8.700 candidatos a finales de 2028**, TalentPact captura u
 Tres fuerzas convergen justo ahora y hacen de 2026 el momento:
 
 1. **Saturación del mercado (demanda de filtro).** 56 candidatos por vacante en España: las empresas están colapsadas de CVs y necesitan un filtro por habilidades reales con urgencia.
-2. **IA madura y asequible.** Evaluar respuestas abiertas con feedback a escala es viable hoy: el motor de TalentPact corrige a **~€0,02 por evaluación** (medido en producción con Claude). Hace tres años esto era económicamente inviable.
+2. **IA madura y asequible.** Evaluar respuestas abiertas con feedback a escala es viable hoy: el motor de TalentPact corrige a **~€0,0165 por evaluación** ($0,0180 medidos con Claude). Hace tres años esto era económicamente inviable.
 3. **Presión regulatoria (EU AI Act, vigente).** El AI Act clasifica la contratación asistida por IA como *alto riesgo* y exige procesos **auditables, explicables y no discriminatorios**. Un sistema anónimo con scoring trazable no solo cumple: convierte el cumplimiento en ventaja competitiva.
 
 A estas tres se suma una cuarta tendencia que fundamenta la capa blockchain:

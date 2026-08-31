@@ -3,7 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TalentPact — Prove. Connect. Hire.</title>
+<title>TalentPact — Contrata por habilidades reales, no por currículum</title>
+<meta name="description" content="Marketplace europeo de talento 100 % anónimo: los candidatos demuestran sus habilidades con retos corregidos por IA y las empresas pagan solo cuando desbloquean un contacto.">
+<link rel="canonical" href="https://talentpact.es/">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f172a'/%3E%3Cpath d='M8 8h5a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8z' fill='%23059669'/%3E%3Cpath d='M17 13h5a2 2 0 0 1 2 2v9h-5a2 2 0 0 1-2-2z' fill='%23e2e8f0'/%3E%3Ccircle cx='16' cy='16' r='3.4' fill='%2334d399'/%3E%3C/svg%3E">
+<!-- Tarjeta al compartir el enlace (LinkedIn, WhatsApp, Slack…) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TalentPact">
+<meta property="og:locale" content="es_ES">
+<meta property="og:url" content="https://talentpact.es/">
+<meta property="og:title" content="Contrata por habilidades reales. No por currículum.">
+<meta property="og:description" content="Retos prácticos corregidos por IA, perfiles 100 % anónimos y una credencial que cualquiera puede verificar.">
+<meta property="og:image" content="https://talentpact.es/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="TalentPact — Contrata por habilidades reales, no por currículum.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Contrata por habilidades reales. No por currículum.">
+<meta name="twitter:description" content="Retos prácticos corregidos por IA, perfiles 100 % anónimos y una credencial que cualquiera puede verificar.">
+<meta name="twitter:image" content="https://talentpact.es/og-image.png">
 <script>
 if('scrollRestoration'in history)history.scrollRestoration='manual';
 if(location.hash)try{history.replaceState(null,'',location.pathname+(location.search||''));}catch(e){}
@@ -36,12 +55,33 @@ document.addEventListener('DOMContentLoaded',_scrollTop);
 // pageshow: carga inicial, recarga y bfcache iOS
 window.addEventListener('pageshow',function(){_startScrollGuard();});
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-JN1K33D5YZ"></script>
 <script>
+// Analitica bajo consentimiento previo.
+//
+// gtag() existe siempre para que el resto del codigo pueda llamarlo sin
+// comprobar nada, pero hasta que hay consentimiento los eventos solo se
+// acumulan en dataLayer: no se descarga el script de Google, no se crean
+// cookies y no sale ni una peticion a un tercero.
+window.TP_GA_ID='G-JN1K33D5YZ';
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
-gtag('js',new Date());
-gtag('config','G-JN1K33D5YZ');
+window.TP_CONSENT_KEY='talentpact:v1:consent';
+
+function tpConsentEstado(){
+  try{ return localStorage.getItem(window.TP_CONSENT_KEY); }catch(e){ return null; }
+}
+function tpCargarAnalitica(){
+  if(window.__tpGaCargada)return;
+  window.__tpGaCargada=true;
+  var sc=document.createElement('script');
+  sc.async=true;
+  sc.src='https://www.googletagmanager.com/gtag/js?id='+window.TP_GA_ID;
+  document.head.appendChild(sc);
+  gtag('js',new Date());
+  // anonymize_ip reduce el dato que sale de la UE; no sustituye al consentimiento.
+  gtag('config',window.TP_GA_ID,{anonymize_ip:true});
+}
+if(tpConsentEstado()==='aceptado')tpCargarAnalitica();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&family=Anybody:ital,wght@0,800;0,900;1,800&display=optional" rel="stylesheet">
@@ -123,11 +163,53 @@ nav a.nl:hover{color:var(--slate-900)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 /* ── PREVIEW BANNER ── */
-.preview-banner{background:var(--slate-900);border-radius:10px;padding:14px 28px;max-width:660px;width:100%;margin-bottom:32px;animation:fadeUp .5s ease both}
-.preview-banner-text{font-size:.8125rem;color:var(--slate-400);font-weight:400;text-align:center;line-height:1.7}
-.preview-banner-text strong{color:white;font-weight:600}
-.preview-banner-text a{color:var(--emerald-400);font-weight:600;text-decoration:none;transition:color .2s}
-.preview-banner-text a:hover{color:var(--emerald-300);text-decoration:underline}
+.demo-note{max-width:62ch;margin:14px auto 0;font-size:.8125rem;line-height:1.65;color:var(--slate-500);background:var(--slate-100);border:1px solid var(--slate-200);border-radius:10px;padding:12px 16px}
+.demo-note strong{color:var(--slate-700);font-weight:600}
+.jobs-more{display:flex;justify-content:center;margin-top:28px}
+.logos-row{opacity:1!important}
+.logos-row span{color:var(--slate-400)!important;font-weight:600!important;font-size:.9375rem!important}
+.tp-cookies{position:fixed;left:20px;bottom:20px;z-index:3800;max-width:420px;background:#fff;border:1px solid var(--slate-200);border-radius:14px;padding:20px 22px;box-shadow:0 16px 44px rgba(15,23,42,.16);display:none}
+.tp-cookies.show{display:block;animation:fadeUp .35s ease both}
+.tp-cookies h4{font-family:'Sora',sans-serif;font-size:.9375rem;font-weight:700;color:var(--slate-900);margin-bottom:8px}
+.tp-cookies p{font-size:.8125rem;line-height:1.6;color:var(--slate-500);margin-bottom:16px}
+.tp-cookies a{color:var(--emerald-600);font-weight:600;text-decoration:none}
+.tp-cookies a:hover{text-decoration:underline}
+.tp-cookies-btns{display:flex;gap:10px}
+.tp-cookies-btns .btn{flex:1;justify-content:center;padding:9px 14px;font-size:.8125rem}
+@media(max-width:600px){.tp-cookies{left:12px;right:12px;bottom:12px;max-width:none;padding:18px}
+  /* Con el banner abierto, el boton del chat se sube para no tapar "Aceptar". */
+  body.tp-consent-abierto .chat-fab,body.tp-consent-abierto .ai-chat-fab{bottom:auto;top:76px;box-shadow:0 4px 14px rgba(16,185,129,.28)}}
+.pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.price-card{background:#fff;border:1px solid var(--slate-200);border-radius:14px;padding:26px 22px;display:flex;flex-direction:column;transition:border-color .2s,box-shadow .2s,transform .2s}
+.price-card:hover{border-color:var(--slate-300);box-shadow:0 8px 24px rgba(15,23,42,.06);transform:translateY(-2px)}
+.price-card.featured{border-color:var(--emerald-500);box-shadow:0 8px 28px rgba(5,150,105,.10)}
+.price-tag{font-size:.6875rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--emerald-600);margin-bottom:12px}
+.price-card h3{font-family:'Sora',sans-serif;font-size:1.0625rem;font-weight:700;color:var(--slate-900);margin-bottom:6px}
+.price-amount{font-family:'Sora',sans-serif;font-size:2.125rem;font-weight:800;color:var(--slate-900);letter-spacing:-.03em;margin:10px 0 2px}
+.price-amount small{font-size:.8125rem;font-weight:500;color:var(--slate-500);letter-spacing:0}
+.price-card p{font-size:.8125rem;color:var(--slate-500);line-height:1.6;margin-bottom:16px}
+.price-card ul{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-direction:column;gap:8px}
+.price-card li{font-size:.8125rem;color:var(--slate-600);padding-left:20px;position:relative;line-height:1.5}
+.price-card li::before{content:"";position:absolute;left:0;top:7px;width:11px;height:6px;border-left:2px solid var(--emerald-500);border-bottom:2px solid var(--emerald-500);transform:rotate(-45deg)}
+.price-card .btn{margin-top:auto;width:100%;justify-content:center}
+.pricing-note{margin-top:26px;font-size:.78125rem;color:var(--slate-500);text-align:center;line-height:1.6}
+@media(max-width:1024px){.pricing-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.pricing-grid{grid-template-columns:1fr}}
+.tp-toast-wrap{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);z-index:4000;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none;width:calc(100% - 32px);max-width:460px}
+.tp-toast{display:flex;align-items:flex-start;gap:10px;background:var(--slate-900);color:#fff;border-radius:12px;padding:13px 18px;font-size:.8125rem;line-height:1.5;box-shadow:0 12px 32px rgba(15,23,42,.28);opacity:0;transform:translateY(10px);transition:opacity .22s ease,transform .22s ease;pointer-events:auto}
+.tp-toast.show{opacity:1;transform:translateY(0)}
+.tp-toast-ico{flex-shrink:0;width:16px;height:16px;margin-top:1px}
+.tp-toast.warn .tp-toast-ico{color:var(--amber-500)}
+.tp-toast.ok .tp-toast-ico{color:var(--emerald-400)}
+.preview-banner{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--slate-200);border-radius:999px;padding:7px 16px 7px 14px;margin-bottom:28px;box-shadow:0 1px 2px rgba(15,23,42,.04);animation:fadeUp .5s ease both}
+.preview-banner::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--amber-500);box-shadow:0 0 0 3px rgba(245,158,11,.15);flex-shrink:0}
+.preview-banner-text{font-size:.78125rem;color:var(--slate-500);font-weight:400;line-height:1.5;white-space:nowrap}
+.preview-banner-text strong{color:var(--slate-900);font-weight:600}
+.preview-banner-text a{color:var(--emerald-600);font-weight:600;text-decoration:none;transition:color .2s}
+.preview-banner-text a:hover{color:var(--emerald-700);text-decoration:underline}
+.hero-proof-link{color:var(--emerald-600);font-weight:600;text-decoration:none}
+.hero-proof-link:hover{text-decoration:underline}
+.stat-src{display:block;margin-top:6px;font-size:.6875rem;color:var(--slate-500);letter-spacing:.02em}
 
 /* ── RETOS PANEL LAYOUT (landing, two-pane) ── */
 .rpl-wrap{display:grid;grid-template-columns:290px 1fr;gap:0;border:1.5px solid var(--slate-200);border-radius:var(--radius-lg);overflow:hidden;background:white;min-height:580px;margin-top:32px;box-shadow:var(--shadow-md)}
@@ -146,12 +228,20 @@ nav a.nl:hover{color:var(--slate-900)}
 .rpl-item:hover{background:var(--slate-50)}
 .rpl-item.active{background:var(--emerald-50)}
 .rpl-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--emerald-500);border-radius:0 2px 2px 0}
-.rpl-item-icon{width:34px;height:34px;border-radius:9px;background:var(--slate-100);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;transition:background .15s}
-.rpl-item.active .rpl-item-icon{background:var(--emerald-100)}
+/* Los 102 retos usan emoji como marca de categoria y vienen con saturaciones
+   muy distintas: unos chillan y otros son casi grises. Bajarles la saturacion
+   y darles el mismo marco hace que se lean como un set coherente en vez de
+   como pegatinas sueltas. */
+.rpl-item-icon{width:34px;height:34px;border-radius:9px;background:var(--slate-100);border:1px solid var(--slate-200);display:flex;align-items:center;justify-content:center;font-size:.9rem;line-height:1;flex-shrink:0;transition:background .15s,border-color .15s;filter:saturate(.62) contrast(.95)}
+.rpl-item:hover .rpl-item-icon{background:#fff;border-color:var(--slate-300)}
+.rpl-item.active .rpl-item-icon{background:#fff;border-color:var(--emerald-300);filter:saturate(.9)}
 .rpl-item-info{flex:1;min-width:0}
 .rpl-item-title{font-size:.78rem;font-weight:700;color:var(--slate-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s}
 .rpl-item.active .rpl-item-title{color:var(--emerald-700)}
 .rpl-item-sub{font-size:.63rem;color:var(--slate-400);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rpl-legend{display:flex;gap:12px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px solid var(--slate-100);font-size:.625rem;color:var(--slate-400);letter-spacing:.02em}
+.rpl-legend span{display:inline-flex;align-items:center;gap:5px}
+.rpl-legend i{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
 .rpl-dots{display:flex;gap:3px;align-items:center;flex-shrink:0}
 .rpl-dot{width:6px;height:6px;border-radius:50%;display:inline-block}
 /* Preview panel */
@@ -185,7 +275,6 @@ nav a.nl:hover{color:var(--slate-900)}
 .rpl-pv-cta-btn:hover{background:var(--emerald-600);transform:translateY(-2px);box-shadow:0 8px 24px rgba(16,185,129,.25)}
 @media (max-width:880px){.rpl-wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr}.rpl-sidebar{border-right:none;border-bottom:1.5px solid var(--slate-100)}.rpl-list{max-height:220px}}
 @media (max-width:640px){.rpl-wrap{border-radius:var(--radius)}.rpl-pv-topbar{flex-direction:column;align-items:flex-start;gap:6px}.rpl-pv-body{padding:14px 16px 20px}}
-
 
 /* ── SETTINGS DRAWER ── */
 .st-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:20001;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(3px)}
@@ -291,7 +380,7 @@ nav a.nl:hover{color:var(--slate-900)}
 .stat-item:last-child::after{display:none}
 .stat-val{font-family:'Sora',sans-serif;font-size:2.5rem;font-weight:800;color:white;letter-spacing:-.04em}
 .stat-val span{color:var(--emerald-400)}
-.stat-lbl{font-size:.75rem;color:var(--slate-400);margin-top:4px;letter-spacing:.02em}
+.stat-lbl{font-size:.75rem;color:var(--slate-300);margin-top:6px;letter-spacing:.02em;line-height:1.5;max-width:22ch;margin-left:auto;margin-right:auto}
 
 /* ── FEATURES ── */
 .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--slate-200);border:1px solid var(--slate-200);border-radius:var(--radius-lg);overflow:hidden;margin-top:48px}
@@ -324,15 +413,7 @@ nav a.nl:hover{color:var(--slate-900)}
 .jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .job-card{background:white;border:1px solid var(--slate-200);border-radius:var(--radius);padding:22px;cursor:pointer;transition:all .2s;position:relative}
 .job-card:hover{border-color:var(--emerald-400);box-shadow:var(--shadow-md);transform:translateY(-2px)}
-.job-badge{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:.6875rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.03em;margin-bottom:10px}
-.jb-mkt{background:rgba(249,115,22,.08);color:#ea580c}.jb-it{background:rgba(59,130,246,.08);color:#2563eb}
-.jb-data{background:rgba(16,185,129,.08);color:#059669}.jb-biz{background:rgba(245,158,11,.08);color:#d97706}
-.jb-des{background:rgba(168,85,247,.08);color:#7c3aed}.jb-hr{background:rgba(239,68,68,.08);color:#dc2626}
-.jb-fin{background:rgba(71,85,105,.08);color:#475569}.jb-leg{background:rgba(100,116,139,.08);color:#64748b}
-.jb-ops{background:rgba(217,119,6,.08);color:#b45309}
-.jb-sales{background:rgba(220,38,38,.08);color:#dc2626}
-.jb-lang{background:rgba(6,182,212,.08);color:#0891b2}
-.jb-cognitive{background:rgba(124,58,237,.08);color:#7c3aed}
+.job-badge{display:inline-flex;padding:3px 9px;border-radius:5px;font-size:.6875rem;font-weight:600;font-family:'JetBrains Mono',monospace;letter-spacing:.03em;margin-bottom:10px;background:var(--slate-100);color:var(--slate-600);border:1px solid var(--slate-200)}
 
 /* ── EXERCISE BRIEFING + COUNTDOWN + TIMER ── */
 .ex-briefing{padding:32px;text-align:center;max-width:520px;margin:0 auto}
@@ -415,7 +496,7 @@ nav a.nl:hover{color:var(--slate-900)}
 .job-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
 .job-tag{font-size:.6875rem;background:var(--slate-100);color:var(--slate-600);padding:2px 8px;border-radius:4px;font-weight:500}
 .job-company{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--slate-500);padding-top:10px;border-top:1px solid var(--slate-100)}
-.job-company-dot{width:18px;height:18px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:.55rem}
+.job-company-dot{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.5625rem;font-weight:700;letter-spacing:.02em;flex-shrink:0}
 .job-exercises{font-family:'JetBrains Mono',monospace;font-size:.6875rem;color:var(--emerald-600);margin-top:8px;display:flex;align-items:center;gap:4px}
 .job-exercises::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--emerald-500)}
 .no-results{text-align:center;padding:60px 20px;color:var(--slate-400)}
@@ -490,7 +571,7 @@ nav a.nl:hover{color:var(--slate-900)}
 .auth-form-side{flex:1;display:flex;align-items:center;justify-content:center;padding:48px;background:white}
 .auth-form-wrap{width:100%;max-width:400px}
 .auth-back{display:inline-flex;align-items:center;gap:5px;color:var(--slate-400);font-size:.8125rem;cursor:pointer;margin-bottom:28px;background:none;border:none;font-family:'Plus Jakarta Sans',sans-serif;transition:color .15s}.auth-back:hover{color:var(--slate-900)}
-.auth-form-wrap h1{font-family:'Sora',sans-serif;font-weight:800;font-size:1.75rem;letter-spacing:-.02em;margin-bottom:4px}
+.auth-form-wrap h1,.auth-form-wrap h2{font-family:'Sora',sans-serif;font-weight:800;font-size:1.75rem;letter-spacing:-.02em;margin-bottom:4px}
 .auth-form-wrap h1 em{font-style:italic;color:var(--emerald-500)}
 .auth-subtitle{color:var(--slate-500);font-size:.8125rem;margin-bottom:28px}
 .auth-tabs{display:flex;background:var(--slate-100);border-radius:8px;padding:3px;margin-bottom:24px}
@@ -628,6 +709,9 @@ nav a.nl:hover{color:var(--slate-900)}
 .cta-sec h2 em{font-style:italic;color:var(--emerald-400)}
 .cta-sec p{color:var(--slate-400);max-width:440px;margin:0 auto 32px;font-size:.9375rem}
 .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.cta-beta{margin:26px auto 0;font-size:.8125rem;color:var(--slate-400);position:relative}
+.cta-beta a{color:var(--emerald-400);font-weight:600;text-decoration:none}
+.cta-beta a:hover{color:var(--emerald-300);text-decoration:underline}
 .beta-cta{background:white;border-top:1px solid var(--slate-200);border-bottom:1px solid var(--slate-200)}
 .beta-cta::before{display:none}
 .beta-cta h2{color:var(--slate-900)}
@@ -720,9 +804,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 .cog-options{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
 .cog-opt{padding:14px;border:2px solid var(--slate-200);border-radius:var(--radius);cursor:pointer;text-align:center;font-size:1.1rem;font-weight:600;transition:all .15s;background:white}
 .cog-opt:hover{border-color:var(--emerald-400)}.cog-opt.selected{border-color:var(--emerald-500);background:var(--emerald-50)}
-
-/* ── SECTOR BADGES NEW ── */
-.jb-sales{background:rgba(234,88,12,.08);color:#ea580c}.jb-lang{background:rgba(6,182,212,.08);color:#0891b2}.jb-cognitive{background:rgba(124,58,237,.08);color:#7c3aed}
 
 /* ═══ SUPERADMIN BACKOFFICE ═══ */
 .admin-overlay{display:none;position:fixed;inset:0;z-index:10000;background:#0a0f1a;overflow-y:auto}
@@ -987,9 +1068,9 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
 /* Exercise config badges */
 .ex-config-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:.625rem;font-weight:600;letter-spacing:.03em}
-.ecb-common{background:var(--emerald-50);color:var(--emerald-600);border:1px solid var(--emerald-100)}
-.ecb-custom{background:var(--blue-100);color:var(--blue-500);border:1px solid rgba(59,130,246,.2)}
-.ecb-contact{background:var(--amber-100);color:var(--amber-500);border:1px solid rgba(245,158,11,.2)}
+.ecb-common{background:#fff;color:var(--slate-500);border:1px solid var(--slate-200)}
+.ecb-custom{background:#fff;color:var(--slate-600);border:1px solid var(--slate-300)}
+.ecb-contact{background:var(--slate-100);color:var(--slate-600);border:1px solid var(--slate-200)}
 
 /* Empresa exercise config in publish form */
 .ex-config-options{display:flex;flex-direction:column;gap:8px;margin-top:8px}
@@ -1058,7 +1139,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 .pay-total .total-amount{font-family:'Sora',sans-serif;font-size:1.1rem;color:var(--emerald-600)}
 .pay-secure{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.6875rem;color:var(--slate-400);margin-top:12px}.pay-secure::before{content:'🔒'}
 
-
 /* ═══════════════════════════════════════ */
 /* ══ RESPONSIVE — TABLET (≤900px) ══ */
 /* ═══════════════════════════════════════ */
@@ -1105,8 +1185,8 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   .hero-proof{flex-direction:column;gap:8px}
 
   /* ── PREVIEW BANNER ── */
-  .preview-banner{padding:12px 18px;margin-bottom:20px;border-radius:8px}
-  .preview-banner-text{font-size:.75rem}
+  .preview-banner{padding:7px 14px;margin-bottom:20px}
+  .preview-banner-text{font-size:.6875rem;white-space:normal;text-align:center}
 
   /* ── STATS ── */
   .stats-inner{grid-template-columns:1fr 1fr;gap:0;padding:20px 16px}
@@ -1159,7 +1239,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   .auth-brand h2{font-size:1.3rem}
   .auth-brand-features{display:none}
   .auth-form-side{padding:20px 16px}
-  .auth-form-wrap h1{font-size:1.4rem}
+  .auth-form-wrap h1,.auth-form-wrap h2{font-size:1.4rem}
   .auth-social{flex-direction:column}
   .auth-social-btn{justify-content:center}
 
@@ -1475,14 +1555,14 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
 <nav id="mainNav">
   <div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div>
-  <ul><li><a class="nl" onclick="goTo('explorar')">Explorar</a></li><li><a class="nl" onclick="goTo('features')">Cómo funciona</a></li><li><a class="nl" onclick="goTo('skillpass')">SkillPass</a></li><li><a class="nl" onclick="openContact()">Contacto</a></li></ul>
+  <ul><li><a class="nl" onclick="goTo('explorar')">Explorar</a></li><li><a class="nl" onclick="goTo('features')">Cómo funciona</a></li><li><a class="nl" onclick="goTo('skillpass')">SkillPass</a></li><li><a class="nl" onclick="goTo('pricing')">Precios</a></li><li><a class="nl" onclick="openContact()">Contacto</a></li></ul>
   <div class="nav-auth"><div class="nav-access"><button class="nav-access-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menú de acceso" onclick="toggleAccessMenu()" id="accessBtn">Acceder <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button><div class="access-dropdown" id="accessDrop"><div class="access-option" onclick="closeAccessMenu();openAuth('candidate')"><div class="access-icon" style="background:var(--emerald-50);color:var(--emerald-600)">🎯</div><div><h4>Soy Candidato</h4><p>Completa retos y genera tu perfil de skills</p></div></div><div class="access-option" onclick="closeAccessMenu();openAuth('empresa')"><div class="access-icon" style="background:var(--blue-100);color:var(--blue-500)">🏢</div><div><h4>Soy Empresa</h4><p>Publica ofertas y accede al pool de talento</p></div></div><div class="access-option" onclick="closeAccessMenu();openAdmin()" style="border-top:1px solid var(--slate-100)"><div class="access-icon" style="background:rgba(239,68,68,.08);color:#ef4444">⚙️</div><div><h4>Admin</h4><p>Panel de administración</p></div></div></div></div></div>
 </nav>
 
 <!-- ═══ AUTH CANDIDATO ═══ -->
-<div class="auth-overlay" id="authCandidate" role="dialog" aria-modal="true" aria-label="Acceso de candidato"><div class="auth-split">
+<div class="auth-overlay" id="authCandidate" aria-labelledby="candAuthTitle" role="dialog" aria-modal="true" aria-label="Acceso de candidato"><div class="auth-split">
   <div class="auth-brand auth-brand-cand"><div class="auth-brand-grid"></div><div class="auth-brand-content"><h2>Demuestra lo que <em>sabes hacer.</em></h2><p>Sin CV. Sin sesgos. Completa retos prácticos y genera tu perfil de habilidades verificado.</p><div class="auth-brand-features"><div class="auth-feat"><div class="auth-feat-icon">🔒</div><div><h4>Perfil 100% anónimo</h4><p>Las empresas solo ven tus skills y puntuaciones.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">⚡</div><div><h4>Retos prácticos reales</h4><p>Sandboxes que replican situaciones laborales.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">📊</div><div><h4>Ranking y visibilidad</h4><p>Mejor puntuación = más visibilidad ante empresas.</p></div></div></div></div></div>
-  <div class="auth-form-side"><div class="auth-form-wrap"><button class="auth-back" onclick="closeAuth('authCandidate')">← Volver</button><h1 id="candAuthTitle">Bienvenido.</h1><p class="auth-subtitle" id="candAuthSub">Accede o crea tu cuenta para empezar los retos.</p>
+  <div class="auth-form-side"><div class="auth-form-wrap"><button class="auth-back" onclick="closeAuth('authCandidate')">← Volver</button><h2 id="candAuthTitle">Bienvenido.</h2><p class="auth-subtitle" id="candAuthSub">Accede o crea tu cuenta para empezar los retos.</p>
     <div class="auth-tabs" id="candTabs" role="tablist" aria-label="Acceso o alta"><button type="button" class="auth-tab active" id="candTabLogin" role="tab" aria-selected="true" aria-controls="cand-login" onclick="switchAuthTab('cand','login',this)" onkeydown="authTabKeys(event)">Iniciar sesión</button><button type="button" class="auth-tab" id="candTabReg" role="tab" aria-selected="false" aria-controls="cand-register" tabindex="-1" onclick="switchAuthTab('cand','register',this)" onkeydown="authTabKeys(event)">Crear cuenta</button></div>
     <form class="auth-form" id="cand-login" role="tabpanel" aria-labelledby="candTabLogin" novalidate onsubmit="event.preventDefault();loginCandidate()"><div class="a-field"><label for="cand-login-email">Email</label><input type="email" placeholder="tu@email.com" id="cand-login-email" name="username" autocomplete="username"><div class="a-err" id="cand-login-email-err"></div></div><div class="a-field"><label for="cand-login-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="cand-login-pw" name="password" autocomplete="current-password" onkeyup="capsHint(event,'cand-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('cand-login-pw',this)">Ver</button></div><div class="a-err" id="cand-login-pw-err"></div><div class="a-caps" id="cand-login-caps">Bloq Mayús está activado.</div></div><div class="a-forgot"><a href="#" onclick="event.preventDefault();showRecover('cand',true)">¿Olvidaste tu contraseña?</a></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candLoginBtn">Iniciar sesión →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button type="button" class="auth-social-btn" id="btnGoogleAuth" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button><button type="button" class="auth-social-btn" id="btnLinkedinAuth" onclick="oauthLogin('linkedin_oidc')"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</button></div><div class="auth-oauth-msg" id="candAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestCandidate()">Explorar como invitado (sin cuenta) →</a></div></form><form class="auth-form" id="cand-recover" style="display:none" novalidate onsubmit="event.preventDefault();sendRecovery('cand')"><p class="auth-recover-lead">Escribe el email de tu cuenta y te enviamos un enlace para elegir una contraseña nueva. El enlace caduca en una hora y solo sirve una vez.</p><div class="a-field"><label for="cand-rec-email">Email</label><input type="email" id="cand-rec-email" name="username" autocomplete="username" placeholder="tu@email.com" aria-describedby="cand-rec-email-err"><div class="a-err" id="cand-rec-email-err"></div></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRecBtn">Enviar enlace →</button></div><div class="auth-oauth-msg" id="candRecMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a href="#" onclick="event.preventDefault();showRecover('cand',false)">← Volver a iniciar sesión</a></div></form>
     <form class="auth-form" id="cand-register" role="tabpanel" aria-labelledby="candTabReg" novalidate onsubmit="event.preventDefault();registerCandidate()" style="display:none"><div class="a-field-row"><div class="a-field"><label for="reg-name">Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name" autocomplete="given-name"><div class="a-err" id="reg-name-err"></div></div><div class="a-field"><label for="reg-last">Apellido</label><input type="text" placeholder="Apellido" id="reg-last" autocomplete="family-name"></div></div><div class="a-field"><label for="reg-email">Email</label><input type="email" placeholder="tu@email.com" id="reg-email" name="username" autocomplete="username"><div class="a-err" id="reg-email-err"></div></div><div class="a-field"><label for="reg-phone">Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone" autocomplete="tel"><span class="hint" style="font-size:.65rem;color:var(--slate-400)">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label for="reg-linkedin">LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin" autocomplete="url"></div><div class="a-field"><label for="reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="reg-pw" autocomplete="new-password" oninput="pwStrength('reg-pw','reg-strength')" onkeyup="capsHint(event,'reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div><div class="pw-meter" id="reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="reg-pw-err"></div></div><div class="a-field"><label for="reg-sector">Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div style="background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:8px;padding:10px 12px;font-size:.72rem;color:var(--emerald-600);margin-bottom:4px">🔒 Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></form>
@@ -1496,12 +1576,12 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   <div class="auth-split auth-split-single">
     <div class="auth-form-side">
       <div class="auth-form-wrap">
-        <h1 id="recTitle">Nueva contraseña.</h1>
+        <h2 id="recTitle">Nueva contraseña.</h2>
         <p class="auth-subtitle">Has entrado desde el enlace de recuperación. Elige una contraseña nueva para <strong id="recEmail">tu cuenta</strong>.</p>
         <form class="auth-form" id="rec-form" novalidate onsubmit="event.preventDefault();applyNewPassword()">
           <!-- Campo de usuario oculto: sin el, el gestor de contrasenas no puede
                asociar la contrasena nueva con la cuenta correcta. -->
-          <input type="email" id="recUser" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
+          <input type="email" id="recUser" aria-label="Correo de la cuenta" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
           <div class="a-field"><label for="rec-pw1">Nueva contraseña</label>
             <div class="a-pw"><input type="password" id="rec-pw1" name="password" autocomplete="new-password" placeholder="Mín. 8 caracteres" oninput="pwStrength('rec-pw1','rec-strength')" onkeyup="capsHint(event,'rec-caps')">
             <button type="button" class="a-pw-toggle" onclick="togglePw('rec-pw1',this)">Ver</button></div>
@@ -1521,9 +1601,9 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 </div>
 
 <!-- ═══ AUTH EMPRESA ═══ -->
-<div class="auth-overlay" id="authEmpresa" role="dialog" aria-modal="true" aria-label="Acceso de empresa"><div class="auth-split">
+<div class="auth-overlay" id="authEmpresa" aria-labelledby="empAuthTitle" role="dialog" aria-modal="true" aria-label="Acceso de empresa"><div class="auth-split">
   <div class="auth-brand auth-brand-emp"><div class="auth-brand-grid"></div><div class="auth-brand-content"><h2>Contrata por <em>capacidad real.</em></h2><p>Pool de candidatos evaluados por skills. Sin CV. Sin sesgos. Solo talento demostrado.</p><div class="auth-brand-features"><div class="auth-feat"><div class="auth-feat-icon">🎯</div><div><h4>Perfiles ciegos</h4><p>Solo ves skills, scores y ranking.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">💰</div><div><h4>Success fee</h4><p>Solo pagas cuando contratas.</p></div></div><div class="auth-feat"><div class="auth-feat-icon">🔒</div><div><h4>Kill Switch</h4><p>Al contratar, el perfil desaparece del pool.</p></div></div></div></div></div>
-  <div class="auth-form-side"><div class="auth-form-wrap empresa-accent"><button class="auth-back" onclick="closeAuth('authEmpresa')">← Volver</button><h1 id="empAuthTitle">Portal empresa.</h1><p class="auth-subtitle" id="empAuthSub">Accede al pool de talento evaluado.</p>
+  <div class="auth-form-side"><div class="auth-form-wrap empresa-accent"><button class="auth-back" onclick="closeAuth('authEmpresa')">← Volver</button><h2 id="empAuthTitle">Portal empresa.</h2><p class="auth-subtitle" id="empAuthSub">Accede al pool de talento evaluado.</p>
     <div class="auth-tabs" id="empTabs" role="tablist" aria-label="Acceso o alta"><button type="button" class="auth-tab active" id="empTabLogin" role="tab" aria-selected="true" aria-controls="emp-login" onclick="switchAuthTab('emp','login',this)" onkeydown="authTabKeys(event)">Iniciar sesión</button><button type="button" class="auth-tab" id="empTabReg" role="tab" aria-selected="false" aria-controls="emp-register" tabindex="-1" onclick="switchAuthTab('emp','register',this)" onkeydown="authTabKeys(event)">Crear cuenta</button></div>
     <form class="auth-form" id="emp-login" role="tabpanel" aria-labelledby="empTabLogin" novalidate onsubmit="event.preventDefault();loginEmpresa()"><div class="a-field"><label for="emp-login-email">Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-login-email" name="username" autocomplete="username"><div class="a-err" id="emp-login-email-err"></div></div><div class="a-field"><label for="emp-login-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="emp-login-pw" name="password" autocomplete="current-password" onkeyup="capsHint(event,'emp-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-login-pw',this)">Ver</button></div><div class="a-err" id="emp-login-pw-err"></div><div class="a-caps" id="emp-login-caps">Bloq Mayús está activado.</div></div><div class="a-forgot"><a href="#" onclick="event.preventDefault();showRecover('emp',true)">¿Olvidaste tu contraseña?</a></div><div class="auth-submit"><button type="submit" class="btn btn-dark btn-lg" id="empLoginBtn">Acceder →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button type="button" class="auth-social-btn" id="btnGoogleEmp" onclick="oauthLogin('google','empresa')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Continuar con Google</button></div><div class="auth-oauth-msg" id="empAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestEmpresa()">Explorar el panel como invitado (sin cuenta) →</a></div></form><form class="auth-form" id="emp-recover" style="display:none" novalidate onsubmit="event.preventDefault();sendRecovery('emp')"><p class="auth-recover-lead">Escribe el email de tu cuenta y te enviamos un enlace para elegir una contraseña nueva. El enlace caduca en una hora y solo sirve una vez.</p><div class="a-field"><label for="emp-rec-email">Email</label><input type="email" id="emp-rec-email" name="username" autocomplete="username" placeholder="tu@email.com" aria-describedby="emp-rec-email-err"><div class="a-err" id="emp-rec-email-err"></div></div><div class="auth-submit"><button type="submit" class="btn btn-dark btn-lg" id="empRecBtn">Enviar enlace →</button></div><div class="auth-oauth-msg" id="empRecMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a href="#" onclick="event.preventDefault();showRecover('emp',false)">← Volver a iniciar sesión</a></div></form>
     <form class="auth-form" id="emp-register" role="tabpanel" aria-labelledby="empTabReg" novalidate onsubmit="event.preventDefault();registerEmpresa()" style="display:none"><div class="a-field"><label for="emp-reg-company">Empresa</label><input type="text" placeholder="Tu empresa S.L." id="emp-reg-company" autocomplete="organization"><div class="a-err" id="emp-reg-company-err"></div></div><div class="a-field-row"><div class="a-field"><label for="emp-reg-name">Tu nombre</label><input type="text" placeholder="Nombre" id="emp-reg-name" autocomplete="name"><div class="a-err" id="emp-reg-name-err"></div></div><div class="a-field"><label for="emp-reg-position">Cargo</label><input type="text" placeholder="RRHH, CTO…" id="emp-reg-position" autocomplete="organization-title"></div></div><div class="a-field"><label for="emp-reg-email">Email corporativo</label><input type="email" placeholder="tu@empresa.com" id="emp-reg-email" name="username" autocomplete="username"><div class="a-err" id="emp-reg-email-err"></div></div><div class="a-field"><label for="emp-reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 8 caracteres" id="emp-reg-pw" autocomplete="new-password" oninput="pwStrength('emp-reg-pw','emp-reg-strength')" onkeyup="capsHint(event,'emp-reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('emp-reg-pw',this)">Ver</button></div><div class="pw-meter" id="emp-reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="emp-reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="emp-reg-pw-err"></div></div><div class="a-field"><label for="emp-reg-size">Tamaño</label><select id="emp-reg-size"><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div><div class="auth-submit"><button type="submit" class="btn btn-dark btn-lg" id="empRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="empRegMsg" role="status" aria-live="polite"></div></form>
@@ -1657,7 +1737,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     <div class="support-panel">
       <div class="support-header"><span>🐛</span><h4>Reportar un Problema</h4></div>
       <div class="support-form">
-        <div class="support-field"><label>Tipo de problema</label><select id="bugType"><option value="bug">Bug / Error técnico</option><option value="score">Problema con un score</option><option value="exercise">Error en un ejercicio</option><option value="payment">Problema de pago</option><option value="account">Problema con mi cuenta</option><option value="other">Otro</option></select></div>
+        <div class="support-field"><label>Tipo de problema</label><select id="bugType" aria-label="Tipo de problema"><option value="bug">Bug / Error técnico</option><option value="score">Problema con un score</option><option value="exercise">Error en un ejercicio</option><option value="payment">Problema de pago</option><option value="account">Problema con mi cuenta</option><option value="other">Otro</option></select></div>
         <div class="support-field"><label>Describe el problema</label><textarea id="bugDesc" rows="4" placeholder="Describe qué ha pasado, qué esperabas que pasara, y qué pantalla estabas viendo…"></textarea></div>
         <div class="support-field"><label>Ejercicio afectado (opcional)</label><input id="bugExercise" placeholder="Ej: Pensamiento Analítico - Ejercicio 2"></div>
         <button class="btn btn-primary" onclick="submitBugReport()">Enviar reporte →</button>
@@ -1669,7 +1749,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <div style="padding:16px 18px">
         <p style="font-size:.8125rem;color:var(--slate-600);margin-bottom:12px">¿Necesitas ayuda personalizada? Nuestro equipo responde en menos de 24h.</p>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <a href="mailto:hola@talentpact.com" class="btn btn-outline btn-sm">📧 hola@talentpact.com</a>
+          <a href="mailto:hello@talentpact.io" class="btn btn-outline btn-sm">📧 hello@talentpact.io</a>
           <button class="btn btn-outline btn-sm" onclick="toggleChat()">💬 Chat en vivo</button>
         </div>
       </div>
@@ -1748,7 +1828,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
             <li>Analytics avanzado</li>
             <li class="no">Soporte prioritario</li>
           </ul>
-          <button class="emp-sub-btn cta" onclick="alert('Contacta con hola@talentpact.com para activar el Plan Pro.')">Activar Pro →</button>
+          <button class="emp-sub-btn cta" onclick="openContact('Plan Pro')">Activar Pro →</button>
         </div>
 
         <!-- ENTERPRISE -->
@@ -1765,18 +1845,18 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
             <li>Analytics avanzado + exportación</li>
             <li>Soporte prioritario 24h</li>
           </ul>
-          <button class="emp-sub-btn cta" onclick="alert('Contacta con hola@talentpact.com para activar Enterprise.')">Contratar Enterprise →</button>
+          <button class="emp-sub-btn cta" onclick="openContact('Plan Enterprise')">Contratar Enterprise →</button>
         </div>
 
       </div>
 
       <!-- Nota retos a medida -->
       <p style="font-size:.7rem;color:var(--slate-400);margin-top:10px;text-align:center">
-        ¿Necesitas retos diseñados a medida para una vacante específica? Disponibles desde <strong style="color:var(--slate-600)">€299/vacante</strong> en cualquier plan. <a href="mailto:hola@talentpact.com" style="color:var(--blue-500)">Contáctanos →</a>
+        ¿Necesitas retos diseñados a medida para una vacante específica? Disponibles desde <strong style="color:var(--slate-600)">€299/vacante</strong> en cualquier plan. <a href="mailto:hello@talentpact.io" style="color:var(--blue-500)">Contáctanos →</a>
       </p>
     </div>
 
-    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label>Salario</label><input type="text" id="pj-salary" placeholder="22.000€ - 28.000€"></div><div class="pj-field"><label>Modalidad</label><select id="pj-mode"><option>Remoto</option><option>Híbrido</option><option>Presencial</option></select></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector" aria-label="Sector de la oferta"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label>Salario</label><input type="text" id="pj-salary" placeholder="22.000€ - 28.000€"></div><div class="pj-field"><label>Modalidad</label><select id="pj-mode" aria-label="Modalidad de trabajo"><option>Remoto</option><option>Híbrido</option><option>Presencial</option></select></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
     <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">Selecciona qué habilidades verificadas necesita el candidato. Escribe para filtrar.</p><input class="search-bar" id="pjSkillSearch" type="text" placeholder="Buscar skill: python, excel, liderazgo…" oninput="renderPjSkills()" style="font-size:.78rem;padding:8px 12px;margin-bottom:8px;width:100%;box-sizing:border-box"><div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><button class="filter-btn active" onclick="setPjSkillCat('all',this)" style="font-size:.65rem;padding:3px 8px">Todos</button><button class="filter-btn" onclick="setPjSkillCat('soft',this)" style="font-size:.65rem;padding:3px 8px">Soft Skills</button><button class="filter-btn" onclick="setPjSkillCat('sector',this)" style="font-size:.65rem;padding:3px 8px">Sectoriales</button><button class="filter-btn" onclick="setPjSkillCat('selected',this)" style="font-size:.65rem;padding:3px 8px">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
     <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)">🟢 Básico <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)">🟡 Intermedio <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)">🔴 Avanzado <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥75)</span></div></div></div>
     <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>📋 Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🏢 Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>🎯 Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
@@ -1809,8 +1889,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     </div>
 
     <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:12px;">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
-
-
 
 </div><!-- /dash-body --></div><!-- /dashEmpresa -->
 
@@ -1899,7 +1977,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
           <div class="st-row-info"><h5>Contraseña</h5><p id="st-cand-pw-meta">Cambia tu contraseña de acceso</p></div>
           <button class="btn btn-outline btn-sm" onclick="togglePwForm('cand')">Cambiar</button>
         </div>
-        <form class="st-inline-form" id="st-cand-pw-form" novalidate onsubmit="event.preventDefault();changePassword('cand')"><input type="email" id="st-cand-pw-user" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
+        <form class="st-inline-form" id="st-cand-pw-form" novalidate onsubmit="event.preventDefault();changePassword('cand')"><input type="email" id="st-cand-pw-user" aria-label="Correo de la cuenta" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
           <div class="st-field"><label for="st-cand-pw1">Nueva contraseña</label><input type="password" id="st-cand-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
           <div class="st-field"><label for="st-cand-pw2">Repite la contraseña</label><input type="password" id="st-cand-pw2" autocomplete="new-password"></div>
           <div class="st-actions">
@@ -2053,7 +2131,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
           <div class="st-row-info"><h5>Contraseña</h5><p>Cambia la contraseña de acceso al portal</p></div>
           <button class="btn btn-outline btn-sm" onclick="togglePwForm('emp')">Cambiar</button>
         </div>
-        <form class="st-inline-form" id="st-emp-pw-form" novalidate onsubmit="event.preventDefault();changePassword('emp')"><input type="email" id="st-emp-pw-user" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
+        <form class="st-inline-form" id="st-emp-pw-form" novalidate onsubmit="event.preventDefault();changePassword('emp')"><input type="email" id="st-emp-pw-user" aria-label="Correo de la cuenta" name="username" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none">
           <div class="st-field"><label for="st-emp-pw1">Nueva contraseña</label><input type="password" id="st-emp-pw1" autocomplete="new-password" placeholder="Mín. 8 caracteres"></div>
           <div class="st-field"><label for="st-emp-pw2">Repite la contraseña</label><input type="password" id="st-emp-pw2" autocomplete="new-password"></div>
           <div class="st-actions">
@@ -2105,32 +2183,31 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 <!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="preview-banner">
-    <div class="preview-banner-text"><strong>Versión preliminar</strong> — Esta web es una preview de TalentPact. La plataforma se encuentra en desarrollo activo. ¿Te interesa? <a href="#" onclick="event.preventDefault();openContact()">Contáctanos</a></div>
+    <div class="preview-banner-text"><strong>Versión preliminar</strong> · plataforma en desarrollo activo — <a href="#" onclick="event.preventDefault();openContact()">hablemos</a></div>
   </div>
   <div class="hero-badge"><div class="hero-badge-dot"></div><span class="mono" style="font-size:.6875rem;letter-spacing:.04em">PROVE. CONNECT. HIRE.</span></div>
   <h1 class="display">Contrata por<br><span class="gradient-text">habilidades reales.</span><br>No por <span style="text-decoration:line-through;color:var(--slate-400)">currículum.</span></h1>
   <p class="hero-sub">Evaluación 100% anónima con retos prácticos. Candidatos demuestran lo que saben hacer. Empresas contratan mejor y más rápido.</p>
   <div class="hero-cta"><button class="btn btn-dark btn-lg" onclick="openAuth('candidate')">Empezar como candidato →</button><button class="btn btn-outline btn-lg" onclick="openAuth('empresa')">Acceso empresa</button></div>
   <div class="hero-proof">
-    <div class="hero-avatars"><span style="background:var(--emerald-500)">AG</span><span style="background:var(--blue-500)">MT</span><span style="background:var(--amber-500)">LR</span><span style="background:var(--violet-500)">JP</span></div>
-    <div class="hero-proof-text"><strong>+240 candidatos</strong> evaluados este mes</div>
+    <div class="hero-proof-text"><strong>102 retos</strong> en 25 áreas · corrección con IA auditable criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a></div>
   </div>
 </section>
 
 <!-- LOGOS -->
-<div class="logos-bar"><p>Empresas que ya confían en TalentPact</p><div class="logos-row"><span>TechCorp</span><span>GrowthLab</span><span>DataPulse</span><span>FinEdge</span><span>PixelCraft</span><span>LogiFlow</span></div></div>
+<div class="logos-bar"><p>Construido sobre infraestructura verificable</p><div class="logos-row"><span>Anthropic Claude</span><span>Supabase · región UE</span><span>Ethereum Sepolia</span><span>Stripe</span><span>Netlify</span></div></div>
 
 <!-- STATS -->
 <div class="stats-strip"><div class="stats-inner">
-  <div class="stat-item"><div class="stat-val">73<span>%</span></div><div class="stat-lbl">Empresas con dificultad para validar junior</div></div>
-  <div class="stat-item"><div class="stat-val">3<span>x</span></div><div class="stat-lbl">Más rápido que selección tradicional</div></div>
-  <div class="stat-item"><div class="stat-val"><span>0</span></div><div class="stat-lbl">Datos personales visibles al evaluador</div></div>
-  <div class="stat-item"><div class="stat-val">€<span>0</span></div><div class="stat-lbl">Coste inicial para empresas</div></div>
+  <div class="stat-item"><div class="stat-val">42</div><div class="stat-lbl">días dura de media un proceso de selección <span class="stat-src">SHRM, 2024</span></div></div>
+  <div class="stat-item"><div class="stat-val">€<span>4.700</span></div><div class="stat-lbl">coste medio por contratación en España <span class="stat-src">Glassdoor · Adecco</span></div></div>
+  <div class="stat-item"><div class="stat-val"><span>0</span></div><div class="stat-lbl">datos personales visibles para quien evalúa <span class="stat-src">anonimato por diseño</span></div></div>
+  <div class="stat-item"><div class="stat-val">€<span>49</span></div><div class="stat-lbl">y solo cuando desbloqueas un contacto <span class="stat-src">sin licencia ni permanencia</span></div></div>
 </div></div>
 
 <!-- FEATURES -->
 <div id="features" class="section">
-  <div class="reveal"><div class="section-label">Cómo funciona</div><h2 class="section-title display">Del reto al match en 4 pasos.</h2><p class="section-desc">Sin CV, sin sesgos. Solo habilidades demostradas en entornos reales de trabajo.</p></div>
+  <div class="reveal"><div class="section-label">Cómo funciona</div><h2 class="section-title display">Del reto al match en 6 pasos.</h2><p class="section-desc">Sin CV, sin sesgos. Solo habilidades demostradas en entornos reales de trabajo.</p></div>
   <div class="features-grid reveal d1">
     <div class="feature-card"><div class="feature-icon fi-emerald">01</div><h3>Registro sin barreras</h3><p>Solo nombre y email. Sin CV, sin foto, sin datos personales que generen sesgos.</p></div>
     <div class="feature-card"><div class="feature-icon fi-blue">02</div><h3>Elige tu vertical</h3><p>Marketing, IT, Data, Business, Diseño, Finanzas, Legal, Operaciones — retos específicos para cada perfil.</p></div>
@@ -2231,6 +2308,11 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
             <button class="rpl-cat-btn" onclick="setExCategory('soft',this)">Soft Skills</button>
             <button class="rpl-cat-btn" onclick="setExCategory('sector',this)">Por Sector</button>
           </div>
+          <div class="rpl-legend" aria-hidden="true">
+            <span><i style="background:var(--emerald-500)"></i>Básico</span>
+            <span><i style="background:var(--amber-500)"></i>Intermedio</span>
+            <span><i style="background:var(--red-500)"></i>Avanzado</span>
+          </div>
         </div>
         <div class="rpl-list" id="landingCommonGrid"></div>
       </aside>
@@ -2241,7 +2323,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       </div>
     </div>
 
-    <div class="reveal" style="margin-top:56px"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
+    <div class="reveal" style="margin-top:56px"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p><p class="demo-note">Durante la preview, las ofertas y las empresas que ves aquí son <strong>datos de demostración</strong>: sirven para enseñar el funcionamiento del producto y no corresponden a procesos de selección reales.</p></div>
     <div class="search-bar-wrap reveal d1"><span class="search-icon">🔍</span><input class="search-bar" id="searchInput" type="search" aria-label="Buscar ofertas de empleo" placeholder="Busca por rol, sector o skill…" oninput="filterJobs()"><button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button></div>
     <div class="filters-row reveal d1" id="sectorFilters">
       <button class="filter-btn active" onclick="setSector('all',this)">Todos</button>
@@ -2257,29 +2339,60 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
     </div>
     <div class="results-meta" id="resultsCount"></div>
     <div class="jobs-grid" id="jobsGrid"></div>
+    <div class="jobs-more" id="jobsMore"></div>
     <div class="no-results" id="noResults" style="display:none"><p>No encontramos resultados. Prueba otro término.</p></div>
   </div>
 </div>
 
-<!-- CTA -->
-<div class="cta-sec"><h2 class="display">¿Listo para contratar<br>por <em>talento real?</em></h2><p>Skills-based hiring para empresas que quieren contratar mejor.</p><div class="cta-btns"><button class="btn btn-primary btn-lg" onclick="openAuth('candidate')">Soy candidato →</button><button class="btn btn-white btn-lg" onclick="openAuth('empresa')">Soy empresa</button></div></div>
-<section class="cta-sec beta-cta">
-  <h2 class="display">Accede a la <em>beta gratuita</em></h2>
-  <p>Rellena esta breve encuesta para clientes y te daremos acceso prioritario a TalentPact.</p>
-  <div class="cta-btns">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLScULQvDbB5M4pbUA-Ec60U1wyOF_yxOd3dDWe6L_ZY_HMACgA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">Acceder a la beta →</a>
+<!-- PRECIOS -->
+<div id="pricing" class="section">
+  <div class="reveal"><div class="section-label">Precios</div><h2 class="section-title display">Paga por resultado, no por licencia.</h2><p class="section-desc">Para el candidato es gratis, siempre. La empresa solo paga cuando decide hablar con alguien.</p></div>
+  <div class="pricing-grid reveal d1">
+    <div class="price-card">
+      <div class="price-tag">Candidatos</div>
+      <h3>Gratis</h3>
+      <div class="price-amount">€0</div>
+      <p>Demuestra lo que sabes y llévate tu SkillPass.</p>
+      <ul><li>5 retos por semana</li><li>Perfil anónimo y verificado</li><li>SkillPass sellado y portable</li><li>Sin CV, sin foto, sin sesgos</li></ul>
+      <button class="btn btn-outline" onclick="openAuth('candidate')">Empezar gratis</button>
+    </div>
+    <div class="price-card featured">
+      <div class="price-tag">Pago por resultado</div>
+      <h3>Individual</h3>
+      <div class="price-amount">€49 <small>/ contacto</small></div>
+      <p>Filtra el pool sin coste. Pagas solo al desbloquear los datos de un candidato.</p>
+      <ul><li>Ofertas y filtrado ilimitados</li><li>Sin licencia ni permanencia</li><li>Perfiles ya evaluados por IA</li><li>SkillPass verificable de cada skill</li></ul>
+      <button class="btn btn-primary" onclick="openAuth('empresa')">Acceso empresa</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tag">Recurrente</div>
+      <h3>Pro</h3>
+      <div class="price-amount">€199 <small>/ mes</small></div>
+      <p>Para equipos que contratan de forma continua.</p>
+      <ul><li>5 contactos incluidos al mes</li><li>Ofertas ilimitadas</li><li>Analítica del pool</li><li>Soporte prioritario</li></ul>
+      <button class="btn btn-outline" onclick="openContact('Plan Pro')">Hablar con ventas</button>
+    </div>
+    <div class="price-card">
+      <div class="price-tag">A medida</div>
+      <h3>Enterprise</h3>
+      <div class="price-amount">€499 <small>/ mes</small></div>
+      <p>Volumen, retos propios y documentación de cumplimiento.</p>
+      <ul><li>Contactos según volumen</li><li>Retos a medida (€299/vacante)</li><li>Dosier AI Act y RGPD</li><li>Gestor de cuenta</li></ul>
+      <button class="btn btn-outline" onclick="openContact('Plan Enterprise')">Hablar con ventas</button>
+    </div>
   </div>
-</section>
+  <p class="pricing-note">Precios sin IVA. Durante la preview no se cobra ningún importe: los desbloqueos se procesan en el entorno de pruebas de Stripe.</p>
+</div>
+
+<!-- CTA -->
+<div class="cta-sec"><h2 class="display">¿Listo para contratar<br>por <em>talento real?</em></h2><p>Contratación por habilidades para equipos que quieren dejar de cribar currículums.</p><div class="cta-btns"><button class="btn btn-primary btn-lg" onclick="openAuth('empresa')">Acceso empresa →</button><button class="btn btn-white btn-lg" onclick="openAuth('candidate')">Soy candidato</button></div><p class="cta-beta">¿Prefieres que te avisemos al abrir? <a href="https://docs.google.com/forms/d/e/1FAIpQLScULQvDbB5M4pbUA-Ec60U1wyOF_yxOd3dDWe6L_ZY_HMACgA/viewform?usp=dialog" target="_blank" rel="noopener noreferrer">Apúntate a la beta gratuita →</a></p></div>
 <footer>
   <div class="footer-main">
     <div class="footer-brand">
       <div class="logo" onclick="goHome()" style="cursor:pointer"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#475569"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text" style="color:white">talent<span>pact</span></div></div>
       <p>Prove. Connect. Hire. — La plataforma de hiring basada en habilidades reales. Sin CV. Sin sesgos.</p>
       <div class="footer-social">
-        <a href="#" title="LinkedIn">in</a>
-        <a href="#" title="X (Twitter)">𝕏</a>
-        <a href="#" title="Instagram">ig</a>
-        <a href="#" title="YouTube">▶</a>
+        <a href="https://www.linkedin.com/company/talentpact" target="_blank" rel="noopener noreferrer" title="LinkedIn">in</a>
       </div>
     </div>
     <div class="footer-col">
@@ -2290,33 +2403,30 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <a href="#" onclick="goTo('features')">Cómo funciona</a>
       <a href="#" onclick="goTo('skillpass')">SkillPass verificable</a>
       <a href="verify.html">Verificar una credencial</a>
-      <a href="#">Pricing</a>
-      <a href="#">API</a>
+      <a href="#" onclick="event.preventDefault();goTo('pricing')">Precios</a>
     </div>
     <div class="footer-col">
-      <h5>Empresa</h5>
-      <a href="#">Sobre nosotros</a>
-      <a href="#">Blog</a>
-      <a href="#">Carreras</a>
-      <a href="#" onclick="openContact()">Contacto</a>
-      <a href="#">Prensa</a>
-      <a href="#">Partners</a>
+      <h5>Confianza</h5>
+      <a href="legal.html#ia">Cómo evalúa la IA</a>
+      <a href="legal.html#privacidad">Qué datos tratamos</a>
+      <a href="legal.html#skillpass">El SkillPass y la blockchain</a>
+      <a href="#" onclick="event.preventDefault();openContact()">Contacto</a>
     </div>
     <div class="footer-col">
       <h5>Contacto</h5>
-      <a href="/cdn-cgi/l/email-protection#5139343d3d3e1125303d343f25213032257f383e"><span class="__cf_email__" data-cfemail="345c5158585b74405558515a40445557401a5d5b">[email&#160;protected]</span></a>
-      <a href="#">Barcelona, España</a>
-      <a href="#">+34 900 000 000</a>
+      <a href="mailto:hello@talentpact.io">hello@talentpact.io</a>
+      <span>Barcelona, España</span>
+      <a href="mailto:hello@talentpact.io">Escríbenos por correo</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2026 TalentPact. Todos los derechos reservados.</span>
+    <span>© 2026 TalentPact · Proyecto en fase de preview</span>
     <div>
-      <a href="#">Aviso Legal</a>
-      <a href="#">Política de Privacidad</a>
-      <a href="#">Términos y Condiciones</a>
-      <a href="#">Política de Cookies</a>
-      <a href="#">RGPD</a>
+      <a href="legal.html#aviso">Aviso legal</a>
+      <a href="legal.html#privacidad">Privacidad</a>
+      <a href="legal.html#condiciones">Condiciones de uso</a>
+      <a href="legal.html#cookies">Cookies</a>
+      <a href="legal.html#ia">Evaluación con IA</a>
     </div>
   </div>
 </footer>
@@ -2325,7 +2435,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 <div class="modal-overlay" id="jobModal" role="dialog" aria-modal="true" aria-label="Detalle de oferta"><div class="job-modal"><div class="jm-header"><button class="jm-close" onclick="closeJobModal()">✕</button><div class="job-badge" id="jmBadge"></div><h2 id="jmTitle"></h2><p id="jmDesc"></p><div class="jm-progress" id="jmProgress"></div></div><div class="ex-nav" id="exNav"></div><div id="exContent"></div></div></div>
 
 <!-- CONTACT -->
-<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="contact"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2>Hablemos</h2><p>¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label>Nombre</label><input type="text" id="cf-name" name="nombre" placeholder="Tu nombre" required></div><div class="fg"><label>Email</label><input type="email" id="cf-email" name="email" placeholder="tu@empresa.com" required></div><div class="fg"><label>Perfil</label><select name="perfil"><option value="">Selecciona…</option><option value="Inversor">Inversor</option><option value="Empresa">Empresa</option><option value="Aceleradora">Aceleradora</option><option value="Otro">Otro</option></select></div><div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos…"></textarea></div><button type="button" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="submitContact()">Enviar →</button></form><div class="fsucc" id="csucc"><h3>¡Enviado!</h3><p>Te contactamos en 24h.</p><button class="btn btn-primary" style="margin-top:14px" onclick="closeM('cmodal')">Cerrar</button></div></div></div>
+<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="contact"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2>Hablemos</h2><p>¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label>Nombre</label><input type="text" id="cf-name" name="nombre" placeholder="Tu nombre" required></div><div class="fg"><label>Email</label><input type="email" id="cf-email" name="email" placeholder="tu@empresa.com" required></div><div class="fg"><label>Perfil</label><select name="perfil" aria-label="Tipo de perfil"><option value="">Selecciona…</option><option value="Inversor">Inversor</option><option value="Empresa">Empresa</option><option value="Aceleradora">Aceleradora</option><option value="Otro">Otro</option></select></div><div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos…"></textarea></div><button type="button" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="submitContact()">Enviar →</button></form><div class="fsucc" id="csucc"><h3>¡Enviado!</h3><p>Te contactamos en 24h.</p><button class="btn btn-primary" style="margin-top:14px" onclick="closeM('cmodal')">Cerrar</button></div></div></div>
 
 <!-- ═══ SUPERADMIN BACKOFFICE ═══ -->
 <div class="admin-overlay" id="dashAdmin" role="main" aria-label="Panel de superadministrador">
@@ -2336,7 +2446,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <span class="admin-badge">SUPERADMIN</span>
     </div>
     <div id="impersonateBar" style="display:none" class="impersonate-bar">⚠️ Viendo como: <strong id="impersonateName"></strong> <button class="admin-btn" onclick="exitImpersonate()" style="margin-left:8px">Salir de suplantación</button></div>
-    <div class="admin-user"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dbbabfb6b2b59bafbab7beb5afabbab8aff5b2b4">[email&#160;protected]</a> <button class="btn btn-ghost btn-sm" style="color:var(--slate-400)" onclick="closeAdmin()">Salir ✕</button></div>
+    <div class="admin-user"><span>hello@talentpact.io</span> <button class="btn btn-ghost btn-sm" style="color:var(--slate-400)" onclick="closeAdmin()">Salir ✕</button></div>
   </div>
   <div class="admin-layout">
     <div class="admin-sidebar">
@@ -2381,7 +2491,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 
       <!-- PAGE C: Master Library -->
       <div class="admin-page" id="adminPage-library">
-        <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between"><div><h2 style="color:white;font-size:1.2rem;font-weight:800">Catálogo de Retos (Master Library)</h2><p style="color:#6b7280;font-size:.78rem">Gestión de retos comunes. Activa, desactiva o edita sin afectar a candidatos en curso.</p></div><div style="display:flex;gap:8px"><input class="admin-search" id="admLibSearch" placeholder="Buscar reto…" oninput="renderAdminLibrary()"><button class="admin-btn admin-btn-primary" onclick="alert('Editor de retos: próximamente. Usa el sistema actual de COMMON_EXERCISES para añadir/editar.')">+ Crear reto</button></div></div>
+        <div style="margin-bottom:20px;display:flex;align-items:center;justify-content:space-between"><div><h2 style="color:white;font-size:1.2rem;font-weight:800">Catálogo de Retos (Master Library)</h2><p style="color:#6b7280;font-size:.78rem">Gestión de retos comunes. Activa, desactiva o edita sin afectar a candidatos en curso.</p></div><div style="display:flex;gap:8px"><input class="admin-search" id="admLibSearch" placeholder="Buscar reto…" oninput="renderAdminLibrary()"><button class="admin-btn admin-btn-primary" onclick="toast('El editor visual de retos no está construido todavía. El catálogo se edita en COMMON_EXERCISES.')">+ Crear reto</button></div></div>
         <div class="admin-metrics" id="admLibStats"></div>
         <div class="admin-card"><div class="admin-card-header"><div class="admin-card-title">📚 Todos los retos</div><span style="color:#6b7280;font-size:.7rem" id="admLibCount"></span></div><div class="admin-card-body" style="padding:0"><div style="overflow-x:auto"><table class="admin-table"><thead><tr><th>Estado</th><th>Reto</th><th>Skill</th><th>Categoría</th><th>Ejercicios</th><th>Completados</th><th>Score medio</th><th>Acciones</th></tr></thead><tbody id="admLibBody"></tbody></table></div></div></div>
       </div>
@@ -2423,7 +2533,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   </div>
 </div>
 
-
 <!-- ADMIN LOGIN MODAL -->
 <div class="modal-overlay" id="adminLoginModal" role="dialog" aria-modal="true" aria-label="Login de administrador" style="z-index:10003">
   <div class="job-modal" style="max-width:380px;margin-top:20vh">
@@ -2433,7 +2542,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
       <p style="font-size:.8125rem;color:var(--slate-500);margin-bottom:20px">Introduce la contraseña de administrador</p>
       <form id="adminLoginForm" novalidate onsubmit="event.preventDefault();submitAdminLogin()"><!-- El panel no tiene usuarios: la identidad es el propio rol. Declararla
      permite que el gestor de contraseñas guarde la clave. -->
-<input type="text" name="username" value="superadmin" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none"><input type="password" id="adminPwInput" name="password" autocomplete="current-password" placeholder="Contraseña…" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-size:.875rem;text-align:center;outline:none;font-family:'Plus Jakarta Sans',sans-serif"></form>
+<input type="text" name="username" aria-label="Usuario" value="superadmin" autocomplete="username" tabindex="-1" aria-hidden="true" readonly style="display:none"><input type="password" id="adminPwInput" name="password" autocomplete="current-password" placeholder="Contraseña…" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1.5px solid var(--slate-200);border-radius:8px;font-size:.875rem;text-align:center;outline:none;font-family:'Plus Jakarta Sans',sans-serif"></form>
       <div id="adminPwError" style="color:var(--red-500);font-size:.75rem;margin-top:8px;display:none">Contraseña incorrecta</div>
       <div style="display:flex;gap:8px;margin-top:16px">
         <button class="btn btn-primary" style="flex:1;justify-content:center" onclick="submitAdminLogin()">Entrar →</button>
@@ -2500,7 +2609,6 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
   </div>
 </div>
 
-
 <!-- ═══ AI CUSTOMER SUPPORT CHAT ═══ -->
 <button class="ai-chat-fab" id="aiChatFab" onclick="toggleAiChat()" aria-label="Abrir chat de soporte">💬</button>
 <div class="ai-chat-panel" id="aiChatPanel">
@@ -2545,7 +2653,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Forzar siempre al top al cargar
 if('scrollRestoration' in history){history.scrollRestoration='manual';}
 window.scrollTo(0,0);
@@ -2553,7 +2661,7 @@ window.scrollTo(0,0);
 // ══════════════════════════════════════════════════════
 // DATA (same comprehensive exercise system from v2)
 // ══════════════════════════════════════════════════════
-const COMPANIES=[{id:'c1',name:'TechCorp',sector:'IT',logo:'🔵',size:'51-200',desc:'Plataforma SaaS de gestión empresarial'},{id:'c2',name:'GrowthLab',sector:'Marketing',logo:'🟠',size:'11-50',desc:'Agencia de marketing digital'},{id:'c3',name:'DataPulse',sector:'Data',logo:'🟢',size:'11-50',desc:'Consultoría de business intelligence'},{id:'c4',name:'SalesForward',sector:'Business',logo:'🟡',size:'51-200',desc:'Soluciones de ventas B2B'},{id:'c5',name:'PixelCraft',sector:'Design',logo:'🟣',size:'1-10',desc:'Estudio de diseño UX/UI'},{id:'c6',name:'PeopleFirst',sector:'RRHH',logo:'🔴',size:'11-50',desc:'Consultoría RRHH'},{id:'c7',name:'FinEdge',sector:'Finance',logo:'⚫',size:'201-1000',desc:'Fintech de pagos'},{id:'c8',name:'LexDigital',sector:'Legal',logo:'⚪',size:'11-50',desc:'Legaltech contractual'},{id:'c9',name:'LogiFlow',sector:'Ops',logo:'🟤',size:'51-200',desc:'Logística inteligente'},{id:'c10',name:'CloserHQ',sector:'Sales',logo:'🔶',size:'11-50',desc:'Plataforma de sales enablement'},{id:'c11',name:'LinguaHub',sector:'Languages',logo:'🌐',size:'51-200',desc:'Escuela de idiomas corporativos'},{id:'c12',name:'MindMetrics',sector:'Cognitive',logo:'🧠',size:'11-50',desc:'Evaluación cognitiva para empresas'}];
+const COMPANIES=[{id:'c1',name:'TechCorp',sector:'IT',logo:'',size:'51-200',desc:'Plataforma SaaS de gestión empresarial'},{id:'c2',name:'GrowthLab',sector:'Marketing',logo:'',size:'11-50',desc:'Agencia de marketing digital'},{id:'c3',name:'DataPulse',sector:'Data',logo:'',size:'11-50',desc:'Consultoría de business intelligence'},{id:'c4',name:'SalesForward',sector:'Business',logo:'',size:'51-200',desc:'Soluciones de ventas B2B'},{id:'c5',name:'PixelCraft',sector:'Design',logo:'',size:'1-10',desc:'Estudio de diseño UX/UI'},{id:'c6',name:'PeopleFirst',sector:'RRHH',logo:'',size:'11-50',desc:'Consultoría RRHH'},{id:'c7',name:'FinEdge',sector:'Finance',logo:'',size:'201-1000',desc:'Fintech de pagos'},{id:'c8',name:'LexDigital',sector:'Legal',logo:'',size:'11-50',desc:'Legaltech contractual'},{id:'c9',name:'LogiFlow',sector:'Ops',logo:'',size:'51-200',desc:'Logística inteligente'},{id:'c10',name:'CloserHQ',sector:'Sales',logo:'',size:'11-50',desc:'Plataforma de sales enablement'},{id:'c11',name:'LinguaHub',sector:'Languages',logo:'',size:'51-200',desc:'Escuela de idiomas corporativos'},{id:'c12',name:'MindMetrics',sector:'Cognitive',logo:'',size:'11-50',desc:'Evaluación cognitiva para empresas'}];
 const JOBS=[
   {id:'mkt1',title:'Marketing Digital Junior',sector:'Marketing',badge:'jb-mkt',company:'c2',desc:'Gestión de campañas, analítica y contenido para marcas digitales.',tags:['Performance','SEO/SEM','Analytics'],requiredSkills:['Pensamiento Analítico','Comunicación Escrita','Toma de Decisiones'],exerciseConfig:'common+custom',requiredLevel:'intermedio'},
   {id:'mkt2',title:'Social Media Manager',sector:'Marketing',badge:'jb-mkt',company:'c2',desc:'Creación de contenido y gestión de comunidades.',tags:['Copywriting','Community','Creatividad'],requiredSkills:['Comunicación Escrita','Toma de Decisiones'],exerciseConfig:'common+custom',requiredLevel:'intermedio'},
@@ -3647,7 +3755,7 @@ const SkillPass={
   pdf(){
     const c=SkillPass.cred; if(!c||!c.cvJson)return;
     const w=window.open('','_blank');
-    if(!w){alert('Permite ventanas emergentes para generar el PDF.');return;}
+    if(!w){toast('Permite las ventanas emergentes para generar el PDF.');return;}
     const card=SkillPass.cardHtml(c,{url:SkillPass.shareUrl()});
     w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>SkillPass TalentPact</title><link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"><style>@page{size:A4;margin:12mm}body{margin:0;background:#f1f5f9;font-family:system-ui,sans-serif;padding:20px}'+
       '.sp-pass-wrap{margin:0 auto;max-width:720px;border-radius:20px;overflow:hidden;border:1px solid #12382c}'+
@@ -3689,11 +3797,12 @@ function copySkillPassLink(){return SkillPass.copyLink();}
 function escHtml(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 
 // Registra una evaluación en el audit trail persistente (respuesta + feedback completo).
-// Coste estimado por evaluación IA (~€0,019) coherente con la PoC (Entrega 2).
+// Coste por evaluación IA. Si la API no devolvió `usage` se usa el valor medio
+// medido en la PoC (Entrega 2): $0,0180 -> ~€0,0165 al tipo declarado.
 function recordEval(ex,score,aiPowered,response,feedback){
   try{
     const fb=feedback||{};
-    const cost=(fb&&typeof fb.costEUR==='number')?fb.costEUR:(aiPowered?0.019:0);
+    const cost=(fb&&typeof fb.costEUR==='number')?fb.costEUR:(aiPowered?0.0165:0);
     TP.logEval({
       job:(activeJob&&activeJob.title)||'—',
       sector:(activeJob&&activeJob.sector)||'—',
@@ -3702,6 +3811,7 @@ function recordEval(ex,score,aiPowered,response,feedback){
       score:Math.round(score||0),
       aiPowered:!!aiPowered,
       estCost:cost,
+      estCostUSD:(fb&&typeof fb.costUSD==='number')?fb.costUSD:null,
       costReal:(fb&&typeof fb.costEUR==='number'),
       tokensIn:(fb&&fb.tokensIn)||null,
       tokensOut:(fb&&fb.tokensOut)||null,
@@ -4757,7 +4867,6 @@ function updateCandProfile(){
   }
 }
 
-
 let _dashExCat='all';
 
 function renderCommonExercises(filter='',cat='all'){
@@ -4859,7 +4968,33 @@ function renderJobMatches(){
 }
 
 // ═══ RENDER ═══
-function renderJobs(list){const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');document.getElementById('resultsCount').textContent=`${list.length} oferta${list.length!==1?'s':''} de empresas`;if(!list.length){g.innerHTML='';nr.style.display='block';return;}nr.style.display='none';g.innerHTML=list.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return`<div class="job-card" onclick="openAuth('candidate')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em">Skills requeridos:</div><div class="job-tags">${req.map(s=>`<span class="job-tag" style="border:1px solid var(--emerald-100);background:var(--emerald-50);color:var(--emerald-600)">${s}</span>`).join('')}${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?`<div class="job-company"><div class="job-company-dot" style="background:var(--slate-200);color:var(--slate-600)">${co.logo}</div>${co.name} · ${co.size} empleados</div>`:''}<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span class="level-badge ${levelCls}">${levelLabel}</span><span class="ex-config-badge ${configCls}">${configLabel}</span></div></div>`;}).join('');}
+// Monograma de empresa: iniciales sobre un tono estable derivado del nombre.
+// Sustituye a los emoji de color que se usaban como logotipo.
+const TP_MONO_TINTS=[['#ecfdf5','#047857'],['#eff6ff','#1d4ed8'],['#fef3c7','#b45309'],['#f5f3ff','#6d28d9'],['#fee2e2','#b91c1c'],['#f1f5f9','#334155']];
+function companyMonogram(nombre){
+  const n=String(nombre||'').trim();
+  // Nombres de una sola palabra en CamelCase (GrowthLab, TechCorp) dan una
+  // inicial sola y quedan pobres: se aprovechan sus mayusculas internas.
+  const palabras=n.split(/[\s·-]+/).filter(Boolean);
+  let iniciales;
+  if(palabras.length>1){
+    iniciales=palabras.slice(0,2).map(w=>w[0]).join('');
+  }else{
+    const mayus=(palabras[0]||'').match(/[A-ZÁÉÍÓÚÑ]/g)||[];
+    iniciales=mayus.length>1?mayus.slice(0,2).join(''):(palabras[0]||'??').slice(0,2);
+  }
+  iniciales=(iniciales||'??').toUpperCase();
+  let h=0; for(let k=0;k<n.length;k++)h=(h*31+n.charCodeAt(k))>>>0;
+  const [bg,fg]=TP_MONO_TINTS[h%TP_MONO_TINTS.length];
+  return {iniciales,bg,fg};
+}
+
+// Cuántas ofertas se ven antes de pulsar "Ver todas".
+const JOBS_VISIBLES=6;
+let _jobsExpandido=false;
+function toggleJobs(){_jobsExpandido=!_jobsExpandido;renderJobs(_ultimasOfertas);if(!_jobsExpandido){const el=document.getElementById('jobsGrid');if(el)window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-90,behavior:'smooth'});}}
+let _ultimasOfertas=[];
+function renderJobs(list){_ultimasOfertas=list;const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');const total=list.length;document.getElementById('resultsCount').textContent=`${total} oferta${total!==1?'s':''} de empresas`;if(!total){g.innerHTML='';nr.style.display='block';const m0=document.getElementById('jobsMore');if(m0)m0.innerHTML='';return;}nr.style.display='none';const visibles=_jobsExpandido?list:list.slice(0,JOBS_VISIBLES);const more=document.getElementById('jobsMore');if(more){more.innerHTML=total>JOBS_VISIBLES?`<button class="btn btn-outline" onclick="toggleJobs()">${_jobsExpandido?'Ver menos':'Ver las '+total+' ofertas'}</button>`:'';}g.innerHTML=visibles.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return`<div class="job-card" onclick="openAuth('candidate')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em">Skills requeridos:</div><div class="job-tags">${req.map(s=>`<span class="job-tag" style="border:1px solid var(--emerald-100);background:var(--emerald-50);color:var(--emerald-600)">${s}</span>`).join('')}${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?(m=>`<div class="job-company"><div class="job-company-dot" style="background:${m.bg};color:${m.fg}">${m.iniciales}</div>${co.name} · ${co.size} empleados</div>`)(companyMonogram(co.name)):''}<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span class="level-badge ${levelCls}">${levelLabel}</span><span class="ex-config-badge ${configCls}">${configLabel}</span></div></div>`;}).join('');}
 // Ofertas visibles para los candidatos: se excluyen las de cuentas pausadas.
 function publicJobs(){ return empPostedJobs.filter(j=>!j.paused); }
 function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(publicJobs());if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}
@@ -5126,32 +5261,32 @@ async function submitEx(i){
   // Gather response based on type
   if(ex.type==='analysis'){
     candidateResponse=(document.getElementById('exAns')?.value||'').trim();
-    if(!candidateResponse||candidateResponse.length<15){alert('Escribe tu análisis (mín. 15 caracteres).');return;}
+    if(!candidateResponse||candidateResponse.length<15){toast('Escribe tu análisis: al menos 15 caracteres.');return;}
   }else if(ex.type==='email'){
     candidateResponse=(document.getElementById('exAns')?.value||'').trim();
     const subj=(document.getElementById('exSubj')?.value||'').trim();
-    if(!candidateResponse||candidateResponse.length<20){alert('Escribe tu respuesta (mín. 20 caracteres).');return;}
+    if(!candidateResponse||candidateResponse.length<20){toast('Escribe tu respuesta: al menos 20 caracteres.');return;}
     const ed=ex.data||{};
-    if(ed.minChars&&candidateResponse.length<ed.minChars){alert('El cuerpo del email es demasiado corto para este ejercicio: necesitas al menos '+ed.minChars+' caracteres (ahora tienes '+candidateResponse.length+').');return;}
-    if(ed.minWords){const wc=candidateResponse.split(/\s+/).filter(Boolean).length;if(wc<ed.minWords){alert('Necesitas al menos '+ed.minWords+' palabras en el cuerpo del email (ahora tienes '+wc+').');return;}}
+    if(ed.minChars&&candidateResponse.length<ed.minChars){toast('El cuerpo del email necesita al menos '+ed.minChars+' caracteres. Ahora tiene '+candidateResponse.length+'.');return;}
+    if(ed.minWords){const wc=candidateResponse.split(/\s+/).filter(Boolean).length;if(wc<ed.minWords){toast('El cuerpo del email necesita al menos '+ed.minWords+' palabras. Ahora tiene '+wc+'.');return;}}
     if(subj) candidateResponse='Asunto: '+subj+'\n\n'+candidateResponse;
   }else if(ex.type==='decision'){
     const items=document.querySelectorAll('#decItems .ex-choice');
     let assigned=0;items.forEach(el=>{if(el.dataset.cat)assigned++;});
-    if(assigned<items.length-1){alert('Clasifica todos los elementos.');return;}
+    if(assigned<items.length-1){toast('Falta clasificar algún elemento.');return;}
     let choices=[];items.forEach(el=>{choices.push({text:el.querySelector('h4')?.textContent||'',chosen:el.dataset.cat,correct:el.dataset.correct});});
     candidateResponse=JSON.stringify(choices);
     evaluationType='deterministic_plus_ai';
   }else if(ex.type==='cognitive'){
     const answers=_exState.cogAnswers||[];const correct=_exState.cogCorrect||[];
-    if(answers.some(a=>a===-1)){alert('Responde a todos los puzzles.');return;}
+    if(answers.some(a=>a===-1)){toast('Falta responder a algún puzzle.');return;}
     let hits=0;answers.forEach((a,j)=>{if(a===correct[j])hits++;});
     const sc=Math.min(100,Math.round((hits/correct.length)*90)+10);
     exResults[i]={score:sc,time:_exTimeLeft?((getExercises(activeJob)[i].timeLimit||300)-_exTimeLeft):120,feedback:{overall:`Has acertado ${hits} de ${correct.length} secuencias.`,criteria:[{name:'Aciertos',score:Math.round((hits/correct.length)*100),comment:`${hits}/${correct.length} respuestas correctas`},{name:'Razonamiento lógico',score:sc,comment:sc>80?'Excelente capacidad de reconocimiento de patrones.':sc>60?'Buen nivel de razonamiento. Practica secuencias más complejas.':'Necesitas mejorar el reconocimiento de patrones numéricos y lógicos.'}],aiPowered:false}};
     recordEval(ex,sc,false,'Test de patrones (selección de opciones)',exResults[i].feedback);
     switchEx(i);return;
   }else if(ex.type==='audio'||ex.type==='video'||ex.type==='image_audit'){
-    if(_recState.elapsed<5){alert('Graba al menos 5 segundos antes de enviar.');return;}
+    if(_recState.elapsed<5){toast('Graba al menos 5 segundos antes de enviar.');return;}
     stopRecording();
     candidateResponse=`[Grabación de ${ex.type==='audio'?'audio':'vídeo'}: ${_recState.elapsed} segundos]`;
     evaluationType='recording_ai';
@@ -5159,7 +5294,7 @@ async function submitEx(i){
     const file=_exState.uploadedFile||'';
     const url=(document.getElementById('exUrlInput')?.value||'').trim();
     const comment=(document.getElementById('exAns')?.value||'').trim();
-    if(!file&&!url){alert('Sube un archivo o introduce una URL.');return;}
+    if(!file&&!url){toast('Sube un archivo o pega una URL.');return;}
     candidateResponse=`[Archivo: ${file||'ninguno'}] [URL: ${url||'ninguna'}] [Comentario: ${comment||'sin comentario'}]`;
     evaluationType='ai';
   }
@@ -5213,6 +5348,11 @@ function detectQuality(text){
   if(words.length<40)return{garbage:false,quality:'medium',wordCount:words.length};
   return{garbage:false,quality:'high',wordCount:words.length};
 }
+
+// Tipo de cambio EUR/USD usado para expresar el coste de la IA en euros.
+// Es un supuesto declarado, no un dato de mercado en vivo: se documenta en la
+// memoria para que el COGS del plan financiero sea reproducible.
+const EUR_USD=1.09;
 
 async function evaluateWithAI(ex, response, evalType){
   // Pre-check for garbage
@@ -5286,11 +5426,14 @@ Responde SOLO con JSON.`;
   if(parsed.criteria){parsed.criteria.forEach(c=>{c.score=Math.max(0,Math.min(100,Math.round(c.score||0)));});}
   parsed.aiPowered=true;
   // Coste real de la evaluación a partir de los tokens (tarifa claude-sonnet-4-6:
-  // $3 / MTok input, $15 / MTok output). Si no hay usage, se estima después.
+  // $3 / MTok input, $15 / MTok output). La tarifa de Anthropic está en DÓLARES:
+  // el importe se convierte a euros de forma explícita en vez de escribir "€"
+  // sobre una cifra en USD, que inflaba el COGS declarado un ~8 %.
   if(parsed.usage){
     const ti=parsed.usage.input_tokens||0, to=parsed.usage.output_tokens||0;
     parsed.tokensIn=ti; parsed.tokensOut=to;
-    parsed.costEUR=(ti*3 + to*15)/1000000;
+    parsed.costUSD=(ti*3 + to*15)/1000000;
+    parsed.costEUR=parsed.costUSD/EUR_USD;
   }
   return parsed;
 }
@@ -6270,7 +6413,7 @@ async function verifySkillPassAtCompany(){
   const st=document.getElementById('empVerifyStatus');
   const card=document.getElementById('empVerifyCard');
   const btn=document.getElementById('empVerifyBtn');
-  if(!raw){alert('Pega el JSON, el hash 0x… o el enlace del candidato.');return;}
+  if(!raw){toast('Pega el JSON, el hash 0x… o el enlace del candidato.');return;}
   let payload={};
   const hashMatch=raw.match(/0x[a-fA-F0-9]{64}/);
   if(raw.startsWith('{')||raw.startsWith('[')){
@@ -6408,7 +6551,7 @@ function openDashCand(){document.getElementById('dashCandidate').classList.add('
     const reqSkills=j.requiredSkills||[];
     const hasCount=reqSkills.filter(s=>candidateProfile.skills[s]?.unlocked).length;
     const allMet=hasCount===reqSkills.length&&reqSkills.length>0;
-    h+=`<div class="job-card" onclick="openJob('${j.id}')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div class="job-tags">${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?`<div class="job-company"><div class="job-company-dot" style="background:var(--slate-200);color:var(--slate-600)">${co.logo}</div>${co.name} · ${co.size} empleados</div>`:''}<div style="margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.7rem"><span style="color:${allMet?'var(--emerald-600)':'var(--amber-500)'};font-weight:600">${allMet?'✅ Cumples requisitos':'⚡ '+hasCount+'/'+reqSkills.length+' skills'}</span>${reqSkills.map(s=>{const ok=candidateProfile.skills[s]?.unlocked;return`<span style="padding:1px 6px;border-radius:3px;font-size:.6rem;border:1px solid ${ok?'var(--emerald-200)':'var(--slate-200)'};background:${ok?'var(--emerald-50)':'var(--slate-50)'};color:${ok?'var(--emerald-600)':'var(--slate-400)'}">${ok?'✓':''} ${s.split(' ')[0]}</span>`}).join('')}</div></div>`;
+    h+=`<div class="job-card" onclick="openJob('${j.id}')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${j.title}</h3><div class="job-desc">${j.desc}</div><div class="job-tags">${j.tags.map(t=>`<span class="job-tag">${t}</span>`).join('')}</div>${co?(m=>`<div class="job-company"><div class="job-company-dot" style="background:${m.bg};color:${m.fg}">${m.iniciales}</div>${co.name} · ${co.size} empleados</div>`)(companyMonogram(co.name)):''}<div style="margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.7rem"><span style="color:${allMet?'var(--emerald-600)':'var(--amber-500)'};font-weight:600">${allMet?'✅ Cumples requisitos':'⚡ '+hasCount+'/'+reqSkills.length+' skills'}</span>${reqSkills.map(s=>{const ok=candidateProfile.skills[s]?.unlocked;return`<span style="padding:1px 6px;border-radius:3px;font-size:.6rem;border:1px solid ${ok?'var(--emerald-200)':'var(--slate-200)'};background:${ok?'var(--emerald-50)':'var(--slate-50)'};color:${ok?'var(--emerald-600)':'var(--slate-400)'}">${ok?'✓':''} ${s.split(' ')[0]}</span>`}).join('')}</div></div>`;
   });
   document.getElementById('candJobsList').innerHTML=`<div class="jobs-grid">${h}</div>`;
   // Companies list
@@ -6485,7 +6628,7 @@ function unlockContact(candId){
   const c=CANDIDATES.find(p=>p.id===candId);
   if(!c)return;
   if(!candidateAcceptsContact(c)){
-    alert('Este candidato no acepta solicitudes de contacto ahora mismo.');
+    toast('Este candidato no acepta solicitudes de contacto ahora mismo.');
     return;
   }
   _payingForCand=c;
@@ -6684,8 +6827,7 @@ async function handlePaymentReturn(){
     if(typeof renderEmpPool==='function')renderEmpPool();
   }else if(r&&r.sessionStatus&&r.sessionStatus!=='paid'){
     // Métodos diferidos (SEPA) pueden tardar en confirmar.
-    alert('El pago aún no está confirmado por Stripe (estado: '+r.sessionStatus+'). '+
-          'En cuanto se confirme, el contacto aparecerá desbloqueado.');
+    toast('Stripe aún no confirma el pago (estado: '+r.sessionStatus+'). En cuanto lo haga, el contacto aparecerá desbloqueado.');
   }
 }
 
@@ -6712,11 +6854,15 @@ function renderLandingCommon(filter='',cat='all',level='all'){
     return;
   }
   const dotColor=l=>l==='basico'?'var(--emerald-500)':l==='intermedio'?'var(--amber-500)':'var(--red-500)';
+  const dotName=l=>l==='basico'?'básico':l==='intermedio'?'intermedio':'avanzado';
+  const ORDEN_NIVEL={basico:0,intermedio:1,avanzado:2};
   const buildRow=ce=>{
-    const levels=[...new Set(ce.exercises.map(e=>e.difficulty))];
+    const levels=[...new Set(ce.exercises.map(e=>e.difficulty))].sort((a,b)=>(ORDEN_NIVEL[a]??9)-(ORDEN_NIVEL[b]??9));
     const dots=levels.map(l=>`<span class="rpl-dot" style="background:${dotColor(l)}"></span>`).join('');
-    const sub=ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').slice(0,2).join(' · ')||ce.category==='sector'?'Por Sector':'Soft Skill';
-    return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${ce.icon}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${sub}</div></div><div class="rpl-dots">${dots}</div></div>`;
+    const nivelesTxt='Niveles disponibles: '+levels.map(dotName).join(', ');
+    const etiquetas=ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').slice(0,2).join(' · ');
+    const sub=etiquetas||(ce.category==='sector'?'Por sector':'Soft skill universal');
+    return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${ce.icon}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${sub}</div></div><div class="rpl-dots" title="${nivelesTxt}" aria-label="${nivelesTxt}">${dots}</div></div>`;
   };
   const softList=list.filter(ce=>ce.category==='soft');
   const sectorList=list.filter(ce=>ce.category==='sector');
@@ -6859,8 +7005,8 @@ function addSkill(){const i=document.getElementById('pj-skill-input'),v=i.value.
 
 function publishJob(){
   const t=document.getElementById('pj-title').value.trim(),s=document.getElementById('pj-sector').value,d=document.getElementById('pj-desc').value.trim();
-  if(!t||!s||!d){alert('Rellena título, sector y descripción.');return;}
-  if(pjReqSkills.length===0){alert('Selecciona al menos 1 skill requerido de la plataforma.');return;}
+  if(!t||!s||!d){toast('Faltan el título, el sector o la descripción.');return;}
+  if(pjReqSkills.length===0){toast('Selecciona al menos un skill requerido.');return;}
   const bm={Marketing:'jb-mkt',IT:'jb-it',Data:'jb-data',Business:'jb-biz',Design:'jb-des',RRHH:'jb-hr',Finance:'jb-fin',Legal:'jb-leg',Ops:'jb-ops',Sales:'jb-sales',Languages:'jb-lang',Cognitive:'jb-cognitive'};
   
   empPostedJobs.push({
@@ -6886,9 +7032,9 @@ function publishJob(){
   togglePostJob();renderEmpJobs();
   
   if(pjExConfigVal==='contact'){
-    alert('¡Oferta publicada!\n\nHas seleccionado ejercicios a medida. Nuestro equipo se pondrá en contacto contigo en 24h para diseñarlos.');
+    toast('Oferta publicada. Has pedido ejercicios a medida: te escribimos en 24 h para diseñarlos.','ok');
   }else{
-    alert('¡Oferta publicada con éxito!\n\nLos candidatos podrán ver los skills requeridos y completar los retos para aplicar.');
+    toast('Oferta publicada. Los candidatos ya ven los skills requeridos y pueden hacer los retos.','ok');
   }
 }
 function closeDash(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
@@ -6897,6 +7043,51 @@ function closeDash(id){document.getElementById(id).classList.remove('open');docu
 function toggleAccessMenu(){const d=document.getElementById('accessDrop'),b=document.getElementById('accessBtn');d.classList.toggle('show');b.classList.toggle('open');}
 function closeAccessMenu(){document.getElementById('accessDrop').classList.remove('show');document.getElementById('accessBtn').classList.remove('open');}
 document.addEventListener('click',function(e){if(!e.target.closest('.nav-access'))closeAccessMenu();});
+// Aviso propio en lugar de alert(). No bloquea el hilo, no rompe una demo en
+// vivo y se anuncia a lectores de pantalla. `alert` congela la pestana hasta
+// que alguien pulsa Aceptar: en una presentacion eso son varios segundos de
+// pantalla muerta.
+// Consentimiento de analitica. Aceptar y rechazar tienen el mismo peso visual
+// y el mismo numero de clics: es lo que pide la AEPD, y ademas es lo honesto.
+function tpConsent(valor){
+  try{ localStorage.setItem(window.TP_CONSENT_KEY, valor); }catch(e){}
+  var b=document.getElementById('tpCookies'); if(b)b.classList.remove('show');
+  document.body.classList.remove('tp-consent-abierto');
+  if(valor==='aceptado')tpCargarAnalitica();
+}
+(function(){
+  // Se muestra solo si no hay una decision previa guardada.
+  function pintar(){
+    if(tpConsentEstado())return;
+    var b=document.getElementById('tpCookies');
+    if(b)setTimeout(function(){ b.classList.add('show'); document.body.classList.add('tp-consent-abierto'); }, 900);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',pintar);
+  else pintar();
+})();
+
+function toast(msg, tipo){
+  var wrap=document.getElementById('tpToastWrap');
+  if(!wrap){
+    wrap=document.createElement('div');
+    wrap.id='tpToastWrap'; wrap.className='tp-toast-wrap';
+    wrap.setAttribute('role','status'); wrap.setAttribute('aria-live','polite');
+    document.body.appendChild(wrap);
+  }
+  var el=document.createElement('div');
+  el.className='tp-toast '+(tipo||'warn');
+  var ico=(tipo==='ok')
+    ? '<svg class="tp-toast-ico" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 9.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd"/></svg>'
+    : '<svg class="tp-toast-ico" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4a1 1 0 011 1v4a1 1 0 11-2 0V7a1 1 0 011-1zm0 8.5a1.1 1.1 0 110-2.2 1.1 1.1 0 010 2.2z" clip-rule="evenodd"/></svg>';
+  el.innerHTML=ico+'<span>'+String(msg).replace(/</g,'&lt;').replace(/\n/g,'<br>')+'</span>';
+  wrap.appendChild(el);
+  requestAnimationFrame(function(){ el.classList.add('show'); });
+  setTimeout(function(){
+    el.classList.remove('show');
+    setTimeout(function(){ if(el.parentNode) el.parentNode.removeChild(el); }, 260);
+  }, tipo==='ok' ? 3200 : 4200);
+}
+
 function goTo(id){const el=document.getElementById(id);if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-70,behavior:'smooth'});}}
 function goHome(){closeDash('dashCandidate');closeDash('dashEmpresa');closeAdmin();closeAuth('authCandidate');closeAuth('authEmpresa');closeSettings('cand');closeSettings('emp');window.scrollTo({top:0,behavior:'smooth'});}
 
@@ -6922,18 +7113,30 @@ function closeSettings(type){
 function updateStCandIncentives(){
   // TalentPact es gratis para candidatos; no hay pago por retos
 }
-function openContact(){document.getElementById('cform').style.display='block';document.getElementById('csucc').style.display='none';document.getElementById('cmodal').classList.add('open');}
+function openContact(asunto){
+  const form=document.getElementById('cform');
+  form.style.display='block';
+  document.getElementById('csucc').style.display='none';
+  if(asunto){
+    // Quien pulsa "Activar Pro" no deberia tener que explicar por que escribe.
+    const perfil=form.querySelector('select[name="perfil"]');
+    if(perfil)perfil.value='Empresa';
+    const msg=form.querySelector('textarea[name="mensaje"]');
+    if(msg&&!msg.value.trim())msg.value='Me interesa el '+asunto+'. ¿Podéis contarme los siguientes pasos?';
+  }
+  document.getElementById('cmodal').classList.add('open');
+}
 function submitContact(){
   const name=document.getElementById('cf-name').value.trim();
   const email=document.getElementById('cf-email').value.trim();
-  if(!name||!email){alert('Rellena nombre y email.');return;}
+  if(!name||!email){toast('Faltan el nombre o el correo.');return;}
   const form=document.getElementById('cform');
   const btn=form.querySelector('button');
   btn.textContent='Enviando…';btn.disabled=true;
   const formData=new URLSearchParams(new FormData(form)).toString();
   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData})
-    .then(function(r){if(r.ok){form.style.display='none';document.getElementById('csucc').style.display='block';}else{alert('Error al enviar. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;}})
-    .catch(function(){alert('Error de conexión. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;});
+    .then(function(r){if(r.ok){form.style.display='none';document.getElementById('csucc').style.display='block';}else{toast('No se ha podido enviar. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;}})
+    .catch(function(){toast('Sin conexión con el servidor. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;});
 }
 function closeM(id){document.getElementById(id).classList.remove('open');}
 document.getElementById('cmodal').addEventListener('click',function(e){if(e.target===this)closeM('cmodal');});
@@ -7135,7 +7338,7 @@ function renderAdminAI(){
   // Alerts
   document.getElementById('admAiAlerts').innerHTML=a.alerts.map(al=>`<div class="ai-alert" style="${al.level==='ok'?'background:rgba(16,185,129,.05);border-color:rgba(16,185,129,.15);color:var(--emerald-400)':''}"><span>${al.level==='warn'?'⚠️':'✅'}</span><span>${al.msg}</span></div>`).join('');
   // Appeals table
-  document.getElementById('admAiAppeals').innerHTML=`<table class="admin-table"><thead><tr><th>Reto</th><th>Quejas</th><th>Score medio quejas</th><th>Estado</th><th>Acción</th></tr></thead><tbody>${a.appeals.map(ap=>`<tr><td style="color:white;font-weight:600">${ap.reto}</td><td style="font-family:JetBrains Mono,monospace">${ap.quejas}</td><td style="color:${ap.score_medio<40?'var(--red-500)':'var(--amber-500)'};font-family:JetBrains Mono,monospace">${ap.score_medio}/100</td><td>${ap.status}</td><td><button class="admin-btn" onclick="alert('Se abre editor de rúbrica para: ${ap.reto}')">Revisar rúbrica</button></td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('admAiAppeals').innerHTML=`<table class="admin-table"><thead><tr><th>Reto</th><th>Quejas</th><th>Score medio quejas</th><th>Estado</th><th>Acción</th></tr></thead><tbody>${a.appeals.map(ap=>`<tr><td style="color:white;font-weight:600">${ap.reto}</td><td style="font-family:JetBrains Mono,monospace">${ap.quejas}</td><td style="color:${ap.score_medio<40?'var(--red-500)':'var(--amber-500)'};font-family:JetBrains Mono,monospace">${ap.score_medio}/100</td><td>${ap.status}</td><td><button class="admin-btn" onclick="toast('El editor de rúbricas todavía no está construido. Reto: ${ap.reto}')">Revisar rúbrica</button></td></tr>`).join('')}</tbody></table>`;
 }
 
 // ═══ C. MASTER LIBRARY ═══
@@ -7169,7 +7372,7 @@ function renderAdminLibrary(){
       <td style="font-family:JetBrains Mono,monospace">${ce.exercises.length}</td>
       <td style="font-family:JetBrains Mono,monospace">${completed}</td>
       <td style="font-family:JetBrains Mono,monospace;color:${avgScore>=60?'var(--emerald-400)':'var(--amber-500)'}">${avgScore}/100</td>
-      <td><button class="admin-btn" onclick="alert('Editor de reto: ${ce.title}\\n\\nAquí podrás editar escenarios, tiempos, rúbricas y dificultad de cada ejercicio.')">Editar</button></td>
+      <td><button class="admin-btn" onclick="toast('Editor de «${ce.title}»: aún no construido. Ahí irán escenarios, tiempos, rúbricas y dificultad.')">Editar</button></td>
     </tr>`;
   }).join('');
 }
@@ -7198,7 +7401,9 @@ function impersonateCompany(id){
   document.getElementById('impersonateName').textContent=c.name+' (Empresa)';
   closeAdmin();
   openDashEmp();
-  alert('👁️ Suplantación activa\n\nEstás viendo el panel como: '+c.name+'\n\nTodo lo que veas es exactamente lo que ve esta empresa. Ninguna acción afectará datos reales en modo suplantación.');
+  // La barra fija de suplantacion ya avisa de forma permanente; el cuadro
+  // nativo solo obligaba a pulsar Aceptar antes de poder mirar nada.
+  toast('Suplantación activa: ves el panel como '+c.name+'. Nada de lo que hagas afecta a datos reales.');
 }
 
 function impersonateCandidate(id){
@@ -7209,7 +7414,7 @@ function impersonateCandidate(id){
   document.getElementById('impersonateName').textContent=c.name+' (Candidato)';
   closeAdmin();
   openDashCand();
-  alert('👁️ Suplantación activa\n\nEstás viendo la plataforma como: '+c.name+'\n\nTodo lo que veas es exactamente lo que ve este candidato.');
+  toast('Suplantación activa: ves la plataforma como '+c.name+'.');
 }
 
 function exitImpersonate(){
@@ -7302,12 +7507,12 @@ function toggleAddPayMethod(){
 function savePayMethod(){
   const inputs=document.querySelectorAll('#pmAddForm .pm-input');
   const vals=[...inputs].map(i=>i.value.trim());
-  if(vals.some(v=>!v)){alert('Rellena todos los campos.');return;}
+  if(vals.some(v=>!v)){toast('Faltan campos por rellenar.');return;}
   const last4=vals[1].replace(/\s/g,'').slice(-4);
   document.getElementById('empSavedCard').innerHTML=`<span class="card-brand">💳</span><div class="card-info"><div class="card-num">Visa •••• •••• •••• ${last4}</div><div class="card-exp">Expira ${vals[2]} · Predeterminada</div></div><button class="btn btn-outline btn-sm" onclick="toggleAddPayMethod()">Cambiar</button>`;
   inputs.forEach(i=>i.value='');
   toggleAddPayMethod();
-  alert('✅ Tarjeta guardada correctamente.\n\nLos cobros futuros se realizarán con esta tarjeta.');
+  toast('Tarjeta guardada. Los cobros futuros se harán con esta tarjeta.','ok');
 }
 
 // ═══ AI CUSTOMER SUPPORT CHAT ═══
@@ -7397,7 +7602,6 @@ function getAiFallback(msg){
   return'Gracias por tu mensaje. Si necesitas algo específico sobre precios, retos, tu perfil o cómo funciona la plataforma, pregúntame directamente. Si es un tema más complejo, puedo escalar tu consulta a nuestro equipo.';
 }
 
-
 // ═══ AI CHATBOT ═══
 function toggleChat(){
   const p=document.getElementById('chatPanel');
@@ -7408,7 +7612,7 @@ function toggleChat(){
 const CHAT_FAQ={
   'retos':['Los retos son ejercicios prácticos cronometrados que evalúan tus habilidades reales. Hay 3 niveles: Básico, Intermedio y Avanzado. Cada reto tiene una pantalla de briefing que no revela el escenario hasta que pulses "Empezar". Una vez empieza, el timer cuenta hacia atrás y no se puede pausar.','Tenemos 102 retos en 25 áreas: desde soft skills (liderazgo, comunicación) hasta técnicos (React, Python, SQL). Completa los que quieras para construir tu perfil.'],
   'desbloquear':['Las empresas pagan €49 por desbloquear el contacto real de un candidato. Tu perfil es 100% anónimo hasta que una empresa paga. Cuando desbloquean tu perfil, te notificamos por email.','Si eres empresa: ve a una oferta → Ver candidatos → Desbloquear. Solo pagas si realmente quieres contactar.'],
-  'problema':['Lamento que tengas un problema. Puedes reportarlo de dos formas:\n\n1. Ve a tu dashboard → pestaña "Soporte" → "Reportar un Problema"\n2. Escríbenos a soporte@talentpact.io\n\nRespondemos en menos de 24h. Si es un problema con un score, incluye el nombre del reto y tu respuesta.'],
+  'problema':['Lamento que tengas un problema. Puedes reportarlo de dos formas:\n\n1. Ve a tu dashboard → pestaña "Soporte" → "Reportar un Problema"\n2. Escríbenos a hello@talentpact.io\n\nRespondemos en menos de 24h. Si es un problema con un score, incluye el nombre del reto y tu respuesta.'],
   'precio':['Para empresas:\n• Desbloqueo individual: €49/contacto\n• Plan Pro: €199/mes (5 contactos incluidos)\n• Plan Enterprise: €499/mes (contactos ilimitados)\n• Retos a medida: desde €299/vacante\n\nPara candidatos: TalentPact es 100% gratuito (hasta 5 retos/semana). Si superas ese límite, hay una suscripción Premium disponible.'],
   'score':['Tu score se calcula con IA (Claude de Anthropic). Evalúa: relevancia, profundidad, estructura y aplicabilidad de tu respuesta. La escala va de 0 a 100:\n• 0-25: Insuficiente\n• 26-45: Por debajo del mínimo\n• 46-65: Aceptable\n• 66-80: Buen nivel junior\n• 81-100: Excelente'],
   'perfil':['Tu perfil muestra todas las skills que has desbloqueado con sus scores. Las empresas ven tu perfil de forma anónima (solo ven "Candidato #XXXX" + tus scores). Para completar tu perfil, haz retos comunes — cada uno desbloquea una skill.'],
@@ -7555,9 +7759,9 @@ function renderFAQ(){
 function submitBugReport(){
   const type=document.getElementById('bugType').value;
   const desc=document.getElementById('bugDesc').value.trim();
-  if(!desc){alert('Describe el problema para poder ayudarte.');return;}
+  if(!desc){toast('Cuéntanos qué ha pasado para poder ayudarte.');return;}
 
-  alert('Reporte enviado. Gracias por ayudarnos a mejorar.');
+  toast('Reporte enviado. Gracias por ayudarnos a mejorar.','ok');
   document.getElementById('bugDesc').value = '';
 }
 
@@ -7576,6 +7780,16 @@ window.addEventListener('load',function(){
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->
 <script src="analytics-talentpact.js"></script>
+
+<!-- CONSENTIMIENTO DE ANALITICA -->
+<div class="tp-cookies" id="tpCookies" role="dialog" aria-live="polite" aria-label="Consentimiento de analítica">
+  <h4>Analítica, solo si nos dejas</h4>
+  <p>Usamos Google Analytics para saber qué partes de la web se usan. No se carga nada hasta que lo aceptas, y rechazarlo no cambia el funcionamiento. Lo necesario para iniciar sesión no lleva analítica. <a href="legal.html#cookies">Más detalle</a>.</p>
+  <div class="tp-cookies-btns">
+    <button class="btn btn-outline" onclick="tpConsent('rechazado')">Rechazar</button>
+    <button class="btn btn-dark" onclick="tpConsent('aceptado')">Aceptar</button>
+  </div>
+</div>
 
 </body>
 </html>

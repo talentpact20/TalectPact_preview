@@ -156,5 +156,5 @@ Guion para `poc_entrega2/presentacion.html` (13 diapositivas). Objetivo: **~10 m
 ## Notas finales
 - Sin demo, el guion da **~10 min**. **Con** demo en vivo, recortad lo marcado con ✂️ (diapos 4, 6 y 12) para mantener el total en ~10-11 min.
 - Diapositivas núcleo de IA (no recortar): **4, 5, 6, 9 y 10**.
-- Las diapositivas 8 y 11 muestran datos de la **PoC** (96/0/92/9, ~€0,017); en el **producto** medisteis ~€0,014 con el mismo comportamiento. La frase para conectarlo ya está incluida en la diapositiva 8.
+- Las diapositivas 8 y 11 muestran datos de la **PoC** (96/0/92/9). El coste medido allí es **$0,0180 ≈ €0,0165** por evaluación; en el **producto**, con retos de *soft skills* (menos contexto), sale **$0,0141 ≈ €0,013**. Si alguien pregunta por qué unas cifras en dólares: la tarifa de Anthropic está en USD y se convierte a 1 € = 1,09 USD. La frase para conectarlo ya está en la diapositiva 8.
 - Ensayad con **cronómetro**: la primera pasada casi siempre se va larga.

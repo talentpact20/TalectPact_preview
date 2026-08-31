@@ -45,8 +45,19 @@ Este directorio contiene todo el trabajo del Trabajo Fin de Máster: el **busine
 | Verificación | `netlify/functions/verify-credential.js` + `verify.html` | ✅ Página pública + panel empresa |
 | Botón en el portal de candidato | `index.html` → SkillPass visual | ✅ Construido |
 | Contrato en Sepolia | `0x85418F3d978e691C0f784bA63E4cB2826478f73A` | ✅ Desplegado (ago 2026) |
+| Pagos con Stripe Checkout | `netlify/functions/create-checkout-session.js` + webhook | ✅ Construido (claves de test) |
+| **Tests automáticos** | `tests/` (`npm test`) | ✅ 84 casos, sin claves ni red |
+| **Banco de pruebas del evaluador** | `tech/eval/` (`npm run bench`) | ✅ Gold set de 12 ítems + métricas |
+| **Cifras canónicas** | `cifras_canonicas.json` | ✅ Fuente de verdad numérica, verificada por test |
 
 Todo lo pendiente está detallado paso a paso en `tech/SETUP_CHECKLIST.md`.
+
+### Dos defectos encontrados en la revisión final (y corregidos)
+
+Merecen quedar escritos porque son el argumento de por qué el banco de pruebas existe: ninguno se veía leyendo el código.
+
+1. **`temperature` no se pasaba en producción.** La PoC lo fijaba a 0; la función serverless no, así que usaba el valor por defecto de la API. La memoria afirmaba una reproducibilidad que el producto no daba. Corregido + test que lo bloquea.
+2. **El coste se calculaba en dólares y se etiquetaba en euros.** La tarifa de Anthropic está en USD; el producto escribía «€» sobre ese número e inflaba el COGS declarado un ~8 %. Corregido con conversión y tipo de cambio explícitos.
 
 ## 4. Estructura de entregables que pide el enunciado
 
@@ -61,9 +72,12 @@ Todo lo pendiente está detallado paso a paso en `tech/SETUP_CHECKLIST.md`.
 | 7 | Regulación y compliance | `business_plan/07_regulacion_compliance.md` | ✅ |
 | 8 | Riesgos y contingencias | `business_plan/08_riesgos.md` | ✅ |
 | — | Resumen ejecutivo | `business_plan/00_resumen_ejecutivo.md` | ✅ |
+| — | Conclusiones y limitaciones | `business_plan/09_conclusiones.md` | ✅ |
 | — | Demo técnico funcional | `tech/SPEC_TECNICA_DEMO.md` | ✅ (Sepolia) |
+| — | Tests y banco de métricas | `tests/` · `tech/eval/` | ✅ |
 | — | Documento único | `tfm/TalentPact_TFM_Business_Plan.pdf` | ✅ |
-| — | Deck de defensa | `business_plan/09_deck.md` | ⬜ |
+| — | Deck de defensa (20 min) | `entrega_final/deck_defensa_20min.html` + `GUION_DEFENSA_20MIN.md` | ✅ |
+| — | Batería de Q&A | `entrega_final/QA_DEFENSA.md` | ✅ |
 
 ## 5. Plan por fases (hasta principios de septiembre)
 
@@ -93,8 +107,10 @@ Todo lo pendiente está detallado paso a paso en `tech/SETUP_CHECKLIST.md`.
 - `netlify/functions/evaluate-exercise.js` — motor de corrección IA en producción.
 
 **Fuentes aportadas (ahora en el repo o usadas para redactar):**
-- `tfm/assets/TalentPact_modelo_financiero.xlsx` — P&L, cashflow, balance, break-even (mayo 2028), KPIs SaaS, €180 k + €50 k ENISA. **Fuente de verdad numérica.**
+- `tfm/assets/TalentPact_modelo_financiero.xlsx` — P&L, cashflow, balance, break-even (mayo 2028), KPIs SaaS, €180 k + €50 k ENISA. **Origen de todas las cifras de negocio**, consolidadas en `cifras_canonicas.json` junto con las métricas técnicas.
 - Investor deck v2 (pptx, Descargas) — use of funds y relato; el equipo de 4 **no** se usa en el TFM.
 - MVP `talentpact-mvp-final.pdf` — validación y mercado (ya volcado en apartados 1–2).
 
-> Los 8 apartados del enunciado están redactados en `business_plan/`. Falta **juntarlos** en un solo documento y el deck de defensa.
+**Cifras.** La fuente de verdad numérica es `cifras_canonicas.json`. Si un número de la memoria no coincide con ese fichero, manda el fichero — y `tests/coherencia-docs.test.js` lo comprueba en cada `npm test`: la discriminación de 87 puntos, el coste medido, el margen bruto, el recuento de tests y la dirección del contrato.
+
+> Los 8 apartados del enunciado están redactados en `business_plan/`, compilados en el PDF, y el deck de defensa está construido. Lo que queda es del mundo real, no del documento: puntuar el gold set con evaluadores humanos para cerrar la κ de Cohen.

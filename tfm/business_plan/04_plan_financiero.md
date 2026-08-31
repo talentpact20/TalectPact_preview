@@ -19,7 +19,7 @@ El equipo del TFM son **dos socios**: Xavier Griñó e Ivan Sánchez. El modelo 
 | Contactos / empresa Individual | 1,2 al mes | Hipótesis de uso |
 | Churn mensual B2B | 5 % (2026) → 4 % (2027) → 3,5 % (2028) | Mejora con producto y lock-in del SkillPass |
 | Stripe | 2 % sobre ingreso bruto | Pasarela; no hay token ni custodia cripto |
-| Coste IA | €0,02 / ejercicio (~€0,06 / reto) | Medido en producción (Claude) |
+| Coste IA | €0,02 / ejercicio (~€0,06 / reto) | **Supuesto conservador.** Lo medido es menor: $0,0180 ≈ €0,0165/ejercicio (~€0,05/reto). Se mantiene el 0,02 para que el modelo vaya por detrás de la realidad, no por delante (§6.2.4) |
 | Impuesto | 15 % sobre EBITDA positivo | Tipo reducido de empresa de nueva creación |
 | DSO / DPO | 2 / 30 días | Cobro casi al contado (tarjeta); proveedores a 30 |
 
@@ -39,7 +39,9 @@ Crecimiento de **nuevas empresas**: arranque lento (1 alta/mes los primeros mese
 | Marketing y CAC | €12.271 | LinkedIn Sales Navigator + adquisición B2B |
 | Administración (legal, contabilidad, SaaS, hosting) | €7.890 | Picos de constitución SL al inicio |
 | Seguros | €400 | |
-| **Total SG&A** | **€77.761** | |
+| **Total SG&A** | **€77.761** | Ver nota sobre los €400 más abajo |
+
+> **Nota de auditoría interna.** Los componentes de arriba suman **€78.161**, mientras que el total declarado es **€77.761**. La diferencia son exactamente los **€400 de Seguros**, que el modelo lista como partida pero **no incluye en el total de SG&A** (el total sale de Marketing €12.271 + Administración €7.890 + Salarios €57.600). El mismo desfase de €400/año se repite en 2027 y 2028, y arrastra el EBITDA al alza en esa cantidad. Se documenta en lugar de corregirlo en silencio: es **€1.200 en tres años**, un 0,9 % del EBITDA positivo de 2028, y no cambia ninguna conclusión —break-even, *runway* ni necesidad de capital—. Lo que sí cambiaría es la credibilidad si lo encontrara el tribunal antes que nosotros.
 
 **COGS** (variable): API Claude + comisión Stripe. En 2026 apenas **€1.063** — el margen bruto no es el problema.
 
@@ -94,7 +96,9 @@ El *ask* del deck (€25 k MRR y 500 empresas a 12 meses) es **aspiracional**. E
 | Impuestos | — | (22) | (8.171) |
 | **Resultado neto** | **(64.271)** | **(89.417)** | **34.178** |
 
-El negocio es un **software de margen ~94 %**. Las pérdidas de 2026-2027 no vienen del coste de servir, sino de construir equipo y adquirir las primeras empresas. En 2028 el EBITDA ya es positivo (**+€45 k**, margen 12,5 %).
+El negocio es un **software de margen ~93,5 %**. Las pérdidas de 2026-2027 no vienen del coste de servir, sino de construir equipo y adquirir las primeras empresas. En 2028 el EBITDA ya es positivo (**+€45 k**, margen 12,5 %).
+
+*(La línea de Seguros aparece en el desglose pero queda fuera del total de SG&A del modelo: ver la nota de auditoría del §4.2. Corregido, el EBITDA de 2028 sería €44.767 en lugar de €45.167.)*
 
 Evolución de salarios (bruto mensual, fin de año):
 
@@ -152,7 +156,7 @@ Con solo el pre-seed (€180 k) y el *net burn* de 2026 (~€5.210/mes), el *run
 
 ### Unit economics (recordatorio; detalle en §3.6)
 
-LTV/CAC **11–17×**, *payback* **< 2 meses**, *gross margin* **> 93 %**. El plan financiero aguanta porque cada empresa nueva se paga sola muy rápido; el riesgo es de **volumen**, no de margen.
+LTV/CAC **11–17×**, *payback* **< 2 meses**, *gross margin* **93,3–93,8 %**. El plan financiero aguanta porque cada empresa nueva se paga sola muy rápido; el riesgo es de **volumen**, no de margen.
 
 ---
 

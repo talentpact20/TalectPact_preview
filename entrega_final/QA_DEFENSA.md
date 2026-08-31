@@ -10,7 +10,7 @@ Preguntas probables del tribunal, ordenadas por bloque, con respuestas apoyadas 
 El pivotaje se sustenta en tres evidencias: LTV/CAC proyectado de 17,3x en 2027, 65 % de empresas dispuestas a sustituir la primera entrevista, y un ciclo de venta más corto y predecible. El candidato no paga; paga la empresa solo por resultado (€49/contacto).
 
 **¿Cómo justificáis el precio de €49/contacto?**
-El coste de mercado por contratación es ~€4.700. €49 por desbloquear un perfil ya pre-validado por IA es <10 % del estándar, con un Gross Margin ~93 %. El coste de IA por candidato (~€0,054) es despreciable frente al precio.
+El coste de mercado por contratación es ~€4.700. €49 por desbloquear un perfil ya pre-validado por IA es <10 % del estándar, con un *gross margin* de ~93,5 % (93,3-93,8 % en 2026-2028). El coste de IA por candidato (3 ejercicios × €0,0165 ≈ **€0,05**) es despreciable frente al precio.
 
 **¿Qué os diferencia de HackerRank, Codility o LinkedIn Recruiter?**
 LinkedIn busca pero no evalúa; HackerRank/Codility evalúan solo perfil técnico, sin anonimato ni pool pre-validado. TalentPact une las tres cosas: pool anónimo + evaluación por IA multi-dominio + modelo pay-per-result.
@@ -32,23 +32,47 @@ No. Vive solo en la variable de entorno del backend serverless (`process.env.ANT
 Degradación elegante: `fallbackScore()` produce una puntuación heurística local para no bloquear al usuario, y la función serverless reintenta con modelos alternativos. Para la demo, la PoC en terminal es el Plan B reproducible.
 
 **¿Cómo garantizáis reproducibilidad de los scores?**
-`temperature=0` (Self-Consistency) → mismo input, mismo score. Para submisiones en zona de corte (±5 pts de un umbral), se evalúa 3 veces y se toma la mediana.
+`temperature=0` en la PoC **y en la función de producción**. Durante la revisión final detectamos que la función serverless no pasaba el parámetro y usaba el valor por defecto de la API: era el único punto donde el producto no cumplía lo que la memoria afirmaba. Está corregido y **hay un test que lo bloquea** (`tests/evaluate-exercise.test.js`), para que no vuelva a perderse en un futuro cambio. Para submisiones en zona de corte (±5 pts de un umbral), se evalúa 3 veces y se toma la mediana; el banco de pruebas mide esa dispersión (test-retest) en cada ejecución.
 
 **¿Cómo persistís los datos?**
-En esta entrega, capa `localStorage` (módulo `TP`) para una demo 100 % reproducible sin infraestructura. En producción, Supabase (PostgreSQL + RLS) según el Charter. La abstracción `TP` aísla el cambio.
+En **Supabase** (PostgreSQL + Auth + RLS, región UE): `profiles`, `companies`, `evaluations` y `credentials`. El módulo `TP` sobre `localStorage` sigue existiendo como respaldo local, lo que permite enseñar la demo aunque caiga la red. La abstracción `TP` es la que hizo barato el cambio.
+
+**¿Qué está probado automáticamente y qué no?**
+`npm test` ejecuta **84 casos** en seis ficheros, sin claves y sin red:
+- *Contrato del evaluador*: `temperature=0`, notas acotadas a 0-100, nota ausente = 0 (nunca un aprobado de regalo), fallo explícito si el modelo devuelve prosa, cascada de modelos que no reintenta ante una clave revocada, y la clave de API fuera de la respuesta.
+- *Separación de canales*: la respuesta del candidato nunca entra en el *system prompt*.
+- *SkillPass*: el hash es determinista e independiente del orden de las claves, y cambiar un punto de una nota, añadir una skill o reasignar el sujeto **rompe el sello**.
+- *Filtro de calidad* del cliente, extraído de `index.html` en tiempo de test.
+- *Estadística del banco de pruebas*, contrastada contra valores calculados a mano.
+
+Lo que **no** cubren: la calidad del juicio del modelo (eso es el banco de pruebas, y necesita API), la integración real con Supabase y Stripe, y el navegador.
 
 ---
 
 ## C. Métricas y validación
 
 **¿Qué métricas habéis medido realmente?**
-En la PoC: coste ~€0,018/evaluación (objetivo <€0,04 ✓), 0 % tasa de rechazo, 100 % detección de prompt injection, y 87 puntos de discriminación (96 mejor vs. 9 peor legítimo). La latencia local es ~17-20 s (sin streaming).
+En la PoC (4 evaluaciones, `evaluation_results.json`): **$0,0180/evaluación ≈ €0,0165** (objetivo <€0,04 ✓), 0 % de rechazo del modelo, el ataque de inyección detectado y neutralizado, y **87 puntos** de discriminación (96 el mejor vs. 9 el peor legítimo). Latencia media 17,0 s, máxima 19,6 s, en local y sin *streaming*.
+
+Además hay dos capas de medición que no dependen de una ejecución puntual: **84 tests automáticos** (`npm test`) sobre el contrato del evaluador, el sello criptográfico y la propia estadística; y un **banco de pruebas reproducible** (`npm run bench`) con un *gold set* de 12 ítems que calcula κ cuadrática, MAE, Spearman, reproducibilidad test-retest, bloqueo de inyección, coste y latencia.
 
 **Accuracy ≥78 % y κ de Cohen ≥0,65: ¿los cumplís?**
-Todavía no validados: requieren contraste con un tribunal humano sobre datos reales. Es nuestro próximo hito crítico y lo decimos abiertamente. Es honestidad metodológica, no una laguna oculta.
+La κ **contra un tribunal humano** sigue sin medir, y lo decimos abiertamente: requiere que evaluadores reales puntúen un corpus. Lo que sí hemos hecho es dejar de esperar a que ocurra: el banco de pruebas (`tfm/tech/eval/`) implementa el protocolo completo, con un *gold set* de 12 ítems cuya referencia es la **banda que fija la rúbrica**, asignada por construcción. Eso mide **validez de constructo**, no acuerdo inter-evaluador, y el informe lo dice con esas palabras. El gold set ya reserva el campo `referenciaHumana`: cuando existan notas humanas, la κ de Cohen sale con el mismo comando, sin tocar código.
+
+**Entonces, ¿la κ que enseñáis no vale?**
+Vale para lo que dice medir: si el evaluador separa correctamente las cinco bandas de la escala (no evaluable / insuficiente / aceptable / bueno / excelente) frente a una referencia razonada. No vale para afirmar que un humano habría puesto la misma nota. Son dos preguntas distintas y confundirlas sería precisamente el error que un tribunal debe penalizar.
 
 **¿Por qué la latencia supera los 12 s?**
 Se mide en local, red doméstica y sin streaming. En producción (cloud + respuesta progresiva) el usuario percibe respuesta desde ~2 s. No es un límite arquitectónico.
+
+**¿Habéis revisado la seguridad, o solo que funcione?**
+Revisamos a mano lo que mueve dinero y datos personales, y salieron tres cosas. Un ***open redirect*** en el inicio del pago: la URL de retorno venía del cliente y solo se comprobaba que empezara por `http://`, así que se podía devolver a alguien recién pagado a un dominio ajeno. No escalaba privilegios —`confirm-checkout` ata cada sesión a su cuenta— pero es *phishing* dentro del cobro. Corregido y con siete tests. El **borrado de cuenta era incompleto**: no eliminaba la ficha de empresa ni el historial de desbloqueos, que es exactamente lo que la política de privacidad promete borrar. Y **verificamos RLS**, que era la comprobación que quedaba abierta desde agosto.
+
+**¿Cómo sabéis que la clave pública de Supabase no expone los perfiles?**
+Porque lo ejecutamos, no porque lo supongamos. La clave `anon` está en el HTML: cualquiera la tiene. Lo único que la separa de los correos y teléfonos son las políticas RLS. `npm run check:rls` lo resuelve de dos maneras: comparando el recuento real contra el que ve la clave pública, o intentando una escritura anónima que RLS debe rechazar. Contra el proyecto real, las cuatro tablas devuelven 401. Antes esto estaba anotado como «conviene confirmarlo»; ahora es un comando.
+
+**El contrato, ¿está auditado?**
+No por un tercero, y no lo vamos a llamar auditoría. Lo que sí hay son ocho tests que compilan el contrato en cada `npm test` y comprueban que no tiene avisos del compilador, que el ABI del backend coincide con el compilado **selector a selector**, que `anchor()` conserva sus tres controles y que nadie ha metido un `selfdestruct` —del que depende nuestro argumento de RGPD—. Y decimos las tres cosas que el contrato deliberadamente **no** hace: no hay revocación, `transferIssuer` es de un solo paso en vez de dos, y no hay anclaje por lotes. Están razonadas en §6.4.4.
 
 ---
 
@@ -71,10 +95,13 @@ Lo intentamos en la PoC con un ataque de prompt injection directo ("ignora tus i
 ## E. Escalabilidad y operación
 
 **¿Aguanta una campaña masiva (300 evaluaciones en 2 h)?**
-~990.000 tokens totales; con paralelización (10 workers) ~30 s. Mitigaciones: cola asíncrona (Redis + workers), tier de API superior y circuit breaker si la tasa de error supera el 5 %.
+En tokens no hay problema: ~2.780 por evaluación → **~834.000 tokens** en total. El cuello de botella es la latencia, no el volumen: a ~17 s por evaluación, 300 evaluaciones con 10 *workers* en paralelo son **~9 minutos**, no segundos. Cabe de sobra en la ventana de 2 h, pero la cifra honesta son minutos. Mitigaciones: cola asíncrona (Redis + *workers*), *tier* de API superior y *circuit breaker* si la tasa de error supera el 5 %.
 
 **¿Cuánto cuesta operar el motor a escala?**
-~€0,018/evaluación → ~€600/mes a 10.000 evaluaciones/mes. Perfectamente absorbible en un SaaS B2B con ~93 % de margen.
+$0,0180 ≈ **€0,0165** por evaluación → **~€165/mes** a 10.000 evaluaciones/mes. El plan financiero usa €0,02 como supuesto conservador (~€200/mes), que es el que está en el Excel: preferimos que el modelo vaya por detrás de lo medido y no al revés.
+
+**Un detalle: ¿por qué unas cifras en dólares y otras en euros?**
+Porque la tarifa de Anthropic está en USD ($3/MTok de entrada, $15/MTok de salida) y escribir "€" sobre una cifra en dólares infla el COGS declarado un ~8 %. Lo medido está en dólares; la conversión a euros usa un tipo declarado (1 € = 1,09 USD) que vive en `tfm/cifras_canonicas.json`. Las capturas del panel del informe son anteriores a esta corrección: los importes son los mismos, el símbolo era el equivocado.
 
 ---
 

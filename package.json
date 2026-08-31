@@ -4,13 +4,17 @@
   "description": "TalentPact — marketplace de talento anónimo con evaluación IA y credenciales verificables en blockchain",
   "private": true,
   "scripts": {
+    "test": "node --test tests/*.test.js",
     "demo": "node serve-demo.js",
     "dev": "node serve-demo.js",
     "doctor": "node tfm/tech/scripts/doctor.js",
+    "bench": "node tfm/tech/eval/run_bench.js",
+    "bench:offline": "node tfm/tech/eval/run_bench.js --offline",
+    "check:rls": "node tfm/tech/scripts/check-rls.js",
+    "check:google": "node tfm/tech/scripts/check-google-auth.js",
     "deploy:contract": "node tfm/tech/scripts/deploy-contract.js",
     "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run",
-    "test:supabase": "node tfm/tech/scripts/test-supabase.js",
-    "check:google": "node tfm/tech/scripts/check-google-auth.js"
+    "test:supabase": "node tfm/tech/scripts/test-supabase.js"
   },
   "dependencies": {
     "ethers": "^6.13.0",

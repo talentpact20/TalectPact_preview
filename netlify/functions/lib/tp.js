@@ -345,6 +345,7 @@ module.exports = {
   authUser,
   ensureProfile,
   ensureProfileByUser,
+  anonymousAlias,
   ensureCompanyByUser,
   canonicalJson,
   hashCv,

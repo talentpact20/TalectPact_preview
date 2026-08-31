@@ -34,7 +34,7 @@ Señal de alarma: CAC medido > €400 o churn B2B > 8 % mensual durante un trime
 | RPC / gas / contrato caído el día de la defensa | Media | Alto | La demo falla en directo | Tener un SkillPass **ya anclado** (tx conocida) y `verify.html?h=0x…` en local; no depender de emitir en vivo sí o sí |
 | Supabase / Netlify caídos | Baja | Alto | Producto entero | Caché local (`localStorage`) como respaldo de demo |
 
-El riesgo técnico que **no** se maquilla: la IA es buena y barata (~€0,02), pero **aún no está calibrada contra humanos**. Eso es el siguiente hito de producto, no un fallo del demo del TFM.
+El riesgo técnico que **no** se maquilla: la IA es buena y barata (~€0,0165 medidos), pero **aún no está calibrada contra humanos**. Lo que sí existe ya es el instrumento para hacerlo: gold set, métricas y comando (§6.2.8). Es el siguiente hito de producto, no un fallo del demo del TFM.
 
 ---
 
@@ -46,7 +46,7 @@ El riesgo técnico que **no** se maquilla: la IA es buena y barata (~€0,02), p
 | ENISA no concedido | Media | Alto | Valle de 2028 más justo | *Runway* con solo 180 k sigue siendo ~35 meses a burn 2026 |
 | Burn de salarios se adelanta | Media | Alto | Se contrata al ritmo 2027 en 2026 | Disciplina: 2026 es €4.800/mes, no €12.200 |
 | Stripe / impagos | Baja | Bajo | DSO corto (2 días), B2B tarjeta | Cortes de cuenta si hay *chargeback* sistemático |
-| Coste IA se multiplica ×10 | Baja | Medio | Margen 94 % aguanta hasta ~€0,20/eval | Límite de retos gratis; modelo más pequeño para ejercicios fáciles |
+| Coste IA se multiplica ×10 | Baja | Medio | Margen ~93,5 % aguanta hasta ~€0,20/eval | Límite de retos gratis; modelo más pequeño para ejercicios fáciles |
 | Caja mínima €38 k (abr-2028) | — | — | Cualquier retraso de ingresos la pisa | Buffer 5 % del pre-seed; no CapEx discrecional en 2028 Q1 |
 
 El modelo **nunca proyecta caja negativa**, pero el margen de error en abril 2028 es estrecho: ahí no se experimenta con nuevas líneas de gasto.

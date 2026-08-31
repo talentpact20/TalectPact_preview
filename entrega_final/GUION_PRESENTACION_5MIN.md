@@ -21,7 +21,7 @@ Guion para `poc_entrega2/presentacion.html` (13 diapositivas). Objetivo: **~5 mi
 
 ## Diapositiva 2 — El problema de negocio ⏱ 0:35 · **X**
 
-> "Contratar en Europa es lento, caro y opaco: **42 días** de media para cubrir una vacante, **4.700 €** de coste por contratación, y hasta un **78 % de CVs inflados**. TalentPact le da la vuelta: es un marketplace **100 % anónimo** donde el candidato **demuestra** sus habilidades con retos evaluados por IA, y la empresa **paga solo por resultado**: 49 € por contacto. Modelo SaaS B2B, con un LTV sobre CAC de 17 y un margen bruto del 93 %."
+> "Contratar en Europa es lento, caro y opaco: **42 días** de media para cubrir una vacante, **4.700 €** de coste por contratación, y hasta un **78 % de CVs inflados**. TalentPact le da la vuelta: es un marketplace **100 % anónimo** donde el candidato **demuestra** sus habilidades con retos evaluados por IA, y la empresa **paga solo por resultado**: 49 € por contacto. Modelo SaaS B2B, con un LTV sobre CAC de 17 y un margen bruto del 93,5 %."
 
 ✂️ *Si vais justos: omitid las cifras de LTV/margen.*
 
@@ -125,4 +125,4 @@ Guion para `poc_entrega2/presentacion.html` (13 diapositivas). Objetivo: **~5 mi
 ## Notas finales
 - Ensayad **con cronómetro**; casi siempre se va largo la primera vez.
 - Si el tribunal os corta por tiempo, las diapositivas imprescindibles son **2, 4, 5, 7, 8 y 9**.
-- Las diapositivas 8 y 11 muestran los datos de la **PoC** (96/0/92/9, ~€0,017). En el **producto** medisteis ~€0,014 y el mismo comportamiento; podéis mencionarlo de pasada para conectar con el informe y la demo.
+- Las diapositivas 8 y 11 muestran los datos de la **PoC** (96/0/92/9, **€0,0165** por evaluación). En el **producto** salió **€0,013** con el mismo comportamiento; podéis mencionarlo de pasada para conectar con el informe y la demo.

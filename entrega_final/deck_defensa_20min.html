@@ -464,23 +464,45 @@ ul.pts li.amber::before{background:var(--amber)}
       <table style="margin-top:20px">
         <thead><tr><th style="width:31%">Indicador</th><th class="num-col" style="width:15%">Objetivo</th><th class="num-col" style="width:17%">Medido</th><th style="width:37%">Estado</th></tr></thead>
         <tbody>
-          <tr><td>Coste por evaluación</td><td class="num-col">&lt; 0,04 €</td><td class="num-col"><strong>0,014 €</strong></td><td><span class="chip ok">Cumple</span></td></tr>
-          <tr><td>Detección de prompt injection</td><td class="num-col">100 %</td><td class="num-col"><strong>100 %</strong></td><td><span class="chip ok">Cumple</span></td></tr>
-          <tr><td>Capacidad de discriminación</td><td class="num-col">&gt; 40 pts</td><td class="num-col"><strong>83 pts</strong></td><td><span class="chip ok">Cumple</span></td></tr>
+          <tr><td>Coste por evaluación</td><td class="num-col">&lt; 0,04 €</td><td class="num-col"><strong>0,013-0,017 €</strong></td><td><span class="chip ok">Cumple</span></td></tr>
+          <tr><td>Capacidad de discriminación</td><td class="num-col">&gt; 40 pts</td><td class="num-col"><strong>83-87 pts</strong></td><td><span class="chip ok">Cumple</span></td></tr>
           <tr><td>Tasa de rechazo del modelo</td><td class="num-col">&lt; 5 %</td><td class="num-col"><strong>0 %</strong></td><td><span class="chip ok">Cumple</span></td></tr>
+          <tr><td>Ataques de inyección bloqueados</td><td class="num-col">100 %</td><td class="num-col"><strong>2 / 2</strong></td><td><span class="chip ok">Cumple en los ensayados</span></td></tr>
+          <tr><td>Tests automáticos del motor</td><td class="num-col">—</td><td class="num-col"><strong>84 casos</strong></td><td><span class="chip ok">npm test · sin claves ni red</span></td></tr>
           <tr><td>Latencia extremo a extremo</td><td class="num-col">&lt; 12 s</td><td class="num-col">17-20 s</td><td><span class="chip warn">Fuera de objetivo — falta streaming</span></td></tr>
-          <tr><td>Concordancia con evaluador humano</td><td class="num-col">κ ≥ 0,65</td><td class="num-col">—</td><td><span class="chip wait">Sin validar — es nuestro siguiente hito</span></td></tr>
+          <tr><td>Concordancia con evaluador humano</td><td class="num-col">κ ≥ 0,65</td><td class="num-col">—</td><td><span class="chip wait">Protocolo construido · faltan las notas humanas</span></td></tr>
         </tbody>
       </table>
-      <p style="margin-top:20px;font-size:15px"><strong>Margen sobre el precio:</strong> tres ejercicios por candidato cuestan <strong>4,2 céntimos</strong> de IA frente a los 49 € que paga la empresa. La partida de IA no condiciona el negocio ni a gran escala.</p>
+      <p style="margin-top:18px;font-size:15px"><strong>Margen sobre el precio:</strong> tres ejercicios por candidato cuestan <strong>5 céntimos</strong> de IA frente a los 49 € que paga la empresa. La partida de IA no condiciona el negocio ni a gran escala.</p>
     </div>
     <div class="foot"><span>El motor de IA</span><span>10</span></div>
-    <aside class="notes" data-t="1:10">
+    <aside class="notes" data-t="0:55">
       <p><b>Xavier.</b> Esta es la tabla que más nos importa, porque son <b>datos medidos en ejecuciones reales</b>, no proyecciones.</p>
-      <p>Cumplimos cuatro objetivos con holgura. El coste es <b>1,4 céntimos por evaluación</b> frente al objetivo de cuatro. La detección de prompt injection es del 100 %. Y la capacidad de discriminación es de <b>83 puntos</b>: el motor separa una respuesta senior de un 85 de un intento de manipulación que puntúa 2.</p>
-      <p>Y ahora lo que <b>no</b> cumplimos, que preferimos decirlo nosotros. La <b>latencia</b> está fuera de objetivo: 17-20 segundos medidos en local sin streaming. No es un límite arquitectónico, es una optimización pendiente.</p>
-      <p class="cue">Y esta es la importante: <b>no hemos validado el score contra evaluadores humanos</b>. La kappa de Cohen está sin medir. Es nuestro principal riesgo de calidad y el siguiente hito del producto. Preferimos presentarlo así antes que afirmar una fiabilidad que no hemos demostrado.</p>
-      <p>Cierre: tres ejercicios por candidato cuestan 4,2 céntimos frente a 49 € de ingreso. La IA no condiciona el margen.</p>
+      <p>El coste está entre <b>1,3 y 1,7 céntimos por evaluación</b> frente al objetivo de cuatro — el rango es porque un reto de código consume más contexto que uno de comunicación. La discriminación va de <b>83 a 87 puntos</b>: el motor separa una respuesta senior de un intento de manipulación que puntúa 2.</p>
+      <p>Lo que <b>no</b> cumplimos, y preferimos decirlo nosotros: la <b>latencia</b>, 17-20 segundos medidos en local y sin streaming. No es un límite arquitectónico, es una optimización pendiente.</p>
+      <p class="cue">Y la fila de abajo: <b>no hemos validado el score contra evaluadores humanos</b>. La kappa de Cohen contra personas sigue sin medir. Ahora os enseño qué hemos hecho al respecto.</p>
+      <p>Cierre: tres ejercicios por candidato cuestan <b>cinco céntimos</b> frente a 49 € de ingreso. La IA no condiciona el margen.</p>
+    </aside>
+  </section>
+  <!-- ══════════════ 11 · CÓMO LO COMPROBAMOS ══════════════ -->
+  <section class="slide" data-sec="El motor de IA">
+    <div class="body top">
+      <div class="eyebrow">Solidez técnica</div>
+      <h2>Un TFM que enseña su mejor ejecución <em>no está midiendo.</em></h2>
+      <div class="grid g3" style="margin-top:26px">
+        <div class="card"><div class="k">84 tests · <code>npm test</code></div><h3>El contrato del motor, blindado</h3><p>Temperatura fija, notas acotadas a 0-100, nota ausente igual a cero y no a un aprobado, fallo explícito si el modelo devuelve prosa, y la respuesta del candidato nunca en el canal de sistema. Sin claves, sin red, en dos décimas de segundo.</p></div>
+        <div class="card"><div class="k">Banco de pruebas · <code>npm run bench</code></div><h3>12 ítems y 3 ataques distintos</h3><p>Nueve respuestas que cubren las cinco bandas de la escala, más inyección directa, encubierta en un comentario de código y por imitación del formato de salida. Devuelve κ cuadrática, MAE, Spearman, dispersión test-retest y coste.</p></div>
+        <div class="card" style="border-color:var(--amber);background:var(--amber-wash)"><div class="k" style="color:var(--amber)">Lo que encontraron</div><h3>Dos fallos que no se veían leyendo el código</h3><p>La temperatura no estaba fijada en producción: afirmábamos una reproducibilidad que el producto no daba. Y el coste se calculaba en dólares y se etiquetaba en euros, inflando nuestro COGS un 8 %. Corregidos, y con un test que impide que vuelvan.</p></div>
+      </div>
+      <div class="claim" style="margin-top:26px">Esa κ mide acuerdo con la banda de la rúbrica, no con un tribunal humano. Son dos preguntas distintas.</div>
+    </div>
+    <div class="foot"><span>El motor de IA</span><span>11</span></div>
+    <aside class="notes" data-t="0:45">
+      <p><b>Xavier.</b> Una tabla de resultados solo demuestra que tuvimos una buena ejecución. Esta diapositiva es cómo se comprueba.</p>
+      <p>A la izquierda, <b>84 tests</b> que corren sin clave de API y sin red. Protegen el contrato del motor: que la temperatura siga fijada, que las notas no se salgan de escala, que una nota ausente valga cero y no un aprobado de regalo, y que la respuesta del candidato jamás entre en el canal de sistema — que es el control anti-inyección de verdad.</p>
+      <p>En el centro, el <b>banco de pruebas</b>. Doce respuestas escritas a propósito para cubrir las cinco bandas de la escala, y tres ataques que no se parecen entre sí: el directo, uno escondido en un comentario de código que invoca un protocolo interno inventado, y otro que imita el JSON de salida y dice que ya lo validó un humano. Un comando devuelve kappa, error medio, correlación de orden y dispersión entre repeticiones.</p>
+      <p class="cue">Y a la derecha lo que más nos ha enseñado: <b>escribir los tests encontró dos fallos reales</b>. Ninguno se veía leyendo el código y los dos habrían sido una mala pregunta hoy aquí.</p>
+      <p>La línea de abajo es importante y la decimos antes de que nos la pregunten: <b>esta kappa mide acuerdo con la banda de la rúbrica, no con personas</b>. Es validez de constructo. La concordancia humana sigue sin medir.</p>
     </aside>
   </section>
 
@@ -497,7 +519,7 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card"><div class="k">RGPD · Minimización</div><h3>El evaluador nunca ve a la persona</h3><p>Ni nombre, ni edad, ni género, ni foto. El anonimato estructural es el control anti-sesgo más eficaz que teníamos disponible.</p></div>
       </div>
     </div>
-    <div class="foot"><span>El motor de IA</span><span>11</span></div>
+    <div class="foot"><span>El motor de IA</span><span>12</span></div>
     <aside class="notes" data-t="0:45">
       <p><b>Xavier.</b> Y como esto es un sistema de alto riesgo según el Anexo III del AI Act, lo hemos tratado como tal desde el diseño, no como un trámite posterior.</p>
       <p><b>Supervisión humana:</b> el score ordena el pool, pero no descarta a nadie. La decisión sigue siendo de la empresa.</p>
@@ -514,7 +536,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <h2>SkillPass: la capa <em>fintech.</em></h2>
       <p class="lede">Si la evaluación es buena, el siguiente problema es de confianza: ¿cómo prueba el candidato ese resultado fuera de nuestra plataforma?</p>
     </div>
-    <div class="foot"><span>SkillPass</span><span>12</span></div>
+    <div class="foot"><span>SkillPass</span><span>13</span></div>
     <aside class="notes" data-t="0:15">
       <p><b>Ivan.</b> Vamos a la capa fintech, que es el eje de este máster.</p>
       <p>Supongamos que la evaluación es buena. Aparece el siguiente problema, que es de <b>confianza</b>: ¿cómo demuestra el candidato ese resultado fuera de TalentPact?</p>
@@ -542,7 +564,7 @@ ul.pts li.amber::before{background:var(--amber)}
         </div>
       </div>
     </div>
-    <div class="foot"><span>SkillPass</span><span>13</span></div>
+    <div class="foot"><span>SkillPass</span><span>14</span></div>
     <aside class="notes" data-t="0:45">
       <p><b>Ivan.</b> Las opciones habituales no sirven. Un <b>PDF</b> lo edita cualquiera. Un <b>perfil de LinkedIn</b> lo escribe el propio candidato: es una declaración, no una prueba. Y un <b>certificado alojado por nosotros</b> obliga a la empresa a confiar en TalentPact y a que TalentPact siga existiendo dentro de cinco años.</p>
       <p>La credencial tiene que poder comprobarse <b>sin confiar en quien la emitió</b>.</p>
@@ -566,7 +588,7 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card"><div class="k">Lo que esto le da al candidato</div><h3>Una credencial que le pertenece</h3><p>Portable a cualquier plataforma, comprobable por cualquier empresa y válida aunque TalentPact desaparezca. Es el activo que el candidato se lleva consigo.</p></div>
       </div>
     </div>
-    <div class="foot"><span>SkillPass</span><span>14</span></div>
+    <div class="foot"><span>SkillPass</span><span>15</span></div>
     <aside class="notes" data-t="1:00">
       <p><b>Ivan.</b> El mecanismo tiene cuatro pasos. <b>Uno</b>, componemos un JSON con el mejor resultado por habilidad, con las claves en orden estable para que el hash sea reproducible. <b>Dos</b>, calculamos su <b>keccak256</b>: cambia un punto de una nota y cambia la huella entera. <b>Tres</b>, anclamos <b>solo esos 32 bytes</b> en el contrato. <b>Cuatro</b>, cualquiera recalcula la huella del JSON que reciba y la busca en el contrato.</p>
       <p>Y aquí está la decisión de diseño que más nos ha costado, que resuelve una tensión real: <b>la blockchain es inmutable y el RGPD exige poder borrar</b>. La resolvemos porque una huella de 32 bytes no es un dato personal, y el CV real vive off-chain en la Unión Europea, donde sí se puede eliminar. Si el candidato ejerce su derecho al olvido, borramos el documento y el hash on-chain queda huérfano: deja de significar nada.</p>
@@ -592,7 +614,7 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card"><div class="k">Honestidad</div><h3>Testnet, y lo decimos</h3><p>Es una red de pruebas. El contrato y el patrón —hash on-chain, dato off-chain— son idénticos a los que irían a una L2 en producción.</p></div>
       </div>
     </div>
-    <div class="foot"><span>SkillPass</span><span>15</span></div>
+    <div class="foot"><span>SkillPass</span><span>16</span></div>
     <aside class="notes" data-t="0:45">
       <p><b>Ivan.</b> Y esto no es una maqueta. El contrato <b>SkillPassRegistry</b> está desplegado en Ethereum Sepolia, en la dirección que veis, en el bloque 11.523.380. Podéis abrirlo en Etherscan ahora mismo.</p>
       <p>Tres precisiones que nos parecen importantes. <b>Por qué Sepolia:</b> nuestra primera opción fue Polygon Amoy, pero sus faucets exigían cripto de mainnet. Sepolia nos permite anclar de verdad a coste cero.</p>
@@ -613,7 +635,7 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card" style="background:rgba(255,255,255,.05);border-color:rgba(154,200,182,.25)"><div class="k" style="color:var(--accent-bright)">04 · Trazabilidad</div><h3 style="color:#EAF5F0;font-size:15px">Registro de auditoría</h3><p style="color:#9CBBB0;font-size:13px">Coste real por evaluación y desglose de criterios.</p></div>
       </div>
     </div>
-    <div class="foot"><span>Demostración</span><span>16</span></div>
+    <div class="foot"><span>Demostración</span><span>17</span></div>
     <aside class="notes" data-t="5:30">
       <p class="cue">◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado en GUION_DEFENSA_20MIN.md, sección DEMO.</p>
       <p><b>Xavier.</b> "Hasta aquí el relato. Ahora os lo enseñamos funcionando."</p>
@@ -632,7 +654,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <h2>¿Se sostiene <em>como negocio?</em></h2>
       <p class="lede">La tecnología funciona y es barata. La pregunta que decide el proyecto es si alguien paga por ella y a qué coste de adquisición.</p>
     </div>
-    <div class="foot"><span>El negocio</span><span>17</span></div>
+    <div class="foot"><span>El negocio</span><span>18</span></div>
     <aside class="notes" data-t="0:12">
       <p><b>Xavier.</b> Vuelvo yo. Ya hemos visto que la tecnología funciona y que es barata. La pregunta que decide el proyecto es otra: <b>¿alguien paga por esto, y a qué coste de adquisición?</b></p>
     </aside>
@@ -668,10 +690,10 @@ ul.pts li.amber::before{background:var(--amber)}
         </div>
       </div>
     </div>
-    <div class="foot"><span>El negocio</span><span>18</span></div>
-    <aside class="notes" data-t="1:00">
+    <div class="foot"><span>El negocio</span><span>19</span></div>
+    <aside class="notes" data-t="0:45">
       <p><b>Xavier.</b> Cinco palancas de ingreso, pero la principal es el <b>desbloqueo de contacto a 49 €</b>. Y esa elección es deliberada: 49 € es una decisión que un responsable de RRHH toma sin pasar por el departamento de compras. Vender una licencia de seis mil euros a una pyme es un ciclo de venta de meses.</p>
-      <p>Los <b>unit economics</b>, a la derecha. Un ratio LTV/CAC de <b>17,3</b> en 2027, cuando el umbral sano son 3. Margen bruto del <b>94 %</b>, porque el COGS es la API de IA y la comisión de Stripe. Y recuperamos el coste de adquisición en <b>mes y medio</b>.</p>
+      <p>Los <b>unit economics</b>, a la derecha. Un ratio LTV/CAC de <b>17,3</b> en 2027, cuando el umbral sano son 3. Margen bruto del <b>93,5 %</b>, porque el COGS es la API de IA y la comisión de Stripe. Y recuperamos el coste de adquisición en <b>mes y medio</b>.</p>
       <p class="cue">La lectura honesta es la de abajo: <b>el problema de este negocio no es la economía unitaria, que es excelente. Es alcanzar volumen.</b> Ahí es donde se juega el break-even.</p>
     </aside>
   </section>
@@ -696,8 +718,8 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card" style="border-color:var(--amber);background:var(--amber-wash)"><div class="k" style="color:var(--amber)">Dónde se rompe</div><h3>El primer año</h3><p>2026 es validación pura: 24 empresas. Si el ritmo de altas no arranca, el resto del modelo no ocurre.</p></div>
       </div>
     </div>
-    <div class="foot"><span>El negocio</span><span>19</span></div>
-    <aside class="notes" data-t="0:55">
+    <div class="foot"><span>El negocio</span><span>20</span></div>
+    <aside class="notes" data-t="0:40">
       <p><b>Xavier.</b> El escenario base a 36 meses. De <b>24 empresas en 2026</b> a <b>284 en 2028</b>, con un ARR de cierre de casi <b>medio millón</b>. Break-even en <b>mayo de 2028</b>, con 230.000 € de capital entre pre-seed y ENISA.</p>
       <p>Quiero señalar dos cosas. La primera: <b>284 empresas es menos del 0,01 % del mercado abordable</b>. El techo de este proyecto no es el tamaño del mercado, es nuestra capacidad de ejecución.</p>
       <p class="cue">Y la segunda, que es la casilla ámbar: <b>donde esto se rompe es el primer año</b>. 2026 son 24 empresas. Si el ritmo de altas no arranca, el resto del modelo simplemente no ocurre. No es una proyección que se autocumpla.</p>
@@ -710,13 +732,13 @@ ul.pts li.amber::before{background:var(--amber)}
       <div class="eyebrow">Lo que todavía no podemos afirmar</div>
       <h2>Los cuatro límites de <em>este trabajo.</em></h2>
       <div class="grid g2" style="margin-top:26px">
-        <div class="card" style="border-left:3px solid var(--amber)"><div class="k" style="color:var(--amber)">Riesgo principal</div><h3>El Skill Score no está calibrado contra humanos</h3><p>La IA discrimina y es barata, pero no hemos contrastado sus notas con un tribunal de evaluadores. Hasta entonces no podemos vender esto como un certificado de fiabilidad demostrada.</p></div>
+        <div class="card" style="border-left:3px solid var(--amber)"><div class="k" style="color:var(--amber)">Riesgo principal</div><h3>El Skill Score no está calibrado contra humanos</h3><p>La IA discrimina y es barata, pero nadie ha contrastado sus notas con un tribunal de evaluadores. El protocolo y el corpus ya están construidos; faltan las personas. Hasta entonces esto no es un certificado de fiabilidad demostrada.</p></div>
         <div class="card" style="border-left:3px solid var(--amber)"><div class="k" style="color:var(--amber)">Validación de mercado</div><h3>n ≈ 30, exploratorio</h3><p>El 90 % de interés viene de una muestra pequeña y autoseleccionada. Mide <strong>atención</strong>, no disposición a pagar. No tenemos evidencia de encaje producto-mercado de pago.</p></div>
-        <div class="card" style="border-left:3px solid var(--amber)"><div class="k" style="color:var(--amber)">Consistencia del modelo</div><h3>Varianza de ±8 a 12 puntos</h3><p>Las rúbricas con indicadores cualitativos producen desviaciones entre ejecuciones. Mitigado con temperatura cero, pero exige anclas numéricas observables.</p></div>
+        <div class="card" style="border-left:3px solid var(--amber)"><div class="k" style="color:var(--amber)">Consistencia del modelo</div><h3>La varianza está acotada, no medida</h3><p>El ±8-12 puntos que citamos viene de la literatura, no de una medición nuestra. Con temperatura cero ya fijada en producción, el banco mide la dispersión real en cada ejecución. Lo que no arregla la temperatura son las rúbricas con adjetivos en vez de anclas observables.</p></div>
         <div class="card" style="border-left:3px solid var(--amber)"><div class="k" style="color:var(--amber)">Efecto red</div><h3>El problema del huevo y la gallina</h3><p>Las empresas no entran sin candidatos y los candidatos se van sin ofertas. Es el riesgo estructural de cualquier marketplace y no se resuelve con tecnología.</p></div>
       </div>
     </div>
-    <div class="foot"><span>Límites</span><span>20</span></div>
+    <div class="foot"><span>Límites</span><span>21</span></div>
     <aside class="notes" data-t="0:55">
       <p><b>Ivan.</b> Antes de cerrar, los cuatro límites de este trabajo. Preferimos decirlos nosotros.</p>
       <p><b>El principal:</b> el Skill Score <b>no está calibrado contra evaluadores humanos</b>. La IA discrimina bien y es barata, pero hasta que midamos la concordancia con un tribunal no podemos afirmar fiabilidad demostrada. Es el siguiente hito del producto.</p>
@@ -732,13 +754,13 @@ ul.pts li.amber::before{background:var(--amber)}
       <div class="eyebrow">Qué viene después de esta defensa</div>
       <h2>El siguiente hito no es técnico: <em>es empírico.</em></h2>
       <div class="grid g3" style="margin-top:26px">
-        <div class="card"><div class="k">Prioridad alta</div><h3>Calibración humana</h3><p>Tribunal de evaluadores y medición de la concordancia. Es lo que convierte una PoC sólida en un producto certificable.</p></div>
+        <div class="card"><div class="k">Prioridad alta</div><h3>Calibración humana</h3><p>Que tres evaluadores puntúen el mismo corpus de doce ítems que ya está escrito. El banco calcula la kappa con el mismo comando. Es lo único que separa esta PoC de un producto certificable.</p></div>
         <div class="card"><div class="k">Prioridad alta</div><h3>Segundo evaluador independiente</h3><p>Un modelo de otro proveedor como juez, para medir alucinación y reducir la dependencia de un único proveedor.</p></div>
         <div class="card"><div class="k">Prioridad media</div><h3>Producción</h3><p>Respuesta en streaming para bajar la latencia percibida, catálogo completo de retos y contrato en una L2.</p></div>
       </div>
       <div class="claim" style="margin-top:34px">Lo que hoy es una arquitectura correcta y medida se convierte en un producto defendible el día que un humano confirme sus notas.</div>
     </div>
-    <div class="foot"><span>Siguientes pasos</span><span>21</span></div>
+    <div class="foot"><span>Siguientes pasos</span><span>22</span></div>
     <aside class="notes" data-t="0:40">
       <p><b>Ivan.</b> Y de ahí sale el roadmap, que está ordenado por lo que <b>desbloquea</b>, no por lo que apetece programar.</p>
       <p>Lo primero es la <b>calibración humana</b>. Lo segundo, un <b>segundo evaluador</b> de otro proveedor, que nos da medida de alucinación e independencia de Anthropic. Y en prioridad media, lo de producción: streaming, catálogo completo y llevar el contrato a una L2.</p>
@@ -752,7 +774,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <div class="body">
       <h2 style="color:#EAF5F0;font-size:52px;max-width:22ch;margin-bottom:24px">Hemos construido la pieza que hacía falta demostrar.</h2>
       <div class="grid g3" style="gap:26px;max-width:none">
-        <div class="stat"><div class="n" style="color:var(--accent-bright)">0,014<small style="color:#6E9587"> €</small></div><div class="l" style="color:#9CBBB0">por evaluación, medido en producción</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent-bright)">0,013<small style="color:#6E9587"> €</small></div><div class="l" style="color:#9CBBB0">por evaluación, medido en producción</div></div>
         <div class="stat"><div class="n" style="color:var(--accent-bright)">83<small style="color:#6E9587"> pts</small></div><div class="l" style="color:#9CBBB0">de discriminación entre una respuesta senior y un fraude</div></div>
         <div class="stat"><div class="n" style="color:var(--accent-bright)">100<small style="color:#6E9587"> %</small></div><div class="l" style="color:#9CBBB0">de los intentos de manipulación, detectados</div></div>
       </div>

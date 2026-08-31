@@ -42,6 +42,11 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           model,
           max_tokens: 1000,
+          // Determinismo: mismo input -> mismo score. Sin esto la API usa su
+          // valor por defecto (1.0) y el evaluador deja de ser reproducible,
+          // que es justo lo que exige un sistema que decide sobre empleo.
+          // El PoC ya lo fijaba; producción no, y es lo que se demuestra en vivo.
+          temperature: 0,
           system: systemPrompt,
           messages: [{ role: "user", content: userPrompt }]
         })

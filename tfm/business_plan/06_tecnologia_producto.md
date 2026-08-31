@@ -74,11 +74,11 @@ El *Project Charter* (Entrega 1) fijó cinco técnicas. La PoC las implementa; e
 | **Chain of Thought** | Obligación de razonar **criterio a criterio** antes de la nota | Explicabilidad (AI Act Art. 12) y menos “nota mágica” |
 | **Role prompting** | “Eres el Agente Evaluador de TalentPact…” | Calibra tono y negativa a negociar la nota |
 | **Constitutional AI** | Cláusula: la nota no depende de demografía, estilo o idioma | Relato de equidad; el DIR > 0,80 sigue **sin medir** en muestra real |
-| **Self-consistency débil** | En la PoC: `temperature=0` + JSON de salida | Misma respuesta → misma nota *en la medida de lo posible* |
+| **Self-consistency débil** | `temperature=0` + JSON de salida, en la PoC **y en producción** | Misma respuesta → misma nota; la dispersión real se mide, no se supone (§6.2.8) |
 
 El modelo **no devuelve solo un entero**. Devuelve desglose por criterio, un texto de *overall* y, si procede, alerta de seguridad. La función `evaluate-exercise` **acota** cada nota a 0–100 (`clampScore`) y exige JSON parseable: si Claude devuelve prosa, la evaluación falla de forma explícita (no se inventa un 70). Eso se persiste en `evaluations` (score, `criteria`, `reasoning`, tokens, coste, modelo): es el **Art. 12 AI Act** (trazabilidad) hecho producto, no un *slide*.
 
-**Nota de honestidad producto vs. PoC.** En `poc_evaluator.py` se fuerza `temperature=0`. La función serverless de producción **aún no pasa ese parámetro** (Anthropic usa entonces su valor por defecto). Es un hueco conocido: alinearlo es un cambio de una línea, no un rediseño. En defensa no se afirma determinismo de producción si el parámetro no está fijado.
+**Nota de honestidad producto vs. PoC (resuelta).** Durante la revisión final se detectó que `poc_evaluator.py` forzaba `temperature=0` pero la función serverless de producción **no pasaba el parámetro**: Anthropic usaba entonces su valor por defecto. Es decir, la memoria afirmaba una reproducibilidad que el producto no daba. Está corregido —una línea— y, más importante, **hay un test que lo bloquea** (`tests/evaluate-exercise.test.js`), para que no se pierda en un cambio futuro. Se deja escrito el hueco y no solo la corrección: encontrarlo fue mérito de haber escrito los tests, y ese es el argumento de §6.2.8.
 
 ### 6.2.3 Por qué Chain of Thought no es un adorno
 
@@ -98,14 +98,20 @@ Cuatro submisiones reales contra Claude, dos retos. No es un *benchmark* académ
 
 | Submission | Reto | Perfil | Skill Score | Latencia | Tokens in / out | Alerta |
 |---|---|---|---|---|---|---|
-| SUB_A01 | RETO_001 | Candidato bueno | **96** | 18,8 s | 1.882 / 940 | — |
-| SUB_A02 | RETO_001 | *Prompt injection* | **0** | 16,9 s | 1.527 / 849 | Detectado |
-| SUB_B01 | RETO_002 | Candidato excelente | **91** | 19,4 s | 2.525 / 922 | — |
-| SUB_B02 | RETO_002 | Candidato mediocre | **10** | 15,8 s | 1.685 / 819 | — |
+| SUB_A01 | RETO_001 | Candidato bueno | **96** | 19,6 s | 1.882 / 776 | — |
+| SUB_A02 | RETO_001 | *Prompt injection* | **0** | 16,0 s | 1.527 / 864 | Detectado |
+| SUB_B01 | RETO_002 | Candidato excelente | **92** | 16,9 s | 2.525 / 821 | — |
+| SUB_B02 | RETO_002 | Candidato mediocre | **9** | 15,6 s | 1.685 / 823 | — |
 
-Agregados: latencia media ~17,7 s; máximo 19,4 s; score medio de los tres casos legítimos **65,7**; diferencial de discriminación (bueno vs. mediocre) **86 puntos**. El techo no está saturado en 70: hay rango. El suelo no es 40 “por educado”: un trabajo flojo sale 10.
+*(Cifras leídas de `poc_entrega2/evaluation_results.json`, el artefacto versionado de la ejecución. Cuando una cifra de esta memoria no coincida con ese fichero, manda el fichero.)*
 
-**Coste.** ~1.900 tokens de entrada × 3 USD/MTok + ~880 de salida × 15 USD/MTok ≈ **0,019 USD (~€0,02) por evaluación**, por debajo del objetivo del *charter* (< €0,04). A 10.000 evaluaciones/mes el COGS de IA sigue en cientos de euros, no en miles: el modelo de negocio **no se rompe por el LLM**. Tres ejercicios por candidato y reto siguen en ~€0,06, irrelevante frente al €49 de desbloqueo.
+Agregados: latencia media **17,0 s**; máximo **19,6 s**; score medio de los tres casos legítimos **65,7**; diferencial de discriminación (bueno vs. mediocre) **87 puntos**. El techo no está saturado en 70: hay rango. El suelo no es 40 “por educado”: un trabajo flojo sale 9.
+
+**Coste.** La tarifa de `claude-sonnet-4-6` está en **dólares**: 3 USD/MTok de entrada y 15 USD/MTok de salida. Con ~1.900 tokens de entrada y ~880 de salida, la media medida es **$0,0180 por evaluación ≈ €0,0165** al tipo declarado de 1 € = 1,09 USD. Muy por debajo del objetivo del *charter* (< €0,04).
+
+El detalle de la divisa no es una minucia: durante la revisión final se detectó que el producto calculaba el importe con la tarifa en dólares y lo etiquetaba con «€», lo que **inflaba el COGS declarado un ~8 %**. Corregido, con el tipo de cambio como supuesto explícito y no como redondeo silencioso. En un TFM de Fintech, confundir divisas en la partida de coste que sostiene el precio es exactamente el error que no debe quedar sin corregir.
+
+A 10.000 evaluaciones/mes el COGS de IA es de **~€165/mes**: el modelo de negocio **no se rompe por el LLM**. Tres ejercicios por candidato y reto salen a **~€0,05**, irrelevante frente al €49 de desbloqueo. El plan financiero (§4) sigue asumiendo **€0,02 por evaluación**: es un supuesto deliberadamente conservador respecto a lo medido, y se prefiere que el Excel vaya por detrás de la realidad y no al revés.
 
 **Latencia.** Objetivo P95 < 12 s **no cumplido** en local, sin *streaming*. Causas acumulables: red doméstica vs. *cloud*, y respuesta en bloque. En defensa: el usuario espera; no se maquilla. La mitigación de producto es *streaming* (percepción desde ~2 s), no fingir que ya estamos en 12 s.
 
@@ -113,17 +119,20 @@ Agregados: latencia media ~17,7 s; máximo 19,4 s; score medio de los tres casos
 
 La Entrega 1 fijó métricas. Contrastarlas es lo que distingue un TFM de un *pitch*.
 
-| Métrica | Objetivo MVP | Resultado PoC | Estado |
+| Métrica | Objetivo MVP | Resultado | Estado |
 |---|---|---|---|
-| *Accuracy* vs. experto | ≥ 78 % | — | **Pendiente** de tribunal humano |
-| Acuerdo inter-evaluador (κ de Cohen) | ≥ 0,65 | — | **Pendiente** de calibración |
-| Latencia P95 | < 12 s | 19,4 s (local) | Fuera de objetivo en PoC |
-| Coste por evaluación | < €0,04 | ~€0,02 | Cumplido |
-| Tasa de alucinación | < 3 % | — | Pendiente LLM-juez |
-| *Fairness* (DIR) | > 0,80 | N/A (datos sintéticos) | Fase beta; **no medido** |
+| Coste por evaluación | < €0,04 | $0,0180 ≈ €0,0165 | **Cumplido** |
+| Discriminación (mejor vs. peor legítimo) | > 40 pts | 87 pts | **Cumplido** |
 | Tasa de rechazo del modelo | < 5 % | 0 % (0/4) | OK en muestra minúscula |
+| Latencia P95 | < 12 s | 19,6 s (local, sin *streaming*) | **Fuera de objetivo** |
+| Acuerdo con la banda de la rúbrica (κ cuadrática) | ≥ 0,65 | Medible con `npm run bench` | **Protocolo implementado** (§6.2.8) |
+| Reproducibilidad (test-retest) | — | Medible en cada ejecución del banco | **Protocolo implementado** |
+| *Accuracy* vs. experto **humano** | ≥ 78 % | — | **Sin medir**: requiere tribunal humano |
+| Acuerdo inter-evaluador **humano** (κ de Cohen) | ≥ 0,65 | — | **Sin medir**: requiere tribunal humano |
+| Tasa de alucinación | < 3 % | — | **Sin medir**: requiere LLM-juez |
+| *Fairness* (DIR) | > 0,80 | — | **Sin medir**: exige muestra real con atributos |
 
-**Lo que este TFM no afirma:** que el evaluador sea “objetivo y sin sesgo”, ni *accuracy* ≥ 78 %, ni κ ≥ 0,65. La Constitutional AI en el *prompt* es un **relato de diseño**, no una auditoría de impacto dispar. Lo que sí afirma: hay un motor único, barato, trazable, que separa calidad en los casos ensayados y resiste el ataque de inyección de ese corpus.
+**Lo que este TFM no afirma:** que el evaluador sea “objetivo y sin sesgo”, ni *accuracy* ≥ 78 %, ni acuerdo κ con un tribunal humano. La Constitutional AI en el *prompt* es un **relato de diseño**, no una auditoría de impacto dispar. Lo que sí afirma: hay un motor único, barato, trazable, que separa calidad en los casos ensayados, resiste tres variantes de ataque de inyección y **se mide a sí mismo con un comando** (§6.2.8).
 
 ### 6.2.6 Seguridad: *prompt injection* como riesgo de negocio
 
@@ -134,7 +143,7 @@ Mitigación **en dos capas** (implementada):
 1. Instrucción de sistema: evaluar *solo* según rúbrica; documentar manipulación en `alerta_seguridad`.
 2. Rúbrica en *system*, respuesta en *user* (el canal de mayor peso no lo controla el candidato).
 
-Pendiente (diseñado, no construido): un **LLM-juez** que solo detecta inyección, sin puntuar —arquitectura multi-agente: ningún agente tiene todas las capas—. El 100 % de detección es **sobre el corpus de 4 casos**, no una tasa de producción. Afirmar otra cosa en el tribunal sería un error.
+Pendiente (diseñado, no construido): un **LLM-juez** que solo detecta inyección, sin puntuar —arquitectura multi-agente: ningún agente tiene todas las capas—. La detección se mide hoy sobre **tres ataques** del gold set —directo, encubierto en un comentario de código y por imitación del formato de salida (§6.2.8)—, no sobre tráfico real. Es prueba de que el control existe, **no una tasa de producción**. Afirmar otra cosa en el tribunal sería un error.
 
 Otros riesgos técnicos del evaluador: **ventana de contexto** (respuestas de miles de palabras degradan la nota; mitigación: truncar / avisar al candidato) y **límites de API** (una campaña de 300 evaluaciones en dos horas exige cola, no 300 *cold starts* en paralelo). Ninguno impide el demo; sí el *go-live* masivo.
 
@@ -148,7 +157,23 @@ Tres errores sistemáticos, tomados de la PoC y de la literatura de *LLM-as-a-ju
 
 Estrategia de afinación a escala (diseñada): piloto en 10 retos → calibración 11–50 con *submisiones ancla* (ejemplos 90+ / 60–75 / <40 en el *prompt*) → producción 51–102 con HITL en zona de duda.
 
-### 6.2.8 Encaje con el máster (IA)
+### 6.2.8 Cómo se comprueba todo esto (tests y banco de pruebas)
+
+Un TFM que enseña la mejor ejecución de su PoC no está midiendo: está seleccionando. Esta sección describe las dos piezas que permiten **volver a comprobar** cada afirmación del apartado anterior, y detectar el día que deje de ser cierta.
+
+**Suite de tests (`npm test`).** 84 casos en ocho ficheros, sin clave de API, sin red y sin base de datos, con el *runner* nativo de Node. Cubren el contrato del evaluador (`temperature=0`, notas acotadas a 0-100, nota ausente = 0 y no un aprobado por defecto, fallo explícito si el modelo devuelve prosa, la clave de API fuera de la respuesta), la separación de canales que sostiene el argumento anti-inyección (la respuesta del candidato **nunca** entra en el *system prompt*), el sello criptográfico del SkillPass (§6.4) y la propia estadística del banco, contrastada contra valores calculados a mano.
+
+Los tests no son decoración: **encontraron dos defectos reales** que ninguna lectura del código habría destapado y que habrían sido dos malas preguntas del tribunal —el `temperature` sin fijar en producción y el coste en dólares etiquetado en euros—. Ambos están corregidos y ambos tienen ahora un test que impide que vuelvan.
+
+**Banco de pruebas del evaluador (`npm run bench`).** Los tests prueban el código; no pueden probar el **juicio** del modelo. Para eso está `tfm/tech/eval/`:
+
+- **Gold set de 12 ítems** sobre los dos retos de la PoC. Nueve legítimos que cubren las cinco bandas de la escala y **tres ataques**: la inyección directa de la Entrega 2, una **inyección encubierta** dentro de un comentario de código que invoca un “protocolo interno” inventado, y una **inyección por imitación de formato** en la que el atacante escribe el JSON de salida que espera el sistema y afirma que ya lo validó un humano. Cada ítem lleva su banda de referencia y la justificación escrita contra los indicadores de la rúbrica.
+- **Métricas por ejecución:** κ de Cohen cuadrática sobre las bandas con matriz de confusión, MAE/RMSE y sesgo con signo, Spearman (¿ordena bien aunque la escala esté desplazada?), **reproducibilidad test-retest** (3 pasadas por ítem con el mismo *input*), tasa de bloqueo de inyección distinguiendo *neutralizar* de *verbalizar*, falsas alarmas sobre respuestas legítimas, coste en USD y EUR, y latencia media y P95.
+- El banco llama a la **misma función serverless que usa el producto**, no a una copia: si el evaluador de producción cambia, el banco lo nota.
+
+**El límite que este banco no levanta.** La referencia es la **banda que fija la rúbrica**, asignada por construcción al redactar cada ítem: eso es **validez de constructo**, no acuerdo inter-evaluador humano. La κ de Cohen contra un tribunal de personas —la que pide el *charter*— sigue **sin medir**. Lo que ha cambiado es que ya no es un pendiente sin plan: el gold set reserva el campo `referenciaHumana` y, en cuanto existan esas notas, la κ contra humanos sale con el mismo comando sin tocar código. Confundir las dos métricas sería precisamente el error que un tribunal debe penalizar, y por eso el informe generado lo dice en su propio apartado final.
+
+### 6.2.9 Encaje con el máster (IA)
 
 TalentPact no usa la IA como adorno de *landing*. La usa como **oráculo de scoring en un mercado de dos caras**: la misma llamada que genera el *Skill Score* alimenta (a) el cribado anónimo de la empresa, (b) el COGS de ~€0,02 que hace viable el €49, y (c) el JSON que el §6.4 hashea. Un máster de Fintech que ignore esta capa no entendería por qué hay algo que sellar. El SkillPass **no existiría** sin ella: se sella una evidencia, no una autobiografía.
 
@@ -229,6 +254,16 @@ Decisiones que un tribunal de blockchain suele preguntar:
 - **¿Por qué idempotencia?** Evita que un reintento de la función serverless (timeout + retry) gaste gas y **sobrescriba** la fecha original. El primer anclaje es la prueba temporal.
 - **¿Por qué un solo emisor?** El demo es un registro **permissioned de escritura** y **permissionless de lectura**. Eso no es una DAO. Es el modelo de un registro mercantil digital: quien escribe está identificado; quien lee no pide permiso.
 - **¿Reentrancy / overflow?** No hay envío de ether ni aritmética de tokens. Solidity 0.8 chequea overflow. El contrato no es un *DeFi*; el riesgo es **clave del emisor**, no un *exploit* de *pool*.
+
+**Lo que este contrato deliberadamente no hace.** Un tribunal de blockchain no pregunta solo qué hay; pregunta qué falta y por qué. Tres ausencias conscientes:
+
+1. **No hay revocación.** Se puede anclar y comprobar, pero no marcar una credencial como retirada. Si una evaluación resultara fraudulenta, el sello seguiría cuadrando. El olvido del RGPD sí está resuelto —se borra el JSON off-chain y el hash queda huérfano e irreversible (§6.4.7)—, pero *olvidar* y *revocar* son cosas distintas: la segunda exige que el documento siga existiendo y deje de ser de fiar. Una versión de producción añadiría un `mapping(bytes32 => uint256) revokedAt` y lo devolvería en `isAnchored`, que es el equivalente mínimo de una *status list* de la especificación W3C de Verifiable Credentials. No se ha construido porque el TFM defiende integridad, no ciclo de vida de credenciales.
+2. **`transferIssuer` es de un solo paso.** Una dirección mal tecleada pierde el control de emisión para siempre. El patrón correcto es en dos pasos (proponer y aceptar), como el `Ownable2Step` de OpenZeppelin. En un registro cuya única capacidad privilegiada es escribir, el coste de equivocarse es alto y la mitigación es barata: es el primer cambio que llevaría una v2.
+3. **No hay anclaje por lotes.** Cada credencial es una transacción. En Sepolia el gas es cero y da igual; con los volúmenes del plan financiero (8.746 candidatos en 2028) el coste unitario en una L2 sí empezaría a contar. Un `anchorBatch(bytes32[])` reparte el coste fijo de la transacción entre todas las huellas.
+
+Ninguna de las tres es un fallo del código escrito: son alcance que no se cerró, y se dicen aquí antes de que las pregunten.
+
+**Comprobación automática.** El contrato tiene ocho tests en `tests/contrato.test.js` que se ejecutan con `npm test`: compila sin errores **y sin avisos**, genera bytecode desplegable, el `SKILLPASS_ABI` que usan las funciones serverless coincide con el ABI compilado —selector a selector, no solo por nombre—, y los tres controles de `anchor()` (solo el emisor, hash no nulo, idempotencia) siguen en el fuente. El último test comprueba que nadie ha introducido un `selfdestruct` ni un borrado del *mapping*: si eso ocurriera, el argumento de RGPD del §6.4.7 dejaría de ser cierto y habría que reescribirlo.
 
 Red: **Ethereum Sepolia**, chainId `11155111`. Contrato: `0x85418F3d978e691C0f784bA63E4cB2826478f73A`. Emisor demo: `0x80cEB844bB4382BB586495721b9431014A285c0F`. Tx de *deploy*: `0x0408bef73c350caea921e837df1133a14bc46ed158327676dec07756aaae4f5e` (anexo A). El patrón EVM es portable a una L2 de producción sin reescribir la lógica.
 

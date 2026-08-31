@@ -38,7 +38,7 @@ TalentPact no es una única innovación, sino tres capas que se refuerzan entre 
 
 | Capa | Qué aporta | Estado |
 |---|---|---|
-| **① Evaluación con IA** | Motor que corrige 102 tipos de reto con una sola arquitectura (Dynamic Prompting + Chain of Thought), trazable y a **~€0,02 por evaluación** (calibración humana aún pendiente, §6.2) | ✅ Construido y funcionando (PoC + producto en vivo) |
+| **① Evaluación con IA** | Motor que corrige 102 tipos de reto con una sola arquitectura (Dynamic Prompting + Chain of Thought), trazable y a **~€0,0165 por evaluación** medidos (calibración contra tribunal humano aún pendiente, §6.2) | ✅ Construido y funcionando (PoC + producto en vivo) |
 | **② Persistencia y perfil verificado** | Base de datos que consolida el histórico de evaluaciones en un perfil de habilidades auditable | ✅ Construido (Supabase Auth + tablas en UE) |
 | **③ Credencial anclada en blockchain** | La habilidad validada se convierte en un JSON tipo Verifiable Credential cuyo *hash* se ancla on-chain: un tercero comprueba **integridad** (si el documento se altera, el sello no cuadra) | ✅ Demo real en Ethereum Sepolia (contrato `SkillPassRegistry` + verificador público) |
 

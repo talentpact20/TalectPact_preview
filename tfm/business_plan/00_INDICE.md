@@ -6,6 +6,8 @@ Universitat de Barcelona · Máster en Fintech, Mercados Financieros y Blockchai
 
 Cada sección se redacta en su propio fichero; el HTML/PDF se regenera con `python3 build_doc.py`.
 
+Las cifras de todo el documento salen de `../cifras_canonicas.json`, y `npm test` comprueba que la memoria no se desvía de ellas.
+
 ---
 
 ## Portada
@@ -57,6 +59,7 @@ Cada sección se redacta en su propio fichero; el HTML/PDF se regenera con `pyth
 ## 6. Tecnología y producto → `06_tecnologia_producto.md`
 - 6.1 Arquitectura del sistema (producto + IA + persistencia + blockchain).
 - 6.2 **Innovación en la corrección de ejercicios con IA** (Dynamic Prompting, CoT, PoC, límites).
+  - 6.2.8 Cómo se comprueba todo esto: 69 tests automáticos + banco de pruebas con gold set y κ cuadrática.
 - 6.3 Persistencia y datos (Supabase).
 - 6.4 **Innovación blockchain: el SkillPass como prueba de integridad** (keccak256, contrato, modelo de confianza, RGPD).
 - 6.5 Innovación financiera (pagos pay-per-result / escrow — visión).
@@ -80,3 +83,5 @@ Cada sección se redacta en su propio fichero; el HTML/PDF se regenera con `pyth
 
 ## 10. Anexos
 - A. SkillPass on-chain · B. PoC de IA · C. Equipo · D. Extracto del modelo financiero · E. Referencias.
+- F. **Banco de pruebas del evaluador** — protocolo, gold set y límites (`../tech/eval/README.md`).
+- G. **Cifras canónicas** — fuente de verdad numérica del trabajo (`../cifras_canonicas.json`).

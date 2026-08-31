@@ -15,14 +15,14 @@
 |---|---|---|
 | Problema y oportunidad | 2-4 | 1:50 |
 | La solución | 5-6 | 1:02 |
-| Motor de evaluación con IA | 7-11 | 4:00 |
-| SkillPass — capa fintech | 12-15 | 2:45 |
-| **Demostración en vivo** | 16 | **5:30** |
-| Negocio | 17-19 | 2:07 |
-| Límites y cierre | 20-22 | 2:10 |
+| Motor de evaluación con IA | 7-12 | 4:30 |
+| SkillPass — capa fintech | 13-16 | 2:45 |
+| **Demostración en vivo** | 17 | **5:30** |
+| Negocio | 18-20 | 1:37 |
+| Límites y cierre | 21-23 | 2:10 |
 
 **Regla de oro:** si vais retrasados, el material que se recorta es el bloque de
-negocio (diapositivas 18-19), nunca la demo ni los límites. La demo es lo que
+negocio (diapositivas 19-20), nunca la demo, los límites ni la diapositiva 11. La demo es lo que
 demuestra que el trabajo existe; los límites son lo que os da credibilidad.
 
 ---
@@ -161,27 +161,47 @@ Sobre esa base aplicamos tres controles. **Chain of Thought** obliga al modelo a
 
 ## 10 · Qué cumple y qué todavía no.
 
-**El motor de IA** · 1:10 previstos · acumulado 6:37
+**El motor de IA** · 0:55 previstos · acumulado 6:22
 
 **Xavier.** Esta es la tabla que más nos importa, porque son **datos medidos en ejecuciones reales**, no proyecciones.
 
       
-Cumplimos cuatro objetivos con holgura. El coste es **1,4 céntimos por evaluación** frente al objetivo de cuatro. La detección de prompt injection es del 100 %. Y la capacidad de discriminación es de **83 puntos**: el motor separa una respuesta senior de un 85 de un intento de manipulación que puntúa 2.
+El coste está entre **1,3 y 1,7 céntimos por evaluación** frente al objetivo de cuatro — el rango es porque un reto de código consume más contexto que uno de comunicación. La discriminación va de **83 a 87 puntos**: el motor separa una respuesta senior de un intento de manipulación que puntúa 2.
 
       
-Y ahora lo que **no** cumplimos, que preferimos decirlo nosotros. La **latencia** está fuera de objetivo: 17-20 segundos medidos en local sin streaming. No es un límite arquitectónico, es una optimización pendiente.
+Lo que **no** cumplimos, y preferimos decirlo nosotros: la **latencia**, 17-20 segundos medidos en local y sin streaming. No es un límite arquitectónico, es una optimización pendiente.
 
       
-> **▶** Y esta es la importante: **no hemos validado el score contra evaluadores humanos**. La kappa de Cohen está sin medir. Es nuestro principal riesgo de calidad y el siguiente hito del producto. Preferimos presentarlo así antes que afirmar una fiabilidad que no hemos demostrado.
+> **▶** Y la fila de abajo: **no hemos validado el score contra evaluadores humanos**. La kappa de Cohen contra personas sigue sin medir. Ahora os enseño qué hemos hecho al respecto.
 
       
-Cierre: tres ejercicios por candidato cuestan 4,2 céntimos frente a 49 € de ingreso. La IA no condiciona el margen.
+Cierre: tres ejercicios por candidato cuestan **cinco céntimos** frente a 49 € de ingreso. La IA no condiciona el margen.
 
 ---
 
-## 11 · Un sistema de alto riesgo tratado como tal.
+## 11 · Un TFM que enseña su mejor ejecución no está midiendo.
 
-**El motor de IA** · 0:45 previstos · acumulado 7:22
+**El motor de IA** · 0:45 previstos · acumulado 7:07
+
+**Xavier.** Una tabla de resultados solo demuestra que tuvimos una buena ejecución. Esta diapositiva es **cómo se comprueba**.
+
+      
+A la izquierda, **84 tests** que corren sin clave de API y sin red, en dos décimas de segundo. Protegen el contrato del motor: que la temperatura siga fijada, que las notas no se salgan de escala, que una nota ausente valga cero y no un aprobado de regalo, y que la respuesta del candidato jamás entre en el canal de sistema — que es el control anti-inyección de verdad.
+
+      
+En el centro, el **banco de pruebas**: doce respuestas escritas a propósito para cubrir las cinco bandas de la escala y **tres ataques que no se parecen entre sí** — el directo, uno escondido en un comentario de código que invoca un protocolo interno inventado, y otro que imita el JSON de salida y afirma que ya lo validó un humano. Un comando devuelve kappa, error medio, correlación de orden y dispersión entre repeticiones.
+
+      
+> **▶** Y a la derecha lo que más nos ha enseñado: **escribir los tests encontró dos fallos reales**. La temperatura no estaba fijada en producción, así que afirmábamos una reproducibilidad que el producto no daba. Y el coste se calculaba con la tarifa en dólares y se etiquetaba en euros, inflando nuestro COGS un 8 %. Ninguno se veía leyendo el código, y los dos habrían sido una mala pregunta hoy aquí. Corregidos, y con un test que impide que vuelvan.
+
+      
+La línea de abajo la decimos antes de que nos la pregunten: **esa kappa mide acuerdo con la banda de la rúbrica, no con un tribunal humano**. Es validez de constructo. La concordancia con personas sigue sin medir, y es lo único que falta.
+
+---
+
+## 12 · Un sistema de alto riesgo tratado como tal.
+
+**El motor de IA** · 0:45 previstos · acumulado 7:52
 
 **Xavier.** Y como esto es un sistema de alto riesgo según el Anexo III del AI Act, lo hemos tratado como tal desde el diseño, no como un trámite posterior.
 
@@ -199,9 +219,9 @@ Cierre: tres ejercicios por candidato cuestan 4,2 céntimos frente a 49 € de i
 
 ---
 
-## 12 · SkillPass: la capa fintech. · corte de acto
+## 13 · SkillPass: la capa fintech. · corte de acto
 
-**SkillPass** · 0:15 previstos · acumulado 7:37
+**SkillPass** · 0:15 previstos · acumulado 8:07
 
 **Ivan.** Vamos a la capa fintech, que es el eje de este máster.
 
@@ -210,9 +230,9 @@ Supongamos que la evaluación es buena. Aparece el siguiente problema, que es de
 
 ---
 
-## 13 · Un PDF se edita en dos minutos.
+## 14 · Un PDF se edita en dos minutos.
 
-**SkillPass** · 0:45 previstos · acumulado 8:22
+**SkillPass** · 0:45 previstos · acumulado 8:52
 
 **Ivan.** Las opciones habituales no sirven. Un **PDF** lo edita cualquiera. Un **perfil de LinkedIn** lo escribe el propio candidato: es una declaración, no una prueba. Y un **certificado alojado por nosotros** obliga a la empresa a confiar en TalentPact y a que TalentPact siga existiendo dentro de cinco años.
 
@@ -224,9 +244,9 @@ La credencial tiene que poder comprobarse **sin confiar en quien la emitió**.
 
 ---
 
-## 14 · Solo la huella sale a la cadena.
+## 15 · Solo la huella sale a la cadena.
 
-**SkillPass** · 1:00 previstos · acumulado 9:22
+**SkillPass** · 1:00 previstos · acumulado 9:52
 
 **Ivan.** El mecanismo tiene cuatro pasos. **Uno**, componemos un JSON con el mejor resultado por habilidad, con las claves en orden estable para que el hash sea reproducible. **Dos**, calculamos su **keccak256**: cambia un punto de una nota y cambia la huella entera. **Tres**, anclamos **solo esos 32 bytes** en el contrato. **Cuatro**, cualquiera recalcula la huella del JSON que reciba y la busca en el contrato.
 
@@ -238,9 +258,9 @@ Y aquí está la decisión de diseño que más nos ha costado, que resuelve una 
 
 ---
 
-## 15 · El contrato está desplegado y es público.
+## 16 · El contrato está desplegado y es público.
 
-**SkillPass** · 0:45 previstos · acumulado 10:07
+**SkillPass** · 0:45 previstos · acumulado 10:37
 
 **Ivan.** Y esto no es una maqueta. El contrato **SkillPassRegistry** está desplegado en Ethereum Sepolia, en la dirección que veis, en el bloque 11.523.380. Podéis abrirlo en Etherscan ahora mismo.
 
@@ -255,9 +275,9 @@ Tres precisiones que nos parecen importantes. **Por qué Sepolia:** nuestra prim
 
 ---
 
-## 16 · Vamos a enseñarlo. · corte de acto
+## 17 · Vamos a enseñarlo. · corte de acto
 
-**Demostración** · 5:30 previstos · acumulado 15:37
+**Demostración** · 5:30 previstos · acumulado 16:07
 
 > **▶** ◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado en GUION_DEFENSA_20MIN.md, sección DEMO.
 
@@ -281,31 +301,31 @@ Tres precisiones que nos parecen importantes. **Por qué Sepolia:** nuestra prim
 
 ---
 
-## 17 · ¿Se sostiene como negocio? · corte de acto
+## 18 · ¿Se sostiene como negocio? · corte de acto
 
-**El negocio** · 0:12 previstos · acumulado 15:49
+**El negocio** · 0:12 previstos · acumulado 16:19
 
 **Xavier.** Vuelvo yo. Ya hemos visto que la tecnología funciona y que es barata. La pregunta que decide el proyecto es otra: **¿alguien paga por esto, y a qué coste de adquisición?**
 
 ---
 
-## 18 · Pago por resultado, con cinco palancas.
+## 19 · Pago por resultado, con cinco palancas.
 
-**El negocio** · 1:00 previstos · acumulado 16:49
+**El negocio** · 0:45 previstos · acumulado 17:04
 
 **Xavier.** Cinco palancas de ingreso, pero la principal es el **desbloqueo de contacto a 49 €**. Y esa elección es deliberada: 49 € es una decisión que un responsable de RRHH toma sin pasar por el departamento de compras. Vender una licencia de seis mil euros a una pyme es un ciclo de venta de meses.
 
       
-Los **unit economics**, a la derecha. Un ratio LTV/CAC de **17,3** en 2027, cuando el umbral sano son 3. Margen bruto del **94 %**, porque el COGS es la API de IA y la comisión de Stripe. Y recuperamos el coste de adquisición en **mes y medio**.
+Los **unit economics**, a la derecha. Un ratio LTV/CAC de **17,3** en 2027, cuando el umbral sano son 3. Margen bruto del **93,5 %**, porque el COGS es la API de IA y la comisión de Stripe. Y recuperamos el coste de adquisición en **mes y medio**.
 
       
 > **▶** La lectura honesta es la de abajo: **el problema de este negocio no es la economía unitaria, que es excelente. Es alcanzar volumen.** Ahí es donde se juega el break-even.
 
 ---
 
-## 19 · De validar a medio millón de ARR.
+## 20 · De validar a medio millón de ARR.
 
-**El negocio** · 0:55 previstos · acumulado 17:44
+**El negocio** · 0:40 previstos · acumulado 17:44
 
 **Xavier.** El escenario base a 36 meses. De **24 empresas en 2026** a **284 en 2028**, con un ARR de cierre de casi **medio millón**. Break-even en **mayo de 2028**, con 230.000 € de capital entre pre-seed y ENISA.
 
@@ -317,7 +337,7 @@ Quiero señalar dos cosas. La primera: **284 empresas es menos del 0,01 % del me
 
 ---
 
-## 20 · Los cuatro límites de este trabajo.
+## 21 · Los cuatro límites de este trabajo.
 
 **Límites** · 0:55 previstos · acumulado 18:39
 
@@ -337,7 +357,7 @@ Quiero señalar dos cosas. La primera: **284 empresas es menos del 0,01 % del me
 
 ---
 
-## 21 · El siguiente hito no es técnico: es empírico.
+## 22 · El siguiente hito no es técnico: es empírico.
 
 **Siguientes pasos** · 0:40 previstos · acumulado 19:19
 
@@ -351,7 +371,7 @@ Lo primero es la **calibración humana**. Lo segundo, un **segundo evaluador** d
 
 ---
 
-## 22 · Hemos construido la pieza que hacía falta demostrar. · corte de acto
+## 23 · Hemos construido la pieza que hacía falta demostrar. · corte de acto
 
 **Cierre** · 0:35 previstos · acumulado 19:54
 
@@ -431,7 +451,7 @@ Panel de administración → historial de evaluaciones.
 |---|---|
 | La API de IA no responde | Terminal: `python poc_evaluator.py` — mismo motor, resultados reproducibles |
 | La red o el RPC caen | Usa el SkillPass **ya anclado** y `verify.html` en local con el hash guardado |
-| Todo lo demás | Pasa a la diapositiva 17 y sigue; no gastes tiempo depurando en directo |
+| Todo lo demás | Pasa a la diapositiva 18 y sigue; no gastes tiempo depurando en directo |
 
 ---
 
@@ -464,14 +484,32 @@ funciona, y eso se demuestra igual en Sepolia.
 
 **¿Qué pasa si Anthropic sube precios o corta el servicio?**
 El prompt es portable y la función serverless ya prueba varios modelos en cascada.
-Además el margen aguanta: a 94 % de margen bruto, el coste de IA podría multiplicarse
+Además el margen aguanta: a ~93,5 % de margen bruto, el coste de IA podría multiplicarse
 por diez y el negocio seguiría siendo viable.
 
 **¿No es optimista proyectar 284 empresas?**
 Es menos del 0,01 % del mercado abordable, y el modelo arranca con **24 empresas en
 2026**, que es una hipótesis modesta. El riesgo no está en el techo, está en el
 arranque: si el primer año no despega, el resto no ocurre. Lo decimos en la
-diapositiva 19.
+diapositiva 20.
+
+**¿Cómo sabemos que el evaluador hace lo que decís?**
+Con dos cosas que se ejecutan delante de vosotros si queréis. `npm test` corre **69
+casos** en dos décimas de segundo, sin clave de API y sin red: comprueban que la
+temperatura sigue fijada, que las notas no se salen de escala, que una nota ausente
+vale cero y no un aprobado, y que la respuesta del candidato nunca entra en el canal
+de sistema. Y `npm run bench` pasa un **gold set de doce ítems y tres ataques** por
+el motor de producción y devuelve kappa, error medio, correlación de orden y
+dispersión entre repeticiones. Escribir esos tests nos encontró dos fallos reales
+que no se veían leyendo el código, y los dos están en la diapositiva 11.
+
+**Esa kappa, ¿es la kappa de Cohen que pedía el Charter?**
+No, y es importante que quede claro. La nuestra mide acuerdo con **la banda que fija
+la rúbrica**, asignada por construcción al escribir cada ítem: eso es validez de
+constructo. La kappa de Cohen contra un tribunal de personas sigue **sin medir**. El
+gold set ya reserva el campo para las notas humanas, así que en cuanto existan sale
+con el mismo comando. Confundir las dos métricas sería el error que deberíais
+penalizarnos, y por eso lo decimos antes de que lo preguntéis.
 
 **¿Qué habéis construido vosotros y qué es teoría?**
 Está funcionando: la corrección con IA, la persistencia, la emisión y el anclaje de
