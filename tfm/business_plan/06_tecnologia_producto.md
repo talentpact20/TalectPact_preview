@@ -80,6 +80,10 @@ El modelo **no devuelve solo un entero**. Devuelve desglose por criterio, un tex
 
 **Nota de honestidad producto vs. PoC (resuelta).** Durante la revisión final se detectó que `poc_evaluator.py` forzaba `temperature=0` pero la función serverless de producción **no pasaba el parámetro**: Anthropic usaba entonces su valor por defecto. Es decir, la memoria afirmaba una reproducibilidad que el producto no daba. Está corregido —una línea— y, más importante, **hay un test que lo bloquea** (`tests/evaluate-exercise.test.js`), para que no se pierda en un cambio futuro. Se deja escrito el hueco y no solo la corrección: encontrarlo fue mérito de haber escrito los tests, y ese es el argumento de §6.2.8.
 
+**Si dos personas contestan lo mismo, ¿sacan la misma nota?** Sí, **si el texto es el mismo** (mismo reto, misma rúbrica, mismo string). Eso no es un fallo: es el requisito de equidad. Un evaluador humano tampoco debería premiar a Ana y penalizar a Luis por copiar palabra por palabra. El diseño lo fuerza con `temperature=0` y JSON de salida; el banco de pruebas lo comprueba con *test-retest* (tres pasadas del mismo ítem). Un residual de pocos puntos sigue siendo posible —los LLM no son un `if`—, y por eso en zona de corte el *charter* prevé mediana de tres evaluaciones.
+
+Si “lo mismo” significa **la misma idea con otras palabras**, la nota debe caer en la **misma banda**, no necesariamente en el mismo entero: el efecto halo de longitud y los indicadores subjetivos de la rúbrica (§6.2.7) pueden moverla unos puntos. Eso se mitiga con anclas observables, no fingiendo determinismo de estilo.
+
 ### 6.2.3 Por qué Chain of Thought no es un adorno
 
 Un evaluador que solo emite `{"score": 73}` es inútil para tres públicos:
@@ -348,7 +352,7 @@ Más allá del CV, el modelo de ingresos **pay-per-result** es en sí una innova
 | Horizonte | Hitos |
 |---|---|
 | **Hecho (demo TFM)** | Auth real, persistencia Supabase, evaluación IA en producción, SkillPass anclado en Sepolia, verificador público. |
-| **Corto (0-3 meses)** | DPIA + aviso AI Act, calibración humana del score, `temperature=0` en la función de producción, Stripe, llevar el contrato a una L2 de producción. |
+| **Corto (0-3 meses)** | DPIA + aviso AI Act, calibración humana del score (κ contra tribunal), Stripe, llevar el contrato a una L2 de producción. |
 | **Medio (4-6 meses)** | Beta de pago: primeras empresas reales, *streaming* del score, rúbricas más ancladas, HITL en zona de duda. |
 | **Largo (7-12 meses)** | Lanzamiento público, catálogo completo, equipo según el plan financiero, expansión Iberia. |
 | **Visión** | Interoperar el SkillPass con EU Digital Identity Wallet / eIDAS 2.0 y, más tarde, liquidación programable (*escrow*). |

@@ -9,6 +9,9 @@ Preguntas probables del tribunal, ordenadas por bloque, con respuestas apoyadas 
 **¿Por qué SaaS B2B y no freemium para el candidato?**
 El pivotaje se sustenta en tres evidencias: LTV/CAC proyectado de 17,3x en 2027, 65 % de empresas dispuestas a sustituir la primera entrevista, y un ciclo de venta más corto y predecible. El candidato no paga; paga la empresa solo por resultado (€49/contacto).
 
+**¿Nos estáis pidiendo 180.000 € a nosotros?**
+No. Es el *ask* del plan de negocio (pre-seed SAFE €180 k + ENISA €50 k no dilutivo). El TFM se defiende igual si la ronda no entra; el break-even de mayo 2028, no. Uso del pre-seed: 40 % producto, 30 % ventas B2B, 15 % legal/SL, 10 % socios, 5 % buffer.
+
 **¿Cómo justificáis el precio de €49/contacto?**
 El coste de mercado por contratación es ~€4.700. €49 por desbloquear un perfil ya pre-validado por IA es <10 % del estándar, con un *gross margin* de ~93,5 % (93,3-93,8 % en 2026-2028). El coste de IA por candidato (3 ejercicios × €0,0165 ≈ **€0,05**) es despreciable frente al precio.
 
@@ -21,6 +24,11 @@ LinkedIn busca pero no evalúa; HackerRank/Codility evalúan solo perfil técnic
 
 **¿Cómo evaluáis 102 retos distintos sin 102 modelos?**
 Con **Dynamic Prompting**: un único pipeline genérico inyecta en tiempo de ejecución la rúbrica del reto en el system prompt. La "inteligencia" está en las rúbricas (datos), no en el código. Añadir el reto 103 no requiere un commit.
+
+**Si dos personas contestan lo mismo, ¿sacan la misma nota?**
+Sí, **si el texto es idéntico** (mismo reto, misma rúbrica, mismo string). Eso es el requisito de equidad, no un bug. Lo fuerza `temperature=0` —en la PoC y en producción, con un test que impide que el parámetro se vuelva a perder— y el banco de pruebas lo comprueba con *test-retest* (tres pasadas del mismo ítem). Un residual de pocos puntos sigue siendo posible: un LLM no es un `if`. En zona de corte el *charter* prevé mediana de tres evaluaciones.
+
+Si “lo mismo” significa **la misma idea con otras palabras**, la nota debe caer en la **misma banda**, no necesariamente en el mismo entero. El efecto halo de longitud y los indicadores subjetivos de la rúbrica pueden moverla unos puntos. Eso se mitiga con anclas observables, no fingiendo determinismo de estilo. Detalle en §6.2 de la memoria.
 
 **¿Por qué Claude y no otro modelo?**
 Calidad de razonamiento estructurado (CoT), buen seguimiento de instrucciones y coste competitivo. El diseño es agnóstico: la función serverless prueba varios modelos en cascada y `MODEL_ID` es una sola línea en la PoC. En producción se añade GPT-4o mini como LLM-juez (independencia de proveedor).

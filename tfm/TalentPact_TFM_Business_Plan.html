@@ -1521,6 +1521,8 @@ más candidatos = pool mejor        más ofertas = más candidatos
 </table>
 <p>El modelo <strong>no devuelve solo un entero</strong>. Devuelve desglose por criterio, un texto de <em>overall</em> y, si procede, alerta de seguridad. La función <code>evaluate-exercise</code> <strong>acota</strong> cada nota a 0–100 (<code>clampScore</code>) y exige JSON parseable: si Claude devuelve prosa, la evaluación falla de forma explícita (no se inventa un 70). Eso se persiste en <code>evaluations</code> (score, <code>criteria</code>, <code>reasoning</code>, tokens, coste, modelo): es el <strong>Art. 12 AI Act</strong> (trazabilidad) hecho producto, no un <em>slide</em>.</p>
 <p><strong>Nota de honestidad producto vs. PoC (resuelta).</strong> Durante la revisión final se detectó que <code>poc_evaluator.py</code> forzaba <code>temperature=0</code> pero la función serverless de producción <strong>no pasaba el parámetro</strong>: Anthropic usaba entonces su valor por defecto. Es decir, la memoria afirmaba una reproducibilidad que el producto no daba. Está corregido —una línea— y, más importante, <strong>hay un test que lo bloquea</strong> (<code>tests/evaluate-exercise.test.js</code>), para que no se pierda en un cambio futuro. Se deja escrito el hueco y no solo la corrección: encontrarlo fue mérito de haber escrito los tests, y ese es el argumento de §6.2.8.</p>
+<p><strong>Si dos personas contestan lo mismo, ¿sacan la misma nota?</strong> Sí, <strong>si el texto es el mismo</strong> (mismo reto, misma rúbrica, mismo string). Eso no es un fallo: es el requisito de equidad. Un evaluador humano tampoco debería premiar a Ana y penalizar a Luis por copiar palabra por palabra. El diseño lo fuerza con <code>temperature=0</code> y JSON de salida; el banco de pruebas lo comprueba con <em>test-retest</em> (tres pasadas del mismo ítem). Un residual de pocos puntos sigue siendo posible —los LLM no son un <code>if</code>—, y por eso en zona de corte el <em>charter</em> prevé mediana de tres evaluaciones.</p>
+<p>Si “lo mismo” significa <strong>la misma idea con otras palabras</strong>, la nota debe caer en la <strong>misma banda</strong>, no necesariamente en el mismo entero: el efecto halo de longitud y los indicadores subjetivos de la rúbrica (§6.2.7) pueden moverla unos puntos. Eso se mitiga con anclas observables, no fingiendo determinismo de estilo.</p>
 <h3>6.2.3 Por qué Chain of Thought no es un adorno</h3>
 <p>Un evaluador que solo emite <code>{"score": 73}</code> es inútil para tres públicos:</p>
 <ol>
@@ -1859,7 +1861,7 @@ más candidatos = pool mejor        más ofertas = más candidatos
 </tr>
 <tr>
 <td><strong>Corto (0-3 meses)</strong></td>
-<td>DPIA + aviso AI Act, calibración humana del score, <code>temperature=0</code> en la función de producción, Stripe, llevar el contrato a una L2 de producción.</td>
+<td>DPIA + aviso AI Act, calibración humana del score (κ contra tribunal), Stripe, llevar el contrato a una L2 de producción.</td>
 </tr>
 <tr>
 <td><strong>Medio (4-6 meses)</strong></td>
