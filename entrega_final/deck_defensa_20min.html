@@ -478,7 +478,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <div class="foot"><span>El motor de IA</span><span>10</span></div>
     <aside class="notes" data-t="0:55">
       <p><b>Xavier.</b> Esta es la tabla que más nos importa, porque son <b>datos medidos en ejecuciones reales</b>, no proyecciones.</p>
-      <p>El coste de la PoC es <b>1,65 céntimos</b> (€0,0165); en producto, con menos contexto, ~1,3. El Excel usa 2 céntimos a propósito. La discriminación es <b>87 puntos</b>: 96 frente a 9. Los ataques de inyección del corpus: <b>2 de 2</b>, no un 100 % de producción.</p>
+      <p>El coste de la PoC es <b>1,65 céntimos</b> (€0,0165); en producto, con menos contexto, ~1,3. El Excel usa 2 céntimos a propósito. La discriminación es <b>87 puntos</b>: 96 frente a 9. Los ataques de inyección del corpus: <b>2 de 2</b>, no un 100 % de producción. Si preguntan: ese 2/2 es la PoC de junio; el banco de la siguiente diapositiva tiene <b>tres ataques distintos</b>. No son la misma muestra.</p>
       <p>Lo que <b>no</b> cumplimos: la <b>latencia</b>, 17-20 segundos en local sin streaming. No es un límite arquitectónico.</p>
       <p class="cue">La fila de abajo: <b>no hemos validado el score contra evaluadores humanos</b>. La kappa contra personas sigue sin medir. Ahora os enseño cómo se comprueba el motor.</p>
       <p>Cierre: tres ejercicios cuestan <b>~5 céntimos</b> frente a 49 €. La IA no condiciona el margen.</p>
@@ -488,7 +488,7 @@ ul.pts li.amber::before{background:var(--amber)}
   <section class="slide" data-sec="El motor de IA">
     <div class="body top">
       <div class="eyebrow">Solidez técnica</div>
-      <h2>Un TFM que enseña su mejor ejecución <em>no está midiendo.</em></h2>
+      <h2>Enseñar la mejor ejecución <em>no es medir.</em></h2>
       <div class="grid g3" style="margin-top:26px">
         <div class="card"><div class="k">84 tests · <code>npm test</code></div><h3>El contrato del motor, blindado</h3><p>Temperatura fija, notas acotadas a 0-100, nota ausente igual a cero y no a un aprobado, fallo explícito si el modelo devuelve prosa, y la respuesta del candidato nunca en el canal de sistema. Sin claves, sin red, en dos décimas de segundo.</p></div>
         <div class="card"><div class="k">Banco de pruebas · <code>npm run bench</code></div><h3>12 ítems y 3 ataques distintos</h3><p>Nueve respuestas que cubren las cinco bandas de la escala, más inyección directa, encubierta en un comentario de código y por imitación del formato de salida. Devuelve κ cuadrática, MAE, Spearman, dispersión test-retest y coste.</p></div>
@@ -570,7 +570,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <aside class="notes" data-t="1:00">
       <p><b>Ivan.</b> El mecanismo tiene cuatro pasos. <b>Uno</b>, componemos un JSON con el mejor resultado por habilidad, con las claves en orden estable para que el hash sea reproducible. <b>Dos</b>, calculamos su <b>keccak256</b>: cambia un punto de una nota y cambia la huella entera. <b>Tres</b>, anclamos <b>solo esos 32 bytes</b> en el contrato. <b>Cuatro</b>, cualquiera recalcula la huella del JSON que reciba y la busca en el contrato.</p>
       <p>Y aquí está la decisión de diseño que más nos ha costado, que resuelve una tensión real: <b>la blockchain es inmutable y el RGPD exige poder borrar</b>. La resolvemos porque una huella de 32 bytes no es un dato personal, y el CV real vive off-chain en la Unión Europea, donde sí se puede eliminar. Si el candidato ejerce su derecho al olvido, borramos el documento y el hash on-chain queda huérfano: deja de significar nada.</p>
-      <p class="cue">Para el candidato esto significa una credencial que <b>le pertenece</b>, que es portable y que sigue siendo válida aunque TalentPact desaparezca.</p>
+      <p class="cue">Olvidar y revocar no son lo mismo. Hoy hay integridad, no ciclo de vida: <b>no hay lista de revocados</b>. Si una evaluación resultara fraude, el sello seguiría cuadrando hasta que se borre el JSON.</p>
     </aside>
   </section>
 
@@ -617,7 +617,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <aside class="notes" data-t="5:30">
       <p class="cue">◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado en GUION_DEFENSA_20MIN.md, sección DEMO.</p>
       <p><b>Xavier.</b> "Hasta aquí el relato. Ahora os lo enseñamos funcionando."</p>
-      <p><b>1 · Candidato (2:00)</b> — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: <i>"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"</i>. Luego una respuesta pobre → nota baja y el motivo.</p>
+      <p><b>1 · Candidato (2:00)</b> — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: <i>"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"</i>. Si preguntan ChatGPT: <i>"el reto no tiene solución única; se puntúa el razonamiento contra el caso, no un texto de referencia"</i>. Luego una respuesta pobre → nota baja y el motivo.</p>
       <p><b>2 · Seguridad (1:00)</b> — Pegar el ataque de prompt injection. El evaluador lo identifica, lo penaliza y lo dice explícitamente.</p>
       <p><b>3 · SkillPass (2:00)</b> — Sellar la credencial → enlace a Etherscan → abrir verify.html y comprobarla. <b>Después editar una nota del JSON y volver a verificar: deja de validar.</b> Ese contraste es el momento más fuerte de la demo.</p>
       <p><b>4 · Trazabilidad (1:00)</b> — Panel de administración → historial de evaluaciones con el coste real de cada una.</p>

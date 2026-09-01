@@ -10,13 +10,13 @@ El Anexo III clasifica como **sistema de IA de alto riesgo** los usados en **emp
 
 | Obligación | Cómo lo cubre TalentPact | Estado |
 |---|---|---|
-| Supervisión humana (Art. 14) | El score no contrata ni rechaza solo; la empresa desbloquea y decide | ✅ Diseño del producto |
-| Transparencia / Art. 50 | Hay que avisar al candidato de que la evaluación es asistida por IA | 🟡 Texto legal + UI (pendiente de cierre formal) |
-| Trazabilidad / logs (Art. 12) | Cada evaluación guarda score, criterios, CoT, modelo, tokens y coste | ✅ `evaluations` + audit trail |
-| Calidad de datos y sesgo | Perfil anónimo; cláusula de equidad en el *system prompt*; objetivo DIR > 0,80 | 🟡 Anonimato sí; *fairness* empírica pendiente de muestra |
-| Exactitud y robustez | PoC: discriminación de calidad y 100 % de detección de *prompt injection* | 🟡 Falta *ground truth* con tribunal humano |
-| Registro UE (Art. 49) | Alta en base de datos de sistemas de alto riesgo | ⬜ Antes de comercializar en UE |
-| Evaluación de conformidad | Documentación técnica + posible organismo notificado | ⬜ Hoja de ruta pre-lanzamiento |
+| Supervisión humana (Art. 14) | El score no contrata ni rechaza solo; la empresa desbloquea y decide | Diseño del producto |
+| Transparencia / Art. 50 | Hay que avisar al candidato de que la evaluación es asistida por IA | Pendiente: texto legal y interfaz |
+| Trazabilidad / logs (Art. 12) | Cada evaluación guarda score, criterios, CoT, modelo, tokens y coste | Implementado (`evaluations` y registro de auditoría) |
+| Calidad de datos y sesgo | Perfil anónimo; cláusula de equidad en el *system prompt*; objetivo DIR > 0,80 | Anonimato sí; *fairness* empírica pendiente de muestra |
+| Exactitud y robustez | PoC: discriminación de calidad y 100 % de detección de *prompt injection* | Pendiente: *ground truth* con evaluadores humanos |
+| Registro UE (Art. 49) | Alta en base de datos de sistemas de alto riesgo | Pendiente: antes de comercializar en la UE |
+| Evaluación de conformidad | Documentación técnica + posible organismo notificado | Pendiente: hoja de ruta pre-lanzamiento |
 
 **Posición de producto:** el AI Act no es un coste hundido, es un argumento de venta frente a un Excel de notas opaco o un *scraper* de LinkedIn.
 

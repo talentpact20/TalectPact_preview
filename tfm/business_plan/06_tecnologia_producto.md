@@ -12,7 +12,7 @@ La arquitectura responde a una restricción de diseño que condiciona todo lo de
 
 **La tercera capa es el anclaje en cadena.** Cuando el candidato decide emitir su credencial, el sistema agrupa sus mejores resultados por habilidad, compone un documento JSON con estructura de credencial verificable y calcula su huella criptográfica. Solo esa huella —treinta y dos bytes, sin ningún dato personal legible— se escribe en el contrato `SkillPassRegistry` desplegado en la red Ethereum Sepolia. El documento completo permanece en la base de datos europea. La clave privada del emisor vive exclusivamente en los secretos del servidor y nunca llega al navegador.
 
-**La cuarta capa es la verificación.** Cualquier tercero —una empresa que no es cliente, un reclutador externo, un tribunal— puede pegar el documento o su huella en un verificador público y comprobar si esa huella está registrada y en qué instante lo fue. No necesita cuenta, no necesita permiso y no necesita confiar en TalentPact: recalcula la huella por su cuenta y la contrasta con lo que dice la cadena. Si el documento fue alterado, aunque sea en un solo carácter, la comprobación falla.
+**La cuarta capa es la verificación.** Cualquier tercero —una empresa que no es cliente, un reclutador externo, un auditor— puede pegar el documento o su huella en un verificador público y comprobar si esa huella está registrada y en qué instante lo fue. No necesita cuenta, no necesita permiso y no necesita confiar en TalentPact: recalcula la huella por su cuenta y la contrasta con lo que dice la cadena. Si el documento fue alterado, aunque sea en un solo carácter, la comprobación falla.
 
 **Componentes concretos del sistema desplegado.** La interfaz es una aplicación web en HTML y JavaScript; la lógica de servidor son funciones sin servidor en Netlify; los datos residen en Supabase (PostgreSQL, autenticación y seguridad por fila, región UE); la evaluación se apoya en la API de Anthropic con el modelo `claude-sonnet-4-6` y un mecanismo de reserva por si el identificador de modelo deja de estar disponible; y el anclaje se realiza sobre el contrato `SkillPassRegistry` en Ethereum Sepolia. La pasarela de pago y el despliegue del contrato en una red de capa dos de producción pertenecen a la hoja de ruta comercial, no al recorrido técnico que este trabajo demuestra.
 
@@ -54,31 +54,33 @@ Tres alternativas se descartaron de forma explícita:
 | **Clasificador** (nota discreta) | Pierde el texto de justificación; no cubre el Art. 12 AI Act |
 | **Prompt estático** (“evalúa este código”) | No generaliza a un caso de negocio ni a un ejercicio de comunicación |
 
-La respuesta implementada es **Dynamic Prompting**: el LLM es un motor de razonamiento **neutro**; la “inteligencia evaluadora” vive en la **rúbrica JSON** del reto, inyectada en tiempo de ejecución en el *system prompt*. Añadir el reto 103 no toca código: se añade una entrada de rúbrica (pesos, indicadores, penalizaciones). El principio es separación de responsabilidades: la lógica de negocio (qué evaluar) no está en el repositorio; está en los datos.
+La respuesta implementada es **Dynamic Prompting**: el LLM es un motor de razonamiento **neutro**; lo que sabe evaluar —escenario, datos y criterios— se inyecta en tiempo de ejecución en el *system prompt*. No hay un modelo ni un *codepath* por reto. Ampliar el catálogo no exige un evaluador nuevo.
+
+Hay que precisar dónde viven esos criterios, porque la prueba de concepto y el producto no coinciden. En la PoC (`poc_evaluator.py`) cada reto lleva un JSON propio con pesos, indicadores y penalizaciones: Python no se puntúa como un backlog. En el producto, `evaluate-exercise` arma los criterios según el **tipo** de ejercicio (análisis, email, decisión, audio) y les inyecta el escenario, la tabla y las palabras clave de **ese** caso. Varios ítems del catálogo siguen siendo la misma plantilla con el nombre de la skill cambiado; el catálogo completo, con rúbricas calibradas reto a reto, es trabajo pendiente. El principio se mantiene: la lógica de evaluación no es un modelo por oficio; está en los datos que se inyectan.
 
 ```
-respuesta del candidato + reto_id
-        → lookup(rúbrica)
-        → SYSTEM_TEMPLATE.format(rúbrica)
+respuesta del candidato + reto
+        → criterios (PoC: JSON del reto; producto: tipo + escenario)
+        → SYSTEM_TEMPLATE + datos del caso
         → Claude (CoT, JSON)
         → { score, criterios[], overall, alerta_seguridad? }
 ```
 
-En la PoC (`poc_evaluator.py`) la rúbrica se lee de un JSON de retos. En el producto, la llamada sale de `evaluate-exercise` (Netlify → API Anthropic, modelo `claude-sonnet-4-6` con *fallback* de modelos si el *id* no existe). La rúbrica y el enunciado viajan en el *system prompt*; la respuesta del candidato, en el mensaje de usuario. Esa **separación estructural** no es cosmética: es el primer control anti-*prompt injection* (la instrucción de mayor peso no comparte canal con el texto que el candidato puede manipular).
+La rúbrica y el enunciado viajan en el *system prompt*; la respuesta del candidato, en el mensaje de usuario. Esa **separación estructural** no es cosmética: es el primer control anti-*prompt injection* (la instrucción de mayor peso no comparte canal con el texto que el candidato puede manipular). El modelo es `claude-sonnet-4-6`, con *fallback* si el identificador deja de existir.
 
 ### 6.2.2 Técnicas de *prompting* (qué hace cada una)
 
-El *Project Charter* (Entrega 1) fijó cinco técnicas. La PoC las implementa; el producto reutiliza el mismo contrato de salida (JSON con *score* y criterios).
+El *Project Charter* fijó cinco técnicas. La PoC las implementa; el producto reutiliza el mismo contrato de salida (JSON con *score* y criterios).
 
-| Técnica | Implementación | Para qué sirve en este TFM |
+| Técnica | Implementación | Función en el sistema |
 |---|---|---|
-| **Dynamic Prompting** | Rúbrica inyectada en *runtime* | Escala a 102 retos; separa negocio de ingeniería |
+| **Dynamic Prompting** | Escenario, datos y criterios inyectados en *runtime* | Un pipeline; no un modelo por reto |
 | **Chain of Thought** | Obligación de razonar **criterio a criterio** antes de la nota | Explicabilidad (AI Act Art. 12) y menos “nota mágica” |
 | **Role prompting** | “Eres el Agente Evaluador de TalentPact…” | Calibra tono y negativa a negociar la nota |
 | **Constitutional AI** | Cláusula: la nota no depende de demografía, estilo o idioma | Relato de equidad; el DIR > 0,80 sigue **sin medir** en muestra real |
 | **Self-consistency débil** | `temperature=0` + JSON de salida, en la PoC **y en producción** | Misma respuesta → misma nota; la dispersión real se mide, no se supone (§6.2.8) |
 
-El modelo **no devuelve solo un entero**. Devuelve desglose por criterio, un texto de *overall* y, si procede, alerta de seguridad. La función `evaluate-exercise` **acota** cada nota a 0–100 (`clampScore`) y exige JSON parseable: si Claude devuelve prosa, la evaluación falla de forma explícita (no se inventa un 70). Eso se persiste en `evaluations` (score, `criteria`, `reasoning`, tokens, coste, modelo): es el **Art. 12 AI Act** (trazabilidad) hecho producto, no un *slide*.
+El modelo **no devuelve solo un entero**. Devuelve desglose por criterio, un texto de *overall* y, si procede, alerta de seguridad. La función `evaluate-exercise` **acota** cada nota a 0–100 (`clampScore`) y exige JSON parseable: si Claude devuelve prosa, la evaluación falla de forma explícita (no se inventa un 70). Eso se persiste en `evaluations` (score, `criteria`, `reasoning`, tokens, coste, modelo): es el **Art. 12 AI Act** (trazabilidad) implementado en el producto.
 
 **Nota de honestidad producto vs. PoC (resuelta).** Durante la revisión final se detectó que `poc_evaluator.py` forzaba `temperature=0` pero la función serverless de producción **no pasaba el parámetro**: Anthropic usaba entonces su valor por defecto. Es decir, la memoria afirmaba una reproducibilidad que el producto no daba. Está corregido —una línea— y, más importante, **hay un test que lo bloquea** (`tests/evaluate-exercise.test.js`), para que no se pierda en un cambio futuro. Se deja escrito el hueco y no solo la corrección: encontrarlo fue mérito de haber escrito los tests, y ese es el argumento de §6.2.8.
 
@@ -104,7 +106,7 @@ Eso conecta con el Art. 14 (supervisión humana) y el Art. 12 (registros). El HI
 
 ### 6.2.4 Resultados medidos (PoC, junio 2026)
 
-Cuatro submisiones reales contra Claude, dos retos. No es un *benchmark* académico; es la evidencia que este TFM **sí** tiene.
+Cuatro submisiones reales contra Claude, dos retos. La evidencia medida es la siguiente.
 
 | Submission | Reto | Perfil | Skill Score | Latencia | Tokens in / out | Alerta |
 |---|---|---|---|---|---|---|
@@ -119,15 +121,15 @@ Agregados: latencia media **17,0 s**; máximo **19,6 s**; score medio de los tre
 
 **Coste.** La tarifa de `claude-sonnet-4-6` está en **dólares**: 3 USD/MTok de entrada y 15 USD/MTok de salida. Con ~1.900 tokens de entrada y ~880 de salida, la media medida es **$0,0180 por evaluación ≈ €0,0165** al tipo declarado de 1 € = 1,09 USD. Muy por debajo del objetivo del *charter* (< €0,04).
 
-El detalle de la divisa no es una minucia: durante la revisión final se detectó que el producto calculaba el importe con la tarifa en dólares y lo etiquetaba con «€», lo que **inflaba el COGS declarado un ~8 %**. Corregido, con el tipo de cambio como supuesto explícito y no como redondeo silencioso. En un TFM de Fintech, confundir divisas en la partida de coste que sostiene el precio es exactamente el error que no debe quedar sin corregir.
+El detalle de la divisa no es una minucia: durante la revisión final se detectó que el producto calculaba el importe con la tarifa en dólares y lo etiquetaba con «€», lo que **inflaba el COGS declarado un ~8 %**. Corregido, con el tipo de cambio como supuesto explícito y no como redondeo silencioso. Confundir divisas en la partida de coste que sostiene el precio es un error de método que no debe quedar sin corregir.
 
 A 10.000 evaluaciones/mes el COGS de IA es de **~€165/mes**: el modelo de negocio **no se rompe por el LLM**. Tres ejercicios por candidato y reto salen a **~€0,05**, irrelevante frente al €49 de desbloqueo. El plan financiero (§4) sigue asumiendo **€0,02 por evaluación**: es un supuesto deliberadamente conservador respecto a lo medido, y se prefiere que el Excel vaya por detrás de la realidad y no al revés.
 
-**Latencia.** Objetivo P95 < 12 s **no cumplido** en local, sin *streaming*. Causas acumulables: red doméstica vs. *cloud*, y respuesta en bloque. En defensa: el usuario espera; no se maquilla. La mitigación de producto es *streaming* (percepción desde ~2 s), no fingir que ya estamos en 12 s.
+**Latencia.** Objetivo P95 < 12 s **no cumplido** en local, sin *streaming*. Causas acumulables: red doméstica vs. *cloud*, y respuesta en bloque. El usuario espera el bloque completo; no se maquilla la cifra. La mitigación de producto es *streaming* (percepción desde ~2 s), no fingir que ya estamos en 12 s.
 
 ### 6.2.5 KPIs del Charter: qué está medido y qué no
 
-La Entrega 1 fijó métricas. Contrastarlas es lo que distingue un TFM de un *pitch*.
+El *Project Charter* inicial fijó métricas. Esta tabla las contrasta con lo medido.
 
 | Métrica | Objetivo MVP | Resultado | Estado |
 |---|---|---|---|
@@ -137,8 +139,8 @@ La Entrega 1 fijó métricas. Contrastarlas es lo que distingue un TFM de un *pi
 | Latencia P95 | < 12 s | 19,6 s (local, sin *streaming*) | **Fuera de objetivo** |
 | Acuerdo con la banda de la rúbrica (κ cuadrática) | ≥ 0,65 | Medible con `npm run bench` | **Protocolo implementado** (§6.2.8) |
 | Reproducibilidad (test-retest) | — | Medible en cada ejecución del banco | **Protocolo implementado** |
-| *Accuracy* vs. experto **humano** | ≥ 78 % | — | **Sin medir**: requiere tribunal humano |
-| Acuerdo inter-evaluador **humano** (κ de Cohen) | ≥ 0,65 | — | **Sin medir**: requiere tribunal humano |
+| *Accuracy* vs. experto **humano** | ≥ 78 % | — | **Sin medir**: requiere panel de evaluadores humanos |
+| Acuerdo inter-evaluador **humano** (κ de Cohen) | ≥ 0,65 | — | **Sin medir**: requiere panel de evaluadores humanos |
 | Tasa de alucinación | < 3 % | — | **Sin medir**: requiere LLM-juez |
 | *Fairness* (DIR) | > 0,80 | — | **Sin medir**: exige muestra real con atributos |
 
@@ -157,7 +159,7 @@ Mitigación **en dos capas** (implementada):
 1. Instrucción de sistema: evaluar *solo* según rúbrica; documentar manipulación en `alerta_seguridad`.
 2. Rúbrica en *system*, respuesta en *user* (el canal de mayor peso no lo controla el candidato).
 
-Pendiente (diseñado, no construido): un **LLM-juez** que solo detecta inyección, sin puntuar —arquitectura multi-agente: ningún agente tiene todas las capas—. La detección se mide hoy sobre **tres ataques** del gold set —directo, encubierto en un comentario de código y por imitación del formato de salida (§6.2.8)—, no sobre tráfico real. Es prueba de que el control existe, **no una tasa de producción**. Afirmar otra cosa en el tribunal sería un error.
+Pendiente (diseñado, no construido): un **LLM-juez** que solo detecta inyección, sin puntuar —arquitectura multi-agente: ningún agente tiene todas las capas—. La detección se mide hoy sobre **tres ataques** del gold set —directo, encubierto en un comentario de código y por imitación del formato de salida (§6.2.8)—, no sobre tráfico real. Es prueba de que el control existe, **no una tasa de producción**. Afirmar otra cosa sería un error de método.
 
 Otros riesgos técnicos del evaluador: **ventana de contexto** (respuestas de miles de palabras degradan la nota; mitigación: truncar / avisar al candidato) y **límites de API** (una campaña de 300 evaluaciones en dos horas exige cola, no 300 *cold starts* en paralelo). Ninguno impide el demo; sí el *go-live* masivo.
 
@@ -203,7 +205,7 @@ La inteligencia artificial no cumple aquí una función decorativa. Actúa como 
 
 ## 6.3 Persistencia y datos (Supabase)
 
-El prototipo guardaba el estado en `localStorage`. El producto del TFM ya usa **Supabase (PostgreSQL + Auth + RLS)** en región UE, con `localStorage` como respaldo local de la demo:
+El prototipo guardaba el estado en `localStorage`. El producto ya usa **Supabase (PostgreSQL + Auth + RLS)** en región UE, con `localStorage` como respaldo local de la demo:
 
 - **`profiles`** — perfiles de candidatos (cuenta real; alias público).
 - **`companies`** — cuentas de empresa.
@@ -390,8 +392,8 @@ La posición del proyecto es por tanto la siguiente: el cobro por resultado **es
 
 | Horizonte | Hitos |
 |---|---|
-| **Hecho (demo TFM)** | Auth real, persistencia Supabase, evaluación IA en producción, SkillPass anclado en Sepolia, verificador público. |
-| **Corto (0-3 meses)** | DPIA + aviso AI Act, calibración humana del score (κ contra tribunal), Stripe, llevar el contrato a una L2 de producción. |
+| **Hecho (prototipo actual)** | Auth real, persistencia Supabase, evaluación IA en producción, SkillPass anclado en Sepolia, verificador público. |
+| **Corto (0-3 meses)** | DPIA + aviso AI Act, calibración humana del score (κ contra evaluadores), Stripe, llevar el contrato a una L2 de producción. |
 | **Medio (4-6 meses)** | Beta de pago: primeras empresas reales, *streaming* del score, rúbricas más ancladas, HITL en zona de duda. |
 | **Largo (7-12 meses)** | Lanzamiento público, catálogo completo, equipo según el plan financiero, expansión Iberia. |
 | **Visión** | Interoperar el SkillPass con EU Digital Identity Wallet / eIDAS 2.0 y, más tarde, liquidación programable (*escrow*). |

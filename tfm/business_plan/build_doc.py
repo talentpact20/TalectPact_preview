@@ -299,9 +299,9 @@ def chapter_label(num: str) -> str:
     if num == "00":
         return "Documento"
     if num == "M":
-        return "Marco del TFM"
+        return "Metodología"
     if num == "09":
-        return "Cierre académico"
+        return "Cierre"
     return f"Apartado {int(num)}"
 
 
@@ -326,14 +326,14 @@ def main() -> None:
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>TalentPact — Business Plan · TFM · Universitat de Barcelona</title>
+<title>TalentPact — Plan de negocio · Universitat de Barcelona</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"/>
 <style>{CSS}</style>
 </head>
 <body>
 <div class="toolbar">
-  <div><b>TalentPact</b> · TFM · Universitat de Barcelona</div>
+  <div><b>TalentPact</b> · Plan de negocio · Universitat de Barcelona</div>
   <div>
     <button type="button" onclick="window.print()">Guardar como PDF</button>
   </div>

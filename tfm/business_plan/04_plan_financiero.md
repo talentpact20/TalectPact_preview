@@ -41,7 +41,7 @@ Crecimiento de **nuevas empresas**: arranque lento (1 alta/mes los primeros mese
 | Seguros | €400 | |
 | **Total SG&A** | **€77.761** | Ver nota sobre los €400 más abajo |
 
-> **Nota de auditoría interna.** Los componentes de arriba suman **€78.161**, mientras que el total declarado es **€77.761**. La diferencia son exactamente los **€400 de Seguros**, que el modelo lista como partida pero **no incluye en el total de SG&A** (el total sale de Marketing €12.271 + Administración €7.890 + Salarios €57.600). El mismo desfase de €400/año se repite en 2027 y 2028, y arrastra el EBITDA al alza en esa cantidad. Se documenta en lugar de corregirlo en silencio: es **€1.200 en tres años**, un 0,9 % del EBITDA positivo de 2028, y no cambia ninguna conclusión —break-even, *runway* ni necesidad de capital—. Lo que sí cambiaría es la credibilidad si lo encontrara el tribunal antes que nosotros.
+> **Nota de auditoría interna.** Los componentes de arriba suman **€78.161**, mientras que el total declarado es **€77.761**. La diferencia son exactamente los **€400 de Seguros**, que el modelo lista como partida pero **no incluye en el total de SG&A** (el total sale de Marketing €12.271 + Administración €7.890 + Salarios €57.600). El mismo desfase de €400/año se repite en 2027 y 2028, y arrastra el EBITDA al alza en esa cantidad. Se documenta en lugar de corregirlo en silencio: es **€1.200 en tres años**, un 0,9 % del EBITDA positivo de 2028, y no cambia ninguna conclusión —break-even, *runway* ni necesidad de capital—. Presentar el total como si cuadrara con la suma de partidas sería un error de transparencia.
 
 **COGS** (variable): API Claude + comisión Stripe. En 2026 apenas **€1.063** — el margen bruto no es el problema.
 
@@ -74,7 +74,7 @@ El ENISA cubre el segundo semestre de 2026 y alarga el *runway* sin diluir.
 
 Lectura: 2026 es validación (pocas empresas, CAC de aprendizaje). 2027 es rampa. 2028 ya es un SaaS de medio millón de ARR con **284 clientes** — una fracción mínima del SAM español, por eso el techo no es el mercado.
 
-El *ask* del deck (€25 k MRR y 500 empresas a 12 meses) es **aspiracional**. El plan que se defiende aquí es el del Excel: ~€3,5 k MRR a dic-2026 y ~€18,7 k MRR a dic-2027. Es más creíble ante un tribunal.
+Las cifras de materiales comerciales (€25 k MRR y 500 empresas a 12 meses) son **aspiracionales**. Este plan usa las del Excel: ~€3,5 k MRR a dic-2026 y ~€18,7 k MRR a dic-2027.
 
 ---
 
@@ -144,7 +144,7 @@ Con solo el pre-seed (€180 k) y el *net burn* de 2026 (~€5.210/mes), el *run
 
 ## 4.7 Financiación y uso de fondos
 
-**Escenario que se defiende (el del modelo):**
+**Escenario de referencia (el del modelo):**
 
 1. **Pre-seed €180 k** en mes 1, formato SAFE, para construir producto, cumplir (SL, RGPD, AI Act) y comprar las primeras cuentas B2B.
 2. **ENISA €50 k** no dilutivo en mes 6: puente de caja y señal institucional.

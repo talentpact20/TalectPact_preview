@@ -1,6 +1,6 @@
 # Objetivos y metodología
 
-Este documento es, a la vez, un **plan de negocio** y una **demostración empírica**. No se limita a describir una fintech sobre el papel: construye y despliega el recorrido completo *evaluación con IA → persistencia de la evidencia → sello criptográfico en blockchain*, de modo que cada afirmación de negocio pueda contrastarse con un producto que funciona. Esta sección fija qué se pretende demostrar, con qué evidencia y con qué límites, para que el resto del documento se lea como un trabajo de investigación aplicada y no como un argumentario comercial.
+Este documento es, a la vez, un **plan de negocio** y una **demostración empírica**. No se limita a describir una fintech sobre el papel: construye y despliega el recorrido completo *evaluación con IA → persistencia de la evidencia → sello criptográfico en blockchain*, de modo que cada afirmación de negocio pueda contrastarse con un producto que funciona. Esta sección fija qué se pretende demostrar, con qué evidencia y con qué límites.
 
 ## Objetivo general
 

@@ -65,7 +65,7 @@ Lo que **no** cubren: la calidad del juicio del modelo (eso es el banco de prueb
 **¿Qué métricas habéis medido realmente?**
 En la PoC (4 evaluaciones, `evaluation_results.json`): **$0,0180/evaluación ≈ €0,0165** (objetivo <€0,04 ✓), 0 % de rechazo del modelo, el ataque de inyección detectado y neutralizado, y **87 puntos** de discriminación (96 el mejor vs. 9 el peor legítimo). Latencia media 17,0 s, máxima 19,6 s, en local y sin *streaming*.
 
-Además hay dos capas de medición que no dependen de una ejecución puntual: **84 tests automáticos** (`npm test`) sobre el contrato del evaluador, el sello criptográfico y la propia estadística; y un **banco de pruebas reproducible** (`npm run bench`) con un *gold set* de 12 ítems que calcula κ cuadrática, MAE, Spearman, reproducibilidad test-retest, bloqueo de inyección, coste y latencia.
+Además hay dos capas de medición que no dependen de una ejecución puntual: **84 tests automáticos** (`npm test`) sobre el contrato del evaluador, el sello criptográfico y la propia estadística; y un **banco de pruebas reproducible** (`npm run bench`) con un *gold set* de 12 ítems que calcula κ cuadrática, MAE, Spearman, reproducibilidad test-retest, bloqueo de inyección, coste y latencia. El **2/2** de la tabla de la PoC y los **tres ataques** del banco son corpus distintos: no es una tasa de producción.
 
 **Accuracy ≥78 % y κ de Cohen ≥0,65: ¿los cumplís?**
 La κ **contra un tribunal humano** sigue sin medir, y lo decimos abiertamente: requiere que evaluadores reales puntúen un corpus. Lo que sí hemos hecho es dejar de esperar a que ocurra: el banco de pruebas (`tfm/tech/eval/`) implementa el protocolo completo, con un *gold set* de 12 ítems cuya referencia es la **banda que fija la rúbrica**, asignada por construcción. Eso mide **validez de constructo**, no acuerdo inter-evaluador, y el informe lo dice con esas palabras. El gold set ya reserva el campo `referenciaHumana`: cuando existan notas humanas, la κ de Cohen sale con el mismo comando, sin tocar código.
@@ -84,6 +84,12 @@ Porque lo ejecutamos, no porque lo supongamos. La clave `anon` está en el HTML:
 
 **El contrato, ¿está auditado?**
 No por un tercero, y no lo vamos a llamar auditoría. Lo que sí hay son ocho tests que compilan el contrato en cada `npm test` y comprueban que no tiene avisos del compilador, que el ABI del backend coincide con el compilado **selector a selector**, que `anchor()` conserva sus tres controles y que nadie ha metido un `selfdestruct` —del que depende nuestro argumento de RGPD—. Y decimos las tres cosas que el contrato deliberadamente **no** hace: no hay revocación, `transferIssuer` es de un solo paso en vez de dos, y no hay anclaje por lotes. Están razonadas en §6.4.4.
+
+**Olvido y revocación, ¿no es lo mismo?**
+No. El derecho al olvido borra el JSON off-chain y deja el hash huérfano. Revocar sería marcar una credencial que sigue existiendo como no válida. Hoy no hay lista de revocados: si una evaluación resultara fraude, el sello seguiría cuadrando hasta borrar el documento.
+
+**¿No pueden copiar o pegar ChatGPT?**
+Los retos no tienen solución única. Se puntúa el razonamiento contra el caso, no un texto de referencia. La prosa genérica encaja mal con las restricciones del enunciado y baja criterio a criterio. El *prompt injection* es otro ataque: va en el mensaje de usuario y no eleva la nota.
 
 ---
 

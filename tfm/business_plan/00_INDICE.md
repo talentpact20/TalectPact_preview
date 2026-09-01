@@ -14,7 +14,7 @@ Las cifras de todo el documento salen de `../cifras_canonicas.json`, y `npm test
 - Título, autores, máster, fecha, logo.
 
 ## Resumen ejecutivo (1-2 págs) → `00_resumen_ejecutivo.md`
-- Problema, validación MVP, solución, mercado, modelo, cifras, alcance del TFM.
+- Problema, validación, solución, mercado, modelo, cifras y alcance.
 
 ## Objetivos y metodología → `00_objetivos_metodologia.md`
 - Objetivo general y específicos, hipótesis, fuentes de evidencia y límites.

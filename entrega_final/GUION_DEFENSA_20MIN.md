@@ -164,7 +164,7 @@ Tres controles. **Chain of Thought**: razonar criterio por criterio antes de pun
 **Xavier.** Esta es la tabla que más nos importa, porque son **datos medidos en ejecuciones reales**, no proyecciones.
 
       
-El coste de la PoC es **1,65 céntimos** (€0,0165); en producto, con menos contexto, ~1,3. El Excel usa 2 céntimos a propósito. La discriminación es **87 puntos**: 96 frente a 9. Los ataques de inyección del corpus: **2 de 2**, no un 100 % de producción.
+El coste de la PoC es **1,65 céntimos** (€0,0165); en producto, con menos contexto, ~1,3. El Excel usa 2 céntimos a propósito. La discriminación es **87 puntos**: 96 frente a 9. Los ataques de inyección del corpus: **2 de 2**, no un 100 % de producción. Si preguntan: ese 2/2 es la PoC de junio; el banco de la siguiente diapositiva tiene **tres ataques distintos**. No son la misma muestra.
 
       
 Lo que **no** cumplimos: la **latencia**, 17-20 segundos en local sin streaming. No es un límite arquitectónico.
@@ -177,7 +177,7 @@ Cierre: tres ejercicios cuestan **~5 céntimos** frente a 49 €. La IA no condi
 
 ---
 
-## 11 · Un TFM que enseña su mejor ejecución no está midiendo.
+## 11 · Enseñar la mejor ejecución no es medir.
 
 **El motor de IA** · 0:45 previstos · acumulado 7:07
 
@@ -235,7 +235,7 @@ La credencial tiene que poder comprobarse **sin cuenta TalentPact y sin fiarse d
 Y aquí está la decisión de diseño que más nos ha costado, que resuelve una tensión real: **la blockchain es inmutable y el RGPD exige poder borrar**. La resolvemos porque una huella de 32 bytes no es un dato personal, y el CV real vive off-chain en la Unión Europea, donde sí se puede eliminar. Si el candidato ejerce su derecho al olvido, borramos el documento y el hash on-chain queda huérfano: deja de significar nada.
 
       
-> **▶** Para el candidato esto es una evidencia **portable**: JSON + hash. El emisor sigue siendo nuestra wallet. eIDAS es después.
+> **▶** Olvidar y revocar no son lo mismo. Hoy hay integridad, no ciclo de vida: **no hay lista de revocados**. Si una evaluación resultara fraude, el sello seguiría cuadrando hasta que se borre el JSON. El emisor sigue siendo nuestra wallet. eIDAS es después.
 
 ---
 
@@ -266,7 +266,7 @@ Tres precisiones que nos parecen importantes. **Por qué Sepolia:** nuestra prim
 **Xavier.** "Hasta aquí el relato. Ahora os lo enseñamos funcionando."
 
       
-**1 · Candidato (2:00)** — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: _"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"_. Luego una respuesta pobre → nota baja y el motivo.
+**1 · Candidato (2:00)** — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: _"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"_. Si preguntan ChatGPT: _"el reto no tiene solución única; se puntúa el razonamiento contra el caso, no un texto de referencia"_. Luego una respuesta pobre → nota baja y el motivo.
 
       
 **2 · Seguridad (1:00)** — Pegar el ataque de prompt injection. El evaluador lo identifica, lo penaliza y lo dice explícitamente.
@@ -387,7 +387,9 @@ Entra como candidato, elige un reto y pega la respuesta buena.
 
 > "Fijaos en lo que devuelve: no es una nota, es una nota **por criterio**, y cada
 > una con su justificación. Esto no es un `if/else` contando palabras clave: es el
-> modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio."
+> modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio.
+> El reto no tiene solución única: se puntúa el razonamiento contra el caso,
+> no un texto de referencia — por eso pegar ChatGPT no compra la nota."
 
 Repite con la respuesta pobre.
 
@@ -457,6 +459,18 @@ no es un uso decorativo: es lo único que una cadena hace mejor que un servidor.
 **¿No choca la inmutabilidad con el derecho al olvido?**
 No, porque on-chain solo hay una huella de 32 bytes, que no es un dato personal. El
 documento vive off-chain en la UE y sí se borra. Al borrarlo, el hash queda huérfano.
+Olvidar y **revocar** no son lo mismo: hoy no hay lista de revocados. Si una evaluación
+resultara fraude, el sello seguiría cuadrando hasta borrar el JSON.
+
+**¿El 2 de 2 de inyección es el mismo que los tres ataques del banco?**
+No. El 2/2 es la PoC de junio (cuatro evaluaciones, un ataque directo). El banco
+tiene tres ataques distintos —directo, comentario de código, JSON falso— sobre el
+motor de producción. Son dos corpus; no es una tasa de producción.
+
+**¿No pueden copiar la respuesta o pegar ChatGPT?**
+Los retos no tienen solución única localizable. Se puntúa el razonamiento contra
+el caso concreto, no un texto de referencia. Pegar prosa genérica encaja mal con
+las restricciones del enunciado y baja en el desglose por criterio.
 
 **¿Es esto un criptoactivo? ¿Aplica MiCA?**
 No y no. El SkillPass no es transferible, no tiene valor de mercado y no hay custodia.

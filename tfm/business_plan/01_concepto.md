@@ -38,9 +38,9 @@ TalentPact no es una única innovación, sino tres capas que se refuerzan entre 
 
 | Capa | Qué aporta | Estado |
 |---|---|---|
-| **① Evaluación con IA** | Motor que corrige 102 tipos de reto con una sola arquitectura (Dynamic Prompting + Chain of Thought), trazable y a **~€0,0165 por evaluación** medidos (calibración contra tribunal humano aún pendiente, §6.2) | ✅ Construido y funcionando (PoC + producto en vivo) |
-| **② Persistencia y perfil verificado** | Base de datos que consolida el histórico de evaluaciones en un perfil de habilidades auditable | ✅ Construido (Supabase Auth + tablas en UE) |
-| **③ Credencial anclada en blockchain** | La habilidad validada se convierte en un JSON tipo Verifiable Credential cuyo *hash* se ancla on-chain: un tercero comprueba **integridad** (si el documento se altera, el sello no cuadra) | ✅ Demo real en Ethereum Sepolia (contrato `SkillPassRegistry` + verificador público) |
+| **1. Evaluación con IA** | Motor que corrige 102 tipos de reto con una sola arquitectura (Dynamic Prompting + Chain of Thought), trazable y a **~€0,0165 por evaluación** medidos (calibración contra evaluadores humanos aún pendiente, §6.2) | Construido y en funcionamiento (PoC y producto en vivo) |
+| **2. Persistencia y perfil verificado** | Base de datos que consolida el histórico de evaluaciones en un perfil de habilidades auditable | Construido (Supabase Auth y tablas en la UE) |
+| **3. Credencial anclada en blockchain** | La habilidad validada se convierte en un JSON tipo Verifiable Credential cuyo *hash* se ancla on-chain: un tercero comprueba **integridad** (si el documento se altera, el sello no cuadra) | Demo real en Ethereum Sepolia (contrato `SkillPassRegistry` y verificador público) |
 
 **La tesis fintech del proyecto:** igual que las fintech convirtieron el dinero y los activos en objetos digitales programables y verificables, TalentPact convierte la **habilidad profesional en un activo digital verificable y propiedad del individuo**. Pasamos de la *economía de las acreditaciones* (títulos que hay que creerse) a la *economía de las evidencias* (competencias comprobadas y certificadas criptográficamente).
 
@@ -78,4 +78,4 @@ Por último, la relación no se agota en el contacto: la empresa puede **convers
 
 ---
 
-*Documento del TFM · Máster en Fintech, Mercados Financieros y Blockchain · Xavier Griñó · Ivan Sánchez.*
+*Xavier Griñó · Ivan Sánchez · Universitat de Barcelona.*
