@@ -4,13 +4,13 @@
 
 **El problema.** Contratar dura ~42 días y cuesta ~€4.700 en España; una fracción alta de CVs no es verificable (fuentes secundarias: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024). El filtro sigue siendo un papel.
 
-**Validación propia (MVP, 2026).** n ≈ 30 encuestas: ~90 % de candidatos interesados; **65 %** de empresas de la muestra dispuestas a sustituir la primera entrevista; **7/10** candidatos quieren anonimato al inicio. Criterio experto (≥5 profesionales, Hays). Tracción: 6 países y ~500 visitas en la primera semana. Muestra exploratoria, no probabilística (detalle en §2.4).
+**Validación propia (investigación del proyecto, 2026).** n ≈ 30 encuestas: ~90 % de candidatos interesados; **65 %** de empresas de la muestra dispuestas a sustituir la primera entrevista; **7/10** candidatos quieren anonimato al inicio. Criterio experto (≥5 profesionales, Hays). Tracción: 6 países y ~500 visitas en la primera semana. Muestra exploratoria, no probabilística (detalle en §2.4).
 
 **La solución construida.** (1) Evaluación con Claude ($0,0180 ≈ €0,0165 por ejercicio), (2) persistencia en Supabase (UE), (3) sello on-chain en Ethereum Sepolia y verificador público. Producto: **talentpact.es**.
 
 **Modelo.** Cinco palancas (€49, Pro €199, Enterprise €499, retos a medida €299, extra B2C €5). Margen bruto **~93,5 %**. LTV/CAC **11–17×**.
 
-**Finanzas (base, Excel 17/04/2026).** Pre-seed **€180 k** + ENISA **€50 k**. 24 → 129 → 284 empresas (2026–2028). Ingreso neto €16 k / €109 k / €360 k. Break-even **mayo 2028**; neto 2028 **+€34 k**. Extracto del modelo en anexo D.
+**Finanzas (base, Excel 17/04/2026).** Pre-seed **€180 k** + ENISA **€50 k**. 24 → 129 → 284 empresas (2026–2028). Ingreso neto €16 k / €109 k / €360 k. Break-even **mayo 2028**; neto 2028 **+€34 k**. Extracto del modelo en anexo C.
 
 **Equipo.** Xavier Griñó e Ivan Sánchez. Universitat de Barcelona. Máster en Fintech, Mercados Financieros y Blockchain. Septiembre 2026.
 

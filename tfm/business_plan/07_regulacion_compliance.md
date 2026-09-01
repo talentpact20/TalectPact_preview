@@ -2,8 +2,6 @@
 
 TalentPact opera en el cruce de **empleo, datos personales, inteligencia artificial y (en el demo) blockchain**. No es un banco ni emite un token: aun así, el marco europeo le aplica con fuerza porque **puntuar a una persona para un trabajo es una actividad de alto riesgo**. La tesis del proyecto es *compliance by design*: el mismo diseño que vende (anonimato, trazabilidad, hash on-chain) es el que cumple.
 
-Este apartado cubre lo que ya se puede defender con el producto actual y lo que queda de hoja de ruta **antes de cobrar el primer €49 real**.
-
 ---
 
 ## 7.1 EU AI Act (Reglamento UE 2024/1689)
@@ -84,18 +82,25 @@ Impuestos: IVA en B2B UE según reglas de servicios electrónicos; el modelo sim
 
 ## 7.5 Hoja de ruta de cumplimiento pre-lanzamiento
 
-Orden práctico, de más bloqueante a menos:
+El cumplimiento normativo no se resuelve con un único trámite, sino con una secuencia de actuaciones que se condicionan entre sí. El orden que sigue está construido de mayor a menor efecto bloqueante: cada paso desbloquea el siguiente, y saltarse uno intermedio obliga habitualmente a rehacer el trabajo posterior.
 
-1. **Constituir SL** y nombramiento de DPO interno o externo (recomendable por el volumen de datos de empleo).
-2. **DPIA** (evaluación de impacto) del flujo candidato → IA → pool → SkillPass.
-3. Contratos: DPA con Supabase, Anthropic, Netlify, Stripe; cláusulas al candidato y a la empresa.
-4. Aviso Art. 50 AI Act en el momento del reto (“esta prueba la corrige un sistema de IA”).
-5. Registro del sistema de alto riesgo y expediente de conformidad (documentación técnica del modelo, rúbricas, límites).
-6. Calibración con evaluadores humanos (cierra el hueco de *accuracy* del informe técnico).
-7. Revisión legal del patrón hash on-chain (dictamen corto; el diseño ya es el estándar “ancla de integridad”).
-8. Solo entonces: **cobrar €49** y dejar de ser preview.
+**1. Constitución de la sociedad y designación del responsable de protección de datos.** Es el primer paso porque, sin personalidad jurídica, no hay ningún sujeto que pueda firmar contratos de encargo de tratamiento, asumir la condición de responsable frente a la autoridad de control ni emitir facturas. La designación de un delegado de protección de datos —interno o externo— es recomendable dada la naturaleza de los datos tratados: información sobre capacidades profesionales de personas en búsqueda de empleo, que se emplea para tomar decisiones que afectan a su acceso al trabajo. Aunque el volumen inicial no active necesariamente la obligación legal de designarlo, el criterio prudente en un tratamiento de este perfil es contar con la figura desde el principio.
 
-Coste previsto en el Excel: partida *Legal* (pico de constitución en 2026) + *Compliance y Seguridad* (€100/mes desde 2027). Es deliberadamente magro: el grueso del cumplimiento **ya está en el diseño del producto**, no en un ejército de abogados.
+**2. Evaluación de impacto relativa a la protección de datos.** Es obligatoria porque concurren dos circunstancias que la desencadenan: se realiza una evaluación sistemática de aspectos personales mediante tratamiento automatizado, y de ella se derivan efectos significativos sobre las personas afectadas. El análisis debe recorrer el circuito completo —registro del candidato, evaluación automatizada, publicación anónima en el conjunto de perfiles, emisión de la credencial y anclaje de la huella— identificando en cada etapa qué datos se tratan, con qué base jurídica, durante cuánto tiempo y con qué riesgos asociados. El resultado no es un documento para archivar: condiciona decisiones concretas de producto, como los plazos de conservación del razonamiento almacenado o los mecanismos de intervención humana en la decisión.
+
+**3. Contratos con proveedores y condiciones para los usuarios.** Hay que formalizar acuerdos de encargo de tratamiento con cada proveedor que procesa datos por cuenta de la empresa: el proveedor de base de datos, el proveedor del modelo de lenguaje, el de alojamiento y el de pagos. Merece atención particular el acuerdo con el proveedor de inteligencia artificial, por dos motivos: es el que recibe el contenido de las respuestas de los candidatos, y es el que puede implicar transferencias fuera del Espacio Económico Europeo, lo que exige cláusulas contractuales tipo y un análisis de las garantías del país de destino. En paralelo hay que redactar condiciones diferenciadas para candidatos y para empresas, ya que la relación jurídica es distinta en cada caso.
+
+**4. Información sobre el uso de inteligencia artificial.** El reglamento europeo exige informar a la persona de que está interactuando con un sistema de inteligencia artificial. En este caso la obligación se cumple en el momento del reto, con un aviso claro de que la prueba será corregida por un sistema automatizado, qué criterios se aplicarán y qué consecuencias tendrá el resultado. Es un requisito de bajo coste técnico y alto impacto reputacional si se omite.
+
+**5. Registro del sistema de alto riesgo y expediente de conformidad.** Es el paso más costoso en tiempo y en documentación. Comprende la elaboración del expediente técnico —descripción del sistema, arquitectura, rúbricas de evaluación, métricas de rendimiento, límites conocidos y medidas de supervisión humana— y la inscripción en la base de datos europea de sistemas de alto riesgo antes de la comercialización. Buena parte de este material ya está redactado en el apartado 6 de este documento, lo que reduce sensiblemente el esfuerzo restante.
+
+**6. Calibración con evaluadores humanos.** Este paso cierra el hueco metodológico identificado en el §6.2.5 y es una condición material del expediente anterior: el reglamento exige demostrar niveles adecuados de exactitud, y la exactitud de un sistema de puntuación solo puede acreditarse comparándola con criterio profesional. Es también el paso que permite pasar de afirmar que la evaluación es trazable a poder afirmar que es exacta, que son cosas distintas.
+
+**7. Dictamen jurídico sobre el anclaje de huellas.** Un informe breve que confirme que el patrón empleado —huella en cadena, dato personal fuera de ella— es compatible con el derecho de supresión. El diseño ya se corresponde con la solución estándar reconocida para conciliar registros distribuidos y protección de datos, de modo que se trata de una confirmación externa más que de un análisis abierto, pero conviene disponer de ella por escrito antes de comercializar.
+
+**8. Inicio de la actividad comercial.** Solo cuando los siete puntos anteriores estén cerrados procede activar los cobros y retirar la condición de versión preliminar de la plataforma pública. Hasta ese momento, la web debe presentarse de forma inequívoca como demostración y no como servicio comercial disponible.
+
+**Coste y criterio.** El modelo financiero recoge estas actuaciones en dos partidas: un pico de gasto legal en el ejercicio de constitución y una partida recurrente de cumplimiento y seguridad de aproximadamente €100 mensuales a partir del segundo año. Puede parecer una dotación escasa para un sistema clasificado como de alto riesgo, y conviene explicar por qué no lo es: el grueso del cumplimiento **ya está incorporado al diseño del producto**. El anonimato estructural, el registro completo de cada evaluación, la residencia europea de los datos y la decisión de no publicar información personal en la cadena no son medidas que haya que añadir después pagando asesoramiento, sino decisiones de arquitectura tomadas desde el principio. Lo que queda por contratar es la formalización documental de algo que el sistema ya hace, y eso es sustancialmente más barato que corregir un producto concebido sin estas consideraciones.
 
 ---
 

@@ -46,26 +46,35 @@ TalentPact no es una única innovación, sino tres capas que se refuerzan entre 
 
 > **Nota de diseño (privacidad + inmutabilidad):** on-chain solo se ancla el *hash* de la credencial; los datos personales viven off-chain en la base de datos europea. Esto reconcilia la inmutabilidad de blockchain con el derecho al olvido del RGPD (se detalla en el apartado 7).
 
-## 1.4 Propuesta de valor única
+## 1.4 Propuesta de valor, misión y visión
 
-**Para el candidato:**
-- Demuestra lo que sabe sin que su CV, su edad o su nombre lo descarten de antemano.
-- Obtiene un **CV verificable y portable** que le pertenece y que puede presentar a cualquier empresa dentro o fuera de TalentPact.
-- Acceso gratuito hasta 5 retos/semana.
+La propuesta de TalentPact no se explica por una funcionalidad concreta, sino por el cambio de objeto que introduce en el proceso de selección: donde antes había un relato personal escrito por el propio candidato, ahora hay una evidencia producida en condiciones controladas y comprobable por terceros. Ese desplazamiento afecta a los dos lados del mercado de forma distinta, y conviene detallarlo por separado.
 
-**Para la empresa:**
-- Reduce el *time-to-hire* de semanas a **minutos de cribado**, filtrando por habilidades reales verificadas.
-- **Paga solo por resultado** (€49/contacto): elimina el coste hundido de las licencias caras sin garantías.
-- Evaluación **anónima, explicable y trazable** (alineada con el AI Act; el registro como sistema de alto riesgo sigue pendiente, §7).
-- Reduce el fraude de CV *como PDF editable*: cada skill va respaldada por un sello de integridad que un tercero verifica (§6.4).
+**Lo que recibe el candidato.** Lo primero y más importante es una **oportunidad real de demostrar lo que sabe hacer** antes de que nadie mire su edad, su nombre, su fotografía o el prestigio de la empresa en la que trabajó. El perfil llega a la empresa despersonalizado: lo que se ve es el resultado de un ejercicio práctico y el desglose de por qué obtuvo ese resultado. Para quien viene de una reconversión profesional, para quien tiene poca experiencia formal o para quien ha sido descartado sistemáticamente por criterios que nada tienen que ver con su competencia, esto no es un matiz: es la diferencia entre entrar en un proceso o no existir en él.
 
-**Diferenciación en una frase:** TalentPact es el **único** actor que combina *sourcing* + *evaluación por IA* + *anonimato* + *pay-per-result* + *credencial verificable en blockchain*. Los competidores hacen una de estas cosas; ninguno las une.
+Lo segundo es la **retroalimentación**. Cada reto corregido devuelve un desglose por criterios y una justificación escrita de la puntuación. El candidato no recibe un veredicto opaco, sino un diagnóstico que le indica dónde está sólido y dónde debe mejorar. En un mercado donde la práctica habitual es el silencio administrativo tras la candidatura, devolver información útil es en sí mismo una propuesta de valor.
 
-## 1.5 Misión, visión y encaje en el máster
+Lo tercero es la **propiedad de la evidencia**. Las habilidades demostradas se consolidan en una credencial verificable que pertenece al candidato y que puede presentar dentro o fuera de la plataforma. No es un certificado que haya que creerse porque lo firme una marca: es un documento cuya integridad cualquier tercero puede comprobar por su cuenta. Si el candidato se marcha de TalentPact, su historial de evidencias sigue siendo válido y comprobable.
 
-- **Misión:** que a nadie se le juzgue por un papel, sino por lo que sabe hacer de verdad.
-- **Visión:** convertirse en el estándar europeo de **credenciales de habilidades verificables**, el "pasaporte de talento" que el profesional posee y lleva consigo entre empleos y plataformas.
-- **Encaje fintech/blockchain:** TalentPact aplica al mercado laboral lo que el máster enseña —pruebas de integridad, registros con emisor identificable, y (como visión) valor programable—. La credencial de skill es un **documento verificable**, no un token; el *pay-per-result* es la innovación de cobro; la verificación sin cuenta TalentPact es el *Web3* que sí está construido. La identidad soberana completa (clave del candidato, EUDI Wallet) es hoja de ruta, no el demo (§6.4).
+Y, cerrando el ciclo, la posibilidad de **interlocución directa con la empresa**. Cuando una compañía decide avanzar con un perfil, se abre un canal de conversación en el que además puede revisar y comentar los ejercicios resueltos. El candidato deja de ser un expediente que se archiva y pasa a recibir la valoración de un profesional del sector que ya ha manifestado interés real por su trabajo.
+
+**Lo que recibe la empresa.** El beneficio inmediato es una **reducción drástica del tiempo de cribado**. En lugar de leer decenas o cientos de currículos para inferir capacidades que no aparecen documentadas, la empresa filtra un conjunto de perfiles ya evaluados por sector, competencia y nivel demostrado. El trabajo de discriminar entre quien dice saber y quien sabe ya está hecho antes de la primera conversación.
+
+El segundo beneficio es la **calidad de la información**. Cada habilidad del perfil está respaldada por un ejercicio concreto, un desglose por criterios y un sello de integridad que permite comprobar que ese documento no ha sido alterado después de emitirse. Un currículo en PDF puede editarse en treinta segundos; una evidencia sellada, no. La empresa deja de contratar sobre declaraciones y empieza a contratar sobre hechos comprobables.
+
+El tercero es la **defendibilidad del proceso**. La evaluación es anónima en su fase inicial, explicable criterio a criterio y trazable de extremo a extremo, lo que encaja de forma natural con las exigencias europeas sobre uso de inteligencia artificial en contratación. Un responsable de selección puede justificar internamente por qué avanzó con un perfil y descartó otro, con un registro que respalda la decisión.
+
+El cuarto es el **modelo de acceso sin compromiso previo**: la empresa no adquiere una licencia anual para descubrir después si le sirve, sino que asume el coste únicamente cuando obtiene el resultado que buscaba. El riesgo de la prueba deja de estar en el lado del cliente.
+
+Por último, la relación no se agota en el contacto: la empresa puede **conversar con el candidato y revisar sus ejercicios**, aportando su propio criterio profesional sobre el trabajo entregado. Ese intercambio mejora la decisión de contratación y, al mismo tiempo, devuelve valor al talento que ha participado.
+
+**Diferenciación.** Ninguno de estos elementos es, aisladamente, imposible de replicar. Existen plataformas que localizan perfiles, plataformas que administran pruebas técnicas y plataformas que emiten certificados digitales. Lo que no existe es un actor que combine en un mismo flujo la búsqueda de talento, la evaluación automatizada y explicable, el anonimato estructural, el pago vinculado al resultado y la credencial verificable criptográficamente. La ventaja no está en cada pieza, sino en que las piezas se refuerzan entre sí: el anonimato solo funciona si hay una evaluación fiable que ocupe el lugar del currículo, y la evaluación solo se convierte en un activo transferible si alguien puede verificarla sin confiar en el emisor.
+
+**Misión.** Que a nadie se le juzgue por un papel, sino por lo que sabe hacer de verdad.
+
+**Visión.** Convertirse en el estándar europeo de credenciales de habilidad verificables: un pasaporte de talento que el profesional posee, conserva entre empleos y puede presentar en cualquier plataforma o proceso, con independencia de quién lo emitió originalmente.
+
+**Encaje fintech y blockchain.** El proyecto traslada al mercado laboral la lógica que las fintech aplicaron al dinero y a los activos financieros: convertir algo que antes solo existía como declaración en un objeto digital verificable, con emisor identificable y trazabilidad completa. La credencial de habilidad es un **documento verificable**, no un token negociable; el cobro vinculado al resultado es la innovación en el modelo de ingresos; y la verificación por parte de un tercero sin necesidad de cuenta es la pieza descentralizada que ya está construida y en funcionamiento. La identidad soberana completa —clave criptográfica en poder del candidato e integración con la cartera de identidad digital europea— pertenece a la hoja de ruta y se describe como tal en el §6.4.
 
 ---
 

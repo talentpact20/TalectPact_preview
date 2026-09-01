@@ -1,8 +1,8 @@
 # 4. Plan financiero
 
-Fuente de verdad: modelo financiero TalentPact, escenario **base**, horizonte **36 meses** (ene 2026 – dic 2028), actualizado el 17/04/2026 (`tfm/assets/TalentPact_modelo_financiero.xlsx`). Las cifras del *investor deck* se usan como narrativa; cuando hay divergencia (resultado neto 2028, caja de cierre), **gana el Excel**.
+Todas las cifras de este apartado proceden del modelo financiero de TalentPact en su escenario **base**, con un horizonte de **36 meses** (enero 2026 – diciembre 2028) y fecha de última actualización el 17/04/2026 (`tfm/assets/TalentPact_modelo_financiero.xlsx`). El modelo es la referencia única del plan: cuando cualquier material de presentación del proyecto ha ofrecido una cifra distinta —típicamente el resultado neto de 2028 o la caja de cierre—, prevalece siempre el libro de cálculo, que es el documento auditable y el que se entrega como anexo digital.
 
-El equipo del TFM son **dos socios**: Xavier Griñó e Ivan Sánchez. El modelo conserva una masa salarial de cuatro líneas lean (€1.200/mes en 2026) para no rehacer las proyecciones: dos corresponden a los socios y las otras dos a las **primeras contrataciones** (producto/desarrollo y growth) previstas al escalar.
+La estructura de personal proyectada mantiene cuatro líneas salariales en régimen austero (€1.200 al mes por línea en 2026). Dos de ellas corresponden a la dedicación de los fundadores y las otras dos a las **primeras contrataciones previstas** —un perfil de producto y desarrollo y otro de crecimiento y ventas— que se incorporan cuando el volumen de clientes lo justifica. Se conserva esa configuración porque es la que sostiene el resto de las proyecciones y modificarla implicaría rehacer la totalidad del modelo sin cambiar sus conclusiones.
 
 ---
 
@@ -154,7 +154,7 @@ Con solo el pre-seed (€180 k) y el *net burn* de 2026 (~€5.210/mes), el *run
 
 **Qué no se financia con cripto:** no hay token, ICO ni *utility coin*. El SkillPass ancla un hash; no es un criptoactivo ofrecido al público (apartado 7).
 
-### Unit economics (recordatorio; detalle en §3.6)
+### Unit economics
 
 LTV/CAC **11–17×**, *payback* **< 2 meses**, *gross margin* **93,3–93,8 %**. El plan financiero aguanta porque cada empresa nueva se paga sola muy rápido; el riesgo es de **volumen**, no de margen.
 

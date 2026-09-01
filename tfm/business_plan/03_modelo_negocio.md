@@ -6,7 +6,7 @@
 |---|---|
 | **Segmentos de clientes** | **B2B (pagan):** startups/pymes tech, departamentos de RRHH con contratación recurrente, agencias/headhunters. **B2C (usuarios):** talento junior o en reconversión, perfiles infrarrepresentados, profesionales tech. |
 | **Propuesta de valor** | Contratar por habilidades reales verificadas, sin sesgo y pagando solo por resultado. Para el candidato: demostrar lo que sabe y obtener un CV verificable que le pertenece. |
-| **Canales** | Web (talentpact.io), ventas B2B *outbound* (LinkedIn Sales Navigator), marketing de contenidos/SEO, comunidad de candidatos, boca-oreja por efecto de red. |
+| **Canales** | Web (talentpact.es), ventas B2B *outbound* (LinkedIn Sales Navigator), marketing de contenidos/SEO, comunidad de candidatos, boca-oreja por efecto de red. |
 | **Relación con clientes** | *Self-service* para candidatos; *sales-assisted* + éxito de cliente para Pro/Enterprise; soporte con chatbot IA. |
 | **Fuentes de ingreso** | 5 palancas: €49/contacto (pay-per-result), Pro €199/mes, Enterprise €499/mes, retos a medida €299/vacante, Premium candidato €5/reto extra. |
 | **Recursos clave** | El motor de evaluación IA, el catálogo de 102 retos + rúbricas, la base de datos de talento verificado, la infraestructura de credenciales blockchain, el equipo. |
@@ -16,7 +16,7 @@
 
 ## 3.2 Propuesta de valor por segmento
 
-**Candidato (lado oferta):** oportunidad de demostrar habilidades sin barreras de CV; anonimato que elimina el sesgo; CV verificable y portable en blockchain; gratis hasta 5 retos/semana. *El candidato aporta la oferta de talento que hace valioso el marketplace.*
+**Candidato (lado oferta):** oportunidad de demostrar habilidades sin las barreras del CV; anonimato que elimina el sesgo en la fase de cribado; retroalimentación detallada de cada ejercicio; credencial verificable y portable que le pertenece; y acceso a la plataforma sin coste de entrada. *El candidato aporta la oferta de talento que hace valioso el marketplace.*
 
 **Empresa (lado demanda):** cribado en minutos por skills verificadas; pago solo por resultado; cumplimiento del EU AI Act por diseño; cero fraude de CV. *La empresa es quien monetiza el marketplace.*
 
@@ -28,7 +28,7 @@
 | **Plan Pro** | €199/mes | Suscripción B2B | 5 contactos incluidos + ofertas ilimitadas. RRHH recurrente. |
 | **Plan Enterprise** | €499/mes | Suscripción B2B | Contactos ilimitados + soporte dedicado. Grandes equipos. |
 | **Retos a medida** | €299/vacante | Servicio B2B | Ejercicios diseñados para una oferta concreta. High-value. |
-| **Candidato Premium** | €5/reto extra | B2C | Monetiza *power users* a partir del 6º reto semanal sin bloquear a la mayoría. |
+| **Candidato Premium** | €5/reto extra | B2C | Monetiza al usuario intensivo que supera el volumen habitual de retos, sin poner barrera de entrada a la mayoría. |
 
 **Mix de clientes asumido (modelo base):** 25 % Pro, 5 % retos a medida, 8 % Enterprise, resto transaccional; 3 % de candidatos pagan B2C. **ARPU blended ≈ €145/empresa/mes.**
 
@@ -67,6 +67,17 @@ Métricas del modelo financiero base (36 meses):
 | **Gross Margin** | 93,5 % | 93,3 % | 93,8 % |
 
 **Lectura:** el ratio **LTV/CAC de 11-17x** (frente al umbral sano de 3x y excelente de 5x) y el *payback* inferior a 2 meses indican un modelo de adquisición muy eficiente. El reto no es la economía unitaria —que es excelente— sino **alcanzar volumen** de empresas B2B, que es donde se juega el break-even (ver apartado 4).
+
+## 3.7 Interacción empresa–candidato tras el desbloqueo
+
+El modelo no termina en la transacción. Una vez la empresa ha pagado —bien por el desbloqueo puntual de un contacto, bien dentro de un plan de suscripción— se abre un canal de comunicación directa con el candidato que forma parte del servicio contratado y que constituye una diferencia relevante frente a las plataformas de evaluación al uso.
+
+Ese canal tiene dos funciones. La primera es la **conversación**: la empresa puede dirigirse al candidato sin intermediarios para ampliar información, plantear preguntas sobre el ejercicio resuelto o proponer los siguientes pasos del proceso. Al haber pagado previamente, el contacto llega ya cualificado por ambas partes, lo que elimina el ruido característico de la mensajería masiva en las redes profesionales, donde el candidato recibe propuestas indiscriminadas y la empresa obtiene tasas de respuesta muy bajas.
+
+La segunda es la **revisión de los ejercicios**. La empresa accede a las respuestas entregadas por el candidato y puede comentarlas, matizar la corrección automática o aportar su propio criterio profesional sobre el trabajo realizado. Esto beneficia a las tres partes implicadas. Al candidato, porque recibe retroalimentación de un profesional en activo de su sector, algo que hoy prácticamente ningún proceso de selección devuelve. A la empresa, porque la revisión del ejercicio real es la mejor forma de decidir si merece la pena invertir tiempo en una entrevista. Y a la plataforma, porque cada corrección humana constituye una referencia externa sobre la calidad de la evaluación automática, es decir, exactamente el tipo de material que se necesita para calibrar el motor de inteligencia artificial contra criterio profesional (§6.2.8).
+
+Esta funcionalidad se reserva de forma deliberada a la fase posterior al pago. No es una restricción arbitraria: es el mecanismo que sostiene la calidad del canal. Si cualquier empresa pudiera escribir a cualquier candidato sin coste, el resultado sería el mismo ruido que hoy satura las plataformas generalistas. Vincular el acceso al pago garantiza que quien inicia la conversación tiene un interés real, y esa es precisamente la señal que hace valioso el marketplace para el lado de la oferta.
+
 
 ---
 

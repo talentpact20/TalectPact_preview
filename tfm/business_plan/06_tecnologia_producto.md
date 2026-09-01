@@ -1,44 +1,46 @@
 # 6. Tecnología y producto
 
-TalentPact no es un *mockup*: es un **producto funcional**. La innovación se organiza en cuatro capas (evaluación → persistencia → anclaje → verificación). Las dos que **más valor aportan a este máster** —y las que un tribunal de Fintech, mercados y blockchain tiene derecho a exigir en profundidad— son la **corrección de ejercicios con IA** (§6.2) y el **SkillPass on-chain** (§6.4). El resto del capítulo las sitúa: arquitectura, datos, visión de pagos y *roadmap*.
+TalentPact no es una maqueta ni un prototipo de pantallas: es un **producto funcional y desplegado**. La innovación se organiza en cuatro capas encadenadas —evaluación, persistencia, anclaje y verificación— y las dos que concentran el contenido técnico del proyecto son la **corrección de ejercicios con inteligencia artificial** (§6.2) y el **SkillPass anclado en cadena** (§6.4). El resto del capítulo las sitúa en su contexto: cómo se conectan entre sí, dónde viven los datos, qué visión existe sobre los pagos y cuál es la hoja de ruta del producto.
 
-## 6.1 Arquitectura del sistema
+## 6.1 Arquitectura y capas del producto
 
-```
-┌──────────────┐   responde reto    ┌─────────────────────────┐
-│  Candidato   │ ─────────────────▶ │  Frontend (web app)     │
-└──────────────┘                    └───────────┬─────────────┘
-                                                 │
-                     ① CORRECCIÓN IA (funcional) │
-                                                 ▼
-                             Función serverless → API Claude
-                                                 │  Skill Score + criterios + CoT
-                                                 ▼
-                    ② PERSISTENCIA  ┌─────────────────────────────┐
-                                    │  Supabase (Postgres + RLS)  │
-                                    │  perfiles · evaluaciones ·  │
-                                    │  credenciales               │
-                                    └───────────┬─────────────────┘
-                                                 │  SkillPass CV (JSON)
-                                                 ▼
-                    ③ BLOCKCHAIN    hash(CV) ──▶ SkillPassRegistry (Sepolia)
-                                                 │  + Verifiable Credential
-                                                 ▼
-                    ④ VERIFICADOR   empresa/tercero recomputa hash y verifica on-chain
-                                                 → ✅ Verificado / ❌ Manipulado
-```
+La arquitectura responde a una restricción de diseño que condiciona todo lo demás: el sistema debe poder demostrar que una evaluación ocurrió, cómo ocurrió y que su resultado no ha sido alterado después, sin que para ello ningún dato personal salga del territorio europeo ni acabe publicado en una red pública. Esa restricción explica por qué hay cuatro capas y no una sola, y por qué cada una tiene una responsabilidad estrictamente delimitada.
 
-**Stack actual del demo:** frontend web (HTML/JS), funciones serverless en **Netlify**, **Supabase** (Postgres + Auth + RLS, región UE), **API de Anthropic (Claude)** para la evaluación, contrato **`SkillPassRegistry`** en **Ethereum Sepolia** (testnet). Stripe y una L2 de producción (p. ej. Polygon) están en el *roadmap* comercial, no en el *vertical slice* del TFM.
+**La primera capa es la corrección con inteligencia artificial.** El candidato accede a la aplicación web y responde a un reto práctico. Su respuesta no viaja directamente a ningún modelo de lenguaje: pasa primero por una función sin servidor alojada en Netlify, que es la que construye la petición. Esa función recupera la rúbrica del reto —los criterios de evaluación, sus pesos y los indicadores observables— y la coloca en las instrucciones de sistema, mientras que la respuesta del candidato viaja en el mensaje de usuario. Esta separación de canales no es un detalle de implementación: es el primer control de seguridad del sistema, porque garantiza que el texto que el candidato puede manipular nunca ocupa el canal de mayor autoridad. La llamada se dirige a la API de Anthropic, y el modelo devuelve un objeto estructurado con la puntuación, el desglose por criterio, el razonamiento escrito y, si procede, una alerta de manipulación. Si la respuesta no es un objeto válido, la evaluación falla de forma explícita en lugar de inventar una nota.
 
-Se eligió Sepolia frente a Polygon Amoy porque los *faucets* de Amoy exigían crypto de *mainnet*; Sepolia permite anclar de verdad a coste €0 y enseñar la transacción en Etherscan. El contrato y el patrón (hash on-chain / dato off-chain) son los mismos que se llevarían a L2.
+**La segunda capa es la persistencia.** El resultado se guarda en Supabase, una base de datos PostgreSQL con autenticación y seguridad a nivel de fila, alojada en región europea. Se almacena la puntuación, el desglose por criterios, el razonamiento completo, el modelo empleado, los tokens consumidos y el coste real de la operación. Esa fila no es un registro técnico cualquiera: es el rastro de auditoría que permite reconstruir, meses después, por qué un candidato obtuvo una determinada valoración. Es también la pieza que da cumplimiento material a la obligación de trazabilidad que el Reglamento europeo de inteligencia artificial impone a los sistemas usados en contratación.
+
+**La tercera capa es el anclaje en cadena.** Cuando el candidato decide emitir su credencial, el sistema agrupa sus mejores resultados por habilidad, compone un documento JSON con estructura de credencial verificable y calcula su huella criptográfica. Solo esa huella —treinta y dos bytes, sin ningún dato personal legible— se escribe en el contrato `SkillPassRegistry` desplegado en la red Ethereum Sepolia. El documento completo permanece en la base de datos europea. La clave privada del emisor vive exclusivamente en los secretos del servidor y nunca llega al navegador.
+
+**La cuarta capa es la verificación.** Cualquier tercero —una empresa que no es cliente, un reclutador externo, un tribunal— puede pegar el documento o su huella en un verificador público y comprobar si esa huella está registrada y en qué instante lo fue. No necesita cuenta, no necesita permiso y no necesita confiar en TalentPact: recalcula la huella por su cuenta y la contrasta con lo que dice la cadena. Si el documento fue alterado, aunque sea en un solo carácter, la comprobación falla.
+
+**Componentes concretos del sistema desplegado.** La interfaz es una aplicación web en HTML y JavaScript; la lógica de servidor son funciones sin servidor en Netlify; los datos residen en Supabase (PostgreSQL, autenticación y seguridad por fila, región UE); la evaluación se apoya en la API de Anthropic con el modelo `claude-sonnet-4-6` y un mecanismo de reserva por si el identificador de modelo deja de estar disponible; y el anclaje se realiza sobre el contrato `SkillPassRegistry` en Ethereum Sepolia. La pasarela de pago y el despliegue del contrato en una red de capa dos de producción pertenecen a la hoja de ruta comercial, no al recorrido técnico que este trabajo demuestra.
+
+### Por qué Sepolia y no Polygon
+
+La elección de red merece explicación, porque una decisión de infraestructura tomada por comodidad y otra tomada por criterio se parecen mucho vistas desde fuera.
+
+El objetivo era anclar credenciales de verdad —transacciones reales, confirmadas, consultables por cualquiera en un explorador de bloques— sin incurrir en coste económico y sin exponer el proyecto a la volatilidad de un activo real. Eso descarta de entrada cualquier red principal: escribir en Ethereum *mainnet* tiene un coste que no aporta nada al valor demostrativo del trabajo, y hacerlo con dinero real para un prototipo académico sería difícil de justificar.
+
+Entre las redes de prueba, la candidata natural era Polygon Amoy, dado que Polygon es la red de capa dos donde con mayor probabilidad se desplegaría el contrato en producción por su bajo coste por transacción. El obstáculo fue de acceso: los grifos de Amoy —los servicios que reparten tokens de prueba— exigían acreditar un saldo previo en la red principal correspondiente, es decir, obligaban a adquirir criptomoneda real para poder operar en un entorno de pruebas. Esa barrera, además de suponer un gasto injustificado, introducía una dependencia de un tercero para poder reproducir el experimento.
+
+Ethereum Sepolia resolvía el problema: es la red de prueba de referencia del ecosistema Ethereum, sus grifos son accesibles sin condiciones previas, dispone de un explorador de bloques público y bien conocido, y su comportamiento replica el de la red principal en todo lo que resulta relevante para este caso. Permite, por tanto, anclar de verdad, con coste cero, y enseñar la transacción a cualquiera que quiera comprobarla.
+
+Lo importante es que la decisión **no compromete la portabilidad**. El contrato está escrito en Solidity estándar y no utiliza ninguna característica específica de Sepolia; el patrón de diseño —huella en cadena, dato fuera de cadena— es idéntico en cualquier red compatible con la máquina virtual de Ethereum. Migrar a Polygon o a cualquier otra red de capa dos en producción consiste en desplegar el mismo bytecode y cambiar el punto de conexión, sin reescribir una línea de lógica. Lo que cambia es el modelo de coste y la garantía de permanencia, no el protocolo. Y esa distinción se declara de forma explícita: una red de pruebas puede reiniciarse, de modo que lo que este trabajo demuestra es el mecanismo, no una promesa de inmutabilidad perpetua.
+
+### Del anclaje a la evaluación: por qué el orden importa
+
+Las cuatro capas están encadenadas en un orden que no es arbitrario, y conviene entender la dependencia antes de entrar en el detalle de cada una. La capa de anclaje resuelve un problema de **integridad**: garantiza que un documento concreto es exactamente el que se emitió en un instante determinado. Pero la integridad, por sí sola, no dice absolutamente nada sobre el valor de lo que se sella. Un sello criptográfico impecable sobre un documento sin contenido sustantivo es un ejercicio técnico vacío.
+
+De ahí que la capa de evaluación sea la que da sentido a todo el conjunto. Lo que convierte al SkillPass en algo distinto de un certificado decorativo es que el documento sellado contiene una medición: una puntuación obtenida al resolver un ejercicio práctico, con su desglose por criterios y su justificación escrita. Esa medición es la señal que justifica que una empresa pague por acceder al candidato, porque no está comprando un currículo bien redactado, sino una evidencia puntuada y comprobable. Sin esa capa, el mecanismo del §6.4 sellaría una autobiografía; con ella, sella un resultado.
 
 ## 6.2 Innovación en la corrección de ejercicios con IA
 
-Esta es la **primera aportación técnica del máster** (bloque de datos e IA; Entrega 2 del programa): no un *chatbot* que “opina” sobre un CV, sino un **agente evaluador** que convierte una respuesta abierta en un *Skill Score* (0–100) **explicable, trazable y barato**. Ese número es la señal que justifica el €49: la empresa no paga por un PDF, paga por una evidencia puntuada. Sin esta capa, el SkillPass del §6.4 sellaría una autobiografía.
+El motor de evaluación es la pieza técnica de mayor complejidad del proyecto y la que resuelve el problema más difícil: convertir una respuesta abierta —código, un análisis de negocio, un texto argumentativo— en un número comparable entre candidatos, acompañado de una explicación que cualquiera pueda revisar y discutir. No se trata de un asistente conversacional que emite una opinión sobre un currículo, sino de un **agente evaluador** con un contrato de salida estricto, un coste medido por operación y un comportamiento verificable mediante pruebas automáticas. Los apartados siguientes desarrollan cómo está construido, qué se ha medido, dónde puede fallar y con qué instrumentos se comprueba.
 
 ### 6.2.1 El problema de escala (por qué no vale un modelo por reto)
 
-El catálogo objetivo son **102 retos** en ~25 áreas (código, negocio, comunicación, diseño de sistemas, etc.). Un diseño *naïve* —un *fine-tune*, un clasificador o un *script* por reto— no escala: cada reto nuevo sería un proyecto de ingeniería, y el *ground truth* humano para entrenar 102 modelos no existe en un TFM.
+El catálogo objetivo son **102 retos** en unas 25 áreas (código, negocio, comunicación, diseño de sistemas, etcétera). Un diseño ingenuo —un ajuste fino del modelo, un clasificador o un guion de corrección por cada reto— no escala por dos motivos. El primero es de ingeniería: cada reto nuevo se convertiría en un proyecto en sí mismo, con su propio desarrollo, su propio mantenimiento y su propia deriva cuando cambien los criterios. El segundo es de datos: entrenar un modelo por familia de retos exigiría disponer de miles de respuestas ya corregidas por evaluadores humanos para cada una de ellas, un corpus que no está disponible públicamente y cuya construcción desde cero costaría más que el resto del producto junto.
 
 La pregunta de arquitectura es:
 
@@ -94,6 +96,10 @@ Un evaluador que solo emite `{"score": 73}` es inútil para tres públicos:
 
 El CoT obliga a un párrafo (o viñeta) **por cada criterio de la rúbrica** antes de agregar. Consecuencia operativa: si el texto dice “el código no maneja el caso nulo” y el criterio *robustez* sale 90, hay una **inconsistencia detectable** —candidata a revisión humana—. El CoT no garantiza verdad; garantiza **inspeccionabilidad**.
 
+**Los retos están diseñados para que no se puedan copiar.** Esta es una consecuencia directa del planteamiento y merece explicarse, porque es la primera objeción que aparece cuando se propone evaluar sin supervisión presencial. Un ejercicio de respuesta cerrada —una pregunta con solución única y públicamente disponible— se resuelve copiando y pegando desde cualquier buscador, y su resultado no mide nada. Por eso ninguno de los retos del catálogo tiene esa forma. Cada ejercicio plantea un caso con contexto propio, restricciones concretas y decisiones que el candidato debe justificar, de modo que **no existe una respuesta correcta única que pueda localizarse y reproducirse**: dos soluciones válidas pueden ser muy distintas entre sí, y lo que la rúbrica evalúa es precisamente la calidad del razonamiento y de las decisiones tomadas, no la coincidencia con un texto de referencia.
+
+La corrección refuerza esa protección desde el otro extremo. Al exigir justificación criterio a criterio, el motor no puntúa la mera presencia de una solución, sino su coherencia interna con el planteamiento del reto. Una respuesta pegada desde otra fuente encaja mal con las restricciones específicas del enunciado y esa desconexión es detectable en el desglose. A ello se suma el control anti-manipulación descrito en el §6.2.6: cualquier intento de instruir al evaluador desde el propio texto de la respuesta se registra como alerta y no eleva la puntuación. El diseño no pretende hacer imposible el fraude —ningún sistema de evaluación remota lo consigue—, pero sí encarecerlo hasta el punto de que resolver el reto honestamente sea el camino más corto.
+
 Eso conecta con el Art. 14 (supervisión humana) y el Art. 12 (registros). El HITL del *charter* no es “un humano mira todo”: es revisión cuando el score cae en la **zona de duda** [45, 55] o a ±5 puntos de un umbral de corte, y —diseñado, no construido— triple evaluación con mediana en esa banda (los LLM siguen siendo estocásticos: ±3–8 puntos entre ejecuciones incluso con temperatura baja).
 
 ### 6.2.4 Resultados medidos (PoC, junio 2026)
@@ -136,7 +142,11 @@ La Entrega 1 fijó métricas. Contrastarlas es lo que distingue un TFM de un *pi
 | Tasa de alucinación | < 3 % | — | **Sin medir**: requiere LLM-juez |
 | *Fairness* (DIR) | > 0,80 | — | **Sin medir**: exige muestra real con atributos |
 
-**Lo que este TFM no afirma:** que el evaluador sea “objetivo y sin sesgo”, ni *accuracy* ≥ 78 %, ni acuerdo κ con un tribunal humano. La Constitutional AI en el *prompt* es un **relato de diseño**, no una auditoría de impacto dispar. Lo que sí afirma: hay un motor único, barato, trazable, que separa calidad en los casos ensayados, resiste tres variantes de ataque de inyección y **se mide a sí mismo con un comando** (§6.2.8).
+**Interpretación de la tabla.** El estado de cada métrica dibuja con nitidez la frontera entre lo demostrado y lo pendiente, y esa frontera es en sí misma un resultado del trabajo. Lo demostrado es un motor de evaluación **único, económico y trazable**, capaz de separar con claridad la calidad de las respuestas en los casos ensayados y de resistir tres variantes distintas de intento de manipulación, con un instrumento de medición propio que permite reproducir cualquiera de estas cifras mediante un solo comando (§6.2.8).
+
+Lo pendiente se concentra en un punto concreto: la **comparación con evaluadores humanos**. Las métricas de exactitud frente a experto, de acuerdo entre evaluadores y de equidad demográfica no aparecen sin medir por descuido, sino porque todas ellas exigen algo que el proyecto todavía no posee: un conjunto de respuestas corregidas por un panel de profesionales y una muestra real con atributos demográficos asociados. Reunir ese material es un trabajo de campo con implicaciones de protección de datos que corresponde a la siguiente fase del producto, no a la construcción del motor.
+
+La consecuencia práctica es que el sistema debe presentarse por lo que hace y no por lo que se le supone. La cláusula de equidad incorporada a las instrucciones del evaluador es una **decisión de diseño documentada**, orientada a que la valoración no dependa de rasgos demográficos, del estilo de redacción ni del idioma; no equivale a una auditoría de impacto dispar, y afirmar lo contrario sería atribuir al sistema una garantía que nadie ha comprobado. La formulación correcta, y la que este documento sostiene, es que la evaluación es **trazable, anónima y resistente a manipulación**, y que el instrumento para medir su acuerdo con criterio humano ya está construido y a la espera de las notas de referencia.
 
 ### 6.2.6 Seguridad: *prompt injection* como riesgo de negocio
 
@@ -157,29 +167,39 @@ Tres errores sistemáticos, tomados de la PoC y de la literatura de *LLM-as-a-ju
 
 1. **Indicadores subjetivos** (“código bien estructurado”) → varianza ±8–12 pts entre ejecuciones equivalentes. Mitigación: anclas observables (“funciones de menos de 20 líneas”, “sin código comentado”).
 2. **Pesos a priori** no contrastados con la distribución real. Si el 95 % saca 90 en *correctitud* y 30 en *documentación*, la nota agregada está inflada. Mitigación: tras ~50 submisiones reales por reto, recalibrar pesos para separar P25 y P75.
-3. **Efecto halo de longitud**: textos largos suben nota aunque el contenido técnico sea el mismo. El CoT por criterio lo reduce (el sesgo opera a nivel de criterio, no de redacción entera); no lo elimina.
+3. **Efecto halo de longitud**: los textos más extensos tienden a recibir una mejor valoración aunque el contenido técnico sea equivalente. El CoT por criterio lo reduce, porque obliga a puntuar cada aspecto por separado en lugar de formar una impresión global sobre la redacción completa; lo reduce, pero no lo elimina.
 
 Estrategia de afinación a escala (diseñada): piloto en 10 retos → calibración 11–50 con *submisiones ancla* (ejemplos 90+ / 60–75 / <40 en el *prompt*) → producción 51–102 con HITL en zona de duda.
 
 ### 6.2.8 Cómo se comprueba todo esto (tests y banco de pruebas)
 
-Un TFM que enseña la mejor ejecución de su PoC no está midiendo: está seleccionando. Esta sección describe las dos piezas que permiten **volver a comprobar** cada afirmación del apartado anterior, y detectar el día que deje de ser cierta.
+Un trabajo que enseña únicamente la mejor ejecución de su prototipo no está midiendo nada: está eligiendo el resultado que más le conviene. Para evitarlo, el proyecto incorpora dos herramientas que permiten **volver a comprobar** cualquier afirmación de los apartados anteriores y detectar el día en que deje de ser cierta. La diferencia entre ambas es sencilla: una comprueba que el **código** hace lo que debe, y la otra comprueba que el **modelo** puntúa como debe.
 
-**Suite de tests (`npm test`).** 84 casos en ocho ficheros, sin clave de API, sin red y sin base de datos, con el *runner* nativo de Node. Cubren el contrato del evaluador (`temperature=0`, notas acotadas a 0-100, nota ausente = 0 y no un aprobado por defecto, fallo explícito si el modelo devuelve prosa, la clave de API fuera de la respuesta), la separación de canales que sostiene el argumento anti-inyección (la respuesta del candidato **nunca** entra en el *system prompt*), el sello criptográfico del SkillPass (§6.4) y la propia estadística del banco, contrastada contra valores calculados a mano.
+**Las pruebas automáticas (`npm test`).** Son 84 pruebas repartidas en ocho archivos. Se ejecutan sin clave de API, sin conexión a internet y sin base de datos, con el propio ejecutor de pruebas de Node, de modo que cualquiera puede lanzarlas y obtener el mismo resultado. Lo que comprueban se agrupa en cuatro bloques.
 
-Los tests no son decoración: **encontraron dos defectos reales** que ninguna lectura del código habría destapado y que habrían sido dos malas preguntas del tribunal —el `temperature` sin fijar en producción y el coste en dólares etiquetado en euros—. Ambos están corregidos y ambos tienen ahora un test que impide que vuelvan.
+El primero es el **comportamiento del evaluador**: que la temperatura del modelo esté fijada en cero, que las notas queden siempre entre 0 y 100, que la ausencia de nota se traduzca en un cero y no en un aprobado por defecto, que el sistema falle de forma visible si el modelo responde con texto libre en lugar del formato esperado, y que la clave de la API no aparezca nunca en lo que se devuelve al navegador.
 
-**Banco de pruebas del evaluador (`npm run bench`).** Los tests prueban el código; no pueden probar el **juicio** del modelo. Para eso está `tfm/tech/eval/`:
+El segundo es la **separación de canales**, que es la base del argumento de seguridad del §6.2.6: las pruebas verifican que la respuesta del candidato nunca acaba mezclada con las instrucciones del sistema. Si alguien lo cambiara en el futuro, la prueba falla y el cambio no pasa.
 
-- **Gold set de 12 ítems** sobre los dos retos de la PoC. Nueve legítimos que cubren las cinco bandas de la escala y **tres ataques**: la inyección directa de la Entrega 2, una **inyección encubierta** dentro de un comentario de código que invoca un “protocolo interno” inventado, y una **inyección por imitación de formato** en la que el atacante escribe el JSON de salida que espera el sistema y afirma que ya lo validó un humano. Cada ítem lleva su banda de referencia y la justificación escrita contra los indicadores de la rúbrica.
-- **Métricas por ejecución:** κ de Cohen cuadrática sobre las bandas con matriz de confusión, MAE/RMSE y sesgo con signo, Spearman (¿ordena bien aunque la escala esté desplazada?), **reproducibilidad test-retest** (3 pasadas por ítem con el mismo *input*), tasa de bloqueo de inyección distinguiendo *neutralizar* de *verbalizar*, falsas alarmas sobre respuestas legítimas, coste en USD y EUR, y latencia media y P95.
-- El banco llama a la **misma función serverless que usa el producto**, no a una copia: si el evaluador de producción cambia, el banco lo nota.
+El tercero es el **sello criptográfico** del SkillPass (§6.4): que la huella sea siempre la misma para el mismo documento, que no dependa del orden en que se escribieron los campos, y que cambiar una nota, añadir una habilidad no evaluada o reasignar el documento a otra persona rompa el sello.
 
-**El límite que este banco no levanta.** La referencia es la **banda que fija la rúbrica**, asignada por construcción al redactar cada ítem: eso es **validez de constructo**, no acuerdo inter-evaluador humano. La κ de Cohen contra un tribunal de personas —la que pide el *charter*— sigue **sin medir**. Lo que ha cambiado es que ya no es un pendiente sin plan: el gold set reserva el campo `referenciaHumana` y, en cuanto existan esas notas, la κ contra humanos sale con el mismo comando sin tocar código. Confundir las dos métricas sería precisamente el error que un tribunal debe penalizar, y por eso el informe generado lo dice en su propio apartado final.
+El cuarto son los **cálculos estadísticos** del banco de pruebas, contrastados contra valores calculados a mano. Si la herramienta que mide estuviera mal, todas las cifras que produce serían inútiles.
 
-### 6.2.9 Encaje con el máster (IA)
+Estas pruebas no son un adorno: **encontraron dos defectos reales** que ninguna lectura del código habría destapado. El primero fue que la temperatura del modelo estaba fijada en la prueba de concepto pero no en la función de producción, de modo que el sistema real no ofrecía la reproducibilidad que el documento afirmaba. El segundo fue que el coste por evaluación se calculaba con tarifas en dólares y se mostraba etiquetado en euros, lo que inflaba el coste declarado alrededor de un 8 %. Los dos están corregidos y los dos tienen ahora una prueba que impide que vuelvan a aparecer.
 
-TalentPact no usa la IA como adorno de *landing*. La usa como **oráculo de scoring en un mercado de dos caras**: la misma llamada que genera el *Skill Score* alimenta (a) el cribado anónimo de la empresa, (b) el COGS de ~€0,02 que hace viable el €49, y (c) el JSON que el §6.4 hashea. Un máster de Fintech que ignore esta capa no entendería por qué hay algo que sellar. El SkillPass **no existiría** sin ella: se sella una evidencia, no una autobiografía.
+**El banco de pruebas del evaluador (`npm run bench`).** Las pruebas anteriores comprueban el código, pero no pueden comprobar el **criterio** del modelo: ninguna prueba automática sabe si un 73 es una nota justa. Para eso existe un conjunto de casos de referencia con su corrección esperada.
+
+Ese conjunto reúne **12 casos** sobre los dos retos de la prueba de concepto. Nueve son respuestas legítimas que cubren toda la escala, desde el trabajo excelente hasta el claramente insuficiente, de manera que se comprueba si el evaluador distingue bien en todo el rango y no solo en los extremos. Los otros tres son intentos de manipulación, cada uno de una naturaleza distinta: el ataque directo, en el que el candidato ordena al sistema que le dé la máxima nota; el **ataque encubierto**, escondido dentro de un comentario del código y disfrazado de instrucción interna del sistema; y el **ataque por imitación de formato**, en el que el atacante escribe directamente la respuesta que espera recibir el sistema y afirma que ya la ha validado una persona. Cada caso lleva escrita su banda de nota esperada y la justificación de por qué le corresponde esa banda según los criterios de la rúbrica.
+
+Cada ejecución del banco produce un informe con las siguientes medidas: el grado de acuerdo entre la nota del modelo y la banda esperada, con su matriz de aciertos y errores; el error medio y el sesgo con signo, que indica si el modelo puntúa sistemáticamente por encima o por debajo; una medida de correlación que responde a si ordena bien a los candidatos aunque la escala esté desplazada; la **repetibilidad**, obtenida repitiendo tres veces cada caso con exactamente el mismo texto de entrada; la tasa de bloqueo de los intentos de manipulación, distinguiendo si el sistema los neutraliza o simplemente los menciona; las falsas alarmas sobre respuestas honestas; el coste en dólares y en euros; y la latencia media y en el percentil 95.
+
+Un detalle de diseño importante: el banco llama a la **misma función que usa el producto en producción**, no a una copia de laboratorio. Si el evaluador real cambia, el banco lo detecta. Esa es la diferencia entre medir el sistema y medir una maqueta del sistema.
+
+**El límite que este banco no cubre.** La referencia con la que se compara es la **banda que fija la rúbrica**, asignada al redactar cada caso. Eso mide si el evaluador aplica correctamente el criterio escrito, que es una forma legítima de validación, pero **no** es lo mismo que medir el acuerdo con un panel de evaluadores humanos. La comparación con personas sigue pendiente y este trabajo no la presenta como hecha. Lo que sí ha cambiado es que ya no es un pendiente sin plan: el conjunto de casos reserva un campo específico para la nota humana de referencia y, en cuanto existan esas correcciones, el acuerdo con personas se calcula con el mismo comando y sin tocar una línea de código. Confundir ambas medidas sería un error de método, y por eso el propio informe que genera la herramienta lo advierte en su apartado final.
+
+### 6.2.9 El papel de la IA en el modelo de negocio
+
+La inteligencia artificial no cumple aquí una función decorativa. Actúa como **mecanismo de puntuación de un mercado de dos caras**, y una sola llamada al modelo alimenta simultáneamente tres cosas: el cribado anónimo que realiza la empresa, el coste variable de aproximadamente €0,02 por evaluación que hace económicamente viable el precio de €49 por contacto, y el documento JSON cuya huella se ancla en el §6.4. Es la capa que da contenido a todo lo demás: sin una medición detrás, el sello criptográfico certificaría un texto autodeclarado en lugar de una evidencia.
 
 ## 6.3 Persistencia y datos (Supabase)
 
@@ -192,95 +212,93 @@ El prototipo guardaba el estado en `localStorage`. El producto del TFM ya usa **
 
 La región UE cubre la residencia de datos del RGPD. El esquema está en `tech/supabase_schema*.sql`. El CoT almacenado es **dato personal** (puede citar fragmentos de la respuesta): misma política de retención que el perfil, no un log eterno.
 
-## 6.4 Innovación blockchain: el SkillPass como prueba de integridad
+## 6.4 El SkillPass: la evidencia como prueba de integridad verificable
 
-Esta es la **segunda aportación del máster** (Fintech / Blockchain) y la que convierte TalentPact en algo distinto de TestGorilla o HackerRank: la evaluación de la IA se vuelve un **objeto verificable fuera de la plataforma**. LinkedIn Recruiter no ofrece a un tercero un protocolo de “este documento es exactamente el que se emitió en T”. Ese protocolo es lo que se defiende aquí.
+Si la capa de inteligencia artificial produce una medición, esta capa se ocupa de que esa medición **siga siendo la misma fuera de la plataforma**. Es lo que separa a TalentPact de cualquier herramienta de evaluación al uso: una plataforma de pruebas técnicas puede decir que un candidato obtuvo un 87, pero no puede ofrecer a un tercero un procedimiento para comprobar que ese documento concreto es exactamente el que se emitió y que nadie lo ha tocado desde entonces. Ese procedimiento es lo que se construye y se demuestra aquí.
 
 ### 6.4.1 Qué problema de confianza resuelve
 
-Un PDF de LinkedIn o un *screenshot* del *score* se recortan, se reenvían y se editan. La empresa tiene que **fiarse del emisor** (o del candidato) cada vez. El SkillPass desplaza la pregunta:
+Un certificado en PDF o una captura de pantalla de una puntuación se recortan, se reenvían y se editan con una facilidad absoluta. La empresa que los recibe tiene que **fiarse del emisor o del propio candidato** en cada ocasión, sin ninguna forma de comprobar por sí misma si lo que tiene delante es lo que se emitió originalmente.
 
-- no “TalentPact dice que sacó 87”,
-- sino “este documento, **exactamente este**, quedó anclado en el instante T; si cambia una coma, el hash no coincide”.
+El SkillPass desplaza esa pregunta. Ya no se trata de si TalentPact afirma que alguien sacó un 87, sino de algo mucho más comprobable: **este documento, exactamente este, quedó registrado en un instante concreto, y si se altera una sola coma la comprobación falla**. Lo que se obtiene es integridad y sellado temporal, no la conversión de un expediente profesional en un activo negociable. Mantener esa distinción con claridad evita tanto el problema regulatorio de parecer un criptoactivo como la exageración de vender identidad soberana donde todavía no la hay.
 
-Eso es **integridad + no repudio temporal**, no “el candidato es dueño de un NFT de su sueldo”. Distinguirlo en defensa evita la pregunta trampa de MiCA y evita vender SSI donde aún no existe.
+En términos de teoría de la confianza —el mismo marco que se aplica a un sistema de pagos— lo que ocurre es una sustitución: se reemplaza la confianza en un documento manipulable por tres elementos verificables de forma independiente. Una **función resumen** de la que resulta computacionalmente inviable retroceder al documento original. Un **registro que solo admite añadir**, con una marca temporal respaldada por el consenso de la red. Y un **emisor identificable** cuya dirección consta públicamente. Con esos tres elementos, quien verifica no necesita cuenta en TalentPact, ni permiso, ni relación previa con nadie.
 
-En términos de teoría de la confianza (el mismo marco que un sistema de pagos): se sustituye la confianza en un PDF maleable por (i) una función hash de preimagen difícil, (ii) un registro append-only con marca de tiempo de consenso, y (iii) un emisor identificable on-chain. El verificador **no necesita cuenta TalentPact**.
+### 6.4.2 Por qué no se pone el CV en la cadena
 
-### 6.4.2 Por qué *no* se pone el CV en la cadena
+Había tres formas posibles de llevar la credencial a una red pública, y solo una de ellas resulta compatible a la vez con la protección de datos europea y con un diseño técnicamente sobrio.
 
-Tres diseños posibles; solo uno encaja con RGPD y con un TFM defendible:
+La primera opción era **escribir el documento completo en la cadena**: nombre, puntuaciones y datos del candidato. Es la solución más intuitiva y la peor de todas. Una cadena pública es, por definición, un registro que no se puede borrar; publicar datos personales en ella entra en conflicto directo con el derecho de supresión que reconoce el artículo 17 del RGPD. No es un matiz interpretable: es un impedimento de diseño.
 
-| Diseño | Qué va on-chain | Veredicto |
-|---|---|---|
-| CV completo / scores / nombre | Datos personales inmutables | Incompatible con derecho de supresión (Art. 17 RGPD) |
-| NFT / SBT del perfil | Activo transferible o *soulbound* con *metadata* | Complejidad, UX de *wallet*, riesgo de parecer criptoactivo (MiCA) |
-| **Anclaje de hash (elegido)** | `bytes32` + `uint256` timestamp | Integridad sin PII; olvido = borrar off-chain |
+La segunda opción era emitir un **token por cada credencial**, en cualquiera de sus variantes —transferible o vinculado permanentemente a una dirección—. Añade complejidad de desarrollo, obliga al candidato a gestionar una cartera de criptomonedas con todo lo que eso implica de fricción, y sobre todo introduce un riesgo regulatorio innecesario: cuanto más se parece una credencial a un activo, más cerca queda del perímetro de la normativa europea sobre criptoactivos. Se valoró concretamente emitir un "diploma" por habilidad como token no fungible y se descartó por una razón conceptual, no solo práctica: un token es un activo, y el SkillPass no se compra, no se vende, no se transfiere y no genera rendimiento alguno. Llamarlo activo sería describirlo mal.
 
-Se barajó también un ERC-721 “diploma” por skill. Se rechazó: un token es un **activo**; el SkillPass no se compra, no se transfiere y no genera *yield*. El contrato mínimo (`SkillPassRegistry`) es deliberadamente aburrido: un `mapping` y un evento. En un máster de blockchain, **menos superficie** es más rigor (menos vectores, gas predecible, auditoría trivial).
+La tercera opción, que es la implementada, consiste en **anclar únicamente la huella criptográfica del documento**: treinta y dos bytes y una marca de tiempo. Proporciona integridad completa sin publicar ningún dato personal, y resuelve el derecho al olvido de la forma más simple posible, borrando el documento fuera de la cadena y dejando la huella sin nada con lo que emparejarse.
 
-El estándar W3C *Verifiable Credentials Data Model* inspira el JSON (`type`, `issuer`, `subject` tipo DID, `issuedAt`, `skills[]`). En el demo **no** hay aún prueba de posesión de clave por el sujeto ni anclaje en una *wallet* europea: el emisor es la cuenta de TalentPact. Es un **VC ligero + ancla on-chain**, no identidad soberana completa. Decirlo así es más sólido que vender *self-sovereign identity*.
+De ahí que el contrato sea **deliberadamente aburrido**: una tabla de correspondencias y un evento. En un sistema de este tipo, menos superficie de código significa menos vectores de ataque, un coste de operación predecible y una auditoría que cualquiera puede completar en diez minutos. La sobriedad es aquí una decisión de ingeniería, no una limitación.
+
+El documento que se sella toma su estructura del estándar del W3C sobre credenciales verificables —tipo, emisor, sujeto, fecha de emisión y lista de habilidades—, aunque conviene precisar hasta dónde llega el parecido. En la versión desplegada **no existe todavía** una prueba criptográfica de que el sujeto posee su propia clave, ni integración con una cartera de identidad europea: quien firma como emisor es TalentPact. Es, por tanto, una credencial verificable en su forma más ligera, acompañada de un anclaje en cadena. Describirlo así es más preciso, y más defendible, que presentarlo como identidad autosoberana.
 
 ### 6.4.3 Criptografía del anclaje: keccak256 y JSON canónico
 
-Ethereum no usa SHA-256 para este tipo de huella: usa **Keccak-256** (el *opcode* `KECCAK256` / `SHA3` histórico de la EVM). La librería `ethers.js` v6 calcula `keccak256(utf8Bytes(canonicalJson(cv)))` en el **servidor**. La clave privada del emisor **nunca** entra en el navegador.
+Ethereum no utiliza SHA-256 para este tipo de huellas, sino **Keccak-256**, la función que implementa la propia máquina virtual de la red. El cálculo se realiza en el **servidor** mediante la librería `ethers.js`, aplicando la función sobre la representación en bytes del documento previamente normalizado. La clave privada del emisor no entra nunca en el navegador.
 
-El detalle que distingue un anclaje serio de un *hash(JSON.stringify(obj))* ingenuo es la **canonicalización**:
+El detalle que distingue un anclaje serio de una implementación ingenua es la **normalización del documento**, y merece explicarse porque es la clase de problema que solo aparece cuando el sistema ya está en producción. La serialización estándar de un objeto JSON **no garantiza el orden de las claves**: el mismo documento, generado en dos entornos distintos, puede producir dos textos diferentes y, en consecuencia, dos huellas distintas. El resultado sería un fallo de verificación sobre un documento que en realidad es correcto, es decir, el peor tipo de error posible en un sistema cuya única función es certificar autenticidad. La solución consiste en ordenar todas las claves en profundidad antes de serializar, de modo que un mismo contenido produzca siempre exactamente el mismo texto y, por tanto, la misma huella. La misma función se emplea para generar la firma del conjunto de habilidades que evita volver a anclar un documento que no ha cambiado.
 
-- `JSON.stringify` no garantiza el orden de claves. El mismo CV, serializado en dos clientes, puede producir **dos hashes distintos** → verificación falsa-negativa.
-- `canonicalJson` ordena claves en profundidad y serializa después. El *fingerprint* de skills (para no re-anclar el mismo CV) usa la misma función.
+Con esa normalización se neutraliza un ataque concreto: reordenar los campos del documento para sostener que se trata de otro distinto. Una vez normalizado, es el mismo documento y produce la misma huella. Conviene señalar con la misma claridad lo que el mecanismo **no** evita: si el emisor anclase un documento inventado, la huella cuadraría igualmente. Eso no es una debilidad de la función criptográfica sino una característica del modelo de confianza, y se aborda en el §6.4.6.
 
-Ataque evitado: un candidato (o un *proxy*) que reordene campos del JSON y pretenda que “es otro documento”. Tras canonicalizar, es el mismo *preimage*. Ataque **no** evitado por el hash: un emisor malicioso que ancla un JSON inventado —eso es el modelo de confianza del *issuer*, no un fallo de Keccak.
+Las tres propiedades que el sistema aprovecha son las siguientes. La **irreversibilidad**: teniendo la huella registrada en la cadena no es posible reconstruir el documento original, lo que sostiene el argumento de protección de datos, ya que una huella sin su documento no permite identificar a nadie. La **resistencia a colisiones**, asumida como hipótesis de trabajo: no resulta factible fabricar un documento distinto que produzca la misma huella para sustituir la evidencia; si esa propiedad se rompiera, caería con ella el conjunto de Ethereum, no solo este sistema. Y el **efecto avalancha**: modificar una coma, una puntuación o la fecha de emisión cambia la huella por completo, con lo que la verificación falla de inmediato.
 
-Propiedades que se usan, sin mitología:
+En la versión actual se ancla una huella por credencial. A gran volumen tendría sentido agrupar varias credenciales en un árbol de Merkle y anclar una sola raíz, repartiendo el coste fijo de la transacción entre todas ellas. Es una evolución natural del diseño, no una carencia del contrato actual.
 
-- **Resistencia a preimagen:** dado el `bytes32` on-chain, no se reconstruye el CV (refuerza el argumento RGPD: el hash huérfano no es un dato personal reconstruible).
-- **Resistencia a colisiones (asunción de trabajo):** no es factible fabricar un segundo JSON distinto con el mismo hash para “sustituir” la evidencia. Si Keccak-256 se rompiera, el esquema entero (y Ethereum) caería con él.
-- **Efecto avalancha:** cambiar una coma, un score o el `issuedAt` cambia el digest por completo → el verificador falla.
+### 6.4.4 El contrato `SkillPassRegistry`
 
-No se usa un árbol de Merkle en el demo (un hash por credencial). A escala, el *batching* (raíz Merkle on-chain, hojas off-chain) reduciría gas; es evolución, no el contrato actual.
+El contrato está escrito en Solidity 0.8.20 con licencia MIT y se desplegó el 19 de agosto de 2026. Su superficie completa se compone de cinco elementos.
 
-### 6.4.4 El contrato `SkillPassRegistry` (diseño mínimo)
+Una **dirección de emisor**, que es la única autorizada a escribir y que se fija en el momento del despliegue. Una **tabla que asocia cada huella con el instante en que se registró**, donde el valor cero significa simplemente que esa huella no está anclada. Una **función de anclaje**, restringida al emisor, que rechaza huellas nulas y que es idempotente: si la huella ya consta, la operación no la sobrescribe. Una **función de consulta** que devuelve si una huella existe y con qué marca temporal, y que puede invocarse sin coste alguno, lo que resulta esencial porque quien verifica no debe pagar por comprobar. Y una **función de rotación de emisor**, prevista para el caso de que la clave se vea comprometida o se quiera migrar la autoridad de emisión a un esquema de firma múltiple.
 
-Solidity `^0.8.20`, licencia MIT, desplegado el 19 de agosto de 2026. Superficie:
+A ello se añade un **evento** que se emite en cada anclaje, con la huella indexada y su marca temporal. Su utilidad es práctica: permite que un explorador de bloques o un servicio de indexación liste todos los anclajes realizados sin necesidad de recorrer la tabla completa.
 
-- `address public issuer` — raíz de autoridad de escritura; el *constructor* asigna `msg.sender`.
-- `mapping(bytes32 => uint256) public anchoredAt` — 0 = no anclado; si no, `block.timestamp`.
-- `anchor(bytes32 cvHash)` — `onlyIssuer`; rechaza hash nulo; **idempotente** (`already anchored` si el mapping no es 0).
-- `isAnchored(bytes32)` — vista: `(exists, timestamp)`. Sin gas para el verificador.
-- `transferIssuer(address)` — rotación de clave si el emisor se compromete o se migra a un *multisig*/HSM.
+**Las decisiones de diseño y su razonamiento.** Cuatro elecciones concretas explican por qué el contrato tiene esta forma y no otra.
 
-Evento `CredentialAnchored(bytes32 indexed cvHash, uint256 timestamp)`: un indexador o Etherscan pueden listar anclajes sin recorrer el *mapping*.
+*Marca temporal en lugar de número de bloque.* El número de bloque es algo más robusto frente a manipulaciones menores de la hora por parte del validador, que históricamente en Ethereum se han movido en el orden de unos pocos segundos. Se optó por la marca temporal por **legibilidad**: quien verifica una credencial es un responsable de selección, no un desarrollador, y necesita ver una fecha comprensible y no un número de bloque que no le dice nada. En un despliegue de producción nada impide guardar ambos valores.
 
-Decisiones que un tribunal de blockchain suele preguntar:
+*Anclaje idempotente.* Si la función del servidor que ejecuta el anclaje sufriera un tiempo de espera agotado y se reintentara, sin idempotencia se gastaría gas por segunda vez y, lo que es más grave, se **sobrescribiría la fecha original**. Como el valor probatorio del sistema reside precisamente en el primer anclaje, este se protege de forma explícita.
 
-- **¿Por qué no `block.number` en vez de timestamp?** El número de bloque es más estable ante manipulación menor del `timestamp` por el validador (±15 s en la práctica histórica de Ethereum). Se eligió timestamp por **legibilidad humana** en el verificador (la empresa ve una fecha). En L2 de producción se puede persistir ambos.
-- **¿Por qué idempotencia?** Evita que un reintento de la función serverless (timeout + retry) gaste gas y **sobrescriba** la fecha original. El primer anclaje es la prueba temporal.
-- **¿Por qué un solo emisor?** El demo es un registro **permissioned de escritura** y **permissionless de lectura**. Eso no es una DAO. Es el modelo de un registro mercantil digital: quien escribe está identificado; quien lee no pide permiso.
-- **¿Reentrancy / overflow?** No hay envío de ether ni aritmética de tokens. Solidity 0.8 chequea overflow. El contrato no es un *DeFi*; el riesgo es **clave del emisor**, no un *exploit* de *pool*.
+*Un único emisor.* El registro es de **escritura restringida y lectura abierta**. No es una organización descentralizada ni pretende serlo: responde al modelo de un registro oficial digital, donde quien inscribe está plenamente identificado y quien consulta no necesita pedir permiso a nadie. Para el objetivo de este sistema —que una empresa sepa quién afirma haber evaluado— esa es exactamente la propiedad que se necesita.
 
-**Lo que este contrato deliberadamente no hace.** Un tribunal de blockchain no pregunta solo qué hay; pregunta qué falta y por qué. Tres ausencias conscientes:
+*Seguridad del contrato.* No hay envío de ether ni aritmética de tokens, de modo que los vectores de ataque habituales en aplicaciones financieras descentralizadas —reentrada, desbordamientos aritméticos— no tienen aquí donde manifestarse; además, la versión de Solidity empleada comprueba los desbordamientos de forma nativa. El riesgo real de este sistema no es un fallo del contrato: es la **custodia de la clave del emisor**, y se trata como tal en el §6.4.6.
 
-1. **No hay revocación.** Se puede anclar y comprobar, pero no marcar una credencial como retirada. Si una evaluación resultara fraudulenta, el sello seguiría cuadrando. El olvido del RGPD sí está resuelto —se borra el JSON off-chain y el hash queda huérfano e irreversible (§6.4.7)—, pero *olvidar* y *revocar* son cosas distintas: la segunda exige que el documento siga existiendo y deje de ser de fiar. Una versión de producción añadiría un `mapping(bytes32 => uint256) revokedAt` y lo devolvería en `isAnchored`, que es el equivalente mínimo de una *status list* de la especificación W3C de Verifiable Credentials. No se ha construido porque el TFM defiende integridad, no ciclo de vida de credenciales.
-2. **`transferIssuer` es de un solo paso.** Una dirección mal tecleada pierde el control de emisión para siempre. El patrón correcto es en dos pasos (proponer y aceptar), como el `Ownable2Step` de OpenZeppelin. En un registro cuya única capacidad privilegiada es escribir, el coste de equivocarse es alto y la mitigación es barata: es el primer cambio que llevaría una v2.
-3. **No hay anclaje por lotes.** Cada credencial es una transacción. En Sepolia el gas es cero y da igual; con los volúmenes del plan financiero (8.746 candidatos en 2028) el coste unitario en una L2 sí empezaría a contar. Un `anchorBatch(bytes32[])` reparte el coste fijo de la transacción entre todas las huellas.
+**Lo que el contrato no hace, y por qué.** Un diseño responsable documenta también sus ausencias. Hay tres, todas conscientes.
 
-Ninguna de las tres es un fallo del código escrito: son alcance que no se cerró, y se dicen aquí antes de que las pregunten.
+*No existe revocación.* Es posible anclar y comprobar, pero no marcar una credencial como retirada. Si una evaluación resultara fraudulenta a posteriori, el sello seguiría cuadrando. Conviene no confundir esto con el derecho al olvido, que sí está resuelto: al borrar el documento fuera de la cadena, la huella queda sin nada con lo que emparejarse. Olvidar y revocar son operaciones distintas, porque la segunda exige que el documento siga existiendo pero deje de considerarse fiable. Una versión de producción añadiría una segunda tabla con las huellas revocadas y devolvería ese dato en la consulta, que es el equivalente mínimo de las listas de estado que contempla el estándar del W3C. No se ha construido porque el alcance de este trabajo es la integridad, no el ciclo de vida completo de una credencial.
 
-**Comprobación automática.** El contrato tiene ocho tests en `tests/contrato.test.js` que se ejecutan con `npm test`: compila sin errores **y sin avisos**, genera bytecode desplegable, el `SKILLPASS_ABI` que usan las funciones serverless coincide con el ABI compilado —selector a selector, no solo por nombre—, y los tres controles de `anchor()` (solo el emisor, hash no nulo, idempotencia) siguen en el fuente. El último test comprueba que nadie ha introducido un `selfdestruct` ni un borrado del *mapping*: si eso ocurriera, el argumento de RGPD del §6.4.7 dejaría de ser cierto y habría que reescribirlo.
+*La rotación de emisor es de un solo paso.* Una dirección mal introducida haría perder el control de emisión de forma irreversible. El patrón correcto es en dos fases —proponer y aceptar—, tal como implementan las librerías de referencia del ecosistema. En un contrato cuya única capacidad privilegiada es escribir, el coste de equivocarse es elevado y la mitigación es barata: es el primer cambio que incorporaría una segunda versión.
 
-Red: **Ethereum Sepolia**, chainId `11155111`. Contrato: `0x85418F3d978e691C0f784bA63E4cB2826478f73A`. Emisor demo: `0x80cEB844bB4382BB586495721b9431014A285c0F`. Tx de *deploy*: `0x0408bef73c350caea921e837df1133a14bc46ed158327676dec07756aaae4f5e` (anexo A). El patrón EVM es portable a una L2 de producción sin reescribir la lógica.
+*No hay anclaje por lotes.* Cada credencial consume una transacción. En una red de pruebas el gas es gratuito y la cuestión resulta irrelevante, pero con los volúmenes que proyecta el plan financiero —cerca de 8.700 candidatos en 2028— el coste unitario en una red de producción empezaría a notarse. Una función de anclaje múltiple repartiría el coste fijo de la transacción entre todas las huellas del lote.
 
-### 6.4.5 Protocolo extremo a extremo (el que ya está desplegado)
+Ninguna de las tres es un defecto del código escrito: son decisiones de alcance, y se documentan aquí por el mismo criterio con el que se documenta el resto.
 
-1. El candidato, **autenticado** (JWT), tiene filas en `evaluations`. Un invitado no sella: la emisión es un acto de identidad de cuenta, no un *click* anónimo.
-2. `issue-credential` agrupa el mejor score por *skill*, compone el JSON SkillPass y calcula `cvHash = keccak256(utf8(canonicalJson(cv)))`.
-3. Si el *fingerprint* de `skills` no ha cambiado, se **reutiliza** la credencial (no se gasta gas dos veces por el mismo CV).
-4. `anchor-credential` instancia `ethers.Wallet(ISSUER_PRIVATE_KEY)` **solo en secretos de Netlify** y llama `SkillPassRegistry.anchor(cvHash)`.
-5. Se guardan en `credentials`: `cv_json`, `cv_hash`, `tx_hash`, `block_number`, `chain = ethereum-sepolia`.
-6. `verify-credential` / `verify.html`: el tercero pega JSON, hash `0x…` o URL `?h=0x…`. El servidor **recomputa** el hash (si hay JSON) y lee `isAnchored`. Coincidencia + timestamp → sello auténtico. Si el JSON se editó, Keccak cambia → **falla**.
+**Comprobación automática.** El contrato dispone de ocho pruebas que se ejecutan junto con el resto de la batería. Verifican que compila sin errores **y sin avisos**, que genera bytecode desplegable, que la interfaz que utilizan las funciones del servidor coincide con la interfaz compilada —comparando selector a selector, no solo los nombres—, y que los tres controles de la función de anclaje siguen presentes en el código fuente. La última prueba comprueba que nadie ha introducido una instrucción de autodestrucción ni un borrado de la tabla: si eso ocurriera, el argumento de protección de datos del §6.4.7 dejaría de ser cierto y habría que reescribirlo.
 
-Esquema del documento que se hashea (campos esenciales):
+**Datos del despliegue.** Red Ethereum Sepolia, identificador de cadena `11155111`. Contrato `0x85418F3d978e691C0f784bA63E4cB2826478f73A`. Emisor de demostración `0x80cEB844bB4382BB586495721b9431014A285c0F`. Transacción de despliegue `0x0408bef73c350caea921e837df1133a14bc46ed158327676dec07756aaae4f5e` (anexo A). El patrón es portable a cualquier red compatible sin reescribir la lógica.
+
+### 6.4.5 El recorrido completo, paso a paso
+
+El proceso que está desplegado y en funcionamiento consta de seis pasos.
+
+**Primero**, el candidato debe estar autenticado y tener evaluaciones registradas a su nombre. Un visitante anónimo no puede emitir una credencial: la emisión es un acto vinculado a una identidad de cuenta, no una acción de un solo clic.
+
+**Segundo**, el sistema agrupa la mejor puntuación obtenida en cada habilidad, compone el documento JSON del SkillPass y calcula su huella sobre la versión normalizada.
+
+**Tercero**, si el conjunto de habilidades no ha cambiado respecto a una credencial anterior, se **reutiliza la existente**. No tiene sentido gastar una transacción en anclar dos veces el mismo contenido.
+
+**Cuarto**, la función de anclaje construye la cartera del emisor a partir de una clave que reside únicamente en los secretos del servidor y envía la transacción al contrato.
+
+**Quinto**, se guarda en la base de datos el documento completo, su huella, el identificador de la transacción, el número de bloque y la red utilizada.
+
+**Sexto**, cualquier tercero puede verificar. Pega el documento, la huella o accede mediante un enlace directo; el servidor recalcula la huella si dispone del documento y consulta el contrato. Si coinciden, el sello es auténtico y se muestra la fecha de emisión. Si el documento fue editado, la huella cambia y la comprobación falla.
+
+Esquema del documento que se sella (campos esenciales):
 
 ```json
 {
@@ -300,52 +318,73 @@ Esquema del documento que se hashea (campos esenciales):
 }
 ```
 
-El `subject` es un seudónimo DID de método propio, no un DNI ni un DID W3C registrado en un *resolver* público. El `evaluator` ata el sello a **cómo** se obtuvo la nota: si mañana cambia el motor, el JSON (y el hash) cambian.
+Dos detalles del documento merecen comentario. El identificador del sujeto es un **seudónimo**, no un documento de identidad ni un identificador registrado en ningún servicio público de resolución. Y el bloque del evaluador vincula el sello a **cómo** se obtuvo la nota: si en el futuro cambia el motor o el modelo, cambia el documento y por tanto cambia la huella, con lo que queda constancia de que aquella evaluación se realizó con una versión distinta del sistema.
 
-### 6.4.6 Modelo de confianza (qué se asume y qué no)
+### 6.4.6 Modelo de confianza: qué se asume y qué no
 
-Quien verifica **no necesita** cuenta TalentPact. Sí asume:
+Quien verifica una credencial **no necesita** cuenta en TalentPact ni relación previa con la plataforma. Sí asume cuatro cosas, y conviene enunciarlas sin adornos.
 
-1. Que Keccak-256 no está rota (la misma asunción que Ethereum).
-2. Que la cadena de la demo (Sepolia) o la L2 futura no se reescribe en el horizonte relevante. **Sepolia se puede resetear**; por eso no se vende como inmutabilidad de *mainnet*. El valor del demo es el **mismo bytecode** y el mismo protocolo.
-3. Que la clave del **emisor** no está comprometida. Si lo está, se pueden anclar hashes de documentos que TalentPact nunca evaluó. Mitigación: *wallet* solo de testnet en el demo; en producción, HSM / secreto rotado / `transferIssuer` a un *multisig*; no dejar la clave en el *frontend*.
-4. Que el RPC no miente de forma persistente (un nodo malicioso podría devolver `isAnchored = true`). Mitigación práctica: el verificador de la defensa puede contrastar Etherscan; en producción, varios RPC o un *light client*.
+**Que la función criptográfica no está rota.** Es exactamente la misma asunción sobre la que se sostiene Ethereum en su conjunto.
 
-**No** asume que el *score* 87 sea verdad absoluta: asume que **ese** documento es el que TalentPact selló. La calidad de la nota es el problema de la capa IA (§6.2), no del hash. Mezclar ambas cosas en una frase tipo “fraude de CV imposible” es el error que este apartado evita.
+**Que la red no se reescribe** en el horizonte temporal relevante. Aquí hay que ser explícito: una red de pruebas **puede reiniciarse**, de modo que este sistema no se presenta como inmutabilidad equivalente a la de una red principal. Lo que demuestra el despliegue actual es el mecanismo y el código, que serían idénticos en producción.
 
-Analogía útil (y sus límites): es un **sello de notario digital** sobre un expediente, no un oráculo de verdad del mundo. OpenTimestamps / *proof of existence* hacen lo mismo con Bitcoin; aquí el registro es un contrato con emisor conocido, porque el verificador de RRHH necesita saber **quién** afirma haber evaluado, no solo que “algo existió en T”.
+**Que la clave del emisor no está comprometida.** Si lo estuviera, alguien podría anclar huellas de documentos que TalentPact nunca evaluó. Es el riesgo real del sistema y por eso se mitiga en varios frentes: en la versión actual se emplea una cartera exclusivamente de red de pruebas, sin valor económico; en producción correspondería custodiar la clave en un módulo de seguridad hardware, rotarla periódicamente y transferir la autoridad de emisión a un esquema de firma múltiple. Lo que nunca debe ocurrir, y no ocurre, es que la clave esté accesible desde el navegador.
 
-### 6.4.7 RGPD: inmutabilidad vs. olvido
+**Que el nodo de acceso a la red no miente de forma sostenida.** Un proveedor malicioso podría responder que una huella está anclada cuando no lo está. La mitigación práctica es sencilla: contrastar el resultado con un explorador de bloques público y, en producción, consultar varios proveedores independientes.
 
-On-chain no hay nombre, email ni scores en claro: solo 32 bytes. Un hash no reconstruye el CV. Si el candidato ejerce supresión, se borra el JSON en Supabase; el hash queda **huérfano**: no hay documento que casar. Es el patrón académico “ancla de integridad / dato off-chain”, no un truco.
+Hay una cosa que el sistema **no** asume, y es importante: no afirma que la puntuación de 87 sea una verdad absoluta sobre la competencia de esa persona. Lo que afirma es que **ese documento concreto** es el que TalentPact selló. La calidad de la nota es responsabilidad de la capa de inteligencia artificial y se discute con sus propios límites en el §6.2. Mezclar ambas cosas en una frase del tipo "el fraude de currículos es imposible" sería precisamente el error que este apartado trata de evitar.
 
-Matices que un DPD preguntaría:
+Una analogía útil, con sus límites: funciona como un **sello notarial digital** sobre un expediente, no como un oráculo de verdad sobre el mundo. Existen servicios que hacen algo parecido sobre Bitcoin para demostrar la existencia de un documento en una fecha; la diferencia es que aquí el registro tiene un emisor conocido, porque quien contrata necesita saber **quién** afirma haber evaluado y no solo que algo existía en un momento dado.
 
-- El hash, **aislado**, no es dato personal. El hash **junto con** el JSON en poder de un tercero que ya lo tiene **sigue** permitiendo verificar. El derecho al olvido borra la copia del responsable (TalentPact); no puede borrar la copia que el candidato envió a una empresa. Eso es igual que un PDF adjunto a un email.
-- El CoT en `evaluations` sí es dato personal y **no** va on-chain.
-- Base jurídica de emisión: consentimiento (o ejecución de contrato) distinto del de evaluar; el sello es un tratamiento adicional.
+### 6.4.7 Protección de datos: inmutabilidad frente a derecho al olvido, y qué es exactamente el SkillPass
 
-### 6.4.8 Qué no es (preguntas típicas del tribunal)
+En la cadena no hay nombres, ni correos electrónicos, ni puntuaciones legibles: solo treinta y dos bytes que no permiten reconstruir nada. Si el candidato ejerce su derecho de supresión, se borra el documento y su perfil de la base de datos europea, y la huella queda **huérfana**: sigue registrada, pero no existe ningún documento con el que emparejarla, de modo que deja de ser utilizable como prueba de nada. Es el patrón reconocido de anclaje de integridad con el dato fuera de la cadena, no un artificio para eludir la norma.
 
-- **No es un token, ICO ni *utility*.** Nadie compra el SkillPass. MiCA no aplica al diseño actual (§7.4).
-- **No es un pago en cripto.** El €49 seguiría por Stripe; el *escrow* en *stablecoin* es visión (§6.5).
-- **No es *mainnet* ni “inmutable para siempre”** en sentido periodístico. Es testnet de demostración del *mismo* contrato.
-- **No transfiere la soberanía de claves al candidato** en esta versión: TalentPact firma como emisor (UX: el candidato no instala MetaMask). La hoja de ruta (eIDAS 2.0 / EUDI Wallet) es **interoperar** después —presentar el SkillPass como credencial en un *wallet* europeo—, no el demo.
-- **No es un SBT.** No hay `tokenId`, no hay transferencia bloqueada, no hay *marketplace*.
+Un responsable de protección de datos plantearía tres matices, y los tres tienen respuesta. El primero: una huella **aislada** no es un dato personal, pero esa misma huella **junto con** el documento en poder de un tercero que ya lo recibió sigue permitiendo verificar. El derecho de supresión obliga a borrar la copia del responsable del tratamiento; no puede alcanzar a la copia que el propio candidato envió voluntariamente a una empresa, exactamente igual que ocurre con un currículo adjunto a un correo electrónico. El segundo: el razonamiento almacenado de cada evaluación **sí** es un dato personal, porque puede contener fragmentos de la respuesta del candidato, y por eso permanece fuera de la cadena y sujeto a la política de retención del perfil. El tercero: la base jurídica de la emisión del sello es distinta de la de la evaluación, ya que se trata de un tratamiento adicional que requiere su propio consentimiento o su propia justificación contractual.
 
-### 6.4.9 Valor de negocio *después* de quitar el *hype*
+**Qué es y qué no es el SkillPass.** Para cerrar el apartado conviene delimitar con precisión la naturaleza jurídica y técnica de la credencial, porque de ello dependen tanto el encaje regulatorio como la forma correcta de describirla.
 
-El sello no “elimina el 78 % de CVs falsos” por magia (ResumeLab es fuente secundaria, §2). Lo que sí hace: **una empresa de fuera de TalentPact puede comprobar un documento en segundos**. Eso es portabilidad de *evidencia*, *lock-in* positivo (el historial se acumula y sigue siendo verificable) y el argumento de defensa que se enseña en vivo: JSON intacto → verde; JSON tocado → rojo.
+**No es un token ni una oferta de criptoactivo.** Nadie compra un SkillPass, nadie lo vende y no existe mercado secundario alguno. La normativa europea sobre criptoactivos no resulta de aplicación al diseño actual, como se detalla en el §7.4.
 
-Gas: en Sepolia es €0 (ETH de *faucet*). En L2 de producción el anclaje es céntimos; lo paga el emisor, no el candidato —coherente con un B2B que ya cobra €49—.
+**No es un pago en criptomoneda.** El cobro de los €49 se realiza por pasarela de pago convencional. La liquidación programable mediante depósito en garantía con moneda estable pertenece al terreno de la visión y se describe en el §6.5.
 
-### 6.4.10 Demo en la defensa (orden)
+**No es una red principal ni inmutabilidad perpetua.** Es una red de pruebas que ejecuta el mismo contrato que se desplegaría en producción. El valor de la demostración está en el mecanismo, no en la permanencia del registro concreto.
 
-Reto evaluado → fila en `evaluations` → Sellar → tx Sepolia → PDF/JSON/enlace → pegar en el verificador o `verify.html?h=0x…`. Tener **una tx ya confirmada** por si la red falla el día D (§8.2). El tribunal puede alterar un campo del JSON y ver el fallo: esa es la prueba, no el *slide*.
+**No transfiere todavía la propiedad de las claves al candidato.** En esta versión firma TalentPact como emisor, lo que evita obligar al candidato a instalar y gestionar una cartera de criptomonedas. La integración con la cartera de identidad digital europea figura en la hoja de ruta como una evolución posterior: presentar el SkillPass como credencial en un monedero europeo, no sustituir el diseño actual.
 
-## 6.5 Innovación financiera: pay-per-result y liquidación (visión)
+**No es un token vinculado permanentemente a una dirección.** No existe identificador de token, ni transferencia bloqueada, ni mercado asociado. Es un registro de huellas, y esa simplicidad es intencionada.
 
-Más allá del CV, el modelo de ingresos **pay-per-result** es en sí una innovación financiera: se cobra solo cuando se genera valor (contacto desbloqueado). La visión a futuro contempla llevar esta lógica a **liquidación programable** mediante *escrow* con *stablecoins* (el pago queda retenido y se libera al confirmarse el resultado, con posibilidad de *revenue-share* al candidato). Esto entronca con MiCA/PSD2 y se describe como evolución, no como parte del demo (ver apartados 7 y 8).
+### 6.4.8 Valor de negocio y verificación en vivo
+
+Una vez retirada la retórica habitual sobre blockchain, conviene ser preciso sobre lo que este mecanismo aporta al negocio. No elimina por arte de magia el fraude en los currículos, y ninguna cifra de estudios de terceros sobre información falsa en los procesos de selección debe atribuirse a lo que el sistema resuelve. Lo que sí hace, y no es poco, es permitir que **una empresa ajena a TalentPact compruebe la autenticidad de un documento en cuestión de segundos**, sin registrarse, sin pedir permiso y sin fiarse de nadie.
+
+De ahí se derivan tres efectos comerciales concretos. El primero es la **portabilidad de la evidencia**: el candidato puede presentar su credencial en cualquier proceso, dentro o fuera de la plataforma, y eso convierte el esfuerzo de evaluarse en un activo reutilizable en lugar de un trámite que caduca. El segundo es una **permanencia positiva**: el historial se acumula y sigue siendo verificable, de modo que la razón para continuar en la plataforma es lo que se gana quedándose, no una penalización por marcharse. El tercero es un **argumento comercial demostrable**, que es algo muy distinto de un argumento explicado.
+
+**La verificación en vivo como herramienta comercial.** Ese tercer efecto merece desarrollarse, porque es la forma en que el trabajo técnico se convierte en valor de venta. El recorrido completo puede mostrarse en directo en menos de dos minutos: se resuelve un reto y se evalúa, aparece el registro de la evaluación con su desglose, se emite y se ancla la credencial, se obtiene la transacción consultable en el explorador de bloques, y se pega el documento resultante en el verificador público. Aparece confirmado. A continuación se modifica un solo carácter del documento —una puntuación, una fecha, una letra— y se vuelve a pegar. Aparece rechazado.
+
+Esa secuencia transforma una demostración de software en una **demostración de confianza**, y su fuerza reside en que el interlocutor no tiene que creer nada: puede alterar él mismo el documento y ver el resultado. Es un argumento que ninguna presentación comercial reproduce, y explica por qué la verificación pública es tanto una pieza técnica como el mejor material de venta del que dispone el proyecto. Por prudencia operativa, conviene tener siempre disponible una credencial ya anclada con su transacción confirmada, de modo que la demostración no dependa de la disponibilidad de la red en el momento concreto en que se realiza.
+
+**Coste del anclaje.** En la red de pruebas es nulo, ya que el gas procede de un grifo público. En una red de capa dos de producción el coste por credencial se mide en céntimos y lo asume el emisor, no el candidato, lo cual es coherente con un modelo de negocio en el que quien paga es la empresa.
+
+## 6.5 Innovación financiera: el cobro por resultado y la liquidación programable
+
+Se tiende a asociar la innovación financiera con la tecnología que la soporta, pero en muchos casos la innovación está antes: en **cuándo y por qué se cobra**. El modelo de cobro por resultado que emplea TalentPact es un ejemplo de ello y merece analizarse como aportación en sí misma, con independencia de la capa técnica que lo acompaña.
+
+**Qué problema resuelve el cobro por resultado.** El mercado de la tecnología de selección funciona con licencias por adelantado. La empresa contrata una suscripción anual, la paga íntegramente y solo después descubre si le sirve. Todo el riesgo de la prueba recae sobre el cliente: si no contrata a nadie, ha pagado igual. Esa asimetría explica buena parte de la resistencia a incorporar herramientas nuevas en empresas pequeñas, donde el presupuesto es limitado y una compra fallida tiene consecuencias reales.
+
+El cobro por resultado invierte esa asimetría. La empresa no adquiere acceso, sino un desenlace concreto: el contacto de un candidato que ya ha demostrado la competencia que busca. Si no encuentra a nadie que le interese, no paga. El riesgo de que el producto no funcione se traslada al proveedor, que es quien está en mejores condiciones de controlarlo y quien tiene, por tanto, el incentivo correcto para mejorar la calidad del conjunto de perfiles. En términos económicos, el modelo alinea los intereses de ambas partes de una forma que la licencia fija no consigue: TalentPact solo gana dinero cuando genera valor comprobable.
+
+**Sus condiciones de viabilidad.** Este esquema no funciona en cualquier negocio, y conviene ser explícito sobre por qué funciona en este. Exige tres condiciones simultáneas. La primera es un **coste marginal muy bajo por unidad de servicio**: evaluar a un candidato cuesta alrededor de €0,0165, de modo que la plataforma puede permitirse producir evidencia para muchos candidatos que ninguna empresa desbloqueará jamás. La segunda es una **unidad de valor claramente identificable**: el desbloqueo de un contacto es un momento discreto, inequívoco y fácil de facturar, a diferencia de conceptos difusos como el uso de una herramienta. Y la tercera es un **margen bruto elevado**, en torno al 93,5 %, que permite absorber la variabilidad de un ingreso que no está garantizado por contrato. Si cualquiera de las tres fallara, el modelo se vendría abajo y habría que volver a la suscripción.
+
+**Lo que la tecnología añade al modelo.** La capa de inteligencia artificial es la que hace posible el primer requisito, porque sin evaluación automatizada el coste de producir evidencia sería el de un evaluador humano y el modelo resultaría inviable. La capa de anclaje criptográfico refuerza el tercero, porque una credencial verificable justifica un precio superior al de un contacto sin garantía alguna. Ambas capas no son adornos alrededor del modelo de negocio: son sus condiciones de posibilidad.
+
+**La evolución hacia la liquidación programable.** El paso natural de esta lógica consiste en llevarla al propio mecanismo de pago mediante un **depósito en garantía programable** con moneda estable. El funcionamiento sería el siguiente: cuando la empresa desbloquea un contacto, el importe queda retenido en un contrato inteligente en lugar de transferirse directamente; el contrato lo libera automáticamente al confirmarse una condición pactada de antemano —que el candidato respondió, que se celebró la entrevista, que se formalizó la contratación—; y si la condición no llega a cumplirse, el importe regresa al pagador sin necesidad de reclamación ni de intermediario que arbitre.
+
+El interés de este mecanismo va más allá de la automatización del cobro. Permitiría escalonar el precio según el resultado efectivamente alcanzado —un importe reducido por el contacto, uno mayor por la entrevista realizada, uno significativo por la contratación cerrada— sin necesidad de que ninguna de las partes confíe en la otra para declarar lo ocurrido. Y abriría la puerta a un **reparto automático de ingresos con el candidato**, que hoy aporta el activo esencial del marketplace —su tiempo y su competencia demostrada— sin recibir contraprestación económica directa. Un contrato que reparta una fracción del importe en el momento de liberarse resolvería esa asimetría sin añadir carga administrativa.
+
+**Por qué no se construye ahora.** Esta evolución no forma parte de lo desarrollado, y la razón es regulatoria antes que técnica. Retener fondos de terceros para liberarlos al cumplirse una condición constituye, con toda probabilidad, una actividad de servicios de pago sujeta a autorización; y operar con moneda estable sitúa la actividad en el ámbito de la normativa europea sobre criptoactivos. Ninguna de las dos cosas se resuelve desplegando un contrato inteligente: exigen autorización administrativa, colaboración con una entidad de pago o de dinero electrónico ya autorizada, y una estructura de cumplimiento que no corresponde a la fase actual del proyecto. El análisis detallado figura en el apartado 7.
+
+La posición del proyecto es por tanto la siguiente: el cobro por resultado **está construido y funcionando** como modelo de ingresos; la liquidación programable está **diseñada conceptualmente y descartada de forma consciente** para esta fase. Distinguir con nitidez lo que existe de lo que se ha pensado es, en un ámbito tan dado a la exageración como este, parte del rigor del trabajo.
 
 ## 6.6 Roadmap de producto
 

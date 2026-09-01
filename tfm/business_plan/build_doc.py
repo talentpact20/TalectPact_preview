@@ -88,7 +88,9 @@ body{
 
 h2{font-family:Sora,sans-serif;font-size:18px;margin:28px 0 10px;letter-spacing:-.02em}
 h3{font-family:Sora,sans-serif;font-size:15.5px;margin:20px 0 8px;color:var(--ink)}
-p{margin:0 0 12px}
+h2,h3,h4{break-after:avoid-page;page-break-after:avoid;break-inside:avoid;page-break-inside:avoid}
+h2+*,h3+*,h4+*{break-before:avoid-page;page-break-before:avoid}
+p{margin:0 0 12px;orphans:3;widows:3}
 ul,ol{margin:0 0 14px;padding-left:22px}
 li{margin:0 0 5px}
 strong{font-weight:700}
@@ -135,6 +137,9 @@ img{max-width:100%}
   .inner{padding:0}
   a{text-decoration:none;color:inherit}
   tr{page-break-inside:avoid}
+  li{orphans:2;widows:2}
+  blockquote,pre,.fig,.kpi,.card{break-inside:avoid;page-break-inside:avoid}
+  h2,h3,h4{break-after:avoid-page;page-break-after:avoid}
   @page{size:A4;margin:16mm 14mm 18mm}
 }
 @media (max-width:720px){
@@ -178,23 +183,10 @@ ANNEX = r"""
     <p>Figura B3. Detección de prompt injection: la manipulación no eleva la nota.</p>
   </div>
 
-  <h2>C. Equipo</h2>
-  <div class="cards">
-    <div class="card">
-      <h3>Xavier Griñó</h3>
-      <p>Growth y comercial. Go-to-market B2B, ventas y relato de producto.</p>
-    </div>
-    <div class="card">
-      <h3>Ivan Sánchez</h3>
-      <p>Finanzas y producto-tech. Modelo financiero, arquitectura, IA y SkillPass.</p>
-    </div>
-  </div>
-  <p class="caption">Universitat de Barcelona. El investor deck citaba cuatro perfiles; este TFM lo firman únicamente los dos autores.</p>
-
-  <h2>D. Extracto del modelo financiero (escenario base)</h2>
+  <h2>C. Extracto del modelo financiero (escenario base)</h2>
   <p>Fuente: <code>assets/TalentPact_modelo_financiero.xlsx</code>, 17/04/2026. No se reproducen las 36 columnas mensuales (ilegibles en PDF); sí el cierre anual, KPIs, caja y balance. El archivo Excel es el anexo digital de auditoría.</p>
 
-  <h3>D.1 Cuenta de resultados (€)</h3>
+  <h3>C.1 Cuenta de resultados (€)</h3>
   <table>
     <thead><tr><th>Partida</th><th>2026</th><th>2027</th><th>2028</th></tr></thead>
     <tbody>
@@ -208,7 +200,7 @@ ANNEX = r"""
     </tbody>
   </table>
 
-  <h3>D.2 Clientes, rentabilidad unitaria y caja</h3>
+  <h3>C.2 Clientes, rentabilidad unitaria y caja</h3>
   <table>
     <thead><tr><th>KPI</th><th>2026</th><th>2027</th><th>2028</th></tr></thead>
     <tbody>
@@ -222,7 +214,7 @@ ANNEX = r"""
     </tbody>
   </table>
 
-  <h3>D.3 Break-even y financiación</h3>
+  <h3>C.3 Break-even y financiación</h3>
   <table>
     <thead><tr><th>Indicador</th><th>Valor</th></tr></thead>
     <tbody>
@@ -235,7 +227,7 @@ ANNEX = r"""
     </tbody>
   </table>
 
-  <h3>D.4 Balance simplificado a 31 de diciembre (€)</h3>
+  <h3>C.4 Balance simplificado a 31 de diciembre (€)</h3>
   <table>
     <thead><tr><th></th><th>2026</th><th>2027</th><th>2028</th></tr></thead>
     <tbody>
@@ -250,7 +242,7 @@ ANNEX = r"""
   </table>
   <p class="caption">Hojas origen: Análisis, KPI Dashboard, P&amp;L, Cashflow, Balance. No se incluyen MODELO NORMAL mes a mes ni Full1.</p>
 
-  <h2>E. Referencias</h2>
+  <h2>D. Referencias</h2>
   <ol class="refs">
     <li>SHRM (2024). <em>Talent Acquisition Benchmarking</em>.</li>
     <li>Glassdoor / Adecco Institute — coste medio por contratación en España.</li>
@@ -259,7 +251,7 @@ ANNEX = r"""
     <li>InfoJobs–Esade (2025). <em>Estado del mercado laboral en España</em>.</li>
     <li>Mordor Intelligence (2026). Mercado global de recruiting.</li>
     <li>Future Market Insights — <em>talent-acquisition technology</em> (2025).</li>
-    <li>Vendr, Capterra, LinkedIn Recruiter pricing (2026); Equip Benchmark (feb 2026) — precios de competencia (MVP).</li>
+    <li>Vendr, Capterra, LinkedIn Recruiter pricing (2026); Equip Benchmark (feb 2026) — precios públicos de la competencia.</li>
     <li>Reglamento (UE) 2024/1689 (AI Act), Anexo III.</li>
     <li>Reglamento (UE) 2016/679 (RGPD) y LOPDGDD.</li>
     <li>Ley 34/2002 (LSSI).</li>
@@ -268,8 +260,7 @@ ANNEX = r"""
     <li>Zheng, L. et al. (2023). <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena</em>. NeurIPS / arXiv:2306.05685 — efecto halo y límites de los jueces LLM.</li>
     <li>Bai, Y. et al. (2022). <em>Constitutional AI: Harmlessness from AI Feedback</em>. Anthropic — cláusula de equidad en el evaluador (relato de diseño, no auditoría DIR).</li>
     <li>TalentPact, modelo financiero escenario base (17/04/2026), archivo Excel en <code>tfm/assets/</code>.</li>
-    <li>Equipo TalentPact (2026). <em>Presentación MVP</em> — sección «Feedback recibido» (encuestas, expertos, tracción).</li>
-    <li>Equipo TalentPact (2026). <em>Investor Deck</em> v2 — tracción y citas cualitativas.</li>
+    <li>Equipo TalentPact (2026). Investigación primaria del proyecto: encuestas a candidatos y empresas, entrevistas de criterio experto y analítica del prototipo público.</li>
   </ol>
 </section>
 """
@@ -328,7 +319,7 @@ def main() -> None:
             f'<div class="num">{chapter_label(num)}</div><h1>{title}</h1>{extra}{html}</section>'
         )
 
-    toc.append('<li><a href="#anexos"><span><span class="n">A–E</span>Anexos</span></a></li>')
+    toc.append('<li><a href="#anexos"><span><span class="n">A–D</span>Anexos</span></a></li>')
 
     html = f"""<!doctype html>
 <html lang="es">
