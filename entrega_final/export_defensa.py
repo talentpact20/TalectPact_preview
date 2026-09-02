@@ -90,6 +90,28 @@ def screenshot_slides(n: int) -> list[Path]:
     return paths
 
 
+def add_hotspot(slide, left_in, top_in, width_in, height_in, url="https://talentpact.es"):
+    """Rectángulo transparente clicable encima de la captura."""
+    from lxml import etree
+    from pptx.dml.color import RGBColor
+    from pptx.enum.shapes import MSO_SHAPE
+    from pptx.oxml.ns import qn
+    from pptx.util import Inches
+
+    shape = slide.shapes.add_shape(
+        MSO_SHAPE.RECTANGLE,
+        Inches(left_in), Inches(top_in), Inches(width_in), Inches(height_in),
+    )
+    shape.line.fill.background()
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = RGBColor(255, 255, 255)
+    solid = shape._element.spPr.find(qn("a:solidFill"))
+    srgb = solid.find(qn("a:srgbClr"))
+    alpha = etree.SubElement(srgb, qn("a:alpha"))
+    alpha.set("val", "0")
+    shape.click_action.hyperlink.address = url
+
+
 def build_pptx(meta: list[dict], pngs: list[Path]) -> None:
     from pptx import Presentation
     from pptx.util import Emu, Inches
@@ -98,11 +120,22 @@ def build_pptx(meta: list[dict], pngs: list[Path]) -> None:
     prs.slide_width = Inches(13.333333)
     prs.slide_height = Inches(7.5)
     blank = prs.slide_layouts[6]
-    for info, png in zip(meta, pngs):
+    # Zonas donde se lee "talentpact.es" (pulgadas, 16:9).
+    hotspots = {
+        1:  [(0.72, 3.50, 3.50, 0.55)],
+        16: [(0.90, 3.85, 7.20, 0.42, "https://talentpact.es/verify.html")],
+        17: [(0.72, 0.50, 6.20, 0.42)],
+        19: [(0.72, 1.72, 5.40, 0.90)],
+        24: [(0.72, 5.00, 4.40, 1.05)],
+    }
+    for idx, (info, png) in enumerate(zip(meta, pngs), start=1):
         slide = prs.slides.add_slide(blank)
         slide.shapes.add_picture(
             str(png), Emu(0), Emu(0), width=prs.slide_width, height=prs.slide_height
         )
+        for spec in hotspots.get(idx, ()):
+            url = spec[4] if len(spec) > 4 else "https://talentpact.es"
+            add_hotspot(slide, spec[0], spec[1], spec[2], spec[3], url)
         notes = info["notes"] or info["title"]
         tf = slide.notes_slide.notes_text_frame
         tf.text = notes

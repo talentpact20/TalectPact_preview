@@ -112,6 +112,22 @@ strong{font-weight:700;color:var(--ink)}
 }
 .cover .meta dd{color:#EAF5F0;font-weight:600;font-size:14px}
 
+a.site{
+  color:var(--accent);
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-weight:600;
+  letter-spacing:.03em;
+  text-decoration:none;
+  border-bottom:1.5px solid currentColor;
+  padding-bottom:1px;
+  cursor:pointer;
+  position:relative;z-index:2;
+}
+a.site:hover{opacity:.8}
+.cover a.site,
+.slide.dark a.site,
+.act a.site{color:var(--accent-bright)}
+
 /* ── Cortes de acto ── */
 .act{background:var(--deep);color:#EAF5F0;justify-content:center}
 .act .num{
@@ -367,6 +383,7 @@ html.exporting #stage{transform:none !important}
     <div class="body">
       <h1>Contratar por <em>habilidades</em>, no por currículum.</h1>
       <p class="sub">Marketplace europeo de talento anónimo: la habilidad se demuestra con retos evaluados por IA y se sella como credencial verificable en blockchain.</p>
+      <p style="margin-top:22px"><a class="site" href="https://talentpact.es" target="_blank" rel="noopener">talentpact.es</a></p>
     </div>
     <div class="meta">
       <div><dt>Trabajo Fin de Máster</dt><dd>Fintech, Mercados Financieros y Blockchain</dd></div>
@@ -724,7 +741,7 @@ html.exporting #stage{transform:none !important}
 <span class="c">Red        </span> Ethereum Sepolia <span class="c">(testnet, chainId 11155111)</span><br>
 <span class="c">Dirección  </span> <span class="hl">0x85418F3d978e691C0f784bA63E4cB2826478f73A</span><br>
 <span class="c">Bloque     </span> 11523380<br>
-<span class="c">Verificador</span> talentpact.es/verify.html
+<span class="c">Verificador</span> <a class="site" href="https://talentpact.es/verify.html" target="_blank" rel="noopener" style="color:var(--accent-bright)">talentpact.es/verify.html</a>
       </div>
       <div class="card" style="margin-top:26px;gap:10px">
         <div class="k">Alcance regulatorio</div>
@@ -744,7 +761,7 @@ html.exporting #stage{transform:none !important}
   <!-- ══════════════ 16 · PRODUCTO ══════════════ -->
   <section class="slide" data-sec="El producto">
     <div class="body top">
-      <div class="eyebrow">Producto y alcance · talentpact.es</div>
+      <div class="eyebrow">Producto y alcance · <a class="site" href="https://talentpact.es" target="_blank" rel="noopener">talentpact.es</a></div>
       <h2>Un flujo convierte el reto en una <em>decisión.</em></h2>
       <div class="split" style="margin-top:8px;grid-template-columns:.92fr 1.08fr;gap:32px;align-items:start">
         <div>
@@ -759,7 +776,7 @@ html.exporting #stage{transform:none !important}
         </div>
         <div class="shot">
           <img src="img/captura-respuesta.png" alt="Pantalla de candidato: reto de feedback constructivo en talentpact.es">
-          <p class="cap">Candidato · reto en curso · talentpact.es</p>
+          <p class="cap">Candidato · reto en curso · <a class="site" href="https://talentpact.es" target="_blank" rel="noopener">talentpact.es</a></p>
         </div>
       </div>
     </div>
@@ -963,7 +980,7 @@ html.exporting #stage{transform:none !important}
         </div>
       </div>
       <div class="grid g3" style="margin-top:26px;gap:20px">
-        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:25px">Un producto que se usa</div><div class="l" style="color:#9CBBB0;max-width:26ch">talentpact.es · candidato, empresa y SkillPass, funcionando</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:25px">Un producto que se usa</div><div class="l" style="color:#9CBBB0;max-width:26ch"><a class="site" href="https://talentpact.es" target="_blank" rel="noopener">talentpact.es</a> · candidato, empresa y SkillPass, funcionando</div></div>
         <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:25px">Un evaluador barato</div><div class="l" style="color:#9CBBB0;max-width:26ch">1,65 céntimos por corrección, con su razonamiento escrito</div></div>
         <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:25px">Un sello comprobable</div><div class="l" style="color:#9CBBB0;max-width:26ch">público en la cadena, verificable sin pedirnos permiso</div></div>
       </div>
@@ -1092,7 +1109,7 @@ html.exporting #stage{transform:none !important}
   document.getElementById('btn-timer').addEventListener('click', toggleTimer);
   // Avanzar con clic, salvo en los controles y en los enlaces de la diapositiva.
   document.getElementById('stage-wrap').addEventListener('click', function(e){
-    if (e.target.closest && e.target.closest('a')) return;
+    if (e.target.closest && e.target.closest('a')){ e.stopPropagation(); return; }
     show(i + 1);
   });
 
