@@ -203,6 +203,88 @@ td:first-child{color:var(--ink);font-weight:600}
   letter-spacing:-.02em;color:var(--ink);max-width:34ch;
 }
 .claim.amber{border-left-color:var(--amber)}
+.mantra{
+  background:var(--accent-wash);border-radius:10px;padding:14px 18px;
+  font-family:'Sora',sans-serif;font-size:16px;font-weight:700;line-height:1.4;
+  letter-spacing:-.015em;color:var(--ink);margin-top:18px;
+}
+
+/* ── Captura de producto (referencia RiskDelta) ── */
+.shot{
+  background:#EEF1EF;border-radius:14px;padding:16px 14px 12px;
+  box-shadow:0 22px 48px rgba(8,34,28,.16);
+}
+.shot img{
+  width:100%;display:block;border-radius:8px;
+  border:1px solid var(--line);background:#fff;
+  max-height:400px;object-fit:cover;object-position:top;
+}
+.shot .cap{
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.04em;
+  color:var(--accent);margin-top:10px;font-weight:500;
+}
+
+/* ── Lista numerada de producto ── */
+ol.feat{list-style:none;display:flex;flex-direction:column;gap:16px}
+ol.feat li{display:grid;grid-template-columns:42px 1fr;gap:12px;align-items:start}
+ol.feat .n{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;
+  letter-spacing:.08em;color:var(--accent);padding-top:3px;
+}
+ol.feat h4{font-family:'Sora',sans-serif;font-size:16px;font-weight:700;margin-bottom:3px}
+ol.feat p{font-size:14px;line-height:1.5;color:var(--muted)}
+.slide.dark ol.feat .n{color:var(--accent-bright)}
+.slide.dark ol.feat h4{color:#EAF5F0}
+.slide.dark ol.feat p{color:#9CBBB0}
+
+/* ── Diapositiva oscura de producto / ronda ── */
+.slide.dark{background:var(--deep);color:#EAF5F0}
+.slide.dark .eyebrow{color:var(--accent-bright)}
+.slide.dark h2{color:#EAF5F0}
+.slide.dark h2 em{color:var(--accent-bright)}
+.slide.dark .lede{color:#9CBBB0}
+.slide.dark .foot{color:#5A7D71}
+.slide.dark .shot{background:rgba(255,255,255,.06);box-shadow:0 22px 48px rgba(0,0,0,.35)}
+.slide.dark .shot .cap{color:var(--accent-bright)}
+
+/* ── Ask: cifra + donut de uso de fondos ── */
+.ask-hero{
+  font-family:'Sora',sans-serif;font-weight:800;font-size:84px;line-height:.95;
+  letter-spacing:-.045em;color:#EAF5F0;margin:4px 0 10px;
+}
+.ask-sub{font-size:16px;line-height:1.5;color:#9CBBB0;max-width:46ch;margin-bottom:18px}
+.ask-box{
+  background:rgba(255,255,255,.06);border:1px solid rgba(154,200,182,.22);
+  border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.55;color:#C5D5CE;
+}
+.donut-wrap{display:flex;align-items:center;gap:28px}
+.donut{
+  width:196px;height:196px;border-radius:50%;flex-shrink:0;position:relative;
+  background:conic-gradient(
+    #34D399 0deg 144deg,
+    #0E7C5A 144deg 252deg,
+    #5A8F7E 252deg 306deg,
+    #9CBBB0 306deg 342deg,
+    #C5D5CE 342deg 360deg
+  );
+}
+.donut::after{
+  content:'';position:absolute;inset:52px;border-radius:50%;background:var(--deep);
+}
+.donut span{
+  position:absolute;inset:0;display:grid;place-items:center;z-index:1;
+  font-family:'Sora',sans-serif;font-weight:800;font-size:26px;color:#EAF5F0;
+  letter-spacing:-.03em;
+}
+ul.leg{list-style:none;display:flex;flex-direction:column;gap:9px;flex:1;min-width:0}
+ul.leg li{display:flex;align-items:baseline;gap:10px;font-size:13.5px;line-height:1.35;color:#C5D5CE}
+ul.leg i{
+  width:10px;height:10px;border-radius:2px;flex-shrink:0;display:inline-block;
+}
+ul.leg b{color:#EAF5F0;font-weight:700;margin-right:4px}
+ul.leg .amt{
+  margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9CBBB0;
+}
 
 /* ── Código / hash ── */
 .code{
@@ -287,7 +369,7 @@ ul.pts li.amber::before{background:var(--amber)}
     <aside class="notes" data-t="0:30">
       <p><b>Xavier.</b> Buenos días. Somos Xavier Griñó e Ivan Sánchez y presentamos <b>TalentPact</b>.</p>
       <p>En veinte minutos defendemos tres cosas: que el problema es real, que la tecnología —<b>IA de corrección y sello blockchain</b>— ya funciona y os la enseñamos en vivo, y que el plan de negocio se sostiene, incluido <b>el dinero de la ronda</b>.</p>
-      <p class="cue">Estructura: relato y tech, demo de seis minutos, negocio y límites, y cerramos con 180.000 € de pre-seed. No es un cheque al tribunal: es el ask del Excel.</p>
+      <p class="cue">Estructura: relato y tech, el producto en talentpact.es, demo en vivo, negocio y límites, y cerramos con <b>180.000 € de pre-seed</b>. No es un cheque al tribunal: es el ask del Excel.</p>
     </aside>
   </section>
 
@@ -601,10 +683,66 @@ ul.pts li.amber::before{background:var(--amber)}
     </aside>
   </section>
 
-  <!-- ══════════════ 16 · DEMO ══════════════ -->
+  <!-- ══════════════ 16 · PRODUCTO ══════════════ -->
+  <section class="slide" data-sec="El producto">
+    <div class="body top">
+      <div class="eyebrow">Producto y alcance · talentpact.es</div>
+      <h2>Un flujo convierte el reto en una <em>decisión.</em></h2>
+      <div class="split" style="margin-top:8px;grid-template-columns:.92fr 1.08fr;gap:32px;align-items:start">
+        <div>
+          <p class="lede" style="font-size:16px;margin-bottom:16px">TalentPact organiza el trabajo que empieza cuando el CV ya no sirve: el candidato demuestra, la IA puntúa, la empresa decide con evidencia.</p>
+          <ul class="pts">
+            <li><strong>Candidato.</strong> Entra, elige un reto laboral real y escribe. El temporizador corre; no hay test de personalidad.</li>
+            <li><strong>Evaluador.</strong> Devuelve Skill Score criterio a criterio, con justificación. No es una nota opaca.</li>
+            <li><strong>Empresa.</strong> Ve un pool anónimo: skills, puntuaciones y sector. Nunca nombre, edad ni foto.</li>
+            <li><strong>SkillPass.</strong> El resultado se sella. Cualquiera lo comprueba sin cuenta TalentPact.</li>
+          </ul>
+          <div class="mantra">No sustituye al reclutador. Ordena la evidencia.</div>
+        </div>
+        <div class="shot">
+          <img src="img/captura-respuesta.png" alt="Pantalla de candidato: reto de feedback constructivo en talentpact.es">
+          <p class="cap">Candidato · reto en curso · talentpact.es</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span>El producto</span><span>16</span></div>
+    <aside class="notes" data-t="0:40">
+      <p><b>Ivan.</b> Antes de abrirlo en vivo, el mapa de lo que vais a ver. talentpact.es no es una landing: es el producto navegable.</p>
+      <p>El candidato entra, elige un reto que replica una situación laboral —aquí, un mensaje de Slack a un compañero— y escribe. La IA no da una nota: da un desglose por criterio. La empresa ve ese resultado sin ver a la persona. Y el SkillPass sella lo que acaba de pasar.</p>
+      <p class="cue">La frase de abajo es el perímetro: <b>no sustituye al reclutador. Ordena la evidencia.</b> Ahora, la pantalla de resultados.</p>
+    </aside>
+  </section>
+
+  <!-- ══════════════ 17 · PRODUCTO FUNCIONAL ══════════════ -->
+  <section class="slide dark" data-sec="El producto">
+    <div class="body top">
+      <div class="eyebrow">Producto funcional</div>
+      <h2 style="font-size:36px;max-width:22ch">El MVP convierte una respuesta en una revisión <em>explicable.</em></h2>
+      <div class="split" style="margin-top:6px;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center">
+        <div class="shot">
+          <img src="img/captura-correccion.png" alt="Evaluación IA: Skill Score 74 con desglose por criterio">
+          <p class="cap">Evaluación · score 74 · cinco criterios con justificación</p>
+        </div>
+        <ol class="feat">
+          <li><span class="n">01</span><div><h4>Reto, no currículum</h4><p>Una situación laboral con tiempo y un entregable. No hay preguntas de personalidad.</p></div></li>
+          <li><span class="n">02</span><div><h4>Nota por criterio</h4><p>Estructura, tono, contenido, solución, concisión. Cada una con el porqué.</p></div></li>
+          <li><span class="n">03</span><div><h4>Pool ciego</h4><p>La empresa ordena por Skill Score. El nombre aparece solo si paga el desbloqueo.</p></div></li>
+          <li><span class="n">04</span><div><h4>Ruta a la evidencia</h4><p>Audit trail Art. 12, coste real por evaluación, SkillPass verificable desde fuera.</p></div></li>
+        </ol>
+      </div>
+    </div>
+    <div class="foot"><span>El producto</span><span>17</span></div>
+    <aside class="notes" data-t="0:40">
+      <p><b>Ivan.</b> Esto es lo que sale cuando el candidato pulsa enviar. Un 74 no es un número suelto: son cinco criterios, cada uno con su barra y su frase. Fijaos en Contenido, al 70: el modelo dice que minimizó el impacto del error. Eso es lo que un reclutador no ve en un CV.</p>
+      <p>Cuatro cosas que el producto ya hace: el reto, la nota explicada, el pool anónimo y la ruta a la evidencia —el historial de costes y el sello.</p>
+      <p class="cue">Hasta aquí el mapa. Ahora lo veis funcionar, con una respuesta buena, una mala, un ataque y el sello.</p>
+    </aside>
+  </section>
+
+  <!-- ══════════════ 18 · DEMO ══════════════ -->
   <section class="slide act" data-sec="Demostración">
     <div class="body">
-      <div class="num">DEMOSTRACIÓN EN VIVO · 6 MINUTOS</div>
+      <div class="num">DEMOSTRACIÓN EN VIVO</div>
       <h2>Vamos a <em>enseñarlo.</em></h2>
       <div class="grid g4" style="margin-top:30px;gap:14px">
         <div class="card" style="background:rgba(255,255,255,.05);border-color:rgba(154,200,182,.25)"><div class="k" style="color:var(--accent-bright)">01 · Candidato</div><h3 style="color:#EAF5F0;font-size:15px">Corrección real con IA</h3><p style="color:#9CBBB0;font-size:13px">Un reto resuelto bien y otro mal. Skill Score y feedback por criterio.</p></div>
@@ -613,32 +751,32 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card" style="background:rgba(255,255,255,.05);border-color:rgba(154,200,182,.25)"><div class="k" style="color:var(--accent-bright)">04 · Trazabilidad</div><h3 style="color:#EAF5F0;font-size:15px">Registro de auditoría</h3><p style="color:#9CBBB0;font-size:13px">Coste real por evaluación y desglose de criterios.</p></div>
       </div>
     </div>
-    <div class="foot"><span>Demostración</span><span>16</span></div>
-    <aside class="notes" data-t="5:30">
-      <p class="cue">◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado en GUION_DEFENSA_20MIN.md, sección DEMO.</p>
-      <p><b>Xavier.</b> "Hasta aquí el relato. Ahora os lo enseñamos funcionando."</p>
-      <p><b>1 · Candidato (2:00)</b> — Reto → respuesta buena → Skill Score alto con feedback criterio a criterio. Frase clave: <i>"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica inyectada para este ejercicio"</i>. Si preguntan ChatGPT: <i>"el reto no tiene solución única; se puntúa el razonamiento contra el caso, no un texto de referencia"</i>. Luego una respuesta pobre → nota baja y el motivo.</p>
+    <div class="foot"><span>Demostración</span><span>18</span></div>
+    <aside class="notes" data-t="4:30">
+      <p class="cue">◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado en GUION_DEFENSA_20MIN.md, sección DEMO. El mapa de la web ya está dicho: aquí solo prueba en vivo.</p>
+      <p><b>Xavier.</b> "Hasta aquí el mapa. Ahora os lo enseñamos funcionando."</p>
+      <p><b>1 · Candidato (1:30)</b> — Reto → respuesta buena → Skill Score con feedback criterio a criterio. Frase clave: <i>"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica"</i>. Si preguntan ChatGPT: <i>"el reto no tiene solución única"</i>. Luego una respuesta pobre → nota baja y el motivo.</p>
       <p><b>2 · Seguridad (1:00)</b> — Pegar el ataque de prompt injection. El evaluador lo identifica, lo penaliza y lo dice explícitamente.</p>
-      <p><b>3 · SkillPass (2:00)</b> — Sellar la credencial → enlace a Etherscan → abrir verify.html y comprobarla. <b>Después editar una nota del JSON y volver a verificar: deja de validar.</b> Ese contraste es el momento más fuerte de la demo.</p>
-      <p><b>4 · Trazabilidad (1:00)</b> — Panel de administración → historial de evaluaciones con el coste real de cada una.</p>
+      <p><b>3 · SkillPass (1:30)</b> — Sellar → Etherscan → verify.html. <b>Editar una nota del JSON y volver a verificar: deja de validar.</b> El momento más fuerte.</p>
+      <p><b>4 · Trazabilidad (0:30)</b> — Historial de evaluaciones con el coste real de cada una.</p>
       <p><b>PLAN B</b> si falla la red: SkillPass ya anclado y verify.html en local; PoC en terminal (<span class="mono">python poc_evaluator.py</span>).</p>
     </aside>
   </section>
 
-  <!-- ══════════════ 17 · ACTO V ══════════════ -->
+  <!-- ══════════════ 19 · ACTO V ══════════════ -->
   <section class="slide act" data-sec="El negocio">
     <div class="body">
       <div class="num">ACTO V</div>
       <h2>¿Se sostiene <em>como negocio?</em></h2>
       <p class="lede">La tecnología funciona y es barata. La pregunta que decide el proyecto es si alguien paga por ella y a qué coste de adquisición.</p>
     </div>
-    <div class="foot"><span>El negocio</span><span>17</span></div>
+    <div class="foot"><span>El negocio</span><span>19</span></div>
     <aside class="notes" data-t="0:12">
       <p><b>Xavier.</b> Vuelvo yo. Ya hemos visto que la tecnología funciona y que es barata. La pregunta que decide el proyecto es otra: <b>¿alguien paga por esto, y a qué coste de adquisición?</b></p>
     </aside>
   </section>
 
-  <!-- ══════════════ 18 · MODELO Y UNIT ECONOMICS ══════════════ -->
+  <!-- ══════════════ 20 · MODELO Y UNIT ECONOMICS ══════════════ -->
   <section class="slide" data-sec="El negocio">
     <div class="body top">
       <div class="eyebrow">Modelo de ingresos</div>
@@ -668,7 +806,7 @@ ul.pts li.amber::before{background:var(--amber)}
         </div>
       </div>
     </div>
-    <div class="foot"><span>El negocio</span><span>18</span></div>
+    <div class="foot"><span>El negocio</span><span>20</span></div>
     <aside class="notes" data-t="0:45">
       <p><b>Xavier.</b> Cinco palancas de ingreso, pero la principal es el <b>desbloqueo de contacto a 49 €</b>. Y esa elección es deliberada: 49 € es una decisión que un responsable de RRHH toma sin pasar por el departamento de compras. Vender una licencia de seis mil euros a una pyme es un ciclo de venta de meses.</p>
       <p>Los <b>unit economics</b>, a la derecha. Un ratio LTV/CAC de <b>17,3</b> en 2027, cuando el umbral sano son 3. Margen bruto del <b>93,5 %</b>, porque el COGS es la API de IA y la comisión de Stripe. Y recuperamos el coste de adquisición en <b>mes y medio</b>.</p>
@@ -676,7 +814,7 @@ ul.pts li.amber::before{background:var(--amber)}
     </aside>
   </section>
 
-  <!-- ══════════════ 19 · PROYECCIÓN ══════════════ -->
+  <!-- ══════════════ 21 · PROYECCIÓN ══════════════ -->
   <section class="slide" data-sec="El negocio">
     <div class="body top">
       <div class="eyebrow">Escenario base · modelo a 36 meses</div>
@@ -696,7 +834,7 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card" style="border-color:var(--amber);background:var(--amber-wash)"><div class="k" style="color:var(--amber)">Dónde se rompe</div><h3>El primer año</h3><p>2026 es validación pura: 24 empresas. Si el ritmo de altas no arranca, el resto del modelo no ocurre.</p></div>
       </div>
     </div>
-    <div class="foot"><span>El negocio</span><span>19</span></div>
+    <div class="foot"><span>El negocio</span><span>21</span></div>
     <aside class="notes" data-t="0:40">
       <p><b>Xavier.</b> El escenario base a 36 meses. De <b>24 empresas en 2026</b> a <b>284 en 2028</b>, con un ARR de cierre de casi <b>medio millón</b>. Break-even en <b>mayo de 2028</b>, con 230.000 € de capital entre pre-seed y ENISA.</p>
       <p>Quiero señalar dos cosas. La primera: <b>284 empresas es menos del 0,01 % del mercado abordable</b>. El techo de este proyecto no es el tamaño del mercado, es nuestra capacidad de ejecución.</p>
@@ -704,7 +842,7 @@ ul.pts li.amber::before{background:var(--amber)}
     </aside>
   </section>
 
-  <!-- ══════════════ 20 · LÍMITES ══════════════ -->
+  <!-- ══════════════ 22 · LÍMITES ══════════════ -->
   <section class="slide" data-sec="Límites">
     <div class="body top">
       <div class="eyebrow">Lo que todavía no podemos afirmar</div>
@@ -716,7 +854,7 @@ ul.pts li.amber::before{background:var(--amber)}
         <div class="card" style="border-left:3px solid var(--amber)"><div class="k" style="color:var(--amber)">Efecto red</div><h3>El problema del huevo y la gallina</h3><p>Las empresas no entran sin candidatos y los candidatos se van sin ofertas. Es el riesgo estructural de cualquier marketplace y no se resuelve con tecnología.</p></div>
       </div>
     </div>
-    <div class="foot"><span>Límites</span><span>20</span></div>
+    <div class="foot"><span>Límites</span><span>22</span></div>
     <aside class="notes" data-t="0:55">
       <p><b>Ivan.</b> Antes de cerrar, los cuatro límites de este trabajo. Preferimos decirlos nosotros.</p>
       <p><b>El principal:</b> el Skill Score <b>no está calibrado contra evaluadores humanos</b>. La IA discrimina bien y es barata, pero hasta que midamos la concordancia con un tribunal no podemos afirmar fiabilidad demostrada. Es el siguiente hito del producto.</p>
@@ -726,57 +864,58 @@ ul.pts li.amber::before{background:var(--amber)}
     </aside>
   </section>
 
-  <!-- ══════════════ 21 · LA RONDA ══════════════ -->
-  <section class="slide" data-sec="La ronda">
+  <!-- ══════════════ 23 · LA RONDA ══════════════ -->
+  <section class="slide dark" data-sec="La ronda">
     <div class="body top">
-      <div class="eyebrow">Cierre del plan · el dinero</div>
-      <h2>Pedimos <em>180.000 €</em> de pre-seed.</h2>
-      <p class="lede" style="margin-bottom:16px">SAFE, mes 1. Más <strong>50.000 €</strong> ENISA no dilutivo. Capital total <strong>230.000 €</strong> para el break-even de <strong>mayo 2028</strong>. Con esto se paga la calibración humana, Stripe, el contrato en L2 y las primeras 24 empresas. No hay token.</p>
-      <div class="split" style="grid-template-columns:1.15fr .85fr;align-items:start;gap:28px">
+      <div class="eyebrow">Financiación · pre-seed</div>
+      <div class="split" style="grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;margin-top:4px">
         <div>
-          <table>
-            <thead><tr><th>Uso del pre-seed</th><th class="num-col">%</th><th class="num-col">Importe</th></tr></thead>
-            <tbody>
-              <tr><td>Producto y tech (IA, infra, SkillPass → L2)</td><td class="num-col">40 %</td><td class="num-col"><strong>72.000 €</strong></td></tr>
-              <tr><td>Sales &amp; marketing B2B (primeras cuentas)</td><td class="num-col">30 %</td><td class="num-col">54.000 €</td></tr>
-              <tr><td>Operaciones y legal (SL, RGPD, AI Act)</td><td class="num-col">15 %</td><td class="num-col">27.000 €</td></tr>
-              <tr><td>Compensación lean de socios</td><td class="num-col">10 %</td><td class="num-col">18.000 €</td></tr>
-              <tr><td>Buffer</td><td class="num-col">5 %</td><td class="num-col">9.000 €</td></tr>
-            </tbody>
-          </table>
+          <div class="ask-hero">180.000 €</div>
+          <p class="ask-sub">Para 18 meses de ejecución, calibración y las primeras 24 empresas. Ronda pre-seed, SAFE. Más <strong style="color:#EAF5F0">50.000 € ENISA</strong> no dilutivo. Capital total <strong style="color:#EAF5F0">230.000 €</strong> hasta el break-even de mayo 2028.</p>
+          <div class="ask-box">Lo primero que compra no es más código: es que <strong style="color:#EAF5F0">tres evaluadores humanos</strong> puntúen el corpus que ya está escrito. Después Stripe, el SkillPass en L2 y las primeras cuentas. No hay token.</div>
         </div>
-        <div class="grid" style="gap:12px">
-          <div class="card"><div class="k">Siguiente hito empírico</div><h3>Calibración humana</h3><p>Tres evaluadores puntúan el corpus de 12 ítems que ya está escrito. El banco calcula la κ con el mismo comando.</p></div>
-          <div class="card" style="border-color:var(--amber);background:var(--amber-wash)"><div class="k" style="color:var(--amber)">Qué no es</div><h3>Una petición al tribunal</h3><p>Es el ask del Excel. Si la ronda no entra, el TFM se defiende igual; el break-even de 2028, no.</p></div>
+        <div>
+          <div class="donut-wrap">
+            <div class="donut" aria-hidden="true"><span>180k</span></div>
+            <ul class="leg">
+              <li><i style="background:#34D399"></i><span><b>40 %</b> Producto y tech</span><span class="amt">72.000 €</span></li>
+              <li><i style="background:#0E7C5A"></i><span><b>30 %</b> Ventas B2B</span><span class="amt">54.000 €</span></li>
+              <li><i style="background:#5A8F7E"></i><span><b>15 %</b> Legal y ops</span><span class="amt">27.000 €</span></li>
+              <li><i style="background:#9CBBB0"></i><span><b>10 %</b> Socios</span><span class="amt">18.000 €</span></li>
+              <li><i style="background:#C5D5CE"></i><span><b>5 %</b> Buffer</span><span class="amt">9.000 €</span></li>
+            </ul>
+          </div>
+          <p style="margin-top:18px;font-size:13px;color:#6E9587;line-height:1.5">Producto: IA, infra y llevar el SkillPass a una L2. Legal: SL, RGPD y AI Act. El colchón cubre retrasos de ronda, no capex.</p>
         </div>
       </div>
     </div>
-    <div class="foot"><span>La ronda</span><span>21</span></div>
-    <aside class="notes" data-t="1:00">
-      <p><b>Xavier.</b> Cerramos el power con el dinero. <b>180.000 euros de pre-seed</b>, SAFE, más <b>50.000 de ENISA</b>. Total 230.000 para mayo de 2028.</p>
-      <p>Uso: <b>40 % producto</b> —IA y llevar el SkillPass a L2—. <b>30 % ventas B2B</b>. <b>15 % legal</b>. 10 % socios, 5 % colchón. Lo primero que desbloquea no es más código: es que <b>humanos puntúen el corpus</b>.</p>
-      <p class="cue"><b>No os estamos pidiendo el cheque a vosotros.</b> Es el ask del plan. El trabajo académico ya está construido.</p>
+    <div class="foot"><span>La ronda</span><span>23</span></div>
+    <aside class="notes" data-t="1:15">
+      <p><b>Xavier.</b> Cerramos con el dinero. <b>Ciento ochenta mil euros de pre-seed</b>, SAFE. Más <b>cincuenta mil de ENISA</b>, no dilutivo. En total 230.000 para llegar a mayo de 2028.</p>
+      <p>A la derecha, a qué se va. <b>Cuarenta por ciento a producto</b>: el evaluador, la infraestructura y sacar el SkillPass de testnet. <b>Treinta a ventas B2B</b>, porque el cuello de botella no es el código, es las primeras 24 empresas. Quince a legal. Diez a socios. Cinco de colchón.</p>
+      <p>La caja de abajo es la decisión: lo primero que desbloquea este capital no es una feature nueva, es que <b>humanos puntúen el corpus</b> que ya tenemos escrito.</p>
+      <p class="cue">No os estamos pidiendo el cheque a vosotros. Es el ask del plan. El trabajo académico ya está construido.</p>
     </aside>
   </section>
 
-  <!-- ══════════════ 22 · CIERRE ══════════════ -->
+  <!-- ══════════════ 24 · CIERRE ══════════════ -->
   <section class="slide cover" data-sec="Cierre">
     <div class="mark">talent<span>pact</span></div>
     <div class="body">
-      <p class="eyebrow" style="color:var(--accent-bright);margin-bottom:10px">Pre-seed · SAFE</p>
-      <h2 style="color:#EAF5F0;font-size:72px;max-width:none;margin-bottom:10px;letter-spacing:-.04em">180.000 €</h2>
-      <p class="sub" style="margin-bottom:26px;max-width:50ch">El dinero que el modelo necesita para que el evaluador y el SkillPass dejen de ser un TFM y pasen a las primeras 24 empresas.</p>
+      <p class="eyebrow" style="color:var(--accent-bright);margin-bottom:8px">Pre-seed · SAFE · + 50.000 € ENISA</p>
+      <h2 style="color:#EAF5F0;font-size:78px;max-width:none;margin-bottom:8px;letter-spacing:-.045em">180.000 €</h2>
+      <p class="sub" style="margin-bottom:22px;max-width:48ch">Siguiente decisión: financiar la calibración humana y convertir el producto que acabáis de ver en las primeras 24 empresas.</p>
       <div class="grid g3" style="gap:22px;max-width:none">
-        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:34px">0,0165 €</div><div class="l" style="color:#9CBBB0">por evaluación IA · PoC (Excel usa 0,02)</div></div>
-        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:34px">keccak256</div><div class="l" style="color:#9CBBB0">SkillPass en Sepolia · ya verificable</div></div>
-        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:34px">+ 50 k €</div><div class="l" style="color:#9CBBB0">ENISA no dilutivo · capital 230 k</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:28px">Producto navegable</div><div class="l" style="color:#9CBBB0">talentpact.es · candidato, empresa, SkillPass</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:28px">0,0165 €</div><div class="l" style="color:#9CBBB0">por evaluación · PoC (Excel usa 0,02)</div></div>
+        <div class="stat"><div class="n" style="color:var(--accent-bright);font-size:28px">230.000 €</div><div class="l" style="color:#9CBBB0">capital total · break-even mayo 2028</div></div>
       </div>
     </div>
     <div class="meta"><div><dt>Gracias</dt><dd>Xavier Griñó · Ivan Sánchez — quedamos a vuestra disposición</dd></div></div>
-    <aside class="notes" data-t="0:40">
-      <p><b>Xavier.</b> Cerramos con la cifra: <b>ciento ochenta mil euros</b>. Más cincuenta de ENISA.</p>
-      <p>Lo demostrado: un evaluador <b>barato e inspeccionable</b> —no decimos fiable, porque falta el tribunal humano—, un sello keccak256 que podéis verificar sin pedirnos permiso, y un plan que con ese capital llega a mayo de 2028.</p>
-      <p class="cue">Muchas gracias. Quedamos a vuestra disposición.</p>
+    <aside class="notes" data-t="0:45">
+      <p><b>Xavier.</b> Cerramos con la cifra: <b>ciento ochenta mil euros</b>. Más cincuenta de ENISA. Doscientos treinta mil para mayo de 2028.</p>
+      <p>Lo demostrado: un producto que se navega, un evaluador <b>barato e inspeccionable</b> —no decimos fiable, porque falta el tribunal humano— y un sello que podéis verificar sin pedirnos permiso.</p>
+      <p class="cue">La siguiente decisión no es académica. Es financiar eso. Muchas gracias. Quedamos a vuestra disposición.</p>
     </aside>
   </section>
 
@@ -842,6 +981,9 @@ ul.pts li.amber::before{background:var(--amber)}
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach(function(s, k){ s.classList.toggle('on', k === i); });
     rail.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (location.hash !== '#' + (i + 1)) {
+      try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+    }
     if (notesOn) renderNotes();
   }
 
@@ -889,6 +1031,8 @@ ul.pts li.amber::before{background:var(--amber)}
   document.getElementById('stage-wrap').addEventListener('click', function(){ show(i + 1); });
 
   window.addEventListener('resize', fit);
-  fit(); show(0);
+  var start = parseInt((location.hash || '').replace('#', ''), 10);
+  fit();
+  show(isNaN(start) || start < 1 ? 0 : start - 1);
 })();
 </script>
