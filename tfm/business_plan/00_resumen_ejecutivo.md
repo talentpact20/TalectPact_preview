@@ -4,7 +4,7 @@
 
 **El problema.** Contratar dura ~42 días y cuesta ~€4.700 en España; una fracción alta de CVs no es verificable (fuentes secundarias: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024). El filtro sigue siendo un papel.
 
-**Validación propia (investigación del proyecto, 2026).** n ≈ 30 encuestas: ~90 % de candidatos interesados; **65 %** de empresas de la muestra dispuestas a sustituir la primera entrevista; **7/10** candidatos quieren anonimato al inicio. Criterio experto (≥5 profesionales, Hays). Tracción: 6 países y ~500 visitas en la primera semana. Muestra exploratoria, no probabilística (detalle en §2.4).
+**Validación propia (investigación del proyecto, 2026).** n ≈ 300 encuestas: ~90 % de candidatos interesados; **65 %** de empresas de la muestra dispuestas a sustituir la primera entrevista; **7/10** candidatos quieren anonimato al inicio. Criterio experto (≥5 profesionales, Hays). Tracción: 6 países y ~500 visitas en la primera semana. Muestra exploratoria, no probabilística (detalle en §2.4).
 
 **La solución construida.** (1) Evaluación con Claude ($0,0180 ≈ €0,0165 por ejercicio), (2) persistencia en Supabase (UE), (3) sello on-chain en Ethereum Sepolia y verificador público. Producto: **talentpact.es**.
 

@@ -351,6 +351,11 @@ ul.pts li.amber::before{background:var(--amber)}
   font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#93A29C;
   letter-spacing:.05em;
 }
+
+html.exporting #hud,
+html.exporting #help{display:none !important}
+html.exporting #stage-wrap{padding:0;align-items:center;justify-content:center}
+html.exporting #stage{transform:none !important}
 </style>
 
 <div id="stage-wrap">
@@ -842,7 +847,7 @@ ul.pts li.amber::before{background:var(--amber)}
       <p class="lede" style="font-size:16.5px">No dimos la demanda por supuesta. La contrastamos por tres vías distintas, cada una diseñada para tapar el punto ciego de las otras dos.</p>
       <div class="grid g3" style="margin-top:22px">
         <div class="card">
-          <div class="k">Frente 1 · Encuesta</div><h3>n ≈ 30 cuestionarios</h3>
+          <div class="k">Frente 1 · Encuesta</div><h3>n ≈ 300 cuestionarios</h3>
           <p><strong>90 %</strong> de candidatos interesados en probar retos. <strong>65 %</strong> de empresas se plantearía sustituir la primera entrevista por nuestra evaluación. <strong>7 de cada 10</strong> candidatos prefieren anonimato en el cribado, y un <strong>80 %</strong> de reclutadores admite que el CV no refleja la capacidad técnica.</p>
         </div>
         <div class="card">
@@ -859,10 +864,10 @@ ul.pts li.amber::before{background:var(--amber)}
     <div class="foot"><span>El negocio</span><span>21</span></div>
     <aside class="notes" data-t="0:40">
       <p><b>Xavier.</b> Antes de enseñaros los números, la pregunta previa: <b>¿alguien quiere esto?</b> No lo dimos por supuesto, y lo contrastamos por tres vías que tapan los puntos ciegos de las otras.</p>
-      <p><b>Primera, la encuesta.</b> Unos treinta cuestionarios. El 90 % de los candidatos quiere probar retos; el <b>65 % de las empresas se plantearía sustituir la primera entrevista</b> por nuestra evaluación, que es el dato importante porque viene del lado que paga; siete de cada diez candidatos prefieren el anonimato en el cribado, que valida directamente nuestro diseño; y un 80 % de reclutadores admite que el CV no refleja la capacidad técnica.</p>
+      <p><b>Primera, la encuesta.</b> Unos trescientos cuestionarios. El 90 % de los candidatos quiere probar retos; el <b>65 % de las empresas se plantearía sustituir la primera entrevista</b> por nuestra evaluación, que es el dato importante porque viene del lado que paga; siete de cada diez candidatos prefieren el anonimato en el cribado, que valida directamente nuestro diseño; y un 80 % de reclutadores admite que el CV no refleja la capacidad técnica.</p>
       <p><b>Segunda, el criterio experto.</b> Una encuesta mide intención declarada, pero no capta el juicio de quien conoce las restricciones reales de un departamento de selección. Hablamos con tres empresas del sector y cinco profesionales, entre ellos un headhunter de Hays. Y lo buscábamos a propósito: queríamos que alguien nos dijera por qué esto <b>no</b> iba a funcionar. Coincidieron en que un resultado verificado reduce el tiempo de cribado técnico, que es exactamente donde está el coste oculto del proceso.</p>
       <p><b>Y tercera, el comportamiento.</b> Porque las opiniones son baratas. Publicamos el prototipo y en la primera semana tuvimos <b>más de 500 visitas desde seis países</b>, con difusión orgánica y sin gastar un euro en publicidad.</p>
-      <p class="cue">Y ahora lo decimos nosotros antes de que nos lo preguntéis, que es la línea ámbar: <b>los tres frentes miden atención, no disposición a pagar</b>. La muestra es pequeña y autoseleccionada — quien responde a una idea que le has hecho llegar tiende a ser favorable, así que ese 90 % está inflado respecto a un muestreo aleatorio. Es investigación exploratoria, la tratamos como tal en el documento, y la validación con clientes de pago es justo lo que viene después.</p>
+      <p class="cue">Y ahora lo decimos nosotros antes de que nos lo preguntéis, que es la línea ámbar: <b>los tres frentes miden atención, no disposición a pagar</b>. La muestra es autoseleccionada — quien responde a una idea que le has hecho llegar tiende a ser favorable, así que ese 90 % está inflado respecto a un muestreo aleatorio. Es investigación exploratoria, la tratamos como tal en el documento, y la validación con clientes de pago es justo lo que viene después.</p>
     </aside>
   </section>
 
@@ -994,9 +999,12 @@ ul.pts li.amber::before{background:var(--amber)}
   var notes  = document.getElementById('notes');
   var rail   = document.querySelector('#rail i');
   var i = 0, notesOn = false, t0 = null;
+  var exporting = /(?:\?|&)export(?:&|=|$)/.test(location.search) || location.search === '?export';
+  if (exporting) document.documentElement.classList.add('exporting');
 
   // Escala el escenario para que quepa entero, sin recortar ni deformar.
   function fit(){
+    if (exporting){ stage.style.transform = 'none'; return; }
     var pad = 0.94;
     var s = Math.min(window.innerWidth / 1280, window.innerHeight / 720) * pad;
     if (notesOn) s = Math.min(window.innerWidth / 1280, (window.innerHeight * 0.56) / 720) * 0.96;

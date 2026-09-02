@@ -381,7 +381,7 @@ Cuatro cosas que el producto ya hace: el reto, la nota explicada, el pool anóni
 **Xavier.** Antes de enseñaros los números, la pregunta previa: **¿alguien quiere esto?** No lo dimos por supuesto, y lo contrastamos por tres vías que tapan los puntos ciegos de las otras.
 
       
-**Primera, la encuesta.** Unos treinta cuestionarios. El 90 % de los candidatos quiere probar retos; el **65 % de las empresas se plantearía sustituir la primera entrevista** por nuestra evaluación, que es el dato importante porque viene del lado que paga; siete de cada diez candidatos prefieren el anonimato en el cribado, que valida directamente nuestro diseño; y un 80 % de reclutadores admite que el CV no refleja la capacidad técnica.
+**Primera, la encuesta.** Unos trescientos cuestionarios. El 90 % de los candidatos quiere probar retos; el **65 % de las empresas se plantearía sustituir la primera entrevista** por nuestra evaluación, que es el dato importante porque viene del lado que paga; siete de cada diez candidatos prefieren el anonimato en el cribado, que valida directamente nuestro diseño; y un 80 % de reclutadores admite que el CV no refleja la capacidad técnica.
 
       
 **Segunda, el criterio experto.** Una encuesta mide intención declarada, pero no capta el juicio de quien conoce las restricciones reales de un departamento de selección. Hablamos con tres empresas del sector y cinco profesionales, entre ellos un headhunter de Hays. Y lo buscábamos a propósito: queríamos que alguien nos dijera por qué esto **no** iba a funcionar. Coincidieron en que un resultado verificado reduce el tiempo de cribado técnico, que es exactamente donde está el coste oculto del proceso.
@@ -447,7 +447,7 @@ Y lo que dejamos demostrado hoy son tres cosas concretas. **Un producto que se u
 > **▶** Y para que quede claro: no os estamos pidiendo el cheque a vosotros. Es la petición del plan de negocio. El trabajo académico ya está construido. Muchas gracias, quedamos a vuestra disposición para las preguntas.
 
       
-> **▶** Los otros límites, si el tribunal los saca: la validación de mercado es una muestra de treinta personas autoseleccionada, mide atención y no disposición a pagar; y el huevo y la gallina del marketplace, que no se resuelve con tecnología sino con estrategia de entrada. Están desarrollados en `QA_DEFENSA.md`.
+> **▶** Los otros límites, si el tribunal los saca: la validación de mercado es una muestra de trescientas personas autoseleccionada, mide atención y no disposición a pagar; y el huevo y la gallina del marketplace, que no se resuelve con tecnología sino con estrategia de entrada. Están desarrollados en `QA_DEFENSA.md`.
 
 ---
 
@@ -598,7 +598,7 @@ superiores: nuestra ventaja no es tener más medios, es ocupar un hueco que a su
 estructuras les resulta incómodo habitar.
 
 **¿Cómo habéis validado que alguien quiere esto?**
-Por tres vías que tapan los puntos ciegos de las otras. **Encuesta** (n ≈ 30): 90 % de
+Por tres vías que tapan los puntos ciegos de las otras. **Encuesta** (n ≈ 300): 90 % de
 candidatos interesados, **65 % de empresas dispuestas a sustituir la primera entrevista**,
 7 de cada 10 candidatos prefieren anonimato en el cribado y 80 % de reclutadores admite que
 el CV no refleja la capacidad técnica. **Criterio experto**: 3 empresas del sector y 5
@@ -606,7 +606,7 @@ profesionales de selección, entre ellos un *headhunter* de Hays, buscados a pro
 que nos dijeran por qué no funcionaría; coincidieron en que un resultado verificado reduce
 el tiempo de cribado técnico. **Tracción**: más de 500 visitas desde 6 países en la primera
 semana del prototipo, sin publicidad de pago. Y el límite, que decimos nosotros: los tres
-frentes miden **atención, no disposición a pagar**. La muestra es pequeña y
+frentes miden **atención, no disposición a pagar**. La muestra es
 autoseleccionada, ese 90 % está inflado respecto a un muestreo aleatorio, y así consta en
 el §2.4 del documento. La validación con clientes de pago es el trabajo siguiente.
 
@@ -622,7 +622,7 @@ Skill Score **no está calibrado contra evaluadores humanos**. La IA discrimina 
 barata, pero hasta que midamos la concordancia con un tribunal no podemos afirmar
 fiabilidad demostrada. El protocolo y el corpus ya están escritos; faltan las personas,
 y es lo primero que financia la ronda. **Dos:** la validación de mercado es una muestra
-de treinta personas, autoseleccionada — mide **atención**, no disposición a pagar.
+de trescientas personas, autoseleccionada — mide **atención**, no disposición a pagar.
 **Tres:** hay varianza residual. Si dos personas pegan *el mismo texto*, sacan la misma
 nota (`temperature=0`); el ±8-12 de la literatura aparece cuando la rúbrica usa
 adjetivos en vez de anclas observables. **Y cuatro:** el huevo y la gallina del

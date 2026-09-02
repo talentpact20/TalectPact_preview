@@ -94,7 +94,7 @@ Los tres frentes se tratan como **investigación exploratoria** y no como infere
 
 | Indicador | Resultado | Lectura |
 |---|---|---|
-| Cuestionarios completados | **n ≈ 30** | Muestra pequeña |
+| Cuestionarios completados | **n ≈ 300** | Muestra no probabilística |
 | Candidatos interesados en el proyecto | **~90 %** | Fuerte *willingness* a probar retos |
 | Empresas dispuestas a **sustituir la primera entrevista** por la evaluación TalentPact | **65 %** | Señal de *willingness to switch* en el lado que paga |
 | Candidatos que prefieren **anonimato** en las fases iniciales | **7 de cada 10** | Encaja con el diseño de perfil ciego |
@@ -130,7 +130,7 @@ Estos datos validan **interés y alcance geográfico inicial** del planteamiento
 
 ### Límites
 
-1. Con **n ≈ 30** y un reclutamiento realizado en el entorno cercano y a través de la propia web, existe un sesgo de autoselección evidente: quien responde a un cuestionario sobre una idea que le han hecho llegar tiende a mostrarse favorable. El ~90 % de interés está, por tanto, **inflado** respecto a lo que arrojaría un muestreo aleatorio.
+1. Con **n ≈ 300** y un reclutamiento realizado en el entorno cercano y a través de la propia web, existe un sesgo de autoselección evidente: quien responde a un cuestionario sobre una idea que le han hecho llegar tiende a mostrarse favorable. El ~90 % de interés está, por tanto, **inflado** respecto a lo que arrojaría un muestreo aleatorio.
 2. Las preguntas exactas y los cruces por edad, sector o disposición a pagar **no están tabulados** en este documento.
 3. El 80 % de reclutadores que admiten la insuficiencia del CV es un resultado de *esta* ronda exploratoria, no la conclusión de un meta-análisis.
 4. Seis países y quinientas visitas miden **atención**, no disposición a pagar. Son magnitudes de interés, no de mercado.

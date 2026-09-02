@@ -100,7 +100,7 @@
   },
   "validacion": {
     "fuente": "encuestas y landing del MVP (2026); muestra no probabilística",
-    "n": 30,
+    "n": 300,
     "candidatosInteresadosPct": 90,
     "empresasSustituyenPrimeraEntrevistaPct": 65,
     "anonimatoPreferido": "7/10",
