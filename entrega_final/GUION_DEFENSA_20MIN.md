@@ -2,7 +2,7 @@
 
 **Deck:** `entrega_final/deck_defensa_20min.html` (ábrelo en el navegador, `F` para pantalla completa)
 **Controles:** `←` `→` navegar · `N` notas del ponente · `T` cronómetro
-**Duración prevista:** ~18:54 hablados + margen · **Reparto:** X = Xavier · I = Ivan
+**Duración prevista:** ~19:49 hablados · **Reparto:** X = Xavier · I = Ivan
 
 > El cronómetro del deck compara el tiempo real con el previsto y avisa de si vais
 > por delante o por detrás. Actívalo con `T` al empezar.
@@ -15,18 +15,20 @@
 |---|---|---|
 | Problema y oportunidad | 2-4 | 1:50 |
 | La solución | 5-6 | 1:02 |
-| Motor de evaluación con IA | 7-11 | 3:45 |
-| SkillPass — capa fintech | 12-15 | 2:40 |
-| **El producto (talentpact.es)** | **16-17** | **1:20** |
-| **Demostración en vivo** | 18 | **4:30** |
-| Negocio | 19-21 | 1:37 |
-| **Cierre y ronda (€180 k)** | **22** | **1:40** |
+| **Competencia y ventaja competitiva** | **7** | **0:45** |
+| Motor de evaluación con IA | 8-12 | 3:45 |
+| SkillPass — capa fintech | 13-16 | 2:40 |
+| **El producto (talentpact.es)** | **17-18** | **1:20** |
+| **Demostración en vivo** | 19 | **4:15** |
+| **Validación de producto** | **21** | **0:40** |
+| Negocio | 20, 22-23 | 1:37 |
+| **Cierre y ronda (€180 k)** | **24** | **1:25** |
 
-Total: **18:54**, con algo más de un minuto de margen sobre los veinte.
+Total: **19:49**. El margen es de once segundos, así que el cronómetro (`T`) deja de ser opcional.
 
-**Regla de oro:** si vais retrasados, recortad negocio (20-21), nunca el producto (16-17), la demo, la diapositiva 11 ni el cierre.
+**Regla de oro:** si vais retrasados, recortad negocio (22-23), nunca el producto (17-18), la demo, la validación (21), la diapositiva 12 ni el cierre. Si vais muy justos, la 7 de competencia se puede resumir en dos frases: *«esto existe a trozos: unos encuentran, otros evalúan, nadie hace las dos y ninguno da anonimato ni credencial portable»*.
 
-**Los límites del trabajo ya no tienen diapositiva propia**, pero se dicen igual, repartidos: la falta de calibración humana en la 10 y la 11 (y otra vez en el cierre), la testnet en la 15, la lista de revocados en las notas de la 14 y el riesgo del primer año en la 21. Las respuestas completas están en `QA_DEFENSA.md`.
+**Los límites del trabajo ya no tienen diapositiva propia**, pero se dicen igual, repartidos: la falta de calibración humana en la 11 y la 12 (y otra vez en el cierre), la testnet en la 16, la lista de revocados en las notas de la 15, **el techo de la validación en la 21** y el riesgo del primer año en la 23. Las respuestas completas están en `QA_DEFENSA.md`.
 
 **Cifras que se dicen (las de `tfm/cifras_canonicas.json`):** coste PoC **€0,0165** (producto ~€0,013; Excel €0,02); discriminación **87 pts** (96 vs 9); tests **84**; margen bruto **93 %** (una sola cifra, siempre la misma); pre-seed **180.000 €** + ENISA **50.000 €**.
 
@@ -109,16 +111,36 @@ Y al mismo tiempo el paro juvenil está en el 24,9 %, el doble de la media europ
 **Segunda:** el perfil es ciego. La empresa ve habilidades y puntuaciones, nunca nombre, edad, género ni foto. Esto no es solo ético: es nuestro principal mecanismo anti-sesgo de cara al AI Act.
 
       
-**Tercera:** ese resultado se convierte en un **SkillPass**: un documento cuyo hash se ancla on-chain y que cualquier empresa comprueba sin cuenta. Es la parte fintech y la veremos en detalle.
+**Tercera:** ese resultado se convierte en un **SkillPass**, una credencial sellada en blockchain que cualquier empresa puede comprobar sin abrirse una cuenta. Es la parte fintech y la veremos en detalle dentro de un momento.
 
       
 > **▶** Y el modelo: la empresa paga 49 € solo cuando quiere el contacto. Pago por resultado, sin licencia ni compromiso.
 
 ---
 
-## 07 · El motor de evaluación. · corte de acto
+## 07 · Encontrar y medir son hoy dos compras distintas.
 
-**El motor de IA** · 0:15 previstos · acumulado 3:37
+**La solución** · 0:45 previstos · acumulado 4:07
+
+**Ivan.** La pregunta obvia en este punto es si esto no existe ya. Y la respuesta corta es que existe **a trozos**.
+
+      
+El mercado está partido en dos mitades que casi no se hablan. Por un lado, las plataformas que **te dicen quién existe**: LinkedIn Recruiter es la referencia, tiene el mayor censo profesional del mundo, pero lo que enseña son currículos digitales, es decir, lo que cada uno dice de sí mismo. Te ayuda a encontrar a alguien y no te dice absolutamente nada sobre si sabe hacer el trabajo. Y se paga por licencia mensual, salga o no salga la contratación.
+
+      
+Por otro lado, las que **evalúan a quien ya has encontrado**: HackerRank y Codility, muy buenas, pero solo para programadores; TestGorilla, más barata pero con tests genéricos que no se adaptan a la vacante; y CodeSignal, que se va por encima de seis mil dólares al año y está pensada para grandes departamentos.
+
+      
+Las tres comparten tres agujeros que se ven en la tabla. **No aportan candidatos**, así que el cuello de botella de encontrar sigue intacto. **Ninguna da anonimato real**: el evaluador ve el nombre y el historial, así que el sesgo entra por la puerta de atrás justo cuando querías medir capacidad. Y **el resultado no es portable**: la nota se queda dentro de la plataforma y pertenece a la empresa que pagó la prueba. Un candidato que aprueba una prueba dura no se lleva nada al siguiente proceso.
+
+      
+> **▶** Y ahora la parte honesta, que es la fila de abajo. De nuestras cuatro ventajas, **el precio es la más floja**: cualquier competidor puede cambiar su tarifa en un trimestre. Las que de verdad protegen son el anonimato —porque copiarlo obliga a LinkedIn a dejar de enseñar lo que vende— y la credencial verificable, que no es una función sino un protocolo. No os vamos a decir que tenemos una barrera de entrada infranqueable: tenemos un hueco que a los actores actuales les resulta incómodo ocupar.
+
+---
+
+## 08 · El motor de evaluación. · corte de acto
+
+**El motor de IA** · 0:15 previstos · acumulado 4:22
 
 **Ivan.** Vamos al núcleo técnico, que es donde está el trabajo del bloque de Data Science e IA.
 
@@ -127,9 +149,9 @@ Todo lo que acabamos de contar descansa en una única pregunta: **¿puede una IA
 
 ---
 
-## 08 · 102 retos distintos, un solo corrector.
+## 09 · 102 retos distintos, un solo corrector.
 
-**El motor de IA** · 0:45 previstos · acumulado 4:22
+**El motor de IA** · 0:45 previstos · acumulado 5:07
 
 **Ivan.** El problema de ingeniería se entiende con un ejemplo. Queremos un catálogo de **102 retos**: uno es escribir código en Python, otro es negociar con un cliente, otro es leer una cuenta de resultados. No se parecen en nada. Hacer un corrector para cada uno significaría construir 102 programas distintos, y eso no se sostiene.
 
@@ -144,9 +166,9 @@ El cuarto es el **Evaluador**, y es el importante: lee la respuesta, la contrast
 
 ---
 
-## 09 · La inteligencia vive en los datos, no en el código.
+## 10 · La inteligencia vive en los datos, no en el código.
 
-**El motor de IA** · 1:05 previstos · acumulado 5:27
+**El motor de IA** · 1:05 previstos · acumulado 6:12
 
 **Ivan.** Esta es la aportación técnica de la que estamos más satisfechos, y quiero explicarla despacio porque es sencilla: **nuestro programa no sabe corregir nada por sí mismo**. Es un motor genérico. Todo lo que hace falta para juzgar un ejercicio le entra como dato en el momento de corregirlo.
 
@@ -164,9 +186,9 @@ Y tres reglas que el motor no puede saltarse: razonar antes de puntuar, criterio
 
 ---
 
-## 10 · Lo que hemos conseguido y lo que falta.
+## 11 · Lo que hemos conseguido y lo que falta.
 
-**El motor de IA** · 0:55 previstos · acumulado 6:22
+**El motor de IA** · 0:55 previstos · acumulado 7:07
 
 **Xavier.** Esta es la tabla que más nos importa, porque son **datos medidos en ejecuciones reales**, no proyecciones. Nos pusimos siete objetivos al empezar; estos son los valores a los que hemos llegado.
 
@@ -187,9 +209,9 @@ Cierre: tres ejercicios por candidato cuestan **unos 5 céntimos** de IA frente 
 
 ---
 
-## 11 · Una buena demo no es una prueba.
+## 12 · Una buena demo no es una prueba.
 
-**El motor de IA** · 0:45 previstos · acumulado 7:07
+**El motor de IA** · 0:45 previstos · acumulado 7:52
 
 **Xavier.** Cualquiera puede enseñar la corrección que le salió bien. Eso no demuestra que el sistema funcione, solo que ese día tuvo suerte. Así que montamos dos comprobaciones que corren solas.
 
@@ -213,9 +235,9 @@ La línea de abajo la decimos antes de que nos la pregunten: esto demuestra que 
 
 ---
 
-## 12 · SkillPass: la capa fintech. · corte de acto
+## 13 · SkillPass: la capa fintech. · corte de acto
 
-**SkillPass** · 0:15 previstos · acumulado 7:22
+**SkillPass** · 0:15 previstos · acumulado 8:07
 
 **Ivan.** Vamos a la capa fintech, que es el eje de este máster.
 
@@ -224,9 +246,9 @@ La frase del trabajo: **la IA produce la evidencia; la cadena prueba que ese doc
 
 ---
 
-## 13 · Un PDF se edita en dos minutos.
+## 14 · Un PDF se edita en dos minutos.
 
-**SkillPass** · 0:45 previstos · acumulado 8:07
+**SkillPass** · 0:45 previstos · acumulado 8:52
 
 **Ivan.** Las opciones habituales no sirven. Un **PDF** lo edita cualquiera. Un **perfil de LinkedIn** lo escribe el propio candidato: es una declaración, no una prueba. Y un **certificado alojado por nosotros** obliga a la empresa a confiar en TalentPact y a que TalentPact siga existiendo dentro de cinco años.
 
@@ -241,9 +263,9 @@ Y para eso usamos la blockchain, para una sola cosa. Pensadlo como un **sello de
 
 ---
 
-## 14 · A la cadena solo sale una huella.
+## 15 · A la cadena solo sale una huella.
 
-**SkillPass** · 1:00 previstos · acumulado 9:07
+**SkillPass** · 1:00 previstos · acumulado 9:52
 
 **Ivan.** Cómo se hace ese sello, en cuatro pasos y sin tecnicismos.
 
@@ -270,7 +292,7 @@ Y esto resuelve una contradicción que parecía irresoluble: **lo que se publica
 
 ---
 
-## 15 · El contrato está desplegado y es público.
+## 16 · El contrato está desplegado y es público.
 
 **SkillPass** · 0:40 previstos · acumulado 10:32
 
@@ -287,9 +309,9 @@ Y aquí la precisión regulatoria, que en este máster importa: el SkillPass **n
 
 ---
 
-## 16 · Un flujo convierte el reto en una decisión.
+## 17 · Un flujo convierte el reto en una decisión.
 
-**El producto** · 0:40 previstos · acumulado 10:32
+**El producto** · 0:40 previstos · acumulado 11:12
 
 **Ivan.** Hasta aquí la tecnología. Ahora, qué es TalentPact cuando lo abres en el navegador. Y una aclaración importante: **talentpact.es no es una página de presentación, es el producto**. Todo lo que veis en esa captura se puede usar hoy.
 
@@ -304,9 +326,9 @@ Cuatro pantallas, cuatro papeles: quien demuestra, quien corrige, quien decide y
 
 ---
 
-## 17 · El MVP convierte una respuesta en una revisión explicable.
+## 18 · El MVP convierte una respuesta en una revisión explicable.
 
-**El producto** · 0:40 previstos · acumulado 11:12
+**El producto** · 0:40 previstos · acumulado 11:52
 
 **Ivan.** Esto es lo que sale cuando el candidato pulsa enviar. Un 74 no es un número suelto: son cinco criterios, cada uno con su barra y su frase. Fijaos en Contenido, al 70: el modelo dice que minimizó el impacto del error. Eso es lo que un reclutador no ve en un CV.
 
@@ -318,9 +340,9 @@ Cuatro cosas que el producto ya hace: el reto, la nota explicada, el pool anóni
 
 ---
 
-## 18 · Vamos a enseñarlo. · corte de acto
+## 19 · Vamos a enseñarlo. · corte de acto
 
-**Demostración** · 4:30 previstos · acumulado 15:42
+**Demostración** · 4:15 previstos · acumulado 16:07
 
 > **▶** ◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado más abajo, sección DEMO. El mapa de la web ya está dicho: aquí solo prueba en vivo.
 
@@ -344,17 +366,37 @@ Cuatro cosas que el producto ya hace: el reto, la nota explicada, el pool anóni
 
 ---
 
-## 19 · ¿Se sostiene como negocio? · corte de acto
+## 20 · ¿Se sostiene como negocio? · corte de acto
 
-**El negocio** · 0:12 previstos · acumulado 15:54
+**El negocio** · 0:12 previstos · acumulado 16:19
 
 **Xavier.** Vuelvo yo. Ya hemos visto que la tecnología funciona y que es barata. La pregunta que decide el proyecto es otra: **¿alguien paga por esto, y a qué coste de adquisición?**
 
 ---
 
-## 20 · Pago por resultado, con cinco palancas.
+## 21 · Qué dijo el mercado antes de construirlo.
 
-**El negocio** · 0:45 previstos · acumulado 16:39
+**El negocio** · 0:40 previstos · acumulado 16:59
+
+**Xavier.** Antes de enseñaros los números, la pregunta previa: **¿alguien quiere esto?** No lo dimos por supuesto, y lo contrastamos por tres vías que tapan los puntos ciegos de las otras.
+
+      
+**Primera, la encuesta.** Unos treinta cuestionarios. El 90 % de los candidatos quiere probar retos; el **65 % de las empresas se plantearía sustituir la primera entrevista** por nuestra evaluación, que es el dato importante porque viene del lado que paga; siete de cada diez candidatos prefieren el anonimato en el cribado, que valida directamente nuestro diseño; y un 80 % de reclutadores admite que el CV no refleja la capacidad técnica.
+
+      
+**Segunda, el criterio experto.** Una encuesta mide intención declarada, pero no capta el juicio de quien conoce las restricciones reales de un departamento de selección. Hablamos con tres empresas del sector y cinco profesionales, entre ellos un headhunter de Hays. Y lo buscábamos a propósito: queríamos que alguien nos dijera por qué esto **no** iba a funcionar. Coincidieron en que un resultado verificado reduce el tiempo de cribado técnico, que es exactamente donde está el coste oculto del proceso.
+
+      
+**Y tercera, el comportamiento.** Porque las opiniones son baratas. Publicamos el prototipo y en la primera semana tuvimos **más de 500 visitas desde seis países**, con difusión orgánica y sin gastar un euro en publicidad.
+
+      
+> **▶** Y ahora lo decimos nosotros antes de que nos lo preguntéis, que es la línea ámbar: **los tres frentes miden atención, no disposición a pagar**. La muestra es pequeña y autoseleccionada — quien responde a una idea que le has hecho llegar tiende a ser favorable, así que ese 90 % está inflado respecto a un muestreo aleatorio. Es investigación exploratoria, la tratamos como tal en el documento, y la validación con clientes de pago es justo lo que viene después.
+
+---
+
+## 22 · Pago por resultado, con cinco palancas.
+
+**El negocio** · 0:45 previstos · acumulado 17:44
 
 **Xavier.** Cinco vías de ingreso, pero la que manda es una: **49 € por desbloquear el contacto de un candidato**. Y esa elección es deliberada, así que la explico.
 
@@ -372,9 +414,9 @@ Las cifras de la derecha. Por cada euro que gastamos en captar una empresa recup
 
 ---
 
-## 21 · De validar a medio millón de ARR.
+## 23 · De validar a medio millón de ARR.
 
-**El negocio** · 0:40 previstos · acumulado 17:19
+**El negocio** · 0:40 previstos · acumulado 18:24
 
 **Xavier.** El escenario base a tres años. De **24 empresas el primer año** a **284 el tercero**, con unos ingresos recurrentes de cierre de casi **medio millón**. Llegamos al punto de equilibrio **a mitad del tercer año**, con 230.000 € de capital entre la ronda y el préstamo ENISA.
 
@@ -386,9 +428,9 @@ Quiero señalar dos cosas. La primera: **284 empresas es menos del 0,01 % del me
 
 ---
 
-## 22 · 180.000 € · cierre
+## 24 · 180.000 € · cierre
 
-**Cierre** · 1:40 previstos · acumulado 18:54
+**Cierre** · 1:25 previstos · acumulado 19:49
 
 **Xavier.** Cerramos con el dinero, que es la parte que suele quedarse fuera de un TFM y aquí no queremos que se quede. **Ciento ochenta mil euros** de ronda pre-seed, en formato SAFE. Más **cincuenta mil de ENISA**, que es un préstamo público y no diluye. Doscientos treinta mil en total, y con eso llegamos al punto de equilibrio a mitad del tercer año.
 
@@ -471,7 +513,7 @@ Panel de administración → historial de evaluaciones.
 |---|---|
 | La API de IA no responde | Terminal: `python poc_evaluator.py` — mismo motor, resultados reproducibles |
 | La red o el RPC caen | Usa el SkillPass **ya anclado** y `verify.html` en local con el hash guardado |
-| Todo lo demás | Pasa a la diapositiva 19 y sigue; no gastes tiempo depurando en directo |
+| Todo lo demás | Pasa a la diapositiva 20 y sigue; no gastes tiempo depurando en directo |
 
 ---
 
@@ -529,11 +571,50 @@ El prompt es portable y la función serverless ya prueba varios modelos en casca
 Además el margen aguanta: a un 93 % de margen bruto, el coste de IA podría multiplicarse
 por diez y el negocio seguiría siendo viable.
 
+**¿Qué os diferencia de HackerRank, Codility o LinkedIn Recruiter?**
+Que ellos resuelven media compra cada uno. LinkedIn **encuentra** pero no evalúa: vende
+currículos declarados por el propio candidato, con licencia de 170 a 900 $/mes que se
+paga salga o no salga la contratación. HackerRank y Codility **evalúan** pero no aportan
+candidatos, y solo cubren perfil de desarrollador. TestGorilla amplía el catálogo a costa
+de tests genéricos que no se adaptan a la vacante. CodeSignal pasa de 6.000 $/año y está
+pensada para grandes departamentos. Los cuatro comparten tres agujeros: no aportan
+candidatos, **ninguno ofrece anonimato real** —el evaluador ve nombre e historial, así que
+el sesgo entra por detrás— y **el resultado no es portable**: la nota se queda dentro de la
+plataforma que la generó y pertenece a la empresa que pagó la prueba. Está en la
+diapositiva 7.
+
+**¿Cuál de vuestras ventajas es defendible de verdad?**
+Lo decimos con orden, porque no todas valen lo mismo. **El precio es la más floja**:
+cobrar por resultado es nuestra mejor arma comercial, pero cualquier competidor cambia su
+tarifa en un trimestre si empieza a perder cuentas; no lo presentamos como barrera de
+entrada. **El anonimato estructural** es más difícil de copiar de lo que parece: no es
+ocultar un campo, es rediseñar el flujo para decidir sin datos personales, lo que obliga a
+tener una señal de calidad alternativa — y un competidor de *sourcing* tendría que dejar de
+enseñar el activo que vende. **El efecto de red** es el que más protege a largo plazo y el
+más frágil al principio. Y **la credencial verificable** es el diferenciador más profundo,
+porque no es una función sino un protocolo: exige criptografía y cumplimiento, que no es el
+perfil habitual de estas empresas. Con todo, los competidores citados tienen recursos muy
+superiores: nuestra ventaja no es tener más medios, es ocupar un hueco que a sus
+estructuras les resulta incómodo habitar.
+
+**¿Cómo habéis validado que alguien quiere esto?**
+Por tres vías que tapan los puntos ciegos de las otras. **Encuesta** (n ≈ 30): 90 % de
+candidatos interesados, **65 % de empresas dispuestas a sustituir la primera entrevista**,
+7 de cada 10 candidatos prefieren anonimato en el cribado y 80 % de reclutadores admite que
+el CV no refleja la capacidad técnica. **Criterio experto**: 3 empresas del sector y 5
+profesionales de selección, entre ellos un *headhunter* de Hays, buscados a propósito para
+que nos dijeran por qué no funcionaría; coincidieron en que un resultado verificado reduce
+el tiempo de cribado técnico. **Tracción**: más de 500 visitas desde 6 países en la primera
+semana del prototipo, sin publicidad de pago. Y el límite, que decimos nosotros: los tres
+frentes miden **atención, no disposición a pagar**. La muestra es pequeña y
+autoseleccionada, ese 90 % está inflado respecto a un muestreo aleatorio, y así consta en
+el §2.4 del documento. La validación con clientes de pago es el trabajo siguiente.
+
 **¿No es optimista proyectar 284 empresas?**
 Es menos del 0,01 % del mercado abordable, y el modelo arranca con **24 empresas el
 primer año**, que es una hipótesis modesta. El riesgo no está en el techo, está en el
 arranque: si el primer año no despega, el resto no ocurre. Lo decimos en la
-diapositiva 21.
+diapositiva 23.
 
 **¿Cuáles son los límites de este trabajo?**
 Cuatro, y los decimos nosotros antes de que nos los saquéis. **Uno, el principal:** el
@@ -555,7 +636,7 @@ vale cero y no un aprobado, y que la respuesta del candidato nunca entra en el c
 de sistema. Y `npm run bench` pasa un **gold set de doce ítems y tres ataques** por
 el motor de producción y devuelve kappa, error medio, correlación de orden y
 dispersión entre repeticiones. Escribir esos tests nos encontró dos fallos reales
-que no se veían leyendo el código, y los dos están en la diapositiva 11.
+que no se veían leyendo el código, y los dos están en la diapositiva 12.
 
 **Esa kappa, ¿es la kappa de Cohen que pedía el Charter?**
 No, y es importante que quede claro. La nuestra mide acuerdo con **la banda que fija
