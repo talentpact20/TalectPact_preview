@@ -2,7 +2,7 @@
 
 **Deck:** `entrega_final/deck_defensa_20min.html` (ábrelo en el navegador, `F` para pantalla completa)
 **Controles:** `←` `→` navegar · `N` notas del ponente · `T` cronómetro
-**Duración prevista:** ~20:14 hablados + margen · **Reparto:** X = Xavier · I = Ivan
+**Duración prevista:** ~18:54 hablados + margen · **Reparto:** X = Xavier · I = Ivan
 
 > El cronómetro del deck compara el tiempo real con el previsto y avisa de si vais
 > por delante o por detrás. Actívalo con `T` al empezar.
@@ -16,16 +16,19 @@
 | Problema y oportunidad | 2-4 | 1:50 |
 | La solución | 5-6 | 1:02 |
 | Motor de evaluación con IA | 7-11 | 3:45 |
-| SkillPass — capa fintech | 12-15 | 2:45 |
+| SkillPass — capa fintech | 12-15 | 2:40 |
 | **El producto (talentpact.es)** | **16-17** | **1:20** |
 | **Demostración en vivo** | 18 | **4:30** |
 | Negocio | 19-21 | 1:37 |
-| Límites | 22 | 0:55 |
-| **La ronda (€180 k)** | 23-24 | **2:00** |
+| **Cierre y ronda (€180 k)** | **22** | **1:40** |
 
-**Regla de oro:** si vais retrasados, recortad negocio (20-21), nunca el producto (16-17), la demo, los límites, la diapositiva 11 ni el cierre de la ronda.
+Total: **18:54**, con algo más de un minuto de margen sobre los veinte.
 
-**Cifras que se dicen (las de `tfm/cifras_canonicas.json`):** coste PoC **€0,0165** (producto ~€0,013; Excel €0,02); discriminación **87 pts** (96 vs 9); tests **84**; margen **93,5 %**; pre-seed **180.000 €** + ENISA **50.000 €**.
+**Regla de oro:** si vais retrasados, recortad negocio (20-21), nunca el producto (16-17), la demo, la diapositiva 11 ni el cierre.
+
+**Los límites del trabajo ya no tienen diapositiva propia**, pero se dicen igual, repartidos: la falta de calibración humana en la 10 y la 11 (y otra vez en el cierre), la testnet en la 15, la lista de revocados en las notas de la 14 y el riesgo del primer año en la 21. Las respuestas completas están en `QA_DEFENSA.md`.
+
+**Cifras que se dicen (las de `tfm/cifras_canonicas.json`):** coste PoC **€0,0165** (producto ~€0,013; Excel €0,02); discriminación **87 pts** (96 vs 9); tests **84**; margen bruto **93 %** (una sola cifra, siempre la misma); pre-seed **180.000 €** + ENISA **50.000 €**.
 
 ---
 
@@ -78,7 +81,7 @@ Y al mismo tiempo el paro juvenil está en el 24,9 %, el doble de la media europ
 **Ivan.** ¿Por qué ahora? Porque convergen cuatro cosas que hace tres años no estaban juntas.
 
       
-**Una**, la saturación crea la demanda de filtro. **Dos**, la IA se ha vuelto asequible: **1,65 céntimos** en la PoC (€0,0165), alrededor de 1,3 en producto. El plan usa 2 céntimos, conservador a propósito.
+**Una**, la saturación crea la demanda de filtro. **Dos**, y esto es lo que hace tres años no existía: hasta hace nada un ordenador solo sabía corregir un test de opción múltiple. Hoy un modelo lee una respuesta escrita, la juzga contra unos criterios y explica por qué pone esa nota. Y le cuesta **menos de dos céntimos**. Sin eso, este proyecto no se puede construir.
 
       
 **Tres**, el AI Act ya está vigente y clasifica esto como alto riesgo. Eso suele leerse como una barrera; para nosotros es lo contrario: si tu sistema ya es anónimo y trazable, la regulación te separa de quien no lo es.
@@ -124,17 +127,20 @@ Todo lo que acabamos de contar descansa en una única pregunta: **¿puede una IA
 
 ---
 
-## 08 · Un catálogo heterogéneo, un solo evaluador.
+## 08 · 102 retos distintos, un solo corrector.
 
 **El motor de IA** · 0:45 previstos · acumulado 4:22
 
-**Ivan.** El problema de ingeniería: el catálogo objetivo son **102 retos de dominios distintos**. Código Python, casos de negocio, negociación, análisis financiero. Un evaluador por tipo no escala.
+**Ivan.** El problema de ingeniería se entiende con un ejemplo. Queremos un catálogo de **102 retos**: uno es escribir código en Python, otro es negociar con un cliente, otro es leer una cuenta de resultados. No se parecen en nada. Hacer un corrector para cada uno significaría construir 102 programas distintos, y eso no se sostiene.
 
       
-Lo resolvemos con una arquitectura de cuatro agentes. **Analista, Generador y Sandbox son el diseño objetivo**; hoy no corren como servicios separados. El cuarto, el **Evaluador**, es el que hemos llevado a producción y el que produce la señal de valor del negocio.
+Así que repartimos el trabajo en cuatro papeles. Los tres primeros preparan el ejercicio: uno lee la oferta de empleo y deduce qué hay que medir, otro escribe el reto y la **plantilla de corrección** —qué se valora y cuánto pesa cada cosa—, y el tercero recoge lo que el candidato responde.
 
       
-> **▶** Puente: cómo un solo evaluador cubre un catálogo tan heterogéneo. Si preguntan por el código del Generador: arquitectura objetivo; lo que corre es el Evaluador más el catálogo.
+El cuarto es el **Evaluador**, y es el importante: lee la respuesta, la contrasta con esa plantilla y pone la nota explicando criterio a criterio. Somos claros con el alcance: **los tres primeros son el diseño objetivo; el cuarto es el que está funcionando hoy**, y es el que genera el valor que la empresa paga.
+
+      
+> **▶** Puente: la pregunta es cómo un solo corrector cubre un catálogo tan variado. Eso es la siguiente diapositiva. Si preguntan por el código del Generador: es arquitectura objetivo; lo que corre hoy es el Evaluador más el catálogo.
 
 ---
 
@@ -142,62 +148,68 @@ Lo resolvemos con una arquitectura de cuatro agentes. **Analista, Generador y Sa
 
 **El motor de IA** · 1:05 previstos · acumulado 5:27
 
-**Ivan.** Aquí está el corazón técnico, y es la aportación de la que estamos más satisfechos: el **Dynamic Prompting**.
+**Ivan.** Esta es la aportación técnica de la que estamos más satisfechos, y quiero explicarla despacio porque es sencilla: **nuestro programa no sabe corregir nada por sí mismo**. Es un motor genérico. Todo lo que hace falta para juzgar un ejercicio le entra como dato en el momento de corregirlo.
 
       
-En lugar de programar la lógica de cada reto, **inyectamos en tiempo de ejecución** el escenario, los datos y los criterios. El código es un pipeline genérico y deliberadamente tonto.
+Cómo piensa el evaluador, en tres pasos. **Uno**: recibe la respuesta del candidato y, con ella, la plantilla de corrección de ese reto —los criterios y cuánto pesa cada uno—. **Dos**: antes de poner ninguna nota, está obligado a escribir qué encuentra y qué falta en cada criterio; el razonamiento va primero y la puntuación después. **Tres**: devuelve una nota por criterio con su justificación, y la nota final es la suma ponderada de esas notas, no una impresión general.
 
       
-A la derecha: en la **PoC** la rúbrica es un JSON del reto; en **producto**, criterios por tipo más el escenario. Ampliar el catálogo no exige un evaluador nuevo.
+De ahí salen dos consecuencias. La primera es que **cada nota viene con su razonamiento escrito**: eso es exactamente lo que el AI Act pide que sea auditable. La segunda es de negocio: ampliar el catálogo a cien retos es añadir cien datos, no programar cien correctores.
 
       
-Tres controles. **Chain of Thought**: razonar criterio por criterio antes de puntuar. **Constitutional AI**: equidad en el prompt; el impacto dispar no está medido. **Temperatura cero**, fijada en producción y con un test que lo impide deshacer.
+Y tres reglas que el motor no puede saltarse: razonar antes de puntuar, criterios de equidad escritos en el propio enunciado, y **temperatura cero** —la misma respuesta saca siempre la misma nota—, fijada en producción y con un test que impide desactivarla.
 
       
-> **▶** Si preguntan **¿cada reto tiene su rúbrica?** PoC sí. Producto: plantilla por tipo + escenario. Mismo texto → misma nota. Misma idea, otras palabras → misma banda. El Generador no corre hoy como servicio.
+> **▶** Si preguntan **¿cada reto tiene su plantilla?** En la PoC sí, una por reto. En producto, plantilla por tipo de ejercicio más el escenario concreto. Mismo texto → misma nota. Misma idea con otras palabras → misma banda.
 
 ---
 
-## 10 · Qué cumple y qué todavía no.
+## 10 · Lo que hemos conseguido y lo que falta.
 
 **El motor de IA** · 0:55 previstos · acumulado 6:22
 
-**Xavier.** Esta es la tabla que más nos importa, porque son **datos medidos en ejecuciones reales**, no proyecciones.
+**Xavier.** Esta es la tabla que más nos importa, porque son **datos medidos en ejecuciones reales**, no proyecciones. Nos pusimos siete objetivos al empezar; estos son los valores a los que hemos llegado.
 
       
-El coste de la PoC es **1,65 céntimos** (€0,0165); en producto, con menos contexto, ~1,3. El Excel usa 2 céntimos a propósito. La discriminación es **87 puntos**: 96 frente a 9. Los ataques de inyección del corpus: **2 de 2**, no un 100 % de producción. Si preguntan: ese 2/2 es la PoC de junio; el banco de la siguiente diapositiva tiene **tres ataques distintos**. No son la misma muestra.
+Lo conseguido. **Coste**: nos dábamos cuatro céntimos por evaluación y estamos en **1,65**, menos de la mitad. **Capacidad de distinguir**: pedíamos que entre una buena respuesta y una mala hubiera al menos 40 puntos de diferencia, y hay **87** —un 96 frente a un 9—. **Rechazos del modelo**: cero. **Intentos de manipulación**: los dos ensayados, bloqueados. Y **84 pruebas automáticas** en verde.
 
       
-Lo que **no** cumplimos: la **latencia**, 17-20 segundos en local sin streaming. No es un límite arquitectónico.
+Lo que **no** hemos conseguido: la **latencia**. Queríamos bajar de doce segundos y estamos en diecisiete o veinte, en local y sin mostrar la respuesta a medida que llega. Es un problema de implementación, no de arquitectura.
 
       
-> **▶** La fila de abajo: **no hemos validado el score contra evaluadores humanos**. La kappa contra personas sigue sin medir. Ahora os enseño cómo se comprueba el motor.
+> **▶** Y la fila de abajo, que decimos antes de que nos la pregunten: **no hemos contrastado la nota contra evaluadores humanos**. El protocolo está escrito, faltan las personas.
 
       
-Cierre: tres ejercicios cuestan **~5 céntimos** frente a 49 €. La IA no condiciona el margen.
+Cierre: tres ejercicios por candidato cuestan **unos 5 céntimos** de IA frente a los 49 € que paga la empresa. La IA no condiciona el margen ni a gran escala.
+
+      
+> **▶** Si preguntan por el 2 de 2 de inyección: es la PoC de junio, no una tasa de producción. El banco de pruebas de la siguiente diapositiva tiene **tres ataques distintos**. No son la misma muestra.
 
 ---
 
-## 11 · Enseñar la mejor ejecución no es medir.
+## 11 · Una buena demo no es una prueba.
 
 **El motor de IA** · 0:45 previstos · acumulado 7:07
 
-**Xavier.** Una tabla de resultados solo demuestra que tuvimos una buena ejecución. Esta diapositiva es **cómo se comprueba**.
+**Xavier.** Cualquiera puede enseñar la corrección que le salió bien. Eso no demuestra que el sistema funcione, solo que ese día tuvo suerte. Así que montamos dos comprobaciones que corren solas.
 
       
-A la izquierda, **84 tests** que corren sin clave de API y sin red, en dos décimas de segundo. Protegen el contrato del motor: que la temperatura siga fijada, que las notas no se salgan de escala, que una nota ausente valga cero y no un aprobado de regalo, y que la respuesta del candidato jamás entre en el canal de sistema — que es el control anti-inyección de verdad.
+La primera: **84 pruebas automáticas**. Vigilan las reglas que el motor no puede romper nunca. Que la nota no se salga de cero a cien. Que si falta la nota de un criterio cuente como cero y no como un aprobado de regalo. Y la más importante: que **lo que escribe el candidato jamás se lea como una orden para el sistema**. Tardan dos décimas de segundo y no gastan ni un céntimo, porque no necesitan llamar a la IA.
 
       
-En el centro, el **banco de pruebas**: doce respuestas escritas a propósito para cubrir las cinco bandas de la escala y **tres ataques que no se parecen entre sí** — el directo, uno escondido en un comentario de código que invoca un protocolo interno inventado, y otro que imita el JSON de salida y afirma que ya lo validó un humano. Un comando devuelve kappa, error medio, correlación de orden y dispersión entre repeticiones.
+La segunda: escribimos **doce respuestas de las que ya sabemos qué nota merecen**, de excelente a pésima, y tres maneras distintas de intentar engañar al corrector. Se las damos al sistema a ciegas y comparamos lo que pone con lo que debía poner. Un comando nos dice cuánto se aleja.
 
       
-> **▶** Y a la derecha lo que más nos ha enseñado: **escribir los tests encontró dos fallos reales**. La temperatura no estaba fijada en producción, así que afirmábamos una reproducibilidad que el producto no daba. Y el coste se calculaba con la tarifa en dólares y se etiquetaba en euros, inflando nuestro COGS un 8 %. Ninguno se veía leyendo el código, y los dos habrían sido una mala pregunta hoy aquí. Corregidos, y con un test que impide que vuelvan.
+> **▶** Y lo que más nos ha enseñado, a la derecha: **escribir estas pruebas destapó dos errores reales** que no se veían leyendo el código. La web no tenía fijada la temperatura, así que prometíamos una consistencia que el producto no daba. Y el coste se calculaba en dólares y se mostraba en euros: un 8 % de más. Los dos corregidos, y con una prueba que impide que vuelvan.
 
       
-La línea de abajo la decimos antes de que nos la pregunten: **esa kappa mide acuerdo con la banda de la rúbrica, no con un tribunal humano**. Es validez de constructo. La concordancia con personas sigue sin medir, y es lo único que falta.
+La línea de abajo la decimos antes de que nos la pregunten: esto demuestra que el motor es **consistente**, no que acierte como un evaluador humano. Contrastarlo con personas es lo único que falta.
 
       
-> **▶** Una frase de compliance, sin diapositiva extra: **alto riesgo, Anexo III**. El score ordena el pool, no descarta a nadie. Art. 12 lo veréis en la demo. Registro EU y aviso Art. 50, pendientes.
+> **▶** Frase de compliance, sin diapositiva extra: **alto riesgo, Anexo III**. La nota ordena la lista, no descarta a nadie. El artículo 12 lo veréis en la demo. El registro europeo y el aviso del Art. 50 están pendientes.
+
+      
+> **▶** Si preguntan por la kappa: la nuestra mide acuerdo con **la banda que fija la rúbrica**, no con un tribunal de personas. Es validez de constructo. La kappa de Cohen contra humanos sigue sin medir.
 
 ---
 
@@ -219,41 +231,59 @@ La frase del trabajo: **la IA produce la evidencia; la cadena prueba que ese doc
 **Ivan.** Las opciones habituales no sirven. Un **PDF** lo edita cualquiera. Un **perfil de LinkedIn** lo escribe el propio candidato: es una declaración, no una prueba. Y un **certificado alojado por nosotros** obliga a la empresa a confiar en TalentPact y a que TalentPact siga existiendo dentro de cinco años.
 
       
-La credencial tiene que poder comprobarse **sin cuenta TalentPact y sin fiarse de un PDF**.
+Así que la credencial tiene que poder comprobarse **sin abrirse una cuenta y sin fiarse de nuestra palabra**.
 
       
-> **▶** Precisión: seguimos siendo el emisor. Si la clave se compromete, se pueden anclar hashes falsos. Eso no es SSI completa. Sepolia es testnet.
+Y para eso usamos la blockchain, para una sola cosa. Pensadlo como un **sello de notario, pero público y gratuito**: deja constancia de que este documento, con este contenido exacto, existía tal día. Si después alguien le cambia una coma, deja de cuadrar y se ve al instante. No guardamos el currículum ahí dentro y no emitimos ninguna moneda: solo la constancia. Y esa constancia sigue valiendo aunque TalentPact desaparezca mañana.
+
+      
+> **▶** Precisión si preguntan: seguimos siendo nosotros quien emite. Si nos robaran la clave, se podrían sellar documentos falsos. No es identidad autosoberana completa, y Sepolia es una red de pruebas.
 
 ---
 
-## 14 · Solo la huella sale a la cadena.
+## 14 · A la cadena solo sale una huella.
 
 **SkillPass** · 1:00 previstos · acumulado 9:07
 
-**Ivan.** El mecanismo tiene cuatro pasos. **Uno**, componemos un JSON con el mejor resultado por habilidad, con las claves en orden estable para que el hash sea reproducible. **Dos**, calculamos su **keccak256**: cambia un punto de una nota y cambia la huella entera. **Tres**, anclamos **solo esos 32 bytes** en el contrato. **Cuatro**, cualquiera recalcula la huella del JSON que reciba y la busca en el contrato.
+**Ivan.** Cómo se hace ese sello, en cuatro pasos y sin tecnicismos.
 
       
-Y aquí está la decisión de diseño que más nos ha costado, que resuelve una tensión real: **la blockchain es inmutable y el RGPD exige poder borrar**. La resolvemos porque una huella de 32 bytes no es un dato personal, y el CV real vive off-chain en la Unión Europea, donde sí se puede eliminar. Si el candidato ejerce su derecho al olvido, borramos el documento y el hash on-chain queda huérfano: deja de significar nada.
+**Uno**: armamos un documento con el mejor resultado de cada habilidad del candidato. Se escribe siempre de la misma forma, y ahora veréis por qué importa.
 
       
-> **▶** Olvidar y revocar no son lo mismo. Hoy hay integridad, no ciclo de vida: **no hay lista de revocados**. Si una evaluación resultara fraude, el sello seguiría cuadrando hasta que se borre el JSON. El emisor sigue siendo nuestra wallet. eIDAS es después.
+**Dos**: sacamos su **huella**. Es un cálculo que coge el documento entero y lo convierte en un código corto, siempre el mismo para el mismo documento. Tiene dos propiedades que lo hacen útil: si cambias una coma, el código cambia por completo; y desde el código no hay manera de reconstruir el documento. Es una huella dactilar del archivo.
+
+      
+**Tres**: en la blockchain publicamos **ese código y nada más**. Ni el nombre, ni las notas, ni el documento. Los datos personales no salen de un servidor europeo.
+
+      
+**Cuatro**: cualquier empresa que reciba el documento le vuelve a sacar la huella y comprueba si coincide con la publicada. Si coincide, tiene el original. Si alguien tocó un número, no coincide. Sin cuenta, sin permiso y sin pagar nada.
+
+      
+Y esto resuelve una contradicción que parecía irresoluble: **lo que se publica en una blockchain no se puede quitar, y el RGPD obliga a poder borrar**. No chocan, porque en la cadena solo hay un código que no dice nada de nadie. Si el candidato ejerce su derecho al olvido, borramos el documento del servidor y esa huella publicada se queda sin nada a lo que corresponder.
+
+      
+> **▶** Si preguntan: olvidar y revocar no son lo mismo. Hoy tenemos integridad, no ciclo de vida: **no hay lista de credenciales anuladas**. Si una evaluación resultara fraudulenta, el sello seguiría cuadrando hasta que borráramos el documento. El emisor sigue siendo nuestra cartera. eIDAS es un paso posterior.
+
+      
+> **▶** El nombre técnico de la huella, por si lo piden: `keccak256`, la misma función que usa Ethereum. Son 32 bytes. No hace falta decirlo en voz alta si nadie pregunta.
 
 ---
 
 ## 15 · El contrato está desplegado y es público.
 
-**SkillPass** · 0:45 previstos · acumulado 10:37
+**SkillPass** · 0:40 previstos · acumulado 10:32
 
-**Ivan.** Y esto no es una maqueta. El contrato **SkillPassRegistry** está desplegado en Ethereum Sepolia, en la dirección que veis, en el bloque 11.523.380. Podéis abrirlo en Etherscan ahora mismo.
-
-      
-Tres precisiones que nos parecen importantes. **Por qué Sepolia:** nuestra primera opción fue Polygon Amoy, pero sus faucets exigían cripto de mainnet. Sepolia nos permite anclar de verdad a coste cero.
+**Ivan.** Y esto no es una maqueta. El contrato **SkillPassRegistry** está desplegado y es público: esa dirección la podéis abrir en Etherscan ahora mismo, desde vuestro móvil, sin pedirnos nada.
 
       
-**Alcance regulatorio:** el SkillPass **no es un criptoactivo**. No es transferible, no tiene valor de mercado y no hay custodia. MiCA no aplica. Es una credencial, no un token.
+Y aquí la precisión regulatoria, que en este máster importa: el SkillPass **no es un criptoactivo**. No se puede vender ni transferir, no tiene precio de mercado y no custodiamos dinero de nadie. Es una credencial, no un token, así que **MiCA no le aplica**.
 
       
-> **▶** Y lo decimos claro: es una **testnet**. El contrato y el patrón son idénticos a los que irían a una L2 en producción, pero no vamos a presentar esto como algo que no es.
+> **▶** Y lo decimos abiertamente antes de que nos lo preguntéis: Sepolia es la **red de pruebas** de Ethereum, no la red real. El contrato y el mecanismo son exactamente los que irían a producción; lo único que cambia es a qué red se envían. No vamos a presentar esto como algo que no es.
+
+      
+> **▶** Si preguntan por qué no Polygon: fue nuestra primera opción, pero sus faucets exigían cripto comprada en la red real. Sepolia nos deja sellar de verdad a coste cero.
 
 ---
 
@@ -261,13 +291,16 @@ Tres precisiones que nos parecen importantes. **Por qué Sepolia:** nuestra prim
 
 **El producto** · 0:40 previstos · acumulado 10:32
 
-**Ivan.** Antes de abrirlo en vivo, el mapa de lo que vais a ver. talentpact.es no es una landing: es el producto navegable.
+**Ivan.** Hasta aquí la tecnología. Ahora, qué es TalentPact cuando lo abres en el navegador. Y una aclaración importante: **talentpact.es no es una página de presentación, es el producto**. Todo lo que veis en esa captura se puede usar hoy.
 
       
-El candidato entra, elige un reto que replica una situación laboral —aquí, un mensaje de Slack a un compañero— y escribe. La IA no da una nota: da un desglose por criterio. La empresa ve ese resultado sin ver a la persona. Y el SkillPass sella lo que acaba de pasar.
+El recorrido es de una sola pieza. El candidato entra y elige un reto que replica una situación de trabajo real —el de la pantalla es escribir a un compañero para corregirle un error sin desmotivarle—. Escribe su respuesta con el tiempo corriendo. La IA no le devuelve una nota a secas: le devuelve el desglose de qué hizo bien y qué no en cada criterio. La empresa ve ese resultado en una lista **sin ver quién es la persona**. Y el SkillPass sella lo que acaba de ocurrir para que se pueda comprobar desde fuera.
 
       
-> **▶** La frase de abajo es el perímetro: **no sustituye al reclutador. Ordena la evidencia.** Ahora, la pantalla de resultados.
+Cuatro pantallas, cuatro papeles: quien demuestra, quien corrige, quien decide y la prueba de que todo eso pasó.
+
+      
+> **▶** La frase de abajo marca el perímetro y conviene decirla mirando al tribunal: **no sustituye al reclutador, ordena la evidencia**. Nadie queda descartado por una nota nuestra; lo que hacemos es que el reclutador llegue a la entrevista sabiendo algo real. Ahora, la pantalla de resultados.
 
 ---
 
@@ -292,7 +325,7 @@ Cuatro cosas que el producto ya hace: el reto, la nota explicada, el pool anóni
 > **▶** ◆ CAMBIAR A LA VENTANA DEL NAVEGADOR. Guion detallado más abajo, sección DEMO. El mapa de la web ya está dicho: aquí solo prueba en vivo.
 
       
-**Xavier.** "Hasta aquí el mapa. Ahora os lo enseñamos funcionando."
+**Xavier.** "Hasta aquí el mapa. Ahora os lo enseñamos funcionando, y la dirección está en pantalla: **talentpact.es**. Podéis entrar vosotros mismos mientras hablamos."
 
       
 **1 · Candidato (1:30)** — Reto → respuesta buena → Skill Score con feedback criterio a criterio. Frase clave: _"esto no es un if/else: es el modelo leyendo la respuesta contra la rúbrica"_. Si preguntan ChatGPT: _"el reto no tiene solución única"_. Luego una respuesta pobre → nota baja y el motivo.
@@ -323,10 +356,16 @@ Cuatro cosas que el producto ya hace: el reto, la nota explicada, el pool anóni
 
 **El negocio** · 0:45 previstos · acumulado 16:39
 
-**Xavier.** Cinco palancas de ingreso, pero la principal es el **desbloqueo de contacto a 49 €**. Y esa elección es deliberada: 49 € es una decisión que un responsable de RRHH toma sin pasar por el departamento de compras. Vender una licencia de seis mil euros a una pyme es un ciclo de venta de meses.
+**Xavier.** Cinco vías de ingreso, pero la que manda es una: **49 € por desbloquear el contacto de un candidato**. Y esa elección es deliberada, así que la explico.
 
       
-Los **unit economics**, a la derecha. Un ratio LTV/CAC de **17,3** en 2027, cuando el umbral sano son 3. Margen bruto del **93,5 %**, porque el COGS es la API de IA y la comisión de Stripe. Y recuperamos el coste de adquisición en **mes y medio**.
+Las plataformas de selección se venden por suscripción anual: varios miles de euros al año, firmados por adelantado. Ese precio obliga a la empresa a pasar por presupuesto, por compras y por dirección, y eso son **meses de negociación antes de cobrar el primer euro**. Para una startup sin nombre es la peor manera de empezar.
+
+      
+Nosotros hacemos lo contrario. **Cuarenta y nueve euros** los aprueba la misma persona de recursos humanos que tiene la vacante abierta, hoy, sin pedirle permiso a nadie. Y solo los paga cuando ya ha visto la nota del candidato y quiere hablar con él. Cobramos menos por operación, pero cobramos **pronto y muchas veces**.
+
+      
+Las cifras de la derecha. Por cada euro que gastamos en captar una empresa recuperamos **17** a lo largo de su vida como cliente; el umbral que se considera sano es 3. El **margen bruto es del 93 %**, porque nuestro único coste variable es la IA y la comisión de la pasarela de pago. Y el dinero de captación lo recuperamos en **mes y medio**.
 
       
 > **▶** La lectura honesta es la de abajo: **el problema de este negocio no es la economía unitaria, que es excelente. Es alcanzar volumen.** Ahí es donde se juega el break-even.
@@ -337,64 +376,36 @@ Los **unit economics**, a la derecha. Un ratio LTV/CAC de **17,3** en 2027, cuan
 
 **El negocio** · 0:40 previstos · acumulado 17:19
 
-**Xavier.** El escenario base a 36 meses. De **24 empresas en 2026** a **284 en 2028**, con un ARR de cierre de casi **medio millón**. Break-even en **mayo de 2028**, con 230.000 € de capital entre pre-seed y ENISA.
+**Xavier.** El escenario base a tres años. De **24 empresas el primer año** a **284 el tercero**, con unos ingresos recurrentes de cierre de casi **medio millón**. Llegamos al punto de equilibrio **a mitad del tercer año**, con 230.000 € de capital entre la ronda y el préstamo ENISA.
 
       
-Quiero señalar dos cosas. La primera: **284 empresas es menos del 0,01 % del mercado abordable**. El techo de este proyecto no es el tamaño del mercado, es nuestra capacidad de ejecución.
+Quiero señalar dos cosas. La primera: **284 empresas es menos del 0,01 % del mercado al que nos podemos dirigir**. El techo de este proyecto no es el tamaño del mercado, es nuestra capacidad de ejecutar.
 
       
-> **▶** Y la segunda, que es la casilla ámbar: **donde esto se rompe es el primer año**. 2026 son 24 empresas. Si el ritmo de altas no arranca, el resto del modelo simplemente no ocurre. No es una proyección que se autocumpla.
+> **▶** Y la segunda, que es la casilla ámbar: **donde esto se rompe es el primer año**. Son 24 empresas. Si el ritmo de altas no arranca ahí, el resto del modelo simplemente no ocurre. No es una proyección que se autocumpla.
 
 ---
 
-## 22 · Los cuatro límites de este trabajo.
+## 22 · 180.000 € · cierre
 
-**Límites** · 0:55 previstos · acumulado 18:14
+**Cierre** · 1:40 previstos · acumulado 18:54
 
-**Ivan.** Antes de cerrar, los cuatro límites de este trabajo. Preferimos decirlos nosotros.
-
-      
-**El principal:** el Skill Score **no está calibrado contra evaluadores humanos**. La IA discrimina bien y es barata, pero hasta que midamos la concordancia con un tribunal no podemos afirmar fiabilidad demostrada. Es el siguiente hito del producto.
+**Xavier.** Cerramos con el dinero, que es la parte que suele quedarse fuera de un TFM y aquí no queremos que se quede. **Ciento ochenta mil euros** de ronda pre-seed, en formato SAFE. Más **cincuenta mil de ENISA**, que es un préstamo público y no diluye. Doscientos treinta mil en total, y con eso llegamos al punto de equilibrio a mitad del tercer año.
 
       
-**Segundo:** nuestra validación de mercado es una muestra de treinta personas, autoseleccionada. Mide **atención**, no disposición a pagar. No tenemos encaje producto-mercado demostrado.
+A la derecha, a qué se va. **Cuarenta por ciento a producto**: el evaluador, la infraestructura y llevar el SkillPass a una red real. **Treinta a ventas**, porque nuestro cuello de botella no es el código, son las primeras 24 empresas. Quince a legal, diez a los socios y cinco de colchón.
 
       
-**Tercero:** hay varianza residual. Si dos personas pegan **el mismo texto**, deben sacar la misma nota (`temperature=0`). El ±8-12 de la literatura aparece cuando la rúbrica usa adjetivos, no cuando el string es idéntico.
+Pero la frase importante es la de la caja: **lo primero que compra este dinero no es una función nueva**. Es que evaluadores humanos puntúen el corpus que ya tenemos escrito. Ese es el único límite serio que nos queda, lo hemos dicho en la diapositiva de resultados, y no se arregla programando: se arregla con personas.
 
       
-**Y cuarto:** el huevo y la gallina, que es el riesgo estructural de cualquier marketplace y que no se resuelve con tecnología, sino con estrategia de entrada.
-
----
-
-## 23 · 180.000 € para llegar a mayo de 2028.
-
-**La ronda** · 1:15 previstos · acumulado 19:29
-
-**Xavier.** Cerramos con el dinero. **Ciento ochenta mil euros de pre-seed**, SAFE. Más **cincuenta mil de ENISA**, no dilutivo. En total 230.000 para llegar a mayo de 2028.
+Y lo que dejamos demostrado hoy son tres cosas concretas. **Un producto que se usa**, no una maqueta: lo acabáis de ver funcionando. **Un evaluador barato y que enseña su razonamiento** —decimos barato e inspeccionable, no decimos todavía fiable, porque nos falta el contraste humano—. Y **un sello que podéis comprobar vosotros mismos**, ahora, sin pedirnos permiso.
 
       
-A la derecha, a qué se va. **Cuarenta por ciento a producto**: el evaluador, la infraestructura y sacar el SkillPass de testnet. **Treinta a ventas B2B**, porque el cuello de botella no es el código, es las primeras 24 empresas. Quince a legal. Diez a socios. Cinco de colchón.
+> **▶** Y para que quede claro: no os estamos pidiendo el cheque a vosotros. Es la petición del plan de negocio. El trabajo académico ya está construido. Muchas gracias, quedamos a vuestra disposición para las preguntas.
 
       
-La caja de abajo es la decisión: lo primero que desbloquea este capital no es una feature nueva, es que **humanos puntúen el corpus** que ya tenemos escrito.
-
-      
-> **▶** No os estamos pidiendo el cheque a vosotros. Es el ask del plan. El trabajo académico ya está construido.
-
----
-
-## 24 · 180.000 € · corte de acto
-
-**Cierre** · 0:45 previstos · acumulado 20:14
-
-**Xavier.** Cerramos con la cifra: **ciento ochenta mil euros**. Más cincuenta de ENISA. Doscientos treinta mil para mayo de 2028.
-
-      
-Lo demostrado: un producto que se navega, un evaluador **barato e inspeccionable** —no decimos fiable, porque falta el tribunal humano— y un sello que podéis verificar sin pedirnos permiso.
-
-      
-> **▶** La siguiente decisión no es académica. Es financiar eso. Muchas gracias. Quedamos a vuestra disposición.
+> **▶** Los otros límites, si el tribunal los saca: la validación de mercado es una muestra de treinta personas autoseleccionada, mide atención y no disposición a pagar; y el huevo y la gallina del marketplace, que no se resuelve con tecnología sino con estrategia de entrada. Están desarrollados en `QA_DEFENSA.md`.
 
 ---
 
@@ -481,7 +492,7 @@ es el siguiente hito: el protocolo y el corpus ya están escritos.
 
 **¿Nos estáis pidiendo 180.000 € a nosotros?**
 No. Es el *ask* del plan de negocio (Excel: pre-seed SAFE + ENISA 50 k). El TFM
-se defiende igual si la ronda no entra; el break-even de mayo 2028, no.
+se defiende igual si la ronda no entra; el break-even de mitad del tercer año, no.
 
 **¿Por qué blockchain y no una base de datos firmada?**
 Una firma nuestra obliga a confiar en nosotros y a que sigamos existiendo. El anclaje
@@ -515,17 +526,29 @@ funciona, y eso se demuestra igual en Sepolia.
 
 **¿Qué pasa si Anthropic sube precios o corta el servicio?**
 El prompt es portable y la función serverless ya prueba varios modelos en cascada.
-Además el margen aguanta: a ~93,5 % de margen bruto, el coste de IA podría multiplicarse
+Además el margen aguanta: a un 93 % de margen bruto, el coste de IA podría multiplicarse
 por diez y el negocio seguiría siendo viable.
 
 **¿No es optimista proyectar 284 empresas?**
-Es menos del 0,01 % del mercado abordable, y el modelo arranca con **24 empresas en
-2026**, que es una hipótesis modesta. El riesgo no está en el techo, está en el
+Es menos del 0,01 % del mercado abordable, y el modelo arranca con **24 empresas el
+primer año**, que es una hipótesis modesta. El riesgo no está en el techo, está en el
 arranque: si el primer año no despega, el resto no ocurre. Lo decimos en la
-diapositiva 22.
+diapositiva 21.
+
+**¿Cuáles son los límites de este trabajo?**
+Cuatro, y los decimos nosotros antes de que nos los saquéis. **Uno, el principal:** el
+Skill Score **no está calibrado contra evaluadores humanos**. La IA discrimina bien y es
+barata, pero hasta que midamos la concordancia con un tribunal no podemos afirmar
+fiabilidad demostrada. El protocolo y el corpus ya están escritos; faltan las personas,
+y es lo primero que financia la ronda. **Dos:** la validación de mercado es una muestra
+de treinta personas, autoseleccionada — mide **atención**, no disposición a pagar.
+**Tres:** hay varianza residual. Si dos personas pegan *el mismo texto*, sacan la misma
+nota (`temperature=0`); el ±8-12 de la literatura aparece cuando la rúbrica usa
+adjetivos en vez de anclas observables. **Y cuatro:** el huevo y la gallina del
+marketplace, que no se resuelve con tecnología sino con estrategia de entrada.
 
 **¿Cómo sabemos que el evaluador hace lo que decís?**
-Con dos cosas que se ejecutan delante de vosotros si queréis. `npm test` corre **69
+Con dos cosas que se ejecutan delante de vosotros si queréis. `npm test` corre **84
 casos** en dos décimas de segundo, sin clave de API y sin red: comprueban que la
 temperatura sigue fijada, que las notas no se salen de escala, que una nota ausente
 vale cero y no un aprobado, y que la respuesta del candidato nunca entra en el canal

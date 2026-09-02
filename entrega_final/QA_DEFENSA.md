@@ -7,13 +7,13 @@ Preguntas probables del tribunal, ordenadas por bloque, con respuestas apoyadas 
 ## A. Negocio y valor fintech
 
 **¿Por qué SaaS B2B y no freemium para el candidato?**
-El pivotaje se sustenta en tres evidencias: LTV/CAC proyectado de 17,3x en 2027, 65 % de empresas dispuestas a sustituir la primera entrevista, y un ciclo de venta más corto y predecible. El candidato no paga; paga la empresa solo por resultado (€49/contacto).
+El pivotaje se sustenta en tres evidencias: LTV/CAC proyectado de 17,3x en el segundo año, 65 % de empresas dispuestas a sustituir la primera entrevista, y un ciclo de venta más corto y predecible. El candidato no paga; paga la empresa solo por resultado (€49/contacto).
 
 **¿Nos estáis pidiendo 180.000 € a nosotros?**
-No. Es el *ask* del plan de negocio (pre-seed SAFE €180 k + ENISA €50 k no dilutivo). El TFM se defiende igual si la ronda no entra; el break-even de mayo 2028, no. Uso del pre-seed: 40 % producto, 30 % ventas B2B, 15 % legal/SL, 10 % socios, 5 % buffer.
+No. Es el *ask* del plan de negocio (pre-seed SAFE €180 k + ENISA €50 k no dilutivo). El TFM se defiende igual si la ronda no entra; el break-even de mitad del tercer año, no. Uso del pre-seed: 40 % producto, 30 % ventas B2B, 15 % legal/SL, 10 % socios, 5 % buffer.
 
 **¿Cómo justificáis el precio de €49/contacto?**
-El coste de mercado por contratación es ~€4.700. €49 por desbloquear un perfil ya pre-validado por IA es <10 % del estándar, con un *gross margin* de ~93,5 % (93,3-93,8 % en 2026-2028). El coste de IA por candidato (3 ejercicios × €0,0165 ≈ **€0,05**) es despreciable frente al precio.
+El coste de mercado por contratación es ~€4.700. €49 por desbloquear un perfil ya pre-validado por IA es <10 % del estándar, con un *gross margin* del 93 % sostenido en los tres años. El coste de IA por candidato (3 ejercicios × €0,0165 ≈ **€0,05**) es despreciable frente al precio.
 
 **¿Qué os diferencia de HackerRank, Codility o LinkedIn Recruiter?**
 LinkedIn busca pero no evalúa; HackerRank/Codility evalúan solo perfil técnico, sin anonimato ni pool pre-validado. TalentPact une las tres cosas: pool anónimo + evaluación por IA multi-dominio + modelo pay-per-result.
