@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="none" role="img" aria-label="TalentPact">
+  <path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/>
+  <path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#475569"/>
+  <circle cx="16" cy="16" r="4" fill="#34d399"/>
+</svg>
