@@ -27,7 +27,8 @@ const PERFIL = loadValue("candidateProfile");
 const { fallbackScore } = loadFunctions(["detectQuality", "fallbackScore"]);
 
 /** Los retos escritos a mano, uno a uno. Los demás son plantilla y no se cubren. */
-const MANUALES = ["common_fund_management", "common_cybersecurity", "common_recruiting", "common_ecommerce"];
+const MANUALES = ["common_fund_management", "common_cybersecurity", "common_recruiting",
+                  "common_ecommerce", "common_testing", "common_gdpr"];
 const RETOS = MANUALES.map((id) => {
   const r = CATALOGO.find((c) => c.id === id);
   if (!r) throw new Error(`No existe el reto ${id} en COMMON_EXERCISES`);
@@ -38,7 +39,7 @@ const RETO = RETOS[0];                       // el de fondos, para los tests de 
 const [FASE1, FASE2, FASE3] = RETO.exercises;
 
 // ─── 1. Los retos existen y tienen la forma de la casa ──────────────────────
-test("los cuatro retos escritos a mano están en el catálogo", () => {
+test("los retos escritos a mano están en el catálogo", () => {
   for (const r of RETOS) {
     assert.equal(r.category, "sector", `${r.id}: categoría inesperada`);
     assert.ok(r.skill, `${r.id}: sin skill`);
@@ -64,7 +65,7 @@ test("las tres fases usan tipos de corrección distintos", () => {
 });
 
 test("ninguno se ha quedado con el contenido de plantilla", () => {
-  // El catálogo arrastra 74 retos autogenerados con "Concepto A / Valor 1".
+  // El catálogo arrastra decenas de retos autogenerados con "Concepto A".
   // Estos cuatro son los que se pueden enseñar a un cliente.
   for (const r of RETOS) {
     const bruto = JSON.stringify(r.exercises);
