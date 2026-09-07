@@ -23,8 +23,17 @@ function origenesPermitidos(event) {
   const permitidos = new Set();
 
   // El sitio declarado en el entorno manda (útil tras un dominio propio).
-  for (const v of [process.env.SITE_URL, process.env.URL, process.env.DEPLOY_PRIME_URL]) {
-    if (v) { try { permitidos.add(new URL(v).origin); } catch (_e) {} }
+  // URL y DEPLOY_PRIME_URL las inyectaba Netlify; VERCEL_* son sus equivalentes
+  // y llegan SIN esquema (`mi-app.vercel.app`), que a new URL() no le vale.
+  const conEsquema = (v) => (/^https?:\/\//.test(v) ? v : "https://" + v);
+  for (const v of [
+    process.env.SITE_URL,
+    process.env.URL,
+    process.env.DEPLOY_PRIME_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    process.env.VERCEL_URL
+  ]) {
+    if (v) { try { permitidos.add(new URL(conEsquema(v)).origin); } catch (_e) {} }
   }
   // Y el origen desde el que llega la petición, que es el caso normal.
   const origin = h.origin || h.Origin;
