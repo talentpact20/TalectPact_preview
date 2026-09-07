@@ -45,4 +45,57 @@ function loadFunctions(names, file = INDEX) {
   return vm.runInContext(`({ ${names.join(", ")} })`, context);
 }
 
-module.exports = { extractSource, loadFunctions, INDEX };
+/**
+ * Extrae el valor de una constante declarada dentro de index.html (por ejemplo
+ * el catálogo COMMON_EXERCISES o candidateProfile).
+ *
+ * Mismo motivo que extractSource: el catálogo vive dentro del HTML y no se
+ * puede `require`. A diferencia de aquélla, aquí sí hace falta saltarse el
+ * contenido de las cadenas: los enunciados de los retos llevan corchetes y
+ * llaves dentro del texto, y contarlos rompería el aislamiento.
+ */
+function extractDeclaration(name, file = INDEX) {
+  const html = fs.readFileSync(file, "utf8");
+  const decl = new RegExp(`(?:const|let|var)\\s+${name}\\s*=`).exec(html);
+  if (!decl) {
+    throw new Error(
+      `No se encontró la declaración de ${name} en ${path.basename(file)}. ` +
+      `Si se ha renombrado, actualiza el test: cubre un dato de producto, no decoración.`
+    );
+  }
+  const inicio = decl.index + decl[0].length;
+  let i = inicio;
+  while (/\s/.test(html[i])) i++;
+  const abre = html[i];
+  const cierra = { "[": "]", "{": "}" }[abre];
+  if (!cierra) throw new Error(`${name} no abre con [ ni con {`);
+  let profundidad = 0, comilla = null;
+  for (; i < html.length; i++) {
+    const c = html[i];
+    if (comilla) {
+      if (c === "\\") { i++; continue; }   // escape dentro de la cadena
+      if (c === comilla) comilla = null;
+      continue;
+    }
+    if (c === "'" || c === '"' || c === "`") { comilla = c; continue; }
+    if (c === abre) profundidad++;
+    else if (c === cierra) {
+      profundidad--;
+      if (profundidad === 0) return html.slice(inicio, i + 1);
+    }
+  }
+  throw new Error(`Delimitadores sin cerrar al extraer ${name}`);
+}
+
+/**
+ * Evalúa esa constante y devuelve el valor.
+ *
+ * El round-trip por JSON no es decorativo: sin él los arrays vuelven del
+ * contexto del vm con otro prototipo y deepStrictEqual falla comparando dos
+ * listas idénticas. Los catálogos son datos puros, así que la copia es exacta.
+ */
+function loadValue(name, file = INDEX) {
+  return JSON.parse(JSON.stringify(vm.runInNewContext(`(${extractDeclaration(name, file)})`)));
+}
+
+module.exports = { extractSource, loadFunctions, extractDeclaration, loadValue, INDEX };
