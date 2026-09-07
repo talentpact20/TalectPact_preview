@@ -10,7 +10,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { handler } = require("../netlify/functions/evaluate-exercise.js");
+const { handler } = require("../api/_handlers/evaluate-exercise.js");
 
 const realFetch = globalThis.fetch;
 const realKey = process.env.ANTHROPIC_API_KEY;

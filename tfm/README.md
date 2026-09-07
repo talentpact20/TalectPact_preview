@@ -46,7 +46,7 @@ Este directorio contiene todo el trabajo del Trabajo Fin de Máster: el **busine
 | Botón en el portal de candidato | `index.html` → SkillPass visual | ✅ Construido |
 | Contrato en Sepolia | `0x85418F3d978e691C0f784bA63E4cB2826478f73A` | ✅ Desplegado (ago 2026) |
 | Pagos con Stripe Checkout | `netlify/functions/create-checkout-session.js` + webhook | ✅ Construido (claves de test) |
-| **Tests automáticos** | `tests/` (`npm test`) | ✅ 84 casos, sin claves ni red |
+| **Tests automáticos** | `tests/` (`npm test`) | ✅ 91 casos, sin claves ni red |
 | **Banco de pruebas del evaluador** | `tech/eval/` (`npm run bench`) | ✅ Gold set de 12 ítems + métricas |
 | **Cifras canónicas** | `cifras_canonicas.json` | ✅ Fuente de verdad numérica, verificada por test |
 

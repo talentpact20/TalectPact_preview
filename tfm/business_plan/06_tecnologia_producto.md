@@ -177,7 +177,7 @@ Estrategia de afinación a escala (diseñada): piloto en 10 retos → calibraci�
 
 Un trabajo que enseña únicamente la mejor ejecución de su prototipo no está midiendo nada: está eligiendo el resultado que más le conviene. Para evitarlo, el proyecto incorpora dos herramientas que permiten **volver a comprobar** cualquier afirmación de los apartados anteriores y detectar el día en que deje de ser cierta. La diferencia entre ambas es sencilla: una comprueba que el **código** hace lo que debe, y la otra comprueba que el **modelo** puntúa como debe.
 
-**Las pruebas automáticas (`npm test`).** Son 84 pruebas repartidas en ocho archivos. Se ejecutan sin clave de API, sin conexión a internet y sin base de datos, con el propio ejecutor de pruebas de Node, de modo que cualquiera puede lanzarlas y obtener el mismo resultado. Lo que comprueban se agrupa en cuatro bloques.
+**Las pruebas automáticas (`npm test`).** Son 91 pruebas repartidas en nueve archivos. Se ejecutan sin clave de API, sin conexión a internet y sin base de datos, con el propio ejecutor de pruebas de Node, de modo que cualquiera puede lanzarlas y obtener el mismo resultado. Lo que comprueban se agrupa en cuatro bloques.
 
 El primero es el **comportamiento del evaluador**: que la temperatura del modelo esté fijada en cero, que las notas queden siempre entre 0 y 100, que la ausencia de nota se traduzca en un cero y no en un aprobado por defecto, que el sistema falle de forma visible si el modelo responde con texto libre en lugar del formato esperado, y que la clave de la API no aparezca nunca en lo que se devuelve al navegador.
 

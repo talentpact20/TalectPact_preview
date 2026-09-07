@@ -3,7 +3,7 @@
  * Body: { userId?, profileName?, challengeId, skill, score, criteria?, reasoning?,
  *         modelUsed?, tokensIn?, tokensOut?, costEur? }
  */
-const { jsonResponse, sb, ensureProfile, ensureProfileByUser } = require("./lib/tp");
+const { jsonResponse, sb, ensureProfile, ensureProfileByUser } = require("../_lib/tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });

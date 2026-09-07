@@ -2,7 +2,7 @@
  * get-company — devuelve la ficha de empresa de un usuario autenticado.
  * Body: { userId }
  */
-const { jsonResponse, ensureCompanyByUser } = require("./lib/tp");
+const { jsonResponse, ensureCompanyByUser } = require("../_lib/tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });

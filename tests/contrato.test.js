@@ -15,7 +15,7 @@ const path = require("node:path");
 const { ethers } = require("ethers");
 const solc = require("solc");
 
-const { SKILLPASS_ABI, CHAIN } = require("../netlify/functions/lib/tp");
+const { SKILLPASS_ABI, CHAIN } = require("../api/_lib/tp");
 const RUTA = path.join(__dirname, "..", "tfm", "tech", "contracts", "SkillPassRegistry.sol");
 
 /** Compila una sola vez para todos los tests. */

@@ -3,7 +3,7 @@
  * Body: { userId }
  * Devuelve: { profile, skills:[{skill,score,challengeId,evaluatedAt}], completed:[...] }
  */
-const { jsonResponse, sb, ensureProfileByUser } = require("./lib/tp");
+const { jsonResponse, sb, ensureProfileByUser } = require("../_lib/tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });

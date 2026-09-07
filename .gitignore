@@ -11,8 +11,8 @@ node_modules/
 # Sistema
 .DS_Store
 
-# Netlify
-.netlify/
+# Vercel
+.vercel/
 
 # Artefactos de compilación del contrato (regenerables: npm run compile:contract).
 # El registro del despliegue sí se versiona: documenta la dirección en Amoy.

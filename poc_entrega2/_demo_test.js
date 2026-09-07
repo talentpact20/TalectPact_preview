@@ -2,7 +2,7 @@
 // (http://localhost:8888), que ya tiene la API key cargada. No contiene la clave.
 // Reproduce el prompt real que usa index.html (evaluateWithAI).
 
-const ENDPOINT = "http://localhost:8888/.netlify/functions/evaluate-exercise";
+const ENDPOINT = "http://localhost:8888/api/evaluate-exercise";
 
 const systemPrompt = `Eres un evaluador ESTRICTO y EXIGENTE de TalentPact. Evalúas respuestas de candidatos a ejercicios profesionales.
 

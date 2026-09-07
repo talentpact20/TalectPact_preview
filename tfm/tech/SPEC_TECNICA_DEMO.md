@@ -13,7 +13,7 @@ Objetivo: demostrar en vivo, de punta a punta, el flujo **IA evalúa → se pers
                                                  │
                      ① corrección IA (ya existe) │
                                                  ▼
-                             /.netlify/functions/evaluate-exercise
+                             /api/evaluate-exercise
                                                  │  Skill Score + criterios
                                                  ▼
                     ② PERSISTENCIA  ┌─────────────────────────────┐
@@ -23,7 +23,7 @@ Objetivo: demostrar en vivo, de punta a punta, el flujo **IA evalúa → se pers
                                     └───────────┬─────────────────┘
                                                  │  genera SkillPass CV (JSON)
                                                  ▼
-                    ③ BLOCKCHAIN    /.netlify/functions/anchor-credential
+                    ③ BLOCKCHAIN    /api/anchor-credential
                                     │  hash = keccak256(CV_JSON)
                                     │  tx → contrato SkillPassRegistry (testnet)
                                     └───────────┬─────────────────┘

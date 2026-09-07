@@ -2,7 +2,7 @@
  * save-profile — crea o actualiza el perfil de un candidato autenticado.
  * Body: { userId, email?, fullName?, sector?, phone?, linkedin? }
  */
-const { jsonResponse, ensureProfileByUser } = require("./lib/tp");
+const { jsonResponse, ensureProfileByUser } = require("../_lib/tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });

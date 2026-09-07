@@ -13,7 +13,7 @@
  * Devuelve: { paid, unlocks: [candidateRef…], sessionStatus? }
  */
 const { jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode,
-        UNLOCK_PRICE, formatAmount } = require("./lib/tp");
+        UNLOCK_PRICE, formatAmount } = require("../_lib/tp");
 
 /** Estado de la pasarela, para que la interfaz no tenga que adivinarlo. */
 function gatewayInfo() {

@@ -12,7 +12,7 @@ const assert = require("node:assert/strict");
 const {
   canonicalJson, hashCv, isHash32, isUuid, anonymousAlias,
   UNLOCK_PRICE, formatAmount, tokenFromEvent, CHAIN
-} = require("../netlify/functions/lib/tp");
+} = require("../api/_lib/tp");
 
 const CV = {
   type: "TalentPactSkillPass",

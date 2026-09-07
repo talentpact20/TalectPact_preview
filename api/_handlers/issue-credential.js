@@ -14,7 +14,7 @@
 const {
   jsonResponse, sb, authUser, ensureProfileByUser, canonicalJson, hashCv,
   CHAIN, explorerTx
-} = require("./lib/tp");
+} = require("../_lib/tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });

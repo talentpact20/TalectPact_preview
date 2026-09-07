@@ -12,15 +12,16 @@ Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & I
 | Componente | Ruta | Descripción |
 |---|---|---|
 | **Producto web** | `index.html` | Aplicación completa (candidato · empresa · superadmin). HTML/CSS/JS sin framework. |
-| **Corrección IA (backend)** | `netlify/functions/evaluate-exercise.js` | Función serverless que llama a la API de Anthropic (Claude) para evaluar respuestas. |
-| **Chatbot de soporte** | `netlify/functions/support-chat.js` | Función serverless del asistente conversacional. |
+| **Corrección IA (backend)** | `api/_handlers/evaluate-exercise.js` | Función serverless que llama a la API de Anthropic (Claude) para evaluar respuestas. |
+| **Chatbot de soporte** | `api/_handlers/support-chat.js` | Función serverless del asistente conversacional. |
+| **Formulario de contacto** | `api/_handlers/contact.js` | Recoge los mensajes de "Hablemos" en Supabase (sustituye a Netlify Forms). |
 | **Persistencia** | dentro de `index.html` (módulo `TP`) | Capa de persistencia en `localStorage` (perfil, pool de talento, desbloqueos, audit trail de evaluaciones). |
-| **SkillPass (credencial)** | `netlify/functions/issue-credential.js` · `anchor-credential.js` · `verify-credential.js` | Emisión del CV verificable, anclaje de su hash en blockchain y verificación pública. |
+| **SkillPass (credencial)** | `api/_handlers/issue-credential.js` · `anchor-credential.js` · `verify-credential.js` | Emisión del CV verificable, anclaje de su hash en blockchain y verificación pública. |
 | **Contrato** | `tfm/tech/contracts/SkillPassRegistry.sol` | Registro de huellas en Ethereum Sepolia. Solo hashes: ningún dato personal on-chain. |
 | **Verificador público** | `verify.html` | Página sin cuenta donde cualquiera comprueba un SkillPass. |
-| **Pagos (Stripe)** | `netlify/functions/create-checkout-session.js` · `stripe-webhook.js` · `confirm-checkout.js` | Cobro del desbloqueo de contacto vía Stripe Checkout y concesión del acceso solo tras confirmar el pago. |
+| **Pagos (Stripe)** | `api/_handlers/create-checkout-session.js` · `stripe-webhook.js` · `confirm-checkout.js` | Cobro del desbloqueo de contacto vía Stripe Checkout y concesión del acceso solo tras confirmar el pago. |
 | **PoC del Agente Evaluador** | `poc_entrega2/` | Prototipo en Python (Entrega 2) que demuestra el motor de evaluación con Dynamic Prompting + Chain of Thought. |
-| **Tests automáticos** | `tests/` | 84 casos con el *runner* nativo de Node. Sin claves, sin red, sin dependencias de testing. |
+| **Tests automáticos** | `tests/` | 91 casos con el *runner* nativo de Node. Sin claves, sin red, sin dependencias de testing. |
 | **Banco de pruebas del evaluador** | `tfm/tech/eval/` | Gold set de 12 ítems + métricas (κ cuadrática, MAE, Spearman, test-retest, bloqueo de inyección, coste). |
 | **Cifras canónicas** | `tfm/cifras_canonicas.json` | Fuente de verdad numérica del TFM. Si la memoria discrepa, manda este fichero. |
 | **Entregables** | `entrega_final/` | Informe técnico final, guion de demo, guiones de presentación, deck de defensa y batería de Q&A. |
@@ -30,12 +31,12 @@ Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & I
 
 ## 2. Instalación y uso — Producto web
 
-El producto es una web estática + funciones serverless de Netlify. La corrección con IA requiere una clave de API de Anthropic.
+El producto es una web estática + funciones serverless de Vercel. La corrección con IA requiere una clave de API de Anthropic.
 
 ### 2.1 Requisitos
 
 - [Node.js](https://nodejs.org/) ≥ 18
-- [Netlify CLI](https://docs.netlify.com/cli/get-started/): `npm install -g netlify-cli`
+- [Vercel CLI](https://vercel.com/docs/cli) (opcional): `npm install -g vercel`
 - Una **API key de Anthropic** ([console.anthropic.com](https://console.anthropic.com/))
 
 ### 2.2 Ejecución en local
@@ -50,26 +51,82 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 node serve-demo.js          # abre http://localhost:8888
 ```
 
-`serve-demo.js` sirve `index.html` y ejecuta las funciones de `netlify/functions/` en `/.netlify/functions/*`, replicando `netlify dev` sin dependencias.
+`serve-demo.js` sirve `index.html` y ejecuta los handlers de `api/_handlers/` en `/api/*`, replicando `vercel dev` sin dependencias.
 
-**Opción B — Netlify CLI:**
+**Opción B — Vercel CLI:** reproduce el entorno real de producción.
 
 ```bash
-npm install -g netlify-cli   # requiere permisos (puede necesitar sudo)
+npm install -g vercel
+vercel link            # vincula la carpeta con el proyecto
+vercel env pull .env   # descarga las variables del panel
 export ANTHROPIC_API_KEY="sk-ant-..."
 export ANTHROPIC_MODEL="claude-sonnet-4-6"   # opcional; modelo por defecto
-netlify dev
+vercel dev             # http://localhost:3000
 ```
 
 > **Modelo:** el modelo por defecto es `claude-sonnet-4-6`. Modelos antiguos como `claude-3-5-sonnet-latest` pueden devolver `not_found_error` si ya no están disponibles en tu cuenta. Ajusta `ANTHROPIC_MODEL` si tu cuenta usa otro identificador.
 
 > **Nota:** abrir `index.html` con doble clic (protocolo `file://`) carga la web pero **no** la corrección IA, porque las funciones serverless no están disponibles. En ese caso la app degrada con elegancia a una puntuación heurística local (`fallbackScore`).
 
-### 2.3 Despliegue (Netlify)
+### 2.3 Despliegue (Vercel)
 
-1. Conecta el repositorio en Netlify.
-2. En *Site settings → Environment variables* define `ANTHROPIC_API_KEY` (y opcionalmente `ANTHROPIC_MODEL`).
-3. Deploy. `netlify.toml` ya apunta el directorio de funciones a `netlify/functions`.
+1. Importa el repositorio en [vercel.com/new](https://vercel.com/new) con
+   **Framework Preset: `Other`**, *Build Command* vacío y *Output Directory* en
+   la raíz. Vercel detecta `api/` y despliega el router.
+2. En *Settings → Environment Variables* define las claves para los tres
+   entornos (Production, Preview y Development). Como mínimo `ANTHROPIC_API_KEY`,
+   `SUPABASE_URL` y `SUPABASE_SERVICE_KEY`; el resto (Stripe, blockchain) activa
+   sus funciones correspondientes y sin ellas esos endpoints responden 503 con
+   un mensaje claro, sin tumbar el resto de la web.
+3. Ejecuta `tfm/tech/supabase_schema_contact.sql` en el *SQL Editor* de Supabase.
+   **Netlify Forms no tiene equivalente en Vercel**: el formulario "Hablemos"
+   ahora envía a `api/_handlers/contact.js` y los mensajes se leen en
+   *Table Editor → contact_messages*.
+4. Añade la URL del despliegue en **Supabase → Authentication → URL Configuration**
+   (*Site URL* y *Redirect URLs*) y en los orígenes de **Google Cloud Console**,
+   o el acceso con Google fallará al volver del proveedor.
+5. Actualiza el endpoint del webhook en **Stripe → Developers → Webhooks** a
+   `https://<tu-sitio>/api/stripe-webhook`.
+6. Comprueba el resultado:
+
+   ```bash
+   npm run check:deploy -- https://tu-proyecto.vercel.app
+   ```
+
+   Recorre la web y los quince endpoints y dice cuál responde y cuál no. Es de
+   solo lectura, así que puede ejecutarse contra producción.
+
+### 2.3.1 Una sola función: `api/[fn].js`
+
+El plan Hobby de Vercel admite **12 funciones** y aquí hay **15 endpoints**, así
+que no vale el esquema de un archivo por función. En su lugar hay un router
+único: `[fn]` captura el último segmento de la ruta, de modo que `/api/save-profile`
+sigue llamándose igual y solo cambia quién lo atiende. Los handlers viven en
+`api/_handlers/` con su firma original de Netlify, sin tocar su lógica; Vercel
+ignora los directorios que empiezan por guion bajo, así que viajan en el bundle
+sin publicarse como endpoints.
+
+El router **desactiva el parseo automático del cuerpo** (`bodyParser: false`) y
+lee los bytes tal cual. No es un detalle menor: `stripe-webhook` valida la firma
+sobre el cuerpo literal, y `JSON.stringify` de un objeto ya parseado produce
+bytes distintos, así que con el parseo activado **la firma fallaría siempre y los
+pagos se quedarían sin confirmar**. `tests/router-vercel.test.js` lo cubre
+firmando un evento de prueba y comprobando que sigue validando al otro lado.
+
+### 2.3.2 Migrar sin romper lo que ya funciona
+
+La migración vive en una rama aparte; `main` conserva `netlify.toml` y
+`netlify/functions/`, así que Netlify sigue sirviendo la versión conocida
+mientras se prueba Vercel.
+
+1. En Vercel, *Settings → Git → Production Branch* → la rama de la migración.
+2. Despliega, pasa `npm run check:deploy` y prueba a mano lo que un script no
+   puede: acceso con Google, un reto corregido por IA, un pago de prueba y el
+   formulario de contacto.
+3. Cuando todo esté bien: fusiona en `main`, devuelve *Production Branch* a
+   `main` y borra el sitio de Netlify.
+
+> Si algo falla, `main` y Netlify siguen intactos: se corrige sobre la rama.
 
 ### 2.4 Acceso con Google / LinkedIn (OAuth)
 
@@ -212,12 +269,12 @@ al borrarlo, el hash on-chain queda huérfano y deja de significar nada.
 
 > Se eligió Sepolia y no Polygon Amoy porque los faucets de Amoy exigían saldo de
 > mainnet. La red está definida una sola vez en `CHAIN` (en
-> `netlify/functions/lib/tp.js` y `tfm/tech/scripts/lib-env.js`); **ambos deben moverse
+> `api/_lib/tp.js` y `tfm/tech/scripts/lib-env.js`); **ambos deben moverse
 > a la vez** si se cambia de cadena.
 
 ### 3.3 El sellado no es instantáneo
 
-Un bloque de Sepolia tarda ~12 s y Netlify corta las funciones síncronas a 10 s. Por eso
+Un bloque de Sepolia tarda ~12 s y las funciones se cortan por tiempo (10 s por defecto en Vercel; `vercel.json` lo sube a 60 s). Por eso
 `anchor-credential` **no espera** a la confirmación: difunde la transacción, guarda el
 `tx_hash` y responde `pending`; el frontend consulta hasta que la red confirma. El enlace
 a Etherscan ya funciona desde el primer segundo.
@@ -274,7 +331,7 @@ que es exactamente lo que asume el plan de negocio
 ### 4.2 Dos reglas que sostienen todo lo demás
 
 1. **El importe lo fija el servidor.** `UNLOCK_PRICE` vive en
-   `netlify/functions/lib/tp.js`. Si el precio viniera del navegador, se podría
+   `api/_lib/tp.js`. Si el precio viniera del navegador, se podría
    pagar un céntimo cambiando una variable en la consola.
 2. **El desbloqueo no se concede en el cliente.** `create-checkout-session` solo
    deja una fila en `unlocks` con estado `pending`. Quien la pasa a `paid` es
@@ -308,7 +365,7 @@ STRIPE_WEBHOOK_SECRET=whsec_...    # firma del webhook
 **Webhook en producción** — Stripe → *Developers → Webhooks → Add endpoint*:
 
 ```
-https://<tu-sitio>/.netlify/functions/stripe-webhook
+https://<tu-sitio>/api/stripe-webhook
 ```
 
 Eventos: `checkout.session.completed`, `checkout.session.expired`,
@@ -317,7 +374,7 @@ Eventos: `checkout.session.completed`, `checkout.session.expired`,
 **Webhook en local** — con la [CLI de Stripe](https://stripe.com/docs/stripe-cli):
 
 ```bash
-stripe listen --forward-to localhost:8888/.netlify/functions/stripe-webhook
+stripe listen --forward-to localhost:8888/api/stripe-webhook
 ```
 
 Sin webhook la demo funciona igual (`confirm-checkout` verifica contra Stripe al
@@ -355,7 +412,7 @@ el servidor.
 Todo lo de este apartado corre **sin clave de API, sin red y sin base de datos**.
 
 ```bash
-npm test                       # 84 casos, ~0,2 s
+npm test                       # 91 casos, ~0,2 s
 npm run doctor                 # qué falta configurar (IA, datos, blockchain, pagos)
 npm run bench -- --dry-run     # enseña los prompts del banco de pruebas sin gastar nada
 npm run bench -- --offline     # recalcula las métricas desde la última ejecución guardada

@@ -55,7 +55,7 @@ Degradación elegante: `fallbackScore()` produce una puntuación heurística loc
 En **Supabase** (PostgreSQL + Auth + RLS, región UE): `profiles`, `companies`, `evaluations` y `credentials`. El módulo `TP` sobre `localStorage` sigue existiendo como respaldo local, lo que permite enseñar la demo aunque caiga la red. La abstracción `TP` es la que hizo barato el cambio.
 
 **¿Qué está probado automáticamente y qué no?**
-`npm test` ejecuta **84 casos** en seis ficheros, sin claves y sin red:
+`npm test` ejecuta **91 casos** en nueve ficheros, sin claves y sin red:
 - *Contrato del evaluador*: `temperature=0`, notas acotadas a 0-100, nota ausente = 0 (nunca un aprobado de regalo), fallo explícito si el modelo devuelve prosa, cascada de modelos que no reintenta ante una clave revocada, y la clave de API fuera de la respuesta.
 - *Separación de canales*: la respuesta del candidato nunca entra en el *system prompt*.
 - *SkillPass*: el hash es determinista e independiente del orden de las claves, y cambiar un punto de una nota, añadir una skill o reasignar el sujeto **rompe el sello**.
@@ -71,7 +71,7 @@ Lo que **no** cubren: la calidad del juicio del modelo (eso es el banco de prueb
 **¿Qué métricas habéis medido realmente?**
 En la PoC (4 evaluaciones, `evaluation_results.json`): **$0,0180/evaluación ≈ €0,0165** (objetivo <€0,04 ✓), 0 % de rechazo del modelo, el ataque de inyección detectado y neutralizado, y **87 puntos** de discriminación (96 el mejor vs. 9 el peor legítimo). Latencia media 17,0 s, máxima 19,6 s, en local y sin *streaming*.
 
-Además hay dos capas de medición que no dependen de una ejecución puntual: **84 tests automáticos** (`npm test`) sobre el contrato del evaluador, el sello criptográfico y la propia estadística; y un **banco de pruebas reproducible** (`npm run bench`) con un *gold set* de 12 ítems que calcula κ cuadrática, MAE, Spearman, reproducibilidad test-retest, bloqueo de inyección, coste y latencia. El **2/2** de la tabla de la PoC y los **tres ataques** del banco son corpus distintos: no es una tasa de producción.
+Además hay dos capas de medición que no dependen de una ejecución puntual: **91 tests automáticos** (`npm test`) sobre el contrato del evaluador, el sello criptográfico y la propia estadística; y un **banco de pruebas reproducible** (`npm run bench`) con un *gold set* de 12 ítems que calcula κ cuadrática, MAE, Spearman, reproducibilidad test-retest, bloqueo de inyección, coste y latencia. El **2/2** de la tabla de la PoC y los **tres ataques** del banco son corpus distintos: no es una tasa de producción.
 
 **Accuracy ≥78 % y κ de Cohen ≥0,65: ¿los cumplís?**
 La κ **contra un tribunal humano** sigue sin medir, y lo decimos abiertamente: requiere que evaluadores reales puntúen un corpus. Lo que sí hemos hecho es dejar de esperar a que ocurra: el banco de pruebas (`tfm/tech/eval/`) implementa el protocolo completo, con un *gold set* de 12 ítems cuya referencia es la **banda que fija la rúbrica**, asignada por construcción. Eso mide **validez de constructo**, no acuerdo inter-evaluador, y el informe lo dice con esas palabras. El gold set ya reserva el campo `referenciaHumana`: cuando existan notas humanas, la κ de Cohen sale con el mismo comando, sin tocar código.

@@ -2435,7 +2435,7 @@ footer{background:var(--slate-900);border-top:1px solid var(--slate-800);color:v
 <div class="modal-overlay" id="jobModal" role="dialog" aria-modal="true" aria-label="Detalle de oferta"><div class="job-modal"><div class="jm-header"><button class="jm-close" onclick="closeJobModal()">✕</button><div class="job-badge" id="jmBadge"></div><h2 id="jmTitle"></h2><p id="jmDesc"></p><div class="jm-progress" id="jmProgress"></div></div><div class="ex-nav" id="exNav"></div><div id="exContent"></div></div></div>
 
 <!-- CONTACT -->
-<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="contact"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2>Hablemos</h2><p>¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label>Nombre</label><input type="text" id="cf-name" name="nombre" placeholder="Tu nombre" required></div><div class="fg"><label>Email</label><input type="email" id="cf-email" name="email" placeholder="tu@empresa.com" required></div><div class="fg"><label>Perfil</label><select name="perfil" aria-label="Tipo de perfil"><option value="">Selecciona…</option><option value="Inversor">Inversor</option><option value="Empresa">Empresa</option><option value="Aceleradora">Aceleradora</option><option value="Otro">Otro</option></select></div><div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos…"></textarea></div><button type="button" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="submitContact()">Enviar →</button></form><div class="fsucc" id="csucc"><h3>¡Enviado!</h3><p>Te contactamos en 24h.</p><button class="btn btn-primary" style="margin-top:14px" onclick="closeM('cmodal')">Cerrar</button></div></div></div>
+<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" onsubmit="return false"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2>Hablemos</h2><p>¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label>Nombre</label><input type="text" id="cf-name" name="nombre" placeholder="Tu nombre" required></div><div class="fg"><label>Email</label><input type="email" id="cf-email" name="email" placeholder="tu@empresa.com" required></div><div class="fg"><label>Perfil</label><select name="perfil" aria-label="Tipo de perfil"><option value="">Selecciona…</option><option value="Inversor">Inversor</option><option value="Empresa">Empresa</option><option value="Aceleradora">Aceleradora</option><option value="Otro">Otro</option></select></div><div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos…"></textarea></div><button type="button" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="submitContact()">Enviar →</button></form><div class="fsucc" id="csucc"><h3>¡Enviado!</h3><p>Te contactamos en 24h.</p><button class="btn btn-primary" style="margin-top:14px" onclick="closeM('cmodal')">Cerrar</button></div></div></div>
 
 <!-- ═══ SUPERADMIN BACKOFFICE ═══ -->
 <div class="admin-overlay" id="dashAdmin" role="main" aria-label="Panel de superadministrador">
@@ -3160,7 +3160,7 @@ const TPCloud={
       if(fullName)await TPCloud.saveProfile(user,{fullName});
     }catch(e){ console.warn('[TP] syncOAuthProfile',e); }
   },
-  _post(fn,body){ return fetch('/.netlify/functions/'+fn,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()); },
+  _post(fn,body){ return fetch('/api/'+fn,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(r=>r.json()); },
   // Token de la sesión actual (null en modo invitado).
   async accessToken(){
     const c=TPCloud.client(); if(!c)return null;
@@ -3174,7 +3174,7 @@ const TPCloud={
     const token=await TPCloud.accessToken();
     const headers={'Content-Type':'application/json'};
     if(token)headers['Authorization']='Bearer '+token;
-    const r=await fetch('/.netlify/functions/'+fn,{method:'POST',headers,body:JSON.stringify(body||{})});
+    const r=await fetch('/api/'+fn,{method:'POST',headers,body:JSON.stringify(body||{})});
     const text=await r.text();
     // Un 502 de Netlify devuelve HTML: sin esto, JSON.parse rompería el flujo
     // con un error críptico en vez de decir qué pasó.
@@ -5410,7 +5410,7 @@ ${response}
 IMPORTANTE: Si la respuesta es incoherente, basura, o no aborda el escenario, puntúa 0-10. No seas condescendiente. Evalúa como lo haría un director de RRHH exigente.
 Responde SOLO con JSON.`;
 
-  const res=await fetch('/.netlify/functions/evaluate-exercise',{
+  const res=await fetch('/api/evaluate-exercise',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({systemPrompt,userPrompt})
@@ -7133,9 +7133,14 @@ function submitContact(){
   const form=document.getElementById('cform');
   const btn=form.querySelector('button');
   btn.textContent='Enviando…';btn.disabled=true;
-  const formData=new URLSearchParams(new FormData(form)).toString();
-  fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData})
-    .then(function(r){if(r.ok){form.style.display='none';document.getElementById('csucc').style.display='block';}else{toast('No se ha podido enviar. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;}})
+  // Antes esto era un POST a "/" que interceptaba Netlify Forms. En Vercel no
+  // existe ese mecanismo: el mensaje va a una función que lo guarda en Supabase.
+  const fd=new FormData(form);
+  fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+    nombre:name, email:email, perfil:fd.get('perfil')||'', mensaje:fd.get('mensaje')||'', botField:fd.get('bot-field')||''
+  })})
+    .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d};},function(){return{ok:false,d:null};});})
+    .then(function(res){if(res.ok&&res.d&&res.d.ok){form.style.display='none';document.getElementById('csucc').style.display='block';}else{toast((res.d&&res.d.error)||'No se ha podido enviar. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;}})
     .catch(function(){toast('Sin conexión con el servidor. Inténtalo de nuevo.');btn.textContent='Enviar →';btn.disabled=false;});
 }
 function closeM(id){document.getElementById(id).classList.remove('open');}
@@ -7562,7 +7567,7 @@ REGLAS:
 - Sé amable y profesional`;
 
   try{
-    const res=await fetch('/.netlify/functions/support-chat',{
+    const res=await fetch('/api/support-chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({

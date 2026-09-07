@@ -15,7 +15,7 @@
 const {
   jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode,
   UNLOCK_PRICE, formatAmount
-} = require("./lib/tp");
+} = require("../_lib/tp");
 
 /** Orígenes a los que se permite volver tras pagar. */
 function origenesPermitidos(event) {

@@ -193,7 +193,7 @@ Y tres reglas que el motor no puede saltarse: razonar antes de puntuar, criterio
 **Xavier.** Esta es la tabla que más nos importa, porque son **datos medidos en ejecuciones reales**, no proyecciones. Nos pusimos siete objetivos al empezar; estos son los valores a los que hemos llegado.
 
       
-Lo conseguido. **Coste**: nos dábamos cuatro céntimos por evaluación y estamos en **1,65**, menos de la mitad. **Capacidad de distinguir**: pedíamos que entre una buena respuesta y una mala hubiera al menos 40 puntos de diferencia, y hay **87** —un 96 frente a un 9—. **Rechazos del modelo**: cero. **Intentos de manipulación**: los dos ensayados, bloqueados. Y **84 pruebas automáticas** en verde.
+Lo conseguido. **Coste**: nos dábamos cuatro céntimos por evaluación y estamos en **1,65**, menos de la mitad. **Capacidad de distinguir**: pedíamos que entre una buena respuesta y una mala hubiera al menos 40 puntos de diferencia, y hay **87** —un 96 frente a un 9—. **Rechazos del modelo**: cero. **Intentos de manipulación**: los dos ensayados, bloqueados. Y **91 pruebas automáticas** en verde.
 
       
 Lo que **no** hemos conseguido: la **latencia**. Queríamos bajar de doce segundos y estamos en diecisiete o veinte, en local y sin mostrar la respuesta a medida que llega. Es un problema de implementación, no de arquitectura.
@@ -216,7 +216,7 @@ Cierre: tres ejercicios por candidato cuestan **unos 5 céntimos** de IA frente 
 **Xavier.** Cualquiera puede enseñar la corrección que le salió bien. Eso no demuestra que el sistema funcione, solo que ese día tuvo suerte. Así que montamos dos comprobaciones que corren solas.
 
       
-La primera: **84 pruebas automáticas**. Vigilan las reglas que el motor no puede romper nunca. Que la nota no se salga de cero a cien. Que si falta la nota de un criterio cuente como cero y no como un aprobado de regalo. Y la más importante: que **lo que escribe el candidato jamás se lea como una orden para el sistema**. Tardan dos décimas de segundo y no gastan ni un céntimo, porque no necesitan llamar a la IA.
+La primera: **91 pruebas automáticas**. Vigilan las reglas que el motor no puede romper nunca. Que la nota no se salga de cero a cien. Que si falta la nota de un criterio cuente como cero y no como un aprobado de regalo. Y la más importante: que **lo que escribe el candidato jamás se lea como una orden para el sistema**. Tardan dos décimas de segundo y no gastan ni un céntimo, porque no necesitan llamar a la IA.
 
       
 La segunda: escribimos **doce respuestas de las que ya sabemos qué nota merecen**, de excelente a pésima, y tres maneras distintas de intentar engañar al corrector. Se las damos al sistema a ciegas y comparamos lo que pone con lo que debía poner. Un comando nos dice cuánto se aleja.
@@ -529,7 +529,7 @@ Si “lo mismo” es **la misma idea con otras palabras**, la nota debe caer en 
 
 **¿Cómo sabéis que el Skill Score es correcto si no lo habéis validado con humanos?**
 No lo sabemos, y por eso no lo afirmamos. Lo que sí hemos medido es que discrimina
-**87 puntos** (96 vs 9), que el coste es **€0,0165**, que los ataques ensayados no compran la nota, y que hay **84 tests**. La concordancia con evaluadores humanos
+**87 puntos** (96 vs 9), que el coste es **€0,0165**, que los ataques ensayados no compran la nota, y que hay **91 tests**. La concordancia con evaluadores humanos
 es el siguiente hito: el protocolo y el corpus ya están escritos.
 
 **¿Nos estáis pidiendo 180.000 € a nosotros?**

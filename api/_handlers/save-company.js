@@ -2,7 +2,7 @@
  * save-company — crea o actualiza la ficha de una empresa autenticada.
  * Body: { userId, email?, companyName?, contactName?, jobTitle?, companySize? }
  */
-const { jsonResponse, ensureCompanyByUser } = require("./lib/tp");
+const { jsonResponse, ensureCompanyByUser } = require("../_lib/tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });

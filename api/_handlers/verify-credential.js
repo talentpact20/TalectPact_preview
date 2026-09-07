@@ -12,7 +12,7 @@
 const {
   jsonResponse, sb, hashCv, getContract, chainConfigured, isHash32,
   CHAIN, explorerTx, explorerAddress
-} = require("./lib/tp");
+} = require("../_lib/tp");
 
 function chainMeta(extra) {
   return Object.assign(

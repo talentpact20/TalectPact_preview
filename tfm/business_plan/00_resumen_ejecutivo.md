@@ -1,6 +1,6 @@
 # Resumen ejecutivo
 
-**TalentPact** es un marketplace europeo de talento **100 % anónimo**. El candidato demuestra habilidades con retos prácticos **corregidos por IA**; la empresa filtra un pool pre-validado y paga **solo por resultado** (€49 por contacto). Las dos capas técnicas son el **evaluador** (un agente, Dynamic Prompting + CoT, **€0,0165/ejercicio medido**, con 84 tests y un banco de métricas reproducible) y el **SkillPass** (keccak256 anclado on-chain; un tercero verifica el documento sin fiarse de un PDF).
+**TalentPact** es un marketplace europeo de talento **100 % anónimo**. El candidato demuestra habilidades con retos prácticos **corregidos por IA**; la empresa filtra un pool pre-validado y paga **solo por resultado** (€49 por contacto). Las dos capas técnicas son el **evaluador** (un agente, Dynamic Prompting + CoT, **€0,0165/ejercicio medido**, con 91 tests y un banco de métricas reproducible) y el **SkillPass** (keccak256 anclado on-chain; un tercero verifica el documento sin fiarse de un PDF).
 
 **El problema.** Contratar dura ~42 días y cuesta ~€4.700 en España; una fracción alta de CVs no es verificable (fuentes secundarias: SHRM 2024, Glassdoor/Adecco, ResumeLab 2024). El filtro sigue siendo un papel.
 

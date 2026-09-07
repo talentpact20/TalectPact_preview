@@ -1,9 +1,9 @@
 /**
  * Servidor de demo local para TalentPact — sin dependencias externas.
  *
- * Replica el comportamiento de `netlify dev` para la demo: sirve los archivos
- * estáticos (index.html, etc.) y ejecuta las funciones serverless de
- * netlify/functions/ en los endpoints /.netlify/functions/<nombre>.
+ * Replica el comportamiento de `vercel dev` para la demo: sirve los archivos
+ * estáticos (index.html, etc.) y ejecuta los handlers de api/_handlers/ en los
+ * endpoints /api/<nombre>.
  *
  * Requisitos: Node >= 18 (usa fetch global) y un archivo `.env` en la raiz
  * (copialo de `.env.example`). Las variables ya exportadas en el shell tienen
@@ -43,7 +43,7 @@ const DOTENV_COUNT = loadDotEnv(path.join(__dirname, ".env"));
 
 const PORT = process.env.PORT || 8888;
 const ROOT = __dirname;
-const FUNCTIONS_DIR = path.join(ROOT, "netlify", "functions");
+const FUNCTIONS_DIR = path.join(ROOT, "api", "_handlers");
 
 const MIME = {
   ".html": "text/html; charset=utf-8",
@@ -73,7 +73,12 @@ async function handleFunction(req, res, fnName) {
   }
   try {
     const body = await readBody(req);
-    delete require.cache[require.resolve(fnPath)]; // recarga en caliente
+    // Recarga en caliente. Se limpia todo api/ para que los cambios en _lib/
+    // también se vean sin reiniciar el servidor.
+    const API_DIR = path.join(ROOT, "api");
+    for (const cached of Object.keys(require.cache)) {
+      if (cached.startsWith(API_DIR)) delete require.cache[cached];
+    }
     const mod = require(fnPath);
     // Netlify entrega la query ya parseada; sin esto los endpoints GET
     // (verify-credential?h=…) funcionan en produccion pero no en local.
@@ -113,14 +118,10 @@ function serveStatic(req, res) {
 }
 
 const server = http.createServer((req, res) => {
-  const fnMatch = req.url.match(/^\/\.netlify\/functions\/([\w-]+)/);
+  // `/api/<nombre>` es la ruta real en Vercel; la antigua de Netlify se acepta
+  // igual porque vercel.json hace ese mismo reenvío en producción.
+  const fnMatch = req.url.match(/^\/(?:api|\.netlify\/functions)\/([\w-]+)/);
   if (fnMatch) return handleFunction(req, res, fnMatch[1]);
-  if (req.method === "POST" && req.url === "/") {
-    // El formulario de contacto hace POST a "/"; respondemos 200 sin procesar.
-    res.writeHead(200, { "content-type": "text/plain" });
-    res.end("OK");
-    return;
-  }
   serveStatic(req, res);
 });
 

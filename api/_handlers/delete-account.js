@@ -14,7 +14,7 @@
  * cuenta de Auth puede ser cualquiera de las dos, y el aviso de privacidad
  * promete supresion completa, no parcial.
  */
-const { jsonResponse, sb, supabaseEnv } = require("./lib/tp");
+const { jsonResponse, sb, supabaseEnv } = require("../_lib/tp");
 
 /** Devuelve el usuario dueño del token, o null si el token no vale. */
 async function userFromToken(url, serviceKey, accessToken) {

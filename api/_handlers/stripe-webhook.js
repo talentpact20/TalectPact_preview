@@ -6,10 +6,10 @@
  * fingiendo un cobro y regalarse los contactos.
  *
  * Se registra en Stripe (Developers → Webhooks) apuntando a:
- *   https://<tu-sitio>/.netlify/functions/stripe-webhook
+ *   https://<tu-sitio>/api/stripe-webhook
  * con los eventos checkout.session.completed y checkout.session.expired.
  */
-const { jsonResponse, sb, getStripe, stripeConfigured } = require("./lib/tp");
+const { jsonResponse, sb, getStripe, stripeConfigured } = require("../_lib/tp");
 
 /** Marca la fila como pagada. Idempotente: Stripe reintenta los webhooks. */
 async function markPaid(session) {

@@ -3,7 +3,7 @@
 Protocolo reproducible para medir el motor de corrección de TalentPact. Existe porque el *Project Charter* fijó métricas de fiabilidad (*accuracy*, κ, tasa de alucinación) que quedaron sin medir, y "pendiente de validación humana" repetido en tres documentos no es un plan: es una nota adhesiva.
 
 ```bash
-npm test                     # 84 casos, sin API, ~0,2 s
+npm test                     # 91 casos, sin API, ~0,2 s
 npm run bench -- --dry-run   # enseña los prompts sin gastar nada
 npm run bench                # ejecuta el gold set (necesita ANTHROPIC_API_KEY)
 npm run bench:offline        # recalcula métricas desde la última ejecución

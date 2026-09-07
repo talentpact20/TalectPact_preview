@@ -19,7 +19,7 @@
 const {
   jsonResponse, sb, authUser, getContract, getProvider,
   chainConfigured, isHash32, isUuid, CHAIN, explorerTx, explorerAddress
-} = require("./lib/tp");
+} = require("../_lib/tp");
 
 // Margen de espera antes de devolver `pending`. Deja aire dentro de los 10 s de
 // Netlify para el resto de la petición (auth, Supabase, difusión).

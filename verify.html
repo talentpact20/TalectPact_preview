@@ -392,7 +392,7 @@ async function verifyPayload(payload){
   pass.className='pass'; bad.className='bad';
   let r,data;
   try{
-    r=await fetch('/.netlify/functions/verify-credential',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    r=await fetch('/api/verify-credential',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const text=await r.text();
     try{ data=JSON.parse(text); }
     catch(e){ showError('El verificador no está disponible.','Respondió HTTP '+r.status+' en un formato inesperado. Si estás abriendo el archivo con doble clic, las funciones serverless no se ejecutan: sirve el sitio con «npm run demo».'); return; }
