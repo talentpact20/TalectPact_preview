@@ -12,7 +12,7 @@
 const { loadDotEnv, env } = require("./lib-env");
 loadDotEnv();
 
-const tp = require("../../../netlify/functions/lib/tp");
+const tp = require("../../../api/_lib/tp");
 const { sb, ensureProfileByUser, hashCv, CHAIN } = tp;
 
 const TEST_SKILL = "__test__SQL";
