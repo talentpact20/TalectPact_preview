@@ -113,7 +113,62 @@ bytes distintos, así que con el parseo activado **la firma fallaría siempre y 
 pagos se quedarían sin confirmar**. `tests/router-vercel.test.js` lo cubre
 firmando un evento de prueba y comprobando que sigue validando al otro lado.
 
-### 2.3.2 Migrar sin romper lo que ya funciona
+### 2.3.2 Entorno propio: no compartir backend con el proyecto original
+
+Este repositorio nació como copia de otro proyecto. Separar el código no basta:
+mientras el `.env` apunte al mismo Supabase, a la misma cuenta de Stripe y a la
+misma clave de Anthropic, **los dos despliegues comparten backend** y tocar la
+configuración de uno afecta al otro. Lo más caro de deshacer es cambiar el
+*Site URL* de Supabase Auth: rompe el login del proyecto original al instante.
+
+**Supabase.** Crea un proyecto nuevo (región UE) y levántalo entero de una vez:
+
+```bash
+npm run schema:build      # regenera tfm/tech/supabase_bootstrap.sql
+```
+
+Pega `tfm/tech/supabase_bootstrap.sql` en el *SQL Editor* del proyecto nuevo.
+Contiene las seis tablas (`profiles`, `evaluations`, `credentials`, `unlocks`,
+`companies`, `contact_messages`) en el orden correcto — importa, porque la capa
+de cuentas hace `ALTER` sobre tablas que crea la base. Es idempotente.
+
+Después, apunta el proyecto al Supabase nuevo:
+
+```bash
+npm run set:supabase                       # ver a qué proyecto apunta ahora
+npm run set:supabase -- <url> <clave-anon> # cambiarlo
+```
+
+Cambia los dos sitios a la vez: la URL y la clave `anon` van dentro de
+`index.html` (el producto es un HTML sin build, no hay variables de entorno en
+el navegador) y la URL también en `.env`. Dejar uno sin el otro haría que el
+login fuese contra un proyecto y los datos se guardasen en otro — un fallo
+silencioso y difícil de ver. El script rechaza una `service_role` por error:
+`index.html` es público y esa clave da acceso total.
+
+Queda a mano la `SUPABASE_SERVICE_KEY` (en `.env` y en Vercel) y, en
+*Authentication*, habilitar Google y poner *Site URL* y *Redirect URLs*.
+Comprueba con `npm run doctor` y `npm run test:supabase`.
+
+**Stripe.** No hace falta otra cuenta: una misma cuenta admite **varios
+endpoints de webhook**. Añade uno nuevo apuntando a
+`https://<tu-sitio>/api/stripe-webhook` en vez de editar el que ya existe —
+editarlo dejaría al proyecto original sin confirmación de pagos. Cada endpoint
+tiene su propio *signing secret*, así que copia el `whsec_...` **del endpoint
+nuevo** a `STRIPE_WEBHOOK_SECRET` en Vercel. Usa las claves de test hasta que
+todo esté probado.
+
+**Anthropic.** Genera una API key aparte en la misma cuenta: aísla el consumo y
+permite revocarla sin tocar el otro proyecto.
+
+**Google Cloud (OAuth).** Añade los orígenes y la URI de redirección del
+proyecto nuevo; no sustituyas los existentes.
+
+> Regla general al configurar paneles compartidos: **añade, nunca sustituyas**.
+> Lo aditivo (un webhook más, una redirect URL más) no rompe nada; lo que
+> sustituye (Site URL, un endpoint existente) sí.
+
+### 2.3.3 Migrar sin romper lo que ya funciona
 
 La migración vive en una rama aparte; `main` conserva `netlify.toml` y
 `netlify/functions/`, así que Netlify sigue sirviendo la versión conocida

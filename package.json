@@ -18,7 +18,9 @@
     "deploy:contract": "node tfm/tech/scripts/deploy-contract.js",
     "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run",
     "test:supabase": "node tfm/tech/scripts/test-supabase.js",
-    "check:deploy": "node tfm/tech/scripts/check-deploy.js"
+    "check:deploy": "node tfm/tech/scripts/check-deploy.js",
+    "schema:build": "node tfm/tech/scripts/build-schema.js",
+    "set:supabase": "node tfm/tech/scripts/set-supabase.js"
   },
   "dependencies": {
     "ethers": "^6.13.0",
