@@ -90,17 +90,31 @@ exports.handler = async (event) => {
   }
   const candidateLabel = String(b.candidateLabel || "").trim().slice(0, 200) || candidateRef;
 
-  // Con claves reales solo se cobra por un perfil real (id de Supabase). Los
-  // candidatos de la demo (p1…p8, "me") tienen un contacto ficticio: cobrar
-  // dinero de verdad por él sería vender algo que no existe.
-  if (stripeLiveMode() && !isUuid(candidateRef)) {
-    return jsonResponse(400, {
-      error: "Este perfil es de demostración y no se puede desbloquear con un pago real",
-      code: "demo_candidate_live_payment"
-    });
+  // Solo se cobra por un perfil real del pool (id de Supabase): cualquier otra
+  // referencia no tiene un contacto que entregar después del pago.
+  if (!isUuid(candidateRef)) {
+    return jsonResponse(400, { error: "Ese candidato no es un perfil del pool", code: "not_real_candidate" });
   }
 
   try {
+    // ── Un candidato real tiene que existir y estar en el pool. ──
+    {
+      let filas;
+      try { filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id,pool_visible,allow_contact&limit=1`); }
+      catch (err) {
+        if (!/pool_visible|allow_contact/i.test(err.message)) throw err;
+        filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id&limit=1`);
+      }
+      const perfil = Array.isArray(filas) ? filas[0] : null;
+      if (!perfil) return jsonResponse(404, { error: "Ese candidato ya no existe", code: "candidate_not_found" });
+      if (perfil.allow_contact === false) {
+        return jsonResponse(409, { error: "Este candidato no acepta solicitudes de contacto ahora mismo", code: "contact_not_allowed" });
+      }
+      if (perfil.pool_visible === false) {
+        return jsonResponse(409, { error: "Este candidato ha dejado de estar visible para empresas", code: "candidate_hidden" });
+      }
+    }
+
     // ── Ya pagado: no se cobra dos veces por el mismo candidato. ──
     const paid = await sb.select(
       "unlocks",

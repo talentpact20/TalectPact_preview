@@ -23,6 +23,7 @@ llamar desde un `onclick` del HTML o desde `10-…`.
 | `app/13-integridad.js` | `TPIntegrity`: cámara, anti-copia, pestañas e informe de integridad. |
 | `app/14-empleo.js` | `TPEmpleo`: preferencias de empleo, encaje y pool filtrable. |
 | `app/15-proteccion-acceso.js` | `TPAuthGuard`: bloqueo por intentos, política de contraseñas, inactividad. |
+| `app/16-pool-real.js` | `TPPool`: pool real desde Supabase, contacto real tras el pago y sincronización de preferencias. |
 | `app/99-arranque.js` | Restaura la sesión cuando todo lo anterior está definido. |
 
 ## Regla de orden

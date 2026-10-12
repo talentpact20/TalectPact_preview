@@ -60,7 +60,21 @@ async function sbRequest(method, path, { body, prefer } = {}) {
   return data;
 }
 
+/** Número de filas que cumplen un filtro, sin descargarlas (Content-Range de PostgREST). */
+async function sbCount(table, query = "") {
+  const { url, key } = supabaseEnv();
+  const q = `select=id${query ? "&" + query : ""}`;
+  const res = await fetch(`${url}/rest/v1/${table}?${q}`, {
+    method: "HEAD",
+    headers: { apikey: key, authorization: `Bearer ${key}`, prefer: "count=exact", range: "0-0" }
+  });
+  if (!res.ok) throw new Error(`Supabase COUNT ${table} -> ${res.status}`);
+  const total = Number(String(res.headers.get("content-range") || "").split("/")[1]);
+  return Number.isFinite(total) ? total : 0;
+}
+
 const sb = {
+  count: sbCount,
   select: (table, query = "") => sbRequest("GET", `${table}${query ? "?" + query : ""}`),
   insert: (table, row) =>
     sbRequest("POST", table, { body: row, prefer: "return=representation" }),
@@ -110,7 +124,7 @@ function authUser(event, body) {
   return userFromToken(tokenFromEvent(event, body));
 }
 
-const PROFILE_FIELDS = ["email", "full_name", "sector", "phone", "linkedin", "display_name"];
+const PROFILE_FIELDS = ["email", "full_name", "sector", "phone", "linkedin", "display_name", "empleo", "pool_visible", "allow_contact"];
 function pickProfileFields(fields = {}) {
   const out = {};
   for (const k of PROFILE_FIELDS) {
@@ -157,7 +171,7 @@ async function ensureProfileByUser(userId, fields = {}) {
   }
 }
 
-const COMPANY_FIELDS = ["email", "company_name", "contact_name", "job_title", "company_size"];
+const COMPANY_FIELDS = ["email", "company_name", "contact_name", "job_title", "company_size", "description", "sector", "website", "location"];
 function pickCompanyFields(fields = {}) {
   const out = {};
   for (const k of COMPANY_FIELDS) {

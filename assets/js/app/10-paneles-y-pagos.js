@@ -11,7 +11,7 @@ function openDashCand(){document.getElementById('dashCandidate').classList.add('
     const reqSkills=j.requiredSkills||[];
     const hasCount=reqSkills.filter(s=>candidateProfile.skills[s]?.unlocked).length;
     const allMet=hasCount===reqSkills.length&&reqSkills.length>0;
-    h+=`<div class="job-card" onclick="openJob('${j.id}')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div><div class="job-tags">${j.tags.map(t=>`<span class="job-tag">${escHtml(t)}</span>`).join('')}</div>${co?(m=>`<div class="job-company"><div class="job-company-dot" style="background:${m.bg};color:${m.fg}">${m.iniciales}</div>${co.name} · ${co.size} empleados</div>`)(companyMonogram(co.name)):''}<div style="margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.7rem"><span style="color:${allMet?'var(--emerald-600)':'var(--amber-500)'};font-weight:600">${allMet?'✅ Cumples requisitos':'⚡ '+hasCount+'/'+reqSkills.length+' skills'}</span>${reqSkills.map(s=>{const ok=candidateProfile.skills[s]?.unlocked;return`<span style="padding:1px 6px;border-radius:3px;font-size:.6rem;border:1px solid ${ok?'var(--emerald-200)':'var(--slate-200)'};background:${ok?'var(--emerald-50)':'var(--slate-50)'};color:${ok?'var(--emerald-600)':'var(--slate-400)'}">${ok?'✓':''} ${s.split(' ')[0]}</span>`}).join('')}</div></div>`;
+    h+=`<div class="job-card" onclick="openJob('${j.id}')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div><div class="job-tags">${j.tags.map(t=>`<span class="job-tag">${escHtml(t)}</span>`).join('')}</div>${co?(m=>`<div class="job-company"><div class="job-company-dot" style="background:${m.bg};color:${m.fg}">${m.iniciales}</div>${co.name} · ${co.size} empleados</div>`)(companyMonogram(co.name)):''}<div style="margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.7rem"><span style="color:${allMet?'var(--emerald-600)':'var(--amber-500)'};font-weight:600">${allMet?tpIcon('check')+' Cumples requisitos':''+hasCount+'/'+reqSkills.length+' skills'}</span>${reqSkills.map(s=>{const ok=candidateProfile.skills[s]?.unlocked;return`<span style="padding:1px 6px;border-radius:3px;font-size:.6rem;border:1px solid ${ok?'var(--emerald-200)':'var(--slate-200)'};background:${ok?'var(--emerald-50)':'var(--slate-50)'};color:${ok?'var(--emerald-600)':'var(--slate-400)'}">${ok?'✓':''} ${s.split(' ')[0]}</span>`}).join('')}</div></div>`;
   });
   document.getElementById('candJobsList').innerHTML=`<div class="jobs-grid">${h}</div>`;
   // Companies list
@@ -37,36 +37,54 @@ function renderEmpJobs(){const my=JOBS.filter(j=>j.company==='c1').concat(myPost
   my.forEach(j=>{const nc=8+(j.id.charCodeAt(0)%18);h+=`<tr><td><strong>${escHtml(j.title)}</strong></td><td>${j.sector}</td><td><strong style="color:var(--emerald-600)">${nc}</strong></td><td><span class="status-active">Activa</span></td><td><button class="btn btn-primary btn-sm" onclick="showOfferCandidates('${j.id}')">Ver candidatos →</button></td></tr>`;});
   h+='</tbody></table>';document.getElementById('empJobsList').innerHTML=h;}
 
+// Candidatos para una oferta, ordenados por encaje real: skills requeridas que
+// el candidato ha demostrado y condiciones (jornada, modalidad) compatibles.
+// Antes se listaban todos, con un "#1000+posición" inventado como alias y
+// reordenando el array global.
+function encajeOferta(job,c){
+  const req=(job.requiredSkills||[]).map(x=>String(x).toLowerCase());
+  const tiene=new Set((c.skills||[]).map(s=>String(s.n).toLowerCase()));
+  const skills=req.length?req.filter(x=>tiene.has(x)).length/req.length:0;
+  const cd=c.cond||{};
+  const ok=(lista,v)=>!v||!(lista&&lista.length)?null:lista.includes(v);
+  const jor=ok(cd.jornadas,job.jornada),mod=ok(cd.modalidades,job.modalidad);
+  const cond=[jor,mod].filter(x=>x!==null);
+  const pctCond=cond.length?cond.filter(Boolean).length/cond.length:1;
+  return {pct:Math.round((skills*0.7+pctCond*0.3)*100),skills,jor,mod};
+}
 function showOfferCandidates(jobId){
   const job=JOBS.concat(empPostedJobs).find(j=>j.id===jobId);
   if(!job)return;
   document.getElementById('empOfferCandidatesSection').style.display='block';
   document.getElementById('empOfferCandTitle').textContent='Candidatos para: '+job.title;
-  const matching=CANDIDATES.sort((a,b)=>b.score-a.score);
-  
+  const lista=CANDIDATES.map(c=>({c,e:encajeOferta(job,c)}))
+    .filter(x=>x.e.pct>0)
+    .sort((x,y)=>y.e.pct-x.e.pct||y.c.score-x.c.score);
+  const chip=(ok,txt)=>ok===null?'':`<span class="tp-cond-chip ${ok?'ok':'ko'}">${ok?'✓':'✕'} ${escHtml(txt)}</span>`;
   let h='';
-  matching.forEach((ca,idx)=>{
-    const unlocked=ca._unlocked||false;
+  lista.forEach(({c:ca,e})=>{
     const scoreCls=ca.score>=80?'score-high':'score-mid';
+    const verif=(ca.skills||[]).filter(s=>s.verified).length;
     h+=`<div class="offer-cand-card">
-      <div class="oc-avatar">${ca.i}</div>
+      <div class="oc-avatar">${escHtml(ca.i)}</div>
       <div class="oc-score-pill"><div class="score-circle ${scoreCls}">${ca.score}</div></div>
       <div class="oc-info">
-        <h4>Candidato #${1000+idx}</h4>
-        <div class="oc-meta">${ca.sector} · ${ca.skills.length} skills verificados</div>
-        <div class="oc-skills">${ca.skills.map(s=>`<span class="job-tag">${s.n}: <strong>${s.v}</strong></span>`).join('')}</div>
+        <h4>${escHtml(TPPool.alias(ca))}<span class="tp-origen ${ca._real?'real':'demo'}">${ca._real?'Real':'Demo'}</span> <span class="tp-cond-chip">${e.pct}% de encaje</span></h4>
+        <div class="oc-meta">${escHtml(ca.sector)} · ${(ca.skills||[]).length} skills${ca._real?' · '+verif+' verificadas':''}</div>
+        <div class="oc-skills">${(ca.skills||[]).map(s=>`<span class="job-tag">${escHtml(s.n)}: <strong>${s.v}</strong></span>`).join('')}</div>
+        <div class="tp-cond">${chip(e.jor,TP_COND.jornadas[job.jornada]||'')}${chip(e.mod,TP_COND.modalidades[job.modalidad]||'')}</div>
       </div>
       <div class="oc-actions">
-        ${unlocked
-          ?`<button class="btn-unlock unlocked">✓ Contacto desbloqueado</button>`
+        ${ca._unlocked
+          ?`<button class="btn-unlock unlocked" onclick="showContactCard(CANDIDATES.find(x=>String(x.id)==='${escHtml(ca.id)}'))">✓ Ver contacto</button>`
           :(candidateAcceptsContact(ca)
-            ?`<button class="btn-unlock" onclick="unlockContact('${ca.id}')">🔓 Desbloquear · €49</button>`
+            ?`<button class="btn-unlock" onclick="unlockContact('${escHtml(ca.id)}')">${tpIcon('unlock')} Desbloquear · 49 €</button>`
             :`<button class="btn-unlock" disabled style="opacity:.55;cursor:not-allowed">No acepta contactos</button>`)
         }
       </div>
     </div>`;
   });
-  if(!matching.length)h='<div style="text-align:center;padding:32px;color:var(--slate-400);background:var(--slate-50);border-radius:var(--radius)"><p style="font-size:1.5rem;margin-bottom:8px">🔎</p><p>No hay candidatos para esta oferta todavía.</p></div>';
+  if(!lista.length)h='<div style="text-align:center;padding:32px;color:var(--slate-400);background:var(--slate-50);border-radius:var(--radius)"><p style="font-size:1.5rem;margin-bottom:8px">${tpIcon('search')}</p><p>Ningún candidato del pool tiene todavía las skills que pide esta oferta.</p></div>';
   document.getElementById('empOfferCandList').innerHTML=h;
   document.getElementById('empOfferCandidatesSection').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -80,9 +98,10 @@ let _payingForJob=null;
 
 // Un candidato puede cerrar la puerta desde Ajustes -> Privacidad; cuando lo
 // hace, su ficha sigue visible pero no se puede comprar su contacto.
+// Lo decide el candidato en sus ajustes y lo comprueba también el servidor
+// (create-checkout-session no cobra, get-contact no entrega).
 function candidateAcceptsContact(c){
-  if(!c||!c._mine)return true;          // solo aplica a tu propia ficha
-  return prefIsOn('cand','allowContact',true);
+  return !!c&&c.acceptsContact!==false;
 }
 function unlockContact(candId){
   const c=CANDIDATES.find(p=>p.id===candId);
@@ -313,7 +332,7 @@ function renderLandingCommon(filter='',cat='all',level='all'){
   if(!list.length){
     el.innerHTML='<div style="padding:20px;text-align:center;color:var(--slate-400);font-size:.75rem">No hay retos que coincidan.</div>';
     const prev=document.getElementById('rplPreview');
-    if(prev)prev.innerHTML='<div class="rpl-preview-empty"><span>🔍</span><p>Sin resultados para tu búsqueda.</p></div>';
+    if(prev)prev.innerHTML='<div class="rpl-preview-empty"><span>'+tpIcon('search')+'</span><p>Sin resultados para tu búsqueda.</p></div>';
     return;
   }
   const dotColor=l=>l==='basico'?'var(--emerald-500)':l==='intermedio'?'var(--amber-500)':'var(--red-500)';
@@ -325,7 +344,7 @@ function renderLandingCommon(filter='',cat='all',level='all'){
     const nivelesTxt='Niveles disponibles: '+levels.map(dotName).join(', ');
     const etiquetas=ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').slice(0,2).join(' · ');
     const sub=etiquetas||(ce.category==='sector'?'Por sector':'Soft skill universal');
-    return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${ce.icon}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${sub}</div></div><div class="rpl-dots" title="${nivelesTxt}" aria-label="${nivelesTxt}">${dots}</div></div>`;
+    return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${tpMonograma(ce.title,ce.category)}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${sub}</div></div><div class="rpl-dots" title="${nivelesTxt}" aria-label="${nivelesTxt}">${dots}</div></div>`;
   };
   const softList=list.filter(ce=>ce.category==='soft');
   const sectorList=list.filter(ce=>ce.category==='sector');
@@ -345,7 +364,7 @@ function buildLandingExBody(ce,idx){
   const allSkills=[...hardSkills,...softSkills];
   const timerMins=ex.timeLimit?Math.floor(ex.timeLimit/60):8;
   const timerStr=timerMins+':00';
-  return`<div class="rpl-pv-warn"><span>⚠️</span> El escenario se revelará cuando pulses "Empezar". El timer empieza al instante.</div><div class="rpl-pv-center"><span class="rpl-pv-big-icon">${ce.icon}</span><div class="rpl-pv-ex-title">${ex.title}</div><p class="rpl-pv-ex-desc">${ex.briefing}</p><div class="rpl-pv-skills">${allSkills.map(s=>`<span class="rpl-pv-skill-tag">${s.toUpperCase()}</span>`).join('')}</div><div class="rpl-pv-cta"><button class="rpl-pv-cta-btn" onclick="openAuth('candidate')">Únete para empezar →</button></div></div>`;
+  return`<div class="rpl-pv-warn"><span>${tpIcon('alert')}</span> El escenario se revelará cuando pulses "Empezar". El timer empieza al instante.</div><div class="rpl-pv-center"><span class="rpl-pv-big-icon">${ce.icon}</span><div class="rpl-pv-ex-title">${ex.title}</div><p class="rpl-pv-ex-desc">${ex.briefing}</p><div class="rpl-pv-skills">${allSkills.map(s=>`<span class="rpl-pv-skill-tag">${s.toUpperCase()}</span>`).join('')}</div><div class="rpl-pv-cta"><button class="rpl-pv-cta-btn" onclick="openAuth('candidate')">Únete para empezar →</button></div></div>`;
 }
 
 function selectLandingReto(id){
@@ -359,7 +378,7 @@ function selectLandingReto(id){
   const diffLabel=ex.difficulty==='basico'?'Básico':ex.difficulty==='intermedio'?'Intermedio':'Avanzado';
   const timerMins=ex.timeLimit?Math.floor(ex.timeLimit/60):8;
   const exTabs=ce.exercises.map((e,i)=>`<button class="rpl-ex-tab${i===0?' active':''}" onclick="selectLandingEx(${i})">${e.num}. ${e.title.length>22?e.title.slice(0,22)+'…':e.title}</button>`).join('');
-  preview.innerHTML=`<div class="rpl-pv-topbar"><div class="rpl-pv-title">${ce.title} — ${ex.title}</div><div class="rpl-pv-right"><span class="rpl-pv-badge ${ex.difficulty}">${diffLabel.toUpperCase()}</span><span class="rpl-pv-exnum">Ejercicio 1 de ${ce.exercises.length}</span><span class="rpl-pv-timer">⏱ ${timerMins}:00</span></div></div><div class="rpl-ex-tabs">${exTabs}</div><div class="rpl-pv-body" id="rplPreviewBody">${buildLandingExBody(ce,0)}</div>`;
+  preview.innerHTML=`<div class="rpl-pv-topbar"><div class="rpl-pv-title">${ce.title} — ${ex.title}</div><div class="rpl-pv-right"><span class="rpl-pv-badge ${ex.difficulty}">${diffLabel.toUpperCase()}</span><span class="rpl-pv-exnum">Ejercicio 1 de ${ce.exercises.length}</span><span class="rpl-pv-timer">${tpIcon('clock')} ${timerMins}:00</span></div></div><div class="rpl-ex-tabs">${exTabs}</div><div class="rpl-pv-body" id="rplPreviewBody">${buildLandingExBody(ce,0)}</div>`;
 }
 
 function selectLandingEx(idx){
@@ -370,7 +389,7 @@ function selectLandingEx(idx){
   const diffLabel=ex.difficulty==='basico'?'Básico':ex.difficulty==='intermedio'?'Intermedio':'Avanzado';
   const timerMins=ex.timeLimit?Math.floor(ex.timeLimit/60):8;
   const topbar=document.querySelector('.rpl-pv-topbar');
-  if(topbar)topbar.innerHTML=`<div class="rpl-pv-title">${ce.title} — ${ex.title}</div><div class="rpl-pv-right"><span class="rpl-pv-badge ${ex.difficulty}">${diffLabel.toUpperCase()}</span><span class="rpl-pv-exnum">Ejercicio ${idx+1} de ${ce.exercises.length}</span><span class="rpl-pv-timer">⏱ ${timerMins}:00</span></div>`;
+  if(topbar)topbar.innerHTML=`<div class="rpl-pv-title">${ce.title} — ${ex.title}</div><div class="rpl-pv-right"><span class="rpl-pv-badge ${ex.difficulty}">${diffLabel.toUpperCase()}</span><span class="rpl-pv-exnum">Ejercicio ${idx+1} de ${ce.exercises.length}</span><span class="rpl-pv-timer">${tpIcon('clock')} ${timerMins}:00</span></div>`;
   const body=document.getElementById('rplPreviewBody');
   if(body)body.innerHTML=buildLandingExBody(ce,idx);
 }
@@ -400,7 +419,7 @@ function clearExSearch(){
 }
 
 function renderEmpPool(){let h='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Top Skills</th><th></th></tr></thead><tbody>';CANDIDATES.forEach(c=>{h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${c.i}</div>#${1000+parseInt(c.id.slice(1))*111}</div></td><td>${c.sector}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${s.n}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${c.id}')">Ver perfil</button></td></tr>`;});h+='</tbody></table>';document.getElementById('empPool').innerHTML=h;}
-function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${c.i}</div><div class="cp-info"><h3>Candidato anónimo</h3><div class="cp-meta">${escHtml(c.sector)} · Score: ${c.score} · Perfil ciego</div>${(()=>{const cd=c.cond||{};const t=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k]),cd.ciudad?(cd.ciudad+(cd.reubicacion?' (acepta mudarse)':'')):'',cd.disponibilidad?'Disponible: '+(TP_COND.disponibilidad[cd.disponibilidad]||''):''].filter(Boolean);return (t.length?`<div class="tp-cond">${t.map(x=>`<span class="tp-cond-chip">${escHtml(x)}</span>`).join('')}</div>`:'')+(c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'');})()}</div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${s.n}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${c.id}')">Desbloquear contacto · €49 →</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
+function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${escHtml(c.i)}</div><div class="cp-info"><h3>${c._real?escHtml(c.alias||"Candidato anónimo"):"Candidato anónimo"}${c._real?'<span class="tp-origen real">Real</span>':'<span class="tp-origen demo">Demo</span>'}</h3><div class="cp-meta">${escHtml(c.sector)} · Score: ${c.score} · Perfil ciego</div>${(()=>{const cd=c.cond||{};const t=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k]),cd.ciudad?(cd.ciudad+(cd.reubicacion?' (acepta mudarse)':'')):'',cd.disponibilidad?'Disponible: '+(TP_COND.disponibilidad[cd.disponibilidad]||''):''].filter(Boolean);return (t.length?`<div class="tp-cond">${t.map(x=>`<span class="tp-cond-chip">${escHtml(x)}</span>`).join('')}</div>`:'')+(c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'');})()}</div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${escHtml(s.n)}${s.verified?' <span class="tp-verified">✓</span>':''}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${escHtml(c.id)}')">${c._unlocked?'Ver contacto →':'Desbloquear contacto · €49 →'}</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
 
 // ═══ POST JOB ═══
 let pjExConfigVal='common+custom';

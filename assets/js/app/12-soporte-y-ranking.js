@@ -9,7 +9,7 @@ function toggleAiChat(){
   const fab=document.getElementById('aiChatFab');
   const isOpen=panel.classList.contains('open');
   panel.classList.toggle('open');
-  fab.textContent=isOpen?'💬':'✕';
+  fab.innerHTML=isOpen?tpIcon('message'):tpIcon('x');
   fab.classList.toggle('open');
   if(!isOpen)document.getElementById('aiChatInput').focus();
 }
@@ -165,8 +165,8 @@ function renderRanking(sector,btn){
     const isYou=r.id==='you';
     const scoreColor=r.score>=80?'var(--emerald-600)':r.score>=60?'var(--amber-500)':'var(--slate-500)';
     h+=`<div class="ranking-row ${isYou?'is-you':''}">
-      <div class="ranking-pos ${posCls}">${pos<=3?['🥇','🥈','🥉'][pos-1]:pos}</div>
-      <div class="ranking-name">${isYou?'<strong>⭐ Tú</strong>':r.name} <span>${r.sector} · ${r.retos} retos</span></div>
+      <div class="ranking-pos ${posCls}">${pos}</div>
+      <div class="ranking-name">${isYou?'<strong>Tú</strong>':r.name} <span>${r.sector} · ${r.retos} retos</span></div>
       <div class="ranking-score" style="color:${scoreColor}">${r.score>0?r.score:'—'}</div>
     </div>`;
   });

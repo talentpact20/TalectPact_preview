@@ -65,7 +65,7 @@ test("el chat de soporte ignora el prompt del cliente y no empieza nunca por el 
   }
 });
 
-test("con claves reales de Stripe no se cobra por un candidato de demostración", async () => {
+test("no se cobra por una referencia que no es un candidato real del pool", async () => {
   const k = process.env.STRIPE_SECRET_KEY, real = globalThis.fetch;
   process.env.STRIPE_SECRET_KEY = "sk_live_prueba";
   process.env.SUPABASE_URL = process.env.SUPABASE_URL || "https://ejemplo.supabase.co";
@@ -76,7 +76,7 @@ test("con claves reales de Stripe no se cobra por un candidato de demostración"
     const { handler } = require("../netlify/functions/lib/handlers/create-checkout-session.js");
     const res = await handler({ httpMethod: "POST", headers: { authorization: "Bearer t", origin: "https://talentpact.es" }, body: JSON.stringify({ candidateRef: "p1" }) });
     assert.equal(res.statusCode, 400);
-    assert.equal(JSON.parse(res.body).code, "demo_candidate_live_payment");
+    assert.equal(JSON.parse(res.body).code, "not_real_candidate");
   } finally {
     globalThis.fetch = real;
     if (k === undefined) delete process.env.STRIPE_SECRET_KEY; else process.env.STRIPE_SECRET_KEY = k;

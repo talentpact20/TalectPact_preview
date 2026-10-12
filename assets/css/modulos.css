@@ -48,3 +48,7 @@ body.tp-exam-blur #jobModal #exContent{filter:blur(7px);transition:filter .15s}
 .tp-chip input:focus-visible+span{outline:2px solid var(--emerald-500,#10b981);outline-offset:2px}
 .tp-pref-check{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--slate-600,#475569);margin-top:4px}
 @media (max-width:600px){.tp-proctor{width:112px}.tp-proctor video{width:100px;height:75px}.tp-filter-count{margin-left:0}}
+.tp-origen{font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:4px;padding:1px 5px;margin-left:6px}
+.tp-origen.real{background:var(--emerald-50,#ecfdf5);color:var(--emerald-600,#059669);border:1px solid var(--emerald-200,#a7f3d0)}
+.tp-origen.demo{background:var(--slate-50,#f8fafc);color:var(--slate-500,#64748b);border:1px solid var(--slate-200,#e2e8f0)}
+.tp-pool-aviso{font-size:.74rem;color:var(--slate-500,#64748b);margin:-6px 0 12px}
