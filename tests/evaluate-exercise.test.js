@@ -10,11 +10,12 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { handler } = require("../netlify/functions/evaluate-exercise.js");
+const { handler } = require("../netlify/functions/lib/handlers/evaluate-exercise.js");
 
 const realFetch = globalThis.fetch;
 const realKey = process.env.ANTHROPIC_API_KEY;
 const realModel = process.env.ANTHROPIC_MODEL;
+const realRaw = process.env.EVAL_ALLOW_RAW_PROMPTS;
 
 /** Sustituye fetch por una cola de respuestas y registra lo que se envió. */
 function stubFetch(respuestas) {
@@ -49,6 +50,9 @@ function silenciarErrores() {
 const PROMPTS = { systemPrompt: "Eres un evaluador ESTRICTO...", userPrompt: "RESPUESTA DEL CANDIDATO: ..." };
 
 test.beforeEach(() => {
+  // Estos tests fijan el contrato del motor en modo crudo, el mismo que usa el
+  // banco de pruebas. En producción ese modo está apagado (ver Corrector v2).
+  process.env.EVAL_ALLOW_RAW_PROMPTS = "1";
   process.env.ANTHROPIC_API_KEY = "sk-ant-test";
   delete process.env.ANTHROPIC_MODEL;
 });
@@ -56,6 +60,7 @@ test.after(() => {
   globalThis.fetch = realFetch;
   if (realKey === undefined) delete process.env.ANTHROPIC_API_KEY; else process.env.ANTHROPIC_API_KEY = realKey;
   if (realModel === undefined) delete process.env.ANTHROPIC_MODEL; else process.env.ANTHROPIC_MODEL = realModel;
+  if (realRaw === undefined) delete process.env.EVAL_ALLOW_RAW_PROMPTS; else process.env.EVAL_ALLOW_RAW_PROMPTS = realRaw;
 });
 
 test("rechaza métodos que no son POST", async () => {

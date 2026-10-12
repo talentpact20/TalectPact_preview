@@ -1,8 +1,12 @@
 /**
  * save-profile — crea o actualiza el perfil de un candidato autenticado.
- * Body: { userId, email?, fullName?, sector?, phone?, linkedin? }
+ * Body: { email?, fullName?, sector?, phone?, linkedin? }
+ * Cabecera: Authorization: Bearer <access token de Supabase>
+ *
+ * El candidato se deduce del token. Antes se aceptaba un `userId` en el body,
+ * así que cualquiera podía sobrescribir el nombre, teléfono o LinkedIn de otro.
  */
-const { jsonResponse, ensureProfileByUser } = require("./lib/tp");
+const { jsonResponse, authUser, ensureProfileByUser } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -10,10 +14,12 @@ exports.handler = async (event) => {
 
   try {
     const b = JSON.parse(event.body || "{}");
-    if (!b.userId) return jsonResponse(400, { error: "userId es obligatorio" });
+    const user = await authUser(event, b);
+    if (!user) return jsonResponse(401, { error: "Sesión no válida o caducada" });
 
-    const profile = await ensureProfileByUser(b.userId, {
-      email: b.email,
+    const profile = await ensureProfileByUser(user.id, {
+      // El email es el de la cuenta, no uno que proponga el cliente.
+      email: user.email,
       full_name: b.fullName,
       sector: b.sector,
       phone: b.phone,

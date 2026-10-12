@@ -110,18 +110,6 @@ function authUser(event, body) {
   return userFromToken(tokenFromEvent(event, body));
 }
 
-/** Devuelve el perfil con ese display_name; lo crea si no existe. */
-async function ensureProfile(displayName) {
-  const name = displayName || "Candidato Demo";
-  const found = await sb.select(
-    "profiles",
-    `display_name=eq.${encodeURIComponent(name)}&select=*&limit=1`
-  );
-  if (Array.isArray(found) && found.length) return found[0];
-  const created = await sb.insert("profiles", { display_name: name });
-  return Array.isArray(created) ? created[0] : created;
-}
-
 const PROFILE_FIELDS = ["email", "full_name", "sector", "phone", "linkedin", "display_name"];
 function pickProfileFields(fields = {}) {
   const out = {};
@@ -255,9 +243,19 @@ const SKILLPASS_ABI = [
   "function issuer() view returns (address)"
 ];
 
+// Dependencias pesadas inyectadas por la entrada de cada función.
+// En el API moderno, Netlify solo empaqueta los paquetes que la entrada .mjs
+// importa: un `require` perezoso desde aquí no lo ve, y en producción daba
+// "Cannot find module 'ethers'". Las entradas que los necesitan los importan y
+// los registran aquí; tests y scripts locales siguen cayendo al `require`.
+let _ethersMod = null;
+let _stripe = null;
+let _StripeCtor = null;
+function usarEthers(mod) { _ethersMod = mod; }
+function usarStripe(ctor) { _StripeCtor = ctor; _stripe = null; }
+
 function getEthers() {
-  // Carga perezosa para no romper funciones que no usan blockchain.
-  return require("ethers");
+  return _ethersMod || require("ethers");
 }
 
 function getProvider() {
@@ -311,18 +309,17 @@ function stripeLiveMode() {
   return /^sk_live_/.test(process.env.STRIPE_SECRET_KEY || "");
 }
 
-let _stripe = null;
 function getStripe() {
   if (_stripe) return _stripe;
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) throw new Error("Falta STRIPE_SECRET_KEY en variables de entorno");
   // Carga perezosa: las funciones que no cobran no deben pagar el arranque.
-  const Stripe = require("stripe");
+  const Stripe = _StripeCtor || require("stripe");
   // Sin fijar apiVersion a proposito: stripe-node ya viene anclado a la
   // version de API para la que fue construido. Forzar una antigua hace que
   // la libreria construya peticiones con una forma y Stripe las interprete
   // con otra. maxNetworkRetries cubre cortes de red puntuales.
-  _stripe = Stripe(key, { maxNetworkRetries: 2 });
+  _stripe = new Stripe(key, { maxNetworkRetries: 2 });
   return _stripe;
 }
 
@@ -343,7 +340,6 @@ module.exports = {
   userFromToken,
   tokenFromEvent,
   authUser,
-  ensureProfile,
   ensureProfileByUser,
   anonymousAlias,
   ensureCompanyByUser,
@@ -362,5 +358,7 @@ module.exports = {
   stripeConfigured,
   stripeLiveMode,
   getStripe,
+  usarEthers,
+  usarStripe,
   formatAmount
 };

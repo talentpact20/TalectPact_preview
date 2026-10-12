@@ -11,16 +11,16 @@ Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & I
 
 | Componente | Ruta | Descripción |
 |---|---|---|
-| **Producto web** | `index.html` | Aplicación completa (candidato · empresa · superadmin). HTML/CSS/JS sin framework. |
-| **Corrección IA (backend)** | `netlify/functions/evaluate-exercise.js` | Función serverless que llama a la API de Anthropic (Claude) para evaluar respuestas. |
-| **Chatbot de soporte** | `netlify/functions/support-chat.js` | Función serverless del asistente conversacional. |
-| **Persistencia** | dentro de `index.html` (módulo `TP`) | Capa de persistencia en `localStorage` (perfil, pool de talento, desbloqueos, audit trail de evaluaciones). |
-| **SkillPass (credencial)** | `netlify/functions/issue-credential.js` · `anchor-credential.js` · `verify-credential.js` | Emisión del CV verificable, anclaje de su hash en blockchain y verificación pública. |
+| **Producto web** | `index.html` + `assets/` | Aplicación completa (candidato · empresa · superadmin). HTML/CSS/JS sin framework: el marcado en `index.html`, los estilos en `assets/css/` y la lógica en 16 scripts por dominio en `assets/js/app/` (ver `assets/js/README.md`). |
+| **Corrección IA (backend)** | `netlify/functions/lib/handlers/evaluate-exercise.js` + `lib/evaluator.js` | Corrector v2: el servidor pone reglas y rúbrica, filtra el prompt injection y firma cada nota. Llama a la API de Anthropic (Claude) para evaluar respuestas. |
+| **Chatbot de soporte** | `netlify/functions/lib/handlers/support-chat.js` | Función serverless del asistente conversacional. |
+| **Persistencia** | `assets/js/app/04-estado-y-nube.js` (módulos `TP` y `TPCloud`) | Capa de persistencia en `localStorage` (perfil, pool de talento, desbloqueos, audit trail de evaluaciones). |
+| **SkillPass (credencial)** | `netlify/functions/lib/handlers/issue-credential.js` · `anchor-credential.js` · `verify-credential.js` | Emisión del CV verificable, anclaje de su hash en blockchain y verificación pública. |
 | **Contrato** | `tfm/tech/contracts/SkillPassRegistry.sol` | Registro de huellas en Ethereum Sepolia. Solo hashes: ningún dato personal on-chain. |
 | **Verificador público** | `verify.html` | Página sin cuenta donde cualquiera comprueba un SkillPass. |
-| **Pagos (Stripe)** | `netlify/functions/create-checkout-session.js` · `stripe-webhook.js` · `confirm-checkout.js` | Cobro del desbloqueo de contacto vía Stripe Checkout y concesión del acceso solo tras confirmar el pago. |
+| **Pagos (Stripe)** | `netlify/functions/lib/handlers/create-checkout-session.js` · `stripe-webhook.js` · `confirm-checkout.js` | Cobro del desbloqueo de contacto vía Stripe Checkout y concesión del acceso solo tras confirmar el pago. |
 | **PoC del Agente Evaluador** | `poc_entrega2/` | Prototipo en Python (Entrega 2) que demuestra el motor de evaluación con Dynamic Prompting + Chain of Thought. |
-| **Tests automáticos** | `tests/` | 84 casos con el *runner* nativo de Node. Sin claves, sin red, sin dependencias de testing. |
+| **Tests automáticos** | `tests/` | 98 casos con el *runner* nativo de Node. Sin claves, sin red, sin dependencias de testing. |
 | **Banco de pruebas del evaluador** | `tfm/tech/eval/` | Gold set de 12 ítems + métricas (κ cuadrática, MAE, Spearman, test-retest, bloqueo de inyección, coste). |
 | **Cifras canónicas** | `tfm/cifras_canonicas.json` | Fuente de verdad numérica del TFM. Si la memoria discrepa, manda este fichero. |
 | **Entregables** | `entrega_final/` | Informe técnico final, guion de demo, guiones de presentación, deck de defensa y batería de Q&A. |
@@ -217,7 +217,7 @@ al borrarlo, el hash on-chain queda huérfano y deja de significar nada.
 
 ### 3.3 El sellado no es instantáneo
 
-Un bloque de Sepolia tarda ~12 s y Netlify corta las funciones síncronas a 10 s. Por eso
+Un bloque de Sepolia tarda ~12 s y una función síncrona no debe quedarse esperando a la red. Por eso
 `anchor-credential` **no espera** a la confirmación: difunde la transacción, guarda el
 `tx_hash` y responde `pending`; el frontend consulta hasta que la red confirma. El enlace
 a Etherscan ya funciona desde el primer segundo.
@@ -355,7 +355,7 @@ el servidor.
 Todo lo de este apartado corre **sin clave de API, sin red y sin base de datos**.
 
 ```bash
-npm test                       # 84 casos, ~0,2 s
+npm test                       # 98 casos, ~0,2 s
 npm run doctor                 # qué falta configurar (IA, datos, blockchain, pagos)
 npm run bench -- --dry-run     # enseña los prompts del banco de pruebas sin gastar nada
 npm run bench -- --offline     # recalcula las métricas desde la última ejecución guardada

@@ -14,8 +14,8 @@
  */
 const {
   jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode,
-  UNLOCK_PRICE, formatAmount
-} = require("./lib/tp");
+  UNLOCK_PRICE, formatAmount, isUuid
+} = require("../tp");
 
 /** Orígenes a los que se permite volver tras pagar. */
 function origenesPermitidos(event) {
@@ -89,6 +89,16 @@ exports.handler = async (event) => {
     return jsonResponse(400, { error: "Falta el candidato a desbloquear (candidateRef)" });
   }
   const candidateLabel = String(b.candidateLabel || "").trim().slice(0, 200) || candidateRef;
+
+  // Con claves reales solo se cobra por un perfil real (id de Supabase). Los
+  // candidatos de la demo (p1…p8, "me") tienen un contacto ficticio: cobrar
+  // dinero de verdad por él sería vender algo que no existe.
+  if (stripeLiveMode() && !isUuid(candidateRef)) {
+    return jsonResponse(400, {
+      error: "Este perfil es de demostración y no se puede desbloquear con un pago real",
+      code: "demo_candidate_live_payment"
+    });
+  }
 
   try {
     // ── Ya pagado: no se cobra dos veces por el mismo candidato. ──

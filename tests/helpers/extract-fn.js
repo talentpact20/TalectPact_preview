@@ -1,10 +1,10 @@
 /**
- * Extrae el código fuente de una función declarada dentro de index.html.
+ * Extrae el código fuente de una función declarada en el JS de cliente
+ * (assets/js/app/*.js, que index.html carga en orden).
  *
- * El producto es un único HTML de ~800 KB sin build ni módulos: la lógica de
- * cliente no se puede `require`. En vez de trocear un fichero que funciona
- * (riesgo alto, beneficio nulo para el TFM), el test lee la declaración,
- * la aísla por conteo de llaves y la evalúa en su propio ámbito.
+ * Son scripts clásicos que comparten el ámbito global, sin build ni módulos:
+ * la lógica de cliente no se puede `require`. El test lee la declaración, la
+ * aísla por conteo de llaves y la evalúa en su propio ámbito.
  *
  * Si alguien renombra la función, el test falla con un mensaje explícito en
  * lugar de pasar en verde sobre código que ya no existe.
@@ -13,14 +13,20 @@ const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
 
-const INDEX = path.join(__dirname, "..", "..", "index.html");
+const APP_DIR = path.join(__dirname, "..", "..", "assets", "js", "app");
 
-function extractSource(name, file = INDEX) {
-  const html = fs.readFileSync(file, "utf8");
+/** Todo el JS de cliente, en el mismo orden en que lo carga index.html. */
+function clientSource() {
+  return fs.readdirSync(APP_DIR).filter((f) => f.endsWith(".js")).sort()
+    .map((f) => fs.readFileSync(path.join(APP_DIR, f), "utf8")).join("\n");
+}
+
+function extractSource(name, file) {
+  const html = file ? fs.readFileSync(file, "utf8") : clientSource();
   const start = html.indexOf(`function ${name}(`);
   if (start === -1) {
     throw new Error(
-      `No se encontró "function ${name}(" en ${path.basename(file)}. ` +
+      `No se encontró "function ${name}(" en ${file ? path.basename(file) : "assets/js/app"}. ` +
       `Si la función se ha renombrado o movido, actualiza el test: está cubriendo un control real, no decoración.`
     );
   }
@@ -38,7 +44,7 @@ function extractSource(name, file = INDEX) {
 }
 
 /** Devuelve las funciones pedidas, evaluadas juntas en un contexto compartido. */
-function loadFunctions(names, file = INDEX) {
+function loadFunctions(names, file) {
   const src = names.map((n) => extractSource(n, file)).join("\n");
   const context = vm.createContext({});
   vm.runInContext(`${src}\n;({ ${names.join(", ")} })`, context);
@@ -54,12 +60,12 @@ function loadFunctions(names, file = INDEX) {
  * contenido de las cadenas: los enunciados de los retos llevan corchetes y
  * llaves dentro del texto, y contarlos rompería el aislamiento.
  */
-function extractDeclaration(name, file = INDEX) {
-  const html = fs.readFileSync(file, "utf8");
+function extractDeclaration(name, file) {
+  const html = file ? fs.readFileSync(file, "utf8") : clientSource();
   const decl = new RegExp(`(?:const|let|var)\\s+${name}\\s*=`).exec(html);
   if (!decl) {
     throw new Error(
-      `No se encontró la declaración de ${name} en ${path.basename(file)}. ` +
+      `No se encontró la declaración de ${name} en ${file ? path.basename(file) : "assets/js/app"}. ` +
       `Si se ha renombrado, actualiza el test: cubre un dato de producto, no decoración.`
     );
   }
@@ -94,8 +100,8 @@ function extractDeclaration(name, file = INDEX) {
  * contexto del vm con otro prototipo y deepStrictEqual falla comparando dos
  * listas idénticas. Los catálogos son datos puros, así que la copia es exacta.
  */
-function loadValue(name, file = INDEX) {
+function loadValue(name, file) {
   return JSON.parse(JSON.stringify(vm.runInNewContext(`(${extractDeclaration(name, file)})`)));
 }
 
-module.exports = { extractSource, loadFunctions, extractDeclaration, loadValue, INDEX };
+module.exports = { extractSource, loadFunctions, extractDeclaration, loadValue, clientSource, APP_DIR };

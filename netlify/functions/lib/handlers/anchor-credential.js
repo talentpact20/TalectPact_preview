@@ -9,7 +9,8 @@
  * del propio usuario — la propiedad se impone en la consulta, no comparando ids.
  *
  * La confirmación de un bloque de Sepolia tarda ~12 s y Netlify corta las
- * funciones síncronas a 10 s. Por eso el anclaje NO bloquea hasta la
+ * funciones síncronas (60 s en el API moderno; 10 s en el antiguo modo Lambda),
+ * y no tiene sentido tener a la persona esperando. Por eso el anclaje NO bloquea hasta la
  * confirmación: difunde la transacción, la guarda, espera un margen corto y, si
  * aún no ha entrado en un bloque, responde `pending` con el txHash. Volver a
  * llamar con el mismo `credentialId` recoge el recibo y cierra el anclaje.
@@ -19,10 +20,10 @@
 const {
   jsonResponse, sb, authUser, getContract, getProvider,
   chainConfigured, isHash32, isUuid, CHAIN, explorerTx, explorerAddress
-} = require("./lib/tp");
+} = require("../tp");
 
-// Margen de espera antes de devolver `pending`. Deja aire dentro de los 10 s de
-// Netlify para el resto de la petición (auth, Supabase, difusión).
+// Margen de espera antes de devolver `pending`. Corto a propósito: la persona
+// no espera a la red, y el resto de la petición (auth, Supabase, difusión) va aparte.
 const WAIT_MS = Number(process.env.ANCHOR_WAIT_MS || 5000);
 
 function chainMeta(extra) {

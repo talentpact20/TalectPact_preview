@@ -40,13 +40,13 @@ Este directorio contiene todo el trabajo del Trabajo Fin de Máster: el **busine
 | Contrato `SkillPassRegistry` | `tech/contracts/SkillPassRegistry.sol` | ✅ Escrito y compilando (solc 0.8.36, sin avisos) |
 | Script de despliegue | `tech/scripts/deploy-contract.js` (`npm run deploy:contract`) | ✅ Listo — sustituye al paso manual con Remix |
 | Diagnóstico de configuración | `tech/scripts/doctor.js` (`npm run doctor`) | ✅ Listo |
-| Emisión de credencial | `netlify/functions/issue-credential.js` | ✅ Con cuentas reales (Supabase Auth) |
-| Anclaje on-chain | `netlify/functions/anchor-credential.js` | ✅ Anclaje real en Sepolia |
-| Verificación | `netlify/functions/verify-credential.js` + `verify.html` | ✅ Página pública + panel empresa |
+| Emisión de credencial | `netlify/functions/lib/handlers/issue-credential.js` | ✅ Con cuentas reales (Supabase Auth) |
+| Anclaje on-chain | `netlify/functions/lib/handlers/anchor-credential.js` | ✅ Anclaje real en Sepolia |
+| Verificación | `netlify/functions/lib/handlers/verify-credential.js` + `verify.html` | ✅ Página pública + panel empresa |
 | Botón en el portal de candidato | `index.html` → SkillPass visual | ✅ Construido |
 | Contrato en Sepolia | `0x85418F3d978e691C0f784bA63E4cB2826478f73A` | ✅ Desplegado (ago 2026) |
-| Pagos con Stripe Checkout | `netlify/functions/create-checkout-session.js` + webhook | ✅ Construido (claves de test) |
-| **Tests automáticos** | `tests/` (`npm test`) | ✅ 84 casos, sin claves ni red |
+| Pagos con Stripe Checkout | `netlify/functions/lib/handlers/create-checkout-session.js` + webhook | ✅ Construido (claves de test) |
+| **Tests automáticos** | `tests/` (`npm test`) | ✅ 98 casos, sin claves ni red |
 | **Banco de pruebas del evaluador** | `tech/eval/` (`npm run bench`) | ✅ Gold set de 12 ítems + métricas |
 | **Cifras canónicas** | `cifras_canonicas.json` | ✅ Fuente de verdad numérica, verificada por test |
 
@@ -104,7 +104,7 @@ Merecen quedar escritos porque son el argumento de por qué el banco de pruebas 
 - `entrega_final/INFORME_TECNICO_FINAL.md` — arquitectura, métricas reales de IA, compliance, roadmap.
 - `poc_entrega2/` — PoC del Agente Evaluador (Python) + resultados.
 - `index.html` — producto web funcional (candidato/empresa/superadmin).
-- `netlify/functions/evaluate-exercise.js` — motor de corrección IA en producción.
+- `netlify/functions/lib/handlers/evaluate-exercise.js` — motor de corrección IA en producción.
 
 **Fuentes aportadas (ahora en el repo o usadas para redactar):**
 - `tfm/assets/TalentPact_modelo_financiero.xlsx` — P&L, cashflow, balance, break-even (mayo 2028), KPIs SaaS, €180 k + €50 k ENISA. **Origen de todas las cifras de negocio**, consolidadas en `cifras_canonicas.json` junto con las métricas técnicas.

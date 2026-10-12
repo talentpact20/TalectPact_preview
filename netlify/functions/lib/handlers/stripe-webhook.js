@@ -9,7 +9,7 @@
  *   https://<tu-sitio>/.netlify/functions/stripe-webhook
  * con los eventos checkout.session.completed y checkout.session.expired.
  */
-const { jsonResponse, sb, getStripe, stripeConfigured } = require("./lib/tp");
+const { jsonResponse, sb, getStripe, stripeConfigured } = require("../tp");
 
 /** Marca la fila como pagada. Idempotente: Stripe reintenta los webhooks. */
 async function markPaid(session) {

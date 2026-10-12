@@ -1,8 +1,8 @@
 /**
- * get-company — devuelve la ficha de empresa de un usuario autenticado.
- * Body: { userId }
+ * get-company — devuelve la ficha de empresa del usuario autenticado.
+ * Cabecera: Authorization: Bearer <access token de Supabase>
  */
-const { jsonResponse, ensureCompanyByUser } = require("./lib/tp");
+const { jsonResponse, authUser, ensureCompanyByUser } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -10,8 +10,9 @@ exports.handler = async (event) => {
 
   try {
     const b = JSON.parse(event.body || "{}");
-    if (!b.userId) return jsonResponse(400, { error: "userId es obligatorio" });
-    const company = await ensureCompanyByUser(b.userId);
+    const user = await authUser(event, b);
+    if (!user) return jsonResponse(401, { error: "Sesión no válida o caducada" });
+    const company = await ensureCompanyByUser(user.id);
     return jsonResponse(200, { ok: true, company });
   } catch (err) {
     return jsonResponse(500, { error: "No se pudo cargar la empresa", details: err.message });

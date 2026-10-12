@@ -98,7 +98,10 @@ Procede con el análisis según la rúbrica. Responde SOLO con el JSON.`;
 // ─── Ejecución ───────────────────────────────────────────────────────────────
 async function evaluar(item) {
   const reto = retos[item.retoId];
-  const { handler } = require(path.join(RAIZ, "netlify", "functions", "evaluate-exercise.js"));
+  // El banco escribe sus propios prompts: usa el modo crudo del motor, que en
+  // producción está apagado. Solo se activa dentro de este proceso.
+  if (process.env.EVAL_ALLOW_RAW_PROMPTS === undefined) process.env.EVAL_ALLOW_RAW_PROMPTS = "1";
+  const { handler } = require(path.join(RAIZ, "netlify", "functions", "lib", "handlers", "evaluate-exercise.js"));
   const t0 = process.hrtime.bigint();
   const res = await handler({
     httpMethod: "POST",

@@ -1,9 +1,13 @@
 /**
  * get-progress — devuelve el perfil y el progreso guardado de un candidato.
- * Body: { userId }
+ * Cabecera: Authorization: Bearer <access token de Supabase>
+ *
+ * El candidato sale del token. Con un `userId` en el body cualquiera podía leer
+ * el email, nombre y teléfono de otro candidato — justo lo que el anonimato
+ * promete no revelar.
  * Devuelve: { profile, skills:[{skill,score,challengeId,evaluatedAt}], completed:[...] }
  */
-const { jsonResponse, sb, ensureProfileByUser } = require("./lib/tp");
+const { jsonResponse, sb, authUser, ensureProfileByUser } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -11,9 +15,10 @@ exports.handler = async (event) => {
 
   try {
     const b = JSON.parse(event.body || "{}");
-    if (!b.userId) return jsonResponse(400, { error: "userId es obligatorio" });
+    const user = await authUser(event, b);
+    if (!user) return jsonResponse(401, { error: "Sesión no válida o caducada" });
 
-    const profile = await ensureProfileByUser(b.userId);
+    const profile = await ensureProfileByUser(user.id);
 
     const evals = await sb.select(
       "evaluations",

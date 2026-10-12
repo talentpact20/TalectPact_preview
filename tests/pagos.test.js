@@ -8,7 +8,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { returnUrlSegura, origenesPermitidos } = require("../netlify/functions/create-checkout-session.js");
+const { returnUrlSegura, origenesPermitidos } = require("../netlify/functions/lib/handlers/create-checkout-session.js");
 const { UNLOCK_PRICE } = require("../netlify/functions/lib/tp");
 
 const evento = (headers) => ({ headers });
