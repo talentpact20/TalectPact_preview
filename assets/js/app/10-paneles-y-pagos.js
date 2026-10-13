@@ -11,7 +11,12 @@ function renderCandOfertas(){
     const allMet=hasCount===reqSkills.length&&reqSkills.length>0;
     h+=`<div class="job-card" onclick="openJob('${escHtml(j.id)}')"><div class="job-badge ${j.badge}">${escHtml(j.sector)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j)}<div class="job-tags">${(j.tags||[]).map(t=>`<span class="job-tag">${escHtml(t)}</span>`).join('')}</div>${co?`<div class="job-company">${escHtml(co.name)}${co.size&&co.size!=='—'?' · '+escHtml(co.size)+' empleados':''}</div>`:''}<div style="margin-top:8px;font-size:.72rem;font-weight:600;color:${allMet?'var(--emerald-600)':'var(--slate-500)'}">${allMet?tpIcon('check')+' Cumples los skills requeridos':hasCount+' de '+reqSkills.length+' skills requeridos'}</div></div>`;
   });
-  document.getElementById('candJobsList').innerHTML=JOBS.length?`<div class="jobs-grid">${h}</div>`:'<div class="tp-empty">Todavía no hay ofertas publicadas. Mientras tanto, completa retos: las empresas buscan en el pool por skills.</div>';
+  // Sin ofertas no siempre es "no hay": puede que no se hayan podido cargar.
+  const est=typeof TPOfertas!=='undefined'?TPOfertas.estado:'ok';
+  document.getElementById('candJobsList').innerHTML=JOBS.length?`<div class="jobs-grid">${h}</div>`
+    :est==='error'?tpVacio({error:true,icono:'alert',titulo:'No se han podido cargar las ofertas',texto:'Es un problema nuestro, no de tu cuenta. Vuelve a intentarlo en unos minutos.',acciones:[{txt:'Reintentar',accion:'TPOfertas.cargar()'}]})
+    :(est==='cargando'||est==='sin cargar')?tpEsqueleto(4)
+    :tpVacio({icono:'building',titulo:'Todavía no hay ofertas publicadas',texto:'Mientras tanto, completa retos: las empresas buscan en el pool por skills y verán tu nota en cuanto publiquen.'});
   const emp=COMPANIES.map(c=>`<div class="tp-company-card"><div class="tp-company-head">${companyMonogramHTML(c.name)}<div><strong>${escHtml(c.name)}</strong><div class="tp-company-meta">${[c.sector,c.size&&c.size!=='—'?c.size+' empleados':'',c.location].filter(Boolean).map(escHtml).join(' · ')}</div></div></div>${c.desc?`<p>${escHtml(c.desc)}</p>`:''}${c.website?`<a href="${escHtml(c.website)}" target="_blank" rel="noopener nofollow">${escHtml(c.website.replace(/^https?:\/\//,''))}</a>`:''}</div>`).join('');
   document.getElementById('candCompaniesList').innerHTML=COMPANIES.length?`<div class="companies-grid">${emp}</div>`:'<div class="tp-empty">Aún no hay empresas con ofertas abiertas.</div>';
 }

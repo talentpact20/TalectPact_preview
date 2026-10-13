@@ -9,7 +9,7 @@
 // navegador: una oferta existe cuando está en la base de datos y la ven todos.
 // ═══════════════════════════════════════════════════════════════════════════
 var TPOfertas={
-  estado:'sin cargar',error:null,mias:[],pagos:[],
+  estado:'sin cargar',error:null,mias:[],errorMias:false,pagos:[],
   BADGE:{Marketing:'jb-mkt',IT:'jb-it',Data:'jb-data',Business:'jb-biz',Design:'jb-des',RRHH:'jb-hr',Finance:'jb-fin',Legal:'jb-leg',Ops:'jb-ops',Sales:'jb-sales',Languages:'jb-lang'},
   _clave(nombre){let h=0;const n=String(nombre||'');for(let k=0;k<n.length;k++)h=(h*31+n.charCodeAt(k))>>>0;return 'co_'+h.toString(36);},
   /** Oferta del servidor → forma que usan las vistas (empresa en COMPANIES). */
@@ -23,7 +23,7 @@ var TPOfertas={
     let r;
     try{r=await fetch('/.netlify/functions/list-jobs',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'}).then(x=>x.json());}
     catch(e){r={error:e.message||String(e)};}
-    if(!r||r.error){TPOfertas.estado='error';TPOfertas.error=(r&&(r.details||r.error))||'Sin respuesta';}
+    if(!r||r.error){TPOfertas.estado='error';TPOfertas.error=(r&&(r.details||r.error))||'Sin respuesta';console.warn('[TP] list-jobs:',TPOfertas.error);}
     else{
       JOBS.length=0;COMPANIES.length=0;
       (r.jobs||[]).forEach(o=>JOBS.push(TPOfertas.adaptar(o)));
@@ -34,6 +34,8 @@ var TPOfertas={
   async cargarMias(){
     if(!tpCompany){TPOfertas.mias=[];return;}
     const r=await TPCloud._postAuth('list-jobs',{mine:true});
+    TPOfertas.errorMias=!r||!!r.error;
+    if(TPOfertas.errorMias)console.warn('[TP] list-jobs (mías):',r&&(r.details||r.error));
     TPOfertas.mias=(r&&r.jobs)?r.jobs.map(TPOfertas.adaptar):[];
     empPostedJobs=TPOfertas.mias;          // openJob y "Ver candidatos" buscan aquí las propias cerradas
     tpActividadEmpresa();
@@ -90,7 +92,7 @@ async function tpCambiarEstadoOferta(id,estado){
 // Panel de empresa: sus ofertas reales, con candidatos reales que encajan.
 renderEmpJobs=function(){
   const mias=TPOfertas.mias;
-  const st=document.getElementById('empStatOffers');if(st)st.textContent=mias.filter(j=>j.status==='open').length;
+  const st=document.getElementById('empStatOffers');if(st)st.textContent=TPOfertas.errorMias?'—':mias.filter(j=>j.status==='open').length;
   let h='<table class="dash-table"><thead><tr><th>Puesto</th><th>Sector</th><th>Candidatos que encajan</th><th>Estado</th><th></th></tr></thead><tbody>';
   mias.forEach(j=>{
     const abierta=j.status==='open';
@@ -100,7 +102,9 @@ renderEmpJobs=function(){
       <td style="white-space:nowrap"><button class="btn btn-primary btn-sm" onclick="showOfferCandidates('${escHtml(j.id)}')">Ver candidatos</button>
       <button class="btn btn-outline btn-sm" onclick="tpCambiarEstadoOferta('${escHtml(j.id)}','${abierta?'closed':'open'}')">${abierta?'Cerrar':'Reabrir'}</button></td></tr>`;
   });
-  if(!mias.length)h+='<tr><td colspan="5"><div class="tp-empty">Todavía no has publicado ninguna oferta. Usa «Nueva oferta» para empezar.</div></td></tr>';
+  if(!mias.length)h+='<tr><td colspan="5">'+(TPOfertas.errorMias
+    ?tpVacio({error:true,icono:'alert',titulo:'No se han podido cargar tus ofertas',texto:'El servidor no ha respondido bien. Tus ofertas no se han perdido: vuelve a intentarlo en unos minutos.',acciones:[{txt:'Reintentar',accion:'TPOfertas.cargarMias().then(renderEmpJobs)'}]})
+    :'<div class="tp-empty">Todavía no has publicado ninguna oferta. Usa «Nueva oferta» para empezar.</div>')+'</td></tr>';
   h+='</tbody></table>';
   const box=document.getElementById('empJobsList');
   if(box)box.innerHTML=h;

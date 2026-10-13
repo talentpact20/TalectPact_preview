@@ -226,3 +226,10 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
 .tp-vacio-acc{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
 .tp-cargando-ofertas{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
 .tp-cargando-ofertas>div{padding:20px;border:1px solid var(--c-borde);border-radius:var(--radius-lg);background:var(--c-superficie)}
+
+/* Ofertas del candidato: skills pedidas, con las que ya tiene marcadas */
+.tp-match-skills{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.tp-skill-req{font-size:var(--fs-micro)}
+.job-tag.tp-skill-req.ok{border-color:var(--emerald-200)!important;background:var(--c-ok-suave)!important;color:var(--emerald-700)!important}
+.job-tag.tp-skill-req.falta{border-color:var(--amber-200)!important;background:var(--c-aviso-suave)!important;color:var(--amber-700)!important}
+.tp-va-medio{vertical-align:middle;margin-left:4px}

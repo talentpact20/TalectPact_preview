@@ -1178,33 +1178,42 @@ function getJobMatches(){
 
 function renderJobMatches(){
   const matches=TPEmpleo.filtrar(getJobMatches());
+  const sinRetos=candidateProfile.completedCommon.length===0;
+  const est=typeof TPOfertas!=='undefined'?TPOfertas.estado:'ok';
+  const irRetos="switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1])";
   let html=TPEmpleo.toolbar();
-  if(candidateProfile.completedCommon.length===0){
-    html=`<div style="text-align:center;padding:32px;background:var(--slate-50);border:1.5px dashed var(--slate-200);border-radius:var(--radius);color:var(--slate-500)"><p style="font-size:2rem;margin-bottom:10px"></p><p style="font-size:.875rem;font-weight:600;margin-bottom:4px">Completa al menos 1 reto común</p><p style="font-size:.78rem">Para calcular tu % de encaje con ofertas, necesitamos conocer tus habilidades primero.</p><button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1])">Ir a retos comunes →</button></div>`;
-  }else{
-    matches.forEach(m=>{
-      const req=m.requiredSkills||[];
-      const reqLevel=m.requiredLevel||'basico';
-      const threshold=m.threshold;
-      const hasCount=req.filter(s=>{const sk=candidateProfile.skills[s];return sk?.unlocked&&sk.score>=threshold;}).length;
-      const allMet=hasCount===req.length&&req.length>0;
-      const cls=allMet?'match-high':hasCount>0?'match-mid':'match-low';
-      const pct=req.length?Math.round((hasCount/req.length)*100):0;
-      const levelCls='level-'+reqLevel;
-      const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';
-      html+=`<div class="match-card" onclick="openJob('${m.id}')">
-        <div class="match-score-ring ${cls}">${pct}%</div>
-        <div class="match-info">
-          <h4>${escHtml(m.title)} <span class="level-badge ${levelCls}" style="vertical-align:middle;margin-left:4px">${levelLabel}</span></h4>
-          <div class="match-company">${m.companyLogo} ${m.companyName}</div>
-          ${tpCondChips(m)}
-          <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px">${req.map(s=>{const sk=candidateProfile.skills[s];const ok=sk?.unlocked&&sk.score>=threshold;return`<span class="job-tag" style="font-size:.6rem;border:1px solid ${ok?'var(--emerald-200)':'var(--amber-100)'};background:${ok?'var(--emerald-50)':'rgba(245,158,11,.06)'};color:${ok?'var(--emerald-600)':'var(--amber-500)'}">${ok?'✓':''} ${s}</span>`;}).join('')}</div>
-        </div>
-        <div class="match-why">${allMet?'✓ Puedes aplicar':' '+hasCount+'/'+req.length}</div>
-      </div>`;
-    });
+  // Antes, sin ningún reto hecho no se enseñaba ninguna oferta. Ahora se ven
+  // siempre; lo que falta hasta el primer reto es el % de encaje.
+  if(!JOBS.length){
+    html+=est==='error'?tpVacio({error:true,icono:'alert',titulo:'No se han podido cargar las ofertas',texto:'Es un problema nuestro, no de tu cuenta. Vuelve a intentarlo en unos minutos.',acciones:[{txt:'Reintentar',accion:'TPOfertas.cargar()'}]})
+      :(est==='cargando'||est==='sin cargar')?tpEsqueleto(4)
+      :tpVacio({icono:'building',titulo:'Todavía no hay ofertas publicadas',texto:'Cuando una empresa publique una oferta, aparecerá aquí con tu % de encaje.',acciones:sinRetos?[{txt:'Mientras, haz tu primer reto',accion:irRetos,tipo:'btn-primary'}]:[]});
+    document.getElementById('candMatchesList').innerHTML=html;
+    return;
   }
-  if(candidateProfile.completedCommon.length&&!matches.length)html+='<div style="text-align:center;padding:24px;color:var(--slate-500);font-size:.82rem">Ninguna oferta cumple esos filtros.</div>';
+  if(sinRetos)html+=tpSiguiente({icono:'target',titulo:'Haz tu primer reto para ver tu % de encaje',sub:'Ya puedes ver todas las ofertas; el encaje se calcula con tus skills verificadas.',boton:'Ir a los retos',accion:irRetos});
+  matches.forEach(m=>{
+    const req=m.requiredSkills||[];
+    const reqLevel=m.requiredLevel||'basico';
+    const threshold=m.threshold;
+    const hasCount=req.filter(s=>{const sk=candidateProfile.skills[s];return sk?.unlocked&&sk.score>=threshold;}).length;
+    const allMet=hasCount===req.length&&req.length>0;
+    const cls=sinRetos?'match-low':allMet?'match-high':hasCount>0?'match-mid':'match-low';
+    const pct=req.length?Math.round((hasCount/req.length)*100):0;
+    const levelCls='level-'+reqLevel;
+    const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';
+    html+=`<div class="match-card" onclick="openJob('${escHtml(m.id)}')">
+      <div class="match-score-ring ${cls}">${sinRetos?'—':pct+'%'}</div>
+      <div class="match-info">
+        <h4>${escHtml(m.title)} <span class="level-badge ${levelCls} tp-va-medio">${levelLabel}</span></h4>
+        <div class="match-company">${escHtml(m.companyName)}</div>
+        ${tpCondChips(m)}
+        <div class="tp-match-skills">${req.map(s=>{const sk=candidateProfile.skills[s];const ok=sk?.unlocked&&sk.score>=threshold;return`<span class="job-tag tp-skill-req ${ok?'ok':'falta'}">${ok?'✓ ':''}${escHtml(s)}</span>`;}).join('')}</div>
+      </div>
+      <div class="match-why">${sinRetos?'Ver oferta →':allMet?'✓ Puedes aplicar':hasCount+'/'+req.length+' skills'}</div>
+    </div>`;
+  });
+  if(!matches.length)html+=tpVacio({icono:'search',titulo:'Ninguna oferta cumple esos filtros',texto:'Prueba a quitar algún filtro de jornada o modalidad.'});
   document.getElementById('candMatchesList').innerHTML=html;
 }
 
