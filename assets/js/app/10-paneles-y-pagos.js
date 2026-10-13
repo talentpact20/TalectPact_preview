@@ -1,21 +1,27 @@
 // TalentPact · 10-paneles-y-pagos
 // Script clásico: comparte el ámbito global con el resto de assets/js/app/*.js,
 // que index.html carga en orden numérico. Ver assets/js/README.md.
-// ═══ DASHBOARDS ═══
-function openDashCand(){document.getElementById('dashCandidate').classList.add('open');document.body.style.overflow='hidden';
-  applyCandidateIdentity();
-  updateCandProfile();renderCommonExercises();renderJobMatches();renderOnboarding();renderRanking('all');renderFAQ();
-  // Render all company job offers
+// Ofertas y empresas en el panel del candidato (también se repinta al llegar
+// las ofertas del servidor).
+function renderCandOfertas(){
   let h='';
   JOBS.forEach(j=>{const co=COMPANIES.find(c=>c.id===j.company);
     const reqSkills=j.requiredSkills||[];
     const hasCount=reqSkills.filter(s=>candidateProfile.skills[s]?.unlocked).length;
     const allMet=hasCount===reqSkills.length&&reqSkills.length>0;
-    h+=`<div class="job-card" onclick="openJob('${j.id}')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div><div class="job-tags">${j.tags.map(t=>`<span class="job-tag">${escHtml(t)}</span>`).join('')}</div>${co?(m=>`<div class="job-company"><div class="job-company-dot" style="background:${m.bg};color:${m.fg}">${m.iniciales}</div>${co.name} · ${co.size} empleados</div>`)(companyMonogram(co.name)):''}<div style="margin-top:10px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.7rem"><span style="color:${allMet?'var(--emerald-600)':'var(--amber-500)'};font-weight:600">${allMet?tpIcon('check')+' Cumples requisitos':''+hasCount+'/'+reqSkills.length+' skills'}</span>${reqSkills.map(s=>{const ok=candidateProfile.skills[s]?.unlocked;return`<span style="padding:1px 6px;border-radius:3px;font-size:.6rem;border:1px solid ${ok?'var(--emerald-200)':'var(--slate-200)'};background:${ok?'var(--emerald-50)':'var(--slate-50)'};color:${ok?'var(--emerald-600)':'var(--slate-400)'}">${ok?'✓':''} ${s.split(' ')[0]}</span>`}).join('')}</div></div>`;
+    h+=`<div class="job-card" onclick="openJob('${escHtml(j.id)}')"><div class="job-badge ${j.badge}">${escHtml(j.sector)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j)}<div class="job-tags">${(j.tags||[]).map(t=>`<span class="job-tag">${escHtml(t)}</span>`).join('')}</div>${co?`<div class="job-company">${escHtml(co.name)}${co.size&&co.size!=='—'?' · '+escHtml(co.size)+' empleados':''}</div>`:''}<div style="margin-top:8px;font-size:.72rem;font-weight:600;color:${allMet?'var(--emerald-600)':'var(--slate-500)'}">${allMet?tpIcon('check')+' Cumples los skills requeridos':hasCount+' de '+reqSkills.length+' skills requeridos'}</div></div>`;
   });
-  document.getElementById('candJobsList').innerHTML=`<div class="jobs-grid">${h}</div>`;
-  // Companies list
-  let ch='<div class="companies-grid">';COMPANIES.forEach(c=>{ch+=`<div style="background:white;border:1px solid var(--slate-200);border-radius:var(--radius);padding:16px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:1.1rem">${c.logo}</span><strong style="font-size:.875rem">${c.name}</strong></div><div style="font-size:.75rem;color:var(--slate-500);margin-bottom:6px">${c.desc}</div><div style="font-size:.6875rem;color:var(--slate-400)">${c.size} empleados · ${c.sector}</div></div>`;});ch+='</div>';document.getElementById('candCompaniesList').innerHTML=ch;
+  document.getElementById('candJobsList').innerHTML=JOBS.length?`<div class="jobs-grid">${h}</div>`:'<div class="tp-empty">Todavía no hay ofertas publicadas. Mientras tanto, completa retos: las empresas buscan en el pool por skills.</div>';
+  const emp=COMPANIES.map(c=>`<div class="tp-company-card"><div class="tp-company-head">${companyMonogramHTML(c.name)}<div><strong>${escHtml(c.name)}</strong><div class="tp-company-meta">${[c.sector,c.size&&c.size!=='—'?c.size+' empleados':'',c.location].filter(Boolean).map(escHtml).join(' · ')}</div></div></div>${c.desc?`<p>${escHtml(c.desc)}</p>`:''}${c.website?`<a href="${escHtml(c.website)}" target="_blank" rel="noopener nofollow">${escHtml(c.website.replace(/^https?:\/\//,''))}</a>`:''}</div>`).join('');
+  document.getElementById('candCompaniesList').innerHTML=COMPANIES.length?`<div class="companies-grid">${emp}</div>`:'<div class="tp-empty">Aún no hay empresas con ofertas abiertas.</div>';
+}
+function companyMonogramHTML(nombre){const m=companyMonogram(nombre);return `<span class="tp-mono" style="background:${m.bg};color:${m.fg}">${escHtml(m.iniciales)}</span>`;}
+
+// ═══ DASHBOARDS ═══
+function openDashCand(){document.getElementById('dashCandidate').classList.add('open');document.body.style.overflow='hidden';
+  applyCandidateIdentity();
+  updateCandProfile();renderCommonExercises();renderJobMatches();renderOnboarding();renderRanking('all');renderFAQ();
+  renderCandOfertas();
   // Reset to profile tab
   document.querySelectorAll('#candDashTabs .dash-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
   document.querySelectorAll('[id^="candTab-"]').forEach((c,i)=>c.classList.toggle('active',i===0));
@@ -28,8 +34,6 @@ function openDashEmp(){
   // desde otro dispositivo, el contacto tiene que seguir estando desbloqueado.
   Pay.sync().then(function(r){ if(r&&r.unlocks)renderEmpPool(); }).catch(function(){});
 }
-// Las ofertas sin `owner` son las guardadas antes de que existieran las cuentas
-// de empresa: se siguen mostrando para no perder el historial de la demo.
 function myPostedJobs(){ const k=companyKey(); return empPostedJobs.filter(j=>!j.owner||j.owner===k); }
 function renderEmpJobs(){const my=JOBS.filter(j=>j.company==='c1').concat(myPostedJobs());
   document.getElementById('empStatOffers').textContent=my.length;
@@ -69,7 +73,7 @@ function showOfferCandidates(jobId){
       <div class="oc-avatar">${escHtml(ca.i)}</div>
       <div class="oc-score-pill"><div class="score-circle ${scoreCls}">${ca.score}</div></div>
       <div class="oc-info">
-        <h4>${escHtml(TPPool.alias(ca))}<span class="tp-origen ${ca._real?'real':'demo'}">${ca._real?'Real':'Demo'}</span> <span class="tp-cond-chip">${e.pct}% de encaje</span></h4>
+        <h4>${escHtml(TPPool.alias(ca))}<span class="tp-cond-chip">${e.pct}% de encaje</span></h4>
         <div class="oc-meta">${escHtml(ca.sector)} · ${(ca.skills||[]).length} skills${ca._real?' · '+verif+' verificadas':''}</div>
         <div class="oc-skills">${(ca.skills||[]).map(s=>`<span class="job-tag">${escHtml(s.n)}: <strong>${s.v}</strong></span>`).join('')}</div>
         <div class="tp-cond">${chip(e.jor,TP_COND.jornadas[job.jornada]||'')}${chip(e.mod,TP_COND.modalidades[job.modalidad]||'')}</div>
@@ -84,7 +88,7 @@ function showOfferCandidates(jobId){
       </div>
     </div>`;
   });
-  if(!lista.length)h='<div style="text-align:center;padding:32px;color:var(--slate-400);background:var(--slate-50);border-radius:var(--radius)"><p style="font-size:1.5rem;margin-bottom:8px">${tpIcon('search')}</p><p>Ningún candidato del pool tiene todavía las skills que pide esta oferta.</p></div>';
+  if(!lista.length)h='<div style="text-align:center;padding:32px;color:var(--slate-400);background:var(--slate-50);border-radius:var(--radius)"><p style="font-size:1.5rem;margin-bottom:8px">'+tpIcon('search')+'</p><p>Ningún candidato del pool tiene todavía las skills que pide esta oferta.</p></div>';
   document.getElementById('empOfferCandList').innerHTML=h;
   document.getElementById('empOfferCandidatesSection').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -119,33 +123,12 @@ function unlockContact(candId){
   document.getElementById('payModal').classList.add('open');
 }
 
-// Datos de contacto de la demo. Se derivan del id del candidato para que sean
-// estables entre recargas; en producción vendrían de la fila de `profiles`.
-const CONTACT_NAMES=['Ana García Martínez','Carlos López Ruiz','María Fernández Torres','Javier Sánchez Díaz','Laura Moreno Gil','Pablo Navarro Cruz','Sofía Herrera Vega','Daniel Jiménez Ramos'];
-function _slug(t){ return (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z]/g,''); }
-function candidateContact(c){
-  const id=String((c&&c.id)||'');
-  let h=0; for(let i=0;i<id.length;i++)h=(h*31+id.charCodeAt(i))>>>0;
-  const name=CONTACT_NAMES[h%CONTACT_NAMES.length];
-  const p=name.split(' ');
-  return {
-    name,
-    email:_slug(p[0])+'.'+_slug(p[1])+'@email.com',
-    phone:'+34 6'+String(h%100000000).padStart(8,'0'),
-    linkedin:'linkedin.com/in/'+_slug(p[0])+'-'+_slug(p[1])
-  };
-}
 let _lastContact=null;
+// Solo hay contactos reales: 16-pool-real.js sustituye esta función y los pide
+// a get-contact. Esta versión base cubre el caso de una referencia desconocida.
 function showContactCard(c){
-  const d=candidateContact(c);
-  _lastContact=d;
-  // Hasta que exista la función que entrega el contacto real tras el pago
-  // (ver la guía de mejora), lo que se muestra es ficticio y se dice.
-  document.getElementById('contactFields').innerHTML=
-    '<div class="tp-integrity-note warn">Contacto de demostración: estos datos son ficticios.</div>'+
-    [['Nombre',d.name],['Email',d.email],['Teléfono',d.phone],['LinkedIn',d.linkedin]]
-      .map(function(f){return '<div class="ct-row"><span class="ct-k">'+f[0]+'</span><span class="ct-v">'+escHtml(f[1])+'</span></div>';}).join('');
-  const b=document.getElementById('contactCopyBtn'); if(b)b.textContent='Copiar datos de contacto';
+  _lastContact=null;
+  document.getElementById('contactFields').innerHTML='<div class="tp-integrity-note warn">Este candidato no está disponible.</div>';
   document.getElementById('contactModal').classList.add('open');
 }
 function closeContactModal(){ document.getElementById('contactModal').classList.remove('open'); }
@@ -364,7 +347,7 @@ function buildLandingExBody(ce,idx){
   const allSkills=[...hardSkills,...softSkills];
   const timerMins=ex.timeLimit?Math.floor(ex.timeLimit/60):8;
   const timerStr=timerMins+':00';
-  return`<div class="rpl-pv-warn"><span>${tpIcon('alert')}</span> El escenario se revelará cuando pulses "Empezar". El timer empieza al instante.</div><div class="rpl-pv-center"><span class="rpl-pv-big-icon">${ce.icon}</span><div class="rpl-pv-ex-title">${ex.title}</div><p class="rpl-pv-ex-desc">${ex.briefing}</p><div class="rpl-pv-skills">${allSkills.map(s=>`<span class="rpl-pv-skill-tag">${s.toUpperCase()}</span>`).join('')}</div><div class="rpl-pv-cta"><button class="rpl-pv-cta-btn" onclick="openAuth('candidate')">Únete para empezar →</button></div></div>`;
+  return`<div class="rpl-pv-warn"><span>${tpIcon('alert')}</span> El escenario se revelará cuando pulses "Empezar". El timer empieza al instante.</div><div class="rpl-pv-center"><span class="rpl-pv-big-icon">${tpMonograma(ce.title,ce.category)}</span><div class="rpl-pv-ex-title">${ex.title}</div><p class="rpl-pv-ex-desc">${ex.briefing}</p><div class="rpl-pv-skills">${allSkills.map(s=>`<span class="rpl-pv-skill-tag">${s.toUpperCase()}</span>`).join('')}</div><div class="rpl-pv-cta"><button class="rpl-pv-cta-btn" onclick="openAuth('candidate')">Únete para empezar →</button></div></div>`;
 }
 
 function selectLandingReto(id){
@@ -419,7 +402,7 @@ function clearExSearch(){
 }
 
 function renderEmpPool(){let h='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Top Skills</th><th></th></tr></thead><tbody>';CANDIDATES.forEach(c=>{h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${c.i}</div>#${1000+parseInt(c.id.slice(1))*111}</div></td><td>${c.sector}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${s.n}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${c.id}')">Ver perfil</button></td></tr>`;});h+='</tbody></table>';document.getElementById('empPool').innerHTML=h;}
-function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${escHtml(c.i)}</div><div class="cp-info"><h3>${c._real?escHtml(c.alias||"Candidato anónimo"):"Candidato anónimo"}${c._real?'<span class="tp-origen real">Real</span>':'<span class="tp-origen demo">Demo</span>'}</h3><div class="cp-meta">${escHtml(c.sector)} · Score: ${c.score} · Perfil ciego</div>${(()=>{const cd=c.cond||{};const t=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k]),cd.ciudad?(cd.ciudad+(cd.reubicacion?' (acepta mudarse)':'')):'',cd.disponibilidad?'Disponible: '+(TP_COND.disponibilidad[cd.disponibilidad]||''):''].filter(Boolean);return (t.length?`<div class="tp-cond">${t.map(x=>`<span class="tp-cond-chip">${escHtml(x)}</span>`).join('')}</div>`:'')+(c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'');})()}</div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${escHtml(s.n)}${s.verified?' <span class="tp-verified">✓</span>':''}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${escHtml(c.id)}')">${c._unlocked?'Ver contacto →':'Desbloquear contacto · €49 →'}</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
+function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${escHtml(c.i)}</div><div class="cp-info"><h3>${escHtml(c.alias||"Candidato anónimo")}</h3><div class="cp-meta">${escHtml(c.sector)} · Score: ${c.score} · Perfil ciego</div>${(()=>{const cd=c.cond||{};const t=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k]),cd.ciudad?(cd.ciudad+(cd.reubicacion?' (acepta mudarse)':'')):'',cd.disponibilidad?'Disponible: '+(TP_COND.disponibilidad[cd.disponibilidad]||''):''].filter(Boolean);return (t.length?`<div class="tp-cond">${t.map(x=>`<span class="tp-cond-chip">${escHtml(x)}</span>`).join('')}</div>`:'')+(c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'');})()}</div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${escHtml(s.n)}${s.verified?' <span class="tp-verified">✓</span>':''}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${escHtml(c.id)}')">${c._unlocked?'Ver contacto →':'Desbloquear contacto · €49 →'}</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
 
 // ═══ POST JOB ═══
 let pjExConfigVal='common+custom';
@@ -540,7 +523,7 @@ function closeDash(id){document.getElementById(id).classList.remove('open');docu
 function toggleAccessMenu(){const d=document.getElementById('accessDrop'),b=document.getElementById('accessBtn');d.classList.toggle('show');b.classList.toggle('open');}
 function closeAccessMenu(){document.getElementById('accessDrop').classList.remove('show');document.getElementById('accessBtn').classList.remove('open');}
 document.addEventListener('click',function(e){if(!e.target.closest('.nav-access'))closeAccessMenu();});
-// Aviso propio en lugar de alert(). No bloquea el hilo, no rompe una demo en
+// Aviso propio en lugar de alert(). No bloquea el hilo, no rompe una presentación en
 // vivo y se anuncia a lectores de pantalla. `alert` congela la pestana hasta
 // que alguien pulsa Aceptar: en una presentacion eso son varios segundos de
 // pantalla muerta.
@@ -642,6 +625,5 @@ document.getElementById('profileModal').addEventListener('click',function(e){if(
 document.getElementById('payModal').addEventListener('click',function(e){if(e.target===this)closePayModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeContactModal();closeSettings('cand');closeSettings('emp');closeJobModal();closeM('cmodal');closeM('profileModal');closePayModal();closeAdminLogin();closeAdmin();closeDash('dashCandidate');closeDash('dashEmpresa');closeAuth('authCandidate');closeAuth('authEmpresa');}});
 window.addEventListener('load',function(){if(typeof _scrollTop==='function')_scrollTop();});
-document.getElementById('adminLoginModal').addEventListener('click',function(e){if(e.target===this)closeAdminLogin();});
 const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));

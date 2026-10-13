@@ -1,0 +1,176 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TalentPact · tema profesional
+   Se carga después de app.css y modulos.css y redefine tokens y componentes:
+   tipografía Inter, paleta sobria (tinta + verde azulado profundo), radios y
+   sombras contenidos, chips neutros, iconos de línea y sin animaciones de
+   aparición. Las clases de app.css no cambian: este fichero solo las afina.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --slate-950:#060a13;--slate-900:#0c1220;--slate-800:#1b2333;--slate-700:#323c4e;
+  --slate-600:#4a5568;--slate-500:#667085;--slate-400:#98a2b3;--slate-300:#d0d5dd;
+  --slate-200:#e4e7ec;--slate-100:#f2f4f7;--slate-50:#f9fafb;
+  --emerald-700:#08574b;--emerald-600:#0b6e5f;--emerald-500:#0f8a76;--emerald-400:#3aa892;
+  --emerald-200:#bfe3da;--emerald-100:#dcefea;--emerald-50:#f1f8f6;
+  --amber-500:#c2700b;--amber-100:#fdf1dc;--red-500:#c8372d;--red-100:#fde8e6;
+  --blue-500:#2f5bd3;--blue-100:#e8eefc;--violet-500:#5b4bc4;
+  --radius:8px;--radius-lg:12px;--radius-xl:16px;
+  --shadow-sm:0 1px 2px rgba(16,24,40,.05);
+  --shadow:0 1px 3px rgba(16,24,40,.07),0 1px 2px rgba(16,24,40,.04);
+  --shadow-md:0 6px 16px -4px rgba(16,24,40,.08),0 2px 4px -2px rgba(16,24,40,.04);
+  --shadow-lg:0 14px 28px -8px rgba(16,24,40,.12);
+  --shadow-xl:0 24px 48px -12px rgba(16,24,40,.18);
+}
+
+/* ── Tipografía ── */
+body,button,input,select,textarea{font-family:var(--font-sans)}
+body{font-size:15px;line-height:1.6;color:var(--slate-900);letter-spacing:-.006em;font-feature-settings:'cv11','ss01','ss03'}
+.display,h1,h2,h3,h4{font-family:var(--font-sans);letter-spacing:-.022em}
+.display{font-weight:700;letter-spacing:-.035em;line-height:1.08}
+.mono,code,kbd,pre{font-family:var(--font-mono)}
+.logo-text{font-family:var(--font-sans);font-weight:700;letter-spacing:-.03em}
+.logo-text span{color:var(--emerald-600)}
+.gradient-text{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;-webkit-text-fill-color:currentColor!important;color:var(--emerald-600)!important}
+
+/* Sin animaciones de aparición al hacer scroll: el contenido está, sin más. */
+.reveal,.reveal.d1,.reveal.d2,.reveal.d3{opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+
+/* ── Iconos de línea ── */
+.ico{width:1em;height:1em;flex-shrink:0;vertical-align:-.14em;display:inline-block}
+.access-icon,.auth-feat-icon{display:inline-flex;align-items:center;justify-content:center}
+.access-icon .ico,.auth-feat-icon .ico{width:18px;height:18px}
+.search-icon{display:inline-flex;align-items:center;color:var(--slate-400)}
+.search-icon .ico{width:16px;height:16px}
+.ai-chat-fab,.chat-fab{display:inline-flex;align-items:center;justify-content:center}
+.ai-chat-fab .ico,.chat-fab .ico{width:22px;height:22px}
+.ai-chat-avatar{display:inline-flex;align-items:center;justify-content:center}
+.ai-chat-avatar .ico{width:18px;height:18px}
+.ex-briefing-icon .ico{width:28px;height:28px;color:var(--emerald-600)}
+.apply-summary-icon .ico{width:22px;height:22px}
+.ex-upload-icon .ico,.file-icon .ico{width:22px;height:22px}
+.support-header span .ico{width:18px;height:18px}
+.ranking-header h3{display:flex;align-items:center;gap:8px}
+
+/* Monograma de reto: sustituye a los emojis de cada reto. */
+.tp-mono{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.02em;flex-shrink:0;background:var(--slate-100);color:var(--slate-700)}
+.tp-mono-soft{background:#eef0fb;color:#3f3a9c}
+.tp-mono-sector{background:var(--emerald-50);color:var(--emerald-700)}
+.cex-icon,.rpl-item-icon,.rpl-pv-big-icon{font-size:inherit!important;background:none!important;width:auto!important;height:auto!important}
+.rpl-pv-big-icon .tp-mono{width:52px;height:52px;font-size:1rem;border-radius:12px}
+
+/* ── Navegación ── */
+nav{background:rgba(255,255,255,.94);border-bottom:1px solid var(--slate-200);box-shadow:none}
+nav a.nl{color:var(--slate-600);font-weight:500}
+.nav-access-btn{border-radius:8px;background:var(--slate-900)}
+.access-dropdown{border-radius:12px;box-shadow:var(--shadow-xl)}
+.access-icon{border-radius:8px}
+
+/* ── Botones ── */
+.btn{border-radius:8px;font-weight:600;letter-spacing:-.01em;box-shadow:none;transition:background .15s,border-color .15s,color .15s}
+.btn-primary{background:var(--emerald-600);border-color:var(--emerald-600);color:#fff}
+.btn-primary:hover{background:var(--emerald-700);border-color:var(--emerald-700);transform:none;box-shadow:none}
+.btn-dark{background:var(--slate-900);color:#fff}
+.btn-dark:hover{background:var(--slate-800);transform:none}
+.btn-outline{background:#fff;border:1px solid var(--slate-300);color:var(--slate-800)}
+.btn-outline:hover{background:var(--slate-50);border-color:var(--slate-400);transform:none}
+.btn-lg{border-radius:10px}
+.btn-unlock{border-radius:8px;font-weight:600}
+.btn-launch{border-radius:10px;background:var(--slate-900)}
+
+/* ── Hero ── */
+.hero-badge{background:#fff;border:1px solid var(--slate-200);border-radius:999px;color:var(--slate-600);font-size:.8125rem;font-weight:500;box-shadow:var(--shadow-sm)}
+.hero-badge-dot{background:var(--emerald-500)}
+.hero h1{font-weight:700}
+.hero-sub{color:var(--slate-600)}
+.section-label{background:none!important;border:0!important;padding:0!important;color:var(--emerald-600);font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.section-title{font-weight:700}
+
+/* ── Tarjetas ── */
+.job-card,.feature-card,.common-ex-card,.price-card,.match-card,.offer-cand-card,.dash-stat-card,.tp-company-card,.st-card,.support-panel,.ranking-card,.score-card,.ai-feedback,.tp-integrity{background:#fff;border:1px solid var(--slate-200);border-radius:12px;box-shadow:none}
+.job-card:hover,.common-ex-card:hover,.match-card:hover,.feature-card:hover{border-color:var(--slate-300);box-shadow:var(--shadow-md);transform:none}
+.price-card.featured{border:1.5px solid var(--slate-900);box-shadow:var(--shadow-lg)}
+.feature-icon{border-radius:8px!important;background:var(--slate-100)!important;color:var(--slate-700)!important;font-weight:600}
+.dash-stat-card .dsc-val{font-weight:700;letter-spacing:-.03em}
+
+/* ── Chips y etiquetas: neutros, rectangulares ── */
+.job-tag,.skill-pill,.level-badge,.ex-config-badge,.tp-cond-chip,.tp-ichip,.ex-meta-pill{border-radius:6px!important;font-weight:500}
+.job-tag{background:var(--slate-50)!important;border:1px solid var(--slate-200)!important;color:var(--slate-700)!important}
+.job-badge{background:none!important;border:0!important;padding:0!important;color:var(--slate-500)!important;font-size:.6875rem!important;font-weight:600!important;letter-spacing:.07em;text-transform:uppercase}
+.skill-pill.sp-hard{background:var(--slate-50);border-color:var(--slate-200);color:var(--slate-700)}
+.skill-pill.sp-soft{background:#fff;border-color:var(--slate-200);color:var(--slate-600)}
+.tp-risk,.tp-verified,.tp-origen{border-radius:6px}
+.lvl-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.lvl-basico{background:var(--emerald-500)}.lvl-intermedio{background:var(--amber-500)}.lvl-avanzado{background:var(--red-500)}
+
+/* ── Formularios ── */
+input[type=text],input[type=email],input[type=password],input[type=tel],input[type=url],input[type=number],input[type=search],select,textarea{border-radius:8px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--emerald-500)!important;box-shadow:0 0 0 3px rgba(15,138,118,.15)!important}
+
+/* ── Paneles ── */
+.dash-tab{border-radius:8px;font-weight:500}
+.dash-tab.active{font-weight:600}
+.dash-table th{background:var(--slate-50);color:var(--slate-500);font-size:.6875rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.dash-table td{border-color:var(--slate-100)}
+.status-closed{color:var(--slate-500);font-weight:600;display:flex;align-items:center;gap:4px}
+.status-closed::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--slate-400)}
+.tp-empty{padding:28px 20px;text-align:center;color:var(--slate-500);font-size:.85rem;background:var(--slate-50);border:1px dashed var(--slate-200);border-radius:12px}
+.ranking-pos.gold,.ranking-pos.silver,.ranking-pos.bronze{font-weight:700}
+
+/* Fichas de empresa en el panel del candidato */
+.tp-company-card{padding:16px}
+.tp-company-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.tp-company-meta{font-size:.72rem;color:var(--slate-500)}
+.tp-company-card p{font-size:.8rem;color:var(--slate-600);margin:6px 0}
+.tp-company-card a{font-size:.75rem;color:var(--emerald-600);text-decoration:none;font-weight:500}
+
+/* ── Modales ── */
+.job-modal,.pay-box,.cbox,.tp-consent-card{border-radius:16px!important;box-shadow:var(--shadow-xl)}
+.modal-overlay,.tp-consent{backdrop-filter:blur(2px)}
+
+/* ── Chat de soporte ── */
+.ai-chat-fab,.chat-fab{background:var(--slate-900)!important;box-shadow:var(--shadow-lg)!important}
+.ai-chat-status{font-size:.68rem;opacity:.8}
+
+/* ── Backoffice ── */
+.adm{background:var(--slate-50);flex-direction:column}
+.adm.open{display:flex}
+.adm-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 24px;background:#fff;border-bottom:1px solid var(--slate-200)}
+.adm-brand{display:flex;align-items:center;gap:10px}
+.adm-logo{font-weight:700;letter-spacing:-.03em;font-size:1.05rem}.adm-logo b{color:var(--emerald-600);font-weight:700}
+.adm-tag{font-size:.68rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--slate-500);border:1px solid var(--slate-200);border-radius:6px;padding:2px 8px}
+.adm-top-right{display:flex;align-items:center;gap:8px}
+.adm-user{font-size:.78rem;color:var(--slate-500)}
+.adm-layout{display:flex;flex:1;min-height:0}
+.adm-side{width:220px;flex-shrink:0;padding:16px 12px;border-right:1px solid var(--slate-200);background:#fff;display:flex;flex-direction:column;gap:2px}
+.adm-nav{display:flex;align-items:center;gap:10px;width:100%;padding:9px 12px;border:0;background:none;border-radius:8px;color:var(--slate-600);font:500 .85rem var(--font-sans);cursor:pointer;text-align:left}
+.adm-nav .ico{width:16px;height:16px}
+.adm-nav:hover{background:var(--slate-50);color:var(--slate-900)}
+.adm-nav.active{background:var(--emerald-50);color:var(--emerald-700);font-weight:600}
+.adm-main{flex:1;overflow:auto;padding:28px 32px}
+.adm-pag{display:none}.adm-pag.active{display:block}
+.adm-main h2{font-size:1.35rem;font-weight:700;margin-bottom:4px}
+.adm-sub{color:var(--slate-500);font-size:.85rem;margin-bottom:18px}
+.adm-estado{font-size:.75rem;color:var(--slate-500);margin-bottom:12px}
+.adm-estado.err{color:var(--red-500)}
+.adm-kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.adm-kpi{background:#fff;border:1px solid var(--slate-200);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.adm-kpi span{font-size:.72rem;color:var(--slate-500);font-weight:500}
+.adm-kpi strong{font-size:1.4rem;font-weight:700;letter-spacing:-.03em;color:var(--slate-900)}
+.adm-kpi small{font-size:.68rem;color:var(--slate-400)}
+.adm-card{background:#fff;border:1px solid var(--slate-200);border-radius:12px;padding:16px;margin-bottom:16px}
+.adm-card h3{font-size:.9rem;font-weight:600;margin-bottom:10px}
+.adm-tabla-wrap{overflow-x:auto}
+.adm-tabla{width:100%;border-collapse:collapse;font-size:.8rem}
+.adm-tabla th{text-align:left;font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--slate-500);background:var(--slate-50);padding:8px 10px;border-bottom:1px solid var(--slate-200)}
+.adm-tabla td{padding:9px 10px;border-bottom:1px solid var(--slate-100);color:var(--slate-700)}
+.adm-reto{display:flex;align-items:center;gap:10px}
+.adm-reto .tp-mono{width:28px;height:28px;font-size:.68rem}
+.adm-buscar{width:100%;max-width:360px;padding:9px 12px;border:1px solid var(--slate-300);margin-bottom:12px;font-size:.85rem}
+@media (max-width:760px){
+  .adm-layout{flex-direction:column}
+  .adm-side{width:auto;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--slate-200)}
+  .adm-nav{white-space:nowrap;width:auto}
+  .adm-main{padding:20px 16px}
+  .adm-top{padding:10px 16px}.adm-user{display:none}
+}

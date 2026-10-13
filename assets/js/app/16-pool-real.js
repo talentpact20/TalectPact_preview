@@ -6,7 +6,7 @@
 // TPPool — pool de talento real (Supabase) y contacto real tras el pago
 //
 // · get-talent-pool: candidatos reales y anónimos (alias, notas, condiciones,
-//   integridad). Se mezclan con los de demostración, marcados como tales.
+//   integridad).
 // · get-contact: el contacto real, solo si esta empresa tiene un desbloqueo
 //   pagado de ese candidato. Lo decide el servidor, no este código.
 // ═══════════════════════════════════════════════════════════════════════════
@@ -27,7 +27,7 @@ var TPPool={
     TPPool._promesa=(async()=>{
       const r=await TPCloud._postAuth('get-talent-pool',{});
       if(!r||r.error){TPPool.estado='error';TPPool.error=(r&&(r.details||r.error))||'Sin respuesta del servidor';return;}
-      // Sustituye los reales anteriores; los de demostración se quedan.
+      // Sustituye la carga anterior.
       for(let k=CANDIDATES.length-1;k>=0;k--)if(CANDIDATES[k]._real)CANDIDATES.splice(k,1);
       const reales=(r.candidates||[]).map(f=>({
         id:f.ref,i:f.i,alias:f.alias,sector:f.sector,score:f.score,skills:f.skills||[],
@@ -40,11 +40,10 @@ var TPPool={
     return TPPool._promesa;
   },
   aviso(){
-    const demo=CANDIDATES.filter(c=>!c._real).length;
-    if(TPPool.estado==='cargando')return 'Cargando candidatos reales…';
-    if(TPPool.estado==='sin sesion')return 'Mostrando '+demo+' perfiles de demostración. Inicia sesión como empresa para ver candidatos reales.';
-    if(TPPool.estado==='error')return 'No se pudo cargar el pool real ('+TPPool.error+'). Mostrando '+demo+' perfiles de demostración.';
-    if(TPPool.estado==='ok')return TPPool.total+' candidato'+(TPPool.total===1?'':'s')+' real'+(TPPool.total===1?'':'es')+' · '+demo+' de demostración';
+    if(TPPool.estado==='cargando')return 'Cargando candidatos…';
+    if(TPPool.estado==='sin sesion')return 'Inicia sesión con tu cuenta de empresa para ver el pool de talento.';
+    if(TPPool.estado==='error')return 'No se pudo cargar el pool de talento. Vuelve a intentarlo en unos minutos.';
+    if(TPPool.estado==='ok')return TPPool.total+' candidato'+(TPPool.total===1?'':'s')+' en el pool';
     return '';
   }
 };
@@ -67,13 +66,12 @@ var TPPool={
     const c=CANDIDATES.find(p=>String(p.id)===String(candId));
     if(c&&c._unlocked){showContactCard(c);return;}
     const r=_unlock.apply(this,arguments);
-    if(c){const n=document.getElementById('payName');if(n)n.textContent=TPPool.alias(c)+(TPPool.esReal(c)?'':' (demostración)');}
+    if(c){const n=document.getElementById('payName');if(n)n.textContent=TPPool.alias(c);}
     return r;
   };
 })();
 
-// Ficha de contacto: real (get-contact) para candidatos reales, ficticia y
-// avisada para los de demostración.
+// Ficha de contacto: siempre la real, pedida a get-contact.
 (function(){
   const _show=showContactCard;
   const fila=(k,v)=>'<div class="ct-row"><span class="ct-k">'+k+'</span><span class="ct-v">'+(v?escHtml(v):'<span style="color:var(--slate-400)">No indicado</span>')+'</span></div>';
@@ -151,3 +149,37 @@ copyContact=function(){
     return r;
   };
 })();
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TPRanking — ranking real: posición anónima entre los candidatos del pool.
+// Quien se oculta del pool tampoco aparece aquí. El propio candidato se
+// reconoce por su alias (las 4 primeras cifras de su id), igual que el servidor.
+// ═══════════════════════════════════════════════════════════════════════════
+var TPRanking={
+  SECTORES:{IT:['it','dev'],Design:['diseñ','design'],Finance:['finan'],Marketing:['marketing'],Data:['data'],Business:['business','negocio'],RRHH:['rrhh','recursos']},
+  miAlias(){return tpUser?'Candidato #'+String(tpUser.id||'').replace(/-/g,'').slice(0,4).toUpperCase():null;},
+  enSector(c,sector){if(!sector||sector==='all')return true;const s=tpNorm(c.sector);return (TPRanking.SECTORES[sector]||[sector.toLowerCase()]).some(k=>s.includes(k));},
+  lista(sector){return CANDIDATES.filter(c=>c._real&&TPRanking.enSector(c,sector)).sort((a,b)=>b.score-a.score);},
+  posicionTexto(){const a=TPRanking.miAlias();if(!a||TPPool.estado!=='ok')return '';const l=TPRanking.lista('all');const i=l.findIndex(c=>c.alias===a);return i<0?'':'#'+(i+1)+' de '+l.length;}
+};
+renderRanking=function(sector,btn){
+  if(btn){document.querySelectorAll('#rankingSectorFilters .filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+  const box=document.getElementById('rankingList');if(!box)return;
+  const msg=t=>'<div class="tp-empty">'+t+'</div>';
+  if(!tpUser){box.innerHTML=msg('Inicia sesión para ver tu posición entre los candidatos del pool.');return;}
+  if(TPPool.estado!=='ok'){
+    box.innerHTML=msg(TPPool.estado==='error'?'No se pudo cargar el ranking.':'Cargando ranking…');
+    if(TPPool.estado!=='error')TPPool.cargar().then(()=>{if(TPPool.estado==='ok')renderRanking(sector);});
+    return;
+  }
+  const yo=TPRanking.miAlias();
+  const lista=TPRanking.lista(sector);
+  if(!lista.length){box.innerHTML=msg('Todavía no hay candidatos con notas en este sector.');return;}
+  box.innerHTML=lista.slice(0,50).map((c,i)=>{
+    const es=c.alias===yo;
+    const color=c.score>=80?'var(--emerald-600)':c.score>=60?'var(--amber-500)':'var(--slate-500)';
+    return `<div class="ranking-row ${es?'is-you':''}"><div class="ranking-pos ${i<3?['gold','silver','bronze'][i]:'normal'}">${i+1}</div>
+      <div class="ranking-name">${es?'<strong>Tú</strong>':escHtml(c.alias)} <span>${escHtml(c.sector)} · ${c.retos||c.skills.length} skills${c.verified?' · verificado':''}</span></div>
+      <div class="ranking-score" style="color:${color}">${c.score}</div></div>`;
+  }).join('');
+};

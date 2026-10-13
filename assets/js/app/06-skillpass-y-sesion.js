@@ -239,21 +239,21 @@ const SkillPass={
     const w=window.open('','_blank');
     if(!w){toast('Permite las ventanas emergentes para generar el PDF.');return;}
     const card=SkillPass.cardHtml(c,{url:SkillPass.shareUrl()});
-    w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>SkillPass TalentPact</title><link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet"><style>@page{size:A4;margin:12mm}body{margin:0;background:#f1f5f9;font-family:system-ui,sans-serif;padding:20px}'+
+    w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>SkillPass TalentPact</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>@page{size:A4;margin:12mm}body{margin:0;background:#f1f5f9;font-family:system-ui,sans-serif;padding:20px}'+
       '.sp-pass-wrap{margin:0 auto;max-width:720px;border-radius:20px;overflow:hidden;border:1px solid #12382c}'+
       '.sp-pass{background:radial-gradient(1200px 280px at 10% -20%,rgba(52,211,153,.28),transparent 55%),linear-gradient(165deg,#06281f 0%,#0b3d30 42%,#0f172a 100%);color:#ecfdf5;padding:28px 26px 22px;position:relative}'+
       '.sp-pass::after{content:"";position:absolute;inset:10px;border:1px solid rgba(167,243,208,.18);border-radius:14px;pointer-events:none}'+
       '.sp-pass-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:18px;position:relative;z-index:1}'+
-      '.sp-pass-brand{font-family:Sora,sans-serif;font-weight:800;font-size:18px}.sp-pass-brand span{color:#34d399}'+
+      '.sp-pass-brand{font-family:Inter,sans-serif;font-weight:800;font-size:18px}.sp-pass-brand span{color:#34d399}'+
       '.sp-pass-seal{width:78px;height:78px;border-radius:50%;background:conic-gradient(from 210deg,#34d399,#059669,#a7f3d0,#34d399);display:flex;align-items:center;justify-content:center}'+
       '.sp-pass-seal.pending{background:conic-gradient(from 210deg,#fbbf24,#d97706,#fde68a,#fbbf24)}'+
-      '.sp-pass-seal i{width:62px;height:62px;border-radius:50%;background:#06281f;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a7f3d0;text-align:center;line-height:1.15;font-style:normal;font-family:Sora,sans-serif}'+
-      '.sp-pass h3{font-family:Sora,sans-serif;font-size:28px;margin:4px 0}.sp-pass-kicker{font-size:11px;color:#a7f3d0;letter-spacing:.14em;text-transform:uppercase;font-weight:700}'+
+      '.sp-pass-seal i{width:62px;height:62px;border-radius:50%;background:#06281f;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#a7f3d0;text-align:center;line-height:1.15;font-style:normal;font-family:Inter,sans-serif}'+
+      '.sp-pass h3{font-family:Inter,sans-serif;font-size:28px;margin:4px 0}.sp-pass-kicker{font-size:11px;color:#a7f3d0;letter-spacing:.14em;text-transform:uppercase;font-weight:700}'+
       '.sp-pass-lead{font-size:13px;color:#cbd5e1;max-width:420px;line-height:1.5}'+
       '.sp-pass-chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;position:relative;z-index:1}'+
       '.sp-pass-chip{background:rgba(255,255,255,.06);border:1px solid rgba(167,243,208,.16);border-radius:12px;padding:10px 12px}'+
       '.sp-pass-chip-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}'+
-      '.sp-pass-chip-top strong{font-family:Sora,sans-serif;font-size:18px;color:#6ee7b7}'+
+      '.sp-pass-chip-top strong{font-family:Inter,sans-serif;font-size:18px;color:#6ee7b7}'+
       '.sp-pass-bar{height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}'+
       '.sp-pass-bar i{display:block;height:100%;background:#34d399}'+
       '.sp-pass-lvl{font-size:10px;color:#94a3b8;margin-top:5px;text-transform:uppercase}'+
@@ -306,22 +306,13 @@ function recordEval(ex,score,aiPowered,response,feedback){
 
 // Upsert del perfil propio en el pool de talento anónimo visible para empresas.
 // Convierte las skills desbloqueadas del candidato en una entrada real del pool.
+// El pool de talento vive en Supabase (get-talent-pool): ya no hay una ficha
+// local "Tu perfil" mezclada con la de las empresas. Se mantiene la función
+// porque varias vistas la llaman tras guardar progreso o preferencias; solo
+// limpia entradas locales de versiones anteriores.
 function syncMyPoolEntry(){
-  // Si el candidato se ha ocultado, su ficha sale del pool de las empresas.
-  if(!prefIsOn('cand','poolVisible',true)){
-    const i=CANDIDATES.findIndex(c=>c.id==='me');
-    if(i>=0)CANDIDATES.splice(i,1);
-    TP.savePool();
-    return;
-  }
-  const unlocked=Object.entries(candidateProfile.skills).filter(([k,v])=>v.unlocked&&v.score>0);
-  if(!unlocked.length)return;
-  const skills=unlocked.map(([n,v])=>({n,v:v.score})).sort((a,b)=>b.v-a.v).slice(0,6);
-  const avg=Math.round(skills.reduce((a,s)=>a+s.v,0)/skills.length);
-  let me=CANDIDATES.find(c=>c.id==='me');
-  if(me){me.skills=skills;me.score=avg;}
-  else CANDIDATES.unshift({id:'me',i:'YO',sector:'Tu perfil',score:avg,skills,_dynamic:true,_mine:true});
-  TP.savePool();
+  for(let k=CANDIDATES.length-1;k>=0;k--)if(CANDIDATES[k]._dynamic||CANDIDATES[k].id==='me')CANDIDATES.splice(k,1);
+  try{localStorage.removeItem(TP_NS+'pool');}catch(e){}
 }
 
 // Rehidratar el estado persistido al cargar la app (perfil, pool, desbloqueos, ofertas)

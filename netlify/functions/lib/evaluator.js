@@ -36,6 +36,8 @@ REGLAS:
 - Si es genérica y no concreta: máximo 40.
 - Si copia o parafrasea el enunciado: máximo 15.
 - La longitud no es calidad.
+- No penalices faltas de ortografía, el estilo ni que la respuesta esté en otro idioma si el contenido es correcto. Solo en los retos de comunicación escrita la claridad y la corrección forman parte de la rúbrica.
+- Evalúa solo el contenido profesional: nunca supongas género, edad, origen ni ningún otro rasgo personal de quien responde.
 - Cada criterio se puntúa de 0 a 100; el score global es la media ponderada de los criterios.
 - El feedback cita qué dijo bien el candidato y qué falta exactamente.
 

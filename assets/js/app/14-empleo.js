@@ -77,7 +77,8 @@ function tpNorm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/
 function tpK(n){return Math.round(n/1000)+' k€';}
 function tpCondChips(j,p){
   if(!j||!j.jornada&&!j.modalidad)return '';
-  const cs=TPEmpleo.encaje(j,p===undefined?TPEmpleo.prefs():p);
+  // p=null → vista pública: se muestran las condiciones, sin juzgar el encaje.
+  const cs=TPEmpleo.encaje(j,p===undefined?TPEmpleo.prefs():(p||TPEmpleo.vacio()));
   return `<div class="tp-cond">${cs.map(c=>`<span class="tp-cond-chip${c.ok===true?' ok':c.ok===false?' ko':''}" title="${c.ok===true?'Encaja con tus preferencias':c.ok===false?'No encaja con tus preferencias':''}">${c.ok===true?'✓ ':c.ok===false?'✕ ':''}${escHtml(c.txt)}</span>`).join('')}</div>`;
 }
 
@@ -87,52 +88,25 @@ function tpCondChips(j,p){
   openSettings=function(type){const r=_open.apply(this,arguments);if(type==='cand')TPEmpleo.pintarAjustes();return r;};
 })();
 
-// La ficha del pool lleva condiciones e integridad: es lo que la empresa filtra.
-(function(){
-  const _sync=syncMyPoolEntry;
-  syncMyPoolEntry=function(){
-    _sync();
-    const me=CANDIDATES.find(c=>c.id==='me');if(!me)return;
-    const p=TPEmpleo.prefs();
-    me.cond={jornadas:p.jornadas,modalidades:p.modalidades,ciudad:p.ciudad,reubicacion:p.reubicacion,disponibilidad:p.disponibilidad};
-    const done=candidateProfile.completedCommon||[];
-    const orden={bajo:0,medio:1,alto:2};
-    me.integ=done.reduce((peor,c)=>c.integrity&&(peor===null||orden[c.integrity]>orden[peor])?c.integrity:peor,null);
-    me.verified=done.length>0&&done.every(c=>c.verified);
-    TP.savePool();
-  };
-})();
-
-// Condiciones de demo para el pool sembrado.
-(function(){
-  const D={p1:[['completa'],['hibrido'],'Barcelona'],p2:[['completa'],['remoto'],''],p3:[['completa','parcial'],['hibrido','remoto'],'Madrid'],p4:[['completa'],['presencial','hibrido'],'Madrid'],p5:[['parcial','horas'],['remoto'],''],p6:[['completa'],['hibrido'],'Bilbao'],p7:[['practicas','completa'],['presencial'],'Valencia'],p8:[['completa'],['hibrido','presencial'],'Sevilla']};
-  CANDIDATES.forEach(c=>{const d=D[c.id];if(d&&!c.cond)c.cond={jornadas:d[0],modalidades:d[1],ciudad:d[2]};if(c.id!=='me'&&c.integ===undefined){c.integ='bajo';c.verified=true;}});
-  // Dos skills de los retos comunes por perfil de demo: son las que piden las
-  // ofertas, así "Ver candidatos" puede calcular un encaje con sentido.
-  const comunes=[...new Set(JOBS.flatMap(j=>j.requiredSkills||[]))];
-  CANDIDATES.forEach((c,k)=>{if(!D[c.id]||c._skillsComunes||!comunes.length)return;
-    c.skills=c.skills.concat([{n:comunes[k%comunes.length],v:70+(k*7)%25},{n:comunes[(k+3)%comunes.length],v:66+(k*11)%28}]);c._skillsComunes=true;});
-})();
-
 // Pool de talento de la empresa, con filtros por condiciones e integridad.
 // Sustituye a la tabla anterior, que además pintaba "#NaN" para el perfil propio.
-var TP_POOL_FILTRO={jornada:'',modalidad:'',soloVerificados:false,soloReales:false};
+var TP_POOL_FILTRO={jornada:'',modalidad:'',soloVerificados:false};
 function tpAliasCand(c){
   let h=0;const s=String(c.id);for(let k=0;k<s.length;k++)h=(h*31+s.charCodeAt(k))>>>0;
   return '#'+(1000+h%9000);
 }
 function renderEmpPool(){
   const f=TP_POOL_FILTRO,opt=(m,v)=>Object.entries(m).map(([k,t])=>`<option value="${k}"${k===v?' selected':''}>${t}</option>`).join('');
-  const lista=CANDIDATES.filter(c=>{const cd=c.cond||{};return(!f.jornada||(cd.jornadas||[]).includes(f.jornada))&&(!f.modalidad||(cd.modalidades||[]).includes(f.modalidad))&&(!f.soloVerificados||c.verified)&&(!f.soloReales||c._real);});
-  let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><label class="tp-filter-check"><input type="checkbox"${f.soloReales?' checked':''} onchange="TP_POOL_FILTRO.soloReales=this.checked;renderEmpPool()"> Solo candidatos reales</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}</div>`:''}`;
+  const lista=CANDIDATES.filter(c=>{const cd=c.cond||{};return(!f.jornada||(cd.jornadas||[]).includes(f.jornada))&&(!f.modalidad||(cd.modalidades||[]).includes(f.modalidad))&&(!f.soloVerificados||c.verified);});
+  let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}</div>`:''}`;
   h+='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Condiciones</th><th>Integridad</th><th>Top Skills</th><th></th></tr></thead><tbody>';
   lista.forEach(c=>{
     const cd=c.cond||{};
     const cond=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k])].filter(Boolean).slice(0,3).map(t=>`<span class="tp-cond-chip">${t}</span>`).join(' ')||'<span style="color:var(--slate-400)">—</span>';
     const integ=c.integ?`<span class="tp-risk r-${c.integ}">${c.integ}</span>${c.verified?' <span class="tp-verified">✓</span>':''}`:'<span style="color:var(--slate-400)">—</span>';
-    h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${escHtml(c.i)}</div>${c._real?escHtml(String(c.alias||'').replace(/^Candidato /,'')):tpAliasCand(c)}<span class="tp-origen ${c._real?'real':'demo'}">${c._real?'Real':'Demo'}</span></div></td><td>${escHtml(c.sector)}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${cond}</td><td>${integ}</td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${escHtml(s.n)}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
+    h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${escHtml(c.i)}</div>${escHtml(String(c.alias||'').replace(/^Candidato /,''))}</div></td><td>${escHtml(c.sector)}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${cond}</td><td>${integ}</td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${escHtml(s.n)}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
   });
-  if(!lista.length)h+='<tr><td colspan="7" style="text-align:center;color:var(--slate-400);padding:20px">Ningún candidato cumple esos filtros.</td></tr>';
+  if(!lista.length)h+='<tr><td colspan="7"><div class="tp-empty">'+(CANDIDATES.length?'Ningún candidato cumple esos filtros.':'Todavía no hay candidatos en el pool.')+'</div></td></tr>';
   h+='</tbody></table>';
   document.getElementById('empPool').innerHTML=h;
 }

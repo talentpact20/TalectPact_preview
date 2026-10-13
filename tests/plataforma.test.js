@@ -82,3 +82,26 @@ test("no se cobra por una referencia que no es un candidato real del pool", asyn
     if (k === undefined) delete process.env.STRIPE_SECRET_KEY; else process.env.STRIPE_SECRET_KEY = k;
   }
 });
+
+test("todos los scripts del cliente compilan", () => {
+  // Un error de sintaxis en un solo fichero deja sin definir todo lo que
+  // contiene, y la portada se queda en blanco: pasó en producción el 12/10/2026.
+  const dirApp = path.join(__dirname, "..", "assets", "js");
+  const ficheros = [];
+  for (const sub of ["app", "head"]) {
+    for (const f of fs.readdirSync(path.join(dirApp, sub))) if (f.endsWith(".js")) ficheros.push(path.join(dirApp, sub, f));
+  }
+  for (const f of ficheros) {
+    assert.doesNotThrow(() => new Function(fs.readFileSync(f, "utf8")), `${path.basename(f)} no compila`);
+  }
+});
+
+test("index.html carga exactamente los scripts y estilos que existen", () => {
+  const raiz = path.join(__dirname, "..");
+  const html = fs.readFileSync(path.join(raiz, "index.html"), "utf8");
+  const referidos = [...html.matchAll(/(?:src|href)="(assets\/[^"?]+)/g)].map((m) => m[1]);
+  for (const r of referidos) assert.ok(fs.existsSync(path.join(raiz, r)), `index.html carga ${r}, que no existe`);
+  const app = fs.readdirSync(path.join(raiz, "assets", "js", "app")).filter((f) => f.endsWith(".js"));
+  for (const f of app) assert.ok(referidos.includes("assets/js/app/" + f), `assets/js/app/${f} existe pero index.html no lo carga`);
+  for (const f of fs.readdirSync(path.join(raiz, "assets", "css"))) assert.ok(referidos.includes("assets/css/" + f), `assets/css/${f} no se carga`);
+});

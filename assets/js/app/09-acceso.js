@@ -509,6 +509,7 @@ function loadEmpSettings(){
   _val('st-emp-contact',m.contact_name||'');
   _val('st-emp-position',m.position||'');
   _val('st-emp-desc',m.description||'');
+  _val('st-emp-location',m.location||'');
   const b=m.billing||{};
   _val('st-emp-legal',b.legal||m.company||'');
   _val('st-emp-taxid',b.taxId||'');
@@ -538,8 +539,16 @@ async function saveEmpSettings(){
       web:_val('st-emp-web'),
       contact_name:_val('st-emp-contact'),
       position:_val('st-emp-position'),
-      description:_val('st-emp-desc')
+      description:_val('st-emp-desc'),
+      location:_val('st-emp-location')
     });
+    // La ficha pública de empresa (la que ven los candidatos en cada oferta)
+    // vive en la tabla companies: se guarda también allí.
+    let web=_val('st-emp-web');
+    if(web&&!/^https?:\/\//i.test(web))web='https://'+web;
+    const r=await TPCloud.saveCompany(tpCompany,{companyName:company,contactName:_val('st-emp-contact'),jobTitle:_val('st-emp-position'),
+      companySize:_val('st-emp-size'),description:_val('st-emp-desc'),sector:_val('st-emp-sector'),website:web,location:_val('st-emp-location')});
+    if(r&&r.error)throw new Error(r.details||r.error);
     applyCompanyIdentity();
     const who=document.getElementById('stEmpWho'); if(who)who.textContent='Cuenta de empresa · '+companyName();
     stMsg('st-emp-msg','ok','Perfil de empresa guardado.');

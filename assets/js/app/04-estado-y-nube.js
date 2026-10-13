@@ -116,7 +116,7 @@ let candidateProfile={
 // PERSISTENCIA LOCAL — TalentPact
 // Capa de persistencia real que sobrevive a recargas del navegador.
 // En producción se sustituye por Supabase (PostgreSQL + RLS) según el Project
-// Charter; aquí usamos localStorage para una demo 100% reproducible y sin
+// Charter; aquí se usa localStorage para el progreso local, sin
 // infraestructura externa. Si localStorage no está disponible, el sistema
 // degrada con elegancia a memoria (la app sigue funcionando sin persistir).
 // ═══════════════════════════════════════════════════════════════════════════
@@ -135,7 +135,7 @@ const TP={
   logEval(entry){const log=TP.load('evals',[]);log.push(Object.assign({ts:new Date().toISOString()},entry));if(log.length>200)log.splice(0,log.length-200);TP.save('evals',log);return log;},
   getEvals(){return TP.load('evals',[]);},
   saveProfile(){TP.save('profile',{skills:candidateProfile.skills,completedCommon:candidateProfile.completedCommon,completedCustom:candidateProfile.completedCustom});},
-  savePool(){TP.save('pool',CANDIDATES.filter(c=>c._dynamic));},
+  savePool(){},   // el pool es del servidor; no se persiste en el navegador
   saveUnlocks(){TP.save('unlocks',CANDIDATES.filter(c=>c._unlocked).map(c=>c.id));},
   saveEmpJobs(){TP.save('empJobs',empPostedJobs);},
   // Historial de desbloqueos: es lo que alimenta "Pagos" en el panel de empresa.
@@ -150,10 +150,7 @@ const TP={
       if(Array.isArray(p.completedCommon))candidateProfile.completedCommon=p.completedCommon;
       if(Array.isArray(p.completedCustom))candidateProfile.completedCustom=p.completedCustom;
     }
-    TP.load('pool',[]).forEach(d=>{if(!CANDIDATES.find(c=>c.id===d.id))CANDIDATES.unshift(d);});
     TP.load('unlocks',[]).forEach(id=>{const c=CANDIDATES.find(x=>x.id===id);if(c)c._unlocked=true;});
-    const jobs=TP.load('empJobs',[]);
-    if(Array.isArray(jobs)&&jobs.length)empPostedJobs=jobs;
   }
 };
 
