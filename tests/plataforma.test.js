@@ -105,3 +105,13 @@ test("index.html carga exactamente los scripts y estilos que existen", () => {
   for (const f of app) assert.ok(referidos.includes("assets/js/app/" + f), `assets/js/app/${f} existe pero index.html no lo carga`);
   for (const f of fs.readdirSync(path.join(raiz, "assets", "css"))) assert.ok(referidos.includes("assets/css/" + f), `assets/css/${f} no se carga`);
 });
+
+test("la web no muestra avisos de demostración ni de versión preliminar", () => {
+  // El producto solo enseña datos reales: un aviso de "datos de demostración"
+  // olvidado en una sección contradice todo lo demás.
+  const raiz = path.join(__dirname, "..");
+  for (const f of ["index.html", "legal.html", "verify.html"]) {
+    const visible = fs.readFileSync(path.join(raiz, f), "utf8").replace(/<!--[\s\S]*?-->/g, "").replace(/class="[^"]*"|id="[^"]*"/g, "");
+    assert.doesNotMatch(visible, /datos de demostraci[oó]n|versi[oó]n preliminar|fase de preview|esta preview|durante la preview/i, f);
+  }
+});
