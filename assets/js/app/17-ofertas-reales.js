@@ -36,6 +36,7 @@ var TPOfertas={
     const r=await TPCloud._postAuth('list-jobs',{mine:true});
     TPOfertas.mias=(r&&r.jobs)?r.jobs.map(TPOfertas.adaptar):[];
     empPostedJobs=TPOfertas.mias;          // openJob y "Ver candidatos" buscan aquí las propias cerradas
+    tpActividadEmpresa();
   },
   repintar(){
     try{filterJobs();}catch(e){}
@@ -164,3 +165,16 @@ TPOfertas.cargar();
     else nr.innerHTML='<div class="tp-empty">Ninguna oferta coincide con tu búsqueda. Prueba con otro término o sector.</div>';
   };
 })();
+
+// Cifras del panel de empresa, con datos reales: ofertas abiertas propias,
+// candidatos del pool, cuántos tienen media de 80 o más y contactos desbloqueados
+// (los confirma el servidor). Antes eran números fijos en el HTML (4, 127, 23).
+function tpActividadEmpresa(){
+  const pon=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  const cands=(typeof CANDIDATES!=='undefined'?CANDIDATES:[]);
+  const poolOk=typeof TPPool!=='undefined'&&TPPool.estado==='ok';
+  pon('empStatOffers',tpCompany?String((TPOfertas.mias||[]).filter(j=>j.status==='open').length):'—');
+  pon('empStatPool',poolOk?String(TPPool.total||0):'—');
+  pon('empStatTop',poolOk?String(cands.filter(c=>Number(c.score)>=80).length):'—');
+  pon('empStatUnlocks',String(cands.filter(c=>c._unlocked).length));
+}

@@ -29,10 +29,10 @@ function openDashCand(){document.getElementById('dashCandidate').classList.add('
 function openDashEmp(){
   document.getElementById('dashEmpresa').classList.add('open');
   document.body.style.overflow='hidden';
-  applyCompanyIdentity();renderEmpJobs();renderEmpPool();
+  applyCompanyIdentity();renderEmpJobs();renderEmpPool();tpActividadEmpresa();
   // Los desbloqueos los manda el servidor, no localStorage: si esta cuenta pago
   // desde otro dispositivo, el contacto tiene que seguir estando desbloqueado.
-  Pay.sync().then(function(r){ if(r&&r.unlocks)renderEmpPool(); }).catch(function(){});
+  Pay.sync().then(function(r){ if(r&&r.unlocks)renderEmpPool(); tpActividadEmpresa(); }).catch(function(){});
 }
 function myPostedJobs(){ const k=companyKey(); return empPostedJobs.filter(j=>!j.owner||j.owner===k); }
 function renderEmpJobs(){const my=JOBS.filter(j=>j.company==='c1').concat(myPostedJobs());
@@ -73,7 +73,8 @@ function showOfferCandidates(jobId){
       <div class="oc-avatar">${escHtml(ca.i)}</div>
       <div class="oc-score-pill"><div class="score-circle ${scoreCls}">${ca.score}</div></div>
       <div class="oc-info">
-        <h4>${escHtml(TPPool.alias(ca))}<span class="tp-cond-chip">${e.pct}% de encaje</span></h4>
+        <h4>${escHtml(TPPool.alias(ca))}</h4>
+        ${tpEncaje(e.pct)}
         <div class="oc-meta">${escHtml(ca.sector)} · ${(ca.skills||[]).length} skills${ca._real?' · '+verif+' verificadas':''}</div>
         <div class="oc-skills">${(ca.skills||[]).map(s=>`<span class="job-tag">${escHtml(s.n)}: <strong>${s.v}</strong></span>`).join('')}</div>
         <div class="tp-cond">${chip(e.jor,TP_COND.jornadas[job.jornada]||'')}${chip(e.mod,TP_COND.modalidades[job.modalidad]||'')}</div>
@@ -83,12 +84,12 @@ function showOfferCandidates(jobId){
           ?`<button class="btn-unlock unlocked" onclick="showContactCard(CANDIDATES.find(x=>String(x.id)==='${escHtml(ca.id)}'))">✓ Ver contacto</button>`
           :(candidateAcceptsContact(ca)
             ?`<button class="btn-unlock" onclick="unlockContact('${escHtml(ca.id)}')">${tpIcon('unlock')} Desbloquear · 49 €</button>`
-            :`<button class="btn-unlock" disabled style="opacity:.55;cursor:not-allowed">No acepta contactos</button>`)
+            :`<button class="btn-unlock" disabled>No acepta contactos</button>`)
         }
       </div>
     </div>`;
   });
-  if(!lista.length)h='<div style="text-align:center;padding:32px;color:var(--slate-400);background:var(--slate-50);border-radius:var(--radius)"><p style="font-size:1.5rem;margin-bottom:8px">'+tpIcon('search')+'</p><p>Ningún candidato del pool tiene todavía las skills que pide esta oferta.</p></div>';
+  if(!lista.length)h='<div class="tp-empty">'+tpIcon('search')+'<p>Ningún candidato del pool tiene todavía las skills que pide esta oferta.</p></div>';
   document.getElementById('empOfferCandList').innerHTML=h;
   document.getElementById('empOfferCandidatesSection').scrollIntoView({behavior:'smooth',block:'start'});
 }

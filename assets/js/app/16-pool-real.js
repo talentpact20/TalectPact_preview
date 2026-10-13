@@ -36,6 +36,7 @@ var TPPool={
       }));
       CANDIDATES.unshift(...reales);
       TPPool.total=reales.length;TPPool.estado='ok';TPPool.error=null;
+      if(typeof tpActividadEmpresa==='function')tpActividadEmpresa();
     })().catch(e=>{TPPool.estado='error';TPPool.error=e.message||String(e);}).finally(()=>{TPPool._promesa=null;});
     return TPPool._promesa;
   },

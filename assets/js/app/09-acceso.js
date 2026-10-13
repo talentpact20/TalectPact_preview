@@ -955,7 +955,7 @@ function companyName(){
   const raw=(m.company||'').trim();
   if(raw)return raw;
   if(tpCompany&&tpCompany.email)return tpCompany.email.split('@')[0];
-  return 'TechCorp';
+  return 'Empresa invitada';   // sin cuenta: nunca un nombre de empresa inventado
 }
 function companyKey(){ return tpCompany?tpCompany.id:'guest'; }
 function applyCompanyIdentity(){

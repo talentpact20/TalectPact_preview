@@ -23,20 +23,24 @@
 <meta name="twitter:title" content="Contrata por habilidades reales. No por currículum.">
 <meta name="twitter:description" content="Retos prácticos corregidos por IA, perfiles 100 % anónimos y una credencial que cualquiera puede verificar.">
 <meta name="twitter:image" content="https://talentpact.es/og-image.png">
-<script src="assets/js/head/scroll.js?v=20261013"></script>
-<script src="assets/js/head/analitica.js?v=20261013"></script>
+<script src="assets/js/head/tema.js?v=20261014"></script>
+<script src="assets/js/head/scroll.js?v=20261014"></script>
+<script src="assets/js/head/analitica.js?v=20261014"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/app.css?v=20261013">
-<link rel="stylesheet" href="assets/css/modulos.css?v=20261013">
-<link rel="stylesheet" href="assets/css/tema.css?v=20261013">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20261014">
+<link rel="stylesheet" href="assets/css/app.css?v=20261014">
+<link rel="stylesheet" href="assets/css/modulos.css?v=20261014">
+<link rel="stylesheet" href="assets/css/tema.css?v=20261014">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261014">
+<link rel="stylesheet" href="assets/css/utilidades.css?v=20261014">
 </head>
 <body>
 
 <nav id="mainNav">
-  <div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div>
+  <div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" class="logo-a"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" class="logo-b"/><circle cx="16" cy="16" r="4" class="logo-c"/></svg></div><div class="logo-text">talent<span>pact</span></div></div>
   <ul><li><a class="nl" onclick="goTo('explorar')">Explorar</a></li><li><a class="nl" onclick="goTo('features')">Cómo funciona</a></li><li><a class="nl" onclick="goTo('skillpass')">SkillPass</a></li><li><a class="nl" onclick="goTo('pricing')">Precios</a></li><li><a class="nl" onclick="openContact()">Contacto</a></li></ul>
-  <div class="nav-auth"><div class="nav-access"><button class="nav-access-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menú de acceso" onclick="toggleAccessMenu()" id="accessBtn">Acceder <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button><div class="access-dropdown" id="accessDrop"><div class="access-option" onclick="closeAccessMenu();openAuth('candidate')"><div class="access-icon" style="background:var(--emerald-50);color:var(--emerald-600)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><div><h4>Soy Candidato</h4><p>Completa retos y genera tu perfil de skills</p></div></div><div class="access-option" onclick="closeAccessMenu();openAuth('empresa')"><div class="access-icon" style="background:var(--blue-100);color:var(--blue-500)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/></svg></div><div><h4>Soy Empresa</h4><p>Publica ofertas y accede al pool de talento</p></div></div><div class="access-option" id="accessAdmin" onclick="closeAccessMenu();openAdmin()" style="display:none;border-top:1px solid var(--slate-100)"><div class="access-icon" style="background:var(--slate-100);color:var(--slate-700)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></div><div><h4>Backoffice</h4><p>Métricas, evaluaciones y pagos</p></div></div></div></div></div>
+  <div class="nav-auth"><button type="button" class="tp-tema-btn" onclick="tpCambiarTema()" aria-label="Cambiar tema"></button><div class="nav-access"><button class="nav-access-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menú de acceso" onclick="toggleAccessMenu()" id="accessBtn">Acceder <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"/></svg></button><div class="access-dropdown" id="accessDrop"><div class="access-option" onclick="closeAccessMenu();openAuth('candidate')"><div class="access-icon u-bg-emerald-50 u-c-emerald-600"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><div><h4>Soy Candidato</h4><p>Completa retos y genera tu perfil de skills</p></div></div><div class="access-option" onclick="closeAccessMenu();openAuth('empresa')"><div class="access-icon u-bg-blue-100 u-c-blue-500"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/></svg></div><div><h4>Soy Empresa</h4><p>Publica ofertas y accede al pool de talento</p></div></div><div class="access-option u-bt-1-solid-slate-100" id="accessAdmin" onclick="closeAccessMenu();openAdmin()" style="display:none"><div class="access-icon u-bg-slate-100 u-c-slate-700"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></div><div><h4>Backoffice</h4><p>Métricas, evaluaciones y pagos</p></div></div></div></div></div>
 </nav>
 
 <!-- ═══ AUTH CANDIDATO ═══ -->
@@ -45,7 +49,7 @@
   <div class="auth-form-side"><div class="auth-form-wrap"><button class="auth-back" onclick="closeAuth('authCandidate')">← Volver</button><h2 id="candAuthTitle">Bienvenido.</h2><p class="auth-subtitle" id="candAuthSub">Accede o crea tu cuenta para empezar los retos.</p>
     <div class="auth-tabs" id="candTabs" role="tablist" aria-label="Acceso o alta"><button type="button" class="auth-tab active" id="candTabLogin" role="tab" aria-selected="true" aria-controls="cand-login" onclick="switchAuthTab('cand','login',this)" onkeydown="authTabKeys(event)">Iniciar sesión</button><button type="button" class="auth-tab" id="candTabReg" role="tab" aria-selected="false" aria-controls="cand-register" tabindex="-1" onclick="switchAuthTab('cand','register',this)" onkeydown="authTabKeys(event)">Crear cuenta</button></div>
     <form class="auth-form" id="cand-login" role="tabpanel" aria-labelledby="candTabLogin" novalidate onsubmit="event.preventDefault();loginCandidate()"><div class="a-field"><label for="cand-login-email">Email</label><input type="email" placeholder="tu@email.com" id="cand-login-email" name="username" autocomplete="username"><div class="a-err" id="cand-login-email-err"></div></div><div class="a-field"><label for="cand-login-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="cand-login-pw" name="password" autocomplete="current-password" onkeyup="capsHint(event,'cand-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('cand-login-pw',this)">Ver</button></div><div class="a-err" id="cand-login-pw-err"></div><div class="a-caps" id="cand-login-caps">Bloq Mayús está activado.</div></div><div class="a-forgot"><a href="#" onclick="event.preventDefault();showRecover('cand',true)">¿Olvidaste tu contraseña?</a></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candLoginBtn">Iniciar sesión →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button type="button" class="auth-social-btn" id="btnGoogleAuth" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button><button type="button" class="auth-social-btn" id="btnLinkedinAuth" onclick="oauthLogin('linkedin_oidc')"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</button></div><div class="auth-oauth-msg" id="candAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestCandidate()">Explorar como invitado (sin cuenta) →</a></div></form><form class="auth-form" id="cand-recover" style="display:none" novalidate onsubmit="event.preventDefault();sendRecovery('cand')"><p class="auth-recover-lead">Escribe el email de tu cuenta y te enviamos un enlace para elegir una contraseña nueva. El enlace caduca en una hora y solo sirve una vez.</p><div class="a-field"><label for="cand-rec-email">Email</label><input type="email" id="cand-rec-email" name="username" autocomplete="username" placeholder="tu@email.com" aria-describedby="cand-rec-email-err"><div class="a-err" id="cand-rec-email-err"></div></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRecBtn">Enviar enlace →</button></div><div class="auth-oauth-msg" id="candRecMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a href="#" onclick="event.preventDefault();showRecover('cand',false)">← Volver a iniciar sesión</a></div></form>
-    <form class="auth-form" id="cand-register" role="tabpanel" aria-labelledby="candTabReg" novalidate onsubmit="event.preventDefault();registerCandidate()" style="display:none"><div class="a-field-row"><div class="a-field"><label for="reg-name">Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name" autocomplete="given-name"><div class="a-err" id="reg-name-err"></div></div><div class="a-field"><label for="reg-last">Apellido</label><input type="text" placeholder="Apellido" id="reg-last" autocomplete="family-name"></div></div><div class="a-field"><label for="reg-email">Email</label><input type="email" placeholder="tu@email.com" id="reg-email" name="username" autocomplete="username"><div class="a-err" id="reg-email-err"></div></div><div class="a-field"><label for="reg-phone">Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone" autocomplete="tel"><span class="hint" style="font-size:.65rem;color:var(--slate-400)">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label for="reg-linkedin">LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin" autocomplete="url"></div><div class="a-field"><label for="reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 10 caracteres, letras y números" id="reg-pw" autocomplete="new-password" oninput="pwStrength('reg-pw','reg-strength')" onkeyup="capsHint(event,'reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div><div class="pw-meter" id="reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="reg-pw-err"></div></div><div class="a-field"><label for="reg-sector">Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div style="background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:8px;padding:10px 12px;font-size:.72rem;color:var(--emerald-600);margin-bottom:4px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></form>
+    <form class="auth-form" id="cand-register" role="tabpanel" aria-labelledby="candTabReg" novalidate onsubmit="event.preventDefault();registerCandidate()" style="display:none"><div class="a-field-row"><div class="a-field"><label for="reg-name">Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name" autocomplete="given-name"><div class="a-err" id="reg-name-err"></div></div><div class="a-field"><label for="reg-last">Apellido</label><input type="text" placeholder="Apellido" id="reg-last" autocomplete="family-name"></div></div><div class="a-field"><label for="reg-email">Email</label><input type="email" placeholder="tu@email.com" id="reg-email" name="username" autocomplete="username"><div class="a-err" id="reg-email-err"></div></div><div class="a-field"><label for="reg-phone">Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone" autocomplete="tel"><span class="hint u-fs-micro u-c-slate-400">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label for="reg-linkedin">LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin" autocomplete="url"></div><div class="a-field"><label for="reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 10 caracteres, letras y números" id="reg-pw" autocomplete="new-password" oninput="pwStrength('reg-pw','reg-strength')" onkeyup="capsHint(event,'reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div><div class="pw-meter" id="reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="reg-pw-err"></div></div><div class="a-field"><label for="reg-sector">Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div class="u-bg-emerald-50 u-b-1-solid-emerald-100 u-r-8 u-p-10-12 u-fs-micro u-c-emerald-600 u-mb-4"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></form>
     <div class="auth-success" id="cand-success"><h3>¡Bienvenido!</h3><p>Redirigiendo a tu panel…</p></div>
     <div class="auth-footer" id="cand-footer">¿Eres empresa? <a href="#" onclick="closeAuth('authCandidate');openAuth('empresa')">Accede aquí</a></div>
   </div></div>
@@ -93,13 +97,13 @@
 </div></div>
 
 <!-- ═══ DASH CANDIDATO ═══ -->
-<div class="dash-overlay" id="dashCandidate" role="main" aria-label="Panel de candidato"><div class="dash-topbar"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600)" id="candAvatar">—</div><span id="candName">Mi perfil</span><button class="dash-gear-btn" onclick="logoutCand()" title="Cerrar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button><button class="dash-gear-btn" onclick="openSettings('cand')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashCandidate')">Cerrar sesión</button></div></div>
+<div class="dash-overlay" id="dashCandidate" role="main" aria-label="Panel de candidato"><div class="dash-topbar"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" class="logo-a"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" class="logo-b"/><circle cx="16" cy="16" r="4" class="logo-c"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar u-bg-emerald-100 u-c-emerald-600" id="candAvatar">—</div><span id="candName">Mi perfil</span><button class="dash-gear-btn" onclick="logoutCand()" title="Cerrar sesión" aria-label="Cerrar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button><button type="button" class="tp-tema-btn" onclick="tpCambiarTema()" aria-label="Cambiar tema"></button><button class="dash-gear-btn" onclick="openSettings('cand')" title="Ajustes" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashCandidate')">Volver a la web</button></div></div>
 <div class="dash-body">
   <div class="dash-stats">
-    <div class="dash-stat-card"><div class="dsc-val" style="color:var(--emerald-600)" id="cDashCompleted">0</div><div class="dsc-lbl">Retos completados</div></div>
-    <div class="dash-stat-card"><div class="dsc-val" style="color:var(--blue-500)" id="cDashScore">—</div><div class="dsc-lbl">Score medio</div></div>
-    <div class="dash-stat-card"><div class="dsc-val" style="color:var(--emerald-500)" id="cDashRank">—</div><div class="dsc-lbl">Ranking</div></div>
-    <div class="dash-stat-card"><div class="dsc-val" style="color:var(--slate-600)" id="cDashMatches">0</div><div class="dsc-lbl">Ofertas que encajan</div></div>
+    <div class="dash-stat-card"><div class="dsc-val u-c-emerald-600" id="cDashCompleted">0</div><div class="dsc-lbl">Retos completados</div></div>
+    <div class="dash-stat-card"><div class="dsc-val u-c-blue-500" id="cDashScore">—</div><div class="dsc-lbl">Score medio</div></div>
+    <div class="dash-stat-card"><div class="dsc-val u-c-emerald-500" id="cDashRank">—</div><div class="dsc-lbl">Ranking</div></div>
+    <div class="dash-stat-card"><div class="dsc-val u-c-slate-600" id="cDashMatches">0</div><div class="dsc-lbl">Ofertas que encajan</div></div>
   </div>
   
   <div class="dash-tabs" id="candDashTabs">
@@ -132,38 +136,38 @@
         <div class="sp-info"><h3>Tu Perfil de Skills</h3><div class="sp-meta">Candidato anónimo · Completa retos para desbloquear skills</div></div>
         <div class="sp-global-score"><div class="score-ring"><span class="ring-val" id="spGlobalScore">—</span></div><div class="ring-lbl">SCORE GLOBAL</div></div>
       </div>
-      <div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">Habilidades verificadas</div>
+      <div class="u-fs-micro u-fw-600 u-c-slate-600 u-tt-uppercase u-ls-_04em u-mb-10">Habilidades verificadas</div>
       <div class="sp-skills-grid" id="spSkillsGrid">
       </div>
-      <p id="candProfileFootnote" style="font-size:.75rem;color:var(--slate-500);margin-top:14px;text-align:center;line-height:1.5">Cada skill se desbloquea al completar su reto asociado. Usa el botón de arriba o la pestaña <strong>Retos</strong> para elegir por dónde empezar.</p>
+      <p id="candProfileFootnote" class="u-fs-micro u-c-slate-500 u-mt-14 u-ta-center u-lh-1_5">Cada skill se desbloquea al completar su reto asociado. Usa el botón de arriba o la pestaña <strong>Retos</strong> para elegir por dónde empezar.</p>
     </div>
 
     <!-- SkillPass verificable -->
-    <div class="skill-profile-card" id="spChainCard" style="margin-top:18px;padding:20px">
-      <div class="sp-header" style="margin-bottom:12px;padding-bottom:12px">
-        <div class="sp-avatar" style="background:linear-gradient(135deg,#06281f,#059669);color:#a7f3d0;font-size:1.15rem">✦</div>
+    <div class="skill-profile-card u-mt-18 u-p-20" id="spChainCard">
+      <div class="sp-header u-mb-12 u-pb-12">
+        <div class="sp-avatar u-bg-linear-gradient-135deg-emerald-950-emerald-600 u-c-emerald-200 u-fs-t3">✦</div>
         <div class="sp-info">
           <h3>Tu SkillPass</h3>
           <div class="sp-meta">Credencial portable · verificable en cualquier plataforma</div>
         </div>
       </div>
       <p class="sp-pass-note">No es un PDF más de LinkedIn: es un <strong>sello criptográfico</strong>. Tú lo emites; cualquier empresa o plataforma lo comprueba en 2 segundos. Tus datos personales no salen de Europa.</p>
-      <div class="sp-pass-actions" style="margin-top:0">
+      <div class="sp-pass-actions u-mt-0">
         <button type="button" class="btn btn-primary" id="spChainBtn" onclick="generateSkillPass()">Sellar mi SkillPass</button>
         <button type="button" class="btn btn-outline btn-sm" id="spChainDownload" onclick="downloadSkillPass()" style="display:none">JSON</button>
         <button type="button" class="btn btn-outline btn-sm" id="spChainPdf" onclick="downloadSkillPassPdf()" style="display:none">PDF certificado</button>
         <button type="button" class="btn btn-outline btn-sm" id="spChainShare" onclick="copySkillPassLink()" style="display:none">Copiar enlace</button>
       </div>
-      <div id="spChainStatus" style="display:none;margin-top:14px;padding:12px 14px;border-radius:10px;font-size:.8125rem;line-height:1.6"></div>
+      <div id="spChainStatus" style="display:none" class="u-mt-14 u-p-12-14 u-r-10 u-fs-peq u-lh-1_6"></div>
       <div id="spChainResult" style="display:none"></div>
     </div>
   </div>
 
   <!-- TAB: Retos Comunes -->
   <div class="dash-tab-content" id="candTab-common">
-    <div style="margin-bottom:16px"><h3 style="font-size:1rem;font-weight:700;margin-bottom:4px">Retos comunes — visibles para todas las empresas</h3><p style="font-size:.8125rem;color:var(--slate-500)">Estos retos son universales. Todas las empresas pueden ver tus resultados. Completa los que quieras para construir tu perfil de skills.</p></div>
-    <div class="search-bar-wrap" style="margin-bottom:12px"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar" id="dashExSearch" type="text" placeholder="Busca retos: python, excel, liderazgo, ventas…" oninput="filterDashCommonEx()" style="font-size:.8125rem;padding:10px 14px 10px 38px"><button class="search-clear" id="dashExClear" onclick="document.getElementById('dashExSearch').value='';filterDashCommonEx()">✕</button></div>
-    <div class="filters-row" id="dashExFilters" style="margin-bottom:16px">
+    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Retos comunes — visibles para todas las empresas</h3><p class="u-fs-peq u-c-slate-500">Estos retos son universales. Todas las empresas pueden ver tus resultados. Completa los que quieras para construir tu perfil de skills.</p></div>
+    <div class="search-bar-wrap u-mb-12"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar u-fs-peq u-p-10-14-10-38" id="dashExSearch" type="text" placeholder="Busca retos: python, excel, liderazgo, ventas…" oninput="filterDashCommonEx()"><button class="search-clear" id="dashExClear" onclick="document.getElementById('dashExSearch').value='';filterDashCommonEx()">✕</button></div>
+    <div class="filters-row u-mb-16" id="dashExFilters">
       <button class="filter-btn active" onclick="setDashExCat('all',this)">Todos</button>
       <button class="filter-btn" onclick="setDashExCat('soft',this)">Soft Skills</button>
       <button class="filter-btn" onclick="setDashExCat('sector',this)">Por Sector</button>
@@ -175,21 +179,21 @@
 
   <!-- TAB: Ofertas que encajan -->
   <div class="dash-tab-content" id="candTab-matches">
-    <div style="margin-bottom:16px"><h3 style="font-size:1rem;font-weight:700;margin-bottom:4px">Ofertas que encajan contigo</h3><p style="font-size:.8125rem;color:var(--slate-500)">Ordenadas por compatibilidad con tu perfil de skills. Las empresas también tienen retos personalizados que puedes completar.</p></div>
+    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Ofertas que encajan contigo</h3><p class="u-fs-peq u-c-slate-500">Ordenadas por compatibilidad con tu perfil de skills. Las empresas también tienen retos personalizados que puedes completar.</p></div>
     <div id="candMatchesList"></div>
   </div>
 
   <!-- TAB: Todas las ofertas -->
   <div class="dash-tab-content" id="candTab-all">
-    <div style="margin-bottom:16px"><h3 style="font-size:1rem;font-weight:700;margin-bottom:4px">Todas las ofertas disponibles</h3><p style="font-size:.8125rem;color:var(--slate-500)">Ofertas de empresas reales. Cada una tiene retos personalizados además de los comunes.</p></div>
+    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Todas las ofertas disponibles</h3><p class="u-fs-peq u-c-slate-500">Ofertas de empresas reales. Cada una tiene retos personalizados además de los comunes.</p></div>
     <div class="jobs-grid" id="candJobsList"></div>
-    <div class="dash-section" style="margin-top:28px"><div class="dash-section-head"><div class="dash-section-title">Empresas activas</div></div><div id="candCompaniesList"></div></div>
+    <div class="dash-section u-mt-28"><div class="dash-section-head"><div class="dash-section-title">Empresas activas</div></div><div id="candCompaniesList"></div></div>
   </div>
 
   <!-- TAB: Ranking -->
   <div class="dash-tab-content" id="candTab-ranking">
-    <div style="margin-bottom:16px"><h3 style="font-size:1rem;font-weight:700;margin-bottom:4px">Ranking por Sector</h3><p style="font-size:.8125rem;color:var(--slate-500)">Tu posición anónima comparada con otros candidatos de tu sector. Actualizado en tiempo real.</p></div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="rankingSectorFilters">
+    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Ranking por Sector</h3><p class="u-fs-peq u-c-slate-500">Tu posición anónima comparada con otros candidatos de tu sector. Actualizado en tiempo real.</p></div>
+    <div id="rankingSectorFilters" class="u-d-flex u-gap-6 u-fw-wrap-wrap u-mb-16">
       <button class="filter-btn active" onclick="renderRanking('all',this)">Todos</button>
       <button class="filter-btn" onclick="renderRanking('Marketing',this)">Marketing</button>
       <button class="filter-btn" onclick="renderRanking('IT',this)">IT</button>
@@ -207,11 +211,11 @@
 
   <!-- TAB: Soporte -->
   <div class="dash-tab-content" id="candTab-support">
-    <div style="margin-bottom:16px"><h3 style="font-size:1rem;font-weight:700;margin-bottom:4px">Centro de Soporte</h3><p style="font-size:.8125rem;color:var(--slate-500)">Preguntas frecuentes, reportar problemas o contactar con el equipo.</p></div>
+    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Centro de Soporte</h3><p class="u-fs-peq u-c-slate-500">Preguntas frecuentes, reportar problemas o contactar con el equipo.</p></div>
 
     <div class="support-panel">
       <div class="support-header"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></span><h4>Preguntas Frecuentes</h4></div>
-      <div style="padding:0 18px 16px" id="faqList"></div>
+      <div id="faqList" class="u-p-0-18-16"></div>
     </div>
 
     <div class="support-panel">
@@ -226,9 +230,9 @@
 
     <div class="support-panel">
       <div class="support-header"><span><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span><h4>Contactar con TalentPact</h4></div>
-      <div style="padding:16px 18px">
-        <p style="font-size:.8125rem;color:var(--slate-600);margin-bottom:12px">¿Necesitas ayuda personalizada? Nuestro equipo responde en menos de 24h.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="u-p-16-18">
+        <p class="u-fs-peq u-c-slate-600 u-mb-12">¿Necesitas ayuda personalizada? Nuestro equipo responde en menos de 24h.</p>
+        <div class="u-d-flex u-gap-8 u-fw-wrap-wrap">
           <a href="mailto:hello@talentpact.io" class="btn btn-outline btn-sm"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg> hello@talentpact.io</a>
           <button class="btn btn-outline btn-sm" onclick="toggleChat()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Chat de soporte</button>
         </div>
@@ -239,39 +243,20 @@
 </div><!-- /dash-body --></div><!-- /dashCandidate -->
 
 <!-- ═══ DASH EMPRESA ═══ -->
-<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar" style="border-bottom-color:var(--slate-200)"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#0f172a"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar" style="background:var(--blue-100);color:var(--blue-500)" id="empAvatar">TC</div><span id="empName">TechCorp</span><button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="logoutEmp()">Cerrar sesión</button></div></div>
+<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar u-bbc-slate-200"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" class="logo-a"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" class="logo-b"/><circle cx="16" cy="16" r="4" class="logo-c"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar u-bg-blue-100 u-c-blue-500" id="empAvatar">—</div><span id="empName">Empresa</span><button type="button" class="tp-tema-btn" onclick="tpCambiarTema()" aria-label="Cambiar tema"></button><button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="logoutEmp()">Cerrar sesión</button></div></div>
 
 <div class="dash-body">
   <!-- Estadísticas siempre visibles -->
-  <div class="dash-stats"><div class="dash-stat-card"><div class="dsc-val" style="color:var(--blue-500)" id="empStatOffers">4</div><div class="dsc-lbl">Ofertas activas</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--emerald-600)">127</div><div class="dsc-lbl">Candidatos en pool</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--amber-500)">23</div><div class="dsc-lbl">Score >80</div></div><div class="dash-stat-card"><div class="dsc-val" style="color:var(--slate-400)">€0</div><div class="dsc-lbl">Contactos desbloqueados</div></div></div>
+  <div class="dash-stats"><div class="dash-stat-card"><div class="dsc-val" id="empStatOffers">—</div><div class="dsc-lbl">Ofertas abiertas</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatPool">—</div><div class="dsc-lbl">Candidatos en el pool</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatTop">—</div><div class="dsc-lbl">Con nota media de 80 o más</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatUnlocks">—</div><div class="dsc-lbl">Contactos desbloqueados</div></div></div>
 
     <!-- SUSCRIPCIÓN -->
     <div class="dash-section">
       <div class="dash-section-head">
         <div class="dash-section-title">Plan de suscripción</div>
-        <span style="font-size:.72rem;color:var(--slate-400)">Plan actual: <strong style="color:var(--blue-500)">Free</strong></span>
+        <span class="u-fs-micro u-c-slate-400">Plan actual: <strong class="u-c-blue-500">Free</strong></span>
       </div>
 
       <!-- Uso actual -->
-      <div class="emp-sub-usage" style="margin-bottom:16px">
-        <div class="emp-sub-usage-title">Actividad este mes</div>
-        <div class="emp-sub-usage-row">
-          <div class="emp-sub-usage-label">Ofertas publicadas</div>
-          <div class="emp-sub-usage-bar"><div class="emp-sub-usage-fill" style="width:80%;background:var(--amber-400)"></div></div>
-          <div class="emp-sub-usage-val">4 activas</div>
-        </div>
-        <div class="emp-sub-usage-row">
-          <div class="emp-sub-usage-label">Contactos desbloqueados</div>
-          <div class="emp-sub-usage-bar"><div class="emp-sub-usage-fill" style="width:0%;background:var(--emerald-400)"></div></div>
-          <div class="emp-sub-usage-val">0 · €49 c/u</div>
-        </div>
-        <div class="emp-sub-usage-row">
-          <div class="emp-sub-usage-label">Candidatos visibles en pool</div>
-          <div class="emp-sub-usage-bar"><div class="emp-sub-usage-fill" style="width:100%;background:var(--blue-400)"></div></div>
-          <div class="emp-sub-usage-val">Ilimitado</div>
-        </div>
-      </div>
-
       <!-- Planes -->
       <div class="emp-sub-wrap">
 
@@ -331,31 +316,31 @@
       </div>
 
       <!-- Nota retos a medida -->
-      <p style="font-size:.7rem;color:var(--slate-400);margin-top:10px;text-align:center">
-        ¿Necesitas retos diseñados a medida para una vacante específica? Disponibles desde <strong style="color:var(--slate-600)">€299/vacante</strong> en cualquier plan. <a href="mailto:hello@talentpact.io" style="color:var(--blue-500)">Contáctanos →</a>
+      <p class="u-fs-micro u-c-slate-400 u-mt-10 u-ta-center">
+        ¿Necesitas retos diseñados a medida para una vacante específica? Disponibles desde <strong class="u-c-slate-600">€299/vacante</strong> en cualquier plan. <a href="mailto:hello@talentpact.io" class="u-c-blue-500">Contáctanos →</a>
       </p>
     </div>
 
     <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector" aria-label="Sector de la oferta"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label for="pj-sal-min">Salario mínimo (€/año)</label><input type="number" id="pj-sal-min" min="0" step="1000" inputmode="numeric" placeholder="22000"></div><div class="pj-field"><label for="pj-sal-max">Salario máximo (€/año)</label><input type="number" id="pj-sal-max" min="0" step="1000" inputmode="numeric" placeholder="28000"></div><div class="pj-field"><label for="pj-jornada">Jornada</label><select id="pj-jornada" aria-label="Tipo de jornada"><option value="completa">Jornada completa</option><option value="parcial">Media jornada</option><option value="horas">Por horas / flexible</option><option value="practicas">Prácticas</option></select></div><div class="pj-field"><label for="pj-mode">Modalidad</label><select id="pj-mode" aria-label="Modalidad de trabajo"><option value="remoto">Remoto</option><option value="hibrido">Híbrido</option><option value="presencial">Presencial</option></select></div><div class="pj-field"><label for="pj-contrato">Contrato</label><select id="pj-contrato" aria-label="Tipo de contrato"><option value="indefinido">Indefinido</option><option value="temporal">Temporal</option><option value="freelance">Freelance / autónomo</option><option value="practicas">Convenio de prácticas</option></select></div><div class="pj-field"><label for="pj-city">Ubicación</label><input type="text" id="pj-city" placeholder="Madrid (o vacío si es remoto)"></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
-    <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">Selecciona qué habilidades verificadas necesita el candidato. Escribe para filtrar.</p><input class="search-bar" id="pjSkillSearch" type="text" placeholder="Buscar skill: python, excel, liderazgo…" oninput="renderPjSkills()" style="font-size:.78rem;padding:8px 12px;margin-bottom:8px;width:100%;box-sizing:border-box"><div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap"><button class="filter-btn active" onclick="setPjSkillCat('all',this)" style="font-size:.65rem;padding:3px 8px">Todos</button><button class="filter-btn" onclick="setPjSkillCat('soft',this)" style="font-size:.65rem;padding:3px 8px">Soft Skills</button><button class="filter-btn" onclick="setPjSkillCat('sector',this)" style="font-size:.65rem;padding:3px 8px">Sectoriales</button><button class="filter-btn" onclick="setPjSkillCat('selected',this)" style="font-size:.65rem;padding:3px 8px">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
-    <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)"><span class="lvl-dot lvl-basico"></span>Básico <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)"><span class="lvl-dot lvl-intermedio"></span>Intermedio <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)"><span class="lvl-dot lvl-avanzado"></span>Avanzado <span style="font-size:.55rem;color:var(--slate-400)">(Score ≥75)</span></div></div></div>
-    <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p style="font-size:.6875rem;color:var(--slate-400);margin-bottom:8px">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
-    </div><div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" onclick="publishJob()">Publicar oferta →</button><button class="btn btn-outline" onclick="togglePostJob()">Cancelar</button></div></div></div></div>
+    <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p class="u-fs-micro u-c-slate-400 u-mb-8">Selecciona qué habilidades verificadas necesita el candidato. Escribe para filtrar.</p><input class="search-bar u-fs-micro u-p-8-12 u-mb-8 u-bs-border-box u-w-100pct" id="pjSkillSearch" type="text" placeholder="Buscar skill: python, excel, liderazgo…" oninput="renderPjSkills()"><div class="u-d-flex u-gap-6 u-mb-8 u-fw-wrap-wrap"><button class="filter-btn active u-fs-micro u-p-3-8" onclick="setPjSkillCat('all',this)">Todos</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('soft',this)">Soft Skills</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('sector',this)">Sectoriales</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('selected',this)">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
+    <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p class="u-fs-micro u-c-slate-400 u-mb-8">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)"><span class="lvl-dot lvl-basico"></span>Básico <span class="u-fs-micro u-c-slate-400">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)"><span class="lvl-dot lvl-intermedio"></span>Intermedio <span class="u-fs-micro u-c-slate-400">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)"><span class="lvl-dot lvl-avanzado"></span>Avanzado <span class="u-fs-micro u-c-slate-400">(Score ≥75)</span></div></div></div>
+    <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p class="u-fs-micro u-c-slate-400 u-mb-8">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
+    </div><div class="u-d-flex u-gap-10 u-mt-16"><button class="btn btn-primary" onclick="publishJob()">Publicar oferta →</button><button class="btn btn-outline" onclick="togglePostJob()">Cancelar</button></div></div></div></div>
 
-    <div class="dash-section" id="empVerifySection" style="margin-top:8px">
+    <div class="dash-section u-mt-8" id="empVerifySection">
       <div class="dash-section-head">
         <div class="dash-section-title">Verificar SkillPass</div>
       </div>
       <div class="emp-verify-box">
-        <p style="color:var(--slate-600);font-size:.8125rem;margin-bottom:12px;line-height:1.55">
+        <p class="u-c-slate-600 u-fs-peq u-mb-12 u-lh-1_55">
           Pega el JSON o el enlace que te ha enviado el candidato. En segundos ves si el sello de blockchain es auténtico — algo que LinkedIn no puede ofrecer.
         </p>
         <textarea id="empVerifyJson" rows="5" placeholder="Pega el JSON del SkillPass o un hash 0x…"></textarea>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center">
+        <div class="u-d-flex u-gap-10 u-fw-wrap-wrap u-mt-10 u-ai-center">
           <button type="button" class="btn btn-primary" id="empVerifyBtn" onclick="verifySkillPassAtCompany()">Verificar sello</button>
           <a class="btn btn-outline btn-sm" href="verify.html" target="_blank" rel="noopener">Verificador público</a>
         </div>
-        <div id="empVerifyStatus" style="display:none;margin-top:12px;padding:12px 14px;border-radius:10px;font-size:.8125rem;line-height:1.6"></div>
+        <div id="empVerifyStatus" style="display:none" class="u-mt-12 u-p-12-14 u-r-10 u-fs-peq u-lh-1_6"></div>
         <div id="empVerifyCard"></div>
       </div>
     </div>
@@ -364,11 +349,11 @@
 
     <div class="dash-section" id="empOfferCandidatesSection" style="display:none">
       <div class="dash-section-head"><div class="dash-section-title" id="empOfferCandTitle">Candidatos para: —</div><button class="btn btn-outline btn-sm" onclick="hideOfferCandidates()">← Volver a ofertas</button></div>
-      <p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:16px;">Candidatos que encajan con esta oferta según sus skills verificados. Para ver su contacto real, desbloquea el perfil.</p>
+      <p class="u-c-slate-500 u-fs-peq u-mb-16">Candidatos que encajan con esta oferta según sus skills verificados. Para ver su contacto real, desbloquea el perfil.</p>
       <div id="empOfferCandList"></div>
     </div>
 
-    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:12px;">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p class="u-c-slate-500 u-fs-peq u-mb-12">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
 
 </div><!-- /dash-body --></div><!-- /dashEmpresa -->
 
@@ -377,7 +362,7 @@
 <aside class="st-drawer" id="stDrawerCand" aria-label="Ajustes de candidato">
   <div class="st-topbar">
     <div class="st-topbar-left">
-      <div class="st-topbar-icon" style="background:var(--emerald-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <div class="st-topbar-icon u-bg-emerald-50"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       <div>
         <h2>Ajustes</h2>
         <p id="stCandWho">Cuenta de candidato</p>
@@ -405,7 +390,7 @@
           <div class="st-field"><label for="st-cand-phone">Teléfono</label><input type="tel" id="st-cand-phone" placeholder="+34 600 000 000"></div>
         </div>
         <div class="st-field"><label for="st-cand-portfolio">GitHub / Portafolio</label><input type="url" id="st-cand-portfolio" placeholder="github.com/…"></div>
-        <div style="margin-top:4px"><button class="btn btn-primary btn-sm" id="st-cand-save" onclick="saveCandSettings()">Guardar cambios</button></div>
+        <div class="u-mt-4"><button class="btn btn-primary btn-sm" id="st-cand-save" onclick="saveCandSettings()">Guardar cambios</button></div>
         <div class="st-msg" id="st-cand-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
@@ -427,7 +412,7 @@
           <div class="st-field"><label for="st-pref-hours">Horas/semana (media jornada)</label><input type="number" id="st-pref-hours" min="5" max="40" step="1" inputmode="numeric" placeholder="20"></div>
         </div>
         <label class="tp-pref-check"><input type="checkbox" id="st-pref-reloc"> Dispuesto/a a cambiar de ciudad</label>
-        <div style="margin-top:8px"><button class="btn btn-primary btn-sm" id="st-pref-save" onclick="TPEmpleo.guardarDesdeAjustes()">Guardar preferencias</button></div>
+        <div class="u-mt-8"><button class="btn btn-primary btn-sm" id="st-pref-save" onclick="TPEmpleo.guardarDesdeAjustes()">Guardar preferencias</button></div>
         <div class="st-msg" id="st-pref-msg" role="status" aria-live="polite"></div>
       </div>
     </div>
@@ -436,7 +421,7 @@
     <div class="st-section">
       <div class="st-section-label">Privacidad</div>
       <div class="st-card">
-        <div style="background:var(--emerald-50);border-radius:8px;padding:9px 12px;font-size:.7rem;color:var(--emerald-700);margin-bottom:12px;display:flex;gap:8px"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> <span>Tu nombre y tu contacto son siempre anónimos hasta que una empresa paga por desbloquearte.</span></div>
+        <div class="u-bg-emerald-50 u-r-8 u-p-9-12 u-fs-micro u-c-emerald-700 u-mb-12 u-d-flex u-gap-8"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> <span>Tu nombre y tu contacto son siempre anónimos hasta que una empresa paga por desbloquearte.</span></div>
         <div class="st-row"><div class="st-row-info"><h5>Visible en el pool de talento</h5><p>Si lo desactivas, tu perfil desaparece del listado de las empresas</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-poolVisible" onchange="setPref('cand','poolVisible',this.checked)"><span class="st-tog-sl"></span></label></div>
         <div class="st-row"><div class="st-row-info"><h5>Aceptar solicitudes de contacto</h5><p>Si lo desactivas, las empresas no pueden desbloquear tus datos</p></div><label class="st-tog"><input type="checkbox" id="pref-cand-allowContact" onchange="setPref('cand','allowContact',this.checked)"><span class="st-tog-sl"></span></label></div>
         
@@ -448,12 +433,12 @@
     <div class="st-section">
       <div class="st-section-label">Mi plan</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--emerald-50);border-radius:10px">
+        <div class="u-d-flex u-ai-center u-jc-space-between u-p-12-14 u-bg-emerald-50 u-r-10">
           <div>
-            <div style="font-size:.78rem;font-weight:700;color:var(--emerald-700)">Plan actual: <span style="font-size:.85rem">Free</span></div>
-            <div style="font-size:.68rem;color:var(--emerald-600);margin-top:2px">TalentPact es gratuito para candidatos. Sin límite de retos.</div>
+            <div class="u-fs-micro u-fw-700 u-c-emerald-700">Plan actual: <span class="u-fs-peq">Free</span></div>
+            <div class="u-fs-micro u-c-emerald-600 u-mt-2">TalentPact es gratuito para candidatos. Sin límite de retos.</div>
           </div>
-          <span style="font-size:.65rem;font-weight:700;background:var(--emerald-100);color:var(--emerald-700);padding:4px 10px;border-radius:20px">GRATIS</span>
+          <span class="u-fs-micro u-fw-700 u-bg-emerald-100 u-c-emerald-700 u-p-4-10 u-r-20">GRATIS</span>
         </div>
         <p class="st-note">No hay planes de pago para candidatos ni cobros que configurar: el modelo de negocio cobra a las empresas por desbloquear un contacto.</p>
       </div>
@@ -495,8 +480,8 @@
       <div class="st-danger">
         <div class="st-danger-title"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17h.01"/></svg> Zona de peligro</div>
         <p>Ocultar el perfil lo retira del pool, pero conserva tus retos y tus scores. Eliminar la cuenta borra todo de forma permanente.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" onclick="hideMyProfile()">Ocultar perfil</button>
+        <div class="u-d-flex u-gap-8 u-fw-wrap-wrap">
+          <button class="btn btn-outline btn-sm u-bc-amber-300 u-c-amber-500" onclick="hideMyProfile()">Ocultar perfil</button>
           <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('cand')">Eliminar cuenta</button>
         </div>
         <div class="st-inline-form" id="st-cand-del-form">
@@ -518,7 +503,7 @@
 <aside class="st-drawer" id="stDrawerEmp" aria-label="Ajustes de empresa">
   <div class="st-topbar">
     <div class="st-topbar-left">
-      <div class="st-topbar-icon" style="background:var(--blue-50)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+      <div class="st-topbar-icon u-bg-blue-50"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
       <div>
         <h2>Ajustes</h2>
         <p id="stEmpWho">Cuenta de empresa</p>
@@ -545,7 +530,7 @@
           <div class="st-field"><label for="st-emp-contact">Persona de contacto</label><input type="text" id="st-emp-contact" autocomplete="name"></div>
           <div class="st-field"><label for="st-emp-position">Cargo</label><input type="text" id="st-emp-position" placeholder="RRHH, CTO…"></div>
         </div>
-        <div class="st-field"><label for="st-emp-desc">Descripción <span style="font-weight:400;text-transform:none;font-size:.65rem">(visible para candidatos)</span></label><textarea rows="2" id="st-emp-desc" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
+        <div class="st-field"><label for="st-emp-desc">Descripción <span class="u-fw-400 u-tt-none u-fs-micro">(visible para candidatos)</span></label><textarea rows="2" id="st-emp-desc" placeholder="¿A qué os dedicáis? ¿Qué valores tenéis?"></textarea></div>
         <button class="btn btn-primary btn-sm" id="st-emp-save" onclick="saveEmpSettings()">Guardar cambios</button>
         <div class="st-msg" id="st-emp-msg" role="status" aria-live="polite"></div>
       </div>
@@ -555,10 +540,10 @@
     <div class="st-section">
       <div class="st-section-label">Plan y uso</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+        <div class="u-d-flex u-ai-center u-jc-space-between u-mb-14 u-fw-wrap-wrap u-gap-8">
           <div>
-            <span style="font-size:.65rem;font-weight:700;background:var(--slate-100);color:var(--slate-600);padding:3px 9px;border-radius:5px;font-family:'JetBrains Mono',monospace;letter-spacing:.06em">FREE</span>
-            <div style="font-size:.68rem;color:var(--slate-400);margin-top:4px">Plan actual · pago por contacto desbloqueado</div>
+            <span class="u-fs-micro u-fw-700 u-bg-slate-100 u-c-slate-600 u-p-3-9 u-r-5 u-ff-mono u-ls-_06em">FREE</span>
+            <div class="u-fs-micro u-c-slate-400 u-mt-4">Plan actual · pago por contacto desbloqueado</div>
           </div>
           <span class="st-soon">Planes Pro: no disponibles</span>
         </div>
@@ -589,14 +574,14 @@
     <div class="st-section">
       <div class="st-section-label">Pagos</div>
       <div class="st-card">
-        <div style="display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--slate-50);border:1px solid var(--slate-200);border-radius:9px;margin-bottom:14px">
-          <div style="flex:1;min-width:0">
-            <div style="font-size:.75rem;font-weight:700;color:var(--slate-700)">Cobro con tarjeta</div>
-            <div style="font-size:.68rem;color:var(--slate-500);margin-top:2px">Los desbloqueos se pagan con tarjeta a través de Stripe al desbloquear cada contacto. TalentPact no guarda los datos de la tarjeta.</div>
+        <div class="u-d-flex u-ai-center u-gap-10 u-p-11-12 u-bg-slate-50 u-b-1-solid-slate-200 u-r-9 u-mb-14">
+          <div class="u-flex-1 u-minw-0">
+            <div class="u-fs-micro u-fw-700 u-c-slate-700">Cobro con tarjeta</div>
+            <div class="u-fs-micro u-c-slate-500 u-mt-2">Los desbloqueos se pagan con tarjeta a través de Stripe al desbloquear cada contacto. TalentPact no guarda los datos de la tarjeta.</div>
           </div>
           <span class="st-soon">Stripe</span>
         </div>
-        <div style="font-size:.68rem;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Contactos desbloqueados</div>
+        <div class="u-fs-micro u-fw-700 u-c-slate-500 u-tt-uppercase u-ls-_08em u-mb-6">Contactos desbloqueados</div>
         <div id="st-emp-payments"></div>
       </div>
     </div>
@@ -637,8 +622,8 @@
       <div class="st-danger">
         <div class="st-danger-title"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17h.01"/></svg> Zona de peligro</div>
         <p>Pausar retira tus ofertas del listado de candidatos sin borrarlas. Eliminar la cuenta borra todo de forma permanente.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-outline btn-sm" style="border-color:rgba(245,158,11,.3);color:var(--amber-500)" id="st-emp-pause" onclick="toggleEmpPause()">Pausar cuenta</button>
+        <div class="u-d-flex u-gap-8 u-fw-wrap-wrap">
+          <button class="btn btn-outline btn-sm u-bc-amber-300 u-c-amber-500" id="st-emp-pause" onclick="toggleEmpPause()">Pausar cuenta</button>
           <button class="btn btn-danger btn-sm" onclick="toggleDeleteForm('emp')">Eliminar cuenta</button>
         </div>
         <div class="st-inline-form" id="st-emp-del-form">
@@ -656,7 +641,7 @@
 </aside>
 
 <!-- ═══ PROFILE MODAL ═══ -->
-<div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-label="Perfil de candidato"><div class="job-modal" style="max-width:580px"><div id="profileContent"></div></div></div>
+<div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-label="Perfil de candidato"><div class="job-modal u-maxw-580"><div id="profileContent"></div></div></div>
 
 <!-- ═══ HERO ═══ -->
 <section class="hero">
@@ -776,7 +761,7 @@
       <!-- Sidebar: lista de retos -->
       <aside class="rpl-sidebar">
         <div class="rpl-sidebar-top">
-          <div class="search-bar-wrap" style="margin:0 0 8px"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar" id="exSearchInput" type="search" aria-label="Buscar retos" placeholder="Buscar: liderazgo, python…" oninput="filterCommonExLanding()" style="font-size:.78rem;padding:9px 12px 9px 38px"><button class="search-clear" id="exSearchClear" onclick="clearExSearch()">✕</button></div>
+          <div class="search-bar-wrap u-m-0-0-8"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar u-fs-micro u-p-9-12-9-38" id="exSearchInput" type="search" aria-label="Buscar retos" placeholder="Buscar: liderazgo, python…" oninput="filterCommonExLanding()"><button class="search-clear" id="exSearchClear" onclick="clearExSearch()">✕</button></div>
           <div class="rpl-count" id="exResultsCount"></div>
           <div class="rpl-cat-filters" id="exCategoryFilters">
             <button class="rpl-cat-btn active" onclick="setExCategory('all',this)">Todos</button>
@@ -784,9 +769,9 @@
             <button class="rpl-cat-btn" onclick="setExCategory('sector',this)">Por Sector</button>
           </div>
           <div class="rpl-legend" aria-hidden="true">
-            <span><i style="background:var(--emerald-500)"></i>Básico</span>
-            <span><i style="background:var(--amber-500)"></i>Intermedio</span>
-            <span><i style="background:var(--red-500)"></i>Avanzado</span>
+            <span><i class="u-bg-emerald-500"></i>Básico</span>
+            <span><i class="u-bg-amber-500"></i>Intermedio</span>
+            <span><i class="u-bg-red-500"></i>Avanzado</span>
           </div>
         </div>
         <div class="rpl-list" id="landingCommonGrid"></div>
@@ -798,7 +783,7 @@
       </div>
     </div>
 
-    <div class="reveal" style="margin-top:56px"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
+    <div class="reveal u-mt-56"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
     <div class="search-bar-wrap reveal d1"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar" id="searchInput" type="search" aria-label="Buscar ofertas de empleo" placeholder="Busca por rol, sector o skill…" oninput="filterJobs()"><button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button></div>
     <div class="filters-row reveal d1" id="sectorFilters">
       <button class="filter-btn active" onclick="setSector('all',this)">Todos</button>
@@ -864,7 +849,7 @@
 <footer>
   <div class="footer-main">
     <div class="footer-brand">
-      <div class="logo" onclick="goHome()" style="cursor:pointer"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" fill="#059669"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" fill="#475569"/><circle cx="16" cy="16" r="4" fill="#34d399"/></svg></div><div class="logo-text" style="color:white">talent<span>pact</span></div></div>
+      <div class="logo u-cur-pointer" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" class="logo-a"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" class="logo-b"/><circle cx="16" cy="16" r="4" class="logo-c"/></svg></div><div class="logo-text u-c-sobre-tinta">talent<span>pact</span></div></div>
       <p>Prove. Connect. Hire. — La plataforma de hiring basada en habilidades reales. Sin CV. Sin sesgos.</p>
       <div class="footer-social">
         <a href="https://www.linkedin.com/company/talentpact" target="_blank" rel="noopener noreferrer" title="LinkedIn">in</a>
@@ -910,13 +895,13 @@
 <div class="modal-overlay" id="jobModal" role="dialog" aria-modal="true" aria-label="Detalle de oferta"><div class="job-modal"><div class="jm-header"><button class="jm-close" onclick="closeJobModal()">✕</button><div class="job-badge" id="jmBadge"></div><h2 id="jmTitle"></h2><p id="jmDesc"></p><div class="jm-progress" id="jmProgress"></div></div><div class="ex-nav" id="exNav"></div><div id="exContent"></div></div></div>
 
 <!-- CONTACT -->
-<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="contact"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2>Hablemos</h2><p>¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label>Nombre</label><input type="text" id="cf-name" name="nombre" placeholder="Tu nombre" required></div><div class="fg"><label>Email</label><input type="email" id="cf-email" name="email" placeholder="tu@empresa.com" required></div><div class="fg"><label>Perfil</label><select name="perfil" aria-label="Tipo de perfil"><option value="">Selecciona…</option><option value="Inversor">Inversor</option><option value="Empresa">Empresa</option><option value="Aceleradora">Aceleradora</option><option value="Otro">Otro</option></select></div><div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos…"></textarea></div><button type="button" class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="submitContact()">Enviar →</button></form><div class="fsucc" id="csucc"><h3>¡Enviado!</h3><p>Te contactamos en 24h.</p><button class="btn btn-primary" style="margin-top:14px" onclick="closeM('cmodal')">Cerrar</button></div></div></div>
+<div id="cmodal"><div class="cbox"><button class="cclose" onclick="closeM('cmodal')">✕</button><form id="cform" name="contact" method="POST" netlify data-netlify="true" netlify-honeypot="bot-field"><input type="hidden" name="form-name" value="contact"><p style="display:none"><label>No rellenar si eres humano: <input name="bot-field"></label></p><h2>Hablemos</h2><p>¿Inversor o empresa? Te contactamos en 24h.</p><div class="fg"><label>Nombre</label><input type="text" id="cf-name" name="nombre" placeholder="Tu nombre" required></div><div class="fg"><label>Email</label><input type="email" id="cf-email" name="email" placeholder="tu@empresa.com" required></div><div class="fg"><label>Perfil</label><select name="perfil" aria-label="Tipo de perfil"><option value="">Selecciona…</option><option value="Inversor">Inversor</option><option value="Empresa">Empresa</option><option value="Aceleradora">Aceleradora</option><option value="Otro">Otro</option></select></div><div class="fg"><label>Mensaje</label><textarea name="mensaje" placeholder="Cuéntanos…"></textarea></div><button type="button" class="btn btn-primary u-jc-center u-p-11 u-w-100pct" onclick="submitContact()">Enviar →</button></form><div class="fsucc" id="csucc"><h3>¡Enviado!</h3><p>Te contactamos en 24h.</p><button class="btn btn-primary u-mt-14" onclick="closeM('cmodal')">Cerrar</button></div></div></div>
 
 <!-- ═══ BACKOFFICE (solo cuentas con app_metadata.role = 'admin') ═══ -->
 <div class="admin-overlay adm" id="dashAdmin" role="dialog" aria-modal="true" aria-label="Backoffice de TalentPact">
   <header class="adm-top">
     <div class="adm-brand"><span class="adm-logo">talent<b>pact</b></span><span class="adm-tag">Backoffice</span></div>
-    <div class="adm-top-right"><span id="admUsuario" class="adm-user"></span><button class="btn btn-outline btn-sm" onclick="admCargar()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg> Actualizar</button><button class="btn btn-dark btn-sm" onclick="closeAdmin()">Cerrar</button></div>
+    <div class="adm-top-right"><span id="admUsuario" class="adm-user"></span><button type="button" class="tp-tema-btn" onclick="tpCambiarTema()" aria-label="Cambiar tema"></button><button class="btn btn-outline btn-sm" onclick="admCargar()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg> Actualizar</button><button class="btn btn-dark btn-sm" onclick="closeAdmin()">Cerrar</button></div>
   </header>
   <div class="adm-layout">
     <aside class="adm-side" role="navigation" aria-label="Secciones del backoffice">
@@ -972,9 +957,9 @@
       </div>
       <div class="pay-total"><span>Total a pagar</span><span class="total-amount" id="payTotalAmount">49,00 €</span></div>
       <div class="pay-status" id="payStatus" role="status" aria-live="polite"></div>
-      <button class="btn btn-primary btn-lg" id="payBtn" style="width:100%;justify-content:center" onclick="processPayment()">Pagar con Stripe →</button>
+      <button class="btn btn-primary btn-lg u-jc-center u-w-100pct" id="payBtn" onclick="processPayment()">Pagar con Stripe →</button>
       <div class="pay-secure">TalentPact no ve ni almacena tu tarjeta en ningún momento.</div>
-      <button type="button" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px;font-size:.75rem" onclick="closePayModal()">Cancelar</button>
+      <button type="button" class="btn btn-ghost u-jc-center u-mt-4 u-fs-micro u-w-100pct" onclick="closePayModal()">Cancelar</button>
     </div>
   </div>
 </div>
@@ -982,14 +967,14 @@
 <!-- ═══ CONTACTO DESBLOQUEADO ═══ -->
 <div class="pay-modal" id="contactModal" role="dialog" aria-modal="true" aria-label="Contacto desbloqueado">
   <div class="pay-box">
-    <div class="pay-header" style="background:var(--emerald-600)">
+    <div class="pay-header u-bg-emerald-600">
       <h3>Contacto desbloqueado</h3>
       <p>Ya puedes escribir al candidato. Se le ha notificado tu interés.</p>
     </div>
     <div class="pay-body">
       <div id="contactFields"></div>
-      <button class="btn btn-primary btn-lg" id="contactCopyBtn" style="width:100%;justify-content:center;margin-top:12px" onclick="copyContact()">Copiar datos de contacto</button>
-      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:4px;font-size:.75rem" onclick="closeContactModal()">Cerrar</button>
+      <button class="btn btn-primary btn-lg u-jc-center u-mt-12 u-w-100pct" id="contactCopyBtn" onclick="copyContact()">Copiar datos de contacto</button>
+      <button class="btn btn-ghost u-jc-center u-mt-4 u-fs-micro u-w-100pct" onclick="closeContactModal()">Cerrar</button>
     </div>
   </div>
 </div>
@@ -1003,7 +988,7 @@
       <div class="ai-chat-title">Asistente TalentPact</div>
       <div class="ai-chat-status">Asistente con IA · puede equivocarse. Para casos concretos: hello@talentpact.io</div>
     </div>
-    <button style="margin-left:auto;background:none;border:none;color:var(--slate-400);cursor:pointer;font-size:1.2rem" onclick="toggleAiChat()">✕</button>
+    <button onclick="toggleAiChat()" class="u-ml-auto u-bg-none u-b-none u-c-slate-400 u-cur-pointer u-fs-t3">✕</button>
   </div>
   <div class="ai-chat-body" id="aiChatBody">
     <div class="ai-msg ai-msg-bot">Hola, soy el asistente de TalentPact, un sistema de inteligencia artificial. Puedo ayudarte con cualquier duda sobre la plataforma, los retos, el proceso de evaluación, precios o cómo funciona la contratación. ¿En qué puedo ayudarte?</div>
@@ -1018,17 +1003,17 @@
 <button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="Abrir chat de soporte"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
 <div class="chat-panel" id="chatPanel">
   <div class="chat-header">
-    <span style="font-size:1.2rem"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.7 1.8L21.5 17.5l-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
+    <span class="u-fs-t3"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.7 1.8L21.5 17.5l-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
     <div><h4>TalentPact Asistente</h4><div class="chat-status">Online</div></div>
-    <button onclick="toggleChat()" style="background:none;border:none;color:white;cursor:pointer;font-size:1.1rem">✕</button>
+    <button onclick="toggleChat()" class="u-bg-none u-b-none u-c-sobre-tinta u-cur-pointer u-fs-dest">✕</button>
   </div>
   <div class="chat-messages" id="chatMessages">
     <div class="chat-msg bot">Hola, soy el asistente de TalentPact, un sistema de inteligencia artificial. Puedo ayudarte con preguntas sobre la plataforma, retos, tu perfil, o reportar un problema. ¿En qué te ayudo?</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn btn-outline btn-sm" style="font-size:.7rem" onclick="askChat('¿Cómo funcionan los retos?')">¿Cómo funcionan los retos?</button>
-      <button class="btn btn-outline btn-sm" style="font-size:.7rem" onclick="askChat('¿Cómo desbloqueo un contacto?')">Desbloquear contacto</button>
-      <button class="btn btn-outline btn-sm" style="font-size:.7rem" onclick="askChat('Tengo un problema técnico')">Reportar problema</button>
-      <button class="btn btn-outline btn-sm" style="font-size:.7rem" onclick="askChat('¿Cuánto cuesta para empresas?')">Precios empresa</button>
+    <div class="u-d-flex u-gap-6 u-fw-wrap-wrap">
+      <button class="btn btn-outline btn-sm u-fs-micro" onclick="askChat('¿Cómo funcionan los retos?')">¿Cómo funcionan los retos?</button>
+      <button class="btn btn-outline btn-sm u-fs-micro" onclick="askChat('¿Cómo desbloqueo un contacto?')">Desbloquear contacto</button>
+      <button class="btn btn-outline btn-sm u-fs-micro" onclick="askChat('Tengo un problema técnico')">Reportar problema</button>
+      <button class="btn btn-outline btn-sm u-fs-micro" onclick="askChat('¿Cuánto cuesta para empresas?')">Precios empresa</button>
     </div>
   </div>
   <div class="chat-input-area">
@@ -1038,25 +1023,26 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/app/00-iconos.js?v=20261013"></script>
-<script src="assets/js/app/01-datos-ofertas.js?v=20261013"></script>
-<script src="assets/js/app/02-grabacion.js?v=20261013"></script>
-<script src="assets/js/app/03-datos-retos.js?v=20261013"></script>
-<script src="assets/js/app/04-estado-y-nube.js?v=20261013"></script>
-<script src="assets/js/app/05-qr.js?v=20261013"></script>
-<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261013"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261013"></script>
-<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261013"></script>
-<script src="assets/js/app/09-acceso.js?v=20261013"></script>
-<script src="assets/js/app/10-paneles-y-pagos.js?v=20261013"></script>
-<script src="assets/js/app/11-superadmin.js?v=20261013"></script>
-<script src="assets/js/app/12-soporte-y-ranking.js?v=20261013"></script>
-<script src="assets/js/app/13-integridad.js?v=20261013"></script>
-<script src="assets/js/app/14-empleo.js?v=20261013"></script>
-<script src="assets/js/app/15-proteccion-acceso.js?v=20261013"></script>
-<script src="assets/js/app/16-pool-real.js?v=20261013"></script>
-<script src="assets/js/app/17-ofertas-reales.js?v=20261013"></script>
-<script src="assets/js/app/99-arranque.js?v=20261013"></script>
+<script src="assets/js/app/00-iconos.js?v=20261014"></script>
+<script src="assets/js/app/01-datos-ofertas.js?v=20261014"></script>
+<script src="assets/js/app/02-grabacion.js?v=20261014"></script>
+<script src="assets/js/app/03-datos-retos.js?v=20261014"></script>
+<script src="assets/js/app/04-estado-y-nube.js?v=20261014"></script>
+<script src="assets/js/app/05-qr.js?v=20261014"></script>
+<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261014"></script>
+<script src="assets/js/app/07-retos-comunes.js?v=20261014"></script>
+<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261014"></script>
+<script src="assets/js/app/09-acceso.js?v=20261014"></script>
+<script src="assets/js/app/10-paneles-y-pagos.js?v=20261014"></script>
+<script src="assets/js/app/11-superadmin.js?v=20261014"></script>
+<script src="assets/js/app/12-soporte-y-ranking.js?v=20261014"></script>
+<script src="assets/js/app/13-integridad.js?v=20261014"></script>
+<script src="assets/js/app/14-empleo.js?v=20261014"></script>
+<script src="assets/js/app/15-proteccion-acceso.js?v=20261014"></script>
+<script src="assets/js/app/16-pool-real.js?v=20261014"></script>
+<script src="assets/js/app/17-ofertas-reales.js?v=20261014"></script>
+<script src="assets/js/app/18-interfaz.js?v=20261014"></script>
+<script src="assets/js/app/99-arranque.js?v=20261014"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->
 <script src="analytics-talentpact.js"></script>

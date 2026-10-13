@@ -1,6 +1,6 @@
 # Conversación final para seguir
 
-Este fichero resume, ordenada y limpia, toda la conversación de trabajo sobre TalentPact (12 y 13 de octubre de 2026): qué se pidió, qué se hizo en el código, qué quedó pendiente y cuál es el concepto con el que seguimos. Está pensado para que, al importar el proyecto o abrir una conversación nueva, **salga todo** sin tener que recordar nada.
+Este fichero resume, ordenada y limpia, toda la conversación de trabajo sobre TalentPact (12 a 14 de octubre de 2026): qué se pidió, qué se hizo en el código, qué quedó pendiente y cuál es el concepto con el que seguimos. Está pensado para que, al importar el proyecto o abrir una conversación nueva, **salga todo** sin tener que recordar nada.
 
 - Los cinco documentos de mejora completos están en [`docs/conversacion/`](docs/conversacion/README.md), en Markdown (texto) y en PDF (con los diagramas y bocetos).
 - [`CLAUDE.md`](CLAUDE.md) hace que Claude Code cargue este fichero automáticamente al abrir el repositorio.
@@ -45,19 +45,23 @@ Marketplace de contratación por habilidades demostradas, no por currículum. TF
 | 8 | Documento más completo: de los ejercicios a la corrección, la web y los dashboards, para **filtrar a las personas que entran en un evento Impact de grandes empresas** | Documento 05 |
 | 9 | "Céntrate en mejoras visuales también, de manera completa" | Sección "Mejoras visuales" del documento 05: medición del CSS, sistema de diseño, 14 componentes, gráficos, 15 pantallas y 4 bocetos |
 | 10 | "Arregla esta conversación, ponla en el código y pon el concepto para seguir" | Este fichero, `CLAUDE.md` y `docs/conversacion/` |
+| 11 | "Sigue con todo, mejora la página de manera completa" | Rediseño aplicado en el código: tokens y modo oscuro, escala tipográfica, estilos en línea a clases, componentes, pantallas de ejercicio y resultado, panel de empresa con cifras reales, móvil; ver apartado 4 bis |
 
 ## 4. Estado actual del código
 
-**Pruebas**: `npm test` → **110 tests en 13 ficheros, todos en verde** (sin red ni claves).
+**Pruebas**: `npm test` → **117 tests en 14 ficheros, todos en verde** (sin red ni claves).
 
 **Arquitectura**
 
 ```
 index.html                         solo marcado; carga los scripts en orden numérico
 legal.html                         aviso legal, privacidad, cookies, IA e integridad
+assets/css/tokens.css              paleta, tokens, tipografía y modo oscuro (lo genera tools/generar_tokens.py)
 assets/css/app.css                 estilos base
 assets/css/modulos.css             integridad, preferencias, filtros
-assets/css/tema.css                tema profesional (se carga el último y redefine)
+assets/css/tema.css                tema profesional
+assets/css/componentes.css         componentes del sistema de diseño y pantallas de ejercicio y resultado
+assets/css/utilidades.css          clases de una propiedad que sustituyen a los style="…"
 assets/js/app/NN-*.js              scripts clásicos que comparten ámbito global (ver assets/js/README.md)
   00-iconos.js                     iconos de línea (generado por tools/iconos.py)
   01..12                           datos, grabación, retos, nube, QR, SkillPass, ofertas, acceso, paneles y pagos, backoffice, soporte
@@ -65,13 +69,14 @@ assets/js/app/NN-*.js              scripts clásicos que comparten ámbito globa
   14-empleo.js                     TPEmpleo: jornada, modalidad, contrato, salario, ciudad, disponibilidad
   15-proteccion-acceso.js          TPAuthGuard: política de contraseñas, bloqueo por intentos, cierre por inactividad
   16-pool-real.js                  TPPool / TPRanking: pool y contacto reales
-  17-ofertas-reales.js             TPOfertas: ofertas reales, publicar/cerrar, estados vacíos
+  17-ofertas-reales.js             TPOfertas: ofertas reales, publicar/cerrar, estados vacíos, cifras del panel de empresa
+  18-interfaz.js                   TPTema (claro/oscuro), pasos, barra de nota, anillo, chips, encaje, autoguardado
   99-arranque.js                   restaura la sesión cuando todo está cargado
 netlify/functions/<nombre>.mjs     19 entradas de la API moderna → lib/adaptador.mjs → lib/handlers/<nombre>.js
 netlify/functions/lib/tp.js        Supabase, autenticación por token, blockchain, Stripe
 netlify/functions/lib/evaluator.js Corrector v2
 tfm/tech/supabase_schema_*.sql     esquema y migraciones
-tests/*.test.js                    110 tests
+tests/*.test.js                    117 tests
 serve-demo.js                      servidor local (127.0.0.1:8888) que ejecuta las mismas funciones que Netlify
 ```
 
@@ -87,6 +92,33 @@ serve-demo.js                      servidor local (127.0.0.1:8888) que ejecuta l
 - La lista pública de ofertas nunca expone `company_user_id`.
 
 **Variables de entorno en Netlify**: `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` (o `SUPABASE_SERVICE_ROLE_KEY`), `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`, `EVAL_SIGNING_SECRET`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `UNLOCK_PRICE_CENTS`, `UNLOCK_CURRENCY`, `SEPOLIA_RPC`, `ISSUER_PRIVATE_KEY`, `SKILLPASS_CONTRACT_ADDRESS`, `SITE_URL`.
+
+## 4 bis. Rediseño visual aplicado (14 de octubre de 2026)
+
+| Antes | Ahora |
+| --- | --- |
+| 97 colores distintos escritos a mano | 0 fuera de `tokens.css`: paleta por escalas y tokens semánticos (`--c-*`) |
+| 58 tamaños de letra | 8 pasos (`--fs-micro` … `--fs-display`); nada por debajo de 12 px |
+| Sin modo oscuro | Automático según el sistema y con selector (sistema → claro → oscuro) en la web, los paneles, el backoffice y `legal.html`; se guarda en el navegador |
+| 140 `style="…"` en `index.html` | 22, solo estado que cambia el JavaScript (`display:none` y anchos de barras); el resto son clases de `utilidades.css`, comprobadas una a una en el navegador |
+| 55 `!important` | 32, solo donde hacen falta (comprobado comparando el estilo calculado de las 4.200 piezas de la página) |
+| CSS muerto del antiguo superadmin | Eliminado |
+| Progreso del perfil como etiquetas sueltas | Componente de pasos (horizontal en escritorio, vertical en móvil) |
+| Resultado de un ejercicio: tarjetas sueltas | Anillo con la nota, barras por criterio con comentario, mejor criterio y dónde mejorar, chips de "verificada" y origen de la corrección, aviso de que la nota la propone una IA y botón **Pedir revisión** |
+| Espera de corrección con mensajes de relleno | Pasos reales: recibida → corrigiendo → resultado |
+| Ejercicio | Cronómetro fijo arriba, contador de palabras y autoguardado del borrador en el navegador |
+| Encaje en la lista de candidatos de una oferta | Barra con el porcentaje |
+| Foco, objetivos táctiles | Anillo de foco visible y 44 px mínimos en pantallas táctiles |
+
+**Fallos y restos de demostración encontrados al rediseñar y corregidos**
+
+- El formulario "Reportar un problema" decía "Reporte enviado" sin enviar nada: ahora abre el correo con el reporte escrito.
+- El botón "Cerrar sesión" del panel del candidato solo cerraba el panel: ahora se llama "Volver a la web" y el cierre de sesión real es el icono de salida.
+- Panel de empresa con cifras fijas (4 ofertas, 127 candidatos, 23 con más de 80, "4 activas" con una barra al 80 %) y nombre "TechCorp" para invitados: ahora todo sale de los datos reales o muestra "—".
+- Logos que desaparecían en oscuro y el logo de `legal.html` separado ("talent pact").
+- En móvil, el panel de empresa se salía 235 px por la derecha y el de candidato 50 px.
+
+**Herramientas nuevas**: `tools/generar_tokens.py` (tokens y modo oscuro), `tools/normalizar_css.py` (colores y tamaños a tokens), `tools/estilos_a_clases.py` (style → clases). **Tests nuevos**: `tests/diseno.test.js` (7).
 
 ## 5. Pendiente que solo puede hacer el usuario
 
@@ -157,11 +189,13 @@ El 05 es el más reciente y el que manda: integra lo de los anteriores aplicado 
 
 ## 9. Próximos pasos en el código, por orden
 
-1. **Base de diseño** (fase 1 del plan visual): tokens semánticos en `:root` con modo oscuro, escala tipográfica de 8 pasos, capas `@layer`; fundir `tema.css` y `app.css`; eliminar `!important` y los estilos en línea de `index.html` y de los scripts.
-2. **Componentes** (fase 2): botón, campo, chip de estado, barra de nota con mínimo, insignia de integridad, tarjeta KPI, tabla, pasos, cronómetro, estado vacío, esqueleto de carga, aviso, panel lateral, QR; con una página interna que los muestre en claro y oscuro.
+Hecho el 14 de octubre: base de diseño (tokens, modo oscuro, tipografía, estilos en línea, `!important`) y los componentes principales (apartado 4 bis). Lo siguiente:
+
+1. **Estilos generados por el JavaScript** (unos 137 `style="…"` dentro de los scripts): pasarlos a clases como se hizo con `index.html`.
+2. **Fundir `tema.css` en `app.css`** con capas `@layer` y eliminar los `!important` que quedan.
 3. **Modelo de datos del evento**: migración `tfm/tech/supabase_schema_events.sql` con las 7 tablas y RLS.
 4. **Funciones del evento** con sus tests (encaje, reglas de agenda, permisos).
-5. **Pantallas del evento**: micrositio `/impact`, inscripción en 3 pasos, pantalla de ejercicio, resultado, pestaña Evento del candidato, ranking y lista corta de empresa, panel del organizador, check-in.
+5. **Pantallas del evento**: micrositio `/impact`, inscripción en 3 pasos, pestaña Evento del candidato con agenda y QR, ranking y lista corta de empresa, panel del organizador, check-in.
 6. **Corrector**: doble corrección, salida estructurada, versionado y cola en segundo plano.
 
 Cada paso: tests en verde, cifra canónica de tests actualizada si cambia, y commit solo con aprobación.
@@ -178,4 +212,4 @@ npm run dev
 
 ## 11. Para pegar al importar en una conversación nueva
 
-> Estoy trabajando en TalentPact (repositorio `TalectPact_preview`). Lee primero `CONVERSACION_FINAL_PARA_SEGUIR.md` y, si necesitas detalle, los documentos de `docs/conversacion/` (el 05 es el que manda). Respeta las reglas del apartado 2: responde en español, nada de contenido de demostración, commit solo cuando lo apruebe y no toques credenciales. Seguimos por el apartado 9, paso 1.
+> Estoy trabajando en TalentPact (repositorio `TalectPact_preview`). Lee primero `CONVERSACION_FINAL_PARA_SEGUIR.md` y, si necesitas detalle, los documentos de `docs/conversacion/` (el 05 es el que manda). Respeta las reglas del apartado 2: responde en español, nada de contenido de demostración, commit solo cuando lo apruebe y no toques credenciales. Seguimos por el apartado 9, paso 1 (lo del 14 de octubre ya está hecho, ver apartado 4 bis).

@@ -1,0 +1,102 @@
+/* Utilidades de una sola propiedad (las genera tools/estilos_a_clases.py a partir
+   de los antiguos style="…" de index.html). Se cargan las últimas. */
+.u-ai-center{align-items:center}
+.u-b-1-solid-emerald-100{border:1px solid var(--emerald-100)}
+.u-b-1-solid-slate-200{border:1px solid var(--slate-200)}
+.u-b-none{border:none}
+.u-bbc-slate-200{border-bottom-color:var(--slate-200)}
+.u-bc-amber-300{border-color:var(--amber-300)}
+.u-bg-amber-500{background:var(--amber-500)}
+.u-bg-blue-100{background:var(--blue-100)}
+.u-bg-blue-50{background:var(--blue-50)}
+.u-bg-emerald-100{background:var(--emerald-100)}
+.u-bg-emerald-50{background:var(--emerald-50)}
+.u-bg-emerald-500{background:var(--emerald-500)}
+.u-bg-emerald-600{background:var(--emerald-600)}
+.u-bg-linear-gradient-135deg-emerald-950-emerald-600{background:linear-gradient(135deg,var(--emerald-950),var(--emerald-600))}
+.u-bg-none{background:none}
+.u-bg-red-500{background:var(--red-500)}
+.u-bg-slate-100{background:var(--slate-100)}
+.u-bg-slate-50{background:var(--slate-50)}
+.u-bs-border-box{box-sizing:border-box}
+.u-bt-1-solid-slate-100{border-top:1px solid var(--slate-100)}
+.u-c-amber-500{color:var(--amber-500)}
+.u-c-blue-500{color:var(--blue-500)}
+.u-c-emerald-200{color:var(--emerald-200)}
+.u-c-emerald-500{color:var(--emerald-500)}
+.u-c-emerald-600{color:var(--emerald-600)}
+.u-c-emerald-700{color:var(--emerald-700)}
+.u-c-slate-400{color:var(--slate-400)}
+.u-c-slate-500{color:var(--slate-500)}
+.u-c-slate-600{color:var(--slate-600)}
+.u-c-slate-700{color:var(--slate-700)}
+.u-c-sobre-tinta{color:var(--c-sobre-tinta)}
+.u-cur-pointer{cursor:pointer}
+.u-d-flex{display:flex}
+.u-ff-mono{font-family:'JetBrains Mono',monospace}
+.u-flex-1{flex:1}
+.u-fs-dest{font-size:var(--fs-dest)}
+.u-fs-micro{font-size:var(--fs-micro)}
+.u-fs-peq{font-size:var(--fs-peq)}
+.u-fs-t3{font-size:var(--fs-t3)}
+.u-fw-400{font-weight:400}
+.u-fw-600{font-weight:600}
+.u-fw-700{font-weight:700}
+.u-fw-wrap-wrap{flex-wrap:wrap}
+.u-gap-10{gap:10px}
+.u-gap-6{gap:6px}
+.u-gap-8{gap:8px}
+.u-jc-center{justify-content:center}
+.u-jc-space-between{justify-content:space-between}
+.u-lh-1_5{line-height:1.5}
+.u-lh-1_55{line-height:1.55}
+.u-lh-1_6{line-height:1.6}
+.u-ls-_04em{letter-spacing:.04em}
+.u-ls-_06em{letter-spacing:.06em}
+.u-ls-_08em{letter-spacing:.08em}
+.u-m-0-0-8{margin:0 0 8px}
+.u-maxw-580{max-width:580px}
+.u-mb-10{margin-bottom:10px}
+.u-mb-12{margin-bottom:12px}
+.u-mb-14{margin-bottom:14px}
+.u-mb-16{margin-bottom:16px}
+.u-mb-4{margin-bottom:4px}
+.u-mb-6{margin-bottom:6px}
+.u-mb-8{margin-bottom:8px}
+.u-minw-0{min-width:0}
+.u-ml-auto{margin-left:auto}
+.u-mt-0{margin-top:0}
+.u-mt-10{margin-top:10px}
+.u-mt-12{margin-top:12px}
+.u-mt-14{margin-top:14px}
+.u-mt-16{margin-top:16px}
+.u-mt-18{margin-top:18px}
+.u-mt-2{margin-top:2px}
+.u-mt-28{margin-top:28px}
+.u-mt-4{margin-top:4px}
+.u-mt-56{margin-top:56px}
+.u-mt-8{margin-top:8px}
+.u-p-0-18-16{padding:0 18px 16px}
+.u-p-10-12{padding:10px 12px}
+.u-p-10-14-10-38{padding:10px 14px 10px 38px}
+.u-p-11{padding:11px}
+.u-p-11-12{padding:11px 12px}
+.u-p-12-14{padding:12px 14px}
+.u-p-16-18{padding:16px 18px}
+.u-p-20{padding:20px}
+.u-p-3-8{padding:3px 8px}
+.u-p-3-9{padding:3px 9px}
+.u-p-4-10{padding:4px 10px}
+.u-p-8-12{padding:8px 12px}
+.u-p-9-12{padding:9px 12px}
+.u-p-9-12-9-38{padding:9px 12px 9px 38px}
+.u-pb-12{padding-bottom:12px}
+.u-r-10{border-radius:10px}
+.u-r-20{border-radius:20px}
+.u-r-5{border-radius:5px}
+.u-r-8{border-radius:8px}
+.u-r-9{border-radius:9px}
+.u-ta-center{text-align:center}
+.u-tt-none{text-transform:none}
+.u-tt-uppercase{text-transform:uppercase}
+.u-w-100pct{width:100%}

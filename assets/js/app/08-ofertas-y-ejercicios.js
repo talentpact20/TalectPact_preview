@@ -167,7 +167,7 @@ function renderEx(el,i){
     </div>
     <div class="ex-briefing-skills">${ex.skills.hard.map(s=>`<span class="skill-pill sp-hard">${s}</span>`).join('')}${ex.skills.soft.map(s=>`<span class="skill-pill sp-soft">${s}</span>`).join('')}</div>
     <div class="ex-briefing-text">${briefing}</div>
-    <div class="ex-briefing-warn">${tpIcon('alert')} Cuando pulses "Empezar", el escenario se revelará y ${timeLimit?`el tiempo (${Math.floor(timeLimit/60)}:${String(timeLimit%60).padStart(2,'0')}) empezará a correr.`:'no podrás volver atrás.'} No podrás copiar el enunciado.</div>
+    <div class="ex-briefing-warn">${tpIcon('alert')} Cuando pulses «Estoy preparado», el escenario se revelará y ${timeLimit?`el tiempo (${Math.floor(timeLimit/60)}:${String(timeLimit%60).padStart(2,'0')}) empezará a correr.`:'no podrás volver atrás.'} No podrás copiar el enunciado.</div>
     <button class="btn-launch" onclick="launchExercise(${i})">Estoy preparado →</button>
   </div>`;
 }
@@ -251,6 +251,7 @@ function renderExActive(el,i){
   h+=`<div style="margin-top:16px"><button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitEx(${i})">Enviar respuesta →</button></div></div>`;
   ct.innerHTML=h;
   startExTimer(i);
+  tpRespuestaViva(activeJob.id+':'+i);
 }
 
 function handleUpload(input){
@@ -335,12 +336,8 @@ async function submitEx(i){
 
   // Show loading state
   const ct=document.getElementById('exContent');
-  ct.innerHTML=`<div class="ex-body"><div class="ai-eval-loading"><div class="ai-eval-spinner"></div><p>Evaluando tu respuesta con IA…</p><div class="eval-step" id="evalStep">Analizando contenido…</div></div></div>`;
-  
-  // Animate loading steps
-  const steps=['Analizando contenido…','Aplicando rúbrica de evaluación…','Comparando con criterios del puesto…','Generando feedback personalizado…'];
-  let stepIdx=0;
-  const stepInterval=setInterval(()=>{stepIdx++;if(stepIdx<steps.length){const el=document.getElementById('evalStep');if(el)el.textContent=steps[stepIdx];}},1500);
+  ct.innerHTML=`<div class="ex-body"><div class="ai-eval-loading" role="status">${tpPasos([{txt:'Respuesta recibida',hecho:true},{txt:'Corrigiendo con la rúbrica',hecho:false},{txt:'Resultado',hecho:false}],'Corrección')}<p class="u-mt-16">Esto suele tardar entre 10 y 30 segundos. No cierres esta ventana.</p></div></div>`;
+  const stepInterval=null;
 
   try{
     const result=await evaluateWithAI(ex, candidateResponse, evaluationType);
@@ -488,21 +485,31 @@ function fallbackScore(ex, response){
 function renderDone(ex,i,el){
   const r=exResults[i],allDone=el.every((_,j)=>exResults[j]!==undefined);
   const fb=r.feedback||{};
-  const criteria=fb.criteria||[];
+  const criteria=Array.isArray(fb.criteria)?fb.criteria:[];
   const isAI=fb.aiPowered!==false;
-  
-  let feedbackHTML='';
-  if(criteria.length>0){
-    // El texto del modelo puede citar la respuesta del candidato: se escapa siempre.
-    const badge=fb.blockedByFilter?tpIcon('shield')+' Bloqueado por el filtro anti-manipulación':isAI?tpIcon('sparkles')+' Corregido con IA':tpIcon('chart')+' Corrección automática de reserva';
-    feedbackHTML=`<div class="ai-feedback"><div class="ai-feedback-header"><div class="ai-badge">${badge}</div>${fb.receiptSigned?'<span class="tp-verified" title="Nota firmada por el Corrector v2 '+escHtml(fb.evaluatorVersion||'')+'">✓ Verificada</span>':''}<span style="font-size:.75rem;color:var(--slate-400);margin-left:auto">${escHtml(ex.title)}</span></div><div class="ai-feedback-body">${fb.capped?`<div class="tp-integrity-note warn">Nota limitada: ${escHtml(fb.capped)}.</div>`:''}<div class="ai-criteria-grid">${criteria.map(c=>{
-      const cls=c.score>=75?'high':c.score>=50?'mid':'low';
-      const color=c.score>=75?'var(--emerald-500)':c.score>=50?'var(--amber-500)':'var(--red-500)';
-      return `<div class="ai-criterion"><div class="ai-criterion-name">${escHtml(c.name)}<span class="ai-criterion-score ${cls}">${c.score}/100</span></div><div class="ai-criterion-bar"><div class="ai-criterion-bar-fill" style="width:${c.score}%;background:${color}"></div></div><div class="ai-criterion-comment">${escHtml(c.comment||'')}</div></div>`;
-    }).join('')}</div>${fb.overall?`<div class="ai-overall-comment">${escHtml(fb.overall)}</div>`:''}</div></div>`;
-  }
-  
-  document.getElementById('exContent').innerHTML=`<div class="ex-body"><div style="text-align:center;margin-bottom:20px"><div style="width:48px;height:48px;border-radius:50%;background:var(--emerald-50);border:2px solid var(--emerald-200);display:inline-flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:12px">✓</div><h3 style="font-family:'Inter',sans-serif;font-weight:800;font-size:1.2rem;color:var(--emerald-600);margin-bottom:4px">Completado</h3><p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:16px">${ex.title}</p><div style="display:flex;gap:12px;justify-content:center;margin-bottom:20px;max-width:220px;margin-left:auto;margin-right:auto"><div class="score-card" style="flex:1"><div class="score-num">${r.score}</div><div class="score-lbl">Score</div></div><div class="score-card" style="flex:1"><div class="score-num">${Math.floor(r.time/60)}:${(r.time%60).toString().padStart(2,'0')}</div><div class="score-lbl">Tiempo</div></div></div></div>${feedbackHTML}${window.TPIntegrity?TPIntegrity.html(r.integrity):''}<div style="display:flex;gap:10px;justify-content:center;margin-top:16px">${i<el.length-1?`<button class="btn btn-primary" onclick="switchEx(${i+1})">Siguiente →</button>`:''}${(()=>{const p=el.findIndex((_,j)=>exResults[j]===undefined);return (!allDone&&i===el.length-1&&p>=0)?`<button class="btn btn-primary" onclick="switchEx(${p})">Ir al ejercicio pendiente (0${p+1}) →</button>`:'';})()}${allDone?`<button class="btn btn-dark" onclick="showFinal()">Ver resultado final</button>`:''}</div></div>`;}
+  TPBorrador.borrar(activeJob.id+':'+i);
+  // El texto del modelo puede citar la respuesta del candidato: se escapa siempre.
+  const origen=fb.blockedByFilter?tpChip('Bloqueado por el filtro anti-manipulación','error'):isAI?tpChip('Corregido con IA','info'):tpChip('Corrección automática de reserva');
+  const verif=fb.receiptSigned?'<span title="Nota firmada por el Corrector v2 '+escHtml(fb.evaluatorVersion||'')+'">'+tpChip('Nota verificada','ok')+'</span>':'';
+  const ord=criteria.slice().sort((a,b)=>b.score-a.score);
+  const fuerte=ord[0],debil=ord.length>1?ord[ord.length-1]:null;
+  const pares=(fuerte&&debil&&fuerte.score!==debil.score)?`<div class="tp-res-pares"><div class="tp-res-par"><h4>${tpIcon('check')} Tu mejor criterio</h4><p>${escHtml(fuerte.name)}: ${fuerte.score} sobre 100.</p></div><div class="tp-res-par mejora"><h4>${tpIcon('target')} Dónde más puedes subir</h4><p>${escHtml(debil.name)}: ${debil.score} sobre 100. Lee el comentario de ese criterio antes de repetir el reto.</p></div></div>`:'';
+  const crit=`<div class="tp-res-crit"><h4>Por criterio</h4>${criteria.length?`<div class="tp-notas">${criteria.map(c=>tpBarraNota({nombre:c.name,nota:c.score,comentario:c.comment})).join('')}</div>`:'<p class="tp-nota-coment">Este ejercicio se corrige de forma automática y no tiene desglose por criterios.</p>'}</div>`;
+  const tiempo=Math.floor(r.time/60)+':'+String(r.time%60).padStart(2,'0');
+  const pend=el.findIndex((_,j)=>exResults[j]===undefined);
+  const acciones=(i<el.length-1?`<button class="btn btn-primary" onclick="switchEx(${i+1})">Siguiente ejercicio →</button>`:'')
+    +((!allDone&&i===el.length-1&&pend>=0)?`<button class="btn btn-primary" onclick="switchEx(${pend})">Ir al ejercicio pendiente (${pend+1}) →</button>`:'')
+    +(allDone?`<button class="btn btn-dark" onclick="showFinal()">Ver resultado final</button>`:'');
+  const reto=JSON.stringify(String(activeJob.title||'')).replace(/"/g,'&quot;');
+  document.getElementById('exContent').innerHTML=`<div class="ex-body"><div class="tp-res">
+    <div class="tp-res-cab"><div><div class="tp-res-tit">Resultado</div><div class="tp-res-sub">${escHtml(ex.title)} · ejercicio ${i+1} de ${el.length}</div></div><div class="tp-res-chips">${verif}${origen}</div></div>
+    ${fb.capped?`<div class="tp-integrity-note warn">Nota limitada: ${escHtml(fb.capped)}.</div>`:''}
+    <div class="tp-res-cuerpo"><div class="tp-res-nota">${tpAnillo(r.score,'sobre 100')}<div class="tp-res-dato"><span>Tiempo</span><b>${tiempo}</b></div></div>${crit}</div>
+    ${pares}
+    ${fb.overall?`<div class="tp-res-global">${escHtml(fb.overall)}</div>`:''}
+    ${window.TPIntegrity?TPIntegrity.html(r.integrity):''}
+    <div class="tp-res-pie"><span class="tp-res-aviso">${tpIcon('help')} La nota la propone ${isAI?'un sistema de IA':'una corrección automática'} y una persona puede revisarla si lo pides.</span><div class="tp-res-acciones"><button class="btn btn-outline" onclick="tpPedirRevision(${reto},${i+1})">Pedir revisión</button>${acciones}</div></div>
+  </div></div>`;}
 function showFinal(){const el=getExercises(activeJob),sc=el.map((_,i)=>exResults[i]?.score||0),avg=Math.round(sc.reduce((a,b)=>a+b)/sc.length);
   // Save to candidate profile if common exercise
   // Integridad agregada de los ejercicios (cámara, pestañas, pegados…).
@@ -557,7 +564,17 @@ function showFinal(){const el=getExercises(activeJob),sc=el.map((_,i)=>exResults
   document.getElementById('exNav').innerHTML='';document.getElementById('jmProgress').innerHTML='';
   const isCommon=activeJob._isCommon;
   const hasPending=isCommon&&_pendingJobId;
-  document.getElementById('exContent').innerHTML=`<div class="ex-body" style="text-align:center"><div style="width:56px;height:56px;border-radius:50%;background:var(--emerald-50);border:2px solid var(--emerald-200);display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">${tpIcon('check-circle')}</div><h3 class="display" style="font-size:1.5rem;color:var(--emerald-600);margin-bottom:6px">${avg>=80?'Perfil activado':avg>=60?'Buen nivel':'Sigue practicando'}</h3><p style="color:var(--slate-500);margin-bottom:24px;font-size:.8125rem">Has completado los ${el.length} ejercicios de <strong>${escHtml(activeJob.title)}</strong>.${isCommon?' Tu skill ha sido actualizada en tu perfil.':''}</p><div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:24px">${sc.map((s,i)=>`<div class="score-card"><div class="score-num">${s}</div><div class="score-lbl">EJ.0${i+1}</div></div>`).join('')}<div class="score-card"><div class="score-num">${avg}</div><div class="score-lbl">Media</div></div></div>${window.TPIntegrity?TPIntegrity.html(integ,true):''}${isCommon?`<div style="background:var(--emerald-50);border:1px solid var(--emerald-100);border-radius:8px;padding:14px;margin-bottom:20px;font-size:.8125rem;color:var(--emerald-600)">✓ Skill "<strong>${activeJob._skill}</strong>" desbloqueada con score <strong>${avg}</strong>. Todas las empresas pueden verlo.</div>`:''}<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">${hasPending?`<button class="btn btn-primary" onclick="closeJobModal();openJob('${_pendingJobId}');_pendingJobId=null;">← Volver a la oferta</button><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Ir al panel</button>`:`<button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button><button class="btn btn-primary" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1]),100)">${isCommon?'Más retos comunes →':'Ver resultados →'}</button>`}</div></div>`;}
+  const titulo=avg>=80?'Perfil activado':avg>=60?'Buen nivel':'Sigue practicando';
+  const botones=hasPending?`<button class="btn btn-primary" onclick="closeJobModal();openJob('${_pendingJobId}');_pendingJobId=null;">← Volver a la oferta</button><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Ir al panel</button>`:`<button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button><button class="btn btn-primary" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1]),100)">${isCommon?'Más retos →':'Ver resultados →'}</button>`;
+  document.getElementById('exContent').innerHTML=`<div class="ex-body"><div class="tp-final">
+    ${tpAnillo(avg,'media')}
+    <div><div class="tp-final-tit">${titulo}</div><p class="tp-final-sub">Has completado los ${el.length} ejercicios de <strong>${escHtml(activeJob.title)}</strong>.${isCommon?' Tu skill se ha actualizado en tu perfil.':''}</p></div>
+    <div class="tp-final-ejs">${sc.map((s,i)=>`<div class="tp-final-ej"><span>Ejercicio ${i+1}</span><b>${s}</b></div>`).join('')}</div>
+    ${verificada?tpChip('Todas las notas están verificadas','ok'):''}
+    ${window.TPIntegrity?TPIntegrity.html(integ,true):''}
+    ${isCommon?`<div class="tp-final-skill">${tpIcon('check-circle')}<span>Skill «<strong>${escHtml(activeJob._skill||'')}</strong>» con nota <strong>${avg}</strong>. Las empresas la ven en el pool si tu perfil es visible.</span></div>`:''}
+    <div class="tp-res-acciones">${botones}</div>
+  </div></div>`;}
 
 function closeJobModal(){document.getElementById('jobModal').classList.remove('open');}
 

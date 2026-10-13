@@ -199,9 +199,7 @@ function renderOnboarding(){
   
   document.getElementById('obPct').textContent=pct+'%';
   document.getElementById('obFill').style.width=pct+'%';
-  document.getElementById('obSteps').innerHTML=steps.map(s=>
-    `<div class="ob-step ${s.done?'done':'pending'}">${s.label}</div>`
-  ).join('');
+  document.getElementById('obSteps').innerHTML=tpPasos(steps.map(s=>({txt:s.label,hecho:s.done})),'Completa tu perfil');
   
   // Hide onboarding bar if 100%
   document.getElementById('onboardingBar').style.display=pct>=100?'none':'block';
@@ -233,9 +231,21 @@ function submitBugReport(){
   const type=document.getElementById('bugType').value;
   const desc=document.getElementById('bugDesc').value.trim();
   if(!desc){toast('Cuéntanos qué ha pasado para poder ayudarte.');return;}
+  // Antes mostraba "Reporte enviado" sin enviar nada. Ahora abre el correo del
+  // usuario con el reporte ya escrito: es un canal real y queda copia en su buzón.
+  const tipos={bug:'Bug / error técnico',score:'Problema con un score',exercise:'Error en un ejercicio',payment:'Problema de pago',account:'Problema con mi cuenta',other:'Otro'};
+  const ej=(document.getElementById('bugExercise')||{}).value||'';
+  const cuerpo='Tipo: '+(tipos[type]||type)+'\n'+(ej.trim()?'Ejercicio: '+ej.trim()+'\n':'')+'\n'+desc+'\n';
+  location.href='mailto:hello@talentpact.io?subject='+encodeURIComponent('Reporte: '+(tipos[type]||type))+'&body='+encodeURIComponent(cuerpo);
+  toast('Se ha abierto tu correo con el reporte. Envíalo desde allí y te respondemos en menos de 24 h.','ok');
+}
 
-  toast('Reporte enviado. Gracias por ayudarnos a mejorar.','ok');
-  document.getElementById('bugDesc').value = '';
+// Pedir que una persona revise una nota (RGPD art. 22): abre el correo con el
+// reto y el ejercicio ya indicados. No incluye datos personales.
+function tpPedirRevision(reto,ejercicio){
+  const asunto='Revisión de nota: '+reto+(ejercicio?' · ejercicio '+ejercicio:'');
+  const cuerpo='Quiero que una persona revise la nota de este ejercicio.\n\nReto: '+reto+(ejercicio?'\nEjercicio: '+ejercicio:'')+'\n\nMotivo:\n';
+  location.href='mailto:hello@talentpact.io?subject='+encodeURIComponent(asunto)+'&body='+encodeURIComponent(cuerpo);
 }
 
 // Explorar (landing): pintar retos y ofertas. Se lanza tras el evento load para no interferir con el scroll reset.
