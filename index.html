@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261014">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261014">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261014b">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261014">
 </head>
 <body>
@@ -644,13 +644,34 @@
 <div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-label="Perfil de candidato"><div class="job-modal u-maxw-580"><div id="profileContent"></div></div></div>
 
 <!-- ═══ HERO ═══ -->
-<section class="hero">
-  <div class="hero-badge"><div class="hero-badge-dot"></div><span>Selección por competencias · evaluación con IA supervisada</span></div>
-  <h1 class="display">Contrata por habilidades<br><span class="gradient-text">demostradas</span>, no por currículum.</h1>
-  <p class="hero-sub">Evaluación 100% anónima con retos prácticos. Candidatos demuestran lo que saben hacer. Empresas contratan mejor y más rápido.</p>
-  <div class="hero-cta"><button class="btn btn-dark btn-lg" onclick="openAuth('candidate')">Empezar como candidato →</button><button class="btn btn-outline btn-lg" onclick="openAuth('empresa')">Acceso empresa</button></div>
-  <div class="hero-proof">
-    <div class="hero-proof-text"><strong>102 retos</strong> en 25 áreas · corrección con IA auditable criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a></div>
+<section class="hero hero-2col">
+  <div class="hero-rejilla" aria-hidden="true"></div>
+  <div class="hero-txt">
+    <div class="hero-badge"><div class="hero-badge-dot"></div><span>Selección por competencias · evaluación con IA supervisada</span></div>
+    <h1 class="display">Contrata por habilidades <span class="gradient-text">demostradas</span>, no por currículum.</h1>
+    <p class="hero-sub">Evaluación 100% anónima con retos prácticos. Los candidatos demuestran lo que saben hacer y las empresas contratan mejor y más rápido.</p>
+    <div class="hero-cta"><button class="btn btn-dark btn-lg" onclick="openAuth('candidate')">Empezar como candidato →</button><button class="btn btn-outline btn-lg" onclick="openAuth('empresa')">Acceso empresa</button></div>
+    <div class="hero-proof">
+      <div class="hero-proof-text" id="heroProof"><strong>Retos prácticos</strong> corregidos con IA criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a></div>
+    </div>
+  </div>
+  <div class="hero-visual" aria-label="Cómo funciona TalentPact, en cuatro pasos">
+    <div class="hv-card">
+      <span class="tp-mono tp-mono-soft" aria-hidden="true">PA</span>
+      <div class="hv-txt"><div class="hv-eti">1 · El reto</div><div class="hv-tit">Pensamiento Analítico</div><div class="hv-sub">3 ejercicios: básico, intermedio y avanzado</div><div class="hv-seg" aria-hidden="true"><i></i><i></i><i></i></div></div>
+    </div>
+    <div class="hv-card">
+      <span class="hv-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.7 1.8L21.5 17.5l-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></svg></span>
+      <div class="hv-txt"><div class="hv-eti">2 · La corrección</div><div class="hv-tit">Rúbrica con 4 criterios</div><div class="hv-chips"><span class="tp-chip">Relevancia</span><span class="tp-chip">Profundidad</span><span class="tp-chip">Estructura</span><span class="tp-chip">Aplicabilidad</span></div><div class="hv-sub">Una persona puede revisar cualquier nota.</div></div>
+    </div>
+    <div class="hv-card">
+      <span class="hv-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/></svg></span>
+      <div class="hv-txt"><div class="hv-eti">3 · El SkillPass</div><div class="hv-tit">Sellado en Ethereum Sepolia</div><div class="hv-mono">0x8541…f73A</div><span class="tp-chip tp-chip-ok">Verificable por cualquiera</span></div>
+    </div>
+    <div class="hv-card">
+      <span class="hv-ico"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg></span>
+      <div class="hv-txt"><div class="hv-eti">4 · El contacto</div><div class="hv-tit">Solo si el candidato lo permite</div><div class="hv-sub">Y la empresa paga 49 € solo cuando lo desbloquea.</div></div>
+    </div>
   </div>
 </section>
 
@@ -669,12 +690,12 @@
 <div id="features" class="section">
   <div class="reveal"><div class="section-label">Cómo funciona</div><h2 class="section-title display">Del reto al match en 6 pasos.</h2><p class="section-desc">Sin CV, sin sesgos. Solo habilidades demostradas en entornos reales de trabajo.</p></div>
   <div class="features-grid reveal d1">
-    <div class="feature-card"><div class="feature-icon fi-emerald">01</div><h3>Registro sin barreras</h3><p>Solo nombre y email. Sin CV, sin foto, sin datos personales que generen sesgos.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-blue">02</div><h3>Elige tu vertical</h3><p>Marketing, IT, Data, Business, Diseño, Finanzas, Legal, Operaciones — retos específicos para cada perfil.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-amber">03</div><h3>Completa 3 retos</h3><p>Ejercicios prácticos que simulan situaciones laborales reales. Sin trucos, solo habilidades.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-violet">04</div><h3>Perfil ciego generado</h3><p>Solo iniciales, sector y métricas de rendimiento. Cero datos personales.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-slate">05</div><h3>Empresas te descubren</h3><p>Las empresas filtran por skills y scores. Tu talento habla por ti.</p></div>
-    <div class="feature-card"><div class="feature-icon fi-red">06</div><h3>Tú controlas tu visibilidad</h3><p>Ocúltate del pool o retira el permiso de contacto cuando quieras, desde tus ajustes.</p></div>
+    <div class="feature-card"><div class="feature-top"><div class="feature-icon fi-emerald"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div><span class="feature-num">01</span></div><h3>Registro sin barreras</h3><p>Solo nombre y email. Sin CV, sin foto, sin datos personales que generen sesgos.</p></div>
+    <div class="feature-card"><div class="feature-top"><div class="feature-icon fi-blue"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg></div><span class="feature-num">02</span></div><h3>Elige tu vertical</h3><p>Marketing, IT, Data, Business, Diseño, Finanzas, Legal, Operaciones — retos específicos para cada perfil.</p></div>
+    <div class="feature-card"><div class="feature-top"><div class="feature-icon fi-amber"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/></svg></div><span class="feature-num">03</span></div><h3>Completa 3 retos</h3><p>Ejercicios prácticos que simulan situaciones laborales reales. Sin trucos, solo habilidades.</p></div>
+    <div class="feature-card"><div class="feature-top"><div class="feature-icon fi-violet"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div><span class="feature-num">04</span></div><h3>Perfil ciego generado</h3><p>Solo iniciales, sector y métricas de rendimiento. Cero datos personales.</p></div>
+    <div class="feature-card"><div class="feature-top"><div class="feature-icon fi-slate"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><span class="feature-num">05</span></div><h3>Empresas te descubren</h3><p>Las empresas filtran por skills y scores. Tu talento habla por ti.</p></div>
+    <div class="feature-card"><div class="feature-top"><div class="feature-icon fi-red"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M2 12h3M19 12h3M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></div><span class="feature-num">06</span></div><h3>Tú controlas tu visibilidad</h3><p>Ocúltate del pool o retira el permiso de contacto cuando quieras, desde tus ajustes.</p></div>
   </div>
 </div>
 
@@ -1040,8 +1061,8 @@
 <script src="assets/js/app/14-empleo.js?v=20261014"></script>
 <script src="assets/js/app/15-proteccion-acceso.js?v=20261014"></script>
 <script src="assets/js/app/16-pool-real.js?v=20261014"></script>
-<script src="assets/js/app/17-ofertas-reales.js?v=20261014"></script>
-<script src="assets/js/app/18-interfaz.js?v=20261014"></script>
+<script src="assets/js/app/17-ofertas-reales.js?v=20261014b"></script>
+<script src="assets/js/app/18-interfaz.js?v=20261014b"></script>
 <script src="assets/js/app/99-arranque.js?v=20261014"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->

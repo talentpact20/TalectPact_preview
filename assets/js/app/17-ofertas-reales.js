@@ -159,10 +159,10 @@ TPOfertas.cargar();
   renderJobs=function(list){
     _render.apply(this,arguments);
     const nr=document.getElementById('noResults');if(!nr||list.length)return;
-    if(TPOfertas.estado==='error')nr.innerHTML='<div class="tp-empty">No se han podido cargar las ofertas. Vuelve a intentarlo en unos minutos.</div>';
-    else if(TPOfertas.estado==='cargando'||TPOfertas.estado==='sin cargar')nr.innerHTML='<div class="tp-empty">Cargando ofertas…</div>';
-    else if(!JOBS.length)nr.innerHTML='<div class="tp-empty">Todavía no hay ofertas publicadas. ¿Buscas talento? <a href="#" onclick="event.preventDefault();openAuth(\'empresa\')">Publica la primera oferta</a>.</div>';
-    else nr.innerHTML='<div class="tp-empty">Ninguna oferta coincide con tu búsqueda. Prueba con otro término o sector.</div>';
+    if(TPOfertas.estado==='error')nr.innerHTML=tpVacio({error:true,icono:'alert',titulo:'No se han podido cargar las ofertas',texto:'Puede ser un problema momentáneo de conexión. Vuelve a intentarlo en unos segundos.',acciones:[{txt:'Reintentar',accion:'TPOfertas.cargar()'}]});
+    else if(TPOfertas.estado==='cargando'||TPOfertas.estado==='sin cargar')nr.innerHTML='<div class="tp-cargando-ofertas">'+('<div>'+tpEsqueleto(4)+'</div>').repeat(3)+'</div>';
+    else if(!JOBS.length)nr.innerHTML=tpVacio({icono:'building',titulo:'Todavía no hay ofertas publicadas',texto:'Cuando una empresa publique una oferta, aparecerá aquí. Mientras tanto, completa retos: así ya tendrás tu nota verificada.',acciones:[{txt:'Publicar una oferta',accion:"openAuth('empresa')",tipo:'btn-dark'},{txt:'Ver los retos',accion:"document.getElementById('explorar').scrollIntoView({behavior:'smooth'})"}]});
+    else nr.innerHTML=tpVacio({icono:'search',titulo:'Ninguna oferta coincide con tu búsqueda',texto:'Prueba con otro término o con otro sector.',acciones:[{txt:'Ver todas',accion:'clearSearch()'}]});
   };
 })();
 

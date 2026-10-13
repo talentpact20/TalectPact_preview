@@ -83,6 +83,20 @@ function tpSiguiente(o){
   return '<div class="tp-siguiente"><span class="tp-siguiente-ico">'+tpIcon(o.icono||'arrow-right')+'</span><div class="tp-siguiente-txt"><div class="tp-siguiente-eti">Lo siguiente</div><div class="tp-siguiente-tit">'+_tpEsc(o.titulo)+'</div>'+(o.sub?'<div class="tp-siguiente-sub">'+_tpEsc(o.sub)+'</div>':'')+'</div>'+(o.boton?'<button type="button" class="btn btn-primary" onclick="'+o.accion+'">'+_tpEsc(o.boton)+'</button>':'')+'</div>';
 }
 
+// Estado vacío grande: icono, título, texto y hasta dos acciones [{txt, accion, tipo}].
+function tpVacio(o){
+  return '<div class="tp-vacio'+(o.error?' error':'')+'"><span class="tp-vacio-ico">'+tpIcon(o.icono||'search')+'</span><h3>'+_tpEsc(o.titulo)+'</h3>'+(o.texto?'<p>'+_tpEsc(o.texto)+'</p>':'')
+    +((o.acciones||[]).length?'<div class="tp-vacio-acc">'+o.acciones.map(a=>'<button type="button" class="btn '+(a.tipo||'btn-outline')+'" onclick="'+a.accion+'">'+_tpEsc(a.txt)+'</button>').join('')+'</div>':'')+'</div>';
+}
+
+// Portada: la cifra de retos sale del catálogo real, no de un número escrito a mano.
+function tpPintarPruebaPortada(){
+  const el=document.getElementById('heroProof');
+  if(!el||typeof COMMON_EXERCISES==='undefined'||!COMMON_EXERCISES.length)return;
+  const total=COMMON_EXERCISES.length,soft=COMMON_EXERCISES.filter(c=>c.category==='soft').length;
+  el.innerHTML='<strong>'+total+' retos</strong> ('+soft+' transversales y '+(total-soft)+' de sector) · corrección con IA criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a>';
+}
+
 // ═══ Respuesta en curso: palabras y autoguardado en este navegador ═══
 // El borrador se guarda en sessionStorage (se borra al cerrar la pestaña) para
 // no perder lo escrito si se cierra el ejercicio sin querer. El cronómetro no se
@@ -115,5 +129,5 @@ function tpRespuestaViva(clave){
 }
 
 // Los botones de tema se pintan cuando el DOM existe.
-document.addEventListener('DOMContentLoaded',()=>TPTema.pintar());
-if(document.readyState!=='loading')TPTema.pintar();
+document.addEventListener('DOMContentLoaded',()=>{TPTema.pintar();tpPintarPruebaPortada();});
+if(document.readyState!=='loading'){TPTema.pintar();tpPintarPruebaPortada();}
