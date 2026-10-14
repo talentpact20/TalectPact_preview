@@ -49,7 +49,7 @@ Marketplace de contratación por habilidades demostradas, no por currículum. TF
 
 ## 4. Estado actual del código
 
-**Pruebas**: `npm test` → **118 tests en 14 ficheros, todos en verde** (sin red ni claves).
+**Pruebas**: `npm test` → **124 tests en 15 ficheros, todos en verde** (sin red ni claves).
 
 **Arquitectura**
 
@@ -76,7 +76,7 @@ netlify/functions/<nombre>.mjs     19 entradas de la API moderna → lib/adaptad
 netlify/functions/lib/tp.js        Supabase, autenticación por token, blockchain, Stripe
 netlify/functions/lib/evaluator.js Corrector v2
 tfm/tech/supabase_schema_*.sql     esquema y migraciones
-tests/*.test.js                    118 tests
+tests/*.test.js                    124 tests
 serve-demo.js                      servidor local (127.0.0.1:8888) que ejecuta las mismas funciones que Netlify
 ```
 

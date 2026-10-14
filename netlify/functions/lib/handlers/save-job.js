@@ -2,7 +2,8 @@
  * save-job — publica, edita o cierra una oferta de la empresa autenticada.
  *
  * Body: { id?, title, sector, description, requiredSkills, tags?, requiredLevel?,
- *         exerciseConfig?, jornada?, modalidad?, contrato?, ubicacion?, salMin?, salMax? }
+ *         exerciseConfig?, jornada?, modalidad?, contrato?, ubicacion?, salMin?, salMax?,
+ *         cultureQuestions? }
  *       { id, status: "closed" | "open" }   → cerrar o reabrir
  * Cabecera: Authorization: Bearer <access token de Supabase>
  *
@@ -23,6 +24,15 @@ const lista = (v, max, n) => (Array.isArray(v) ? [...new Set(v.filter((x) => typ
 const entero = (v) => { const x = Number(v); return Number.isFinite(x) && x > 0 ? Math.round(x) : null; };
 const uno = (v, opciones, def) => (opciones.includes(v) ? v : def);
 
+/** Hasta 3 preguntas/escenarios de la vacante (encaje cultural, no personalidad). */
+function limpiarPreguntas(v) {
+  if (!Array.isArray(v)) return [];
+  return v
+    .map((x) => (typeof x === "string" ? x.trim().slice(0, 200) : ""))
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
 /** Valida y normaliza una oferta. Devuelve { fila } o { error }. */
 function validarOferta(b) {
   const fila = {
@@ -38,7 +48,8 @@ function validarOferta(b) {
     contrato: uno(b.contrato, CONTRATOS, "indefinido"),
     ubicacion: texto(b.ubicacion, 80) || null,
     sal_min: entero(b.salMin),
-    sal_max: entero(b.salMax)
+    sal_max: entero(b.salMax),
+    culture_questions: limpiarPreguntas(b.cultureQuestions)
   };
   if (fila.title.length < 3) return { error: "El título necesita al menos 3 caracteres" };
   if (!SECTORES.includes(fila.sector)) return { error: "Sector no válido" };
@@ -78,18 +89,30 @@ exports.handler = async (event) => {
     const { fila, error } = validarOferta(b);
     if (error) return jsonResponse(400, { error });
 
-    if (b.id) {
-      const filas = await sb.update("jobs", propia(b.id), fila);
-      if (!Array.isArray(filas) || !filas.length) return jsonResponse(404, { error: "Oferta no encontrada" });
-      return jsonResponse(200, { ok: true, id: b.id });
+    async function guardar(conPreguntas) {
+      const datos = conPreguntas ? fila : (({ culture_questions: _q, ...resto }) => resto)(fila);
+      if (b.id) {
+        const filas = await sb.update("jobs", propia(b.id), datos);
+        if (!Array.isArray(filas) || !filas.length) return jsonResponse(404, { error: "Oferta no encontrada" });
+        return jsonResponse(200, { ok: true, id: b.id });
+      }
+      const creada = await sb.insert("jobs", Object.assign({ company_user_id: user.id, company_id: empresa.id }, datos));
+      const row = Array.isArray(creada) ? creada[0] : creada;
+      return jsonResponse(200, { ok: true, id: row && row.id });
     }
-    const creada = await sb.insert("jobs", Object.assign({ company_user_id: user.id, company_id: empresa.id }, fila));
-    const row = Array.isArray(creada) ? creada[0] : creada;
-    return jsonResponse(200, { ok: true, id: row && row.id });
+
+    try {
+      return await guardar(true);
+    } catch (err) {
+      // Sin la migración culture_questions, se publica el resto.
+      if (!/culture_questions/i.test(err.message)) throw err;
+      return await guardar(false);
+    }
   } catch (err) {
     return jsonResponse(500, { error: "No se pudo guardar la oferta", details: err.message });
   }
 };
 
 module.exports.validarOferta = validarOferta;
+module.exports.limpiarPreguntas = limpiarPreguntas;
 module.exports.SECTORES = SECTORES;

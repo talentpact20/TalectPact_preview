@@ -14,6 +14,7 @@
  */
 const { jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode,
         UNLOCK_PRICE, formatAmount } = require("../tp");
+const { notificarDesbloqueo } = require("../notify");
 
 /** Estado de la pasarela, para que la interfaz no tenga que adivinarlo. */
 function gatewayInfo() {
@@ -70,7 +71,7 @@ exports.handler = async (event) => {
         // La verdad la da Stripe, no el parámetro de la URL.
         const session = await getStripe().checkout.sessions.retrieve(sessionId);
         if (session && session.payment_status === "paid") {
-          await sb.update(
+          const actualizadas = await sb.update(
             "unlocks",
             `stripe_session_id=eq.${encodeURIComponent(sessionId)}&status=neq.paid`,
             {
@@ -80,6 +81,8 @@ exports.handler = async (event) => {
                 typeof session.payment_intent === "string" ? session.payment_intent : null
             }
           );
+          const u = Array.isArray(actualizadas) ? actualizadas[0] : null;
+          if (u) await notificarDesbloqueo(u);
         } else {
           return jsonResponse(200, {
             ok: true,

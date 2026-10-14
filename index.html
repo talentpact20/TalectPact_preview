@@ -30,7 +30,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/tokens.css?v=20261014">
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
-<link rel="stylesheet" href="assets/css/modulos.css?v=20261014b">
+<link rel="stylesheet" href="assets/css/modulos.css?v=20261014c">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
 <link rel="stylesheet" href="assets/css/componentes.css?v=20261014b">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261014">
@@ -130,6 +130,7 @@
         <button type="button" class="btn btn-outline btn-lg" id="candBtnStartSuggested">Empezar un reto sugerido</button>
       </div>
     </div>
+    <div id="candInbox" class="u-mb-16" hidden></div>
     <div class="skill-profile-card">
       <div class="sp-header">
         <div class="sp-avatar">AC</div>
@@ -165,12 +166,13 @@
 
   <!-- TAB: Retos Comunes -->
   <div class="dash-tab-content" id="candTab-common">
-    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Retos comunes — visibles para todas las empresas</h3><p class="u-fs-peq u-c-slate-500">Estos retos son universales. Todas las empresas pueden ver tus resultados. Completa los que quieras para construir tu perfil de skills.</p></div>
-    <div class="search-bar-wrap u-mb-12"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar u-fs-peq u-p-10-14-10-38" id="dashExSearch" type="text" placeholder="Busca retos: python, excel, liderazgo, ventas…" oninput="filterDashCommonEx()"><button class="search-clear" id="dashExClear" onclick="document.getElementById('dashExSearch').value='';filterDashCommonEx()">✕</button></div>
+    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Retos comunes — visibles para todas las empresas</h3><p class="u-fs-peq u-c-slate-500">Empieza por <strong>Personas y equipo</strong> (liderazgo, equipo, tiempo): es lo que más miran las empresas. Luego cognitivo y técnico.</p></div>
+    <div class="search-bar-wrap u-mb-12"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar u-fs-peq u-p-10-14-10-38" id="dashExSearch" type="text" placeholder="Busca retos: liderazgo, equipo, tiempo, python…" oninput="filterDashCommonEx()"><button class="search-clear" id="dashExClear" onclick="document.getElementById('dashExSearch').value='';filterDashCommonEx()">✕</button></div>
     <div class="filters-row u-mb-16" id="dashExFilters">
       <button class="filter-btn active" onclick="setDashExCat('all',this)">Todos</button>
-      <button class="filter-btn" onclick="setDashExCat('soft',this)">Soft Skills</button>
-      <button class="filter-btn" onclick="setDashExCat('sector',this)">Por Sector</button>
+      <button class="filter-btn" onclick="setDashExCat('personas',this)">Personas y equipo</button>
+      <button class="filter-btn" onclick="setDashExCat('cognitivo',this)">Cognitivo</button>
+      <button class="filter-btn" onclick="setDashExCat('sector',this)">Técnico / sector</button>
       <button class="filter-btn" onclick="setDashExCat('done',this)">Completados</button>
       <button class="filter-btn" onclick="setDashExCat('pending',this)">Pendientes</button>
     </div>
@@ -322,7 +324,12 @@
     </div>
 
     <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector" aria-label="Sector de la oferta"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label for="pj-sal-min">Salario mínimo (€/año)</label><input type="number" id="pj-sal-min" min="0" step="1000" inputmode="numeric" placeholder="22000"></div><div class="pj-field"><label for="pj-sal-max">Salario máximo (€/año)</label><input type="number" id="pj-sal-max" min="0" step="1000" inputmode="numeric" placeholder="28000"></div><div class="pj-field"><label for="pj-jornada">Jornada</label><select id="pj-jornada" aria-label="Tipo de jornada"><option value="completa">Jornada completa</option><option value="parcial">Media jornada</option><option value="horas">Por horas / flexible</option><option value="practicas">Prácticas</option></select></div><div class="pj-field"><label for="pj-mode">Modalidad</label><select id="pj-mode" aria-label="Modalidad de trabajo"><option value="remoto">Remoto</option><option value="hibrido">Híbrido</option><option value="presencial">Presencial</option></select></div><div class="pj-field"><label for="pj-contrato">Contrato</label><select id="pj-contrato" aria-label="Tipo de contrato"><option value="indefinido">Indefinido</option><option value="temporal">Temporal</option><option value="freelance">Freelance / autónomo</option><option value="practicas">Convenio de prácticas</option></select></div><div class="pj-field"><label for="pj-city">Ubicación</label><input type="text" id="pj-city" placeholder="Madrid (o vacío si es remoto)"></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
-    <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p class="u-fs-micro u-c-slate-400 u-mb-8">Selecciona qué habilidades verificadas necesita el candidato. Escribe para filtrar.</p><input class="search-bar u-fs-micro u-p-8-12 u-mb-8 u-bs-border-box u-w-100pct" id="pjSkillSearch" type="text" placeholder="Buscar skill: python, excel, liderazgo…" oninput="renderPjSkills()"><div class="u-d-flex u-gap-6 u-mb-8 u-fw-wrap-wrap"><button class="filter-btn active u-fs-micro u-p-3-8" onclick="setPjSkillCat('all',this)">Todos</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('soft',this)">Soft Skills</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('sector',this)">Sectoriales</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('selected',this)">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
+    <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p class="u-fs-micro u-c-slate-400 u-mb-8">Prioriza <strong>Personas y equipo</strong> si quieres ver liderazgo, equipo o tiempo. Escribe para filtrar.</p><input class="search-bar u-fs-micro u-p-8-12 u-mb-8 u-bs-border-box u-w-100pct" id="pjSkillSearch" type="text" placeholder="Buscar skill: liderazgo, equipo, python…" oninput="renderPjSkills()"><div class="u-d-flex u-gap-6 u-mb-8 u-fw-wrap-wrap"><button class="filter-btn active u-fs-micro u-p-3-8" onclick="setPjSkillCat('all',this)">Todos</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('personas',this)">Personas y equipo</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('cognitivo',this)">Cognitivo</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('sector',this)">Técnico</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('selected',this)">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
+    <div class="pj-field pj-full"><label>Preguntas de la vacante (opcionales, máx. 3)</label><p class="u-fs-micro u-c-slate-400 u-mb-8">Escenarios cortos de encaje cultural con <em>vuestra</em> empresa. No es un test de personalidad.</p>
+      <input class="search-bar u-fs-micro u-p-8-12 u-mb-6 u-bs-border-box u-w-100pct" id="pj-q1" maxlength="200" placeholder="Ej.: ¿Aceptas turnos de tarde 2 días/semana?">
+      <input class="search-bar u-fs-micro u-p-8-12 u-mb-6 u-bs-border-box u-w-100pct" id="pj-q2" maxlength="200" placeholder="Ej.: En un conflicto entre diseño y producto, ¿qué priorizarías?">
+      <input class="search-bar u-fs-micro u-p-8-12 u-bs-border-box u-w-100pct" id="pj-q3" maxlength="200" placeholder="Ej.: ¿Viajes 1 semana al mes te encajan?">
+    </div>
     <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p class="u-fs-micro u-c-slate-400 u-mb-8">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)"><span class="lvl-dot lvl-basico"></span>Básico <span class="u-fs-micro u-c-slate-400">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)"><span class="lvl-dot lvl-intermedio"></span>Intermedio <span class="u-fs-micro u-c-slate-400">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)"><span class="lvl-dot lvl-avanzado"></span>Avanzado <span class="u-fs-micro u-c-slate-400">(Score ≥75)</span></div></div></div>
     <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p class="u-fs-micro u-c-slate-400 u-mb-8">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
     </div><div class="u-d-flex u-gap-10 u-mt-16"><button class="btn btn-primary" onclick="publishJob()">Publicar oferta →</button><button class="btn btn-outline" onclick="togglePostJob()">Cancelar</button></div></div></div></div>
@@ -786,8 +793,9 @@
           <div class="rpl-count" id="exResultsCount"></div>
           <div class="rpl-cat-filters" id="exCategoryFilters">
             <button class="rpl-cat-btn active" onclick="setExCategory('all',this)">Todos</button>
-            <button class="rpl-cat-btn" onclick="setExCategory('soft',this)">Soft Skills</button>
-            <button class="rpl-cat-btn" onclick="setExCategory('sector',this)">Por Sector</button>
+            <button class="rpl-cat-btn" onclick="setExCategory('personas',this)">Personas y equipo</button>
+            <button class="rpl-cat-btn" onclick="setExCategory('cognitivo',this)">Cognitivo</button>
+            <button class="rpl-cat-btn" onclick="setExCategory('sector',this)">Técnico / sector</button>
           </div>
           <div class="rpl-legend" aria-hidden="true">
             <span><i class="u-bg-emerald-500"></i>Básico</span>
@@ -1063,6 +1071,7 @@
 <script src="assets/js/app/16-pool-real.js?v=20261014"></script>
 <script src="assets/js/app/17-ofertas-reales.js?v=20261014b"></script>
 <script src="assets/js/app/18-interfaz.js?v=20261014b"></script>
+<script src="assets/js/app/19-rrhh.js?v=20261014c"></script>
 <script src="assets/js/app/99-arranque.js?v=20261014"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->

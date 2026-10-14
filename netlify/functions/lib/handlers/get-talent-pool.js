@@ -13,6 +13,7 @@
  * Devuelve: { candidates: [{ ref, alias, i, sector, score, skills, cond, integ, verified, retos }] }
  */
 const { jsonResponse, sb, authUser, anonymousAlias } = require("../tp");
+const { extraerPersonas } = require("../personas");
 
 const MAX_PERFILES = 500;
 const LOTE = 100;
@@ -70,13 +71,17 @@ function construirPool(perfiles, evaluaciones, { soloVerificados = false } = {})
     const seis = top.slice(0, 6);
     const alias = anonymousAlias(p.user_id || p.id);
     const peor = top.reduce((r, s) => (s.risk && (r === null || ORDEN_RIESGO[s.risk] > ORDEN_RIESGO[r]) ? s.risk : r), null);
+    const skillsFicha = seis.map(({ n, v, verified }) => ({ n, v, verified }));
+    // Todas las skills del candidato (no solo top 6) para el bloque Personas.
+    const todas = top.map(({ n, v, verified }) => ({ n, v, verified }));
     fichas.push({
       ref: p.id,
       alias,
       i: alias.replace(/^Candidato #/, "").slice(0, 2),
       sector: typeof p.sector === "string" && p.sector ? p.sector.slice(0, 40) : "Sin sector",
       score: Math.round(seis.reduce((n, s) => n + s.v, 0) / seis.length),
-      skills: seis.map(({ n, v, verified }) => ({ n, v, verified })),
+      skills: skillsFicha,
+      personas: extraerPersonas(todas),
       cond: limpiarCond(p.empleo),
       integ: peor,
       verified: top.every((s) => s.verified),

@@ -2,6 +2,8 @@
 
 Antes de nada, lee `CONVERSACION_FINAL_PARA_SEGUIR.md`: resume toda la conversación de trabajo anterior, el estado del código, lo pendiente y el concepto con el que seguimos. Los documentos de mejora completos están en `docs/conversacion/` (el 05, eventos Impact, es el más reciente y el que manda).
 
+Fase actual (prereunión con asesora RRHH): anota cada cambio en `docs/Cambios_prereunion/` (changelog + contexto). No preparar ni ensayar el guion de demo TFM para esa reunión: es conversación, no presentación.
+
 Reglas:
 
 - Responde siempre en español.
@@ -11,3 +13,4 @@ Reglas:
 - No introduzcas credenciales ni crees cuentas en Supabase, Stripe o Netlify reales.
 - Si cambia el número de tests u otra cifra canónica, actualiza `tfm/cifras_canonicas.json` y los documentos que comprueba `tests/coherencia-docs.test.js`.
 - Ejecuta `npm test` después de cada cambio.
+- Tras cada cambio de producto en esta fase, actualiza `docs/Cambios_prereunion/01_changelog.md`.
