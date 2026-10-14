@@ -24,6 +24,7 @@ function limpiarCond(e) {
   const lista = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string").slice(0, 6).map((x) => x.slice(0, 20)) : []);
   const texto = (v, n) => (typeof v === "string" ? v.slice(0, n) : "");
   const sal = Number(e.salMin);
+  const horas = Number(e.horas);
   return {
     jornadas: lista(e.jornadas),
     modalidades: lista(e.modalidades),
@@ -31,7 +32,8 @@ function limpiarCond(e) {
     ciudad: texto(e.ciudad, 80),
     reubicacion: !!e.reubicacion,
     disponibilidad: texto(e.disponibilidad, 20),
-    salMin: Number.isFinite(sal) && sal > 0 ? Math.round(sal) : null
+    salMin: Number.isFinite(sal) && sal > 0 ? Math.round(sal) : null,
+    horas: Number.isFinite(horas) && horas >= 5 && horas <= 40 ? Math.round(horas) : null
   };
 }
 

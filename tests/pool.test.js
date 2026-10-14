@@ -8,7 +8,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { construirPool } = require("../netlify/functions/lib/handlers/get-talent-pool.js");
+const { construirPool, limpiarCond } = require("../netlify/functions/lib/handlers/get-talent-pool.js");
 
 const EMPRESA = "11111111-2222-4333-8444-555555555555";
 const CAND = "2f1c9a44-0e51-4a71-9a3f-6b2d0c8e7a15";
@@ -35,7 +35,7 @@ const conToken = (body) => ({ httpMethod: "POST", headers: { authorization: "Bea
 
 test("el pool solo lleva datos anónimos, la mejor nota por skill y oculta a quien no quiere aparecer", () => {
   const perfiles = [
-    { id: CAND, user_id: "aaaa1111-0000-4000-8000-000000000000", sector: "Data", email: "x@y.es", full_name: "Ana", phone: "600", empleo: { jornadas: ["parcial"], modalidades: ["remoto"], ciudad: "Madrid" } },
+    { id: CAND, user_id: "aaaa1111-0000-4000-8000-000000000000", sector: "Data", email: "x@y.es", full_name: "Ana", phone: "600", empleo: { jornadas: ["parcial"], modalidades: ["remoto"], ciudad: "Madrid", disponibilidad: "quince", horas: 20, salMin: 24000, reubicacion: true } },
     { id: "b", user_id: "bbbb", sector: "IT", pool_visible: false },
     { id: "c", user_id: "cccc", sector: "IT" }   // sin evaluaciones
   ];
@@ -54,12 +54,39 @@ test("el pool solo lleva datos anónimos, la mejor nota por skill y oculta a qui
   assert.equal(f.verified, false);          // una de sus notas no está verificada
   assert.equal(f.integ, "medio");
   assert.deepEqual(f.cond.jornadas, ["parcial"]);
+  assert.equal(f.cond.ciudad, "Madrid");
+  assert.equal(f.cond.disponibilidad, "quince");
+  assert.equal(f.cond.horas, 20);
+  assert.equal(f.cond.salMin, 24000);
+  assert.equal(f.cond.reubicacion, true);
   // Ningún dato personal, ni siquiera anidado.
   assert.doesNotMatch(JSON.stringify(pool), /x@y\.es|Ana|"600"|email|phone|full_name/);
 
   const soloVerif = construirPool(perfiles, evals, { soloVerificados: true });
   assert.deepEqual(soloVerif[0].skills.map((s) => s.n), ["SQL"]);
   assert.equal(soloVerif[0].verified, true);
+});
+
+test("limpiarCond conserva jornada, ciudad, disponibilidad, horas y salario", () => {
+  const c = limpiarCond({
+    jornadas: ["parcial", "horas"],
+    modalidades: ["hibrido"],
+    contratos: ["indefinido"],
+    ciudad: "Barcelona",
+    disponibilidad: "inmediata",
+    horas: 25,
+    salMin: 28000,
+    reubicacion: false,
+    basura: "<script>"
+  });
+  assert.deepEqual(c.jornadas, ["parcial", "horas"]);
+  assert.equal(c.ciudad, "Barcelona");
+  assert.equal(c.disponibilidad, "inmediata");
+  assert.equal(c.horas, 25);
+  assert.equal(c.salMin, 28000);
+  assert.equal(c.reubicacion, false);
+  assert.equal(c.basura, undefined);
+  assert.equal(limpiarCond({ horas: 2 }).horas, null);
 });
 
 test("el pool exige sesión", async () => {

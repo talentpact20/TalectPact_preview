@@ -26,6 +26,7 @@ body.tp-exam-blur #jobModal #exContent{filter:blur(7px);transition:filter .15s}
 .tp-ichip,.tp-cond-chip{font-size:var(--fs-micro);border:1px solid var(--slate-200,var(--slate-200));background:var(--slate-50,var(--slate-50));color:var(--slate-600,var(--slate-600));border-radius:999px;padding:2px 8px;white-space:nowrap}
 .tp-ichip.bad,.tp-cond-chip.ko{border-color:var(--red-200);background:var(--red-50);color:var(--red-700)}
 .tp-cond-chip.ok{border-color:var(--emerald-200,var(--emerald-200));background:var(--emerald-50,var(--emerald-50));color:var(--emerald-600,var(--emerald-600))}
+.tp-cond-chip.muted{border-style:dashed;color:var(--slate-400);background:transparent}
 .tp-risk{font-size:var(--fs-micro);font-weight:700;border-radius:999px;padding:2px 9px;text-transform:capitalize}
 .tp-risk.r-bajo{background:var(--emerald-50,var(--emerald-50));color:var(--emerald-600,var(--emerald-600))}
 .tp-risk.r-medio{background:var(--amber-50);color:var(--amber-700)}
