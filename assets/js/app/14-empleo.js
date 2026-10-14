@@ -81,6 +81,21 @@ function tpCondChips(j,p){
   const cs=TPEmpleo.encaje(j,p===undefined?TPEmpleo.prefs():(p||TPEmpleo.vacio()));
   return `<div class="tp-cond">${cs.map(c=>`<span class="tp-cond-chip${c.ok===true?' ok':c.ok===false?' ko':''}" title="${c.ok===true?'Encaja con tus preferencias':c.ok===false?'No encaja con tus preferencias':''}">${c.ok===true?'✓ ':c.ok===false?'✕ ':''}${escHtml(c.txt)}</span>`).join('')}</div>`;
 }
+/** Chips de condiciones del candidato para el pool empresa (ficha RRHH). */
+function tpPoolCondChips(cd){
+  cd=cd||{};
+  const out=[];
+  const add=t=>{if(t)out.push(String(t));};
+  (cd.jornadas||[]).forEach(k=>add(TP_COND.jornadas[k]));
+  (cd.modalidades||[]).forEach(k=>add(TP_COND.modalidades[k]));
+  (cd.contratos||[]).forEach(k=>add(TP_COND.contratos[k]));
+  if(cd.ciudad)add(cd.ciudad+(cd.reubicacion?' · acepta mudarse':''));
+  if(cd.disponibilidad)add(TP_COND.disponibilidad[cd.disponibilidad]||cd.disponibilidad);
+  if(cd.horas)add(cd.horas+' h/sem');
+  if(cd.salMin)add('Desde '+tpK(cd.salMin));
+  if(!out.length)return '<div class="tp-cond"><span class="tp-cond-chip muted">Sin condiciones indicadas</span></div>';
+  return '<div class="tp-cond">'+out.slice(0,6).map(t=>`<span class="tp-cond-chip">${escHtml(t)}</span>`).join('')+'</div>';
+}
 
 // Al abrir Ajustes del candidato se pintan también las preferencias.
 (function(){
@@ -101,10 +116,8 @@ function renderEmpPool(){
   let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}</div>`:''}`;
   h+='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Condiciones</th><th>Integridad</th><th>Top Skills</th><th></th></tr></thead><tbody>';
   lista.forEach(c=>{
-    const cd=c.cond||{};
-    const cond=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k])].filter(Boolean).slice(0,3).map(t=>`<span class="tp-cond-chip">${t}</span>`).join(' ')||'<span style="color:var(--slate-400)">—</span>';
-    const integ=c.integ?`<span class="tp-risk r-${c.integ}">${c.integ}</span>${c.verified?' <span class="tp-verified">✓</span>':''}`:'<span style="color:var(--slate-400)">—</span>';
-    h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${escHtml(c.i)}</div>${escHtml(String(c.alias||'').replace(/^Candidato /,''))}</div></td><td>${escHtml(c.sector)}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${cond}</td><td>${integ}</td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${escHtml(s.n)}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
+    const integ=c.integ?`<span class="tp-risk r-${c.integ}">${c.integ}</span>${c.verified?' <span class="tp-verified">✓</span>':''}`:'<span class="u-c-slate-400">—</span>';
+    h+=`<tr><td><div class="u-d-flex u-ai-center u-gap-8"><div class="dash-avatar u-bg-emerald-100 u-c-emerald-600">${escHtml(c.i)}</div>${escHtml(String(c.alias||'').replace(/^Candidato /,''))}</div></td><td>${escHtml(c.sector)}</td><td><strong class="u-c-emerald-600">${c.score}</strong></td><td>${tpPoolCondChips(c.cond)}</td><td>${integ}</td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${escHtml(s.n)}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
   });
   if(!lista.length)h+='<tr><td colspan="7"><div class="tp-empty">'+(CANDIDATES.length?'Ningún candidato cumple esos filtros.':'Todavía no hay candidatos en el pool.')+'</div></td></tr>';
   h+='</tbody></table>';

@@ -30,7 +30,7 @@ Total: **19:49**. El margen es de once segundos, así que el cronómetro (`T`) d
 
 **Los límites del trabajo ya no tienen diapositiva propia**, pero se dicen igual, repartidos: la falta de calibración humana en la 11 y la 12 (y otra vez en el cierre), la testnet en la 16, la lista de revocados en las notas de la 15, **el techo de la validación en la 21** y el riesgo del primer año en la 23. Las respuestas completas están en `QA_DEFENSA.md`.
 
-**Cifras que se dicen (las de `tfm/cifras_canonicas.json`):** coste PoC **€0,0165** (producto ~€0,013; Excel €0,02); discriminación **87 pts** (96 vs 9); tests **117**; margen bruto **93 %** (una sola cifra, siempre la misma); pre-seed **180.000 €** + ENISA **50.000 €**.
+**Cifras que se dicen (las de `tfm/cifras_canonicas.json`):** coste PoC **€0,0165** (producto ~€0,013; Excel €0,02); discriminación **87 pts** (96 vs 9); tests **124**; margen bruto **93 %** (una sola cifra, siempre la misma); pre-seed **180.000 €** + ENISA **50.000 €**.
 
 ---
 
@@ -529,7 +529,7 @@ Si “lo mismo” es **la misma idea con otras palabras**, la nota debe caer en 
 
 **¿Cómo sabéis que el Skill Score es correcto si no lo habéis validado con humanos?**
 No lo sabemos, y por eso no lo afirmamos. Lo que sí hemos medido es que discrimina
-**87 puntos** (96 vs 9), que el coste es **€0,0165**, que los ataques ensayados no compran la nota, y que hay **117 tests**. La concordancia con evaluadores humanos
+**87 puntos** (96 vs 9), que el coste es **€0,0165**, que los ataques ensayados no compran la nota, y que hay **124 tests**. La concordancia con evaluadores humanos
 es el siguiente hito: el protocolo y el corpus ya están escritos.
 
 **¿Nos estáis pidiendo 180.000 € a nosotros?**

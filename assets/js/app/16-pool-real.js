@@ -31,6 +31,7 @@ var TPPool={
       for(let k=CANDIDATES.length-1;k>=0;k--)if(CANDIDATES[k]._real)CANDIDATES.splice(k,1);
       const reales=(r.candidates||[]).map(f=>({
         id:f.ref,i:f.i,alias:f.alias,sector:f.sector,score:f.score,skills:f.skills||[],
+        personas:f.personas||[],
         cond:f.cond||{},integ:f.integ,verified:!!f.verified,retos:f.retos,_real:true,acceptsContact:f.acceptsContact!==false,
         _unlocked:Pay.paidRefs.has(String(f.ref))
       }));

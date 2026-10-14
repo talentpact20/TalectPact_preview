@@ -10,6 +10,7 @@
  * con los eventos checkout.session.completed y checkout.session.expired.
  */
 const { jsonResponse, sb, getStripe, stripeConfigured } = require("../tp");
+const { notificarDesbloqueo } = require("../notify");
 
 /** Marca la fila como pagada. Idempotente: Stripe reintenta los webhooks. */
 async function markPaid(session) {
@@ -25,7 +26,9 @@ async function markPaid(session) {
           : (session.payment_intent && session.payment_intent.id) || null
     }
   );
-  return Array.isArray(rows) ? rows.length : 0;
+  const lista = Array.isArray(rows) ? rows : [];
+  for (const u of lista) await notificarDesbloqueo(u);
+  return lista.length;
 }
 
 exports.handler = async (event) => {

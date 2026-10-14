@@ -8,12 +8,16 @@
  */
 const { jsonResponse, sb, authUser } = require("../tp");
 
-const CAMPOS = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
+const CAMPOS_BASE = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
   "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at";
+const CAMPOS = CAMPOS_BASE + ",culture_questions";
 
 /** Fila de Supabase → oferta con la forma que usa la web. */
 function aOferta(f) {
   const c = f.companies || {};
+  const qs = Array.isArray(f.culture_questions)
+    ? f.culture_questions.filter((x) => typeof x === "string").slice(0, 3)
+    : [];
   return {
     id: f.id,
     title: f.title,
@@ -29,6 +33,7 @@ function aOferta(f) {
     ubicacion: f.ubicacion || "",
     salMin: f.sal_min,
     salMax: f.sal_max,
+    cultureQuestions: qs,
     status: f.status,
     createdAt: f.created_at,
     closedAt: f.closed_at,
@@ -47,6 +52,14 @@ async function seleccionar(filtro) {
   try {
     return await sb.select("jobs", `select=${CAMPOS},companies(company_name,company_size,description,sector,website,location)&${filtro}`);
   } catch (err) {
+    if (/culture_questions/i.test(err.message)) {
+      try {
+        return await sb.select("jobs", `select=${CAMPOS_BASE},companies(company_name,company_size,description,sector,website,location)&${filtro}`);
+      } catch (err2) {
+        if (!/description|sector|website|location/i.test(err2.message)) throw err2;
+        return sb.select("jobs", `select=${CAMPOS_BASE},companies(company_name,company_size)&${filtro}`);
+      }
+    }
     // Sin la migración de la ficha de empresa, se sirve la oferta con el nombre.
     if (!/description|sector|website|location/i.test(err.message)) throw err;
     return sb.select("jobs", `select=${CAMPOS},companies(company_name,company_size)&${filtro}`);
