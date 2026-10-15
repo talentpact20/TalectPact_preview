@@ -1,6 +1,6 @@
 # Errores encontrados y mejoras
 
-Registro de lo que ha fallado en TalentPact durante la fase de prereunión (del 13 al 15/10/2026), con su causa, su estado y lo que queda abierto. El detalle de cada arreglo está en `01_changelog.md`. Aquí se ve todo junto para decidir qué falta.
+Registro de lo que ha fallado en TalentPact durante la fase de prereunión (del 13 al 15/10/2026), incluido el análisis completo del backend (sección 7), con su causa, su estado y lo que queda abierto. El detalle de cada arreglo está en `01_changelog.md`. Aquí se ve todo junto para decidir qué falta.
 
 Estados: **Arreglado** (en código, con tests en verde) · **Abierto: código** (lo hace Claude o Iván) · **Abierto: configuración** (Supabase o Netlify, lo hace el equipo) · **Decisión** (hay que elegir).
 
@@ -76,6 +76,54 @@ Estados: **Arreglado** (en código, con tests en verde) · **Abierto: código** 
 | El pipeline leía la etapa previa con dos consultas | Arreglado (una) |
 | Las versiones `?v=` sin actualizar hacían que los navegadores siguieran usando el JS viejo | Se suben con cada cambio. Conviene automatizarlo al desplegar |
 
+## 7. Análisis completo del backend (15/10)
+
+Revisión de las 22 funciones de `netlify/functions/lib/handlers/` y de las librerías compartidas (`tp.js`, `evaluator.js`, `notify.js`). Cada arreglo tiene un test (133 tests en total).
+
+### 7.1 Credibilidad de las notas (lo más grave)
+
+| Error | Impacto | Estado |
+| --- | --- | --- |
+| **El enunciado del ejercicio lo mandaba el navegador.** Con el `challengeId` de un reto real y un enunciado trivial («escribe hola»), el corrector devolvía un recibo firmado y la nota contaba como **verificada** para esa skill. | Cualquiera podía obtener un «Liderazgo 95 verificado» sin hacer el reto. Es justo lo que vendemos. | Arreglado. El servidor tiene su copia del catálogo (`lib/catalogo-retos.json`, generada desde `07-retos-comunes.js` con `npm run catalogo`) y corrige **siempre con su enunciado**. Un test impide que la copia se desincronice. |
+| La skill la decidía el navegador: se podía guardar el reto de Liderazgo como «Python». | Notas en skills que no se han medido. | Arreglado: en los retos del catálogo, la skill la pone el servidor. |
+| En el pool y en el SkillPass ganaba la nota más alta, aunque no estuviera verificada: un 100 enviado por el navegador tapaba un 70 firmado. | La empresa veía la nota menos fiable. | Arreglado: una verificada manda sobre cualquier no verificada. |
+| El SkillPass sellaba en blockchain notas no verificadas como si fueran tan fiables como las demás. | «Certificado» que no certifica. | Arreglado: cada skill del SkillPass dice si está verificada, y las verificadas van primero. |
+| Los retos de oferta (`EX_DB` y la plantilla genérica) siguen corrigiéndose con el texto del navegador. | No se pueden verificar. | **Abierto: código.** Ahora se guardan como «no verificadas» (es lo honesto). Siguiente paso: pasar `EX_DB` al catálogo del servidor. |
+| Se siguen aceptando notas sin recibo (modo invitado sincronizado desde el navegador). | Notas editables por el usuario, marcadas como no verificadas. | **Decisión:** ¿se muestran en el pool o solo las verificadas? |
+| Retos de audio: el corrector solo recibe «[Grabación de audio: N segundos]», sin transcripción, y puede dar hasta 60. | Nota sin evidencia. | **Abierto: código.** Transcribir antes de corregir, o no puntuar el audio hasta tenerlo. |
+
+### 7.2 Pagos y acceso
+
+| Error | Impacto | Estado |
+| --- | --- | --- |
+| Cualquier sesión, también la de un candidato, podía pagar el desbloqueo y recibir el contacto de otro candidato. | Datos personales en manos de quien no es empresa. | Arreglado: hace falta ficha de empresa. `get-company` y `save-company` ya no crean ficha a cuentas de candidato. |
+| Pulsar «Desbloquear» dos veces abría dos sesiones de Stripe que se podían pagar las dos. | Cobro doble. | Arreglado: se reutiliza la sesión abierta. |
+| El texto que veía el cliente en Stripe («Datos de contacto de …») llegaba del navegador. | Texto manipulable en la página de pago. | Arreglado: lo pone el servidor (alias anónimo). |
+| El anclaje del SkillPass no tenía límite: cada credencial nueva es una transacción pagada por la wallet emisora. | Una cuenta podía vaciar la wallet. | Arreglado: 3 sellados al día por candidato (`ANCHOR_MAX_PER_DAY`). |
+| El corrector y el chat de soporte no exigen sesión, y su límite de frecuencia es en memoria (por instancia de la función). | Se puede gastar crédito de Anthropic desde varias IPs o instancias. | **Abierto: código.** Límite persistente (tabla en Supabase o Netlify Blobs) o exigir sesión para corregir. |
+| La empresa puede poner una etapa del pipeline a cualquier candidato del pool, y cada cambio le genera un aviso. | Posible spam de avisos. | Abierto: código (límite de cambios por candidato y día). |
+
+### 7.3 Privacidad y RGPD
+
+| Error | Impacto | Estado |
+| --- | --- | --- |
+| Los errores 500 devolvían al navegador el mensaje de Supabase, con la consulta entera (tablas, filtros, ids). | Filtración de estructura interna y de identificadores. | Arreglado: `errorInterno()` registra el detalle en el log y solo lo devuelve fuera de producción. |
+| Borrar la cuenta no borraba los avisos (`notifications`), y si fallaba el borrado de empresa o desbloqueos se respondía «borrado» igualmente. | Derecho de supresión incumplido sin que nadie lo supiera. | Arreglado: borra los avisos; un error real detiene el proceso **antes** de borrar el usuario, para poder reintentar. Ahora también acepta el token por cabecera. |
+| `save-profile` guardaba nombre, teléfono y LinkedIn sin validar (objetos, textos enormes, `javascript:`). | Datos basura en la base y enlaces peligrosos. | Arreglado: texto con tope y LinkedIn solo como enlace http(s) (si falta `https://`, se añade). |
+| Al borrar una empresa se borran sus desbloqueos (`unlocks`), que son registros de pago. | Puede chocar con la obligación de conservar justificantes contables. | **Decisión** (con asesoría legal): anonimizar en vez de borrar. |
+| `contact_access` conserva el id de la empresa borrada. | Es el registro de quién accedió a qué contacto. | **Decisión:** conservarlo es razonable como trazabilidad; hay que fijar el plazo. |
+
+### 7.4 Robustez
+
+| Error | Impacto | Estado |
+| --- | --- | --- |
+| Ninguna llamada a Supabase, Auth ni Anthropic tenía límite de tiempo. | Una consulta colgada retenía la función hasta los 60 s de Netlify y la persona veía un error tarde y genérico. | Arreglado: 10 s para Supabase y Auth, 45 s para la corrección y 25 s para el chat, con mensaje claro (504) y sin perder la respuesta. |
+| Un JSON mal formado en la petición daba 500 («error del servidor»). | Errores del cliente contados como nuestros. | Arreglado: 400. |
+| Si el modelo añadía una frase antes del JSON, la corrección fallaba con 502. | Correcciones perdidas. | Arreglado: se extrae el objeto JSON. |
+| `ensureCompanyByUser` devolvía `undefined` si la actualización no devolvía filas, y fallaba con dos peticiones a la vez. | Errores 500 intermitentes en el panel de empresa. | Arreglado (igual que en perfiles). |
+| Modelo por defecto `claude-sonnet-4-6`, con modelos retirados en la lista de reserva. | Las cifras del TFM están calibradas con ese modelo. | **Decisión:** cambiar de modelo exige repetir el banco de pruebas (`npm run bench`) y actualizar las cifras canónicas. |
+| El rol está en `user_metadata`, que edita el propio usuario. | Las comprobaciones de «es empresa» o «es candidato» se pueden esquivar. | **Abierto:** pasarlo a `app_metadata` y verificar empresas (`04_estrategia.md`, §3). |
+
 ---
 
 ## Patrones que causan errores (para no repetirlos)
@@ -84,7 +132,9 @@ Estados: **Arreglado** (en código, con tests en verde) · **Abierto: código** 
 2. **Sustituir funciones desde otro fichero.** Los scripts 17 y 19 reasignan funciones de 08 y 10 (`publishJob`, `openJob`, `encajeOferta`…). Así se acabó con dos copias de `publishJob` que se pisaban. Regla: cada función tiene **un solo fichero dueño**; si otro fichero necesita cambiarla, se cambia en el dueño.
 3. **Fusiones sin revisar el diff.** La fusión del 14/10 borró trabajo anterior sin que nadie lo viera. Regla: antes de subir una fusión, revisar `git diff` de los ficheros con conflictos.
 4. **Pantallas que fingen.** Botones o textos que dicen haber hecho algo que no ocurre: «Aplicar», «Reporte enviado», «tiempo real». Regla: si algo no está construido, se dice o no se muestra.
-5. **Probar solo el caso feliz.** Casi todos los fallos aparecían con doble clic, errores de red o datos vacíos. Regla: probar cada pantalla nueva con fallo de red, sin datos y con doble clic.
+5. **Fiarse de lo que manda el navegador.** El enunciado, la skill, la nota, el texto del pago: todo lo que decide algo debe salir del servidor. El navegador solo propone.
+6. **Llamadas externas sin límite de tiempo.** Toda llamada a un servicio externo lleva `AbortSignal.timeout`.
+7. **Probar solo el caso feliz.** Casi todos los fallos aparecían con doble clic, errores de red o datos vacíos. Regla: probar cada pantalla nueva con fallo de red, sin datos y con doble clic.
 
 ## Lo que queda abierto, por responsable
 
@@ -93,10 +143,16 @@ Estados: **Arreglado** (en código, con tests en verde) · **Abierto: código** 
 - [ ] Activar Google en Supabase y añadir `https://talentpact.es/` a las URL de redirección.
 - [ ] Exigir confirmación del email.
 - [ ] Decidir sobre las ofertas de ejemplo, el acceso de candidatos al pool, las condiciones desconocidas, la política de reintentos y la nota global.
+- [ ] Decidir si el pool muestra notas no verificadas, qué se hace con los pagos al borrar una empresa y si se cambia de modelo de IA.
+- [ ] Configurar `EVAL_SIGNING_SECRET` en Netlify: **sin él ninguna nota sale verificada**.
 - [ ] Clave de un proveedor de email para los avisos.
 - [ ] Aprobar el commit y el despliegue de los arreglos del 15/10.
 
 **Código**
+- [ ] Pasar los retos de oferta (`EX_DB`) al catálogo del servidor para poder verificarlos.
+- [ ] Límite de frecuencia persistente para el corrector y el chat (o exigir sesión).
+- [ ] Transcribir el audio antes de corregirlo, o no puntuarlo.
+- [ ] Limitar los avisos de cambio de etapa por candidato y día.
 - [ ] Alias anónimo más largo.
 - [ ] Rol en `app_metadata`.
 - [ ] Los 33 estilos en línea dinámicos que quedan.

@@ -132,6 +132,42 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+## 2026-10-15 — Análisis completo del backend
+
+**Qué.** Revisión de las 22 funciones y de las librerías compartidas. Detalle por tema en `05_errores_y_mejoras.md`, sección 7.
+- **Notas verificadas falsificables (grave):** el enunciado lo mandaba el navegador. Ahora el servidor corrige con su propia copia del catálogo (`lib/catalogo-retos.json`, `npm run catalogo`) y decide la skill de cada reto. Los retos de oferta se guardan como no verificados hasta que pasen al servidor.
+- Pool y SkillPass: una nota verificada manda sobre una no verificada, y el SkillPass marca cuáles lo están.
+- **Pagos:** solo pagan cuentas con ficha de empresa; no se abren dos pagos para el mismo candidato; el texto de Stripe lo pone el servidor. Una cuenta de candidato ya no obtiene ficha de empresa.
+- Anclaje en blockchain limitado a 3 al día por candidato.
+- **Privacidad:** los 500 ya no devuelven la consulta de Supabase al navegador. El borrado de cuenta borra los avisos y no responde «borrado» si algo falla. El perfil valida nombre, teléfono y LinkedIn.
+- **Robustez:** límites de tiempo en Supabase, Auth y Anthropic; JSON mal formado → 400; JSON del modelo con texto alrededor ya no tumba la corrección; arreglado `ensureCompanyByUser`.
+- Tests → 133 en 17 ficheros (`catalogo.test.js`, `backend.test.js` y casos nuevos en corrector y pagos).
+
+**Acción usuario.** Configurar `EVAL_SIGNING_SECRET` en Netlify: sin él, ninguna nota sale verificada.
+
+**Ficheros.** `lib/tp.js`, `lib/catalogo.js`, `lib/catalogo-retos.json`, `tools/generar_catalogo_servidor.js`, `package.json`, handlers `evaluate-exercise`, `save-evaluation`, `get-talent-pool`, `issue-credential`, `anchor-credential`, `create-checkout-session`, `delete-account`, `save-profile`, `save-company`, `get-company`, `support-chat` (y `errorInterno` en el resto), tests.
+
+---
+
+## 2026-10-15 — Corrector v2.1: rúbrica con pesos, evidencia y clasificaciones sin IA
+
+**Qué.** Detalle y plan en `06_corrector.md`.
+- Criterios fijos con peso por tipo de ejercicio y escala anclada; la nota global la calcula el servidor (antes la ponía el modelo «a ojo»).
+- Indicadores concretos sacados de la guía de cada ejercicio; el modelo dice cuáles cumple y cuáles faltan.
+- Evidencia obligatoria: citas literales que el servidor comprueba. Las inventadas se descartan, y sin evidencia un criterio no pasa de 40.
+- Topes aplicados por el servidor: no aborda el escenario 10, copia el enunciado 15, genérica 40, grabación sin transcripción 60.
+- Feedback por criterio: cita, qué está bien, qué falta y una acción concreta para subir; más un siguiente paso.
+- Clasificaciones (95 ejercicios) corregidas en el servidor con la solución oficial, sin IA y descontando el azar. Antes la «respuesta correcta» llegaba del navegador.
+- Web: las clasificaciones ya no pasan por el filtro de texto basura (las puntuaba con un 3) y se etiquetan «Corregido con la solución oficial».
+- La clave de Anthropic solo se exige cuando se llama al modelo.
+- Tests → 138 en 18 ficheros.
+
+**Pendiente.** Validar con el modelo real y con notas humanas (gold set del catálogo con la asesora).
+
+**Ficheros.** `lib/evaluator.js`, `lib/handlers/evaluate-exercise.js`, `tools/generar_catalogo_servidor.js`, `lib/catalogo-retos.json`, `08-ofertas-y-ejercicios.js`, `tests/corrector-v21.test.js`, `tests/catalogo.test.js`
+
+---
+
 ## Pendiente / siguiente
 
 - Deploy a Netlify.

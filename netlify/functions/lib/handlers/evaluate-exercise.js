@@ -15,7 +15,8 @@
  */
 const {
   EVALUATOR_VERSION, MAX_RESPONSE_CHARS, SYSTEM_PROMPT, detectInjection,
-  buildUserPrompt, normalizeExercise, signReceipt, sha256, rateLimited, clientIp
+  buildUserPrompt, normalizeExercise, signReceipt, sha256, rateLimited, clientIp,
+  puntuar, corregirDecision
 } = require("../evaluator");
 const { retoComun, ejercicioComun } = require("../catalogo");
 
@@ -30,10 +31,6 @@ exports.handler = async (event) => {
 
   const apiKey = process.env.ANTHROPIC_API_KEY || process.env.anthropicapikey || process.env.ANTHROPIC_KEY;
   const configuredModel = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-6";
-  if (!apiKey) {
-    return jsonResponse(500, { error: "Missing ANTHROPIC_API_KEY in environment variables" });
-  }
-
   try {
     const body = JSON.parse(event.body || "{}");
     if (body.exercise && body.response != null) {
@@ -62,6 +59,7 @@ function enunciadoOficial(ex) {
   if (!oficial) return { error: jsonResponse(400, { error: "Ese ejercicio no pertenece a este reto", code: "unknown_exercise" }) };
   return {
     catalogo: true,
+    ejercicio: oficial,
     ex: Object.assign({}, ex, {
       title: oficial.title,
       scenario: oficial.scenario,
@@ -74,7 +72,10 @@ function enunciadoOficial(ex) {
 }
 
 // ─── Modo crudo (banco de pruebas) ───────────────────────────────────────────
+const sinClave = () => jsonResponse(500, { error: "Missing ANTHROPIC_API_KEY in environment variables" });
+
 async function evaluateRaw(body, apiKey, configuredModel) {
+  if (!apiKey) return sinClave();
   if (process.env.EVAL_ALLOW_RAW_PROMPTS !== "1") {
     return jsonResponse(403, {
       error: "El modo de prompts crudos está desactivado",
@@ -108,6 +109,13 @@ async function evaluateV2(event, body, apiKey, configuredModel) {
 
   const integrityRisk = body.integrity && typeof body.integrity.risk === "string"
     ? body.integrity.risk.slice(0, 10) : null;
+  // Clasificaciones del catálogo: las corrige el servidor con la solución
+  // oficial, sin IA (lo que mande el navegador como «correcta» se ignora).
+  if (oficial.catalogo && ex.type === "decision") {
+    const sinIA = detectInjection("");
+    return jsonResponse(200, finishV2(corregirDecision(oficial.ejercicio, response), ex, response, sinIA, integrityRisk, null, true));
+  }
+
   const injection = detectInjection(response);
 
   // Ataque claro: no se gasta una llamada al modelo y la nota es 0.
@@ -126,9 +134,21 @@ async function evaluateV2(event, body, apiKey, configuredModel) {
     return jsonResponse(200, finishV2(result, ex, response, injection, integrityRisk, null, oficial.catalogo));
   }
 
+  // Las clasificaciones no la necesitan: la clave solo se exige al llamar al modelo.
+  if (!apiKey) return sinClave();
+
   const nonce = sha256(Math.random() + ":" + Date.now()).slice(0, 12);
-  const call = await callModel(SYSTEM_PROMPT, buildUserPrompt(ex, response, nonce, injection), apiKey, configuredModel);
+  // La salida v2.1 lleva evidencia e indicadores por criterio: necesita más
+  // tokens de salida que la de la v2.0 (1.000).
+  const call = await callModel(SYSTEM_PROMPT, buildUserPrompt(ex, response, nonce, injection), apiKey, configuredModel, 1800);
   if (call.error) return call.error;
+  // La nota la calcula el servidor con los pesos de la rúbrica; si el modelo
+  // devuelve el formato antiguo ({score, criteria}) se mantiene su nota.
+  const calculada = puntuar(ex, call.parsed, response);
+  if (calculada) {
+    for (const k of ["criterios", "banderas", "resumen", "siguiente_paso"]) delete call.parsed[k];
+    Object.assign(call.parsed, calculada);
+  }
   // Una señal leve no bloquea, pero tampoco deja que la nota pase de aprobado
   // raspado sin que una persona lo revise.
   if (injection.suspicious && call.parsed.score > 60) {
@@ -163,7 +183,7 @@ function finishV2(result, ex, response, injection, integrityRisk, model, catalog
 }
 
 // ─── Llamada al modelo (común a los dos modos) ───────────────────────────────
-async function callModel(systemPrompt, userPrompt, apiKey, configuredModel) {
+async function callModel(systemPrompt, userPrompt, apiKey, configuredModel, maxTokens = 1000) {
   const triedModels = [];
   const modelCandidates = uniqueModels([
     configuredModel,
@@ -188,7 +208,7 @@ async function callModel(systemPrompt, userPrompt, apiKey, configuredModel) {
       },
       body: JSON.stringify({
         model,
-        max_tokens: 1000,
+        max_tokens: maxTokens,
         // Determinismo: mismo input -> mismo score. Sin esto la API usa su
         // valor por defecto (1.0) y el evaluador deja de ser reproducible,
         // que es justo lo que exige un sistema que decide sobre empleo.

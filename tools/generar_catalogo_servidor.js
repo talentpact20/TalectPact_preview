@@ -33,10 +33,19 @@ function leerRetos(src) {
   return ctx.__retos;
 }
 
-/** Solo lo que necesita la rúbrica del servidor (sin soluciones ni textos de interfaz). */
+/**
+ * Solo lo que necesita el corrector del servidor. Las clasificaciones llevan su
+ * solución porque se corrigen aquí, sin IA (la misma solución ya está en el
+ * fichero de retos del cliente; aquí deja de importar lo que diga el navegador).
+ */
 function datosRubrica(d) {
   const o = d && typeof d === "object" ? d : {};
   const r = {};
+  if (Array.isArray(o.options) && Array.isArray(o.keys)) {
+    r.options = o.options.map((x) => ({ id: x && x.id, text: x && x.text, correct: x && x.correct }));
+    r.keys = o.keys.slice();
+    if (Array.isArray(o.cats)) r.cats = o.cats.slice();
+  }
   if (Array.isArray(o.table)) r.table = o.table.map((f) => ({ n: f && f.n, a: f && f.a }));
   if (Array.isArray(o.kw)) r.kw = o.kw.slice();
   for (const k of ["to", "subject", "hint", "context"]) if (typeof o[k] === "string") r[k] = o[k];

@@ -5,12 +5,18 @@
 
 - [ ] Decisiones de `04_estrategia.md`: perfil de trabajo inicial, plazo entre reintentos, nota por bloques, pool solo para empresas verificadas. Ver [[Estrategia]].
 
+- [x] Análisis completo del backend (15/10): ver `docs/Cambios_prereunion/05_errores_y_mejoras.md`, sección 7.
+- [ ] Pasar los retos de oferta (`EX_DB`) al catálogo del servidor; límite de frecuencia persistente para el corrector; transcripción del audio.
+
+- [x] Corrector v2.1 (15/10): rúbrica con pesos, evidencia verificada, topes en servidor, clasificaciones sin IA. Ver `docs/Cambios_prereunion/06_corrector.md`.
+- [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
+
 ## Supabase (usuario)
 - [ ] **Activar Google** en Authentication → Providers (hoy Google y LinkedIn están desactivados; ver `docs/Cambios_prereunion/01_changelog.md`, 15/10). Añadir `https://talentpact.es/` a Redirect URLs.
 - [ ] Decidir si se exige confirmar el email al registrarse (hoy `mailer_autoconfirm` está activo: cualquiera puede registrarse con un correo ajeno).
 - [ ] Ejecutar `supabase_schema_pool_fix.sql` si falta.
 - [ ] Ejecutar `supabase_schema_rrhh_corto.sql` (preguntas de vacante, avisos, pipeline).
-- [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
+- [ ] Rol admin en `app_metadata` y **`EVAL_SIGNING_SECRET` en Netlify** (sin él ninguna nota sale verificada).
 
 ## Código (Claude)
 - [x] **Seguridad (XSS)**: en `08-ofertas-y-ejercicios.js` (renderJobs) el nombre de empresa y las skills se insertan sin escapar en la portada.

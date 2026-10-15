@@ -427,8 +427,9 @@ function detectQuality(text){
 const EUR_USD=1.09;
 
 async function evaluateWithAI(ex, response, evalType){
-  // Pre-check for garbage
-  const quality=detectQuality(response);
+  // Pre-check for garbage. Las clasificaciones no son texto (van como lista de
+  // elecciones) y las corrige el servidor con la solución oficial.
+  const quality=evalType==='deterministic_plus_ai'?{garbage:false}:detectQuality(response);
   if(quality.garbage){
     return{
       score:3,
@@ -530,7 +531,7 @@ function renderDone(ex,i,el){
   const isAI=fb.aiPowered!==false;
   TPBorrador.borrar(activeJob.id+':'+i);
   // El texto del modelo puede citar la respuesta del candidato: se escapa siempre.
-  const origen=fb.blockedByFilter?tpChip('Bloqueado por el filtro anti-manipulación','error'):isAI?tpChip('Corregido con IA','info'):tpChip('Corrección automática de reserva');
+  const origen=fb.blockedByFilter?tpChip('Bloqueado por el filtro anti-manipulación','error'):fb.deterministic?tpChip('Corregido con la solución oficial','info'):isAI?tpChip('Corregido con IA','info'):tpChip('Corrección automática de reserva');
   const verif=fb.receiptSigned?'<span title="Nota firmada por el Corrector v2 '+escHtml(fb.evaluatorVersion||'')+'">'+tpChip('Nota verificada','ok')+'</span>':'';
   const ord=criteria.slice().sort((a,b)=>b.score-a.score);
   const fuerte=ord[0],debil=ord.length>1?ord[ord.length-1]:null;
