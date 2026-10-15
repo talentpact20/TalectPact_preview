@@ -7,7 +7,8 @@
  * Estados: aplicado | retos | preseleccionado | entrevista | contratado | descartado
  * Descartado exige motivo (trazabilidad AI Act).
  */
-const { jsonResponse, sb, authUser, isUuid } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema } = require("../tp");
+const { notificarEtapa } = require("../notify");
 
 const ESTADOS = ["aplicado", "retos", "preseleccionado", "entrevista", "contratado", "descartado"];
 
@@ -50,10 +51,12 @@ exports.handler = async (event) => {
       try {
         const existentes = await sb.select(
           "applications",
-          `job_id=eq.${jobId}&candidate_profile_id=eq.${ref}&select=id&limit=1`
+          `job_id=eq.${jobId}&candidate_profile_id=eq.${ref}&select=id,status&limit=1`
         );
-        if (Array.isArray(existentes) && existentes[0]) {
-          await sb.update("applications", `id=eq.${existentes[0].id}`, {
+        // Solo se avisa al candidato si la etapa cambia de verdad.
+        const previa = Array.isArray(existentes) ? existentes[0] || null : null;
+        if (previa) {
+          await sb.update("applications", `id=eq.${previa.id}`, {
             status: campos.status,
             reason: campos.reason,
             updated_at: ahora
@@ -61,8 +64,9 @@ exports.handler = async (event) => {
         } else {
           await sb.insert("applications", Object.assign({ created_at: ahora }, campos));
         }
+        if (!previa || previa.status !== b.status) await notificarEtapa({ profileId: ref, status: b.status, jobId });
       } catch (err) {
-        if (/applications/i.test(err.message)) {
+        if (faltaEnEsquema(err, "applications")) {
           return jsonResponse(503, {
             error: "Falta la migración del pipeline (applications)",
             code: "pending_migration"
@@ -79,7 +83,7 @@ exports.handler = async (event) => {
         `job_id=eq.${jobId}&company_user_id=eq.${user.id}&select=id,candidate_profile_id,status,reason,updated_at,created_at&order=updated_at.desc&limit=200`
       );
     } catch (err) {
-      if (/applications/i.test(err.message)) {
+      if (faltaEnEsquema(err, "applications")) {
         return jsonResponse(200, { ok: true, applications: [], pendingMigration: true });
       }
       throw err;

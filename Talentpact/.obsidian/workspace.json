@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Bienvenido.md",
+                "file": "00 Inicio.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Bienvenido"
+              "title": "00 Inicio"
             }
           }
         ]
@@ -206,6 +206,19 @@
   },
   "active": "bf3c6c444e511615",
   "lastOpenFiles": [
-    "Bienvenido.md"
+    "Concepto/Estrategia.md",
+    "Bienvenido.md",
+    "00 Inicio.md",
+    "Trabajo/Reglas de trabajo.md",
+    "Trabajo/Pendientes.md",
+    "Trabajo/Decisiones.md",
+    "Trabajo",
+    "Producto/Sistema de diseño.md",
+    "Producto/Estado del producto.md",
+    "Producto",
+    "Concepto/Prereunión asesora RRHH.md",
+    "Concepto/Eventos Impact.md",
+    "Concepto/Concepto TalentPact.md",
+    "Concepto"
   ]
 }

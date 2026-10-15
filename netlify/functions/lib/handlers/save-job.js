@@ -10,7 +10,7 @@
  * La empresa sale del token y tiene que tener ficha en `companies`. Una oferta
  * solo la puede tocar quien la publicó: la propiedad se impone en el filtro.
  */
-const { jsonResponse, sb, authUser, isUuid } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema } = require("../tp");
 
 const SECTORES = ["Marketing", "IT", "Data", "Business", "Design", "RRHH", "Finance", "Legal", "Ops", "Sales", "Languages"];
 const NIVELES = ["basico", "intermedio", "avanzado"];
@@ -105,7 +105,7 @@ exports.handler = async (event) => {
       return await guardar(true);
     } catch (err) {
       // Sin la migración culture_questions, se publica el resto.
-      if (!/culture_questions/i.test(err.message)) throw err;
+      if (!faltaEnEsquema(err, /culture_questions/i)) throw err;
       return await guardar(false);
     }
   } catch (err) {

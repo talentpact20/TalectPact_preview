@@ -56,24 +56,32 @@ TP.saveEmpJobs=function(){};
 try{localStorage.removeItem(TP_NS+'empJobs');}catch(e){}
 
 // Publicar: valida en el cliente para dar el aviso rápido; el servidor valida igual.
+// _tpPublicando evita que un doble clic publique la misma oferta dos veces.
+let _tpPublicando=false;
 publishJob=async function(){
+  if(_tpPublicando)return;
   if(!tpCompany){toast('Inicia sesión con tu cuenta de empresa para publicar ofertas.');return;}
   const v=id=>(document.getElementById(id).value||'').trim();
   const datos={
     title:v('pj-title'),sector:v('pj-sector'),description:v('pj-desc'),
     requiredSkills:pjReqSkills.slice(),tags:pjSkills.slice(0,6),requiredLevel:pjLevel,exerciseConfig:pjExConfigVal,
     jornada:v('pj-jornada'),modalidad:v('pj-mode'),contrato:v('pj-contrato'),ubicacion:v('pj-city'),
-    salMin:Number(v('pj-sal-min'))||null,salMax:Number(v('pj-sal-max'))||null
+    salMin:Number(v('pj-sal-min'))||null,salMax:Number(v('pj-sal-max'))||null,
+    cultureQuestions:typeof tpLeerPreguntasVacante==='function'?tpLeerPreguntasVacante():[]
   };
   if(!datos.title||!datos.sector||datos.description.length<20){toast('Faltan el título, el sector o una descripción de al menos 20 caracteres.');return;}
   if(!datos.requiredSkills.length){toast('Selecciona al menos un skill requerido.');return;}
   if(datos.salMin&&datos.salMax&&datos.salMin>datos.salMax){toast('El salario mínimo no puede superar al máximo.');return;}
   if(datos.modalidad!=='remoto'&&!datos.ubicacion){toast('Indica la ubicación: la oferta no es 100 % remota.');return;}
   const pedidoAMedida=datos.exerciseConfig==='contact';
-  const r=await TPCloud._postAuth('save-job',datos);
+  const btn=document.querySelector('[onclick="publishJob()"]');
+  _tpPublicando=true;if(btn){btn.disabled=true;btn.setAttribute('aria-busy','true');}
+  let r;
+  try{r=await TPCloud._postAuth('save-job',datos);}
+  finally{_tpPublicando=false;if(btn){btn.disabled=false;btn.removeAttribute('aria-busy');}}
   if(!r||r.error){toast('No se pudo publicar: '+((r&&(r.error||r.details))||'error desconocido'));return;}
   pjSkills=[];pjReqSkills=[];pjExConfigVal='common+custom';pjLevel='basico';
-  ['pj-title','pj-desc','pj-sal-min','pj-sal-max','pj-city'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  ['pj-title','pj-desc','pj-sal-min','pj-sal-max','pj-city','pj-q1','pj-q2','pj-q3'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   try{renderPjTags();renderPjSkills&&renderPjSkills();}catch(e){}
   togglePostJob();
   await Promise.all([TPOfertas.cargar(),TPOfertas.cargarMias()]);
@@ -96,10 +104,10 @@ renderEmpJobs=function(){
   let h='<table class="dash-table"><thead><tr><th>Puesto</th><th>Sector</th><th>Candidatos que encajan</th><th>Estado</th><th></th></tr></thead><tbody>';
   mias.forEach(j=>{
     const abierta=j.status==='open';
-    h+=`<tr><td><strong>${escHtml(j.title)}</strong><div style="font-size:.72rem;color:var(--slate-500)">${escHtml(TP_COND.jornadas[j.jornada]||'')} · ${escHtml(TP_COND.modalidades[j.modalidad]||'')}${j.ubicacion?' · '+escHtml(j.ubicacion):''}</div></td><td>${escHtml(j.sector)}</td>
+    h+=`<tr><td><strong>${escHtml(j.title)}</strong><div class="u-fs-micro u-c-slate-500">${escHtml(TP_COND.jornadas[j.jornada]||'')} · ${escHtml(TP_COND.modalidades[j.modalidad]||'')}${j.ubicacion?' · '+escHtml(j.ubicacion):''}</div></td><td>${escHtml(j.sector)}</td>
       <td><strong>${TPPool.estado==='ok'?TPOfertas.candidatosPara(j):'—'}</strong></td>
       <td><span class="${abierta?'status-active':'status-closed'}">${abierta?'Abierta':'Cerrada'}</span></td>
-      <td style="white-space:nowrap"><button class="btn btn-primary btn-sm" onclick="showOfferCandidates('${escHtml(j.id)}')">Ver candidatos</button>
+      <td class="u-ws-nowrap"><button class="btn btn-primary btn-sm" onclick="showOfferCandidates('${escHtml(j.id)}')">Ver candidatos</button>
       <button class="btn btn-outline btn-sm" onclick="tpCambiarEstadoOferta('${escHtml(j.id)}','${abierta?'closed':'open'}')">${abierta?'Cerrar':'Reabrir'}</button></td></tr>`;
   });
   if(!mias.length)h+='<tr><td colspan="5">'+(TPOfertas.errorMias

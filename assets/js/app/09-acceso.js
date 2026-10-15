@@ -757,10 +757,16 @@ async function refreshOAuthButtons(portal){
     const map=OAUTH_BTN[portal||'candidate']||{};
     Object.keys(map).forEach(p=>{
       const b=document.getElementById(map[p]); if(!b)return;
+      // Un proveedor sin activar no se ofrece: un botón que no funciona resta confianza.
       const on=prov[p]!==false;
-      b.classList.toggle('is-off',!on);
-      b.title=on?('Continuar con '+OAUTH_LABEL[p]):(OAUTH_LABEL[p]+': proveedor pendiente de activar en Supabase');
+      b.hidden=!on;
+      b.title=on?('Continuar con '+OAUTH_LABEL[p]):'';
     });
+    // Sin ningún proveedor activo, tampoco se muestra el separador «o».
+    const hay=Object.keys(map).some(p=>prov[p]!==false);
+    const form=document.getElementById(map[Object.keys(map)[0]]||'');
+    const caja=form&&form.closest('form');
+    if(caja)caja.querySelectorAll('.auth-divider,.auth-social').forEach(e=>{e.hidden=!hay;});
   }catch(e){}
 }
 

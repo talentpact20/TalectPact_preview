@@ -14,7 +14,7 @@
  */
 const {
   jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode,
-  UNLOCK_PRICE, formatAmount, isUuid
+  UNLOCK_PRICE, formatAmount, isUuid, faltaEnEsquema
 } = require("../tp");
 
 /** Orígenes a los que se permite volver tras pagar. */
@@ -102,7 +102,7 @@ exports.handler = async (event) => {
       let filas;
       try { filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id,pool_visible,allow_contact&limit=1`); }
       catch (err) {
-        if (!/pool_visible|allow_contact/i.test(err.message)) throw err;
+        if (!faltaEnEsquema(err, /pool_visible|allow_contact/i)) throw err;
         filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id&limit=1`);
       }
       const perfil = Array.isArray(filas) ? filas[0] : null;

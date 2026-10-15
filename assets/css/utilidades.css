@@ -1,11 +1,19 @@
 /* Utilidades de una sola propiedad (las genera tools/estilos_a_clases.py a partir
    de los antiguos style="…" de index.html). Se cargan las últimas. */
 .u-ai-center{align-items:center}
+.u-b-0{border:0}
 .u-b-1-solid-emerald-100{border:1px solid var(--emerald-100)}
+.u-b-1-solid-rgba-245-158-11-_2{border:1px solid rgba(245,158,11,.2)}
+.u-b-1-solid-rgba-59-130-246-_15{border:1px solid rgba(59,130,246,.15)}
 .u-b-1-solid-slate-200{border:1px solid var(--slate-200)}
+.u-b-1-solid-slate-700{border:1px solid var(--slate-700)}
 .u-b-none{border:none}
+.u-bb-1-solid-slate-100{border-bottom:1px solid var(--slate-100)}
 .u-bbc-slate-200{border-bottom-color:var(--slate-200)}
 .u-bc-amber-300{border-color:var(--amber-300)}
+.u-bc-blue-100{border-color:var(--blue-100)}
+.u-bc-emerald-200{border-color:var(--emerald-200)}
+.u-bg-amber-100{background:var(--amber-100)}
 .u-bg-amber-500{background:var(--amber-500)}
 .u-bg-blue-100{background:var(--blue-100)}
 .u-bg-blue-50{background:var(--blue-50)}
@@ -18,6 +26,8 @@
 .u-bg-red-500{background:var(--red-500)}
 .u-bg-slate-100{background:var(--slate-100)}
 .u-bg-slate-50{background:var(--slate-50)}
+.u-bg-slate-800{background:var(--slate-800)}
+.u-bg-superficie{background:var(--c-superficie)}
 .u-bs-border-box{box-sizing:border-box}
 .u-bt-1-solid-slate-100{border-top:1px solid var(--slate-100)}
 .u-c-amber-500{color:var(--amber-500)}
@@ -26,13 +36,16 @@
 .u-c-emerald-500{color:var(--emerald-500)}
 .u-c-emerald-600{color:var(--emerald-600)}
 .u-c-emerald-700{color:var(--emerald-700)}
+.u-c-slate-300{color:var(--slate-300)}
 .u-c-slate-400{color:var(--slate-400)}
 .u-c-slate-500{color:var(--slate-500)}
 .u-c-slate-600{color:var(--slate-600)}
 .u-c-slate-700{color:var(--slate-700)}
 .u-c-sobre-tinta{color:var(--c-sobre-tinta)}
 .u-cur-pointer{cursor:pointer}
+.u-d-block{display:block}
 .u-d-flex{display:flex}
+.u-ff-comic-sans-ms-cursive{font-family:Comic Sans MS,cursive}
 .u-ff-mono{font-family:'JetBrains Mono',monospace}
 .u-flex-1{flex:1}
 .u-fs-dest{font-size:var(--fs-dest)}
@@ -44,8 +57,12 @@
 .u-fw-700{font-weight:700}
 .u-fw-wrap-wrap{flex-wrap:wrap}
 .u-gap-10{gap:10px}
+.u-gap-4{gap:4px}
 .u-gap-6{gap:6px}
 .u-gap-8{gap:8px}
+.u-grid-column-1--1{grid-column:1/-1}
+.u-h-28{height:28px}
+.u-h-4{height:4px}
 .u-jc-center{justify-content:center}
 .u-jc-space-between{justify-content:space-between}
 .u-lh-1_5{line-height:1.5}
@@ -55,6 +72,8 @@
 .u-ls-_06em{letter-spacing:.06em}
 .u-ls-_08em{letter-spacing:.08em}
 .u-m-0-0-8{margin:0 0 8px}
+.u-m-10-0{margin:10px 0}
+.u-m-4-0-2{margin:4px 0 2px}
 .u-maxw-580{max-width:580px}
 .u-mb-10{margin-bottom:10px}
 .u-mb-12{margin-bottom:12px}
@@ -64,6 +83,7 @@
 .u-mb-6{margin-bottom:6px}
 .u-mb-8{margin-bottom:8px}
 .u-minw-0{min-width:0}
+.u-ml-8{margin-left:8px}
 .u-ml-auto{margin-left:auto}
 .u-mt-0{margin-top:0}
 .u-mt-10{margin-top:10px}
@@ -75,28 +95,50 @@
 .u-mt-28{margin-top:28px}
 .u-mt-4{margin-top:4px}
 .u-mt-56{margin-top:56px}
+.u-mt-6{margin-top:6px}
 .u-mt-8{margin-top:8px}
+.u-op-_75{opacity:.75}
+.u-op-_8{opacity:.8}
 .u-p-0-18-16{padding:0 18px 16px}
 .u-p-10-12{padding:10px 12px}
 .u-p-10-14-10-38{padding:10px 14px 10px 38px}
+.u-p-10-18{padding:10px 18px}
 .u-p-11{padding:11px}
 .u-p-11-12{padding:11px 12px}
+.u-p-12-0{padding:12px 0}
 .u-p-12-14{padding:12px 14px}
+.u-p-14-16{padding:14px 16px}
+.u-p-16-0{padding:16px 0}
 .u-p-16-18{padding:16px 18px}
+.u-p-18{padding:18px}
+.u-p-2-5{padding:2px 5px}
 .u-p-20{padding:20px}
+.u-p-24{padding:24px}
 .u-p-3-8{padding:3px 8px}
 .u-p-3-9{padding:3px 9px}
 .u-p-4-10{padding:4px 10px}
+.u-p-6-12{padding:6px 12px}
+.u-p-8{padding:8px}
 .u-p-8-12{padding:8px 12px}
 .u-p-9-12{padding:9px 12px}
 .u-p-9-12-9-38{padding:9px 12px 9px 38px}
 .u-pb-12{padding-bottom:12px}
+.u-pos-absolute{position:absolute}
 .u-r-10{border-radius:10px}
+.u-r-2{border-radius:2px}
 .u-r-20{border-radius:20px}
+.u-r-4{border-radius:4px}
 .u-r-5{border-radius:5px}
 .u-r-8{border-radius:8px}
 .u-r-9{border-radius:9px}
+.u-r-radius{border-radius:var(--radius)}
+.u-right-16{right:16px}
 .u-ta-center{text-align:center}
+.u-top-16{top:16px}
 .u-tt-none{text-transform:none}
 .u-tt-uppercase{text-transform:uppercase}
+.u-user-select-none{user-select:none}
 .u-w-100pct{width:100%}
+.u-w-28{width:28px}
+.u-wb-break-all{word-break:break-all}
+.u-ws-nowrap{white-space:nowrap}

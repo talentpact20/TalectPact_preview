@@ -8,7 +8,7 @@
  * ni eso: sin id se escribía en un perfil "Candidato Demo") para inyectarle
  * notas que luego issue-credential sellaba en la blockchain.
  */
-const { jsonResponse, sb, authUser, ensureProfileByUser } = require("../tp");
+const { jsonResponse, sb, authUser, ensureProfileByUser, faltaEnEsquema } = require("../tp");
 const { verifyReceipt } = require("../evaluator");
 
 const MAX_TEXT = 20000;
@@ -103,7 +103,7 @@ exports.handler = async (event) => {
     } catch (err) {
       // Base de datos sin la migración de integridad (supabase_schema_integrity.sql):
       // se guarda la evaluación igual antes que perderla.
-      if (!/integrity/i.test(err.message)) throw err;
+      if (!faltaEnEsquema(err, /integrity/i)) throw err;
       const { integrity: _omit, ...sinIntegridad } = row0;
       inserted = await sb.insert("evaluations", sinIntegridad);
     }

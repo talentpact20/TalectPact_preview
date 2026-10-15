@@ -82,6 +82,56 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+## 2026-10-15 — Aviso al candidato cuando cambia su etapa (cierra el circuito del pipeline)
+
+**Qué.** Al mover a un candidato de etapa (preseleccionado, entrevista, contratado, descartado) se le avisa en su bandeja. El aviso no nombra a la empresa y **no incluye el motivo del descarte** (solo lo ve la empresa; queda registrado). Solo se avisa si la etapa cambia de verdad. No requiere SQL nuevo (usa `notifications` del SQL RRHH).
+
+**Por qué.** RRHH pedía «quién sigue» y el candidato se quedaba sin saber nada: el pipeline era solo del lado empresa.
+
+**Ficheros.** `lib/notify.js` (`notificarEtapa`), `lib/handlers/applications.js`, `tests/rrhh.test.js`
+
+---
+
+## 2026-10-15 — Postulaciones reales del candidato y acceso con Google
+
+**Qué.**
+- **Postulaciones (fallo grave):** el botón «Aplicar» solo enseñaba «¡Candidatura enviada!» y no guardaba nada: la empresa nunca recibía la postulación. Nueva función `apply` (guarda la postulación en `applications`, es idempotente, exige sesión de candidato y oferta abierta). Cuenta de empresa → 403. El candidato ve su etapa en las tarjetas de oferta; la empresa ve el chip «Se ha postulado» en «Ver candidatos» y un aviso si hay postulados que no salen en la lista (perfil no visible en el pool).
+- Sin sesión, «Aplicar» pide iniciar sesión en vez de fingir que funciona; con error de servidor, lo dice y ofrece «Reintentar».
+- **Google:** el diagnóstico (`npm run check:google`) dice que Google y LinkedIn **no están habilitados en Supabase Auth**: por eso el acceso social no funcionaba. Es configuración, no código. Hasta que se active, los botones sociales y el separador «o» se ocultan (antes salían atenuados y daban error al pulsar).
+- Scripts `check-google-auth.js` y `check-rls.js` rotos desde el troceado de `index.html`: arreglados.
+- Escapado de nombre de empresa y skills en la pantalla de requisitos de la oferta.
+- Estilos en línea de los scripts → clases (`tools/estilos_js_a_clases.py`): 84 → 33 (los dinámicos y los colores literales de la ventana de ejemplo se quedan).
+- La empresa recibe un aviso («Nueva postulación», sin identidad del candidato) en su panel; la bandeja de avisos ya funciona para candidatos y empresas.
+- Tests → 125 (sin nuevos tests: aserciones añadidas a los existentes).
+
+**Acción usuario (Google).** Supabase → Authentication → Providers → Google → activar con Client ID y Secret de Google Cloud. En Google Cloud: origen JS `https://talentpact.es`; URI de redirección `https://vqyqedmizxqneniynxqp.supabase.co/auth/v1/callback`. Y en Supabase → URL Configuration, añadir `https://talentpact.es/` a Redirect URLs.
+
+**Ficheros.** `lib/handlers/apply.js`, `apply.mjs`, `08-ofertas-y-ejercicios.js`, `09-acceso.js`, `10-paneles-y-pagos.js`, `19-rrhh.js`, `tfm/tech/scripts/*`, `componentes.css`, `utilidades.css`
+
+---
+
+## 2026-10-15 — Revisión de lo de Iván: fallos del pipeline, encaje y errores ocultos
+
+**Qué.**
+- **Privacidad (grave, servidor):** el mismo patrón estaba en las consultas que filtran por consentimiento. Ante cualquier fallo pasajero (timeout, red), el pool repetía la consulta **sin** `pool_visible=is.true` (las empresas verían a candidatos que se ocultaron), `get-contact` repetía **sin** `allow_contact` (entregaría el contacto de quien retiró el consentimiento, art. 7.3 RGPD) y el pago repetía sin ambos (cobraría el desbloqueo de alguien oculto). Ahora solo se repite si la columna falta de verdad. Aplicado a todas las consultas tolerantes (pool, contacto, pago, perfil, empresa, evaluación, ofertas).
+- **Errores tapados como «migración pendiente» (servidor):** el mensaje de error de Supabase incluye siempre la ruta (`GET applications?…`), así que cualquier fallo de las tablas `applications` y `notifications` (red, timeout, permisos) se tomaba por «falta la migración» y devolvía una lista vacía sin avisar. Nuevo `faltaEnEsquema()` en `tp.js`, que solo mira el mensaje y exige «does not exist» o «schema cache». Test nuevo.
+- **Doble clic en «Aplicar»:** la segunda petición chocaba con el `unique` y respondía «Falta la migración». Ahora se trata como ya postulado (`esDuplicado()`).
+- **Encaje:** un candidato sin ninguna skill de la oferta salía con un 30 % (solo por condiciones), así que «Candidatos que encajan» listaba todo el pool. Ahora sin skills pedidas el encaje es 0. Con ofertas que solo piden skills de personas, ya no se regalan 30 puntos de «técnico». Quien se ha postulado sale siempre en su oferta, aunque aún no tenga las skills.
+- **Preguntas de la vacante:** se insertaban fuera de la caja de la ficha de oferta (el selector agrupado devolvía siempre `#jobModal`). Ahora van bajo la descripción. En «Ver candidatos» ya no se quedan las de la oferta anterior y van bajo la cabecera, no encajadas junto al botón.
+- **Pipeline:** si no se guarda la etapa, el desplegable vuelve a la etapa real y lo dice; si se guarda, confirma. Motivo de descarte con mínimo de 3 caracteres también en el diálogo.
+- **Publicar oferta:** había dos copias de `publishJob` (17 y 19); queda una, en 17, con las preguntas de vacante y bloqueo de doble envío (antes, doble clic = oferta publicada dos veces).
+- **Pool:** la tabla de 8 columnas desbordaba el panel a 1024 px y todo el panel se desplazaba en horizontal; ahora se desplaza solo la tabla.
+- Servidor: «marcar leídos» hace una petición en vez de una por aviso; el pipeline lee la etapa previa en la misma consulta.
+- Aviso de postulados ocultos con estilo informativo (antes salía sin fondo).
+- **Google desde el portal equivocado:** si una cuenta de candidato entra con Google desde «empresa» (o al revés), se abre su panel pero se le dice; antes cambiaba de panel sin explicación.
+- **Ranking:** si fallaba la carga se quedaba en «No se pudo cargar» sin poder reintentar, y sin token se quedaba en «Cargando…» para siempre. Ahora hay «Reintentar» y esqueleto de carga. El pool de empresa también tiene «Reintentar» cuando falla. El texto «Actualizado en tiempo real» no era cierto: ahora dice que usa las notas reales del pool al abrir la pestaña.
+- **Privacidad de avisos:** la bandeja devolvía al candidato el `meta` entero del aviso de desbloqueo, con el `company_user_id` de la empresa. Ahora solo salen la oferta y la etapa; el registro completo se queda en la base de datos.
+- Tests → 127.
+
+**Ficheros.** `lib/tp.js`, `lib/handlers/apply.js`, `applications.js`, `inbox.js`, `get-talent-pool.js`, `get-contact.js`, `create-checkout-session.js`, `save-profile.js`, `save-company.js`, `save-evaluation.js`, `save-job.js`, `list-jobs.js`, `06-skillpass-y-sesion.js`, `16-pool-real.js`, `index.html`, `10-paneles-y-pagos.js`, `17-ofertas-reales.js`, `19-rrhh.js`, `componentes.css`, `modulos.css`, `tests/rrhh.test.js`, cifras canónicas
+
+---
+
 ## Pendiente / siguiente
 
 - Deploy a Netlify.

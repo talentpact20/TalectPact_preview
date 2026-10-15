@@ -10,7 +10,9 @@ function renderCandOfertas(){
     const hasCount=reqSkills.filter(s=>candidateProfile.skills[s]?.unlocked).length;
     const allMet=hasCount===reqSkills.length&&reqSkills.length>0;
     const pie=`<span class="tp-oferta-req ${allMet?'ok':''}">${allMet?tpIcon('check')+' Cumples los skills requeridos':hasCount+' de '+reqSkills.length+' skills requeridos'}</span>`;
-    h+=tpTarjetaOferta(j,co,{click:`openJob('${escHtml(j.id)}')`,tiene:x=>candidateProfile.skills[x]?.unlocked,pie,prefs:undefined});
+    const et=typeof TPPostulaciones!=='undefined'?TPPostulaciones.etapa(j.id):'';
+    const pieFinal=et?`${tpChip(TP_ETAPA_CANDIDATO[et]||et,et==='descartado'?'error':et==='aplicado'?'info':'ok')}`:pie;
+    h+=tpTarjetaOferta(j,co,{click:`openJob('${escHtml(j.id)}')`,tiene:x=>candidateProfile.skills[x]?.unlocked,pie:pieFinal,prefs:undefined});
   });
   // Sin ofertas no siempre es "no hay": puede que no se hayan podido cargar.
   const est=typeof TPOfertas!=='undefined'?TPOfertas.estado:'ok';
@@ -41,11 +43,7 @@ function openDashEmp(){
   Pay.sync().then(function(r){ if(r&&r.unlocks)renderEmpPool(); tpActividadEmpresa(); }).catch(function(){});
 }
 function myPostedJobs(){ const k=companyKey(); return empPostedJobs.filter(j=>!j.owner||j.owner===k); }
-function renderEmpJobs(){const my=JOBS.filter(j=>j.company==='c1').concat(myPostedJobs());
-  document.getElementById('empStatOffers').textContent=my.length;
-  let h='<table class="dash-table"><thead><tr><th>Puesto</th><th>Sector</th><th>Candidatos</th><th>Status</th><th></th></tr></thead><tbody>';
-  my.forEach(j=>{const nc=8+(j.id.charCodeAt(0)%18);h+=`<tr><td><strong>${escHtml(j.title)}</strong></td><td>${j.sector}</td><td><strong style="color:var(--emerald-600)">${nc}</strong></td><td><span class="status-active">Activa</span></td><td><button class="btn btn-primary btn-sm" onclick="showOfferCandidates('${j.id}')">Ver candidatos →</button></td></tr>`;});
-  h+='</tbody></table>';document.getElementById('empJobsList').innerHTML=h;}
+function renderEmpJobs(){ /* lo sustituye 17-ofertas-reales.js (ofertas reales) */ }
 
 // Candidatos para una oferta, ordenados por encaje real: skills requeridas que
 // el candidato ha demostrado y condiciones (jornada, modalidad) compatibles.
@@ -60,15 +58,18 @@ function encajeOferta(job,c){
   const jor=ok(cd.jornadas,job.jornada),mod=ok(cd.modalidades,job.modalidad);
   const cond=[jor,mod].filter(x=>x!==null);
   const pctCond=cond.length?cond.filter(Boolean).length/cond.length:1;
-  return {pct:Math.round((skills*0.7+pctCond*0.3)*100),skills,jor,mod};
+  // Sin ninguna skill de las pedidas no hay encaje: las condiciones solas no bastan.
+  return {pct:skills?Math.round((skills*0.7+pctCond*0.3)*100):0,skills,jor,mod};
 }
 function showOfferCandidates(jobId){
   const job=JOBS.concat(empPostedJobs).find(j=>j.id===jobId);
   if(!job)return;
   document.getElementById('empOfferCandidatesSection').style.display='block';
   document.getElementById('empOfferCandTitle').textContent='Candidatos para: '+job.title;
+  // Encajan por skills, o se han postulado ellos (aunque aún no tengan las skills).
+  const enProceso=c=>typeof TPApps!=='undefined'&&!!TPApps.estadoDe(jobId,c.id);
   const lista=CANDIDATES.map(c=>({c,e:encajeOferta(job,c)}))
-    .filter(x=>x.e.pct>0)
+    .filter(x=>x.e.pct>0||enProceso(x.c))
     .sort((x,y)=>y.e.pct-x.e.pct||y.c.score-x.c.score);
   const chip=(ok,txt)=>ok===null?'':`<span class="tp-cond-chip ${ok?'ok':'ko'}">${ok?'✓':'✕'} ${escHtml(txt)}</span>`;
   let h='';
@@ -244,7 +245,7 @@ async function processPayment(){
       // Se muestra tambien `details`: durante la puesta en marcha es justo lo
       // que dice si falta la tabla `unlocks` o si la clave de Stripe no vale.
       Pay._status('err','<strong>No se pudo iniciar el pago.</strong> '+escHtml(r.error)+
-        (r.details?'<br><span style="opacity:.8;font-size:.72rem">'+escHtml(r.details)+'</span>':''));
+        (r.details?'<br><span class="u-op-_8 u-fs-micro">'+escHtml(r.details)+'</span>':''));
       return;
     }
 
@@ -320,7 +321,7 @@ function renderLandingCommon(filter='',cat='all',level='all'){
   const countEl=document.getElementById('exResultsCount');
   if(countEl)countEl.textContent=`${list.length} reto${list.length!==1?'s':''}`;
   if(!list.length){
-    el.innerHTML='<div style="padding:20px;text-align:center;color:var(--slate-400);font-size:.75rem">No hay retos que coincidan.</div>';
+    el.innerHTML='<div class="u-p-20 u-ta-center u-c-slate-400 u-fs-micro">No hay retos que coincidan.</div>';
     const prev=document.getElementById('rplPreview');
     if(prev)prev.innerHTML='<div class="rpl-preview-empty"><span>'+tpIcon('search')+'</span><p>Sin resultados para tu búsqueda.</p></div>';
     return;
@@ -340,7 +341,7 @@ function renderLandingCommon(filter='',cat='all',level='all'){
   const sectorList=list.filter(ce=>ce.category==='sector');
   let h='';
   if(cat!=='sector'&&softList.length){h+=`<div class="rpl-group-label">Soft Skills Universales</div>`;softList.forEach(ce=>{h+=buildRow(ce);});}
-  if(cat!=='soft'&&sectorList.length){h+=`<div class="rpl-group-label" style="margin-top:6px">Por Sector</div>`;sectorList.forEach(ce=>{h+=buildRow(ce);});}
+  if(cat!=='soft'&&sectorList.length){h+=`<div class="rpl-group-label u-mt-6">Por Sector</div>`;sectorList.forEach(ce=>{h+=buildRow(ce);});}
   el.innerHTML=h;
   // Auto-select: keep current selection if still visible, otherwise first item
   const stillVisible=_selectedLandingRetoId&&list.find(c=>c.id===_selectedLandingRetoId);
@@ -408,8 +409,8 @@ function clearExSearch(){
   renderLandingCommon('',_exCategoryLanding,_exLevelLanding);
 }
 
-function renderEmpPool(){let h='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Top Skills</th><th></th></tr></thead><tbody>';CANDIDATES.forEach(c=>{h+=`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="dash-avatar" style="background:var(--emerald-100);color:var(--emerald-600);width:28px;height:28px;font-size:.65rem">${c.i}</div>#${1000+parseInt(c.id.slice(1))*111}</div></td><td>${c.sector}</td><td><strong style="color:var(--emerald-600)">${c.score}</strong></td><td>${c.skills.slice(0,2).map(s=>`<span class="job-tag">${s.n}: ${s.v}</span>`).join(' ')}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${c.id}')">Ver perfil</button></td></tr>`;});h+='</tbody></table>';document.getElementById('empPool').innerHTML=h;}
-function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${escHtml(c.i)}</div><div class="cp-info"><h3>${escHtml(c.alias||"Candidato anónimo")}</h3><div class="cp-meta">${escHtml(c.sector)} · Score: ${c.score} · Perfil ciego</div>${(()=>{if(typeof tpPoolCondChips==='function'){const chips=tpPoolCondChips(c.cond);const integ=c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'';return chips+integ;}const cd=c.cond||{};const t=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k]),...(cd.contratos||[]).map(k=>TP_COND.contratos[k]),cd.ciudad?(cd.ciudad+(cd.reubicacion?' · acepta mudarse':'')):'',cd.disponibilidad?(TP_COND.disponibilidad[cd.disponibilidad]||cd.disponibilidad):'',cd.horas?cd.horas+' h/sem':'',cd.salMin?'Desde '+Math.round(cd.salMin/1000)+' k€':''].filter(Boolean);return (t.length?`<div class="tp-cond">${t.map(x=>`<span class="tp-cond-chip">${escHtml(x)}</span>`).join('')}</div>`:'<div class="tp-cond"><span class="tp-cond-chip muted">Sin condiciones indicadas</span></div>')+(c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'');})()}</div><button class="jm-close" onclick="closeM('profileModal')" style="position:absolute;right:16px;top:16px">✕</button></div><div class="cp-body"><div style="font-size:.75rem;font-weight:600;color:var(--slate-600);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${escHtml(s.n)}${s.verified?' <span class="tp-verified">✓</span>':''}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div style="display:flex;gap:10px;margin-top:16px"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${escHtml(c.id)}')">${c._unlocked?'Ver contacto →':'Desbloquear contacto · €49 →'}</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
+function renderEmpPool(){ /* lo sustituyen 14-empleo.js y 19-rrhh.js (pool real) */ }
+function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${escHtml(c.i)}</div><div class="cp-info"><h3>${escHtml(c.alias||"Candidato anónimo")}</h3><div class="cp-meta">${escHtml(c.sector)} · Score: ${c.score} · Perfil ciego</div>${(()=>{if(typeof tpPoolCondChips==='function'){const chips=tpPoolCondChips(c.cond);const integ=c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'';return chips+integ;}const cd=c.cond||{};const t=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k]),...(cd.contratos||[]).map(k=>TP_COND.contratos[k]),cd.ciudad?(cd.ciudad+(cd.reubicacion?' · acepta mudarse':'')):'',cd.disponibilidad?(TP_COND.disponibilidad[cd.disponibilidad]||cd.disponibilidad):'',cd.horas?cd.horas+' h/sem':'',cd.salMin?'Desde '+Math.round(cd.salMin/1000)+' k€':''].filter(Boolean);return (t.length?`<div class="tp-cond">${t.map(x=>`<span class="tp-cond-chip">${escHtml(x)}</span>`).join('')}</div>`:'<div class="tp-cond"><span class="tp-cond-chip muted">Sin condiciones indicadas</span></div>')+(c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'');})()}</div><button class="jm-close u-pos-absolute u-right-16 u-top-16" onclick="closeM('profileModal')">✕</button></div><div class="cp-body"><div class="u-fs-micro u-fw-600 u-c-slate-600 u-tt-uppercase u-ls-_04em u-mb-12">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${escHtml(s.n)}${s.verified?' <span class="tp-verified">✓</span>':''}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div class="u-d-flex u-gap-10 u-mt-16"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${escHtml(c.id)}')">${c._unlocked?'Ver contacto →':'Desbloquear contacto · €49 →'}</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
 
 // ═══ POST JOB ═══
 let pjExConfigVal='common+custom';

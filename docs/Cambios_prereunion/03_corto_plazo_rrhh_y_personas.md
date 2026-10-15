@@ -44,6 +44,15 @@ TalentPact ya cubre mucho de 3–4; flaqueaba en 1 (BD), en hacer visible 2, y e
 
 El **guion 1E** no entra: la reunión con la asesora es conversación, no presentación.
 
+**Revisión del 15/10.** Al revisar este bloque aparecieron fallos que ya están corregidos:
+- Errores reales mostrados como «migración pendiente».
+- Filtros de consentimiento que se saltaban ante un fallo pasajero.
+- Encaje del 30 % sin skills.
+- Preguntas de la vacante fuera de la ficha.
+- Doble envío al publicar y al aplicar.
+
+Además, «Aplicar» no guardaba la postulación: ahora la empresa la ve en el pipeline con el chip «Se ha postulado». Detalle en `05_errores_y_mejoras.md`. El paso 6 (encaje) tiene dos decisiones abiertas: cómo tratar las condiciones desconocidas y cómo calcular la nota global (`04_estrategia.md`, §2).
+
 ---
 
 ## Qué decirle a la asesora (sin pitch)
@@ -57,3 +66,5 @@ El **guion 1E** no entra: la reunión con la asesora es conversación, no presen
 - Detalle segmentación soft: `02_punto_1d_pack_soft.md`  
 - Ideas tácticas (orden UI, filtro, pesos): conversación 2026-10-14  
 - Changelog: `01_changelog.md`
+- Siguiente fase: `04_estrategia.md`
+- Errores y pendientes: `05_errores_y_mejoras.md`

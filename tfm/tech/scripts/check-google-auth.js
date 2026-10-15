@@ -22,7 +22,8 @@ loadDotEnv();
 // ─── Credenciales publicas: se leen del propio index.html para que el script
 //     funcione sin tocar el .env (la anon key es publica por diseno). ───────
 function readFrontendConfig() {
-  const file = path.join(ROOT, "index.html");
+  // La configuración pública vive en el script de estado (antes estaba en index.html).
+  const file = path.join(ROOT, "assets", "js", "app", "04-estado-y-nube.js");
   const html = fs.readFileSync(file, "utf8");
   const url = (html.match(/TP_SUPABASE_URL\s*=\s*'([^']+)'/) || [])[1];
   const anon = (html.match(/TP_SUPABASE_ANON\s*=\s*'([^']+)'/) || [])[1];
@@ -157,7 +158,7 @@ async function checkAuthorize() {
   console.log("");
 
   if (!ANON) {
-    console.log("  [FALLO] No encuentro TP_SUPABASE_ANON en index.html.");
+    console.log("  [FALLO] No encuentro TP_SUPABASE_ANON en assets/js/app/04-estado-y-nube.js.");
     process.exitCode = 1;
     return;
   }

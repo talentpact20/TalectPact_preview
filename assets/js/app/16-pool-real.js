@@ -76,7 +76,7 @@ var TPPool={
 // Ficha de contacto: siempre la real, pedida a get-contact.
 (function(){
   const _show=showContactCard;
-  const fila=(k,v)=>'<div class="ct-row"><span class="ct-k">'+k+'</span><span class="ct-v">'+(v?escHtml(v):'<span style="color:var(--slate-400)">No indicado</span>')+'</span></div>';
+  const fila=(k,v)=>'<div class="ct-row"><span class="ct-k">'+k+'</span><span class="ct-v">'+(v?escHtml(v):'<span class="u-c-slate-400">No indicado</span>')+'</span></div>';
   showContactCard=async function(c){
     if(!TPPool.esReal(c))return _show(c);
     const box=document.getElementById('contactFields');
@@ -94,7 +94,7 @@ var TPPool={
     }
     const d=r.contact||{};
     _lastContact={name:d.name||'',email:d.email||'',phone:d.phone||'',linkedin:d.linkedin||''};
-    box.innerHTML='<div class="tp-integrity-note" style="background:var(--emerald-50);color:var(--emerald-600);border:1px solid var(--emerald-100)">Contacto real de '+escHtml(TPPool.alias(c))+
+    box.innerHTML='<div class="tp-integrity-note u-bg-emerald-50 u-c-emerald-600 u-b-1-solid-emerald-100">Contacto real de '+escHtml(TPPool.alias(c))+
       (r.unlockedAt?' · desbloqueado el '+escHtml(new Date(r.unlockedAt).toLocaleDateString('es-ES')):'')+'</div>'+
       fila('Nombre',d.name)+fila('Email',d.email)+fila('Teléfono',d.phone)+fila('LinkedIn',d.linkedin);
   };
@@ -169,9 +169,19 @@ renderRanking=function(sector,btn){
   const box=document.getElementById('rankingList');if(!box)return;
   const msg=t=>'<div class="tp-empty">'+t+'</div>';
   if(!tpUser){box.innerHTML=msg('Inicia sesión para ver tu posición entre los candidatos del pool.');return;}
+  if(TPPool.estado==='error'){
+    // Antes se quedaba en «No se pudo cargar» sin forma de reintentar.
+    const s=String(sector||'all').replace(/[^\w-]/g,'');
+    box.innerHTML=tpVacio({error:true,icono:'alert',titulo:'No se ha podido cargar el ranking',texto:'Puede ser un problema momentáneo. Tus notas no se han perdido.',acciones:[{txt:'Reintentar',accion:"TPPool.estado='sin cargar';renderRanking('"+s+"')"}]});
+    return;
+  }
   if(TPPool.estado!=='ok'){
-    box.innerHTML=msg(TPPool.estado==='error'?'No se pudo cargar el ranking.':'Cargando ranking…');
-    if(TPPool.estado!=='error')TPPool.cargar().then(()=>{if(TPPool.estado==='ok')renderRanking(sector);});
+    box.innerHTML=tpEsqueleto(5);
+    // Se vuelve a pintar acabe como acabe: antes, sin token, se quedaba en «Cargando…».
+    TPPool.cargar().then(()=>{
+      if(TPPool.estado==='ok'||TPPool.estado==='error')renderRanking(sector);
+      else box.innerHTML=msg('Inicia sesión para ver tu posición entre los candidatos del pool.');
+    });
     return;
   }
   const yo=TPRanking.miAlias();
@@ -179,9 +189,9 @@ renderRanking=function(sector,btn){
   if(!lista.length){box.innerHTML=msg('Todavía no hay candidatos con notas en este sector.');return;}
   box.innerHTML=lista.slice(0,50).map((c,i)=>{
     const es=c.alias===yo;
-    const color=c.score>=80?'var(--emerald-600)':c.score>=60?'var(--amber-500)':'var(--slate-500)';
+    const color=c.score>=80?'u-c-emerald-600':c.score>=60?'u-c-amber-500':'u-c-slate-500';
     return `<div class="ranking-row ${es?'is-you':''}"><div class="ranking-pos ${i<3?['gold','silver','bronze'][i]:'normal'}">${i+1}</div>
       <div class="ranking-name">${es?'<strong>Tú</strong>':escHtml(c.alias)} <span>${escHtml(c.sector)} · ${c.retos||c.skills.length} skills${c.verified?' · verificado':''}</span></div>
-      <div class="ranking-score" style="color:${color}">${c.score}</div></div>`;
+      <div class="ranking-score ${color}">${c.score}</div></div>`;
   }).join('');
 };

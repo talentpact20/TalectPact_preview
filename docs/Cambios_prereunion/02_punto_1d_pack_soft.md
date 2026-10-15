@@ -64,8 +64,10 @@ Se puede decir a la asesora, sin guion:
 
 …y la pantalla lo ordena así.
 
-## Estado
+## Estado (15/10)
 
-- **Criterio de producto:** acordado en conversación (2026-10-14).  
-- **Código:** pendiente (resegmentar UI candidato + chips en pool/ficha).  
-- **No hacer:** test de personalidad; ocultar lo técnico; limitar el catálogo a 4 retos.
+- **Criterio de producto:** acordado en conversación (14/10).
+- **Código:** hecho (`19-rrhh.js`, `lib/personas.js`). Filtros Personas, Cognitivo y Técnico en retos; chips de Personas y filtro «Con evidencia de personas» en el pool; bloque Personas en la ficha; más peso en el encaje cuando la oferta pide skills de personas.
+- **Hueco detectado:** el catálogo tiene **7 retos de Personas** frente a 89 de sector. Para que «Personas delante» tenga contenido detrás, hay que llegar a 15–20 (ver `04_estrategia.md`, §8).
+- **No hacer:** test de personalidad, ocultar lo técnico ni limitar el catálogo a 4 retos.
+- **Siguiente paso relacionado:** el perfil de trabajo inicial (`04_estrategia.md`, §1) separa lo que el candidato declara (contexto preferido, sin nota) de lo que demuestra (retos de Personas, con nota).

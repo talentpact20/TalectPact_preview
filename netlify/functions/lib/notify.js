@@ -30,4 +30,40 @@ async function notificarDesbloqueo(unlock) {
   }
 }
 
-module.exports = { notificarDesbloqueo };
+/**
+ * Aviso de cambio de etapa en un proceso. El candidato es anónimo para la
+ * empresa y viceversa hasta el desbloqueo: el aviso no nombra a la empresa ni
+ * incluye el motivo del descarte (lo ve solo la empresa; queda registrado).
+ */
+const AVISOS_ETAPA = {
+  preseleccionado: ["Has pasado a la siguiente fase", "Una empresa te ha preseleccionado para una oferta a la que encajas."],
+  entrevista: ["Una empresa quiere entrevistarte", "Has pasado a la fase de entrevista en una oferta. Revisa tu correo: si la empresa ha desbloqueado tu contacto, te escribirá."],
+  contratado: ["Enhorabuena: te han elegido", "Una empresa ha marcado tu candidatura como contratada."],
+  descartado: ["Tu candidatura no continúa", "Una empresa ha cerrado tu candidatura en una oferta. Tus notas y tu perfil siguen disponibles para otras ofertas."]
+};
+
+function mensajeEtapa(status) {
+  const a = AVISOS_ETAPA[status];
+  return a ? { title: a[0], body: a[1] } : null;
+}
+
+async function notificarEtapa({ profileId, status, jobId }) {
+  const msg = mensajeEtapa(status);
+  if (!msg || !isUuid(String(profileId || ""))) return;
+  try {
+    const filas = await sb.select("profiles", `id=eq.${profileId}&select=user_id&limit=1`);
+    const perfil = Array.isArray(filas) ? filas[0] : null;
+    if (!perfil || !perfil.user_id) return;
+    await sb.insert("notifications", {
+      user_id: perfil.user_id,
+      type: "application_" + status,
+      title: msg.title,
+      body: msg.body,
+      meta: { job_id: jobId || null, status }
+    });
+  } catch (err) {
+    console.warn("[TP] notificación de etapa:", err.message);
+  }
+}
+
+module.exports = { notificarDesbloqueo, notificarEtapa, mensajeEtapa, AVISOS_ETAPA };

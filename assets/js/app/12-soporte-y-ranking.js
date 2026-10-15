@@ -118,62 +118,11 @@ function askChat(question){
   sendChat();
 }
 
-// ═══ RANKING LEADERBOARD ═══
-const RANKING_DATA=[
-  {id:'r1',name:'Candidato #1847',sector:'IT',score:94,retos:9},
-  {id:'r2',name:'Candidato #1293',sector:'Marketing',score:92,retos:7},
-  {id:'r3',name:'Candidato #1561',sector:'IT',score:91,retos:8},
-  {id:'r4',name:'Candidato #1034',sector:'Data',score:89,retos:6},
-  {id:'r5',name:'Candidato #1422',sector:'Marketing',score:88,retos:5},
-  {id:'you',name:'Tú',sector:'—',score:0,retos:0},
-  {id:'r6',name:'Candidato #1688',sector:'Design',score:86,retos:5},
-  {id:'r7',name:'Candidato #1105',sector:'Data',score:85,retos:4},
-  {id:'r8',name:'Candidato #1779',sector:'Finance',score:83,retos:6},
-  {id:'r9',name:'Candidato #1333',sector:'RRHH',score:81,retos:4},
-  {id:'r10',name:'Candidato #1956',sector:'IT',score:80,retos:3},
-  {id:'r11',name:'Candidato #1201',sector:'Business',score:79,retos:4},
-  {id:'r12',name:'Candidato #1667',sector:'Sales',score:78,retos:3},
-  {id:'r13',name:'Candidato #1444',sector:'Design',score:76,retos:4},
-  {id:'r14',name:'Candidato #1555',sector:'IT',score:74,retos:2},
-  {id:'r15',name:'Candidato #1888',sector:'Finance',score:72,retos:3},
-];
+// ═══ RANKING ═══
+// El ranking real (candidatos del pool de Supabase) lo pinta 16-pool-real.js.
+// Aquí había una lista de 15 candidatos inventados: eliminada.
 
-function renderRanking(sector,btn){
-  if(btn){
-    document.querySelectorAll('#rankingSectorFilters .filter-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-  }
-  // Update "you" entry with real profile data
-  const you=RANKING_DATA.find(r=>r.id==='you');
-  const completed=candidateProfile.completedCommon;
-  if(completed.length>0){
-    const scores=completed.map(c=>c.score);
-    you.score=Math.round(scores.reduce((a,b)=>a+b)/scores.length);
-    you.retos=completed.length;
-  }
-  
-  let list=RANKING_DATA.slice();
-  // Preferencia de privacidad: si la desactivas, tu fila desaparece del leaderboard.
-  if(!prefIsOn('cand','publicRanking',true))list=list.filter(r=>r.id!=='you');
-  if(sector&&sector!=='all')list=list.filter(r=>r.sector===sector||r.id==='you');
-  list.sort((a,b)=>b.score-a.score);
-  
-  let h='';
-  list.forEach((r,i)=>{
-    const pos=i+1;
-    const posCls=pos===1?'gold':pos===2?'silver':pos===3?'bronze':'normal';
-    const isYou=r.id==='you';
-    const scoreColor=r.score>=80?'var(--emerald-600)':r.score>=60?'var(--amber-500)':'var(--slate-500)';
-    h+=`<div class="ranking-row ${isYou?'is-you':''}">
-      <div class="ranking-pos ${posCls}">${pos}</div>
-      <div class="ranking-name">${isYou?'<strong>Tú</strong>':r.name} <span>${r.sector} · ${r.retos} retos</span></div>
-      <div class="ranking-score" style="color:${scoreColor}">${r.score>0?r.score:'—'}</div>
-    </div>`;
-  });
-  
-  if(!h)h='<div style="padding:24px;text-align:center;color:var(--slate-400)">No hay datos para este sector.</div>';
-  document.getElementById('rankingList').innerHTML=h;
-}
+function renderRanking(){ /* lo sustituye 16-pool-real.js */ }
 
 // ═══ ONBOARDING PROGRESS ═══
 function renderOnboarding(){
@@ -220,9 +169,9 @@ const FAQ_ITEMS=[
 function renderFAQ(){
   const el=document.getElementById('faqList');
   if(!el)return;
-  el.innerHTML=FAQ_ITEMS.map((f,i)=>`<div style="border-bottom:1px solid var(--slate-100);padding:12px 0;cursor:pointer" onclick="this.querySelector('.faq-a').style.display=this.querySelector('.faq-a').style.display==='none'?'block':'none'">
-    <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:.8125rem;font-weight:600;color:var(--slate-700)">${f.q}</span><span style="color:var(--slate-400);font-size:.75rem">▾</span></div>
-    <div class="faq-a" style="display:none;font-size:.78rem;color:var(--slate-500);margin-top:8px;line-height:1.6">${f.a}</div>
+  el.innerHTML=FAQ_ITEMS.map((f,i)=>`<div onclick="this.querySelector('.faq-a').style.display=this.querySelector('.faq-a').style.display==='none'?'block':'none'" class="u-bb-1-solid-slate-100 u-p-12-0 u-cur-pointer">
+    <div class="u-d-flex u-ai-center u-jc-space-between"><span class="u-fs-peq u-fw-600 u-c-slate-700">${f.q}</span><span class="u-c-slate-400 u-fs-micro">▾</span></div>
+    <div class="faq-a u-fs-micro u-c-slate-500 u-mt-8 u-lh-1_6" style="display:none">${f.a}</div>
   </div>`).join('');
 }
 

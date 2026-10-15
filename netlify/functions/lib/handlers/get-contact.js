@@ -13,7 +13,7 @@
  *
  * Devuelve: { contact: { name, email, phone, linkedin }, unlockedAt }
  */
-const { jsonResponse, sb, authUser, isUuid, supabaseEnv } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, supabaseEnv, faltaEnEsquema } = require("../tp");
 
 /** Completa con Auth lo que el perfil no tenga (email de la cuenta, metadatos). */
 async function datosDeAuth(userId) {
@@ -61,7 +61,7 @@ exports.handler = async (event) => {
     let filas;
     try { filas = await sb.select("profiles", `id=eq.${ref}&select=id,user_id,full_name,email,phone,linkedin,allow_contact&limit=1`); }
     catch (err) {
-      if (!/allow_contact/i.test(err.message)) throw err;
+      if (!faltaEnEsquema(err, /allow_contact/i)) throw err;
       filas = await sb.select("profiles", `id=eq.${ref}&select=id,user_id,full_name,email,phone,linkedin&limit=1`);
     }
     const perfil = Array.isArray(filas) ? filas[0] : null;

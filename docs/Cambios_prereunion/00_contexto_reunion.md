@@ -11,21 +11,42 @@ TalentPact ya pasó por la defensa TFM. Ahora el foco es **alinearlo con lo que 
 3. Frase de posicionamiento (si sale el tema): *ordenamos evidencia; la entrevista la hacéis vosotros*.
 4. Lo que no hacemos: test de virtudes genérico, “disponibilidad total” como virtue signal, ni sustituir la entrevista con IA.
 
-## Checklist “punto 1” (estado para la asesora)
+## Checklist «punto 1» (estado a 15/10)
 
 | Id | Tema | Estado |
 | --- | --- | --- |
-| 1A | Ofertas reales en Supabase | Hecho (seed `jobs`) |
-| 1B | Preferencias del candidato en BD (`empleo`) | Pendiente de que el SQL de pool esté aplicado + Guardar |
-| 1C | Pool empresa con chips de condiciones (ficha RRHH) | Hecho en código (falta deploy) |
-| 1D | Personas y equipo delante (no solo técnico) | **Hecho en código** |
-| 1E | Guion de demo 3 min | **Descartado** para esta fase (no lo presentamos) |
-| Corto plazo | RRHH 2–4 sem + personas | **Hecho en código** — ver `03_…` |
+| 1A | Ofertas reales en Supabase | Tabla `jobs` creada. Las ofertas que hay son del seed de ejemplo: **falta decidir** si se quitan (regla de no mostrar contenido de demostración) |
+| 1B | Preferencias del candidato en BD (`empleo`) | Hecho en código. Falta ejecutar el SQL del pool en Supabase |
+| 1C | Pool de empresa con chips de condiciones (ficha RRHH) | Hecho en código. Falta el despliegue |
+| 1D | Personas y equipo delante (no solo técnico) | Hecho en código. Solo hay 7 retos de Personas: ver `04_estrategia.md`, §8 |
+| 1E | Guion de demo de 3 min | **Descartado** para esta fase |
+| Corto plazo | RRHH 2–4 semanas y personas | Hecho en código, revisado y corregido el 15/10 (ver `05_errores_y_mejoras.md`) |
+| Postulaciones | «Aplicar» guarda de verdad y la empresa lo ve | Hecho en código el 15/10 |
 
-## SQL pendiente en Supabase
+## Antes de la reunión (bloqueante)
 
-1. Si falta el pool: `tfm/tech/supabase_schema_pool_fix.sql`  
-2. Obligatorio para lo nuevo: `tfm/tech/supabase_schema_rrhh_corto.sql`  
-   (preguntas de vacante, avisos, pipeline)
+1. En Supabase: `tfm/tech/supabase_schema_pool_fix.sql` (si falta) y `tfm/tech/supabase_schema_rrhh_corto.sql` (preguntas de vacante, avisos, pipeline y postulaciones).
+2. Aprobar el commit y desplegar los arreglos del 15/10.
+3. Decidir sobre las ofertas de ejemplo.
+4. Opcional: activar Google en Supabase Auth.
 
-Después: deploy → candidato Guardar preferencias → empresa Pool / Ver candidatos.
+Después: el candidato guarda sus preferencias → la empresa ve el pool y «Ver candidatos».
+
+## Preguntas para la asesora
+
+Se usan para escuchar, no para presentar. Salen de `04_estrategia.md`.
+
+**Sobre cómo es la persona**
+- Cuando contratáis, ¿qué os gustaría saber del **contexto** en el que rinde alguien (autonomía, ritmo, equipo, cliente) que hoy no os da un CV ni una entrevista?
+- Si el candidato **declara** sus preferencias de trabajo y además **demuestra** su conducta en un reto, ¿cuál de las dos os creeríais más? ¿Os sirven las dos juntas?
+- ¿Qué competencias de personas os faltan? Hoy tenemos liderazgo, equipo, tiempo, comunicación, decisiones, negociación y atención al cliente.
+
+**Sobre la confianza en la nota**
+- ¿Qué os haría desconfiar de una nota de 85: el número de intentos, la antigüedad, que la corrija una IA?
+- ¿Preferís una cifra única o una nota por bloque (Personas, Cognitivo, Técnico)?
+- ¿Revisaríais una muestra de correcciones para calibrar la IA?
+
+**Sobre el proceso y el pago**
+- ¿Pagaríais por contacto (49 €), por suscripción o por contratación?
+- La trazabilidad que pide el Reglamento de IA (motivo de descarte, revisión humana, transparencia), ¿es para vosotros un problema o un argumento de compra?
+- ¿Qué tendría que pasar para que publicarais una oferta real aquí la semana que viene?

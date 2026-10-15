@@ -1060,15 +1060,15 @@ function updateCandProfile(){
       const color=data.score>=75?'var(--emerald-500)':data.score>=50?'var(--amber-500)':'var(--red-500)';
       const levelLabel=data.score>=80?'Avanzado':data.score>=50?'Intermedio':'Básico';
       const levelCls=data.score>=80?'level-avanzado':data.score>=50?'level-intermedio':'level-basico';
-      return '<div class="sp-skill-item '+(data.unlocked?'':'locked')+'"><div class="sp-skill-name">'+name+(data.unlocked?' <span class="sp-skill-score '+cls+'">'+data.score+'</span>':'')+'</div>'+(data.unlocked?'<div style="margin:4px 0 2px"><span class="level-badge '+levelCls+'">'+levelLabel+'</span></div>':'')+'<div class="sp-skill-bar"><div class="sp-skill-bar-fill" style="width:'+(data.unlocked?data.score:0)+'%;background:'+color+'"></div></div></div>';
+      return '<div class="sp-skill-item '+(data.unlocked?'':'locked')+'"><div class="sp-skill-name">'+name+(data.unlocked?' <span class="sp-skill-score '+cls+'">'+data.score+'</span>':'')+'</div>'+(data.unlocked?'<div class="u-m-4-0-2"><span class="level-badge '+levelCls+'">'+levelLabel+'</span></div>':'')+'<div class="sp-skill-bar"><div class="sp-skill-bar-fill" style="width:'+(data.unlocked?data.score:0)+'%;background:'+color+'"></div></div></div>';
     }).join('');
   }
   const uS=softSkills.filter(s=>s.data.unlocked);const lS=softSkills.filter(s=>!s.data.unlocked);
   const uSe=sectorSkills.filter(s=>s.data.unlocked);const lSe=sectorSkills.filter(s=>!s.data.unlocked);
   let html='';
   if(uS.length+uSe.length>0){
-    html+='<div style="font-size:.65rem;font-weight:700;color:var(--emerald-600);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Skills desbloqueados ('+(uS.length+uSe.length)+')</div>';
-    html+='<div class="sp-skills-grid" style="margin-bottom:16px">'+renderSG([...uS,...uSe])+'</div>';
+    html+='<div class="u-fs-micro u-fw-700 u-c-emerald-600 u-tt-uppercase u-ls-_08em u-mb-8">Skills desbloqueados ('+(uS.length+uSe.length)+')</div>';
+    html+='<div class="sp-skills-grid u-mb-16">'+renderSG([...uS,...uSe])+'</div>';
   }
   const totalLocked=lS.length+lSe.length;
   if(totalLocked>0){
@@ -1122,12 +1122,12 @@ function renderCommonExercises(filter='',cat='all'){
   }
   let html='';
   if(!list.length){
-    html='<div style="text-align:center;padding:24px;color:var(--slate-400);grid-column:1/-1"><p>No hay retos que coincidan con tu búsqueda.</p></div>';
+    html='<div class="u-ta-center u-p-24 u-c-slate-400 u-grid-column-1--1"><p>No hay retos que coincidan con tu búsqueda.</p></div>';
   }else{
     list.forEach(ce=>{
       const done=candidateProfile.completedCommon.find(c=>c.id===ce.id);
-      const catBadge=ce.category==='sector'?`<span class="cex-tag" style="background:var(--blue-100);color:var(--blue-500);border:1px solid rgba(59,130,246,.15)">Sector</span>`:`<span class="cex-tag universal">Universal</span>`;
-      html+=`<div class="common-ex-card ${done?'completed':''}" onclick="openCommonEx('${ce.id}')"><span class="cex-icon">${tpMonograma(ce.title,ce.category)}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta">${catBadge}${ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').map(t=>`<span class="cex-tag">${t}</span>`).join('')}${done?`<span class="cex-tag" style="background:var(--emerald-50);color:var(--emerald-600);border:1px solid var(--emerald-100)">✓ ${done.score}/100</span>`:''}</div></div>`;
+      const catBadge=ce.category==='sector'?`<span class="cex-tag u-bg-blue-100 u-c-blue-500 u-b-1-solid-rgba-59-130-246-_15">Sector</span>`:`<span class="cex-tag universal">Universal</span>`;
+      html+=`<div class="common-ex-card ${done?'completed':''}" onclick="openCommonEx('${ce.id}')"><span class="cex-icon">${tpMonograma(ce.title,ce.category)}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta">${catBadge}${ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').map(t=>`<span class="cex-tag">${t}</span>`).join('')}${done?`<span class="cex-tag u-bg-emerald-50 u-c-emerald-600 u-b-1-solid-emerald-100">✓ ${done.score}/100</span>`:''}</div></div>`;
     });
   }
   document.getElementById('commonExGrid').innerHTML=html;

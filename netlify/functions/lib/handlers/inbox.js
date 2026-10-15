@@ -5,7 +5,20 @@
  * Body: { markRead: [id,…] }       → marca leídos y devuelve la lista
  * Cabecera: Authorization Bearer
  */
-const { jsonResponse, sb, authUser, isUuid } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema } = require("../tp");
+
+/**
+ * Lo que sale de meta hacia el navegador. El aviso de desbloqueo guarda el
+ * company_user_id para auditoría, pero el candidato no debe recibirlo: con él
+ * podría cruzar qué desbloqueos vienen de la misma empresa.
+ */
+function metaPublica(m) {
+  const o = m && typeof m === "object" ? m : {};
+  const r = {};
+  if (typeof o.job_id === "string") r.job_id = o.job_id;
+  if (typeof o.status === "string") r.status = o.status;
+  return r;
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -18,10 +31,11 @@ exports.handler = async (event) => {
 
     if (Array.isArray(b.markRead) && b.markRead.length) {
       const ids = b.markRead.filter((id) => isUuid(String(id))).slice(0, 50);
-      for (const id of ids) {
+      // Una sola petición para todos (antes, una por aviso).
+      if (ids.length) {
         await sb.update(
           "notifications",
-          `id=eq.${id}&user_id=eq.${user.id}&read_at=is.null`,
+          `id=in.(${ids.join(",")})&user_id=eq.${user.id}&read_at=is.null`,
           { read_at: new Date().toISOString() }
         );
       }
@@ -34,7 +48,7 @@ exports.handler = async (event) => {
         `user_id=eq.${user.id}&select=id,type,title,body,meta,read_at,created_at&order=created_at.desc&limit=40`
       );
     } catch (err) {
-      if (/notifications/i.test(err.message)) {
+      if (faltaEnEsquema(err, "notifications")) {
         return jsonResponse(200, { ok: true, notifications: [], pendingMigration: true });
       }
       throw err;
@@ -45,7 +59,7 @@ exports.handler = async (event) => {
       type: n.type,
       title: n.title,
       body: n.body || "",
-      meta: n.meta || {},
+      meta: metaPublica(n.meta),
       readAt: n.read_at,
       createdAt: n.created_at
     }));
@@ -54,3 +68,5 @@ exports.handler = async (event) => {
     return jsonResponse(500, { error: "No se pudieron cargar los avisos", details: err.message });
   }
 };
+
+module.exports.metaPublica = metaPublica;

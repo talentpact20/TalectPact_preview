@@ -26,9 +26,9 @@ const RAIZ = path.join(__dirname, "..", "..", "..");
 const TABLAS = ["profiles", "evaluations", "credentials", "companies", "unlocks"];
 const PROBE = process.argv.includes("--probe-write");
 
-// La URL y la clave pública viven en index.html: son públicas por diseño.
+// La URL y la clave pública viven en assets/js/app/04-estado-y-nube.js: son públicas por diseño.
 function configPublica() {
-  const html = fs.readFileSync(path.join(RAIZ, "index.html"), "utf8");
+  const html = fs.readFileSync(path.join(RAIZ, "assets", "js", "app", "04-estado-y-nube.js"), "utf8");
   const url = (html.match(/const TP_SUPABASE_URL\s*=\s*'([^']+)'/) || [])[1];
   const anon = (html.match(/const TP_SUPABASE_ANON\s*=\s*'([^']+)'/) || [])[1];
   return { url: (process.env.SUPABASE_URL || url || "").replace(/\/$/, ""), anon };
@@ -65,7 +65,7 @@ async function probarEscritura(url, anon, tabla) {
 
   console.log("\n  TalentPact — comprobación de RLS (¿qué ve la clave pública?)\n");
   if (!url || !anon) {
-    console.error("  No he podido leer TP_SUPABASE_URL / TP_SUPABASE_ANON de index.html.\n");
+    console.error("  No he podido leer TP_SUPABASE_URL / TP_SUPABASE_ANON de assets/js/app/04-estado-y-nube.js.\n");
     process.exitCode = 1;
     return;
   }

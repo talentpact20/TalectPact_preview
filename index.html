@@ -30,10 +30,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/tokens.css?v=20261014">
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
-<link rel="stylesheet" href="assets/css/modulos.css?v=20261014c">
+<link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261015">
-<link rel="stylesheet" href="assets/css/utilidades.css?v=20261014">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261015e">
+<link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
 
@@ -194,7 +194,7 @@
 
   <!-- TAB: Ranking -->
   <div class="dash-tab-content" id="candTab-ranking">
-    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Ranking por Sector</h3><p class="u-fs-peq u-c-slate-500">Tu posición anónima comparada con otros candidatos de tu sector. Actualizado en tiempo real.</p></div>
+    <div class="u-mb-16"><h3 class="u-fs-dest u-fw-700 u-mb-4">Ranking por Sector</h3><p class="u-fs-peq u-c-slate-500">Tu posición anónima comparada con otros candidatos de tu sector, con las notas reales del pool al abrir esta pestaña.</p></div>
     <div id="rankingSectorFilters" class="u-d-flex u-gap-6 u-fw-wrap-wrap u-mb-16">
       <button class="filter-btn active" onclick="renderRanking('all',this)">Todos</button>
       <button class="filter-btn" onclick="renderRanking('Marketing',this)">Marketing</button>
@@ -352,6 +352,7 @@
       </div>
     </div>
 
+    <div id="empInbox" class="u-mb-16" hidden></div>
     <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Mis ofertas</div></div><div id="empJobsList"></div></div>
 
     <div class="dash-section" id="empOfferCandidatesSection" style="display:none">
@@ -1052,27 +1053,27 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/app/00-iconos.js?v=20261014"></script>
-<script src="assets/js/app/01-datos-ofertas.js?v=20261014"></script>
-<script src="assets/js/app/02-grabacion.js?v=20261014"></script>
-<script src="assets/js/app/03-datos-retos.js?v=20261014"></script>
-<script src="assets/js/app/04-estado-y-nube.js?v=20261014"></script>
-<script src="assets/js/app/05-qr.js?v=20261014"></script>
-<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261014"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261014b"></script>
-<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261015"></script>
-<script src="assets/js/app/09-acceso.js?v=20261014"></script>
-<script src="assets/js/app/10-paneles-y-pagos.js?v=20261015"></script>
-<script src="assets/js/app/11-superadmin.js?v=20261014"></script>
-<script src="assets/js/app/12-soporte-y-ranking.js?v=20261014"></script>
-<script src="assets/js/app/13-integridad.js?v=20261014"></script>
-<script src="assets/js/app/14-empleo.js?v=20261014b"></script>
-<script src="assets/js/app/15-proteccion-acceso.js?v=20261014"></script>
-<script src="assets/js/app/16-pool-real.js?v=20261014"></script>
-<script src="assets/js/app/17-ofertas-reales.js?v=20261014c"></script>
-<script src="assets/js/app/18-interfaz.js?v=20261014b"></script>
-<script src="assets/js/app/19-rrhh.js?v=20261015"></script>
-<script src="assets/js/app/99-arranque.js?v=20261014"></script>
+<script src="assets/js/app/00-iconos.js?v=20261015c"></script>
+<script src="assets/js/app/01-datos-ofertas.js?v=20261015c"></script>
+<script src="assets/js/app/02-grabacion.js?v=20261015e"></script>
+<script src="assets/js/app/03-datos-retos.js?v=20261015c"></script>
+<script src="assets/js/app/04-estado-y-nube.js?v=20261015c"></script>
+<script src="assets/js/app/05-qr.js?v=20261015c"></script>
+<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261015e"></script>
+<script src="assets/js/app/07-retos-comunes.js?v=20261015c"></script>
+<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261015e"></script>
+<script src="assets/js/app/09-acceso.js?v=20261015c"></script>
+<script src="assets/js/app/10-paneles-y-pagos.js?v=20261015e"></script>
+<script src="assets/js/app/11-superadmin.js?v=20261015c"></script>
+<script src="assets/js/app/12-soporte-y-ranking.js?v=20261015e"></script>
+<script src="assets/js/app/13-integridad.js?v=20261015c"></script>
+<script src="assets/js/app/14-empleo.js?v=20261015c"></script>
+<script src="assets/js/app/15-proteccion-acceso.js?v=20261015c"></script>
+<script src="assets/js/app/16-pool-real.js?v=20261015e"></script>
+<script src="assets/js/app/17-ofertas-reales.js?v=20261015e"></script>
+<script src="assets/js/app/18-interfaz.js?v=20261015c"></script>
+<script src="assets/js/app/19-rrhh.js?v=20261015h"></script>
+<script src="assets/js/app/99-arranque.js?v=20261015c"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->
 <script src="analytics-talentpact.js"></script>

@@ -244,6 +244,25 @@ function isUuid(v) {
     /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v.trim());
 }
 
+/**
+ * ¿El error es que falta una tabla o columna (migración sin aplicar)?
+ * Solo mira el mensaje de Supabase, no la ruta: "Supabase GET applications?… -> 500"
+ * nombra siempre la tabla, y con un test sobre el mensaje entero cualquier
+ * fallo (red, permisos, timeout) pasaba por "migración pendiente".
+ */
+function faltaEnEsquema(err, nombre) {
+  const m = String((err && err.message) || "");
+  const i = m.indexOf("->");
+  const detalle = i >= 0 ? m.slice(i + 2) : m;
+  const re = nombre instanceof RegExp ? nombre : new RegExp(nombre, "i");
+  return re.test(detalle) && /does not exist|schema cache/i.test(detalle);
+}
+
+/** Violación de una restricción unique (p. ej. dos postulaciones simultáneas). */
+function esDuplicado(err) {
+  return /-> 409|duplicate key|23505/i.test(String((err && err.message) || ""));
+}
+
 /** ¿Está la capa blockchain configurada en este entorno? */
 function chainConfigured({ signer = false } = {}) {
   if (!process.env.SKILLPASS_CONTRACT_ADDRESS) return false;
@@ -364,6 +383,8 @@ module.exports = {
   chainConfigured,
   isHash32,
   isUuid,
+  faltaEnEsquema,
+  esDuplicado,
   CHAIN,
   explorerTx,
   explorerAddress,

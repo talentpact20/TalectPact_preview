@@ -6,7 +6,7 @@
  *
  * Nunca devuelve `company_user_id`: el id de la cuenta que publica no es público.
  */
-const { jsonResponse, sb, authUser } = require("../tp");
+const { jsonResponse, sb, authUser, faltaEnEsquema } = require("../tp");
 
 const CAMPOS_BASE = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
   "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at";
@@ -52,16 +52,16 @@ async function seleccionar(filtro) {
   try {
     return await sb.select("jobs", `select=${CAMPOS},companies(company_name,company_size,description,sector,website,location)&${filtro}`);
   } catch (err) {
-    if (/culture_questions/i.test(err.message)) {
+    if (faltaEnEsquema(err, /culture_questions/i)) {
       try {
         return await sb.select("jobs", `select=${CAMPOS_BASE},companies(company_name,company_size,description,sector,website,location)&${filtro}`);
       } catch (err2) {
-        if (!/description|sector|website|location/i.test(err2.message)) throw err2;
+        if (!faltaEnEsquema(err2, /description|sector|website|location/i)) throw err2;
         return sb.select("jobs", `select=${CAMPOS_BASE},companies(company_name,company_size)&${filtro}`);
       }
     }
     // Sin la migración de la ficha de empresa, se sirve la oferta con el nombre.
-    if (!/description|sector|website|location/i.test(err.message)) throw err;
+    if (!faltaEnEsquema(err, /description|sector|website|location/i)) throw err;
     return sb.select("jobs", `select=${CAMPOS},companies(company_name,company_size)&${filtro}`);
   }
 }

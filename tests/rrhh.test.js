@@ -63,6 +63,14 @@ test("el pipeline solo admite estados conocidos y descartado exige motivo en el 
   assert.ok(ESTADOS.includes("preseleccionado"));
   assert.ok(ESTADOS.includes("descartado"));
   assert.equal(ESTADOS.includes("fantasma"), false);
+  // El aviso al candidato no nombra a la empresa ni filtra el motivo del descarte.
+  const { mensajeEtapa } = require("../netlify/functions/lib/notify.js");
+  assert.equal(mensajeEtapa("aplicado"), null);
+  for (const e of ["preseleccionado", "entrevista", "contratado", "descartado"]) {
+    const m = mensajeEtapa(e);
+    assert.ok(m.title && m.body, e);
+    assert.doesNotMatch(m.title + m.body, /motivo|NortePay|razón/i);
+  }
 });
 
 test("inbox y applications exigen sesión", async () => {
@@ -70,4 +78,32 @@ test("inbox y applications exigen sesión", async () => {
   const apps = require("../netlify/functions/lib/handlers/applications.js");
   assert.equal((await inbox.handler({ httpMethod: "POST", headers: {}, body: "{}" })).statusCode, 401);
   assert.equal((await apps.handler({ httpMethod: "POST", headers: {}, body: "{}" })).statusCode, 401);
+  // La postulación del candidato también exige sesión (antes el botón Aplicar no guardaba nada).
+  const apply = require("../netlify/functions/lib/handlers/apply.js");
+  assert.equal((await apply.handler({ httpMethod: "POST", headers: {}, body: JSON.stringify({ jobId: "x" }) })).statusCode, 401);
+  assert.equal((await apply.handler({ httpMethod: "GET", headers: {}, body: "" })).statusCode, 405);
+});
+
+test("un fallo cualquiera no se confunde con una migración pendiente (ni salta filtros de privacidad)", () => {
+  const { faltaEnEsquema, esDuplicado } = require("../netlify/functions/lib/tp.js");
+  const err = (m) => new Error(m);
+  // La ruta nombra siempre la tabla: eso solo no puede bastar.
+  assert.equal(faltaEnEsquema(err("Supabase GET applications?job_id=eq.x -> 500: canceling statement due to statement timeout"), "applications"), false);
+  assert.equal(faltaEnEsquema(err("Supabase GET applications?x -> 404: Could not find the table 'public.applications' in the schema cache"), "applications"), true);
+  assert.equal(faltaEnEsquema(err('Supabase GET notifications?x -> 404: relation "public.notifications" does not exist'), "notifications"), true);
+  assert.equal(faltaEnEsquema(err('Supabase GET applications?x -> 404: relation "public.notifications" does not exist'), "applications"), false);
+  // Pool: un timeout con pool_visible en la ruta no puede activar la consulta
+  // sin filtro (enseñaría candidatos ocultos); una columna ausente sí.
+  const ruta = "Supabase GET profiles?select=id,user_id,sector,empleo,pool_visible,allow_contact&pool_visible=is.true";
+  assert.equal(faltaEnEsquema(err(ruta + " -> 500: canceling statement due to statement timeout"), /empleo|pool_visible|allow_contact/i), false);
+  assert.equal(faltaEnEsquema(err(ruta + " -> 400: column profiles.pool_visible does not exist"), /empleo|pool_visible|allow_contact/i), true);
+  assert.equal(esDuplicado(err('Supabase POST applications -> 409: duplicate key value violates unique constraint')), true);
+  assert.equal(esDuplicado(err("Supabase POST applications -> 500: error")), false);
+});
+
+test("la bandeja no entrega al candidato el identificador de la empresa", () => {
+  const { metaPublica } = require("../netlify/functions/lib/handlers/inbox.js");
+  const m = metaPublica({ unlock_id: "u", company_user_id: "c", candidate_ref: "r", job_id: "j", status: "entrevista" });
+  assert.deepEqual(m, { job_id: "j", status: "entrevista" });
+  assert.deepEqual(metaPublica(null), {});
 });

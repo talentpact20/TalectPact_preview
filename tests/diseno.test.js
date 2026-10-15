@@ -65,6 +65,13 @@ test("index.html no lleva estilos en línea salvo el estado que cambia el JavaSc
   const util = leer("assets/css/utilidades.css");
   const faltan = [...new Set([...index.matchAll(/\b(u-[a-z0-9_-]+)/g)].map((m) => m[1]))].filter((c) => !util.includes("." + c + "{"));
   assert.deepEqual(faltan, [], "clases de utilidad usadas que no existen");
+  // Las plantillas de los scripts también usan utilidades: todas deben existir.
+  const css = util + leer("assets/css/componentes.css");
+  const enJs = new Set();
+  for (const f of fs.readdirSync(path.join(RAIZ, "assets/js/app"))) {
+    for (const m of leer("assets/js/app/" + f).matchAll(/\b(u-[a-z0-9_-]+)/g)) enJs.add(m[1]);
+  }
+  assert.deepEqual([...enJs].filter((c) => !css.includes("." + c)), [], "utilidades usadas en scripts sin definir");
 });
 
 test("las cifras de los paneles no traen números de ejemplo: salen de los datos", () => {

@@ -5,7 +5,7 @@
  *
  * La empresa se deduce del token, nunca de un `userId` enviado por el cliente.
  */
-const { jsonResponse, authUser, ensureCompanyByUser } = require("../tp");
+const { jsonResponse, authUser, ensureCompanyByUser, faltaEnEsquema } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -36,7 +36,7 @@ exports.handler = async (event) => {
       company = await ensureCompanyByUser(user.id, campos);
     } catch (err) {
       // Sin la migración supabase_schema_jobs.sql esas columnas no existen.
-      if (!/description|sector|website|location/i.test(err.message)) throw err;
+      if (!faltaEnEsquema(err, /description|sector|website|location/i)) throw err;
       const { description: _d, sector: _s, website: _w, location: _l, ...resto } = campos;
       company = await ensureCompanyByUser(user.id, resto);
     }

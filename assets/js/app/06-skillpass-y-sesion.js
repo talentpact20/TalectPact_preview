@@ -47,7 +47,7 @@ const SkillPass={
   _statusError(prefix,r){
     SkillPass._status('error','<strong>'+escHtml(prefix)+'</strong>'+
       ((r&&r.error)?': '+escHtml(r.error):'')+
-      ((r&&r.details)?'<br><span style="opacity:.75">'+escHtml(r.details)+'</span>':''));
+      ((r&&r.details)?'<br><span class="u-op-_75">'+escHtml(r.details)+'</span>':''));
   },
 
   _busy(on,label){
@@ -228,7 +228,7 @@ const SkillPass={
 
   copyLink(){
     const url=SkillPass.shareUrl(); if(!url)return;
-    const done=()=>SkillPass._status('ok','Enlace copiado. Cualquiera puede abrirlo y verificar el SkillPass en blockchain, sin cuenta TalentPact.<br><code style="font-size:.72rem;word-break:break-all">'+escHtml(url)+'</code>');
+    const done=()=>SkillPass._status('ok','Enlace copiado. Cualquiera puede abrirlo y verificar el SkillPass en blockchain, sin cuenta TalentPact.<br><code class="u-fs-micro u-wb-break-all">'+escHtml(url)+'</code>');
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(done).catch(()=>{ prompt('Copia este enlace:',url); done(); });
     }else{ prompt('Copia este enlace:',url); done(); }
@@ -265,7 +265,7 @@ const SkillPass={
       '.hint{text-align:center;margin-top:16px;font-size:12px;color:#64748b}'+
       '@media print{button,.hint{display:none}body{background:#fff;padding:0}}</style></head><body>'+
       card+'<p class="hint">En el diálogo elige <strong>Guardar como PDF</strong>.</p>'+
-      '<div class="hint"><button onclick="window.print()" style="padding:10px 18px;border:0;border-radius:10px;background:#059669;color:#fff;font-weight:700;cursor:pointer">Guardar como PDF</button></div>'+
+      '<div class="hint"><button onclick="window.print()" class="u-p-10-18 u-b-0 u-r-10 u-bg-emerald-600 u-c-sobre-tinta u-fw-700 u-cur-pointer">Guardar como PDF</button></div>'+
       '<script>setTimeout(function(){window.print();},500);<\/script></body></html>');
     w.document.close();
   }
@@ -373,6 +373,10 @@ async function tpArrancarSesion(){
     // guardada antes de salir a Google (sessionStorage 'tp_oauth_pending').
     let role=(u.user_metadata||{}).role;
     if(!role&&pending){ role=pending; await TPCloud.setRole(role); }
+    // Entró por el portal que no es el suyo: se abre su panel, pero diciéndolo.
+    else if(pending&&role&&role!==pending&&typeof toast==='function'){
+      toast(role==='empresa'?'Esa cuenta es de empresa: te llevamos a tu panel de empresa.':'Esa cuenta es de candidato: te llevamos a tu panel de candidato.');
+    }
 
     if(role==='empresa'){
       tpCompany=u;

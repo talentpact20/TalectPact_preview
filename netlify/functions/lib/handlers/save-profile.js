@@ -6,7 +6,7 @@
  * El candidato se deduce del token. Antes se aceptaba un `userId` en el body,
  * así que cualquiera podía sobrescribir el nombre, teléfono o LinkedIn de otro.
  */
-const { jsonResponse, authUser, ensureProfileByUser } = require("../tp");
+const { jsonResponse, authUser, ensureProfileByUser, faltaEnEsquema } = require("../tp");
 const { limpiarCond } = require("./get-talent-pool");
 
 exports.handler = async (event) => {
@@ -36,7 +36,7 @@ exports.handler = async (event) => {
     } catch (err) {
       // Sin la migración supabase_schema_pool.sql esas columnas no existen:
       // se guarda el resto antes que perderlo todo.
-      if (!/empleo|pool_visible|allow_contact/i.test(err.message)) throw err;
+      if (!faltaEnEsquema(err, /empleo|pool_visible|allow_contact/i)) throw err;
       const { empleo: _e, pool_visible: _v, allow_contact: _a, ...resto } = campos;
       profile = await ensureProfileByUser(user.id, resto);
     }

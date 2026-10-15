@@ -12,7 +12,7 @@
  *
  * Devuelve: { candidates: [{ ref, alias, i, sector, score, skills, cond, integ, verified, retos }] }
  */
-const { jsonResponse, sb, authUser, anonymousAlias } = require("../tp");
+const { jsonResponse, sb, authUser, anonymousAlias, faltaEnEsquema } = require("../tp");
 const { extraerPersonas } = require("../personas");
 
 const MAX_PERFILES = 500;
@@ -92,12 +92,16 @@ function construirPool(perfiles, evaluaciones, { soloVerificados = false } = {})
   return fichas.sort((a, b) => b.score - a.score);
 }
 
-/** Select tolerante: si la migración aún no está aplicada, repite sin esas columnas. */
+/**
+ * Select tolerante: si la migración aún no está aplicada, repite sin esas columnas.
+ * Solo ante una columna ausente: con cualquier otro fallo, la consulta sin
+ * pool_visible=is.true enseñaría a las empresas candidatos que se han ocultado.
+ */
 async function selectTolerante(tabla, conColumnas, sinColumnas, patron) {
   try {
     return await sb.select(tabla, conColumnas);
   } catch (err) {
-    if (!patron.test(err.message)) throw err;
+    if (!faltaEnEsquema(err, patron)) throw err;
     return sb.select(tabla, sinColumnas);
   }
 }

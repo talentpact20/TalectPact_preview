@@ -160,6 +160,8 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
   .dash-user{gap:6px;min-width:0}
   .dash-user .btn-ghost{padding-left:8px;padding-right:8px}
 }
+/* Tablas anchas (pool: 8 columnas): se desplazan dentro de su caja a cualquier ancho. */
+.tp-tabla-scroll{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
 /* Tablas de los paneles en móvil: se desplazan dentro de su caja, la página no. */
 @media (max-width:760px){
   .dash-table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -262,3 +264,8 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
 .tp-dialogo p{font-size:var(--fs-peq);color:var(--c-texto-2);margin-bottom:12px}
 .tp-dialogo textarea{width:100%;padding:10px 12px;border:1px solid var(--c-borde-fuerte);border-radius:var(--radius);background:var(--c-superficie);color:var(--c-texto);font:inherit;resize:vertical}
 .tp-dialogo-acc{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+
+/* El atributo hidden manda sobre cualquier display de componente */
+[hidden]{display:none!important}
+
+.tp-final-skill.u-d-block{display:block}

@@ -94,39 +94,39 @@ function openJob(id){
   let skillsHTML='';
   has.forEach(s=>{
     const sc=candidateProfile.skills[s]?.score||0;
-    skillsHTML+=`<div class="apply-skill-row has"><div class="ask-icon ok">✓</div><div class="ask-info"><h4>${s}</h4><p>Nivel ${levelLabel} alcanzado (≥${levelThreshold})</p></div><div class="ask-score high">${sc}/100</div></div>`;
+    skillsHTML+=`<div class="apply-skill-row has"><div class="ask-icon ok">✓</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Nivel ${levelLabel} alcanzado (≥${levelThreshold})</p></div><div class="ask-score high">${sc}/100</div></div>`;
   });
   missing.forEach(s=>{
     const sk=candidateProfile.skills[s];
     const isUnlockedButLow=sk?.unlocked&&sk.score<levelThreshold;
     const commonEx=COMMON_EXERCISES.find(ce=>ce.skill===s);
     if(isUnlockedButLow){
-      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">↑</div><div class="ask-info"><h4>${s}</h4><p>Tu score (${sk.score}) no alcanza el nivel ${levelLabel} (≥${levelThreshold}). Repite el reto para mejorar.</p></div><div class="ask-score pending">${sk.score}/${levelThreshold}</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Repetir reto →</button>`:''}</div></div>`;
+      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">↑</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Tu score (${sk.score}) no alcanza el nivel ${levelLabel} (≥${levelThreshold}). Repite el reto para mejorar.</p></div><div class="ask-score pending">${sk.score}/${levelThreshold}</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Repetir reto →</button>`:''}</div></div>`;
     }else{
-      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">!</div><div class="ask-info"><h4>${s}</h4><p>Necesitas completar este reto (nivel ${levelLabel}, ≥${levelThreshold})</p></div><div class="ask-score pending">Pendiente</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Hacer reto →</button>`:`<span class="ex-config-badge ecb-contact">Próximamente</span>`}</div></div>`;
+      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">!</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Necesitas completar este reto (nivel ${levelLabel}, ≥${levelThreshold})</p></div><div class="ask-score pending">Pendiente</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Hacer reto →</button>`:`<span class="ex-config-badge ecb-contact">Próximamente</span>`}</div></div>`;
     }
   });
   
   let summaryHTML='';
   if(hasAll){
-    summaryHTML=`<div class="apply-summary" style="border-color:var(--emerald-200);background:var(--emerald-50)"><div class="apply-summary-icon">${tpIcon('check-circle')}</div><div class="apply-summary-text"><h4 style="color:var(--emerald-600)">¡Cumples todos los requisitos!</h4><p>Tienes todos los skills al nivel ${levelLabel} o superior. Puedes aplicar directamente.</p></div></div>`;
+    summaryHTML=`<div class="apply-summary u-bc-emerald-200 u-bg-emerald-50"><div class="apply-summary-icon">${tpIcon('check-circle')}</div><div class="apply-summary-text"><h4 class="u-c-emerald-600">¡Cumples todos los requisitos!</h4><p>Tienes todos los skills al nivel ${levelLabel} o superior. Puedes aplicar directamente.</p></div></div>`;
   }else{
     summaryHTML=`<div class="apply-summary"><div class="apply-summary-icon">${tpIcon('zap')}</div><div class="apply-summary-text"><h4>Te faltan ${missing.length} skill${missing.length>1?'s':''} al nivel requerido</h4><p>Esta oferta pide nivel <span class="level-badge ${levelCls}">${levelLabel}</span> (score ≥${levelThreshold}) en cada skill.</p></div></div>`;
   }
   
   document.getElementById('exContent').innerHTML=`<div class="apply-screen">
-    ${co?`<div class="apply-company"><div class="apply-company-logo">${co.logo}</div><div class="apply-company-info"><h4>${co.name}</h4><p>${co.size} empleados · ${co.sector}</p></div><div style="display:flex;gap:6px;margin-left:auto;align-items:center"><span class="level-badge ${levelCls}">Nivel ${levelLabel}</span><div class="ex-config-badge ${configBadge}">${configLabel}</div></div></div>`:''}
+    ${co?`<div class="apply-company"><div class="apply-company-logo">${escHtml(co.logo||"")}</div><div class="apply-company-info"><h4>${escHtml(co.name)}</h4><p>${escHtml(co.size)} empleados · ${escHtml(co.sector||"")}</p></div><div class="u-d-flex u-gap-6 u-ml-auto u-ai-center"><span class="level-badge ${levelCls}">Nivel ${levelLabel}</span><div class="ex-config-badge ${configBadge}">${configLabel}</div></div></div>`:''}
     ${summaryHTML}
     <div class="apply-section-title">Skills requeridos — Nivel ${levelLabel} (${has.length}/${required.length} cumplidos)</div>
     <div class="apply-skills-list">${skillsHTML}</div>
-    ${hasAll?`<div style="margin-bottom:16px"><div class="apply-section-title">Retos adicionales de la empresa</div>
-      ${j.exerciseConfig==='common+custom'||j.exerciseConfig==='custom'?`<p style="font-size:.78rem;color:var(--slate-500);margin-bottom:12px">Esta empresa también tiene retos personalizados. Completarlos mejora tu posición frente a otros candidatos.</p><button class="btn btn-primary" onclick="startJobExercises()">Completar retos de ${co?.name||'la empresa'} →</button>
-      <button class="btn btn-outline" style="margin-left:8px" onclick="applyDirectly()">Aplicar sin retos extras</button>`
-      :j.exerciseConfig==='contact'?`<div style="background:var(--amber-100);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:12px 14px;font-size:.78rem;color:var(--amber-500)"><strong>Ejercicios a medida</strong><br>Esta empresa ha solicitado ejercicios diseñados específicamente para este puesto. <a href="#" onclick="openContact()" style="color:var(--amber-500);font-weight:600">Contactar con TalentPact</a> para más info.</div>
-      <button class="btn btn-primary" style="margin-top:12px" onclick="applyDirectly()">Aplicar con mis skills actuales →</button>`
+    ${hasAll?`<div class="u-mb-16"><div class="apply-section-title">Retos adicionales de la empresa</div>
+      ${j.exerciseConfig==='common+custom'||j.exerciseConfig==='custom'?`<p class="u-fs-micro u-c-slate-500 u-mb-12">Esta empresa también tiene retos personalizados. Completarlos mejora tu posición frente a otros candidatos.</p><button class="btn btn-primary" onclick="startJobExercises()">Completar retos de ${escHtml(co?.name||'la empresa')} →</button>
+      <button class="btn btn-outline u-ml-8" onclick="applyDirectly()">Aplicar sin retos extras</button>`
+      :j.exerciseConfig==='contact'?`<div class="u-bg-amber-100 u-b-1-solid-rgba-245-158-11-_2 u-r-8 u-p-12-14 u-fs-micro u-c-amber-500"><strong>Ejercicios a medida</strong><br>Esta empresa ha solicitado ejercicios diseñados específicamente para este puesto. <a href="#" onclick="openContact()" class="u-c-amber-500 u-fw-600">Contactar con TalentPact</a> para más info.</div>
+      <button class="btn btn-primary u-mt-12" onclick="applyDirectly()">Aplicar con mis skills actuales →</button>`
       :`<button class="btn btn-primary" onclick="applyDirectly()">Aplicar a esta oferta →</button>`}
     </div>`:
-    `<div style="text-align:center;padding:16px 0"><button class="btn btn-primary btn-lg" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1]),100)">Ir a completar retos comunes →</button></div>`}
+    `<div class="u-ta-center u-p-16-0"><button class="btn btn-primary btn-lg" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1]),100)">Ir a completar retos comunes →</button></div>`}
   </div>`;
   
   document.getElementById('jobModal').classList.add('open');document.getElementById('jobModal').scrollTop=0;
@@ -141,12 +141,40 @@ function startJobExercises(){
   renderEx(el,0);
 }
 
-function applyDirectly(){
-  const co=COMPANIES.find(c=>c.id===activeJob.company);
-  _pendingJobId=null; // Clear pending job
-  document.getElementById('exContent').innerHTML=`<div class="apply-screen" style="text-align:center"><div style="width:56px;height:56px;border-radius:50%;background:var(--emerald-50);border:2px solid var(--emerald-200);display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:14px">${tpIcon('check-circle')}</div><h3 class="display" style="font-size:1.3rem;color:var(--emerald-600);margin-bottom:6px">¡Candidatura enviada!</h3><p style="color:var(--slate-500);font-size:.8125rem;margin-bottom:20px;max-width:380px;margin-left:auto;margin-right:auto">Tu perfil anónimo de skills ha sido enviado a <strong>${co?.name||'la empresa'}</strong>. Si están interesados, pagarán para ver tu contacto y se pondrán en contacto contigo.</p><div style="background:var(--slate-50);border:1px solid var(--slate-200);border-radius:10px;padding:14px;margin-bottom:20px;text-align:left"><div style="font-size:.6875rem;font-weight:600;color:var(--slate-500);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Lo que verá la empresa:</div><div style="display:flex;gap:8px;flex-wrap:wrap">${(activeJob.requiredSkills||[]).map(s=>{const sc=candidateProfile.skills[s]?.score||0;return`<span class="job-tag" style="font-size:.6875rem">${s}: <strong>${sc}</strong></span>`;}).join('')}</div><div style="font-size:.6875rem;color:var(--slate-400);margin-top:8px">Tu nombre, email y teléfono permanecen ocultos hasta que la empresa pague.</div></div><div style="display:flex;gap:10px;justify-content:center"><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button><button class="btn btn-primary" onclick="closeJobModal();openDashCand()">Explorar más ofertas</button></div></div>`;
-}
+// Postulación real: se guarda en el servidor (función apply). Antes solo se
+// mostraba una pantalla de éxito y la empresa nunca recibía nada.
+const TPPostulaciones={
+  porOferta:{},   // jobId → etapa
+  async cargar(){
+    if(!tpUser)return;
+    try{
+      const r=await TPCloud._postAuth('apply',{});
+      if(r&&Array.isArray(r.applications)){TPPostulaciones.porOferta={};r.applications.forEach(a=>{TPPostulaciones.porOferta[a.jobId]=a.status;});}
+    }catch(e){console.warn('[TP] postulaciones',e);}
+  },
+  etapa(jobId){return TPPostulaciones.porOferta[jobId]||'';}
+};
+const TP_ETAPA_CANDIDATO={aplicado:'Postulación enviada',retos:'En fase de retos',preseleccionado:'Preseleccionado',entrevista:'En entrevista',contratado:'Contratado',descartado:'No continúa'};
 
+async function applyDirectly(){
+  const j=activeJob,co=COMPANIES.find(c=>c.id===j.company);
+  const box=document.getElementById('exContent');
+  if(!tpUser){
+    box.innerHTML='<div class="apply-screen u-ta-center">'+tpVacio({icono:'lock',titulo:'Inicia sesión para postularte',texto:'Tu postulación se guarda en tu cuenta y la empresa verá tu perfil anónimo de skills.',acciones:[{txt:'Iniciar sesión o crear cuenta',accion:"closeJobModal();openAuth('candidate')",tipo:'btn-primary'}]})+'</div>';
+    return;
+  }
+  box.innerHTML='<div class="apply-screen">'+tpEsqueleto(3)+'</div>';
+  let r;
+  try{r=await TPCloud._postAuth('apply',{jobId:String(j.id)});}catch(e){r={error:e.message||String(e)};}
+  if(!r||r.error){
+    box.innerHTML='<div class="apply-screen u-ta-center">'+tpVacio({error:true,icono:'alert',titulo:'No se ha podido enviar tu postulación',texto:(r&&r.error)||'Sin respuesta del servidor. Inténtalo de nuevo.',acciones:[{txt:'Reintentar',accion:'applyDirectly()',tipo:'btn-primary'}]})+'</div>';
+    return;
+  }
+  _pendingJobId=null;
+  TPPostulaciones.porOferta[j.id]=(r.application&&r.application.status)||'aplicado';
+  const habilidades=(j.requiredSkills||[]).map(x=>{const sc=candidateProfile.skills[x]?.score||0;return`<span class="job-tag">${escHtml(x)}: <strong>${sc}</strong></span>`;}).join('');
+  box.innerHTML=`<div class="apply-screen u-ta-center"><div class="tp-final"><span class="tp-vacio-ico">${tpIcon('check')}</span><div><div class="tp-final-tit">${r.yaPostulado?'Ya te habías postulado':'Postulación enviada'}</div><p class="tp-final-sub">Tu perfil anónimo de skills está a disposición de <strong>${escHtml(co?co.name:'la empresa')}</strong>. Te avisaremos en tu bandeja cuando cambie tu etapa. Si desbloquean tu contacto, se pondrán en contacto contigo.</p></div><div class="tp-final-skill u-d-block"><div class="u-fs-micro u-fw-600">Lo que verá la empresa</div><div class="job-tags u-mt-8">${habilidades}</div><div class="u-fs-micro u-mt-8">Tu nombre, email y teléfono permanecen ocultos hasta que la empresa pague.</div></div><div class="tp-res-acciones"><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button></div></div></div>`;
+}
 function goToCommonFromApply(commonExId, jobId){
   _pendingJobId=jobId;
   closeJobModal();
@@ -176,7 +204,7 @@ function renderEx(el,i){
     <div class="ex-briefing-meta">
       <span class="ex-meta-pill ${diffCls}">${diffLabel}</span>
       ${timeLimit?`<span class="ex-meta-pill time-pill">${tpIcon('clock')} ${Math.floor(timeLimit/60)} min</span>`:''}
-      <span class="ex-meta-pill" style="border-color:var(--blue-100);color:var(--blue-500);background:var(--blue-100)">${ex.type==='audio'||ex.type==='video'?'Grabación':'Texto'}</span>
+      <span class="ex-meta-pill u-bc-blue-100 u-c-blue-500 u-bg-blue-100">${ex.type==='audio'||ex.type==='video'?'Grabación':'Texto'}</span>
     </div>
     <div class="ex-briefing-skills">${ex.skills.hard.map(s=>`<span class="skill-pill sp-hard">${s}</span>`).join('')}${ex.skills.soft.map(s=>`<span class="skill-pill sp-soft">${s}</span>`).join('')}</div>
     <div class="ex-briefing-text">${briefing}</div>
@@ -208,26 +236,26 @@ function renderExActive(el,i){
   let timerHTML='';
   if(timeLimit){
     _exTimeLeft=timeLimit;
-    timerHTML=`<div class="ex-timer-bar"><div class="ex-timer-label">Tiempo restante</div><div class="ex-timer-track"><div class="ex-timer-fill green" id="exTimerFill" style="width:100%"></div></div><div class="ex-timer-clock" id="exTimerClock">${Math.floor(timeLimit/60)}:${String(timeLimit%60).padStart(2,'0')}</div></div>`;
+    timerHTML=`<div class="ex-timer-bar"><div class="ex-timer-label">Tiempo restante</div><div class="ex-timer-track"><div class="ex-timer-fill green u-w-100pct" id="exTimerFill"></div></div><div class="ex-timer-clock" id="exTimerClock">${Math.floor(timeLimit/60)}:${String(timeLimit%60).padStart(2,'0')}</div></div>`;
   }
-  let h=timerHTML+`<div class="ex-body" style="user-select:none"><div class="scenario-box"><div class="scenario-label">Escenario</div><p>${ex.scenario}</p></div>`;
+  let h=timerHTML+`<div class="ex-body u-user-select-none"><div class="scenario-box"><div class="scenario-label">Escenario</div><p>${ex.scenario}</p></div>`;
 
   if(ex.type==='analysis'&&ex.data){const hd=ex.data.headers;h+=`<table class="ex-data-table"><thead><tr>${hd.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${ex.data.table.map(r=>`<tr><td>${r.n}</td><td class="${r.cls}">${r.a}</td><td>${r.b}</td><td>${r.c}</td><td>${r.d}</td></tr>`).join('')}</tbody></table><span class="ex-textarea-label">${ex.data.q}</span><textarea class="ex-textarea" id="exAns" placeholder="Escribe tu análisis…" oncopy="return false"></textarea>`;}
-  else if(ex.type==='decision'&&ex.data){_exState.asgn={};ex.data.keys.forEach(k=>_exState.asgn[k]=[]);h+=`<p style="font-size:.8125rem;color:var(--slate-500);margin-bottom:12px;">Clasifica cada elemento haciendo clic:</p><div id="decItems">${ex.data.options.map(o=>`<div class="ex-choice" id="dc_${o.id}" onclick="cycleD('${o.id}',this)" data-correct="${o.correct}" data-cat=""><h4>${o.text}</h4><p id="dl_${o.id}">Sin asignar</p></div>`).join('')}</div><div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0;">${ex.data.cats.map(c=>`<span class="job-tag" style="font-size:.6875rem">${c}</span>`).join('')}</div>`;}
+  else if(ex.type==='decision'&&ex.data){_exState.asgn={};ex.data.keys.forEach(k=>_exState.asgn[k]=[]);h+=`<p class="u-fs-peq u-c-slate-500 u-mb-12">Clasifica cada elemento haciendo clic:</p><div id="decItems">${ex.data.options.map(o=>`<div class="ex-choice" id="dc_${o.id}" onclick="cycleD('${o.id}',this)" data-correct="${o.correct}" data-cat=""><h4>${o.text}</h4><p id="dl_${o.id}">Sin asignar</p></div>`).join('')}</div><div class="u-d-flex u-gap-6 u-fw-wrap-wrap u-m-10-0">${ex.data.cats.map(c=>`<span class="job-tag u-fs-micro">${c}</span>`).join('')}</div>`;}
   else if(ex.type==='email'&&ex.data){h+=`<div class="ex-email-mock"><div class="ex-email-head"><div class="ex-email-row"><label>Para:</label><input value="${ex.data.to}" readonly></div><div class="ex-email-row"><label>Asunto:</label><input id="exSubj" value="${ex.data.subject||''}" placeholder="Asunto…"></div></div><div class="ex-email-body"><textarea id="exAns" placeholder="${ex.data.hint||'Escribe…'}" style="min-height:150px" oncopy="return false"></textarea></div></div>`;}
   else if(ex.type==='audio'&&ex.data){
     const dur=ex.data.duration||ex.data.maxTime||120;
     const botText=ex.data.botMessage||ex.data.botMsg||'';
-    const bars=Array.from({length:40},()=>'<div class="wave-bar" style="height:4px"></div>').join('');
-    if(botText)h+=`<div style="background:var(--slate-800);border:1px solid var(--slate-700);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;color:var(--slate-300);font-size:.8125rem">${botText}</div>`;
+    const bars=Array.from({length:40},()=>'<div class="wave-bar u-h-4"></div>').join('');
+    if(botText)h+=`<div class="u-bg-slate-800 u-b-1-solid-slate-700 u-r-radius u-p-14-16 u-mb-16 u-c-slate-300 u-fs-peq">${botText}</div>`;
     h+=`<div class="rec-container"><div class="rec-label">${tpIcon('mic')} ${ex.data.context||''}</div><div class="rec-timer" id="recTimer">${Math.floor(dur/60)}:${String(dur%60).padStart(2,'0')}</div><div class="rec-status" id="recStatus">Pulsa REC para grabar</div><div class="waveform">${bars}</div><button class="rec-btn" id="recBtn" onclick="toggleRecording(${dur})"><div class="rec-btn-inner"></div></button><div class="rec-metrics" id="recMetrics" style="display:none"></div></div>`;
     h+=`<button class="btn btn-primary" id="recSubmitBtn" style="width:100%;justify-content:center;display:none" onclick="submitEx(${i})">Enviar grabación →</button>`;
     h+=`</div>`;ct.innerHTML=h;startExTimer(i);return;
   }
   else if(ex.type==='video'&&ex.data){
     const dur=ex.data.maxTime||ex.data.duration||120;
-    const bars=Array.from({length:40},()=>'<div class="wave-bar" style="height:4px"></div>').join('');
-    h+=`<div style="background:var(--slate-800);border:1px solid var(--slate-700);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;color:var(--slate-300);font-size:.8125rem">${ex.data.imageUrl||ex.data.context||''}</div>`;
+    const bars=Array.from({length:40},()=>'<div class="wave-bar u-h-4"></div>').join('');
+    h+=`<div class="u-bg-slate-800 u-b-1-solid-slate-700 u-r-radius u-p-14-16 u-mb-16 u-c-slate-300 u-fs-peq">${ex.data.imageUrl||ex.data.context||''}</div>`;
     h+=`<div class="rec-container"><div class="rec-label">${tpIcon('video')} ${ex.data.context||'Grabación de vídeo'}</div><div class="rec-timer" id="recTimer">${Math.floor(dur/60)}:${String(dur%60).padStart(2,'0')}</div><div class="rec-status" id="recStatus">Pulsa REC para grabar</div><div class="waveform">${bars}</div><button class="rec-btn" id="recBtn" onclick="toggleRecording(${dur})"><div class="rec-btn-inner"></div></button><div class="rec-metrics" id="recMetrics" style="display:none"></div></div>`;
     h+=`<button class="btn btn-primary" id="recSubmitBtn" style="width:100%;justify-content:center;display:none" onclick="submitEx(${i})">Enviar grabación →</button>`;
     h+=`</div>`;ct.innerHTML=h;startExTimer(i);return;
@@ -236,14 +264,14 @@ function renderExActive(el,i){
     const puzzles=ex.data.puzzles;_exState.cogAnswers=new Array(puzzles.length).fill(-1);_exState.cogCorrect=puzzles.map(p=>p.correct);
     h+=`<div id="cogPuzzles">`;
     puzzles.forEach((p,pi)=>{
-      h+=`<div style="background:white;border:1px solid var(--slate-200);border-radius:var(--radius);padding:18px;margin-bottom:14px"><div style="font-family:'JetBrains Mono',monospace;font-size:.625rem;color:var(--slate-400);margin-bottom:10px">PUZZLE ${pi+1} de ${puzzles.length}</div><div class="cog-sequence">${(p.seq||p.sequence||[]).map(s=>`<div class="cog-seq-item${s==='?'?' mystery':''}">${s}</div>`).join('')}</div><div class="cog-options">${p.options.map((o,oi)=>`<div class="cog-opt" id="cog_${pi}_${oi}" onclick="selectCog(${pi},${oi})">${o}</div>`).join('')}</div></div>`;
+      h+=`<div class="u-bg-superficie u-b-1-solid-slate-200 u-r-radius u-p-18 u-mb-14"><div style="font-family:'JetBrains Mono',monospace;font-size:.625rem;color:var(--slate-400);margin-bottom:10px">PUZZLE ${pi+1} de ${puzzles.length}</div><div class="cog-sequence">${(p.seq||p.sequence||[]).map(s=>`<div class="cog-seq-item${s==='?'?' mystery':''}">${s}</div>`).join('')}</div><div class="cog-options">${p.options.map((o,oi)=>`<div class="cog-opt" id="cog_${pi}_${oi}" onclick="selectCog(${pi},${oi})">${o}</div>`).join('')}</div></div>`;
     });
     h+=`</div>`;
   }
   else if(ex.type==='image_audit'&&ex.data){
     const dur=ex.data.duration||120;
-    const bars=Array.from({length:40},()=>'<div class="wave-bar" style="height:4px"></div>').join('');
-    h+=`<div class="audit-image-wrap"><div class="audit-badge">${tpIcon('clock')} Analiza</div><div class="audit-image"><div class="audit-mockup"><div class="audit-mockup-nav"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><span style="font-size:.65rem;color:var(--slate-400);margin-left:8px">${ex.data.mockupTitle||'App'}</span></div><div class="audit-mockup-body"><div style="font-family:Comic Sans MS,cursive;font-size:1.1rem;color:#999;margin-bottom:6px">bienvenido a foodapp</div><div style="display:flex;gap:4px;margin-bottom:10px;flex-wrap:wrap">${['Inicio','Menú','Pedidos','Favoritos','Perfil','Ajustes','Ayuda','Blog','Tienda','Ofertas','Club','Más'].map(x=>`<span style="background:#f0f0f0;padding:2px 5px;border-radius:2px;font-size:.5rem;color:#aaa">${x}</span>`).join('')}</div><div style="background:#fafafa;border:1px solid #eee;border-radius:4px;padding:8px;margin-bottom:8px"><div style="font-size:.7rem;color:#bbb">Pizza Margherita €12.50</div></div><button style="background:#e8e8e8;color:#d0d0d0;border:none;padding:6px 12px;border-radius:2px;font-size:.6rem;width:100%">pedir ahora</button></div></div></div></div>`;
+    const bars=Array.from({length:40},()=>'<div class="wave-bar u-h-4"></div>').join('');
+    h+=`<div class="audit-image-wrap"><div class="audit-badge">${tpIcon('clock')} Analiza</div><div class="audit-image"><div class="audit-mockup"><div class="audit-mockup-nav"><div class="dot" style="background:#ff5f57"></div><div class="dot" style="background:#febc2e"></div><div class="dot" style="background:#28c840"></div><span class="u-fs-micro u-c-slate-400 u-ml-8">${ex.data.mockupTitle||'App'}</span></div><div class="audit-mockup-body"><div style="color:#999" class="u-ff-comic-sans-ms-cursive u-fs-dest u-mb-6">bienvenido a foodapp</div><div class="u-d-flex u-gap-4 u-mb-10 u-fw-wrap-wrap">${['Inicio','Menú','Pedidos','Favoritos','Perfil','Ajustes','Ayuda','Blog','Tienda','Ofertas','Club','Más'].map(x=>`<span style="background:#f0f0f0;color:#aaa" class="u-p-2-5 u-r-2 u-fs-micro">${x}</span>`).join('')}</div><div style="background:#fafafa;border:1px solid #eee" class="u-r-4 u-p-8 u-mb-8"><div style="color:#bbb" class="u-fs-micro">Pizza Margherita €12.50</div></div><button style="background:#e8e8e8;color:#d0d0d0" class="u-b-none u-p-6-12 u-r-2 u-fs-micro u-w-100pct">pedir ahora</button></div></div></div></div>`;
     h+=`<div class="rec-container"><div class="rec-label">${tpIcon('video')} Graba tu auditoría</div><div class="rec-timer" id="recTimer">${Math.floor(dur/60)}:${String(dur%60).padStart(2,'0')}</div><div class="rec-status" id="recStatus">Pulsa REC</div><div class="waveform">${bars}</div><button class="rec-btn" id="recBtn" onclick="toggleRecording(${dur})"><div class="rec-btn-inner"></div></button><div class="rec-metrics" id="recMetrics" style="display:none"></div></div>`;
     h+=`<button class="btn btn-primary" id="recSubmitBtn" style="width:100%;justify-content:center;display:none" onclick="submitEx(${i})">Enviar auditoría →</button>`;
     h+=`</div>`;ct.innerHTML=h;startExTimer(i);return;
@@ -257,11 +285,11 @@ function renderExActive(el,i){
       <div class="ex-upload-hint">Formatos: ${accept} · Máx ${maxMB}MB</div>
       <input type="file" id="exFileInput" accept="${accept}" style="display:none" onchange="handleUpload(this)">
     </div>
-    ${ex.data.urlField?`<div style="margin-top:12px"><label style="font-size:.6875rem;font-weight:600;color:var(--slate-600);display:block;margin-bottom:4px">O introduce una URL:</label><input type="url" class="ex-url-input" id="exUrlInput" placeholder="${ex.data.urlPlaceholder||'https://...'}"></div>`:''}
-    ${ex.data.commentField?`<div style="margin-top:12px"><label style="font-size:.6875rem;font-weight:600;color:var(--slate-600);display:block;margin-bottom:4px">${ex.data.commentLabel||'Descripción / comentarios:'}</label><textarea class="ex-textarea" id="exAns" placeholder="${ex.data.commentHint||'Describe tu trabajo…'}" style="min-height:100px" oncopy="return false"></textarea></div>`:''}`;
+    ${ex.data.urlField?`<div class="u-mt-12"><label class="u-fs-micro u-fw-600 u-c-slate-600 u-d-block u-mb-4">O introduce una URL:</label><input type="url" class="ex-url-input" id="exUrlInput" placeholder="${ex.data.urlPlaceholder||'https://...'}"></div>`:''}
+    ${ex.data.commentField?`<div class="u-mt-12"><label class="u-fs-micro u-fw-600 u-c-slate-600 u-d-block u-mb-4">${ex.data.commentLabel||'Descripción / comentarios:'}</label><textarea class="ex-textarea" id="exAns" placeholder="${ex.data.commentHint||'Describe tu trabajo…'}" style="min-height:100px" oncopy="return false"></textarea></div>`:''}`;
   }
 
-  h+=`<div style="margin-top:16px"><button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitEx(${i})">Enviar respuesta →</button></div></div>`;
+  h+=`<div class="u-mt-16"><button class="btn btn-primary" style="width:100%;justify-content:center" onclick="submitEx(${i})">Enviar respuesta →</button></div></div>`;
   ct.innerHTML=h;
   startExTimer(i);
   tpRespuestaViva(activeJob.id+':'+i);
@@ -272,7 +300,7 @@ function handleUpload(input){
   if(!file)return;
   const zone=document.getElementById('uploadZone');
   zone.classList.add('has-file');
-  zone.innerHTML=`<div class="ex-upload-preview"><span class="file-icon">${tpIcon('file')}</span><div class="file-info"><div class="file-name">${file.name}</div><div class="file-size">${(file.size/1024/1024).toFixed(2)} MB</div></div><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();document.getElementById('exFileInput').value='';document.getElementById('uploadZone').classList.remove('has-file');document.getElementById('uploadZone').innerHTML='<span class=\\'ex-upload-icon\\'>'+tpIcon('paperclip')+'</span><div class=\\'ex-upload-text\\'>Haz clic para cambiar archivo</div>';"><span>✕</span></button></div><input type="file" id="exFileInput" style="display:none" onchange="handleUpload(this)">`;
+  zone.innerHTML=`<div class="ex-upload-preview"><span class="file-icon">${tpIcon('file')}</span><div class="file-info"><div class="file-name">${escHtml(file.name)}</div><div class="file-size">${(file.size/1024/1024).toFixed(2)} MB</div></div><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();document.getElementById('exFileInput').value='';document.getElementById('uploadZone').classList.remove('has-file');document.getElementById('uploadZone').innerHTML='<span class=\\'ex-upload-icon\\'>'+tpIcon('paperclip')+'</span><div class=\\'ex-upload-text\\'>Haz clic para cambiar archivo</div>';"><span>✕</span></button></div><input type="file" id="exFileInput" style="display:none" onchange="handleUpload(this)">`;
   _exState.uploadedFile=file.name;
 }
 

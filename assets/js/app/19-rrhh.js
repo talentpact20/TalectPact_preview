@@ -106,6 +106,8 @@ function tpIntegridadDetalle(c){
   };
 })();
 
+function tpReintentarPool(){TPPool.estado='cargando';renderEmpPool();TPPool.cargar().then(renderEmpPool);}
+
 // Pool: filtro “con evidencia de personas” + columna Personas.
 (function(){
   const prev=typeof TP_POOL_FILTRO!=='undefined'?TP_POOL_FILTRO:null;
@@ -122,15 +124,15 @@ function tpIntegridadDetalle(c){
         &&(!f.soloVerificados||c.verified)
         &&(!f.soloPersonas||pers);
     });
-    let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><label class="tp-filter-check"><input type="checkbox"${f.soloPersonas?' checked':''} onchange="TP_POOL_FILTRO.soloPersonas=this.checked;renderEmpPool()"> Con evidencia de personas</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}</div>`:''}`;
-    h+='<table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Personas y equipo</th><th>Condiciones</th><th>Integridad</th><th>Técnico</th><th></th></tr></thead><tbody>';
+    let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><label class="tp-filter-check"><input type="checkbox"${f.soloPersonas?' checked':''} onchange="TP_POOL_FILTRO.soloPersonas=this.checked;renderEmpPool()"> Con evidencia de personas</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}${TPPool.estado==='error'?' <button type="button" class="btn btn-outline btn-sm" onclick="tpReintentarPool()">Reintentar</button>':''}</div>`:''}`;
+    h+='<div class="tp-tabla-scroll"><table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Personas y equipo</th><th>Condiciones</th><th>Integridad</th><th>Técnico</th><th></th></tr></thead><tbody>';
     lista.forEach(c=>{
       const tech=(c.skills||[]).filter(s=>!tpEsPersonaSkill(s.n)).slice(0,2);
       const integ=tpIntegridadDetalle(c);
       h+=`<tr><td><div class="u-d-flex u-ai-center u-gap-8"><div class="dash-avatar u-bg-emerald-100 u-c-emerald-600">${escHtml(c.i)}</div>${escHtml(String(c.alias||'').replace(/^Candidato /,''))}</div></td><td>${escHtml(c.sector)}</td><td><strong class="u-c-emerald-600">${c.score}</strong></td><td>${tpPersonasChips(c)}</td><td>${tpPoolCondChips(c.cond)}</td><td>${integ}</td><td>${tech.length?tech.map(s=>`<span class="job-tag">${escHtml(s.n)}: ${s.v}</span>`).join(' '):'<span class="u-c-slate-400">—</span>'}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
     });
     if(!lista.length)h+='<tr><td colspan="8"><div class="tp-empty">'+(CANDIDATES.length?'Ningún candidato cumple esos filtros.':'Todavía no hay candidatos en el pool.')+'</div></td></tr>';
-    h+='</tbody></table>';
+    h+='</tbody></table></div>';
     const box=document.getElementById('empPool');
     if(box)box.innerHTML=h;
   };
@@ -176,7 +178,10 @@ function tpIntegridadDetalle(c){
     const cond=[jor,mod].filter(x=>x!==null);
     const pctCond=cond.length?cond.filter(Boolean).length/cond.length:1;
     const skills=req.length?(p*persReq.length+t*techReq.length)/req.length:0;
-    return {pct:Math.round((p*0.4+t*0.3+pctCond*0.3)*100),skills,jor,mod,personas:p};
+    // Personas pesa más que técnico (40/30), pero si la oferta no pide técnico
+    // ese 30 % no se regala: los 70 puntos de skills van enteros a personas.
+    const pesoSkills=techReq.length?p*0.4+t*0.3:p*0.7;
+    return {pct:skills?Math.round((pesoSkills+pctCond*0.3)*100):0,skills,jor,mod,personas:p};
   };
 })();
 
@@ -188,34 +193,7 @@ function tpLeerPreguntasVacante(){
   }).filter(Boolean);
 }
 
-(function(){
-  if(typeof TPCloud==='undefined')return;
-  publishJob=async function(){
-    if(!tpCompany){toast('Inicia sesión con tu cuenta de empresa para publicar ofertas.');return;}
-    const v=id=>(document.getElementById(id).value||'').trim();
-    const datos={
-      title:v('pj-title'),sector:v('pj-sector'),description:v('pj-desc'),
-      requiredSkills:pjReqSkills.slice(),tags:pjSkills.slice(0,6),requiredLevel:pjLevel,exerciseConfig:pjExConfigVal,
-      jornada:v('pj-jornada'),modalidad:v('pj-mode'),contrato:v('pj-contrato'),ubicacion:v('pj-city'),
-      salMin:Number(v('pj-sal-min'))||null,salMax:Number(v('pj-sal-max'))||null,
-      cultureQuestions:tpLeerPreguntasVacante()
-    };
-    if(!datos.title||!datos.sector||datos.description.length<20){toast('Faltan el título, el sector o una descripción de al menos 20 caracteres.');return;}
-    if(!datos.requiredSkills.length){toast('Selecciona al menos un skill requerido.');return;}
-    if(datos.salMin&&datos.salMax&&datos.salMin>datos.salMax){toast('El salario mínimo no puede superar al máximo.');return;}
-    if(datos.modalidad!=='remoto'&&!datos.ubicacion){toast('Indica la ubicación: la oferta no es 100 % remota.');return;}
-    const pedidoAMedida=datos.exerciseConfig==='contact';
-    const r=await TPCloud._postAuth('save-job',datos);
-    if(!r||r.error){toast('No se pudo publicar: '+((r&&(r.error||r.details))||'error desconocido'));return;}
-    pjSkills=[];pjReqSkills=[];pjExConfigVal='common+custom';pjLevel='basico';
-    ['pj-title','pj-desc','pj-sal-min','pj-sal-max','pj-city','pj-q1','pj-q2','pj-q3'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
-    try{renderPjTags();renderPjSkills&&renderPjSkills();}catch(e){}
-    togglePostJob();
-    await Promise.all([TPOfertas.cargar(),TPOfertas.cargarMias()]);
-    renderEmpJobs();
-    toast(pedidoAMedida?'Oferta publicada. Has pedido ejercicios a medida: te escribimos en 24 h para diseñarlos.':'Oferta publicada. Ya la ven los candidatos.','ok');
-  };
-})();
+// publishJob (17-ofertas-reales.js) las envía como cultureQuestions.
 
 // Mostrar preguntas de vacante en ficha de oferta (candidato).
 (function(){
@@ -228,17 +206,19 @@ function tpLeerPreguntasVacante(){
       ||(window.TPOfertas&&TPOfertas.mias||[]).find(x=>String(x.id)===String(id));
     const qs=j&&j.cultureQuestions;
     let el=document.getElementById('tpJobCultureQs');
-    const host=document.getElementById('jobModal')||document.getElementById('exContent');
     if(!qs||!qs.length){
       if(el)el.remove();
       return r;
     }
     if(!el){
+      // Dentro de la cabecera de la ficha, tras la descripción. Antes el
+      // selector agrupado devolvía siempre #jobModal y quedaban fuera de la caja.
+      const desc=document.getElementById('jmDesc');
+      if(!desc)return r;
       el=document.createElement('div');
       el.id='tpJobCultureQs';
-      el.className='tp-culture-qs';
-      const modal=document.querySelector('#jobModal .jm-body, #jobModal .job-modal-body, #jobModal');
-      if(modal)modal.appendChild(el);
+      el.className='tp-culture-qs u-mt-8';
+      desc.insertAdjacentElement('afterend',el);
     }
     el.innerHTML='<div class="u-fs-micro u-fw-700 u-c-slate-600 u-tt-uppercase u-mb-8">Preguntas de esta vacante</div><ol class="tp-culture-list">'+
       qs.map(q=>`<li>${escHtml(q)}</li>`).join('')+'</ol><p class="u-fs-micro u-c-slate-500">La empresa las usa para hablar del encaje cultural en la entrevista; no son un test de personalidad.</p>';
@@ -249,8 +229,10 @@ function tpLeerPreguntasVacante(){
 // ── Bandeja de avisos (candidato) ──
 var TPInbox={
   items:[],
+  /** Candidato → #candInbox; empresa → #empInbox (los avisos se guardan por cuenta). */
+  caja(){return document.getElementById(tpCompany&&!tpUser?'empInbox':'candInbox');},
   async cargar(){
-    if(!tpUser)return;
+    if(!tpUser&&!tpCompany)return;
     try{
       const r=await TPCloud._postAuth('inbox',{});
       if(r&&Array.isArray(r.notifications))TPInbox.items=r.notifications;
@@ -258,7 +240,7 @@ var TPInbox={
     TPInbox.pintar();
   },
   pintar(){
-    const box=document.getElementById('candInbox');
+    const box=TPInbox.caja();
     if(!box)return;
     const unread=TPInbox.items.filter(n=>!n.readAt);
     if(!TPInbox.items.length){box.innerHTML='';box.hidden=true;return;}
@@ -274,11 +256,21 @@ var TPInbox={
   }
 };
 (function(){
+  const _open=typeof openDashEmp==='function'?openDashEmp:null;
+  if(!_open)return;
+  openDashEmp=function(){
+    const r=_open.apply(this,arguments);
+    TPInbox.cargar();
+    return r;
+  };
+})();
+(function(){
   const _open=typeof openDashCand==='function'?openDashCand:null;
   if(!_open)return;
   openDashCand=function(){
     const r=_open.apply(this,arguments);
     TPInbox.cargar();
+    if(typeof TPPostulaciones!=='undefined')TPPostulaciones.cargar().then(()=>{try{renderCandOfertas();renderJobMatches();}catch(e){}});
     return r;
   };
 })();
@@ -302,7 +294,7 @@ var TPApps={
     return new Promise(res=>{
       const d=document.createElement('dialog');
       d.className='tp-dialogo';
-      d.innerHTML='<form method="dialog"><h3>Motivo del descarte</h3><p>Es obligatorio y queda registrado: nadie queda fuera sin una razón que una persona pueda revisar.</p><label class="sr-only" for="tpMotivo">Motivo</label><textarea id="tpMotivo" rows="3" maxlength="300" required></textarea><div class="tp-dialogo-acc"><button type="button" class="btn btn-outline" data-r="no">Cancelar</button><button type="submit" class="btn btn-dark" value="ok">Descartar</button></div></form>';
+      d.innerHTML='<form method="dialog"><h3>Motivo del descarte</h3><p>Es obligatorio y queda registrado: nadie queda fuera sin una razón que una persona pueda revisar.</p><label class="sr-only" for="tpMotivo">Motivo</label><textarea id="tpMotivo" rows="3" minlength="3" maxlength="300" required></textarea><div class="tp-dialogo-acc"><button type="button" class="btn btn-outline" data-r="no">Cancelar</button><button type="submit" class="btn btn-dark" value="ok">Descartar</button></div></form>';
       document.body.appendChild(d);
       const fin=v=>{d.close();d.remove();res(v);};
       d.querySelector('[data-r=no]').onclick=()=>fin(null);
@@ -316,10 +308,12 @@ var TPApps={
     if(status==='descartado'){
       reason=await TPApps.pedirMotivo();
       if(reason===null){await TPApps.cargar(jobId);showOfferCandidates(jobId);return;}
-      if(reason.trim().length<3){toast('Hace falta un motivo para descartar.');return;}
+      if(reason.trim().length<3){toast('Hace falta un motivo para descartar.');await TPApps.cargar(jobId);showOfferCandidates(jobId);return;}
     }
     const r=await TPCloud._postAuth('applications',{jobId,candidateRef:ref,status,reason});
-    if(r&&r.error){toast(r.error);return;}
+    // Si no se guarda, el desplegable no puede quedarse mostrando la etapa nueva.
+    if(!r||r.error){toast('No se ha guardado la etapa: '+((r&&r.error)||'sin respuesta del servidor'));await TPApps.cargar(jobId);showOfferCandidates(jobId);return;}
+    toast(status==='descartado'?'Candidatura descartada. El motivo queda registrado.':'Etapa actualizada: '+(TP_APP_ESTADOS[status]||status)+'.','ok');
     await TPApps.cargar(jobId);
     if(typeof showOfferCandidates==='function')showOfferCandidates(jobId);
   }
@@ -338,6 +332,7 @@ var TPApps={
       const ref=card.dataset.ref; // la etapa no depende de si el candidato acepta contacto
       if(!ref)return;
       const cur=TPApps.estadoDe(jobId,ref)||'';
+      if(cur){const h4=card.querySelector('h4');if(h4)h4.insertAdjacentHTML('afterend','<div class="tp-postulado">'+tpChip(cur==='aplicado'?'Se ha postulado':(TP_APP_ESTADOS[cur]||cur),cur==='descartado'?'error':'info')+'</div>');}
       const sel=document.createElement('div');
       sel.className='tp-pipeline';
       sel.innerHTML='<label class="u-fs-micro">Etapa <select aria-label="Etapa del proceso">'+
@@ -348,12 +343,24 @@ var TPApps={
       const actions=card.querySelector('.oc-actions')||card;
       actions.appendChild(sel);
     });
+    // Postulaciones de candidatos que no salen en la lista (no están visibles en el pool).
+    const visibles=new Set([...list.querySelectorAll('.offer-cand-card')].map(c=>String(c.dataset.ref)));
+    const ocultas=(TPApps.byJob[jobId]||[]).filter(a=>!visibles.has(String(a.candidateRef))).length;
+    let aviso=document.getElementById('tpOfertaOcultas');
+    if(aviso)aviso.remove();
+    if(ocultas){
+      aviso=document.createElement('div');aviso.id='tpOfertaOcultas';aviso.className='tp-integrity-note info';
+      aviso.textContent=ocultas+(ocultas===1?' candidato se ha postulado pero no aparece':' candidatos se han postulado pero no aparecen')+' en esta lista porque ha ocultado su perfil del pool. La postulación sigue guardada.';
+      list.prepend(aviso);
+    }
     // Preguntas de la vacante en cabecera
     const job=JOBS.concat(window.TPOfertas&&TPOfertas.mias||[]).find(j=>String(j.id)===String(jobId));
     const title=document.getElementById('empOfferCandTitle');
+    const previas=document.getElementById('tpOfferQs');
+    if(previas&&!(job&&job.cultureQuestions&&job.cultureQuestions.length))previas.remove();
     if(title&&job&&job.cultureQuestions&&job.cultureQuestions.length){
       let q=document.getElementById('tpOfferQs');
-      if(!q){q=document.createElement('div');q.id='tpOfferQs';q.className='tp-culture-qs u-mt-8';title.parentNode.insertBefore(q,title.nextSibling);}
+      if(!q){q=document.createElement('div');q.id='tpOfferQs';q.className='tp-culture-qs u-mb-12';title.parentNode.insertAdjacentElement('afterend',q);}
       q.innerHTML='<div class="u-fs-micro u-fw-600">Preguntas de la vacante</div><ol class="tp-culture-list">'+job.cultureQuestions.map(x=>`<li>${escHtml(x)}</li>`).join('')+'</ol>';
     }
   };
