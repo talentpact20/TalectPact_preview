@@ -112,7 +112,7 @@ El prototipo `poc_evaluator.py` demuestra el motor en estado puro mediante **Dyn
 | Persistencia (respaldo de demo) | `localStorage` (módulo `TP`) |
 | Blockchain | Ethereum Sepolia · contrato `SkillPassRegistry` · `ethers` v6 |
 | Pagos | Stripe Checkout + webhook (construido; claves de test) |
-| Tests y métricas | `node:test` (127 casos) + banco de pruebas propio (`tfm/tech/eval/`) |
+| Tests y métricas | `node:test` (128 casos) + banco de pruebas propio (`tfm/tech/eval/`) |
 | PoC | Python + SDK `anthropic` + `rich` |
 
 ---
@@ -153,7 +153,7 @@ Acceso (superadmin: contraseña `admin2026`):
 ### 4.2 Tests y métricas (sin claves ni red)
 
 ```bash
-npm test                       # 127 casos, ~0,1 s, sin API key
+npm test                       # 128 casos, ~0,1 s, sin API key
 npm run bench -- --dry-run     # enseña los prompts del banco sin gastar nada
 npm run bench -- --offline     # recalcula las métricas desde la última ejecución
 ```
@@ -192,7 +192,7 @@ Resultados medidos en la ejecución real de la PoC (`evaluation_results.json`, m
 | Accuracy vs. experto humano | ≥ 78 % | Sin medir — requiere tribunal humano | 🔄 Pendiente |
 | κ de Cohen inter-evaluador **humano** | ≥ 0,65 | Sin medir — requiere tribunal humano | 🔄 Pendiente |
 | Hallucination rate | < 3 % | Sin medir — requiere LLM-juez | 🔄 Pendiente |
-| Cobertura de tests automáticos | — | **127 casos**, `npm test` | ✅ Nuevo |
+| Cobertura de tests automáticos | — | **128 casos**, `npm test` | ✅ Nuevo |
 
 \* *La latencia se mide en local, red doméstica y sin streaming. En producción (cloud + respuesta progresiva) el usuario percibe respuesta desde ~2 s. No es un límite arquitectónico.*
 
@@ -279,7 +279,7 @@ Para garantizar la fiabilidad del sistema entregado se realizaron las siguientes
 - **Trazabilidad:** verificación de que cada evaluación registra respuesta, criterios, feedback, tokens y coste real, y de que el panel de superadmin los muestra.
 - **Robustez de sintaxis:** validación de todos los bloques de JavaScript del producto y de las funciones serverless.
 - **Seguridad:** prueba con un intento de *prompt injection*, confirmando que se detecta y penaliza en lugar de obedecerse.
-- **Suite de tests automáticos:** 127 casos ejecutables con `npm test`, descritos en el apartado 6.
+- **Suite de tests automáticos:** 128 casos ejecutables con `npm test`, descritos en el apartado 6.
 
 ---
 
@@ -289,7 +289,7 @@ Un informe que solo enseña la mejor ejecución no es evidencia: es una anécdot
 
 ### 6.1 Suite de tests automáticos (`npm test`)
 
-**127 casos en quince ficheros.** No necesitan clave de API, ni red, ni base de datos: se ejecutan en ~0,1 s con el runner nativo de Node (`node:test`), sin ninguna dependencia de testing añadida.
+**128 casos en quince ficheros.** No necesitan clave de API, ni red, ni base de datos: se ejecutan en ~0,1 s con el runner nativo de Node (`node:test`), sin ninguna dependencia de testing añadida.
 
 | Fichero | Qué protege |
 |---|---|
@@ -401,6 +401,6 @@ El proyecto demuestra que el patrón **Dynamic Prompting + Chain of Thought**, s
 
 En este bloque se han cerrado las dos carencias del MVP —**corrección real con IA** y **persistencia de datos**—, conectando el flujo completo candidato → evaluación → pool de talento → panel de control. Los KPIs de coste, seguridad y discriminación cumplen los objetivos del Project Charter.
 
-La revisión final aportó algo que no estaba previsto y que probablemente sea lo más útil del bloque: **medirse a uno mismo encuentra errores**. Escribir los tests destapó que la reproducibilidad que el informe afirmaba no existía en producción (`temperature` sin fijar) y que el coste declarado estaba en dólares con símbolo de euro. Ninguno de los dos se habría visto leyendo el código; los dos habrían sido una mala pregunta en la defensa. Ahora hay 127 casos que los bloquean.
+La revisión final aportó algo que no estaba previsto y que probablemente sea lo más útil del bloque: **medirse a uno mismo encuentra errores**. Escribir los tests destapó que la reproducibilidad que el informe afirmaba no existía en producción (`temperature` sin fijar) y que el coste declarado estaba en dólares con símbolo de euro. Ninguno de los dos se habría visto leyendo el código; los dos habrían sido una mala pregunta en la defensa. Ahora hay 128 casos que los bloquean.
 
 El siguiente hito crítico sigue sin ser técnico, sino de **validación empírica**: contrastar el Skill Score con evaluadores humanos. La diferencia respecto a la versión anterior de este informe es que ya no es una intención. El protocolo está implementado, el corpus escrito y el hueco para las notas humanas reservado: lo que falta son las personas, no el código. Ese es el paso que convierte una PoC sólida en un producto de alto riesgo certificable y comercializable en el mercado europeo.

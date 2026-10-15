@@ -80,23 +80,42 @@ exports.handler = async (event) => {
     try {
       filas = await sb.select(
         "applications",
-        `job_id=eq.${jobId}&company_user_id=eq.${user.id}&select=id,candidate_profile_id,status,reason,updated_at,created_at&order=updated_at.desc&limit=200`
+        `job_id=eq.${jobId}&company_user_id=eq.${user.id}&select=id,candidate_profile_id,status,reason,dilemma_answers,updated_at,created_at&order=updated_at.desc&limit=200`
       );
     } catch (err) {
       if (faltaEnEsquema(err, "applications")) {
         return jsonResponse(200, { ok: true, applications: [], pendingMigration: true });
       }
-      throw err;
+      if (faltaEnEsquema(err, /dilemma_answers/i)) {
+        filas = await sb.select(
+          "applications",
+          `job_id=eq.${jobId}&company_user_id=eq.${user.id}&select=id,candidate_profile_id,status,reason,updated_at,created_at&order=updated_at.desc&limit=200`
+        );
+      } else {
+        throw err;
+      }
     }
 
-    const applications = (Array.isArray(filas) ? filas : []).map((a) => ({
-      id: a.id,
-      candidateRef: a.candidate_profile_id,
-      status: a.status,
-      reason: a.reason || "",
-      updatedAt: a.updated_at,
-      createdAt: a.created_at
-    }));
+    const applications = (Array.isArray(filas) ? filas : []).map((a) => {
+      const answers = Array.isArray(a.dilemma_answers)
+        ? a.dilemma_answers
+            .filter((x) => x && typeof x === "object")
+            .slice(0, 3)
+            .map((x) => ({
+              prompt: String(x.prompt || "").slice(0, 600),
+              answer: String(x.answer || "").slice(0, 2000)
+            }))
+        : [];
+      return {
+        id: a.id,
+        candidateRef: a.candidate_profile_id,
+        status: a.status,
+        reason: a.reason || "",
+        dilemmaAnswers: answers,
+        updatedAt: a.updated_at,
+        createdAt: a.created_at
+      };
+    });
     return jsonResponse(200, { ok: true, applications });
   } catch (err) {
     return jsonResponse(500, { error: "No se pudo gestionar el proceso", details: err.message });

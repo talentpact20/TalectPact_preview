@@ -10,6 +10,7 @@
 - [ ] Decidir si se exige confirmar el email al registrarse (hoy `mailer_autoconfirm` está activo: cualquiera puede registrarse con un correo ajeno).
 - [ ] Ejecutar `supabase_schema_pool_fix.sql` si falta.
 - [ ] Ejecutar `supabase_schema_rrhh_corto.sql` (preguntas de vacante, avisos, pipeline).
+- [ ] Ejecutar `supabase_schema_dilemmas.sql` (dilemas en oferta + respuestas al postularse).
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
 
 ## Código (Claude)
@@ -20,5 +21,7 @@
 - [x] (parcial: 84→33) Pasar a clases los ~137 `style="…"` que generan los scripts.
 - [x] Privacidad: ante un fallo pasajero, el pool, el contacto y el pago repetían la consulta sin los filtros de consentimiento (`pool_visible`, `allow_contact`). Corregido con `faltaEnEsquema()`.
 - [x] Revisión del código de Iván (15/10): errores tapados como «migración pendiente», doble clic en Aplicar y en Publicar, encaje del 30 % sin skills, preguntas de vacante fuera de la ficha, tabla del pool desbordando el panel.
+- [x] Taxonomía de aptitudes (4 familias + técnicas) + dilemas en oferta/postulación (15/10). Falta SQL en Supabase.
+- [ ] Engordar catálogo: escucha, resiliencia, proactividad, pensamiento lateral, etc. (huecos del doc 08).
 - [ ] Encaje: las condiciones desconocidas (candidato sin preferencias) cuentan como encaje completo (30 puntos). ¿Contarlas como neutras?
 - [ ] Email real del aviso de desbloqueo (hoy solo bandeja in-app).

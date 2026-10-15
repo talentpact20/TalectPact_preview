@@ -18,7 +18,9 @@ Carpeta viva de lo que se cambia en producto **antes de hablar con la asesora** 
 
 1. **¿Qué falta para que funcione en producción?** → [05_errores_y_mejoras.md](05_errores_y_mejoras.md), apartado «Lo que queda abierto».
 2. **¿Qué le preguntamos a la asesora?** → [00_contexto_reunion.md](00_contexto_reunion.md), apartado «Preguntas para la asesora».
-3. **¿Hacia dónde vamos después?** → [04_estrategia.md](04_estrategia.md).
+3. **¿Hacia dónde vamos después?** → [04_estrategia.md](04_estrategia.md) y el plan [07_plan_semanal.md](07_plan_semanal.md).
+4. **¿Cómo se clasifican las aptitudes y qué lleva la oferta?** → [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md).
+5. **¿La pieza disruptiva? (para explicársela a la asesora y a Xavi)** → [06_encaje_modelo_empresa.md](06_encaje_modelo_empresa.md).
 
 ## Índice
 
@@ -26,7 +28,10 @@ Carpeta viva de lo que se cambia en producto **antes de hablar con la asesora** 
 | --- | --- | --- |
 | [00_contexto_reunion.md](00_contexto_reunion.md) | Marco de la reunión con la asesora y preguntas para ella | Vivo |
 | [01_changelog.md](01_changelog.md) | Registro de cambios (cronológico) | Vivo |
-| [02_punto_1d_pack_soft.md](02_punto_1d_pack_soft.md) | Segmentar por «cómo es la persona» (Personas y equipo) | Hecho en código |
+| [02_punto_1d_pack_soft.md](02_punto_1d_pack_soft.md) | Segmentar por «cómo es la persona» (Personas y equipo) | Hecho en código; **evoluciona** → doc 08 |
 | [03_corto_plazo_rrhh_y_personas.md](03_corto_plazo_rrhh_y_personas.md) | Apartado 2 (RRHH, 2–4 semanas) y peso a las habilidades de personas | Hecho en código (revisado el 15/10) |
 | [04_estrategia.md](04_estrategia.md) | Perfil de trabajo inicial, credibilidad de la nota, confianza, cumplimiento, captación, ingresos y métricas | Propuesta para decidir |
 | [05_errores_y_mejoras.md](05_errores_y_mejoras.md) | Todos los errores encontrados, su causa y su estado, y lo que queda abierto | Vivo |
+| [06_encaje_modelo_empresa.md](06_encaje_modelo_empresa.md) | **Briefing** para asesora y Xavi: encaje con el modelo de empresa (antes de desarrollar) | Propuesta validable |
+| [07_plan_semanal.md](07_plan_semanal.md) | Planificación por semanas (incluye lo disruptivo en S5–S6) | Vivo |
+| [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) | **Taxonomía** (cognitivas / interpersonales / autogestión / ejecución + técnicas) y oferta = skills + 3 preguntas + 1–3 dilemas | En código; falta SQL dilemas en Supabase |

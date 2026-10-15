@@ -71,3 +71,4 @@ Se puede decir a la asesora, sin guion:
 - **Hueco detectado:** el catálogo tiene **7 retos de Personas** frente a 89 de sector. Para que «Personas delante» tenga contenido detrás, hay que llegar a 15–20 (ver `04_estrategia.md`, §8).
 - **No hacer:** test de personalidad, ocultar lo técnico ni limitar el catálogo a 4 retos.
 - **Siguiente paso relacionado:** el perfil de trabajo inicial (`04_estrategia.md`, §1) separa lo que el candidato declara (contexto preferido, sin nota) de lo que demuestra (retos de Personas, con nota).
+- **Evolución (15/10):** la segmentación Personas / Cognitivo / Técnico se **refina** en cuatro bloques de aptitudes + técnicas, y la oferta gana dilemas de empresa. Criterio completo en [`08_taxonomia_aptitudes_y_oferta.md`](08_taxonomia_aptitudes_y_oferta.md). Lo ya hecho en código sigue válido; el doc 08 es el mapa al que migrar.

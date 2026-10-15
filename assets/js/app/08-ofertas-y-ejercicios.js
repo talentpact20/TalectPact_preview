@@ -156,24 +156,45 @@ const TPPostulaciones={
 };
 const TP_ETAPA_CANDIDATO={aplicado:'Postulación enviada',retos:'En fase de retos',preseleccionado:'Preseleccionado',entrevista:'En entrevista',contratado:'Contratado',descartado:'No continúa'};
 
-async function applyDirectly(){
+/** Pantalla intermedia: el candidato responde los dilemas de la empresa. */
+function tpPintarDilemasAplicar(j){
+  const ds=(j&&j.dilemmas)||[];
+  const box=document.getElementById('exContent');
+  if(!box||!ds.length)return;
+  box.innerHTML=`<div class="apply-screen"><div class="apply-section-title">Dilemas del día a día de esta empresa</div><p class="u-fs-peq u-c-slate-500 u-mb-16">Responde cómo actuarías. La empresa verá tus respuestas junto a tu perfil anónimo de skills.</p>`+
+    ds.map((d,i)=>`<div class="pj-field u-mb-12"><label class="u-fs-micro u-fw-600" for="tp-dil-a${i+1}">Dilema ${i+1}</label><p class="u-fs-peq u-c-slate-600 u-mb-6">${escHtml(d)}</p><textarea id="tp-dil-a${i+1}" class="search-bar u-fs-peq u-p-10-12 u-bs-border-box u-w-100pct" rows="4" maxlength="2000" placeholder="Tu respuesta…"></textarea></div>`).join('')+
+    `<div class="u-d-flex u-gap-10 u-mt-16"><button class="btn btn-primary" onclick="tpEnviarConDilemas()">Enviar postulación →</button><button class="btn btn-outline" onclick="closeJobModal()">Cancelar</button></div></div>`;
+}
+
+async function tpEnviarConDilemas(){
+  const j=activeJob;
+  const ds=(j&&j.dilemmas)||[];
+  const answers=typeof tpLeerRespuestasDilema==='function'?tpLeerRespuestasDilema():[];
+  if(ds.length&&answers.length<ds.length){toast('Responde los '+ds.length+' dilemas antes de postularte.');return;}
+  return applyDirectly(true);
+}
+
+async function applyDirectly(dilemasOk){
   const j=activeJob,co=COMPANIES.find(c=>c.id===j.company);
   const box=document.getElementById('exContent');
   if(!tpUser){
     box.innerHTML='<div class="apply-screen u-ta-center">'+tpVacio({icono:'lock',titulo:'Inicia sesión para postularte',texto:'Tu postulación se guarda en tu cuenta y la empresa verá tu perfil anónimo de skills.',acciones:[{txt:'Iniciar sesión o crear cuenta',accion:"closeJobModal();openAuth('candidate')",tipo:'btn-primary'}]})+'</div>';
     return;
   }
+  const ds=(j&&j.dilemmas)||[];
+  if(ds.length&&!dilemasOk){tpPintarDilemasAplicar(j);return;}
+  const dilemmaAnswers=ds.length&&typeof tpLeerRespuestasDilema==='function'?tpLeerRespuestasDilema():[];
   box.innerHTML='<div class="apply-screen">'+tpEsqueleto(3)+'</div>';
   let r;
-  try{r=await TPCloud._postAuth('apply',{jobId:String(j.id)});}catch(e){r={error:e.message||String(e)};}
+  try{r=await TPCloud._postAuth('apply',{jobId:String(j.id),dilemmaAnswers});}catch(e){r={error:e.message||String(e)};}
   if(!r||r.error){
-    box.innerHTML='<div class="apply-screen u-ta-center">'+tpVacio({error:true,icono:'alert',titulo:'No se ha podido enviar tu postulación',texto:(r&&r.error)||'Sin respuesta del servidor. Inténtalo de nuevo.',acciones:[{txt:'Reintentar',accion:'applyDirectly()',tipo:'btn-primary'}]})+'</div>';
+    box.innerHTML='<div class="apply-screen u-ta-center">'+tpVacio({error:true,icono:'alert',titulo:'No se ha podido enviar tu postulación',texto:(r&&r.error)||'Sin respuesta del servidor. Inténtalo de nuevo.',acciones:[{txt:'Reintentar',accion:ds.length?'tpPintarDilemasAplicar(activeJob)':'applyDirectly()',tipo:'btn-primary'}]})+'</div>';
     return;
   }
   _pendingJobId=null;
   TPPostulaciones.porOferta[j.id]=(r.application&&r.application.status)||'aplicado';
   const habilidades=(j.requiredSkills||[]).map(x=>{const sc=candidateProfile.skills[x]?.score||0;return`<span class="job-tag">${escHtml(x)}: <strong>${sc}</strong></span>`;}).join('');
-  box.innerHTML=`<div class="apply-screen u-ta-center"><div class="tp-final"><span class="tp-vacio-ico">${tpIcon('check')}</span><div><div class="tp-final-tit">${r.yaPostulado?'Ya te habías postulado':'Postulación enviada'}</div><p class="tp-final-sub">Tu perfil anónimo de skills está a disposición de <strong>${escHtml(co?co.name:'la empresa')}</strong>. Te avisaremos en tu bandeja cuando cambie tu etapa. Si desbloquean tu contacto, se pondrán en contacto contigo.</p></div><div class="tp-final-skill u-d-block"><div class="u-fs-micro u-fw-600">Lo que verá la empresa</div><div class="job-tags u-mt-8">${habilidades}</div><div class="u-fs-micro u-mt-8">Tu nombre, email y teléfono permanecen ocultos hasta que la empresa pague.</div></div><div class="tp-res-acciones"><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button></div></div></div>`;
+  box.innerHTML=`<div class="apply-screen u-ta-center"><div class="tp-final"><span class="tp-vacio-ico">${tpIcon('check')}</span><div><div class="tp-final-tit">${r.yaPostulado?'Ya te habías postulado':'Postulación enviada'}</div><p class="tp-final-sub">Tu perfil anónimo de skills${ds.length?' y tus respuestas a los dilemas están':' está'} a disposición de <strong>${escHtml(co?co.name:'la empresa')}</strong>. Te avisaremos en tu bandeja cuando cambie tu etapa. Si desbloquean tu contacto, se pondrán en contacto contigo.</p></div><div class="tp-final-skill u-d-block"><div class="u-fs-micro u-fw-600">Lo que verá la empresa</div><div class="job-tags u-mt-8">${habilidades}</div><div class="u-fs-micro u-mt-8">Tu nombre, email y teléfono permanecen ocultos hasta que la empresa pague.</div></div><div class="tp-res-acciones"><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button></div></div></div>`;
 }
 function goToCommonFromApply(commonExId, jobId){
   _pendingJobId=jobId;

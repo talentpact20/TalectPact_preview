@@ -171,17 +171,20 @@ Sin datos no se puede decidir nada de lo anterior. Proponemos seis métricas, vi
 
 | Prioridad | Línea | Esfuerzo | Depende de |
 | --- | --- | --- | --- |
+| 0 | **Escenario del modelo de empresa** (encaje con *este* negocio; ver `06_…`) | Diseño 1 sem + MVP 1–2 sem | Validar con la asesora |
 | 1 | Confirmar email, pool solo para empresas verificadas, alias más largo | Bajo | Supabase y una decisión del equipo |
 | 1 | Plazo entre intentos y número de intentos visible | Bajo | Decisión del plazo |
 | 1 | Perfil de trabajo: bloques A y C | 1 semana | — |
 | 1 | Más retos de Personas y equipo (de 7 a 15–20) | 2–3 semanas | Contenido; validar con la asesora |
 | 2 | Notas por bloque en vez de una cifra única | 1 semana | Decisión |
-| 2 | Bloque B y su espejo en la empresa | 1 semana | Validar los ejes con la asesora |
+| 2 | Bloque B y su espejo en la empresa (alimenta el escenario del modelo) | 1 semana | Validar los ejes con la asesora |
 | 2 | Email real de los avisos | 2–3 días | Clave del proveedor |
 | 2 | Métricas en el backoffice | 3–4 días | — |
 | 3 | Calibración con correctores humanos | Continuo | Personas de RRHH que corrijan |
 | 3 | Hoja de transparencia, DPIA y registro exportable | 1–2 semanas | Revisión legal |
 | 3 | Variantes de retos | Continuo | Contenido |
+
+Plan por semanas: `07_plan_semanal.md`.
 
 Relación con otros documentos:
 - `03_corto_plazo_rrhh_y_personas.md`: lo que ya está hecho.

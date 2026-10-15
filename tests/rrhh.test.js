@@ -1,21 +1,28 @@
 /**
- * Corto plazo RRHH: segmentación Personas, preguntas de vacante y pipeline.
+ * Corto plazo RRHH: taxonomía de aptitudes, preguntas/dilemas de vacante y pipeline.
  */
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { esPersona, esCognitivo, extraerPersonas } = require("../netlify/functions/lib/personas.js");
-const { limpiarPreguntas, validarOferta } = require("../netlify/functions/lib/handlers/save-job.js");
+const { esPersona, esCognitivo, familiaDe, extraerPersonas } = require("../netlify/functions/lib/personas.js");
+const { limpiarPreguntas, limpiarDilemas, validarOferta } = require("../netlify/functions/lib/handlers/save-job.js");
 const { construirPool } = require("../netlify/functions/lib/handlers/get-talent-pool.js");
 const { ESTADOS } = require("../netlify/functions/lib/handlers/applications.js");
+const { limpiarRespuestasDilema } = require("../netlify/functions/lib/handlers/apply.js");
 
-test("liderazgo y equipo son Personas; analítica es Cognitivo; React no", () => {
+test("taxonomía: ejecución / interpersonales / cognitivas; React y Excel son técnico", () => {
+  assert.equal(familiaDe("Liderazgo"), "ejecucion");
+  assert.equal(familiaDe("Trabajo en Equipo"), "interpersonales");
+  assert.equal(familiaDe("Gestión del Tiempo"), "ejecucion");
+  assert.equal(familiaDe("Toma de Decisiones"), "autogestion");
+  assert.equal(familiaDe("Pensamiento Analítico"), "cognitivas");
+  assert.equal(familiaDe("Excel y Datos"), "sector");
   assert.equal(esPersona("Liderazgo"), true);
-  assert.equal(esPersona("Trabajo en Equipo"), true);
-  assert.equal(esPersona("Gestión del Tiempo"), true);
+  assert.equal(esPersona("Comunicación Escrita"), true);
   assert.equal(esCognitivo("Pensamiento Analítico"), true);
   assert.equal(esPersona("React"), false);
   assert.equal(esCognitivo("React"), false);
+  assert.equal(esCognitivo("Excel y Datos"), false);
 });
 
 test("extraerPersonas ordena por nota y limita a 5", () => {
@@ -53,10 +60,19 @@ test("las preguntas de vacante se limitan a 3 y 200 caracteres", () => {
     description: "Descripción suficientemente larga para validar.",
     requiredSkills: ["Liderazgo"],
     modalidad: "remoto",
-    cultureQuestions: ["¿Turnos de tarde?"]
+    cultureQuestions: ["¿Turnos de tarde?"],
+    dilemmas: ["Cliente pide saltarse calidad. ¿Qué haces?"]
   });
   assert.equal(error, undefined);
   assert.deepEqual(fila.culture_questions, ["¿Turnos de tarde?"]);
+  assert.equal(fila.dilemmas.length, 1);
+});
+
+test("dilemas de oferta y respuestas del candidato se limitan", () => {
+  assert.deepEqual(limpiarDilemas(["  A  ", "", "B", "C", "D"]), ["A", "B", "C"]);
+  assert.equal(limpiarDilemas(["x".repeat(700)])[0].length, 600);
+  assert.deepEqual(limpiarRespuestasDilema([" sí ", "", "no", "tal vez", "extra"]), ["sí", "no", "tal vez"]);
+  assert.equal(limpiarRespuestasDilema(["y".repeat(2500)])[0].length, 2000);
 });
 
 test("el pipeline solo admite estados conocidos y descartado exige motivo en el contrato", () => {

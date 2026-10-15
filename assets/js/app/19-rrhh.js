@@ -1,29 +1,55 @@
 // TalentPact · 19-rrhh
-// Personas y equipo, preguntas de vacante, bandeja de avisos y mini-pipeline.
+// Taxonomía de aptitudes (doc 08), preguntas + dilemas de vacante, avisos y pipeline.
 // Script clásico: ámbito global compartido (ver assets/js/README.md).
+// Espejo de netlify/functions/lib/personas.js
 
-var TP_PERSONAS_SKILLS={
-  'Liderazgo':1,'Trabajo en Equipo':1,'Gestión del Tiempo':1,
-  'Comunicación Escrita':1,'Toma de Decisiones':1,'Negociación':1,'Atención al Cliente':1
+var TP_SKILL_FAMILIA={
+  'Pensamiento Analítico':'cognitivas','Razonamiento Lógico':'cognitivas',
+  'Resolución de Problemas':'cognitivas','Creatividad':'cognitivas',
+  'Creatividad e Innovación':'cognitivas','Pensamiento Estratégico':'cognitivas',
+  'Pensamiento crítico':'cognitivas','Pensamiento Crítico':'cognitivas',
+  'Agilidad de aprendizaje':'cognitivas','Agilidad de Aprendizaje':'cognitivas',
+  'Pensamiento lateral':'cognitivas','Pensamiento Lateral':'cognitivas',
+  'Comunicación Escrita':'interpersonales','Negociación':'interpersonales',
+  'Atención al Cliente':'interpersonales','Trabajo en Equipo':'interpersonales','Escucha':'interpersonales',
+  'Toma de Decisiones':'autogestion','Inteligencia emocional':'autogestion',
+  'Inteligencia Emocional':'autogestion','Resiliencia':'autogestion',
+  'Gestión de la incertidumbre':'autogestion','Gestión de la Incertidumbre':'autogestion',
+  'Liderazgo':'ejecucion','Gestión del Tiempo':'ejecucion','Proactividad':'ejecucion',
+  'Iniciativa':'ejecucion','Responsabilidad personal':'ejecucion','Responsabilidad Personal':'ejecucion'
 };
-var TP_COGNITIVO_SKILLS={
-  'Pensamiento Analítico':1,'Razonamiento Lógico':1,'Resolución de Problemas':1,
-  'Creatividad':1,'Creatividad e Innovación':1,'Excel y Datos':1,
-  'Pensamiento Estratégico':1,'Inglés (Speaking)':1
+var TP_HERRAMIENTAS={'Excel y Datos':1,'Inglés (Speaking)':1};
+var TP_FAMILIA_LABEL={
+  cognitivas:'Cognitivas',interpersonales:'Interpersonales',
+  autogestion:'Autogestión emocional',ejecucion:'Ejecución',sector:'Técnicas'
 };
 var TP_APP_ESTADOS={
   aplicado:'Aplicado',retos:'Retos',preseleccionado:'Preseleccionado',
   entrevista:'Entrevista',contratado:'Contratado',descartado:'Descartado'
 };
 
-function tpEsPersonaSkill(n){return !!TP_PERSONAS_SKILLS[String(n||'')];}
-function tpEsCognitivoSkill(n){return !!TP_COGNITIVO_SKILLS[String(n||'')];}
+function tpFamiliaAptitud(n){
+  const s=String(n||'');
+  if(TP_HERRAMIENTAS[s])return 'sector';
+  return TP_SKILL_FAMILIA[s]||null;
+}
+function tpEsPersonaSkill(n){
+  const f=tpFamiliaAptitud(n);
+  return f==='interpersonales'||f==='autogestion'||f==='ejecucion';
+}
+function tpEsCognitivoSkill(n){return tpFamiliaAptitud(n)==='cognitivas';}
 function tpSegmentoReto(ce){
   if(!ce)return 'sector';
   if(ce.category==='sector')return 'sector';
-  if(tpEsPersonaSkill(ce.skill))return 'personas';
-  if(tpEsCognitivoSkill(ce.skill))return 'cognitivo';
-  return ce.category==='soft'?'cognitivo':'sector';
+  const f=tpFamiliaAptitud(ce.skill);
+  if(f)return f;
+  return ce.category==='soft'?'cognitivas':'sector';
+}
+/** Alias legacy: «personas» = las tres familias de conducta; «cognitivo» = cognitivas. */
+function tpMatchSegmento(seg,familia){
+  if(seg==='personas')return familia==='interpersonales'||familia==='autogestion'||familia==='ejecucion';
+  if(seg==='cognitivo')return familia==='cognitivas';
+  return familia===seg;
 }
 
 /** Chips de Personas y equipo (+ integridad) para pool / ficha. */
@@ -39,21 +65,25 @@ function tpIntegridadDetalle(c){
   return `<span class="tp-risk r-${c.integ}">${txt}</span>${c.verified?' <span class="tp-verified">Notas verificadas</span>':''}<span class="u-fs-micro u-c-slate-500"> · No descarta solo: revisión humana</span>`;
 }
 
-// ── Filtros de retos: Personas / Cognitivo / Técnico ──
+var TP_APT_FILTROS=['cognitivas','interpersonales','autogestion','ejecucion','personas','cognitivo'];
+
+// ── Filtros de retos: 4 aptitudes + técnicas ──
 (function(){
   if(typeof renderCommonExercises!=='function')return;
   const _render=renderCommonExercises;
   renderCommonExercises=function(filter,cat){
     const c=cat!=null?cat:(typeof _dashExCat!=='undefined'?_dashExCat:'all');
-    if(c==='personas'||c==='cognitivo'){
+    if(TP_APT_FILTROS.includes(c)){
       const q=filter||'';
-      let list=COMMON_EXERCISES.filter(ce=>tpSegmentoReto(ce)===c);
+      let list=COMMON_EXERCISES.filter(ce=>tpMatchSegmento(c,tpSegmentoReto(ce)));
       if(q){const qq=q.toLowerCase();list=list.filter(ce=>(ce.title+' '+ce.desc+' '+(ce.searchTerms||'')+' '+ce.skill).toLowerCase().includes(qq));}
       let html='';
       if(!list.length)html='<div class="tp-empty u-p-24">No hay retos en este segmento.</div>';
       else list.forEach(ce=>{
         const done=candidateProfile.completedCommon.find(x=>x.id===ce.id);
-        html+=`<div class="common-ex-card ${done?'completed':''}" onclick="openCommonEx('${ce.id}')"><span class="cex-icon">${tpMonograma(ce.title,ce.category)}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta"><span class="cex-tag universal">${c==='personas'?'Personas y equipo':'Cognitivo'}</span>${done?`<span class="cex-tag">✓ ${done.score}/100</span>`:''}</div></div>`;
+        const fam=tpSegmentoReto(ce);
+        const label=TP_FAMILIA_LABEL[fam]||fam;
+        html+=`<div class="common-ex-card ${done?'completed':''}" onclick="openCommonEx('${ce.id}')"><span class="cex-icon">${tpMonograma(ce.title,ce.category)}</span><div class="cex-title">${ce.title}</div><div class="cex-desc">${ce.desc}</div><div class="cex-meta"><span class="cex-tag universal">${label}</span>${done?`<span class="cex-tag">✓ ${done.score}/100</span>`:''}</div></div>`;
       });
       const box=document.getElementById('commonExGrid');if(box)box.innerHTML=html;
       return;
@@ -68,15 +98,15 @@ function tpIntegridadDetalle(c){
   setExCategory=function(c,btn){
     document.querySelectorAll('.rpl-cat-btn').forEach(b=>b.classList.remove('active'));
     if(btn)btn.classList.add('active');
-    const q=(document.getElementById('exSearchInput')&&document.getElementById('exSearchInput').value)||'';
-    if(c==='personas'||c==='cognitivo'){
+    if(TP_APT_FILTROS.includes(c)){
       _exCategoryLanding=c;
-      const list=COMMON_EXERCISES.filter(ce=>tpSegmentoReto(ce)===c);
+      const list=COMMON_EXERCISES.filter(ce=>tpMatchSegmento(c,tpSegmentoReto(ce)));
       const el=document.getElementById('landingCommonGrid');
       if(!el)return;
-      const label=c==='personas'?'Personas y equipo':'Cognitivo y criterio';
-      el.innerHTML=`<div class="rpl-group-label">${label}</div>`+list.map(ce=>{
-        return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${tpMonograma(ce.title,ce.category)}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${label}</div></div></div>`;
+      const titulo=c==='personas'?'Aptitudes de persona':(c==='cognitivo'?'Cognitivas':(TP_FAMILIA_LABEL[c]||c));
+      el.innerHTML=`<div class="rpl-group-label">${titulo}</div>`+list.map(ce=>{
+        const fam=tpSegmentoReto(ce);
+        return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${tpMonograma(ce.title,ce.category)}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${TP_FAMILIA_LABEL[fam]||titulo}</div></div></div>`;
       }).join('');
       const countEl=document.getElementById('exResultsCount');
       if(countEl)countEl.textContent=list.length+' reto'+(list.length!==1?'s':'');
@@ -91,10 +121,10 @@ function tpIntegridadDetalle(c){
   const _render=typeof renderPjSkills==='function'?renderPjSkills:null;
   if(!_render)return;
   renderPjSkills=function(){
-    if(_pjSkillCat!=='personas'&&_pjSkillCat!=='cognitivo')return _render.apply(this,arguments);
+    if(!TP_APT_FILTROS.includes(_pjSkillCat))return _render.apply(this,arguments);
     const q=(document.getElementById('pjSkillSearch')?.value||'').toLowerCase();
     let list=Object.keys(candidateProfile.skills||{});
-    list=list.filter(_pjSkillCat==='personas'?tpEsPersonaSkill:tpEsCognitivoSkill);
+    list=list.filter(s=>tpMatchSegmento(_pjSkillCat,tpFamiliaAptitud(s)||(getSkillCategory(s)==='sector'?'sector':'cognitivas')));
     if(q)list=list.filter(s=>s.toLowerCase().includes(q));
     const grid=document.getElementById('pjRequiredSkills');
     if(!grid)return;
@@ -185,19 +215,30 @@ function tpReintentarPool(){TPPool.estado='cargando';renderEmpPool();TPPool.carg
   };
 })();
 
-// ── Preguntas de vacante al publicar ──
+// ── Preguntas y dilemas al publicar ──
 function tpLeerPreguntasVacante(){
   return [1,2,3].map(i=>{
     const el=document.getElementById('pj-q'+i);
     return el?(el.value||'').trim().slice(0,200):'';
   }).filter(Boolean);
 }
+function tpLeerDilemasVacante(){
+  return [1,2,3].map(i=>{
+    const el=document.getElementById('pj-d'+i);
+    return el?(el.value||'').trim().slice(0,600):'';
+  }).filter(Boolean);
+}
+function tpLeerRespuestasDilema(){
+  return [1,2,3].map(i=>{
+    const el=document.getElementById('tp-dil-a'+i);
+    return el?(el.value||'').trim().slice(0,2000):'';
+  }).filter(Boolean);
+}
 
-// publishJob (17-ofertas-reales.js) las envía como cultureQuestions.
+// publishJob (17-ofertas-reales.js) envía cultureQuestions + dilemmas.
 
-// Mostrar preguntas de vacante en ficha de oferta (candidato).
+// Mostrar preguntas y dilemas en ficha de oferta (candidato).
 (function(){
-  // Se engancha cuando se abre un job; openJob está en 08.
   const _open=typeof openJob==='function'?openJob:null;
   if(!_open)return;
   openJob=function(id){
@@ -205,14 +246,13 @@ function tpLeerPreguntasVacante(){
     const j=JOBS.concat(typeof empPostedJobs!=='undefined'?empPostedJobs:[]).find(x=>String(x.id)===String(id))
       ||(window.TPOfertas&&TPOfertas.mias||[]).find(x=>String(x.id)===String(id));
     const qs=j&&j.cultureQuestions;
+    const ds=j&&j.dilemmas;
     let el=document.getElementById('tpJobCultureQs');
-    if(!qs||!qs.length){
+    if((!qs||!qs.length)&&(!ds||!ds.length)){
       if(el)el.remove();
       return r;
     }
     if(!el){
-      // Dentro de la cabecera de la ficha, tras la descripción. Antes el
-      // selector agrupado devolvía siempre #jobModal y quedaban fuera de la caja.
       const desc=document.getElementById('jmDesc');
       if(!desc)return r;
       el=document.createElement('div');
@@ -220,8 +260,16 @@ function tpLeerPreguntasVacante(){
       el.className='tp-culture-qs u-mt-8';
       desc.insertAdjacentElement('afterend',el);
     }
-    el.innerHTML='<div class="u-fs-micro u-fw-700 u-c-slate-600 u-tt-uppercase u-mb-8">Preguntas de esta vacante</div><ol class="tp-culture-list">'+
-      qs.map(q=>`<li>${escHtml(q)}</li>`).join('')+'</ol><p class="u-fs-micro u-c-slate-500">La empresa las usa para hablar del encaje cultural en la entrevista; no son un test de personalidad.</p>';
+    let html='';
+    if(qs&&qs.length){
+      html+='<div class="u-fs-micro u-fw-700 u-c-slate-600 u-tt-uppercase u-mb-8">Preguntas de esta vacante</div><ol class="tp-culture-list">'+
+        qs.map(q=>`<li>${escHtml(q)}</li>`).join('')+'</ol><p class="u-fs-micro u-c-slate-500 u-mb-12">La empresa las usa en la entrevista; no son un test de personalidad.</p>';
+    }
+    if(ds&&ds.length){
+      html+='<div class="u-fs-micro u-fw-700 u-c-slate-600 u-tt-uppercase u-mb-8">Dilemas del día a día</div><ol class="tp-culture-list">'+
+        ds.map(d=>`<li>${escHtml(d)}</li>`).join('')+'</ol><p class="u-fs-micro u-c-slate-500">Al postularte responderás cómo actuarías en estas situaciones.</p>';
+    }
+    el.innerHTML=html;
     return r;
   };
 })();
@@ -353,15 +401,31 @@ var TPApps={
       aviso.textContent=ocultas+(ocultas===1?' candidato se ha postulado pero no aparece':' candidatos se han postulado pero no aparecen')+' en esta lista porque ha ocultado su perfil del pool. La postulación sigue guardada.';
       list.prepend(aviso);
     }
-    // Preguntas de la vacante en cabecera
+    // Preguntas y dilemas de la vacante en cabecera
     const job=JOBS.concat(window.TPOfertas&&TPOfertas.mias||[]).find(j=>String(j.id)===String(jobId));
     const title=document.getElementById('empOfferCandTitle');
     const previas=document.getElementById('tpOfferQs');
-    if(previas&&!(job&&job.cultureQuestions&&job.cultureQuestions.length))previas.remove();
-    if(title&&job&&job.cultureQuestions&&job.cultureQuestions.length){
+    const hayQs=job&&job.cultureQuestions&&job.cultureQuestions.length;
+    const hayDs=job&&job.dilemmas&&job.dilemmas.length;
+    if(previas&&!hayQs&&!hayDs)previas.remove();
+    if(title&&(hayQs||hayDs)){
       let q=document.getElementById('tpOfferQs');
       if(!q){q=document.createElement('div');q.id='tpOfferQs';q.className='tp-culture-qs u-mb-12';title.parentNode.insertAdjacentElement('afterend',q);}
-      q.innerHTML='<div class="u-fs-micro u-fw-600">Preguntas de la vacante</div><ol class="tp-culture-list">'+job.cultureQuestions.map(x=>`<li>${escHtml(x)}</li>`).join('')+'</ol>';
+      let h='';
+      if(hayQs)h+='<div class="u-fs-micro u-fw-600">Preguntas de la vacante</div><ol class="tp-culture-list">'+job.cultureQuestions.map(x=>`<li>${escHtml(x)}</li>`).join('')+'</ol>';
+      if(hayDs)h+='<div class="u-fs-micro u-fw-600'+(hayQs?' u-mt-8':'')+'">Dilemas del día a día</div><ol class="tp-culture-list">'+job.dilemmas.map(x=>`<li>${escHtml(x)}</li>`).join('')+'</ol>';
+      q.innerHTML=h;
     }
+    // Respuestas a dilemas en cada tarjeta de postulado
+    list.querySelectorAll('.offer-cand-card').forEach(card=>{
+      const ref=card.dataset.ref;
+      if(!ref)return;
+      const app=(TPApps.byJob[jobId]||[]).find(x=>String(x.candidateRef)===String(ref));
+      const ans=app&&app.dilemmaAnswers;
+      let box=card.querySelector('.tp-dil-answers');
+      if(!ans||!ans.length){if(box)box.remove();return;}
+      if(!box){box=document.createElement('div');box.className='tp-dil-answers tp-culture-qs u-mt-8';(card.querySelector('.oc-actions')||card).insertAdjacentElement('beforebegin',box);}
+      box.innerHTML='<div class="u-fs-micro u-fw-600 u-mb-4">Respuestas a dilemas</div>'+ans.map(a=>`<div class="u-mb-8"><div class="u-fs-micro u-c-slate-500">${escHtml(a.prompt)}</div><div class="u-fs-peq">${escHtml(a.answer)}</div></div>`).join('');
+    });
   };
 })();

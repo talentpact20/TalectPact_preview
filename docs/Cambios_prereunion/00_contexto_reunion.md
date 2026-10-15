@@ -25,21 +25,33 @@ TalentPact ya pasó por la defensa TFM. Ahora el foco es **alinearlo con lo que 
 
 ## Antes de la reunión (bloqueante)
 
-1. En Supabase: `tfm/tech/supabase_schema_pool_fix.sql` (si falta) y `tfm/tech/supabase_schema_rrhh_corto.sql` (preguntas de vacante, avisos, pipeline y postulaciones).
+1. En Supabase: `tfm/tech/supabase_schema_pool_fix.sql` (si falta), `tfm/tech/supabase_schema_rrhh_corto.sql` (preguntas, avisos, pipeline) y `tfm/tech/supabase_schema_dilemmas.sql` (dilemas de oferta + respuestas).
 2. Aprobar el commit y desplegar los arreglos del 15/10.
 3. Decidir sobre las ofertas de ejemplo.
 4. Opcional: activar Google en Supabase Auth.
 
 Después: el candidato guarda sus preferencias → la empresa ve el pool y «Ver candidatos».
 
+## Piezas a validar (antes de código)
+
+1. **Taxonomía de aptitudes + estructura de la oferta** (skills clasificadas, 3 preguntas, 1–3 dilemas):  
+   → [`08_taxonomia_aptitudes_y_oferta.md`](08_taxonomia_aptitudes_y_oferta.md)
+2. **Encaje con el modelo de empresa** (capa de ejes / informe; los dilemas son el MVP):  
+   → [`06_encaje_modelo_empresa.md`](06_encaje_modelo_empresa.md)
+
 ## Preguntas para la asesora
 
-Se usan para escuchar, no para presentar. Salen de `04_estrategia.md`.
+Se usan para escuchar, no para presentar. Salen de `04`, `06` y `08`.
 
-**Sobre cómo es la persona**
+**Sobre cómo clasificamos las aptitudes**
+- ¿Os sirve ver cuatro bloques — **cognitivas, interpersonales, autogestión emocional, ejecución** — y aparte las **técnicas**?
+- ¿Falta alguna aptitud que siempre miráis al contratar? ¿Sobran nombres?
+
+**Sobre cómo es la persona y si encaja con *vosotros***
 - Cuando contratáis, ¿qué os gustaría saber del **contexto** en el que rinde alguien (autonomía, ritmo, equipo, cliente) que hoy no os da un CV ni una entrevista?
 - Si el candidato **declara** sus preferencias de trabajo y además **demuestra** su conducta en un reto, ¿cuál de las dos os creeríais más? ¿Os sirven las dos juntas?
-- ¿Qué competencias de personas os faltan? Hoy tenemos liderazgo, equipo, tiempo, comunicación, decisiones, negociación y atención al cliente.
+- Si en cada oferta pudierais poner **1–3 dilemas reales** de vuestro día a día y el candidato los resolviera, ¿eso sustituiría parte de la primera criba o solo enriquecería la entrevista?
+- ¿Preferís dilemas escritos por vosotros, o plantillas por tipo de empresa?
 
 **Sobre la confianza en la nota**
 - ¿Qué os haría desconfiar de una nota de 85: el número de intentos, la antigüedad, que la corrija una IA?
