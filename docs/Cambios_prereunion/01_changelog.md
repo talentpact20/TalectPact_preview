@@ -132,7 +132,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
-<<<<<<< HEAD
 ## 2026-10-15 — Análisis completo del backend
 
 **Qué.** Revisión de las 22 funciones y de las librerías compartidas. Detalle por tema en `05_errores_y_mejoras.md`, sección 7.
@@ -166,7 +165,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Pendiente.** Validar con el modelo real y con notas humanas (gold set del catálogo con la asesora).
 
 **Ficheros.** `lib/evaluator.js`, `lib/handlers/evaluate-exercise.js`, `tools/generar_catalogo_servidor.js`, `lib/catalogo-retos.json`, `08-ofertas-y-ejercicios.js`, `tests/corrector-v21.test.js`, `tests/catalogo.test.js`
-=======
 ## 2026-10-15 — Pieza disruptiva + plan semanal
 
 **Qué.** Iván pide ir más allá de soft genérico y de 3 preguntas: que la empresa conozca si el candidato encaja en **su modelo de negocio**. Se documenta el “Escenario del modelo” y se mete en el plan semanal (semanas 5–6).
@@ -198,7 +196,14 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Ficheros.** `lib/personas.js`, `save-job.js`, `list-jobs.js`, `apply.js`, `applications.js`, `19-rrhh.js`, `08-ofertas-y-ejercicios.js`, `17-ofertas-reales.js`, `index.html`, `tests/rrhh.test.js`, SQL `tfm/tech/supabase_schema_dilemmas.sql`.
 
 **Supabase.** Ejecutar `supabase_schema_dilemmas.sql` (columnas `jobs.dilemmas` y `applications.dilemma_answers`).
->>>>>>> 5492cdb98e9ecc87f1827d67a4cdef916c8d44f7
+
+---
+
+## 2026-10-15 — Tres pilares: Hard / Soft / Transferibles
+
+**Qué.** Los filtros de retos y el selector de skills de la oferta pasan a tres pilares claros: **Hard skills**, **Soft skills** y **Transferibles** (sustituye Cognitivas / Interpersonales / Autogestión / Ejecución / Técnicas).
+
+**Ficheros.** `lib/personas.js`, `19-rrhh.js`, `index.html`, `tests/rrhh.test.js`, doc 08.
 
 ---
 

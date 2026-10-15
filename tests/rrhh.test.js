@@ -10,29 +10,31 @@ const { construirPool } = require("../netlify/functions/lib/handlers/get-talent-
 const { ESTADOS } = require("../netlify/functions/lib/handlers/applications.js");
 const { limpiarRespuestasDilema } = require("../netlify/functions/lib/handlers/apply.js");
 
-test("taxonomía: ejecución / interpersonales / cognitivas; React y Excel son técnico", () => {
-  assert.equal(familiaDe("Liderazgo"), "ejecucion");
-  assert.equal(familiaDe("Trabajo en Equipo"), "interpersonales");
-  assert.equal(familiaDe("Gestión del Tiempo"), "ejecucion");
-  assert.equal(familiaDe("Toma de Decisiones"), "autogestion");
-  assert.equal(familiaDe("Pensamiento Analítico"), "cognitivas");
-  assert.equal(familiaDe("Excel y Datos"), "sector");
+test("taxonomía: hard / soft / transferibles", () => {
+  assert.equal(familiaDe("Liderazgo"), "soft");
+  assert.equal(familiaDe("Trabajo en Equipo"), "soft");
+  assert.equal(familiaDe("Toma de Decisiones"), "soft");
+  assert.equal(familiaDe("Comunicación Escrita"), "soft");
+  assert.equal(familiaDe("Gestión del Tiempo"), "transferibles");
+  assert.equal(familiaDe("Pensamiento Analítico"), "transferibles");
+  assert.equal(familiaDe("Resolución de Problemas"), "transferibles");
+  assert.equal(familiaDe("Excel y Datos"), "hard");
   assert.equal(esPersona("Liderazgo"), true);
-  assert.equal(esPersona("Comunicación Escrita"), true);
   assert.equal(esCognitivo("Pensamiento Analítico"), true);
   assert.equal(esPersona("React"), false);
   assert.equal(esCognitivo("React"), false);
   assert.equal(esCognitivo("Excel y Datos"), false);
 });
 
-test("extraerPersonas ordena por nota y limita a 5", () => {
+test("extraerPersonas ordena soft skills por nota y limita a 5", () => {
   const out = extraerPersonas([
     { n: "React", v: 99 },
     { n: "Liderazgo", v: 70 },
     { n: "Trabajo en Equipo", v: 88 },
-    { n: "Gestión del Tiempo", v: 60 }
+    { n: "Gestión del Tiempo", v: 60 }, // transferible: no entra en soft
+    { n: "Comunicación Escrita", v: 65 }
   ]);
-  assert.deepEqual(out.map((s) => s.n), ["Trabajo en Equipo", "Liderazgo", "Gestión del Tiempo"]);
+  assert.deepEqual(out.map((s) => s.n), ["Trabajo en Equipo", "Liderazgo", "Comunicación Escrita"]);
   assert.equal(out[0].v, 88);
 });
 

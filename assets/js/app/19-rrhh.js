@@ -1,27 +1,29 @@
 // TalentPact · 19-rrhh
-// Taxonomía de aptitudes (doc 08), preguntas + dilemas de vacante, avisos y pipeline.
+// Tres pilares: Hard / Soft / Transferibles + preguntas, dilemas, avisos y pipeline.
 // Script clásico: ámbito global compartido (ver assets/js/README.md).
 // Espejo de netlify/functions/lib/personas.js
 
 var TP_SKILL_FAMILIA={
-  'Pensamiento Analítico':'cognitivas','Razonamiento Lógico':'cognitivas',
-  'Resolución de Problemas':'cognitivas','Creatividad':'cognitivas',
-  'Creatividad e Innovación':'cognitivas','Pensamiento Estratégico':'cognitivas',
-  'Pensamiento crítico':'cognitivas','Pensamiento Crítico':'cognitivas',
-  'Agilidad de aprendizaje':'cognitivas','Agilidad de Aprendizaje':'cognitivas',
-  'Pensamiento lateral':'cognitivas','Pensamiento Lateral':'cognitivas',
-  'Comunicación Escrita':'interpersonales','Negociación':'interpersonales',
-  'Atención al Cliente':'interpersonales','Trabajo en Equipo':'interpersonales','Escucha':'interpersonales',
-  'Toma de Decisiones':'autogestion','Inteligencia emocional':'autogestion',
-  'Inteligencia Emocional':'autogestion','Resiliencia':'autogestion',
-  'Gestión de la incertidumbre':'autogestion','Gestión de la Incertidumbre':'autogestion',
-  'Liderazgo':'ejecucion','Gestión del Tiempo':'ejecucion','Proactividad':'ejecucion',
-  'Iniciativa':'ejecucion','Responsabilidad personal':'ejecucion','Responsabilidad Personal':'ejecucion'
+  'Comunicación Escrita':'soft','Negociación':'soft','Atención al Cliente':'soft',
+  'Trabajo en Equipo':'soft','Escucha':'soft','Toma de Decisiones':'soft',
+  'Inteligencia emocional':'soft','Inteligencia Emocional':'soft','Resiliencia':'soft',
+  'Gestión de la incertidumbre':'soft','Gestión de la Incertidumbre':'soft','Liderazgo':'soft',
+  'Pensamiento Analítico':'transferibles','Razonamiento Lógico':'transferibles',
+  'Resolución de Problemas':'transferibles','Creatividad':'transferibles',
+  'Creatividad e Innovación':'transferibles','Pensamiento Estratégico':'transferibles',
+  'Pensamiento crítico':'transferibles','Pensamiento Crítico':'transferibles',
+  'Agilidad de aprendizaje':'transferibles','Agilidad de Aprendizaje':'transferibles',
+  'Pensamiento lateral':'transferibles','Pensamiento Lateral':'transferibles',
+  'Gestión del Tiempo':'transferibles','Proactividad':'transferibles',
+  'Iniciativa':'transferibles','Responsabilidad personal':'transferibles',
+  'Responsabilidad Personal':'transferibles'
 };
 var TP_HERRAMIENTAS={'Excel y Datos':1,'Inglés (Speaking)':1};
 var TP_FAMILIA_LABEL={
-  cognitivas:'Cognitivas',interpersonales:'Interpersonales',
-  autogestion:'Autogestión emocional',ejecucion:'Ejecución',sector:'Técnicas'
+  hard:'Hard skills',soft:'Soft skills',transferibles:'Transferibles',
+  // alias legacy (filtros antiguos / category sector)
+  sector:'Hard skills',cognitivas:'Transferibles',cognitivo:'Transferibles',
+  personas:'Soft skills',interpersonales:'Soft skills',autogestion:'Soft skills',ejecucion:'Soft skills'
 };
 var TP_APP_ESTADOS={
   aplicado:'Aplicado',retos:'Retos',preseleccionado:'Preseleccionado',
@@ -30,33 +32,31 @@ var TP_APP_ESTADOS={
 
 function tpFamiliaAptitud(n){
   const s=String(n||'');
-  if(TP_HERRAMIENTAS[s])return 'sector';
+  if(TP_HERRAMIENTAS[s])return 'hard';
   return TP_SKILL_FAMILIA[s]||null;
 }
-function tpEsPersonaSkill(n){
-  const f=tpFamiliaAptitud(n);
-  return f==='interpersonales'||f==='autogestion'||f==='ejecucion';
-}
-function tpEsCognitivoSkill(n){return tpFamiliaAptitud(n)==='cognitivas';}
+function tpEsPersonaSkill(n){return tpFamiliaAptitud(n)==='soft';}
+function tpEsCognitivoSkill(n){return tpFamiliaAptitud(n)==='transferibles';}
 function tpSegmentoReto(ce){
-  if(!ce)return 'sector';
-  if(ce.category==='sector')return 'sector';
+  if(!ce)return 'hard';
+  if(ce.category==='sector')return 'hard';
   const f=tpFamiliaAptitud(ce.skill);
   if(f)return f;
-  return ce.category==='soft'?'cognitivas':'sector';
+  return ce.category==='soft'?'soft':'hard';
 }
-/** Alias legacy: «personas» = las tres familias de conducta; «cognitivo» = cognitivas. */
+/** Alias: personas/soft → soft; cognitivo/cognitivas → transferibles; sector → hard. */
 function tpMatchSegmento(seg,familia){
-  if(seg==='personas')return familia==='interpersonales'||familia==='autogestion'||familia==='ejecucion';
-  if(seg==='cognitivo')return familia==='cognitivas';
+  if(seg==='personas'||seg==='soft'||seg==='interpersonales'||seg==='autogestion'||seg==='ejecucion')return familia==='soft';
+  if(seg==='cognitivo'||seg==='cognitivas'||seg==='transferibles')return familia==='transferibles';
+  if(seg==='sector'||seg==='hard')return familia==='hard';
   return familia===seg;
 }
 
-/** Chips de Personas y equipo (+ integridad) para pool / ficha. */
+/** Chips de Soft skills (+ integridad) para pool / ficha. */
 function tpPersonasChips(c){
   const list=(c&&c.personas&&c.personas.length)?c.personas
     :(c&&c.skills||[]).filter(s=>tpEsPersonaSkill(s.n)).sort((a,b)=>b.v-a.v).slice(0,5);
-  if(!list.length)return '<div class="tp-cond"><span class="tp-cond-chip muted">Sin simulaciones de personas aún</span></div>';
+  if(!list.length)return '<div class="tp-cond"><span class="tp-cond-chip muted">Sin soft skills aún</span></div>';
   return '<div class="tp-cond">'+list.map(s=>`<span class="tp-cond-chip tp-chip-personas">${escHtml(s.n)}: ${s.v}</span>`).join('')+'</div>';
 }
 function tpIntegridadDetalle(c){
@@ -65,9 +65,9 @@ function tpIntegridadDetalle(c){
   return `<span class="tp-risk r-${c.integ}">${txt}</span>${c.verified?' <span class="tp-verified">Notas verificadas</span>':''}<span class="u-fs-micro u-c-slate-500"> · No descarta solo: revisión humana</span>`;
 }
 
-var TP_APT_FILTROS=['cognitivas','interpersonales','autogestion','ejecucion','personas','cognitivo'];
+var TP_APT_FILTROS=['hard','soft','transferibles','sector','personas','cognitivo','cognitivas'];
 
-// ── Filtros de retos: 4 aptitudes + técnicas ──
+// ── Filtros de retos: Hard / Soft / Transferibles ──
 (function(){
   if(typeof renderCommonExercises!=='function')return;
   const _render=renderCommonExercises;
@@ -103,7 +103,7 @@ var TP_APT_FILTROS=['cognitivas','interpersonales','autogestion','ejecucion','pe
       const list=COMMON_EXERCISES.filter(ce=>tpMatchSegmento(c,tpSegmentoReto(ce)));
       const el=document.getElementById('landingCommonGrid');
       if(!el)return;
-      const titulo=c==='personas'?'Aptitudes de persona':(c==='cognitivo'?'Cognitivas':(TP_FAMILIA_LABEL[c]||c));
+      const titulo=TP_FAMILIA_LABEL[c]||c;
       el.innerHTML=`<div class="rpl-group-label">${titulo}</div>`+list.map(ce=>{
         const fam=tpSegmentoReto(ce);
         return`<div class="rpl-item" id="rplItem_${ce.id}" onclick="selectLandingReto('${ce.id}')"><div class="rpl-item-icon">${tpMonograma(ce.title,ce.category)}</div><div class="rpl-item-info"><div class="rpl-item-title">${ce.title}</div><div class="rpl-item-sub">${TP_FAMILIA_LABEL[fam]||titulo}</div></div></div>`;
@@ -124,7 +124,10 @@ var TP_APT_FILTROS=['cognitivas','interpersonales','autogestion','ejecucion','pe
     if(!TP_APT_FILTROS.includes(_pjSkillCat))return _render.apply(this,arguments);
     const q=(document.getElementById('pjSkillSearch')?.value||'').toLowerCase();
     let list=Object.keys(candidateProfile.skills||{});
-    list=list.filter(s=>tpMatchSegmento(_pjSkillCat,tpFamiliaAptitud(s)||(getSkillCategory(s)==='sector'?'sector':'cognitivas')));
+    list=list.filter(s=>{
+      const fam=tpFamiliaAptitud(s)||(getSkillCategory(s)==='sector'?'hard':'soft');
+      return tpMatchSegmento(_pjSkillCat,fam);
+    });
     if(q)list=list.filter(s=>s.toLowerCase().includes(q));
     const grid=document.getElementById('pjRequiredSkills');
     if(!grid)return;
@@ -154,10 +157,10 @@ function tpReintentarPool(){TPPool.estado='cargando';renderEmpPool();TPPool.carg
         &&(!f.soloVerificados||c.verified)
         &&(!f.soloPersonas||pers);
     });
-    let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><label class="tp-filter-check"><input type="checkbox"${f.soloPersonas?' checked':''} onchange="TP_POOL_FILTRO.soloPersonas=this.checked;renderEmpPool()"> Con evidencia de personas</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}${TPPool.estado==='error'?' <button type="button" class="btn btn-outline btn-sm" onclick="tpReintentarPool()">Reintentar</button>':''}</div>`:''}`;
-    h+='<div class="tp-tabla-scroll"><table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Personas y equipo</th><th>Condiciones</th><th>Integridad</th><th>Técnico</th><th></th></tr></thead><tbody>';
+    let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><label class="tp-filter-check"><input type="checkbox"${f.soloPersonas?' checked':''} onchange="TP_POOL_FILTRO.soloPersonas=this.checked;renderEmpPool()"> Con soft skills</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}${TPPool.estado==='error'?' <button type="button" class="btn btn-outline btn-sm" onclick="tpReintentarPool()">Reintentar</button>':''}</div>`:''}`;
+    h+='<div class="tp-tabla-scroll"><table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Soft skills</th><th>Condiciones</th><th>Integridad</th><th>Hard skills</th><th></th></tr></thead><tbody>';
     lista.forEach(c=>{
-      const tech=(c.skills||[]).filter(s=>!tpEsPersonaSkill(s.n)).slice(0,2);
+      const tech=(c.skills||[]).filter(s=>tpFamiliaAptitud(s.n)==='hard'||(!tpEsPersonaSkill(s.n)&&!tpEsCognitivoSkill(s.n))).slice(0,2);
       const integ=tpIntegridadDetalle(c);
       h+=`<tr><td><div class="u-d-flex u-ai-center u-gap-8"><div class="dash-avatar u-bg-emerald-100 u-c-emerald-600">${escHtml(c.i)}</div>${escHtml(String(c.alias||'').replace(/^Candidato /,''))}</div></td><td>${escHtml(c.sector)}</td><td><strong class="u-c-emerald-600">${c.score}</strong></td><td>${tpPersonasChips(c)}</td><td>${tpPoolCondChips(c.cond)}</td><td>${integ}</td><td>${tech.length?tech.map(s=>`<span class="job-tag">${escHtml(s.n)}: ${s.v}</span>`).join(' '):'<span class="u-c-slate-400">—</span>'}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
     });
@@ -185,7 +188,11 @@ function tpReintentarPool(){TPPool.estado='cargando';renderEmpPool();TPPool.carg
       box.className='u-mt-8';
       info.appendChild(box);
     }
-    box.innerHTML='<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mb-4">Personas y equipo</div>'+tpPersonasChips(c)+
+    const transf=(c.skills||[]).filter(s=>tpEsCognitivoSkill(s.n)).sort((a,b)=>b.v-a.v).slice(0,5);
+    const hard=(c.skills||[]).filter(s=>tpFamiliaAptitud(s.n)==='hard'||(!tpEsPersonaSkill(s.n)&&!tpEsCognitivoSkill(s.n))).sort((a,b)=>b.v-a.v).slice(0,5);
+    box.innerHTML='<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mb-4">Soft skills</div>'+tpPersonasChips(c)+
+      (transf.length?'<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mt-8 u-mb-4">Transferibles</div><div class="tp-cond">'+transf.map(s=>`<span class="tp-cond-chip">${escHtml(s.n)}: ${s.v}</span>`).join('')+'</div>':'')+
+      (hard.length?'<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mt-8 u-mb-4">Hard skills</div><div class="tp-cond">'+hard.map(s=>`<span class="tp-cond-chip">${escHtml(s.n)}: ${s.v}</span>`).join('')+'</div>':'')+
       '<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mt-8 u-mb-4">Integridad de la prueba</div><div class="tp-cond">'+tpIntegridadDetalle(c)+'</div>';
   };
 })();

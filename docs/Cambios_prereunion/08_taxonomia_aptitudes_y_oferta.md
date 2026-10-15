@@ -1,8 +1,8 @@
 # Taxonomía de aptitudes y estructura de la oferta  
 **Documento para Iván, Xavi y la asesora** · 15/10/2026  
-Estado: **en código** (15/10/2026) — falta ejecutar SQL de dilemas en Supabase
+Estado: **en código** (15/10/2026) — tres pilares Hard / Soft / Transferibles; falta SQL de dilemas en Supabase
 
-Este documento fija **cómo se clasifican los retos** y **qué ve la empresa al publicar**. Sustituye la etiqueta vaga «soft skills» por cuatro bloques de aptitudes + lo técnico, y define la oferta completa: skills + preguntas + dilemas del día a día.
+**Actualización:** la clasificación visible son **tres pilares** (Hard skills, Soft skills, Transferibles). Las subfamilias del borrador (cognitivas, interpersonales, etc.) quedan como detalle interno del catálogo, no como filtros de producto.
 
 ---
 

@@ -1,93 +1,95 @@
 /**
- * Taxonomía de aptitudes (doc 08) + compat con «Personas / Cognitivo».
+ * Tres pilares de habilidades (producto):
+ *   hard | soft | transferibles
+ *
  * Misma lógica en servidor (pool) y espejada en assets/js/app/19-rrhh.js.
  *
- * Familias:
- *   cognitivas | interpersonales | autogestion | ejecucion | (sector = técnico)
- *
- * «Personas» (filtro pool / evidencia conductual) =
- *   interpersonales + autogestion + ejecucion
+ * Compat: «Personas» ≈ soft; «Cognitivo» ≈ transferibles; «sector» ≈ hard.
  */
 
 const SKILL_FAMILIA = {
-  // Cognitivas
-  "Pensamiento Analítico": "cognitivas",
-  "Razonamiento Lógico": "cognitivas",
-  "Resolución de Problemas": "cognitivas",
-  "Creatividad": "cognitivas",
-  "Creatividad e Innovación": "cognitivas",
-  "Pensamiento Estratégico": "cognitivas",
-  "Pensamiento crítico": "cognitivas",
-  "Pensamiento Crítico": "cognitivas",
-  "Agilidad de aprendizaje": "cognitivas",
-  "Agilidad de Aprendizaje": "cognitivas",
-  "Pensamiento lateral": "cognitivas",
-  "Pensamiento Lateral": "cognitivas",
-  // Interpersonales
-  "Comunicación Escrita": "interpersonales",
-  "Negociación": "interpersonales",
-  "Atención al Cliente": "interpersonales",
-  "Trabajo en Equipo": "interpersonales",
-  "Escucha": "interpersonales",
-  // Autogestión emocional
-  "Toma de Decisiones": "autogestion",
-  "Inteligencia emocional": "autogestion",
-  "Inteligencia Emocional": "autogestion",
-  "Resiliencia": "autogestion",
-  "Gestión de la incertidumbre": "autogestion",
-  "Gestión de la Incertidumbre": "autogestion",
-  // Ejecución
-  "Liderazgo": "ejecucion",
-  "Gestión del Tiempo": "ejecucion",
-  "Proactividad": "ejecucion",
-  "Iniciativa": "ejecucion",
-  "Responsabilidad personal": "ejecucion",
-  "Responsabilidad Personal": "ejecucion"
+  // Soft — cómo se relaciona y se regula
+  "Comunicación Escrita": "soft",
+  "Negociación": "soft",
+  "Atención al Cliente": "soft",
+  "Trabajo en Equipo": "soft",
+  "Escucha": "soft",
+  "Toma de Decisiones": "soft",
+  "Inteligencia emocional": "soft",
+  "Inteligencia Emocional": "soft",
+  "Resiliencia": "soft",
+  "Gestión de la incertidumbre": "soft",
+  "Gestión de la Incertidumbre": "soft",
+  "Liderazgo": "soft",
+
+  // Transferibles — valen en cualquier puesto / sector
+  "Pensamiento Analítico": "transferibles",
+  "Razonamiento Lógico": "transferibles",
+  "Resolución de Problemas": "transferibles",
+  "Creatividad": "transferibles",
+  "Creatividad e Innovación": "transferibles",
+  "Pensamiento Estratégico": "transferibles",
+  "Pensamiento crítico": "transferibles",
+  "Pensamiento Crítico": "transferibles",
+  "Agilidad de aprendizaje": "transferibles",
+  "Agilidad de Aprendizaje": "transferibles",
+  "Pensamiento lateral": "transferibles",
+  "Pensamiento Lateral": "transferibles",
+  "Gestión del Tiempo": "transferibles",
+  "Proactividad": "transferibles",
+  "Iniciativa": "transferibles",
+  "Responsabilidad personal": "transferibles",
+  "Responsabilidad Personal": "transferibles"
 };
 
-/** Inglés / Excel: herramientas → se tratan como técnico, no como aptitud. */
+/** Herramientas → hard (técnicas). */
 const HERRAMIENTAS = {
   "Excel y Datos": true,
   "Inglés (Speaking)": true
 };
 
-const FAMILIAS_PERSONA = { interpersonales: true, autogestion: true, ejecucion: true };
-
 const LABELS = {
-  cognitivas: "Cognitivas",
-  interpersonales: "Interpersonales",
-  autogestion: "Autogestión emocional",
-  ejecucion: "Ejecución",
-  sector: "Técnicas"
+  hard: "Hard skills",
+  soft: "Soft skills",
+  transferibles: "Transferibles"
 };
 
 function familiaDe(skill) {
   const n = String(skill || "");
-  if (HERRAMIENTAS[n]) return "sector";
+  if (HERRAMIENTAS[n]) return "hard";
   return SKILL_FAMILIA[n] || null;
 }
 
 function esPersona(skill) {
-  const f = familiaDe(skill);
-  return !!(f && FAMILIAS_PERSONA[f]);
+  return familiaDe(skill) === "soft";
 }
 
 function esCognitivo(skill) {
-  return familiaDe(skill) === "cognitivas";
+  return familiaDe(skill) === "transferibles";
 }
 
-/** Compat: mapas booleanos que ya usaban los tests / código antiguo. */
+function esHard(skill) {
+  return familiaDe(skill) === "hard";
+}
+
+function esTransferible(skill) {
+  return familiaDe(skill) === "transferibles";
+}
+
+/** Compat: mapas booleanos que ya usaban tests / código antiguo. */
 const PERSONAS = Object.keys(SKILL_FAMILIA).reduce((acc, k) => {
-  if (FAMILIAS_PERSONA[SKILL_FAMILIA[k]]) acc[k] = true;
+  if (SKILL_FAMILIA[k] === "soft") acc[k] = true;
   return acc;
 }, {});
 
 const COGNITIVO = Object.keys(SKILL_FAMILIA).reduce((acc, k) => {
-  if (SKILL_FAMILIA[k] === "cognitivas") acc[k] = true;
+  if (SKILL_FAMILIA[k] === "transferibles") acc[k] = true;
   return acc;
 }, {});
 
-/** De las skills del pool (array {n,v,…}), saca las de personas ordenadas por nota. */
+const FAMILIAS_PERSONA = { soft: true };
+
+/** Soft skills del pool, ordenadas por nota. */
 function extraerPersonas(skills) {
   return (skills || [])
     .filter((s) => s && esPersona(s.n))
@@ -106,5 +108,7 @@ module.exports = {
   familiaDe,
   esPersona,
   esCognitivo,
+  esHard,
+  esTransferible,
   extraerPersonas
 };

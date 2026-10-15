@@ -32,10 +32,7 @@ Carpeta viva de lo que se cambia en producto **antes de hablar con la asesora** 
 | [03_corto_plazo_rrhh_y_personas.md](03_corto_plazo_rrhh_y_personas.md) | Apartado 2 (RRHH, 2–4 semanas) y peso a las habilidades de personas | Hecho en código (revisado el 15/10) |
 | [04_estrategia.md](04_estrategia.md) | Perfil de trabajo inicial, credibilidad de la nota, confianza, cumplimiento, captación, ingresos y métricas | Propuesta para decidir |
 | [05_errores_y_mejoras.md](05_errores_y_mejoras.md) | Todos los errores encontrados, su causa y su estado, y lo que queda abierto | Vivo |
-<<<<<<< HEAD
 | [06_corrector.md](06_corrector.md) | Diagnóstico del corrector, lo aplicado en la v2.1 y el plan para que corrija de forma más concreta | v2.1 aplicada; plan por decidir. Versión explicada en PDF: [../corrector.pdf](../corrector.pdf) |
-=======
 | [06_encaje_modelo_empresa.md](06_encaje_modelo_empresa.md) | **Briefing** para asesora y Xavi: encaje con el modelo de empresa (antes de desarrollar) | Propuesta validable |
 | [07_plan_semanal.md](07_plan_semanal.md) | Planificación por semanas (incluye lo disruptivo en S5–S6) | Vivo |
-| [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) | **Taxonomía** (cognitivas / interpersonales / autogestión / ejecución + técnicas) y oferta = skills + 3 preguntas + 1–3 dilemas | En código; falta SQL dilemas en Supabase |
->>>>>>> 5492cdb98e9ecc87f1827d67a4cdef916c8d44f7
+| [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) | **Taxonomía** Hard / Soft / Transferibles y oferta = skills + 3 preguntas + 1–3 dilemas | En código; falta SQL dilemas en Supabase |
