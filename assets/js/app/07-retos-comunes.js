@@ -1048,6 +1048,14 @@ function updateCandProfile(){
   // Posición real en el pool (16-pool-real.js), no un tramo inventado por nota.
   document.getElementById('cDashRank').textContent=(window.TPRanking&&TPRanking.posicionTexto())||'—';
   document.getElementById('spGlobalScore').textContent=avg||'—';
+  // Cabecera: el alias con el que te ven las empresas (antes «AC · Candidato
+  // anónimo» escrito a mano, igual para todo el mundo).
+  const alias=(window.TPRanking&&TPRanking.miAlias())||null;
+  const av=document.getElementById('spAvatar'),meta=document.getElementById('spMeta');
+  if(av)av.textContent=alias?alias.replace(/^Candidato #/,'').slice(0,2):'—';
+  if(meta)meta.textContent=alias
+    ?'Así te ven las empresas: '+alias+' · '+(completed.length?completed.length+(completed.length===1?' reto completado':' retos completados'):'completa retos para desbloquear skills')
+    :'Sin cuenta: inicia sesión para guardar tu progreso y aparecer en el pool';
   const softSkills=[];const sectorSkills=[];
   for(const[name,data] of Object.entries(candidateProfile.skills)){
     const ce=COMMON_EXERCISES.find(c=>c.skill===name);
@@ -1059,8 +1067,9 @@ function updateCandProfile(){
       const cls=data.unlocked?(data.score>=75?'high':data.score>=50?'mid':'low'):'';
       const color=data.score>=75?'var(--emerald-500)':data.score>=50?'var(--amber-500)':'var(--red-500)';
       const levelLabel=data.score>=80?'Avanzado':data.score>=50?'Intermedio':'Básico';
-      const levelCls=data.score>=80?'level-avanzado':data.score>=50?'level-intermedio':'level-basico';
-      return '<div class="sp-skill-item '+(data.unlocked?'':'locked')+'"><div class="sp-skill-name">'+name+(data.unlocked?' <span class="sp-skill-score '+cls+'">'+data.score+'</span>':'')+'</div>'+(data.unlocked?'<div class="u-m-4-0-2"><span class="level-badge '+levelCls+'">'+levelLabel+'</span></div>':'')+'<div class="sp-skill-bar"><div class="sp-skill-bar-fill" style="width:'+(data.unlocked?data.score:0)+'%;background:'+color+'"></div></div></div>';
+      // Nivel alcanzado: verde si es alto. Antes usaba los colores de dificultad
+      // de las ofertas y «Avanzado» salía en rojo, como si fuera un error.
+      return '<div class="sp-skill-item '+(data.unlocked?'':'locked')+'"><div class="sp-skill-name">'+name+(data.unlocked?' <span class="sp-skill-score '+cls+'">'+data.score+'</span>':'')+'</div>'+(data.unlocked?'<div class="u-m-4-0-2">'+tpChip(levelLabel,data.score>=80?'ok':data.score>=50?'info':'')+'</div>':'')+'<div class="sp-skill-bar"><div class="sp-skill-bar-fill" style="width:'+(data.unlocked?data.score:0)+'%;background:'+color+'"></div></div></div>';
     }).join('');
   }
   const uS=softSkills.filter(s=>s.data.unlocked);const lS=softSkills.filter(s=>!s.data.unlocked);

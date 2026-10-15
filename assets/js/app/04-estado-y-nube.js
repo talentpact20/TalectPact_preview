@@ -121,6 +121,8 @@ let candidateProfile={
 // degrada con elegancia a memoria (la app sigue funcionando sin persistir).
 // ═══════════════════════════════════════════════════════════════════════════
 const TP_NS='talentpact:v1:';
+// Copia del perfil vacío, para dejarlo limpio al cambiar de cuenta.
+const TP_PERFIL_VACIO=JSON.stringify(candidateProfile);
 const TP={
   _ok:null,
   available(){
@@ -134,7 +136,19 @@ const TP={
   // Log de evaluaciones IA — trazabilidad / audit trail (AI Act Art. 12)
   logEval(entry){const log=TP.load('evals',[]);log.push(Object.assign({ts:new Date().toISOString()},entry));if(log.length>200)log.splice(0,log.length-200);TP.save('evals',log);return log;},
   getEvals(){return TP.load('evals',[]);},
-  saveProfile(){TP.save('profile',{skills:candidateProfile.skills,completedCommon:candidateProfile.completedCommon,completedCustom:candidateProfile.completedCustom});},
+  // El progreso guardado en el navegador lleva dueño: la cuenta (id) o 'guest'.
+  // Antes no lo llevaba: al entrar con otra cuenta se mezclaba con ella y se
+  // subía a la nube, así que una cuenta nueva aparecía con retos de otra persona.
+  saveProfile(){TP.save('profile',{owner:(typeof tpUser!=='undefined'&&tpUser&&tpUser.id)||'guest',skills:candidateProfile.skills,completedCommon:candidateProfile.completedCommon,completedCustom:candidateProfile.completedCustom});},
+  /** Dueño del progreso guardado: id de cuenta, 'guest' o null (guardado antes de llevar dueño). */
+  dueno(){const p=TP.load('profile',null);return p?(p.owner||null):undefined;},
+  /** Deja el perfil en memoria y en el navegador como el de una cuenta nueva. */
+  vaciarPerfil(){
+    const v=JSON.parse(TP_PERFIL_VACIO);
+    Object.keys(candidateProfile).forEach(k=>{delete candidateProfile[k];});
+    Object.assign(candidateProfile,v);
+    ['profile','evals'].forEach(k=>{try{localStorage.removeItem(TP_NS+k);}catch(e){}});
+  },
   savePool(){},   // el pool es del servidor; no se persiste en el navegador
   saveUnlocks(){TP.save('unlocks',CANDIDATES.filter(c=>c._unlocked).map(c=>c.id));},
   saveEmpJobs(){TP.save('empJobs',empPostedJobs);},
@@ -289,6 +303,15 @@ const TPCloud={
   // Rehidrata candidateProfile desde la nube y refresca la cabecera del panel.
   async loadProgressIntoProfile(user){
     try{
+      // ¿De quién es el progreso de este navegador? Solo se mezcla con la cuenta
+      // si es suyo. Lo de otra cuenta se descarta; lo hecho sin sesión se aparta
+      // y se pregunta antes de añadirlo (puede ser de otra persona).
+      const dueno=TP.dueno();
+      let deInvitado=null;
+      if(dueno!==undefined&&dueno!==user.id){
+        if((dueno==='guest'||dueno===null)&&(candidateProfile.completedCommon||[]).length)deInvitado=JSON.parse(JSON.stringify(candidateProfile));
+        TP.vaciarPerfil();
+      }
       const p=await TPCloud.getProgress(user);
       if(p&&p.profile){
         const nm=((p.profile.full_name||'').trim())||user.email||'Candidato';
@@ -320,6 +343,7 @@ const TPCloud={
         }
         if(pending.length)console.info('[TP] sincronizados a la nube:',pending.length,'reto(s)');
       }catch(e){console.warn('[TP] sync-up error',e);}
+      if(deInvitado)await tpOfrecerProgresoInvitado(user,deInvitado,p);
     }catch(e){console.warn('TPCloud.loadProgress',e);}
   }
 };
@@ -337,3 +361,47 @@ async function loadCompanyIntoUI(user){
   }catch(e){console.warn('loadCompany',e); applyCompanyToUI(null,user);}
 }
 
+/**
+ * Retos hechos en este navegador sin iniciar sesión. Pueden ser de quien acaba
+ * de entrar o de otra persona que usó el mismo ordenador: se pregunta antes de
+ * añadirlos a la cuenta. Se guardan como notas no verificadas.
+ */
+async function tpOfrecerProgresoInvitado(user,local,nube){
+  const enNube=new Set(((nube&&nube.completed)||[]).map(c=>c.challengeId));
+  const nuevos=(local.completedCommon||[]).filter(c=>c&&c.id&&!enNube.has(c.id));
+  if(!nuevos.length)return;
+  const si=await tpConfirmar({
+    titulo:'Hay retos hechos sin cuenta en este navegador',
+    texto:nuevos.length+(nuevos.length===1?' reto se hizo':' retos se hicieron')+' en este navegador sin iniciar sesión. Si los hiciste tú, puedes añadirlos a tu cuenta (como notas no verificadas). Si no son tuyos, se descartan.',
+    si:'Añadirlos a mi cuenta',no:'No son míos'
+  });
+  if(!si)return;
+  nuevos.forEach(c=>{
+    candidateProfile.completedCommon.push(c);
+    const sk=local.skills&&local.skills[c.skill];
+    if(sk&&candidateProfile.skills[c.skill]&&(!candidateProfile.skills[c.skill].unlocked||sk.score>candidateProfile.skills[c.skill].score))candidateProfile.skills[c.skill]=sk;
+  });
+  TP.saveProfile();
+  for(const c of nuevos){
+    try{await TPCloud.saveEvaluation(user,{challengeId:c.id,skill:c.skill||c.id,score:c.score||0,criteria:[],reasoning:'(añadido desde este navegador por el usuario)'});}catch(e){console.warn('[TP] subir reto de invitado',e);}
+  }
+  if(typeof syncMyPoolEntry==='function')syncMyPoolEntry();
+  if(typeof updateCandProfile==='function'&&document.getElementById('dashCandidate')?.classList.contains('open'))updateCandProfile();
+}
+
+/** Diálogo propio de sí/no (accesible). Devuelve una promesa con true/false. */
+function tpConfirmar(o){
+  return new Promise(res=>{
+    const d=document.createElement('dialog');
+    d.className='tp-dialogo';
+    d.innerHTML='<form method="dialog"><h3></h3><p></p><div class="tp-dialogo-acc"><button type="button" class="btn btn-outline" data-r="no"></button><button type="submit" class="btn btn-primary" data-r="si"></button></div></form>';
+    d.querySelector('h3').textContent=o.titulo;d.querySelector('p').textContent=o.texto;
+    d.querySelector('[data-r=no]').textContent=o.no||'Cancelar';d.querySelector('[data-r=si]').textContent=o.si||'Aceptar';
+    document.body.appendChild(d);
+    const fin=v=>{try{d.close();}catch(e){}d.remove();res(v);};
+    d.querySelector('[data-r=no]').onclick=()=>fin(false);
+    d.addEventListener('cancel',e=>{e.preventDefault();fin(false);});
+    d.querySelector('form').onsubmit=e=>{e.preventDefault();fin(true);};
+    d.showModal();
+  });
+}

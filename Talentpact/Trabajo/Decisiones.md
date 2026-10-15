@@ -12,3 +12,4 @@
 - Lo que decide algo (enunciado, skill, nota, importe, texto del pago) sale del servidor; el navegador solo propone. Los retos fuera del catálogo del servidor no se verifican. (15/10)
 - Corrector v2.1: la nota global la calcula el servidor con pesos fijos; sin evidencia citada, un criterio no pasa de 40; las clasificaciones se corrigen sin IA descontando el azar (pendiente de confirmar). (15/10)
 - Habilidades en **tres pilares**: Hard skills, Soft skills y Transferibles. En la oferta: skills + hasta 3 preguntas + hasta 3 dilemas del día a día; el candidato los responde al postularse. (15/10)
+- El progreso del navegador tiene dueño: solo se mezcla con su cuenta; lo hecho sin sesión se añade solo si la persona lo confirma; al cerrar sesión se vacía. (15/10)

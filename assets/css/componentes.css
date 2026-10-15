@@ -258,7 +258,7 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
 .tp-tinte-5{background:var(--slate-100);color:var(--slate-700)}
 
 /* Diálogo sencillo (motivo de descarte) */
-.tp-dialogo{border:1px solid var(--c-borde);border-radius:var(--radius-xl);background:var(--c-superficie);color:var(--c-texto);padding:24px;width:min(440px,92vw);box-shadow:var(--shadow-xl)}
+.tp-dialogo{margin:auto;inset:0;max-height:calc(100vh - 32px);overflow:auto;border:1px solid var(--c-borde);border-radius:var(--radius-xl);background:var(--c-superficie);color:var(--c-texto);padding:24px;width:min(440px,92vw);box-shadow:var(--shadow-xl)}
 .tp-dialogo::backdrop{background:var(--c-velo)}
 .tp-dialogo h3{font-size:var(--fs-t3);margin-bottom:6px}
 .tp-dialogo p{font-size:var(--fs-peq);color:var(--c-texto-2);margin-bottom:12px}
@@ -269,3 +269,5 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
 [hidden]{display:none!important}
 
 .tp-final-skill.u-d-block{display:block}
+/* Contenedor del perfil de skills: bloque normal; las cuadrículas van dentro. */
+.sp-skills{display:block}

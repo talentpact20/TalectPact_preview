@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261015e">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261015j">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
@@ -133,14 +133,13 @@
     <div id="candInbox" class="u-mb-16" hidden></div>
     <div class="skill-profile-card">
       <div class="sp-header">
-        <div class="sp-avatar">AC</div>
-        <div class="sp-info"><h3>Tu Perfil de Skills</h3><div class="sp-meta">Candidato anónimo · Completa retos para desbloquear skills</div></div>
+        <div class="sp-avatar" id="spAvatar" aria-hidden="true">—</div>
+        <div class="sp-info"><h3>Tu Perfil de Skills</h3><div class="sp-meta" id="spMeta">Completa retos para desbloquear skills</div></div>
         <div class="sp-global-score"><div class="score-ring"><span class="ring-val" id="spGlobalScore">—</span></div><div class="ring-lbl">SCORE GLOBAL</div></div>
       </div>
-      <div class="u-fs-micro u-fw-600 u-c-slate-600 u-tt-uppercase u-ls-_04em u-mb-10">Habilidades verificadas</div>
-      <div class="sp-skills-grid" id="spSkillsGrid">
+      <div class="sp-skills" id="spSkillsGrid">
       </div>
-      <p id="candProfileFootnote" class="u-fs-micro u-c-slate-500 u-mt-14 u-ta-center u-lh-1_5">Cada skill se desbloquea al completar su reto asociado. Usa el botón de arriba o la pestaña <strong>Retos</strong> para elegir por dónde empezar.</p>
+      <p id="candProfileFootnote" class="u-fs-micro u-c-slate-500 u-mt-14 u-ta-center u-lh-1_5">Cada skill se desbloquea al completar su reto. Elige el siguiente en la pestaña <strong>Retos</strong>.</p>
     </div>
 
     <!-- SkillPass verificable -->
@@ -1062,18 +1061,18 @@
 <script src="assets/js/app/01-datos-ofertas.js?v=20261015c"></script>
 <script src="assets/js/app/02-grabacion.js?v=20261015e"></script>
 <script src="assets/js/app/03-datos-retos.js?v=20261015c"></script>
-<script src="assets/js/app/04-estado-y-nube.js?v=20261015c"></script>
+<script src="assets/js/app/04-estado-y-nube.js?v=20261015j"></script>
 <script src="assets/js/app/05-qr.js?v=20261015c"></script>
 <script src="assets/js/app/06-skillpass-y-sesion.js?v=20261015e"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261015c"></script>
-<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261015i"></script>
-<script src="assets/js/app/09-acceso.js?v=20261015c"></script>
+<script src="assets/js/app/07-retos-comunes.js?v=20261015j"></script>
+<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261015j"></script>
+<script src="assets/js/app/09-acceso.js?v=20261015j"></script>
 <script src="assets/js/app/10-paneles-y-pagos.js?v=20261015e"></script>
 <script src="assets/js/app/11-superadmin.js?v=20261015c"></script>
 <script src="assets/js/app/12-soporte-y-ranking.js?v=20261015e"></script>
 <script src="assets/js/app/13-integridad.js?v=20261015c"></script>
 <script src="assets/js/app/14-empleo.js?v=20261015c"></script>
-<script src="assets/js/app/15-proteccion-acceso.js?v=20261015c"></script>
+<script src="assets/js/app/15-proteccion-acceso.js?v=20261015j"></script>
 <script src="assets/js/app/16-pool-real.js?v=20261015e"></script>
 <script src="assets/js/app/17-ofertas-reales.js?v=20261015i"></script>
 <script src="assets/js/app/18-interfaz.js?v=20261015c"></script>

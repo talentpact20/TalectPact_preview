@@ -28,6 +28,7 @@ var TPAuthGuard={
       if(Date.now()-TPAuthGuard._ultima<TPAuthGuard.INACTIVIDAD_MS)return;
       TPAuthGuard._ultima=Date.now();
       try{await TPCloud.signOut();}catch(e){}
+      if(tpUser)TP.vaciarPerfil();   // el progreso de la cuenta no se queda para el siguiente
       tpUser=null;tpCompany=null;
       ['dashCandidate','dashEmpresa'].forEach(id=>{const d=document.getElementById(id);if(d)d.classList.remove('open');});
       document.body.style.overflow='';

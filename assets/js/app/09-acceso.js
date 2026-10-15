@@ -781,6 +781,8 @@ function cleanAuthUrl(){
 async function logoutCand(){
   await TPCloud.signOut();
   tpUser=null;
+  // El progreso de la cuenta no se queda en el navegador para la siguiente persona.
+  TP.vaciarPerfil();
   TPPrefs.invalidate();
   applyCandidateIdentity();   // borra el nombre del que se va
   closeDash('dashCandidate');

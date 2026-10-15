@@ -207,6 +207,25 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+## 2026-10-15 — Una cuenta nueva aparecía con retos de otra sesión
+
+**Qué pasaba.** El progreso guardado en el navegador no sabía de quién era: no se borraba al cerrar sesión y, al entrar con cualquier cuenta (también una recién creada), se mezclaba con ella y se subía a la nube como suyo.
+
+**Arreglo.**
+- El progreso local lleva dueño (cuenta o invitado). Solo se mezcla con su cuenta; el de otra se descarta.
+- Lo hecho sin sesión no se sube solo: se pregunta «¿Son tuyos?» y, si se acepta, se guarda como no verificado.
+- Al cerrar sesión (a mano o por inactividad) se vacía el progreso del navegador.
+- Tarjeta «Tu Perfil de Skills»:
+  - alias real en vez de «AC · Candidato anónimo» escrito a mano;
+  - fuera el título «Habilidades verificadas», que no era cierto;
+  - cuadrícula corregida;
+  - «Avanzado» en verde.
+- Diálogos propios centrados (el reset de márgenes los pegaba arriba a la izquierda).
+
+**Ficheros.** `04-estado-y-nube.js`, `07-retos-comunes.js`, `09-acceso.js`, `15-proteccion-acceso.js`, `componentes.css`, `index.html`
+
+---
+
 ## Pendiente / siguiente
 
 - Ejecutar `supabase_schema_dilemmas.sql` en Supabase.
