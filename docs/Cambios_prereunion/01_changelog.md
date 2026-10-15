@@ -132,6 +132,7 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+<<<<<<< HEAD
 ## 2026-10-15 — Análisis completo del backend
 
 **Qué.** Revisión de las 22 funciones y de las librerías compartidas. Detalle por tema en `05_errores_y_mejoras.md`, sección 7.
@@ -165,11 +166,45 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Pendiente.** Validar con el modelo real y con notas humanas (gold set del catálogo con la asesora).
 
 **Ficheros.** `lib/evaluator.js`, `lib/handlers/evaluate-exercise.js`, `tools/generar_catalogo_servidor.js`, `lib/catalogo-retos.json`, `08-ofertas-y-ejercicios.js`, `tests/corrector-v21.test.js`, `tests/catalogo.test.js`
+=======
+## 2026-10-15 — Pieza disruptiva + plan semanal
+
+**Qué.** Iván pide ir más allá de soft genérico y de 3 preguntas: que la empresa conozca si el candidato encaja en **su modelo de negocio**. Se documenta el “Escenario del modelo” y se mete en el plan semanal (semanas 5–6).
+
+**Docs.** `06_encaje_modelo_empresa.md`, `07_plan_semanal.md`; preguntas en `00_contexto_reunion.md`.
+
+---
+
+## 2026-10-15 — Briefing listo para asesora y Xavi
+
+**Qué.** Se reescribe `06_encaje_modelo_empresa.md` como documento de explicación: problema, propuesta en 3 capas, frases listas, límites, recorrido en producto, preguntas de validación y resumen de 30 s. **Sin desarrollar código** hasta validar.
+
+**Para qué.** Que Iván pueda contárselo a la asesora y a Xavi con el mismo texto.
+
+---
+
+## 2026-10-15 — Taxonomía de aptitudes + dilemas en la oferta (criterio)
+
+**Qué.** Criterio de producto documentado: 4 aptitudes + técnicas; oferta = skills + 3 preguntas + 1–3 dilemas.
+
+**Docs.** `08_taxonomia_aptitudes_y_oferta.md`.
+
+---
+
+## 2026-10-15 — Taxonomía y dilemas en producto (código)
+
+**Qué.** Clasificación real en filtros de retos y selector de skills al publicar (Cognitivas / Interpersonales / Autogestión / Ejecución / Técnicas). Al publicar: hasta 3 dilemas. Al postularse: el candidato los responde. La empresa los ve en «Ver candidatos».
+
+**Ficheros.** `lib/personas.js`, `save-job.js`, `list-jobs.js`, `apply.js`, `applications.js`, `19-rrhh.js`, `08-ofertas-y-ejercicios.js`, `17-ofertas-reales.js`, `index.html`, `tests/rrhh.test.js`, SQL `tfm/tech/supabase_schema_dilemmas.sql`.
+
+**Supabase.** Ejecutar `supabase_schema_dilemmas.sql` (columnas `jobs.dilemmas` y `applications.dilemma_answers`).
+>>>>>>> 5492cdb98e9ecc87f1827d67a4cdef916c8d44f7
 
 ---
 
 ## Pendiente / siguiente
 
-- Deploy a Netlify.
-- Email real del aviso (hoy es bandeja in-app; Resend/SMTP después).
-- Encaje ponderado fino opcional (ya hay boost si la oferta pide skills de Personas).
+- Ejecutar `supabase_schema_dilemmas.sql` en Supabase.
+- Probar: publicar con dilemas → candidato responde → empresa ve respuestas.
+- Validar con asesora / Xavi (docs 06 y 08).
+- Seguir `07_plan_semanal.md`.

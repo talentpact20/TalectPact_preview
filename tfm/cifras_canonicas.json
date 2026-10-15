@@ -52,8 +52,13 @@
   },
   "tests": {
     "fuente": "npm test",
+<<<<<<< HEAD
     "ficheros": 18,
     "casos": 138
+=======
+    "ficheros": 15,
+    "casos": 128
+>>>>>>> 5492cdb98e9ecc87f1827d67a4cdef916c8d44f7
   },
   "negocio": {
     "fuente": "tfm/assets/TalentPact_modelo_financiero.xlsx (escenario base, 17/04/2026)",

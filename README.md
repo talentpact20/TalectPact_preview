@@ -20,7 +20,11 @@ Máster en Fintech, Mercados Financieros y Blockchain · Bloque Data Science & I
 | **Verificador público** | `verify.html` | Página sin cuenta donde cualquiera comprueba un SkillPass. |
 | **Pagos (Stripe)** | `netlify/functions/lib/handlers/create-checkout-session.js` · `stripe-webhook.js` · `confirm-checkout.js` | Cobro del desbloqueo de contacto vía Stripe Checkout y concesión del acceso solo tras confirmar el pago. |
 | **PoC del Agente Evaluador** | `poc_entrega2/` | Prototipo en Python (Entrega 2) que demuestra el motor de evaluación con Dynamic Prompting + Chain of Thought. |
+<<<<<<< HEAD
 | **Tests automáticos** | `tests/` | 138 casos con el *runner* nativo de Node. Sin claves, sin red, sin dependencias de testing. |
+=======
+| **Tests automáticos** | `tests/` | 128 casos con el *runner* nativo de Node. Sin claves, sin red, sin dependencias de testing. |
+>>>>>>> 5492cdb98e9ecc87f1827d67a4cdef916c8d44f7
 | **Banco de pruebas del evaluador** | `tfm/tech/eval/` | Gold set de 12 ítems + métricas (κ cuadrática, MAE, Spearman, test-retest, bloqueo de inyección, coste). |
 | **Cifras canónicas** | `tfm/cifras_canonicas.json` | Fuente de verdad numérica del TFM. Si la memoria discrepa, manda este fichero. |
 | **Entregables** | `entrega_final/` | Informe técnico final, guion de demo, guiones de presentación, deck de defensa y batería de Q&A. |
@@ -355,7 +359,11 @@ el servidor.
 Todo lo de este apartado corre **sin clave de API, sin red y sin base de datos**.
 
 ```bash
+<<<<<<< HEAD
 npm test                       # 138 casos, ~0,2 s
+=======
+npm test                       # 128 casos, ~0,2 s
+>>>>>>> 5492cdb98e9ecc87f1827d67a4cdef916c8d44f7
 npm run doctor                 # qué falta configurar (IA, datos, blockchain, pagos)
 npm run bench -- --dry-run     # enseña los prompts del banco de pruebas sin gastar nada
 npm run bench -- --offline     # recalcula las métricas desde la última ejecución guardada

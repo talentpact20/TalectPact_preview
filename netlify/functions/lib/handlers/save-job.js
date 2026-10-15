@@ -3,7 +3,7 @@
  *
  * Body: { id?, title, sector, description, requiredSkills, tags?, requiredLevel?,
  *         exerciseConfig?, jornada?, modalidad?, contrato?, ubicacion?, salMin?, salMax?,
- *         cultureQuestions? }
+ *         cultureQuestions?, dilemmas? }
  *       { id, status: "closed" | "open" }   → cerrar o reabrir
  * Cabecera: Authorization: Bearer <access token de Supabase>
  *
@@ -24,11 +24,20 @@ const lista = (v, max, n) => (Array.isArray(v) ? [...new Set(v.filter((x) => typ
 const entero = (v) => { const x = Number(v); return Number.isFinite(x) && x > 0 ? Math.round(x) : null; };
 const uno = (v, opciones, def) => (opciones.includes(v) ? v : def);
 
-/** Hasta 3 preguntas/escenarios de la vacante (encaje cultural, no personalidad). */
+/** Hasta 3 preguntas de la vacante (criba / logística, no personalidad). */
 function limpiarPreguntas(v) {
   if (!Array.isArray(v)) return [];
   return v
     .map((x) => (typeof x === "string" ? x.trim().slice(0, 200) : ""))
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
+/** Hasta 3 dilemas del día a día de la empresa (texto más largo). */
+function limpiarDilemas(v) {
+  if (!Array.isArray(v)) return [];
+  return v
+    .map((x) => (typeof x === "string" ? x.trim().slice(0, 600) : ""))
     .filter(Boolean)
     .slice(0, 3);
 }
@@ -49,7 +58,8 @@ function validarOferta(b) {
     ubicacion: texto(b.ubicacion, 80) || null,
     sal_min: entero(b.salMin),
     sal_max: entero(b.salMax),
-    culture_questions: limpiarPreguntas(b.cultureQuestions)
+    culture_questions: limpiarPreguntas(b.cultureQuestions),
+    dilemmas: limpiarDilemas(b.dilemmas)
   };
   if (fila.title.length < 3) return { error: "El título necesita al menos 3 caracteres" };
   if (!SECTORES.includes(fila.sector)) return { error: "Sector no válido" };
@@ -89,8 +99,10 @@ exports.handler = async (event) => {
     const { fila, error } = validarOferta(b);
     if (error) return jsonResponse(400, { error });
 
-    async function guardar(conPreguntas) {
-      const datos = conPreguntas ? fila : (({ culture_questions: _q, ...resto }) => resto)(fila);
+    async function guardar(opts) {
+      let datos = fila;
+      if (!opts.preguntas) datos = (({ culture_questions: _q, ...resto }) => resto)(datos);
+      if (!opts.dilemas) datos = (({ dilemmas: _d, ...resto }) => resto)(datos);
       if (b.id) {
         const filas = await sb.update("jobs", propia(b.id), datos);
         if (!Array.isArray(filas) || !filas.length) return jsonResponse(404, { error: "Oferta no encontrada" });
@@ -101,13 +113,23 @@ exports.handler = async (event) => {
       return jsonResponse(200, { ok: true, id: row && row.id });
     }
 
-    try {
-      return await guardar(true);
-    } catch (err) {
-      // Sin la migración culture_questions, se publica el resto.
-      if (!faltaEnEsquema(err, /culture_questions/i)) throw err;
-      return await guardar(false);
+    const intentos = [
+      { preguntas: true, dilemas: true },
+      { preguntas: true, dilemas: false },
+      { preguntas: false, dilemas: false }
+    ];
+    let ultimo = null;
+    for (const opts of intentos) {
+      try {
+        return await guardar(opts);
+      } catch (err) {
+        ultimo = err;
+        const faltaPreg = faltaEnEsquema(err, /culture_questions/i);
+        const faltaDil = faltaEnEsquema(err, /dilemmas/i);
+        if (!faltaPreg && !faltaDil) throw err;
+      }
     }
+    throw ultimo || new Error("No se pudo guardar la oferta");
   } catch (err) {
     return errorInterno("No se pudo guardar la oferta", err);
   }
@@ -115,4 +137,5 @@ exports.handler = async (event) => {
 
 module.exports.validarOferta = validarOferta;
 module.exports.limpiarPreguntas = limpiarPreguntas;
+module.exports.limpiarDilemas = limpiarDilemas;
 module.exports.SECTORES = SECTORES;

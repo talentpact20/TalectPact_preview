@@ -10,14 +10,17 @@ const { jsonResponse, sb, authUser, faltaEnEsquema, errorInterno } = require("..
 
 const CAMPOS_BASE = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
   "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at";
-const CAMPOS = CAMPOS_BASE + ",culture_questions";
+const CAMPOS_QS = CAMPOS_BASE + ",culture_questions";
+const CAMPOS = CAMPOS_QS + ",dilemmas";
+
+function textosJson(v, max, len) {
+  if (!Array.isArray(v)) return [];
+  return v.filter((x) => typeof x === "string").map((x) => x.slice(0, len)).filter(Boolean).slice(0, max);
+}
 
 /** Fila de Supabase → oferta con la forma que usa la web. */
 function aOferta(f) {
   const c = f.companies || {};
-  const qs = Array.isArray(f.culture_questions)
-    ? f.culture_questions.filter((x) => typeof x === "string").slice(0, 3)
-    : [];
   return {
     id: f.id,
     title: f.title,
@@ -33,7 +36,8 @@ function aOferta(f) {
     ubicacion: f.ubicacion || "",
     salMin: f.sal_min,
     salMax: f.sal_max,
-    cultureQuestions: qs,
+    cultureQuestions: textosJson(f.culture_questions, 3, 200),
+    dilemmas: textosJson(f.dilemmas, 3, 600),
     status: f.status,
     createdAt: f.created_at,
     closedAt: f.closed_at,
@@ -49,21 +53,24 @@ function aOferta(f) {
 }
 
 async function seleccionar(filtro) {
-  try {
-    return await sb.select("jobs", `select=${CAMPOS},companies(company_name,company_size,description,sector,website,location)&${filtro}`);
-  } catch (err) {
-    if (faltaEnEsquema(err, /culture_questions/i)) {
-      try {
-        return await sb.select("jobs", `select=${CAMPOS_BASE},companies(company_name,company_size,description,sector,website,location)&${filtro}`);
-      } catch (err2) {
-        if (!faltaEnEsquema(err2, /description|sector|website|location/i)) throw err2;
-        return sb.select("jobs", `select=${CAMPOS_BASE},companies(company_name,company_size)&${filtro}`);
-      }
+  const join = "companies(company_name,company_size,description,sector,website,location)";
+  const joinMin = "companies(company_name,company_size)";
+  const intentos = [
+    `select=${CAMPOS},${join}&${filtro}`,
+    `select=${CAMPOS_QS},${join}&${filtro}`,
+    `select=${CAMPOS_BASE},${join}&${filtro}`,
+    `select=${CAMPOS_BASE},${joinMin}&${filtro}`
+  ];
+  let ultimo = null;
+  for (const q of intentos) {
+    try {
+      return await sb.select("jobs", q);
+    } catch (err) {
+      ultimo = err;
+      if (!faltaEnEsquema(err, /culture_questions|dilemmas|description|sector|website|location/i)) throw err;
     }
-    // Sin la migración de la ficha de empresa, se sirve la oferta con el nombre.
-    if (!faltaEnEsquema(err, /description|sector|website|location/i)) throw err;
-    return sb.select("jobs", `select=${CAMPOS},companies(company_name,company_size)&${filtro}`);
   }
+  throw ultimo || new Error("No se pudieron cargar las ofertas");
 }
 
 exports.handler = async (event) => {
