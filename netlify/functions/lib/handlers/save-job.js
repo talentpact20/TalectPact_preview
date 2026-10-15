@@ -10,7 +10,7 @@
  * La empresa sale del token y tiene que tener ficha en `companies`. Una oferta
  * solo la puede tocar quien la publicó: la propiedad se impone en el filtro.
  */
-const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema, errorInterno } = require("../tp");
 
 const SECTORES = ["Marketing", "IT", "Data", "Business", "Design", "RRHH", "Finance", "Legal", "Ops", "Sales", "Languages"];
 const NIVELES = ["basico", "intermedio", "avanzado"];
@@ -109,7 +109,7 @@ exports.handler = async (event) => {
       return await guardar(false);
     }
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo guardar la oferta", details: err.message });
+    return errorInterno("No se pudo guardar la oferta", err);
   }
 };
 

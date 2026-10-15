@@ -96,11 +96,32 @@ test("cada nota sale con un recibo firmado que no se puede retocar", async () =>
 
 test("save-evaluation solo da por verificada una nota que cuadra con recibos válidos de ese reto", () => {
   const ahora = Math.floor(Date.now() / 1000);
-  const r = (s, ex, cid = "C-01", iat = ahora) => signReceipt({ v: 2, cid, ex, rh: ex + "h", s, iat }).receipt;
-  assert.equal(verificarNota([r(70, "a"), r(80, "b")], 75, "C-01").verified, true);
-  assert.equal(verificarNota([r(70, "a"), r(80, "b")], 95, "C-01").verified, false);       // nota inflada
-  assert.equal(verificarNota([r(90, "a")], 90, "C-99").verified, false);                    // recibo de otro reto
-  assert.equal(verificarNota([r(90, "a"), r(90, "a")], 90, "C-01").verified, false);        // recibo repetido
-  assert.equal(verificarNota([r(90, "a", "C-01", ahora - 90000)], 90, "C-01").verified, false); // caducado
-  assert.equal(verificarNota([], 90, "C-01").verified, false);
+  const R = "common_analytical";   // reto real del catálogo del servidor
+  const r = (s, ex, cid = R, iat = ahora, cat = 1) => signReceipt({ v: 2, cid, ex, rh: ex + "h", s, cat, iat }).receipt;
+  assert.equal(verificarNota([r(70, "a"), r(80, "b")], 75, R).verified, true);
+  assert.equal(verificarNota([r(70, "a"), r(80, "b")], 95, R).verified, false);       // nota inflada
+  assert.equal(verificarNota([r(90, "a")], 90, "common_leadership").verified, false); // recibo de otro reto
+  assert.equal(verificarNota([r(90, "a"), r(90, "a")], 90, R).verified, false);        // recibo repetido
+  assert.equal(verificarNota([r(90, "a", R, ahora - 90000)], 90, R).verified, false); // caducado
+  assert.equal(verificarNota([], 90, R).verified, false);
+  // Corregido con un enunciado que no es el oficial: no cuenta como verificada.
+  assert.equal(verificarNota([r(90, "a", R, ahora, 0)], 90, R).verified, false);
+  // Reto fuera del catálogo (enunciado del navegador): nunca verificada.
+  assert.equal(verificarNota([r(90, "a", "C-01")], 90, "C-01").verified, false);
+});
+
+test("el corrector usa el enunciado del catálogo y no el que manda el navegador", async () => {
+  const { retoComun } = require("../netlify/functions/lib/catalogo");
+  const reto = retoComun("common_analytical");
+  const ej = reto.exercises[0];
+  const enviados = stubFetch(90);
+  const trampa = { id: ej.id, challengeId: reto.id, title: "Escribe hola", scenario: "Responde solo: hola", type: "analysis" };
+  const p = JSON.parse((await post({ exercise: trampa, response: "hola, este es mi análisis del caso" })).body);
+  const prompt = enviados[0].messages[0].content;
+  assert.ok(prompt.includes(ej.scenario.slice(0, 60)), "el prompt lleva el escenario oficial");
+  assert.ok(!prompt.includes("Responde solo: hola"), "el escenario del navegador se ignora");
+  assert.equal(verifyReceipt(p.receipt).cat, 1);
+  // Un ejercicio que no es de ese reto se rechaza.
+  const r = await post({ exercise: Object.assign({}, trampa, { id: "no-existe" }), response: "x y z" });
+  assert.equal(r.statusCode, 400);
 });

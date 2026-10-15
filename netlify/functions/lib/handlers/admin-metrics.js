@@ -11,7 +11,7 @@
  * Minimización: el backoffice ve agregados, alias y nombres de empresa. Nunca
  * email, teléfono ni nombre de candidatos (eso solo sale por get-contact).
  */
-const { jsonResponse, sb, authUser, anonymousAlias } = require("../tp");
+const { jsonResponse, sb, authUser, anonymousAlias, errorInterno } = require("../tp");
 
 function esAdmin(user) {
   return !!(user && user.app_metadata && user.app_metadata.role === "admin");
@@ -105,7 +105,7 @@ exports.handler = async (event) => {
       empresasRecientes: ultimasEmpresas.map((c) => ({ nombre: c.company_name || "—", tamano: c.company_size || "—", sector: c.sector || "—", alta: c.created_at }))
     });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudieron cargar las métricas", details: err.message });
+    return errorInterno("No se pudieron cargar las métricas", err);
   }
 };
 

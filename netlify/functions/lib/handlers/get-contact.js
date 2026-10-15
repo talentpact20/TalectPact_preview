@@ -13,7 +13,7 @@
  *
  * Devuelve: { contact: { name, email, phone, linkedin }, unlockedAt }
  */
-const { jsonResponse, sb, authUser, isUuid, supabaseEnv, faltaEnEsquema } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, supabaseEnv, faltaEnEsquema, errorInterno } = require("../tp");
 
 /** Completa con Auth lo que el perfil no tenga (email de la cuenta, metadatos). */
 async function datosDeAuth(userId) {
@@ -98,6 +98,6 @@ exports.handler = async (event) => {
 
     return jsonResponse(200, { ok: true, contact, unlockedAt: unlock.paid_at || null });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo obtener el contacto", details: err.message });
+    return errorInterno("No se pudo obtener el contacto", err);
   }
 };

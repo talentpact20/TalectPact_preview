@@ -6,7 +6,7 @@
  *
  * Nunca devuelve `company_user_id`: el id de la cuenta que publica no es público.
  */
-const { jsonResponse, sb, authUser, faltaEnEsquema } = require("../tp");
+const { jsonResponse, sb, authUser, faltaEnEsquema, errorInterno } = require("../tp");
 
 const CAMPOS_BASE = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
   "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at";
@@ -83,7 +83,7 @@ exports.handler = async (event) => {
     const jobs = (Array.isArray(filas) ? filas : []).map(aOferta);
     return jsonResponse(200, { ok: true, jobs });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudieron cargar las ofertas", details: err.message });
+    return errorInterno("No se pudieron cargar las ofertas", err);
   }
 };
 

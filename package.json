@@ -14,7 +14,8 @@
     "check:google": "node tfm/tech/scripts/check-google-auth.js",
     "deploy:contract": "node tfm/tech/scripts/deploy-contract.js",
     "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run",
-    "test:supabase": "node tfm/tech/scripts/test-supabase.js"
+    "test:supabase": "node tfm/tech/scripts/test-supabase.js",
+    "catalogo": "node tools/generar_catalogo_servidor.js"
   },
   "dependencies": {
     "ethers": "^6.13.0",

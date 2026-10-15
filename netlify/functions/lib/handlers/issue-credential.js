@@ -13,8 +13,26 @@
  */
 const {
   jsonResponse, sb, authUser, ensureProfileByUser, canonicalJson, hashCv,
-  CHAIN, explorerTx
+  CHAIN, explorerTx, faltaEnEsquema, errorInterno
 } = require("../tp");
+
+/**
+ * Mejor nota por skill, prefiriendo siempre las verificadas (firmadas por el
+ * corrector con el enunciado oficial). Cada skill dice si lo está: antes el
+ * SkillPass sellaba en la cadena notas que había enviado el navegador como si
+ * fueran tan fiables como las corregidas.
+ */
+function mejoresSkills(evals) {
+  const best = {};
+  for (const e of evals) {
+    const verified = !!(e.integrity && e.integrity.verified);
+    const cur = best[e.skill];
+    if (!cur || (verified && !cur.verified) || (verified === cur.verified && e.score > cur.score)) {
+      best[e.skill] = { skill: e.skill, score: e.score, challengeId: e.challenge_id, evaluatedAt: e.created_at, verified };
+    }
+  }
+  return Object.values(best).sort((a, b) => (b.verified - a.verified) || (b.score - a.score));
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -26,7 +44,7 @@ exports.handler = async (event) => {
 
   let user;
   try { user = await authUser(event, b); }
-  catch (err) { return jsonResponse(500, { error: "No se pudo validar la sesión", details: err.message }); }
+  catch (err) { return errorInterno("No se pudo validar la sesión", err); }
   if (!user) {
     return jsonResponse(401, {
       error: "Necesitas iniciar sesión para emitir tu SkillPass",
@@ -37,23 +55,24 @@ exports.handler = async (event) => {
   try {
     const profile = await ensureProfileByUser(user.id, { email: user.email });
 
-    const evals = await sb.select(
-      "evaluations",
-      `profile_id=eq.${profile.id}&select=skill,score,challenge_id,created_at&order=created_at.asc`
-    );
+    let evals;
+    try {
+      evals = await sb.select(
+        "evaluations",
+        `profile_id=eq.${profile.id}&select=skill,score,challenge_id,created_at,integrity&order=created_at.asc`
+      );
+    } catch (err) {
+      if (!faltaEnEsquema(err, /integrity/i)) throw err;
+      evals = await sb.select(
+        "evaluations",
+        `profile_id=eq.${profile.id}&select=skill,score,challenge_id,created_at&order=created_at.asc`
+      );
+    }
     if (!Array.isArray(evals) || !evals.length) {
       return jsonResponse(400, { error: "Este candidato no tiene evaluaciones que certificar" });
     }
 
-    // Mejor score por skill.
-    const bestBySkill = {};
-    for (const e of evals) {
-      const cur = bestBySkill[e.skill];
-      if (!cur || e.score > cur.score) {
-        bestBySkill[e.skill] = { skill: e.skill, score: e.score, challengeId: e.challenge_id, evaluatedAt: e.created_at };
-      }
-    }
-    const skills = Object.values(bestBySkill).sort((a, b) => b.score - a.score);
+    const skills = mejoresSkills(evals);
 
     // Si ya existe una credencial con exactamente estas mismas skills, se
     // reutiliza en vez de emitir otra: el CV no ha cambiado, así que su hash
@@ -119,6 +138,8 @@ exports.handler = async (event) => {
       pending: false
     });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo emitir la credencial", details: err.message });
+    return errorInterno("No se pudo emitir la credencial", err);
   }
 };
+
+module.exports.mejoresSkills = mejoresSkills;

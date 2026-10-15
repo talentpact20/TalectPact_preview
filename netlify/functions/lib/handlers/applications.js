@@ -7,7 +7,7 @@
  * Estados: aplicado | retos | preseleccionado | entrevista | contratado | descartado
  * Descartado exige motivo (trazabilidad AI Act).
  */
-const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema, errorInterno } = require("../tp");
 const { notificarEtapa } = require("../notify");
 
 const ESTADOS = ["aplicado", "retos", "preseleccionado", "entrevista", "contratado", "descartado"];
@@ -99,7 +99,7 @@ exports.handler = async (event) => {
     }));
     return jsonResponse(200, { ok: true, applications });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo gestionar el proceso", details: err.message });
+    return errorInterno("No se pudo gestionar el proceso", err);
   }
 };
 

@@ -12,7 +12,7 @@
  *
  * Devuelve: { candidates: [{ ref, alias, i, sector, score, skills, cond, integ, verified, retos }] }
  */
-const { jsonResponse, sb, authUser, anonymousAlias, faltaEnEsquema } = require("../tp");
+const { jsonResponse, sb, authUser, anonymousAlias, faltaEnEsquema, errorInterno } = require("../tp");
 const { extraerPersonas } = require("../personas");
 
 const MAX_PERFILES = 500;
@@ -51,7 +51,11 @@ function construirPool(perfiles, evaluaciones, { soloVerificados = false } = {})
     if (!porPerfil.has(e.profile_id)) porPerfil.set(e.profile_id, new Map());
     const skills = porPerfil.get(e.profile_id);
     const actual = skills.get(e.skill);
-    if (!actual || e.score > actual.score) {
+    // Una nota verificada manda sobre cualquier no verificada, aunque sea más
+    // baja: antes un 100 enviado por el navegador tapaba un 70 firmado.
+    const mejor = !actual || (verificada && !actual.verified) ||
+      (verificada === actual.verified && Number(e.score) > actual.score);
+    if (mejor) {
       skills.set(e.skill, {
         score: Number(e.score) || 0,
         verified: verificada,
@@ -140,7 +144,7 @@ exports.handler = async (event) => {
     const candidates = construirPool(lista, evaluaciones, { soloVerificados: !!b.soloVerificados });
     return jsonResponse(200, { ok: true, candidates, total: candidates.length });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo cargar el pool de talento", details: err.message });
+    return errorInterno("No se pudo cargar el pool de talento", err);
   }
 };
 

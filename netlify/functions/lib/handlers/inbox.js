@@ -5,7 +5,7 @@
  * Body: { markRead: [id,…] }       → marca leídos y devuelve la lista
  * Cabecera: Authorization Bearer
  */
-const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema } = require("../tp");
+const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema, errorInterno } = require("../tp");
 
 /**
  * Lo que sale de meta hacia el navegador. El aviso de desbloqueo guarda el
@@ -65,7 +65,7 @@ exports.handler = async (event) => {
     }));
     return jsonResponse(200, { ok: true, notifications });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudieron cargar los avisos", details: err.message });
+    return errorInterno("No se pudieron cargar los avisos", err);
   }
 };
 

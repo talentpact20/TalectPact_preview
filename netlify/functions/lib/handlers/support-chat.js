@@ -51,6 +51,8 @@ exports.handler = async (event) => {
     for (const model of modelos) {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
+        // Sin límite, una API lenta retenía la función hasta el corte de Netlify.
+        signal: AbortSignal.timeout(25000),
         headers: {
           "content-type": "application/json",
           "x-api-key": apiKey,
@@ -77,7 +79,12 @@ exports.handler = async (event) => {
       reply: reply || "Disculpa, no he podido procesar tu mensaje. ¿Puedes reformularlo?"
     });
   } catch (err) {
-    return jsonResponse(500, { error: "Unexpected server error", details: err.message });
+    if (err instanceof SyntaxError) return jsonResponse(400, { error: "Body JSON no válido" });
+    if (err && (err.name === "TimeoutError" || err.name === "AbortError")) {
+      return jsonResponse(504, { error: "El asistente ha tardado demasiado. Vuelve a intentarlo." });
+    }
+    console.error("[TP] support-chat:", err);
+    return jsonResponse(500, { error: "Error inesperado en el asistente", code: "internal" });
   }
 };
 

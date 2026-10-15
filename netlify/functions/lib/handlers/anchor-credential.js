@@ -19,12 +19,24 @@
  */
 const {
   jsonResponse, sb, authUser, getContract, getProvider,
-  chainConfigured, isHash32, isUuid, CHAIN, explorerTx, explorerAddress
+  chainConfigured, isHash32, isUuid, CHAIN, explorerTx, explorerAddress, errorInterno
 } = require("../tp");
 
 // Margen de espera antes de devolver `pending`. Corto a propósito: la persona
 // no espera a la red, y el resto de la petición (auth, Supabase, difusión) va aparte.
 const WAIT_MS = Number(process.env.ANCHOR_WAIT_MS || 5000);
+
+// Cada sellado nuevo es una transacción que paga la wallet emisora, y basta con
+// cambiar una nota para tener una credencial nueva que sellar. Sin tope, una
+// sola cuenta podía vaciar la wallet a base de retos repetidos.
+const MAX_ANCLAJES_DIA = Number(process.env.ANCHOR_MAX_PER_DAY || 3);
+
+/** ¿Ha agotado este perfil sus sellados de las últimas 24 h? */
+async function cupoAgotado(profileId) {
+  const desde = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const n = await sb.count("credentials", `profile_id=eq.${profileId}&tx_hash=not.is.null&created_at=gte.${desde}`);
+  return n >= MAX_ANCLAJES_DIA;
+}
 
 function chainMeta(extra) {
   return Object.assign(
@@ -84,7 +96,7 @@ exports.handler = async (event) => {
   // ── Identidad: el servidor decide de quién es la credencial. ──
   let user;
   try { user = await authUser(event, b); }
-  catch (err) { return jsonResponse(500, { error: "No se pudo validar la sesión", details: err.message }); }
+  catch (err) { return errorInterno("No se pudo validar la sesión", err); }
   if (!user) {
     return jsonResponse(401, {
       error: "Necesitas iniciar sesión para sellar tu SkillPass",
@@ -159,6 +171,13 @@ exports.handler = async (event) => {
       }));
     }
 
+    if (await cupoAgotado(profile.id)) {
+      return jsonResponse(429, {
+        error: `Has sellado ${MAX_ANCLAJES_DIA} SkillPass en las últimas 24 horas. Vuelve a intentarlo mañana.`,
+        code: "anchor_quota"
+      });
+    }
+
     // ── ④ Difunde y guarda el txHash antes de esperar: si la respuesta se corta,
     // la transacción no se pierde y la siguiente llamada la recupera. ──
     const tx = await contract.anchor(cred.cv_hash);
@@ -192,6 +211,6 @@ exports.handler = async (event) => {
       explorerUrl: explorerTx(tx.hash)
     }));
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo anclar la credencial", details: err.message });
+    return errorInterno("No se pudo anclar la credencial", err);
   }
 };

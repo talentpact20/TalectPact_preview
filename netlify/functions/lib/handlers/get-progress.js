@@ -7,7 +7,7 @@
  * promete no revelar.
  * Devuelve: { profile, skills:[{skill,score,challengeId,evaluatedAt}], completed:[...] }
  */
-const { jsonResponse, sb, authUser, ensureProfileByUser } = require("../tp");
+const { jsonResponse, sb, authUser, ensureProfileByUser, errorInterno } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -60,6 +60,6 @@ exports.handler = async (event) => {
 
     return jsonResponse(200, { ok: true, profile, skills, completed });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo cargar el progreso", details: err.message });
+    return errorInterno("No se pudo cargar el progreso", err);
   }
 };

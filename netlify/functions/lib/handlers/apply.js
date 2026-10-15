@@ -10,7 +10,7 @@
  * empresa ve el alias del candidato, nunca su identidad (eso sigue siendo el
  * desbloqueo de pago).
  */
-const { jsonResponse, sb, authUser, ensureProfileByUser, isUuid, faltaEnEsquema, esDuplicado } = require("../tp");
+const { jsonResponse, sb, authUser, ensureProfileByUser, isUuid, faltaEnEsquema, esDuplicado, errorInterno } = require("../tp");
 
 function aPostulacion(a) {
   return {
@@ -97,7 +97,7 @@ exports.handler = async (event) => {
     if (faltaEnEsquema(err, "applications")) {
       return jsonResponse(503, { error: "Falta la migración del pipeline (applications)", code: "pending_migration" });
     }
-    return jsonResponse(500, { error: "No se pudo gestionar la postulación", details: err.message });
+    return errorInterno("No se pudo gestionar la postulación", err);
   }
 };
 

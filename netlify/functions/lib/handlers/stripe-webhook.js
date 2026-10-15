@@ -9,7 +9,7 @@
  *   https://<tu-sitio>/.netlify/functions/stripe-webhook
  * con los eventos checkout.session.completed y checkout.session.expired.
  */
-const { jsonResponse, sb, getStripe, stripeConfigured } = require("../tp");
+const { jsonResponse, sb, getStripe, stripeConfigured, errorInterno } = require("../tp");
 const { notificarDesbloqueo } = require("../notify");
 
 /** Marca la fila como pagada. Idempotente: Stripe reintenta los webhooks. */
@@ -88,6 +88,6 @@ exports.handler = async (event) => {
     return jsonResponse(200, { received: true, type: stripeEvent.type });
   } catch (err) {
     // Aquí sí conviene fallar: que Stripe reintente si Supabase estaba caído.
-    return jsonResponse(500, { error: "No se pudo registrar el evento", details: err.message });
+    return errorInterno("No se pudo registrar el evento", err);
   }
 };

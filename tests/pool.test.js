@@ -141,12 +141,33 @@ test("no se puede pagar por un candidato real que ya no existe", async () => {
   process.env.STRIPE_SECRET_KEY = "sk_test_prueba";
   const sim = simularSupabase([
     ["/auth/v1/user", { id: EMPRESA, email: "rrhh@empresa.es" }],
+    ["/rest/v1/companies", [{ id: "co-1", company_name: "Empresa" }]],
     ["/rest/v1/profiles", []]
   ]);
   try {
     const { handler } = require("../netlify/functions/lib/handlers/create-checkout-session.js");
     const res = await handler({ httpMethod: "POST", headers: { authorization: "Bearer t", origin: "https://talentpact.es" }, body: JSON.stringify({ candidateRef: CAND }) });
     assert.equal(res.statusCode, 404);
+  } finally {
+    sim.restaurar();
+    if (k === undefined) delete process.env.STRIPE_SECRET_KEY; else process.env.STRIPE_SECRET_KEY = k;
+  }
+});
+
+test("una cuenta sin ficha de empresa no puede pagar por el contacto de un candidato", async () => {
+  const k = process.env.STRIPE_SECRET_KEY;
+  process.env.STRIPE_SECRET_KEY = "sk_test_prueba";
+  const sim = simularSupabase([
+    ["/auth/v1/user", { id: EMPRESA, email: "otro@candidato.es", user_metadata: { role: "candidate" } }],
+    ["/rest/v1/companies", []]
+  ]);
+  try {
+    const { handler } = require("../netlify/functions/lib/handlers/create-checkout-session.js");
+    const res = await handler({ httpMethod: "POST", headers: { authorization: "Bearer t", origin: "https://talentpact.es" }, body: JSON.stringify({ candidateRef: CAND }) });
+    assert.equal(res.statusCode, 403);
+    assert.equal(JSON.parse(res.body).code, "not_company");
+    // No se llega a mirar el perfil del candidato.
+    assert.ok(!sim.pedidas.some((p) => p.url.includes("/rest/v1/profiles")));
   } finally {
     sim.restaurar();
     if (k === undefined) delete process.env.STRIPE_SECRET_KEY; else process.env.STRIPE_SECRET_KEY = k;

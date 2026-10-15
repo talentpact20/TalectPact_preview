@@ -23,7 +23,34 @@ function jsonResponse(statusCode, payload) {
   };
 }
 
+/**
+ * Error interno → 500 sin filtrar detalles. El mensaje de un fallo de Supabase
+ * lleva la consulta entera (tabla, filtros, ids); antes salía en `details` al
+ * navegador. Ahora se registra en el log y solo se devuelve fuera de producción
+ * (Netlify pone CONTEXT=production en el sitio publicado).
+ * Un JSON mal formado en el cuerpo no es un fallo nuestro: responde 400.
+ */
+function errorInterno(mensaje, err) {
+  if (err instanceof SyntaxError) return jsonResponse(400, { error: "Body JSON no válido" });
+  console.error("[TP] " + mensaje + ":", (err && err.stack) || err);
+  const payload = { error: mensaje, code: "internal" };
+  if (process.env.CONTEXT !== "production") payload.details = String((err && err.message) || err);
+  return jsonResponse(500, payload);
+}
+
+/** Texto acotado o undefined: lo que no es string no se guarda. */
+function textoCorto(v, max) {
+  if (typeof v !== "string") return undefined;
+  const t = v.trim().slice(0, max);
+  return t || undefined;
+}
+
 // ─── Supabase REST (PostgREST) ───────────────────────────────────────────────
+// Sin límite, una consulta colgada retenía la función hasta el corte de Netlify
+// (60 s) y la persona veía un error genérico tarde. 10 s sobra para PostgREST.
+const SB_TIMEOUT_MS = Number(process.env.SUPABASE_TIMEOUT_MS || 10000);
+const conLimite = () => AbortSignal.timeout(SB_TIMEOUT_MS);
+
 function supabaseEnv() {
   // Tolerante a distintos nombres (mayúsculas/minúsculas) por comodidad de despliegue.
   const url = process.env.SUPABASE_URL || process.env.supabaseurl || process.env.SUPABASE_PROJECT_URL;
@@ -48,7 +75,8 @@ async function sbRequest(method, path, { body, prefer } = {}) {
   const res = await fetch(`${url}/rest/v1/${path}`, {
     method,
     headers,
-    body: body != null ? JSON.stringify(body) : undefined
+    body: body != null ? JSON.stringify(body) : undefined,
+    signal: conLimite()
   });
   const text = await res.text();
   let data;
@@ -66,7 +94,8 @@ async function sbCount(table, query = "") {
   const q = `select=id${query ? "&" + query : ""}`;
   const res = await fetch(`${url}/rest/v1/${table}?${q}`, {
     method: "HEAD",
-    headers: { apikey: key, authorization: `Bearer ${key}`, prefer: "count=exact", range: "0-0" }
+    headers: { apikey: key, authorization: `Bearer ${key}`, prefer: "count=exact", range: "0-0" },
+    signal: conLimite()
   });
   if (!res.ok) throw new Error(`Supabase COUNT ${table} -> ${res.status}`);
   const total = Number(String(res.headers.get("content-range") || "").split("/")[1]);
@@ -96,7 +125,8 @@ async function userFromToken(accessToken) {
   const { url, key } = supabaseEnv();
   try {
     const res = await fetch(`${url}/auth/v1/user`, {
-      headers: { apikey: key, authorization: `Bearer ${accessToken}` }
+      headers: { apikey: key, authorization: `Bearer ${accessToken}` },
+      signal: conLimite()
     });
     if (!res.ok) return null;
     const user = await res.json();
@@ -188,14 +218,29 @@ async function ensureCompanyByUser(userId, fields = {}) {
   if (Array.isArray(found) && found.length) {
     if (Object.keys(patch).length) {
       const upd = await sb.update("companies", `user_id=eq.${userId}`, patch);
-      return Array.isArray(upd) ? upd[0] : found[0];
+      // Un PATCH sin filas devolvía [] y aquí salía undefined (mismo fallo que
+      // ya se corrigió en ensureProfileByUser).
+      return (Array.isArray(upd) && upd[0]) || found[0];
     }
     return found[0];
   }
   const row = Object.assign({ user_id: userId }, patch);
   if (!row.company_name) row.company_name = fields.contact_name || fields.email || "Empresa";
-  const created = await sb.insert("companies", row);
-  return Array.isArray(created) ? created[0] : created;
+  try {
+    const created = await sb.insert("companies", row);
+    return Array.isArray(created) ? created[0] : created;
+  } catch (err) {
+    // Dos peticiones simultáneas de la misma cuenta: gana la primera.
+    const retry = await sb.select("companies", `user_id=eq.${userId}&select=*&limit=1`);
+    if (Array.isArray(retry) && retry.length) return retry[0];
+    throw err;
+  }
+}
+
+/** Ficha de empresa SIN crearla: para comprobar que quien pide es una empresa. */
+async function companyOf(userId) {
+  const rows = await sb.select("companies", `user_id=eq.${userId}&select=id,company_name&limit=1`);
+  return Array.isArray(rows) && rows[0] ? rows[0] : null;
 }
 
 // ─── Canonicalización JSON (orden de claves estable) ─────────────────────────
@@ -368,6 +413,9 @@ function formatAmount(cents, currency) {
 
 module.exports = {
   jsonResponse,
+  errorInterno,
+  textoCorto,
+  companyOf,
   supabaseEnv,
   sb,
   userFromToken,

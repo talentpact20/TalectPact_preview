@@ -11,7 +11,7 @@
  */
 const {
   jsonResponse, sb, hashCv, getContract, chainConfigured, isHash32,
-  CHAIN, explorerTx, explorerAddress
+  CHAIN, explorerTx, explorerAddress, errorInterno
 } = require("../tp");
 
 function chainMeta(extra) {
@@ -64,7 +64,7 @@ exports.handler = async (event) => {
     // el hash cambia y el anclaje deja de encontrarse. Ahí está la garantía.
     return verifyOnChain(hashCv(cvJson), cvJson);
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo verificar la credencial", details: err.message });
+    return errorInterno("No se pudo verificar la credencial", err);
   }
 };
 

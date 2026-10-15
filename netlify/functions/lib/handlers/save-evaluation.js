@@ -8,8 +8,9 @@
  * ni eso: sin id se escribía en un perfil "Candidato Demo") para inyectarle
  * notas que luego issue-credential sellaba en la blockchain.
  */
-const { jsonResponse, sb, authUser, ensureProfileByUser, faltaEnEsquema } = require("../tp");
+const { jsonResponse, sb, authUser, ensureProfileByUser, faltaEnEsquema, errorInterno } = require("../tp");
 const { verifyReceipt } = require("../evaluator");
+const { retoComun } = require("../catalogo");
 
 const MAX_TEXT = 20000;
 
@@ -30,10 +31,15 @@ function verificarNota(receipts, score, challengeId, nowS = Math.floor(Date.now(
   if (!Array.isArray(receipts) || !receipts.length || receipts.length > 10) {
     return { verified: false, reason: "sin recibos" };
   }
+  // Solo el servidor conoce el enunciado de los retos del catálogo. Un reto de
+  // fuera (ejercicios de oferta) se corrige con el texto que manda el
+  // navegador, así que su nota no puede presentarse como verificada.
+  if (!retoComun(challengeId)) return { verified: false, reason: "reto fuera del catálogo del servidor" };
   const payloads = receipts.map(verifyReceipt);
   if (payloads.some((p) => !p)) return { verified: false, reason: "firma no válida o secreto no configurado" };
   // Un recibo válido de otro reto, caducado o repetido no puede inflar esta nota.
   if (payloads.some((p) => String(p.cid) !== String(challengeId))) return { verified: false, reason: "recibo de otro reto" };
+  if (payloads.some((p) => p.cat !== 1)) return { verified: false, reason: "corregido sin el enunciado oficial" };
   if (payloads.some((p) => !(nowS - Number(p.iat) <= RECEIPT_TTL_S))) return { verified: false, reason: "recibo caducado" };
   if (new Set(payloads.map((p) => p.ex + ":" + p.rh)).size !== payloads.length) return { verified: false, reason: "recibo repetido" };
   const media = Math.round(payloads.reduce((n, p) => n + (Number(p.s) || 0), 0) / payloads.length);
@@ -74,6 +80,11 @@ exports.handler = async (event) => {
       return jsonResponse(400, { error: "challengeId, skill y score son obligatorios" });
     }
 
+    // En un reto del catálogo la skill la dice el catálogo: antes se podía
+    // guardar el reto de Liderazgo como «Python».
+    const reto = retoComun(b.challengeId);
+    const skill = reto ? reto.skill : String(b.skill).slice(0, 120);
+
     const profile = await ensureProfileByUser(user.id);
     const score = Math.max(0, Math.min(100, Math.round(Number(b.score) || 0)));
     const cost = Number(b.costEur);
@@ -87,7 +98,7 @@ exports.handler = async (event) => {
     const row0 = {
       profile_id: profile.id,
       challenge_id: String(b.challengeId).slice(0, 120),
-      skill: String(b.skill).slice(0, 120),
+      skill,
       score,
       criteria: Array.isArray(b.criteria) ? b.criteria.slice(0, 20) : null,
       reasoning: b.reasoning ? String(b.reasoning).slice(0, MAX_TEXT) : null,
@@ -114,7 +125,7 @@ exports.handler = async (event) => {
       verified: integrity.verified, reason: integrity.reason || null
     });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo guardar la evaluación", details: err.message });
+    return errorInterno("No se pudo guardar la evaluación", err);
   }
 };
 

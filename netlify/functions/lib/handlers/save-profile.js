@@ -6,7 +6,16 @@
  * El candidato se deduce del token. Antes se aceptaba un `userId` en el body,
  * así que cualquiera podía sobrescribir el nombre, teléfono o LinkedIn de otro.
  */
-const { jsonResponse, authUser, ensureProfileByUser, faltaEnEsquema } = require("../tp");
+const { jsonResponse, authUser, ensureProfileByUser, faltaEnEsquema, errorInterno, textoCorto } = require("../tp");
+
+/** LinkedIn solo como enlace http(s): lo abre la empresa tras desbloquear. */
+function enlaceSeguro(v) {
+  let t = textoCorto(v, 200);
+  if (!t) return undefined;
+  // «linkedin.com/in/ana» sin esquema es lo habitual al escribirlo a mano.
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(t) && /^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(t)) t = "https://" + t;
+  return /^https?:\/\/[^\s<>"']+$/i.test(t) ? t : undefined;
+}
 const { limpiarCond } = require("./get-talent-pool");
 
 exports.handler = async (event) => {
@@ -21,10 +30,12 @@ exports.handler = async (event) => {
     const campos = {
       // El email es el de la cuenta, no uno que proponga el cliente.
       email: user.email,
-      full_name: b.fullName,
-      sector: b.sector,
-      phone: b.phone,
-      linkedin: b.linkedin,
+      // Antes se guardaba cualquier cosa (objetos, textos de megas): ahora
+      // solo texto y con tope, como el resto de campos.
+      full_name: textoCorto(b.fullName, 120),
+      sector: textoCorto(b.sector, 80),
+      phone: textoCorto(b.phone, 40),
+      linkedin: enlaceSeguro(b.linkedin),
       // Condiciones de empleo y visibilidad: las lee get-talent-pool.
       empleo: b.empleo && typeof b.empleo === "object" ? limpiarCond(b.empleo) : undefined,
       pool_visible: typeof b.poolVisible === "boolean" ? b.poolVisible : undefined,
@@ -43,6 +54,8 @@ exports.handler = async (event) => {
 
     return jsonResponse(200, { ok: true, profileId: profile.id, profile });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo guardar el perfil", details: err.message });
+    return errorInterno("No se pudo guardar el perfil", err);
   }
 };
+
+module.exports.enlaceSeguro = enlaceSeguro;

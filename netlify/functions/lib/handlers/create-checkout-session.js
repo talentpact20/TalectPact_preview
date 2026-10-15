@@ -14,8 +14,13 @@
  */
 const {
   jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode,
-  UNLOCK_PRICE, formatAmount, isUuid, faltaEnEsquema
+  UNLOCK_PRICE, formatAmount, isUuid, faltaEnEsquema, errorInterno,
+  companyOf, anonymousAlias
 } = require("../tp");
+
+// Una sesión de Checkout vive 24 h. Si la empresa vuelve a pulsar «Desbloquear»
+// se le devuelve la misma, en vez de abrir otra que también podría pagar.
+const REUSO_MS = 23 * 3600 * 1000;
 
 /** Orígenes a los que se permite volver tras pagar. */
 function origenesPermitidos(event) {
@@ -76,7 +81,7 @@ exports.handler = async (event) => {
   // ── Solo una empresa identificada puede iniciar un pago. ──
   let user;
   try { user = await authUser(event, b); }
-  catch (err) { return jsonResponse(500, { error: "No se pudo validar la sesión", details: err.message }); }
+  catch (err) { return errorInterno("No se pudo validar la sesión", err); }
   if (!user) {
     return jsonResponse(401, {
       error: "Necesitas una cuenta de empresa para desbloquear un contacto",
@@ -88,7 +93,6 @@ exports.handler = async (event) => {
   if (!candidateRef || candidateRef.length > 120) {
     return jsonResponse(400, { error: "Falta el candidato a desbloquear (candidateRef)" });
   }
-  const candidateLabel = String(b.candidateLabel || "").trim().slice(0, 200) || candidateRef;
 
   // Solo se cobra por un perfil real del pool (id de Supabase): cualquier otra
   // referencia no tiene un contacto que entregar después del pago.
@@ -96,14 +100,21 @@ exports.handler = async (event) => {
     return jsonResponse(400, { error: "Ese candidato no es un perfil del pool", code: "not_real_candidate" });
   }
 
+  let candidateLabel;
   try {
+    // ── Solo una cuenta de empresa compra contactos. Antes bastaba cualquier
+    // sesión: un candidato podía pagar y llevarse el contacto de otro. ──
+    if ((user.user_metadata || {}).role === "candidate" || !(await companyOf(user.id))) {
+      return jsonResponse(403, { error: "Solo las cuentas de empresa pueden desbloquear contactos", code: "not_company" });
+    }
+
     // ── Un candidato real tiene que existir y estar en el pool. ──
     {
       let filas;
-      try { filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id,pool_visible,allow_contact&limit=1`); }
+      try { filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id,user_id,pool_visible,allow_contact&limit=1`); }
       catch (err) {
         if (!faltaEnEsquema(err, /pool_visible|allow_contact/i)) throw err;
-        filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id&limit=1`);
+        filas = await sb.select("profiles", `id=eq.${candidateRef}&select=id,user_id&limit=1`);
       }
       const perfil = Array.isArray(filas) ? filas[0] : null;
       if (!perfil) return jsonResponse(404, { error: "Ese candidato ya no existe", code: "candidate_not_found" });
@@ -113,6 +124,8 @@ exports.handler = async (event) => {
       if (perfil.pool_visible === false) {
         return jsonResponse(409, { error: "Este candidato ha dejado de estar visible para empresas", code: "candidate_hidden" });
       }
+      // El texto que verá Stripe lo pone el servidor (antes llegaba del navegador).
+      candidateLabel = anonymousAlias(perfil.user_id || perfil.id);
     }
 
     // ── Ya pagado: no se cobra dos veces por el mismo candidato. ──
@@ -131,6 +144,27 @@ exports.handler = async (event) => {
     }
 
     const stripe = getStripe();
+
+    // ── Ya hay un pago abierto para este candidato: se reutiliza. Dos sesiones
+    // abiertas permitían pagar dos veces el mismo desbloqueo. ──
+    const desde = new Date(Date.now() - REUSO_MS).toISOString();
+    const abiertas = await sb.select(
+      "unlocks",
+      `company_user_id=eq.${user.id}&candidate_ref=eq.${candidateRef}&status=eq.pending` +
+        `&created_at=gte.${desde}&select=stripe_session_id&order=created_at.desc&limit=1`
+    ).catch(() => []);
+    const previa = Array.isArray(abiertas) && abiertas[0] && abiertas[0].stripe_session_id;
+    if (previa) {
+      try {
+        const ses = await stripe.checkout.sessions.retrieve(previa);
+        if (ses && ses.status === "open" && ses.url) {
+          return jsonResponse(200, {
+            ok: true, reused: true, url: ses.url, sessionId: ses.id, livemode: !!ses.livemode,
+            testMode: !stripeLiveMode(), amount: formatAmount(UNLOCK_PRICE.amountCents, UNLOCK_PRICE.currency)
+          });
+        }
+      } catch (_e) { /* sesión caducada o borrada: se crea otra */ }
+    }
     // Stripe vuelve a la misma página con el id de sesión, que es lo que
     // confirm-checkout verifica contra la API de Stripe.
     //
@@ -196,7 +230,7 @@ exports.handler = async (event) => {
       amount: formatAmount(UNLOCK_PRICE.amountCents, UNLOCK_PRICE.currency)
     });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo iniciar el pago", details: err.message });
+    return errorInterno("No se pudo iniciar el pago", err);
   }
 };
 

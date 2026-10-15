@@ -13,7 +13,7 @@
  * Devuelve: { paid, unlocks: [candidateRef…], sessionStatus? }
  */
 const { jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode,
-        UNLOCK_PRICE, formatAmount } = require("../tp");
+        UNLOCK_PRICE, formatAmount, errorInterno } = require("../tp");
 const { notificarDesbloqueo } = require("../notify");
 
 /** Estado de la pasarela, para que la interfaz no tenga que adivinarlo. */
@@ -45,7 +45,7 @@ exports.handler = async (event) => {
 
   let user;
   try { user = await authUser(event, b); }
-  catch (err) { return jsonResponse(500, { error: "No se pudo validar la sesión", details: err.message }); }
+  catch (err) { return errorInterno("No se pudo validar la sesión", err); }
   if (!user) return jsonResponse(401, { error: "Sesión no válida o caducada" });
 
   try {
@@ -106,6 +106,6 @@ exports.handler = async (event) => {
     // Sin sessionId: solo se sincroniza el estado (al abrir el panel).
     return jsonResponse(200, { ok: true, paid: false, unlocks: await paidRefs(user.id), stripe: gatewayInfo() });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo confirmar el pago", details: err.message });
+    return errorInterno("No se pudo confirmar el pago", err);
   }
 };

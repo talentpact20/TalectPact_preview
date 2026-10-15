@@ -17,6 +17,11 @@ const {
   EVALUATOR_VERSION, MAX_RESPONSE_CHARS, SYSTEM_PROMPT, detectInjection,
   buildUserPrompt, normalizeExercise, signReceipt, sha256, rateLimited, clientIp
 } = require("../evaluator");
+const { retoComun, ejercicioComun } = require("../catalogo");
+
+// La corrección tarda ~17 s; Netlify corta a los 60 s. Sin límite, una API
+// lenta agotaba la función entera y el candidato perdía su respuesta sin aviso.
+const MODEL_TIMEOUT_MS = Number(process.env.ANTHROPIC_TIMEOUT_MS || 45000);
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -36,9 +41,37 @@ exports.handler = async (event) => {
     }
     return await evaluateRaw(body, apiKey, configuredModel);
   } catch (err) {
-    return jsonResponse(500, { error: "Unexpected server error", details: err.message });
+    if (err instanceof SyntaxError) return jsonResponse(400, { error: "Body JSON no válido" });
+    if (err && (err.name === "TimeoutError" || err.name === "AbortError")) {
+      return jsonResponse(504, { error: "La corrección ha tardado demasiado. Tu respuesta no se ha perdido: vuelve a enviarla." });
+    }
+    console.error("[TP] evaluate-exercise:", err);
+    return jsonResponse(500, { error: "Error inesperado al corregir", code: "internal" });
   }
 };
+
+/**
+ * Enunciado con el que se corrige. Si el reto es del catálogo, manda el
+ * servidor: título, escenario, tipo y datos salen de catalogo-retos.json y lo
+ * que diga el navegador se ignora. Antes, con el challengeId de un reto real y
+ * un enunciado trivial, se obtenía una nota "verificada" de esa skill.
+ */
+function enunciadoOficial(ex) {
+  if (!retoComun(ex.challengeId)) return { ex, catalogo: false };
+  const oficial = ejercicioComun(ex.challengeId, ex.id);
+  if (!oficial) return { error: jsonResponse(400, { error: "Ese ejercicio no pertenece a este reto", code: "unknown_exercise" }) };
+  return {
+    catalogo: true,
+    ex: Object.assign({}, ex, {
+      title: oficial.title,
+      scenario: oficial.scenario,
+      type: oficial.type,
+      data: oficial.data || {},
+      jobTitle: retoComun(ex.challengeId).title,
+      sector: "Universal"
+    })
+  };
+}
 
 // ─── Modo crudo (banco de pruebas) ───────────────────────────────────────────
 async function evaluateRaw(body, apiKey, configuredModel) {
@@ -63,7 +96,9 @@ async function evaluateV2(event, body, apiKey, configuredModel) {
   if (rateLimited("eval:" + clientIp(event))) {
     return jsonResponse(429, { error: "Demasiadas evaluaciones seguidas. Espera unos minutos." });
   }
-  const ex = normalizeExercise(body.exercise);
+  const oficial = enunciadoOficial(normalizeExercise(body.exercise));
+  if (oficial.error) return oficial.error;
+  const ex = oficial.ex;
   const response = String(body.response || "").trim();
   if (!ex.title || !ex.scenario) return jsonResponse(400, { error: "El ejercicio necesita título y escenario" });
   if (!response) return jsonResponse(400, { error: "La respuesta está vacía" });
@@ -88,7 +123,7 @@ async function evaluateV2(event, body, apiKey, configuredModel) {
       aiPowered: false,
       blockedByFilter: true
     };
-    return jsonResponse(200, finishV2(result, ex, response, injection, integrityRisk, null));
+    return jsonResponse(200, finishV2(result, ex, response, injection, integrityRisk, null, oficial.catalogo));
   }
 
   const nonce = sha256(Math.random() + ":" + Date.now()).slice(0, 12);
@@ -100,10 +135,10 @@ async function evaluateV2(event, body, apiKey, configuredModel) {
     call.parsed.score = 60;
     call.parsed.capped = "señal de manipulación: nota limitada a 60 hasta revisión humana";
   }
-  return jsonResponse(200, finishV2(call.parsed, ex, response, injection, integrityRisk, call.selectedModel));
+  return jsonResponse(200, finishV2(call.parsed, ex, response, injection, integrityRisk, call.selectedModel, oficial.catalogo));
 }
 
-function finishV2(result, ex, response, injection, integrityRisk, model) {
+function finishV2(result, ex, response, injection, integrityRisk, model, catalogo) {
   const { receipt, signed } = signReceipt({
     v: 2,
     ev: EVALUATOR_VERSION,
@@ -114,6 +149,9 @@ function finishV2(result, ex, response, injection, integrityRisk, model) {
     inj: injection.signals,
     ir: integrityRisk,
     m: model,
+    // 1 = corregido con el enunciado del catálogo del servidor. save-evaluation
+    // solo da por verificada una nota de reto común si todos sus recibos lo traen.
+    cat: catalogo ? 1 : 0,
     iat: Math.floor(Date.now() / 1000)
   });
   return Object.assign(result, {
@@ -142,6 +180,7 @@ async function callModel(systemPrompt, userPrompt, apiKey, configuredModel) {
     triedModels.push(model);
     const attemptRes = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
+      signal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
       headers: {
         "content-type": "application/json",
         "x-api-key": apiKey,
@@ -199,16 +238,11 @@ async function callModel(systemPrompt, userPrompt, apiKey, configuredModel) {
   }
 
   const text = (raw.content || []).map((c) => c.text || "").join("");
-  const clean = text.replace(/```json|```/g, "").trim();
-  let parsed;
-  try {
-    parsed = JSON.parse(clean);
-  } catch (_err) {
+  const parsed = extraerJson(text);
+  if (!parsed || typeof parsed !== "object") {
+    console.error("[TP] respuesta del modelo sin JSON:", text.slice(0, 500));
     return {
-      error: jsonResponse(502, {
-        error: "AI response is not valid JSON",
-        details: clean.slice(0, 500)
-      })
+      error: jsonResponse(502, { error: "La corrección no ha devuelto un resultado válido. Vuelve a enviar la respuesta." })
     };
   }
 
@@ -232,6 +266,18 @@ async function callModel(systemPrompt, userPrompt, apiKey, configuredModel) {
   return { parsed, selectedModel };
 }
 
+/**
+ * JSON del modelo aunque venga con ```json o con una frase delante. Antes
+ * cualquier texto fuera del objeto tumbaba la corrección con un 502.
+ */
+function extraerJson(texto) {
+  const limpio = String(texto || "").replace(/```json|```/g, "").trim();
+  try { return JSON.parse(limpio); } catch (_e) { /* sigue */ }
+  const i = limpio.indexOf("{"), j = limpio.lastIndexOf("}");
+  if (i < 0 || j <= i) return null;
+  try { return JSON.parse(limpio.slice(i, j + 1)); } catch (_e) { return null; }
+}
+
 function clampScore(value) {
   const n = Number(value);
   if (!Number.isFinite(n)) return 0;
@@ -249,3 +295,6 @@ function jsonResponse(statusCode, payload) {
 function uniqueModels(models) {
   return [...new Set(models.filter(Boolean))];
 }
+
+module.exports.extraerJson = extraerJson;
+module.exports.enunciadoOficial = enunciadoOficial;

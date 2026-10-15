@@ -5,7 +5,7 @@
  *
  * La empresa se deduce del token, nunca de un `userId` enviado por el cliente.
  */
-const { jsonResponse, authUser, ensureCompanyByUser, faltaEnEsquema } = require("../tp");
+const { jsonResponse, authUser, ensureCompanyByUser, faltaEnEsquema, errorInterno } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -15,6 +15,11 @@ exports.handler = async (event) => {
     const b = JSON.parse(event.body || "{}");
     const user = await authUser(event, b);
     if (!user) return jsonResponse(401, { error: "Sesión no válida o caducada" });
+    // Una cuenta de candidato no se convierte en empresa por llamar aquí: tener
+    // ficha en companies es lo que permite publicar ofertas y pagar contactos.
+    if ((user.user_metadata || {}).role === "candidate") {
+      return jsonResponse(403, { error: "Esta cuenta es de candidato", code: "not_company" });
+    }
 
     const txt = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : undefined);
     const web = txt(b.website, 200);
@@ -43,6 +48,6 @@ exports.handler = async (event) => {
 
     return jsonResponse(200, { ok: true, companyId: company.id, company });
   } catch (err) {
-    return jsonResponse(500, { error: "No se pudo guardar la empresa", details: err.message });
+    return errorInterno("No se pudo guardar la empresa", err);
   }
 };
