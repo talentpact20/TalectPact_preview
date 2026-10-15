@@ -9,7 +9,8 @@ function renderCandOfertas(){
     const reqSkills=j.requiredSkills||[];
     const hasCount=reqSkills.filter(s=>candidateProfile.skills[s]?.unlocked).length;
     const allMet=hasCount===reqSkills.length&&reqSkills.length>0;
-    h+=`<div class="job-card" onclick="openJob('${escHtml(j.id)}')"><div class="job-badge ${j.badge}">${escHtml(j.sector)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j)}<div class="job-tags">${(j.tags||[]).map(t=>`<span class="job-tag">${escHtml(t)}</span>`).join('')}</div>${co?`<div class="job-company">${escHtml(co.name)}${co.size&&co.size!=='—'?' · '+escHtml(co.size)+' empleados':''}</div>`:''}<div style="margin-top:8px;font-size:.72rem;font-weight:600;color:${allMet?'var(--emerald-600)':'var(--slate-500)'}">${allMet?tpIcon('check')+' Cumples los skills requeridos':hasCount+' de '+reqSkills.length+' skills requeridos'}</div></div>`;
+    const pie=`<span class="tp-oferta-req ${allMet?'ok':''}">${allMet?tpIcon('check')+' Cumples los skills requeridos':hasCount+' de '+reqSkills.length+' skills requeridos'}</span>`;
+    h+=tpTarjetaOferta(j,co,{click:`openJob('${escHtml(j.id)}')`,tiene:x=>candidateProfile.skills[x]?.unlocked,pie,prefs:undefined});
   });
   // Sin ofertas no siempre es "no hay": puede que no se hayan podido cargar.
   const est=typeof TPOfertas!=='undefined'?TPOfertas.estado:'ok';
@@ -20,7 +21,7 @@ function renderCandOfertas(){
   const emp=COMPANIES.map(c=>`<div class="tp-company-card"><div class="tp-company-head">${companyMonogramHTML(c.name)}<div><strong>${escHtml(c.name)}</strong><div class="tp-company-meta">${[c.sector,c.size&&c.size!=='—'?c.size+' empleados':'',c.location].filter(Boolean).map(escHtml).join(' · ')}</div></div></div>${c.desc?`<p>${escHtml(c.desc)}</p>`:''}${c.website?`<a href="${escHtml(c.website)}" target="_blank" rel="noopener nofollow">${escHtml(c.website.replace(/^https?:\/\//,''))}</a>`:''}</div>`).join('');
   document.getElementById('candCompaniesList').innerHTML=COMPANIES.length?`<div class="companies-grid">${emp}</div>`:'<div class="tp-empty">Aún no hay empresas con ofertas abiertas.</div>';
 }
-function companyMonogramHTML(nombre){const m=companyMonogram(nombre);return `<span class="tp-mono" style="background:${m.bg};color:${m.fg}">${escHtml(m.iniciales)}</span>`;}
+function companyMonogramHTML(nombre){const m=companyMonogram(nombre);return `<span class="tp-mono tp-tinte-${m.tinte}">${escHtml(m.iniciales)}</span>`;}
 
 // ═══ DASHBOARDS ═══
 function openDashCand(){document.getElementById('dashCandidate').classList.add('open');document.body.style.overflow='hidden';
@@ -74,7 +75,7 @@ function showOfferCandidates(jobId){
   lista.forEach(({c:ca,e})=>{
     const scoreCls=ca.score>=80?'score-high':'score-mid';
     const verif=(ca.skills||[]).filter(s=>s.verified).length;
-    h+=`<div class="offer-cand-card">
+    h+=`<div class="offer-cand-card" data-ref="${escHtml(ca.id)}">
       <div class="oc-avatar">${escHtml(ca.i)}</div>
       <div class="oc-score-pill"><div class="score-circle ${scoreCls}">${ca.score}</div></div>
       <div class="oc-info">

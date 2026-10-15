@@ -1,6 +1,6 @@
 # TalentPact · instrucciones para Claude
 
-Antes de nada, lee `CONVERSACION_FINAL_PARA_SEGUIR.md`: resume toda la conversación de trabajo anterior, el estado del código, lo pendiente y el concepto con el que seguimos. Los documentos de mejora completos están en `docs/conversacion/` (el 05, eventos Impact, es el más reciente y el que manda).
+Antes de nada, lee la bóveda de Obsidian `Talentpact/` empezando por `Talentpact/00 Inicio.md`: concepto, estado, pendientes y decisiones en notas cortas (más barato en contexto). Mantenla al día: tras cada cambio actualiza `Talentpact/Trabajo/Pendientes.md` y, si se decide algo, `Talentpact/Trabajo/Decisiones.md`. Solo si necesitas detalle, abre `CONVERSACION_FINAL_PARA_SEGUIR.md`: resume toda la conversación de trabajo anterior, el estado del código, lo pendiente y el concepto con el que seguimos. Los documentos de mejora completos están en `docs/conversacion/` (el 05, eventos Impact, es el más reciente y el que manda).
 
 Fase actual (prereunión con asesora RRHH): anota cada cambio en `docs/Cambios_prereunion/` (changelog + contexto). No preparar ni ensayar el guion de demo TFM para esa reunión: es conversación, no presentación.
 

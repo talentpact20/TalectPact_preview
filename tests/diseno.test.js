@@ -104,6 +104,15 @@ test("los componentes son accesibles y no dejan pasar HTML", () => {
   assert.match(tpEncaje(-5), /Encaje: 0 %/);
 });
 
+test("las tarjetas de oferta escapan lo que escriben las empresas", () => {
+  const js = leer("assets/js/app/08-ofertas-y-ejercicios.js");
+  const f = js.slice(js.indexOf("function tpTarjetaOferta"), js.indexOf("function renderJobs"));
+  assert.match(f, /escHtml\(co\.name\)/);
+  assert.match(f, /escHtml\(x\)/);
+  assert.doesNotMatch(f, /\$\{co\.name\}|\$\{s\}/, "nombre de empresa o skill sin escapar");
+  assert.doesNotMatch(leer("assets/js/app/19-rrhh.js"), /window\.prompt/);
+});
+
 test("el formulario de problemas ya no finge un envío: abre el correo", () => {
   const js = leer("assets/js/app/12-soporte-y-ranking.js");
   const f = js.slice(js.indexOf("function submitBugReport"), js.indexOf("function tpPedirRevision"));

@@ -4,7 +4,7 @@
 // ═══ RENDER ═══
 // Monograma de empresa: iniciales sobre un tono estable derivado del nombre.
 // Sustituye a los emoji de color que se usaban como logotipo.
-const TP_MONO_TINTS=[['#ecfdf5','#047857'],['#eff6ff','#1d4ed8'],['#fef3c7','#b45309'],['#f5f3ff','#6d28d9'],['#fee2e2','#b91c1c'],['#f1f5f9','#334155']];
+const TP_MONO_TINTES=6; // tintes definidos en componentes.css (.tp-tinte-0 … 5)
 function companyMonogram(nombre){
   const n=String(nombre||'').trim();
   // Nombres de una sola palabra en CamelCase (GrowthLab, TechCorp) dan una
@@ -19,8 +19,7 @@ function companyMonogram(nombre){
   }
   iniciales=(iniciales||'??').toUpperCase();
   let h=0; for(let k=0;k<n.length;k++)h=(h*31+n.charCodeAt(k))>>>0;
-  const [bg,fg]=TP_MONO_TINTS[h%TP_MONO_TINTS.length];
-  return {iniciales,bg,fg};
+  return {iniciales,tinte:h%TP_MONO_TINTES};
 }
 
 // Cuántas ofertas se ven antes de pulsar "Ver todas".
@@ -28,7 +27,21 @@ const JOBS_VISIBLES=6;
 let _jobsExpandido=false;
 function toggleJobs(){_jobsExpandido=!_jobsExpandido;renderJobs(_ultimasOfertas);if(!_jobsExpandido){const el=document.getElementById('jobsGrid');if(el)window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-90,behavior:'smooth'});}}
 let _ultimasOfertas=[];
-function renderJobs(list){_ultimasOfertas=list;const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');const total=list.length;document.getElementById('resultsCount').textContent=`${total} oferta${total!==1?'s':''} de empresas`;if(!total){g.innerHTML='';nr.style.display='block';const m0=document.getElementById('jobsMore');if(m0)m0.innerHTML='';return;}nr.style.display='none';const visibles=_jobsExpandido?list:list.slice(0,JOBS_VISIBLES);const more=document.getElementById('jobsMore');if(more){more.innerHTML=total>JOBS_VISIBLES?`<button class="btn btn-outline" onclick="toggleJobs()">${_jobsExpandido?'Ver menos':'Ver las '+total+' ofertas'}</button>`:'';}g.innerHTML=visibles.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return`<div class="job-card" onclick="openAuth('candidate')"><div class="job-badge ${j.badge}">${j.sector}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j,null)}<div style="font-size:.6875rem;font-weight:600;color:var(--slate-600);margin:8px 0 4px;text-transform:uppercase;letter-spacing:.04em">Skills requeridos:</div><div class="job-tags">${req.map(s=>`<span class="job-tag" style="border:1px solid var(--emerald-100);background:var(--emerald-50);color:var(--emerald-600)">${s}</span>`).join('')}${j.tags.map(t=>`<span class="job-tag">${escHtml(t)}</span>`).join('')}</div>${co?(m=>`<div class="job-company"><div class="job-company-dot" style="background:${m.bg};color:${m.fg}">${m.iniciales}</div>${co.name} · ${co.size} empleados</div>`)(companyMonogram(co.name)):''}<div style="margin-top:8px;display:flex;align-items:center;gap:6px"><span class="level-badge ${levelCls}">${levelLabel}</span><span class="ex-config-badge ${configCls}">${configLabel}</span></div></div>`;}).join('');}
+// Tarjeta de oferta (portada y panel del candidato). Todo lo que viene de la base
+// de datos se escapa: nombres de empresa y skills los escriben las empresas.
+const TP_SECTOR_ES={IT:'Tecnología',Data:'Datos',Business:'Negocio',Design:'Diseño',Finance:'Finanzas',Ops:'Operaciones',Sales:'Ventas',Languages:'Idiomas'};
+function tpTarjetaOferta(j,co,o){
+  o=o||{};
+  const req=j.requiredSkills||[],MAX=4;
+  const nivel=j.requiredLevel||'basico';
+  const nivelTxt={basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'}[nivel]||'Básico';
+  const m=co?companyMonogram(co.name):null;
+  const empresa=co?`<div class="tp-oferta-emp"><span class="tp-mono-mini tp-tinte-${m.tinte}" aria-hidden="true">${escHtml(m.iniciales)}</span><span>${escHtml(co.name)}${co.size&&co.size!=='—'?' · '+escHtml(co.size)+' empleados':''}</span></div>`:'';
+  const sk=req.slice(0,MAX).map(x=>`<span class="job-tag tp-skill-req ${o.tiene&&o.tiene(x)?'ok':''}">${o.tiene&&o.tiene(x)?'✓ ':''}${escHtml(x)}</span>`).join('')+(req.length>MAX?`<span class="job-tag" title="${escHtml(req.slice(MAX).join(', '))}">+${req.length-MAX}</span>`:'');
+  const pie=o.pie||`<span class="level-badge level-${escHtml(nivel)}">${nivelTxt}</span>`;
+  return `<div class="job-card tp-oferta" role="button" tabindex="0" onclick="${o.click}" onkeydown="if(event.key==='Enter')${o.click}">${empresa}<div class="tp-oferta-sector">${escHtml(TP_SECTOR_ES[j.sector]||j.sector)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j,o.prefs)}<div class="job-tags">${sk}</div><div class="tp-oferta-pie">${pie}</div></div>`;
+}
+function renderJobs(list){_ultimasOfertas=list;const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');const total=list.length;document.getElementById('resultsCount').textContent=`${total} oferta${total!==1?'s':''} de empresas`;if(!total){g.innerHTML='';nr.style.display='block';const m0=document.getElementById('jobsMore');if(m0)m0.innerHTML='';return;}nr.style.display='none';const visibles=_jobsExpandido?list:list.slice(0,JOBS_VISIBLES);const more=document.getElementById('jobsMore');if(more){more.innerHTML=total>JOBS_VISIBLES?`<button class="btn btn-outline" onclick="toggleJobs()">${_jobsExpandido?'Ver menos':'Ver las '+total+' ofertas'}</button>`:'';}g.innerHTML=visibles.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return tpTarjetaOferta(j,co,{click:"openAuth('candidate')"});}).join('');}
 // Ofertas visibles para los candidatos: se excluyen las de cuentas pausadas.
 function publicJobs(){ return empPostedJobs.filter(j=>!j.paused); }
 function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(publicJobs());if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}

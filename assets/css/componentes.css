@@ -233,3 +233,32 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
 .job-tag.tp-skill-req.ok{border-color:var(--emerald-200)!important;background:var(--c-ok-suave)!important;color:var(--emerald-700)!important}
 .job-tag.tp-skill-req.falta{border-color:var(--amber-200)!important;background:var(--c-aviso-suave)!important;color:var(--amber-700)!important}
 .tp-va-medio{vertical-align:middle;margin-left:4px}
+
+/* ═══ Tarjeta de oferta ═══ */
+.tp-oferta{display:flex;flex-direction:column;gap:10px}
+.tp-oferta:focus-visible{outline:2px solid var(--c-foco);outline-offset:2px}
+.tp-oferta h3{font-size:var(--fs-dest);letter-spacing:-.01em;margin:0}
+.tp-oferta .job-desc{margin:0}
+.tp-oferta .job-tags{margin:0}
+.tp-oferta-emp{display:flex;align-items:center;gap:8px;font-size:var(--fs-peq);color:var(--c-texto-2)}
+.tp-oferta-sector{font-size:var(--fs-micro);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--c-marca)}
+.tp-oferta-pie{margin-top:auto;padding-top:10px;border-top:1px solid var(--c-borde);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tp-oferta-req{font-size:var(--fs-micro);font-weight:600;color:var(--c-texto-3);display:inline-flex;align-items:center;gap:4px}
+.tp-oferta-req.ok{color:var(--c-marca)}
+.tp-mono-mini{width:24px;height:24px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:var(--fs-micro);font-weight:700;flex-shrink:0}
+
+/* Tintes de los logotipos de empresa (iniciales) */
+.tp-tinte-0{background:var(--emerald-50);color:var(--emerald-700)}
+.tp-tinte-1{background:var(--blue-50);color:var(--blue-700)}
+.tp-tinte-2{background:var(--amber-100);color:var(--amber-700)}
+.tp-tinte-3{background:var(--violet-100);color:var(--violet-500)}
+.tp-tinte-4{background:var(--red-100);color:var(--red-700)}
+.tp-tinte-5{background:var(--slate-100);color:var(--slate-700)}
+
+/* Diálogo sencillo (motivo de descarte) */
+.tp-dialogo{border:1px solid var(--c-borde);border-radius:var(--radius-xl);background:var(--c-superficie);color:var(--c-texto);padding:24px;width:min(440px,92vw);box-shadow:var(--shadow-xl)}
+.tp-dialogo::backdrop{background:var(--c-velo)}
+.tp-dialogo h3{font-size:var(--fs-t3);margin-bottom:6px}
+.tp-dialogo p{font-size:var(--fs-peq);color:var(--c-texto-2);margin-bottom:12px}
+.tp-dialogo textarea{width:100%;padding:10px 12px;border:1px solid var(--c-borde-fuerte);border-radius:var(--radius);background:var(--c-superficie);color:var(--c-texto);font:inherit;resize:vertical}
+.tp-dialogo-acc{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}

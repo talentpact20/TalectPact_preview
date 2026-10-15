@@ -69,6 +69,19 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+## 2026-10-15 — Tarjeta de oferta segura y rediseñada; pipeline y descarte
+
+**Qué.**
+- **Seguridad:** el nombre de empresa y las skills se insertaban sin escapar en las tarjetas de oferta de la portada (una empresa podía inyectar código que se ejecutaba a todos los visitantes). Ahora todo pasa por `escHtml`.
+- Tarjeta de oferta única (`tpTarjetaOferta`) para portada y panel del candidato: empresa arriba, sector en español, máximo 4 skills + «+N», nivel y encaje al pie. Logotipos de empresa con tintes de `componentes.css` (sin colores a mano).
+- Pipeline: la etapa del proceso ya no depende del botón de contacto (`data-ref` en la tarjeta), así que también aparece en candidatos que no aceptan contacto.
+- Motivo de descarte: diálogo propio accesible en vez de `window.prompt`.
+- Tests: `tests/diseno.test.js` comprueba el escapado. Tests → **125 / 15 ficheros**.
+
+**Ficheros.** `08-ofertas-y-ejercicios.js`, `10-paneles-y-pagos.js`, `19-rrhh.js`, `componentes.css`, `tests/diseno.test.js`
+
+---
+
 ## Pendiente / siguiente
 
 - Deploy a Netlify.

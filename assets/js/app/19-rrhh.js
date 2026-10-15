@@ -297,10 +297,25 @@ var TPApps={
     const a=(TPApps.byJob[jobId]||[]).find(x=>String(x.candidateRef)===String(ref));
     return a?a.status:'';
   },
+  /** Diálogo propio (accesible) para el motivo de descarte. Devuelve el texto o null. */
+  pedirMotivo(){
+    return new Promise(res=>{
+      const d=document.createElement('dialog');
+      d.className='tp-dialogo';
+      d.innerHTML='<form method="dialog"><h3>Motivo del descarte</h3><p>Es obligatorio y queda registrado: nadie queda fuera sin una razón que una persona pueda revisar.</p><label class="sr-only" for="tpMotivo">Motivo</label><textarea id="tpMotivo" rows="3" maxlength="300" required></textarea><div class="tp-dialogo-acc"><button type="button" class="btn btn-outline" data-r="no">Cancelar</button><button type="submit" class="btn btn-dark" value="ok">Descartar</button></div></form>';
+      document.body.appendChild(d);
+      const fin=v=>{d.close();d.remove();res(v);};
+      d.querySelector('[data-r=no]').onclick=()=>fin(null);
+      d.addEventListener('cancel',e=>{e.preventDefault();fin(null);});
+      d.querySelector('form').onsubmit=e=>{e.preventDefault();fin(d.querySelector('textarea').value);};
+      d.showModal();d.querySelector('textarea').focus();
+    });
+  },
   async set(jobId,ref,status){
     let reason='';
     if(status==='descartado'){
-      reason=window.prompt('Motivo del descarte (obligatorio, queda registrado):','')||'';
+      reason=await TPApps.pedirMotivo();
+      if(reason===null){await TPApps.cargar(jobId);showOfferCandidates(jobId);return;}
       if(reason.trim().length<3){toast('Hace falta un motivo para descartar.');return;}
     }
     const r=await TPCloud._postAuth('applications',{jobId,candidateRef:ref,status,reason});
@@ -320,9 +335,7 @@ var TPApps={
     const list=document.getElementById('empOfferCandList');
     if(!list)return;
     list.querySelectorAll('.offer-cand-card').forEach(card=>{
-      const btn=card.querySelector('[onclick*="unlockContact"],[onclick*="showContactCard"]');
-      const m=(btn&&btn.getAttribute('onclick')||'').match(/'([^']+)'/);
-      const ref=m&&m[1];
+      const ref=card.dataset.ref; // la etapa no depende de si el candidato acepta contacto
       if(!ref)return;
       const cur=TPApps.estadoDe(jobId,ref)||'';
       const sel=document.createElement('div');
