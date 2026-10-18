@@ -422,7 +422,7 @@ def localizar(ruta_pdf):
     return paginas
 
 
-def numerar(ruta_pdf, destino):
+def numerar(ruta_pdf, destino, pie="TalentPact · Plan tras la reunión · 18/10/2026", titulo="TalentPact · Plan tras la reunión"):
     lector = PdfReader(ruta_pdf)
     escritor = PdfWriter()
     total = len(lector.pages)
@@ -432,13 +432,13 @@ def numerar(ruta_pdf, destino):
             c = canvas.Canvas(buf, pagesize=A4)
             c.setFont("Helvetica", 7.5)
             c.setFillColorRGB(0.4, 0.44, 0.52)
-            c.drawString(16 * 2.8346, 9 * 2.8346, "TalentPact · Plan tras la reunión · 18/10/2026")
+            c.drawString(16 * 2.8346, 9 * 2.8346, pie)
             c.drawRightString(A4[0] - 16 * 2.8346, 9 * 2.8346, f"{i} / {total}")
             c.save()
             buf.seek(0)
             pag.merge_page(PdfReader(buf).pages[0])
         escritor.add_page(pag)
-    escritor.add_metadata({"/Title": "TalentPact · Plan tras la reunión", "/Author": "TalentPact",
+    escritor.add_metadata({"/Title": titulo, "/Author": "TalentPact",
                            "/Subject": "Enfoque de las tareas acordadas en la reunión (18/10/2026)"})
     with open(destino, "wb") as fh:
         escritor.write(fh)

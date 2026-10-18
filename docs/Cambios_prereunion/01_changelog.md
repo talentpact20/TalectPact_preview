@@ -244,3 +244,5 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Ficheros.** `docs/plan_post_reunion/*.md`. Sin cambios de código ni de cifras canónicas.
 
 **Añadido (18/10).** `resumen_general.md` (lo general de cada concepto) y su PDF `TalentPact_Plan_resumen.pdf` (16 páginas: portada, índice, resumen visual y una página por concepto). Generador reproducible: `python3 tools/generar_plan_pdf.py` (con `--completo` saca la versión larga con los documentos enteros).
+
+**Cambiado (18/10).** El PDF pasa a ser estructural, no técnico: `estructura_plataforma.md` → `TalentPact_Estructura_plataforma.pdf` (14 páginas, una por parte: la plataforma en una página, mapa de cuatro zonas, cómo se ordena la información, tres pilares, catálogo, recorridos de candidato y empresa, rama IA, cómo se pone la nota, confianza, gratis y de pago, orden de construcción). Generador: `python3 tools/generar_estructura_pdf.py`. Se retira el PDF resumido anterior (se puede regenerar con `tools/generar_plan_pdf.py`).
