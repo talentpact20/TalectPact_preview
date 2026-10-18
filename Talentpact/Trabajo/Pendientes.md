@@ -19,7 +19,10 @@
 - [ ] Ejecutar `supabase_schema_rrhh_corto.sql` (preguntas de vacante, avisos, pipeline).
 - [ ] Rol admin en `app_metadata` y **`EVAL_SIGNING_SECRET` en Netlify** (sin él ninguna nota sale verificada).
 - [ ] Ejecutar `supabase_schema_dilemmas.sql` (dilemas en oferta + respuestas al postularse).
+<<<<<<< Updated upstream
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
+=======
+>>>>>>> Stashed changes
 
 ## Código (Claude)
 - [ ] **Fase 0 (grave)**: enunciados y soluciones de las clasificaciones están en `07-retos-comunes.js` (público). Servirlos desde el servidor al empezar el intento; reloj e intento de servidor (doc 08 del plan post reunión). Pendiente de aprobación.

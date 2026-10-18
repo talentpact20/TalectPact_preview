@@ -35,4 +35,8 @@ Carpeta viva de lo que se cambia en producto **antes de hablar con la asesora** 
 | [06_corrector.md](06_corrector.md) | Diagnóstico del corrector, lo aplicado en la v2.1 y el plan para que corrija de forma más concreta | v2.1 aplicada; plan por decidir. Versión explicada en PDF: [../corrector.pdf](../corrector.pdf) |
 | [06_encaje_modelo_empresa.md](06_encaje_modelo_empresa.md) | **Briefing** para asesora y Xavi: encaje con el modelo de empresa (antes de desarrollar) | Propuesta validable |
 | [07_plan_semanal.md](07_plan_semanal.md) | Planificación por semanas (incluye lo disruptivo en S5–S6) | Vivo |
+<<<<<<< Updated upstream
 | [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) | **Taxonomía** Hard / Soft / Transferibles y oferta = skills + 3 preguntas + 1–3 dilemas | En código; falta SQL dilemas en Supabase |
+=======
+| [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) | **Taxonomía** (cognitivas / interpersonales / autogestión / ejecución + técnicas) y oferta = skills + 3 preguntas + 1–3 dilemas | En código; falta SQL dilemas en Supabase |
+>>>>>>> Stashed changes

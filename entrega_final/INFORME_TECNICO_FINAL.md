@@ -289,7 +289,11 @@ Un informe que solo enseña la mejor ejecución no es evidencia: es una anécdot
 
 ### 6.1 Suite de tests automáticos (`npm test`)
 
+<<<<<<< Updated upstream
 **139 casos en dieciocho ficheros.** No necesitan clave de API, ni red, ni base de datos: se ejecutan en ~0,1 s con el runner nativo de Node (`node:test`), sin ninguna dependencia de testing añadida.
+=======
+**139 casos en quince ficheros.** No necesitan clave de API, ni red, ni base de datos: se ejecutan en ~0,1 s con el runner nativo de Node (`node:test`), sin ninguna dependencia de testing añadida.
+>>>>>>> Stashed changes
 
 | Fichero | Qué protege |
 |---|---|

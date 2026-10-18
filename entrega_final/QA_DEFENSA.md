@@ -55,7 +55,11 @@ Degradación elegante: `fallbackScore()` produce una puntuación heurística loc
 En **Supabase** (PostgreSQL + Auth + RLS, región UE): `profiles`, `companies`, `evaluations` y `credentials`. El módulo `TP` sobre `localStorage` sigue existiendo como respaldo local, lo que permite enseñar la demo aunque caiga la red. La abstracción `TP` es la que hizo barato el cambio.
 
 **¿Qué está probado automáticamente y qué no?**
+<<<<<<< Updated upstream
 `npm test` ejecuta **139 casos** en dieciocho ficheros, sin claves y sin red:
+=======
+`npm test` ejecuta **139 casos** en quince ficheros, sin claves y sin red:
+>>>>>>> Stashed changes
 - *Contrato del evaluador*: `temperature=0`, notas acotadas a 0-100, nota ausente = 0 (nunca un aprobado de regalo), fallo explícito si el modelo devuelve prosa, cascada de modelos que no reintenta ante una clave revocada, y la clave de API fuera de la respuesta.
 - *Separación de canales*: la respuesta del candidato nunca entra en el *system prompt*.
 - *SkillPass*: el hash es determinista e independiente del orden de las claves, y cambiar un punto de una nota, añadir una skill o reasignar el sujeto **rompe el sello**.

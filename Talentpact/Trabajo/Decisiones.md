@@ -11,5 +11,9 @@
 - Sin ninguna skill de las pedidas, el encaje es 0; quien se postula sale siempre en su oferta. (15/10)
 - Lo que decide algo (enunciado, skill, nota, importe, texto del pago) sale del servidor; el navegador solo propone. Los retos fuera del catálogo del servidor no se verifican. (15/10)
 - Corrector v2.1: la nota global la calcula el servidor con pesos fijos; sin evidencia citada, un criterio no pasa de 40; las clasificaciones se corrigen sin IA descontando el azar (pendiente de confirmar). (15/10)
+<<<<<<< Updated upstream
 - Habilidades en **tres pilares**: Hard skills, Soft skills y Transferibles. En la oferta: skills + hasta 3 preguntas + hasta 3 dilemas del día a día; el candidato los responde al postularse. (15/10)
+=======
+- Aptitudes en 4 familias (cognitivas, interpersonales, autogestión emocional, ejecución) + técnicas. En la oferta: skills + hasta 3 preguntas + hasta 3 dilemas del día a día; el candidato los responde al postularse. (15/10)
+>>>>>>> Stashed changes
 - El progreso del navegador tiene dueño: solo se mezcla con su cuenta; lo hecho sin sesión se añade solo si la persona lo confirma; al cerrar sesión se vacía. (15/10)

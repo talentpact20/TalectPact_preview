@@ -171,7 +171,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 **Docs.** `06_encaje_modelo_empresa.md`, `07_plan_semanal.md`; preguntas en `00_contexto_reunion.md`.
 
----
 
 ## 2026-10-15 — Briefing listo para asesora y Xavi
 
@@ -179,7 +178,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 **Para qué.** Que Iván pueda contárselo a la asesora y a Xavi con el mismo texto.
 
----
 
 ## 2026-10-15 — Taxonomía de aptitudes + dilemas en la oferta (criterio)
 
@@ -187,7 +185,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 **Docs.** `08_taxonomia_aptitudes_y_oferta.md`.
 
----
 
 ## 2026-10-15 — Taxonomía y dilemas en producto (código)
 
@@ -199,6 +196,7 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+<<<<<<< Updated upstream
 ## 2026-10-15 — Tres pilares: Hard / Soft / Transferibles
 
 **Qué.** Los filtros de retos y el selector de skills de la oferta pasan a tres pilares claros: **Hard skills**, **Soft skills** y **Transferibles** (sustituye Cognitivas / Interpersonales / Autogestión / Ejecución / Técnicas).
@@ -221,6 +219,26 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
   - cuadrícula corregida;
   - «Avanzado» en verde.
 - Diálogos propios centrados (el reset de márgenes los pegaba arriba a la izquierda).
+=======
+## 2026-10-15 — Una cuenta nueva aparecía con retos de otra sesión
+
+**Qué pasaba.** El progreso que guarda el navegador no sabía de quién era. Al cerrar sesión no se borraba y, al entrar con cualquier cuenta (también una recién creada), se mezclaba con ella y **se subía a la nube** como si fuera suyo. En un ordenador compartido, los retos de una persona acababan en la cuenta de otra.
+
+**Arreglo.**
+- El progreso local lleva dueño (id de la cuenta o «invitado»). Al entrar, solo se mezcla si es de esa cuenta; el de otra cuenta se descarta.
+- Lo hecho sin sesión ya no se sube solo: se pregunta «¿Son tuyos?» en un diálogo propio. Si se aceptan, se guardan como notas no verificadas.
+- Al cerrar sesión (a mano o por inactividad) se vacía el progreso del navegador.
+- Tarjeta «Tu Perfil de Skills»:
+  - el avatar y el texto («AC · Candidato anónimo») estaban escritos a mano y eran iguales para todos; ahora muestran el alias real («Así te ven las empresas: Candidato #9F3C»);
+  - el título «Habilidades verificadas» no era cierto, y se quita;
+  - la cuadrícula iba dentro de otra cuadrícula y se descolocaba;
+  - «Avanzado» salía en rojo y ahora sale en verde.
+- Los diálogos propios (este y el del motivo de descarte) salían pegados arriba a la izquierda por el reset de márgenes: ahora salen centrados.
+
+**Fusión.** El commit `dc38352` se subió con conflictos sin resolver (`<<<<<<<`) en `index.html`, las cifras canónicas y 11 documentos. Están resueltos: se conservan las dos partes en los documentos y se usa el recuento real de tests (139 en 18 ficheros).
+
+**Acción usuario.** Tu cuenta nueva ya tiene en Supabase las notas que se subieron desde el navegador (motivo «(sincronizado desde el dispositivo)»). Para quitarlas, ver la consulta en la respuesta del chat o borrar la cuenta desde Ajustes y crearla de nuevo.
+>>>>>>> Stashed changes
 
 **Ficheros.** `04-estado-y-nube.js`, `07-retos-comunes.js`, `09-acceso.js`, `15-proteccion-acceso.js`, `componentes.css`, `index.html`
 
