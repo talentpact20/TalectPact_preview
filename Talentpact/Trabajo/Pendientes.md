@@ -1,6 +1,7 @@
 # Pendientes
 
 ## Decide el equipo
+- [ ] **Plan post reunión** (`docs/plan_post_reunion/00_plan_maestro.md`, §5): fase 0 antitrampas, diccionario canónico, 12 sectores + 7 áreas, intento oficial cada 30 días, precios (Plus 6,99 €/mes · 49 €/año, sello 4,99 €, certificación IA 39 €, perfil IA 89 €), prueba gratuita 30 días, quién hace el gold set, pago del candidato con Stripe. Ver [[Plan post reunión]].
 - [ ] **Ofertas de ejemplo en producción**: el seed de Iván (NortePay, Orbit Labs, ClaroData, Verde Brand) choca con la regla de no mostrar contenido de demostración. ¿Se quitan, se marcan o se mantienen para la reunión?
 
 - [ ] Decisiones de `04_estrategia.md`: perfil de trabajo inicial, plazo entre reintentos, nota por bloques, pool solo para empresas verificadas. Ver [[Estrategia]].
@@ -21,6 +22,7 @@
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
 
 ## Código (Claude)
+- [ ] **Fase 0 (grave)**: enunciados y soluciones de las clasificaciones están en `07-retos-comunes.js` (público). Servirlos desde el servidor al empezar el intento; reloj e intento de servidor (doc 08 del plan post reunión). Pendiente de aprobación.
 - [x] **Seguridad (XSS)**: en `08-ofertas-y-ejercicios.js` (renderJobs) el nombre de empresa y las skills se insertan sin escapar en la portada.
 - [x] Rediseñar tarjeta de oferta (empresa arriba, máx. 4 skills + «+N», sector en español, sin colores a mano en `TP_MONO_TINTS`).
 - [x] Pipeline: el selector de etapa depende del botón de contacto; los que no aceptan contacto se quedan sin etapa. Usar `data-ref` en la tarjeta.

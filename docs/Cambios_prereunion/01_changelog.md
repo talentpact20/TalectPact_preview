@@ -232,3 +232,15 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 - Probar: publicar con dilemas → candidato responde → empresa ve respuestas.
 - Validar con asesora / Xavi (docs 06 y 08).
 - Seguir `07_plan_semanal.md`.
+
+---
+
+## 2026-10-18 — Plan tras la reunión (documentos, sin cambios de producto)
+
+**Qué.** Once documentos en `docs/plan_post_reunion/` con el enfoque de cada tarea de la reunión: sectores y áreas tipo LinkedIn, rama IA, blockchain de pago, modelo de negocio y precios del candidato, corrector completo, hard y soft skills, base de datos y entrega a empresas, antitrampas, ejercicio por ejercicio (con inventario de los 309) y confianza para empresas. Índice y orden de trabajo en `00_plan_maestro.md`.
+
+**Hallazgo.** Los enunciados y las soluciones de las clasificaciones viajan en el JS público (`07-retos-comunes.js`): se pueden leer sin empezar el reto. Propuesto como fase 0 (doc 08).
+
+**Ficheros.** `docs/plan_post_reunion/*.md`. Sin cambios de código ni de cifras canónicas.
+
+**Añadido (18/10).** `resumen_general.md` (lo general de cada concepto) y su PDF `TalentPact_Plan_resumen.pdf` (16 páginas: portada, índice, resumen visual y una página por concepto). Generador reproducible: `python3 tools/generar_plan_pdf.py` (con `--completo` saca la versión larga con los documentos enteros).

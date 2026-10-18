@@ -7,6 +7,7 @@ Bóveda de trabajo: concepto, estado y pendientes en notas cortas. Claude la lee
 - [[Eventos Impact]]
 - [[Prereunión asesora RRHH]]
 - [[Estrategia]]
+- [[Plan post reunión]]
 
 ## Producto
 - [[Estado del producto]]
@@ -22,3 +23,4 @@ Bóveda de trabajo: concepto, estado y pendientes en notas cortas. Claude la lee
 - `docs/conversacion/05_eventos_impact_plan_completo.md`
 - `docs/Cambios_prereunion/01_changelog.md`
 - `docs/Cambios_prereunion/04_estrategia.md` y `05_errores_y_mejoras.md`
+- `docs/plan_post_reunion/00_plan_maestro.md` (tareas de la reunión del 18/10)
