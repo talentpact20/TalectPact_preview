@@ -503,7 +503,7 @@ function loadEmpSettings(){
   if(who)who.textContent=tpCompany?('Cuenta de empresa · '+companyName()):'Explorando como invitado (sin cuenta)';
   _val('st-emp-pw-user',(tpCompany&&tpCompany.email)||'');   // usuario oculto para el gestor de contraseñas
   _val('st-emp-company',m.company||'');
-  _val('st-emp-sector',m.sector||'');
+  tpSectorPoner('st-emp-sector',m.sector||'');
   _val('st-emp-size',m.size||'');
   _val('st-emp-web',m.web||'');
   _val('st-emp-contact',m.contact_name||'');
@@ -534,7 +534,7 @@ async function saveEmpSettings(){
   try{
     await TPCloud.saveMeta({
       company,
-      sector:_val('st-emp-sector'),
+      sector:tpSectorValor('st-emp-sector'),
       size:_val('st-emp-size'),
       web:_val('st-emp-web'),
       contact_name:_val('st-emp-contact'),
@@ -547,7 +547,7 @@ async function saveEmpSettings(){
     let web=_val('st-emp-web');
     if(web&&!/^https?:\/\//i.test(web))web='https://'+web;
     const r=await TPCloud.saveCompany(tpCompany,{companyName:company,contactName:_val('st-emp-contact'),jobTitle:_val('st-emp-position'),
-      companySize:_val('st-emp-size'),description:_val('st-emp-desc'),sector:_val('st-emp-sector'),website:web,location:_val('st-emp-location')});
+      companySize:_val('st-emp-size'),description:_val('st-emp-desc'),sector:tpSectorValor('st-emp-sector'),website:web,location:_val('st-emp-location')});
     if(r&&r.error)throw new Error(r.details||r.error);
     applyCompanyIdentity();
     const who=document.getElementById('stEmpWho'); if(who)who.textContent='Cuenta de empresa · '+companyName();

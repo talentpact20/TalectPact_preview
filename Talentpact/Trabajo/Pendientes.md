@@ -35,7 +35,11 @@
 - [ ] Antitrampas siguientes: variantes por intento (datos distintos y detalle trampa), defensa de 2 preguntas, patrón de escritura, detección de móvil y segunda persona, segundo monitor; retos de oferta (`EX_DB`, `03-datos-retos.js`) aún con contenido en el navegador.
 - [ ] Legal: evaluación de impacto (EIPD) antes de activar la cámara obligatoria en producción; revisar `legal.html` §05 con asesoría.
 - [x] Áreas de empleo tipo LinkedIn y vocabulario (19/10): `taxonomia.json` único (7 áreas + especialidades, 12 sectores + ampliados, nombres de skills en español), oferta con área y especialidad, tablón filtrado por área, sector de empresa (12), área de interés del candidato. Pendiente de commit.
-- [ ] Siguiente de áreas: filtro de área en el catálogo de retos y en el pool; «Recomendados para ti» por área del candidato; códigos ESCO.
+- [x] Clasificación de la asesora (19/10): 9 áreas generales con las 21 concretas, 12 sectores con los 22 concretos (en dos pasos), 6 dimensiones y 32 competencias, catálogo de retos filtrado por pilar y luego por dimensión o área, tipo de puesto en la oferta con competencias sugeridas. Ver `docs/Cambios_prereunion/09_clasificacion_retos_y_competencias.md`. Pendiente de commit.
+- [x] Retos en dos bloques (19/10, noche): Hard skills (sector → área) y Soft skills (dimensión → enfoque); fuera Transferibles. Pendiente de commit.
+- [ ] Validar con la asesora: las dos áreas generales nuevas (Dirección y Sanidad/educación), llamar «sectores» a esas áreas generales dentro de Hard skills, y los enfoques de cada reto.
+- [ ] Retos para las 16 competencias sin reto (dimensión 06 entera; casi toda la 02 y la 03), usando el «reto sugerido» de cada ficha del diccionario. Rúbricas con los anclajes 1/3/5 y la escala NE + 1–5.
+- [ ] Siguiente de áreas: filtro de área en el pool; «Recomendados para ti» por área del candidato; códigos ESCO.
 - [x] Google integrado para empresas (paso «Completa los datos de tu empresa», aviso de Workspace) y verificación de empresa con sello en las ofertas (19/10). Pendiente de commit.
 - [ ] Decidir si el pool o el desbloqueo exigen empresa verificada (propuesta del doc 04_estrategia).
 - [x] Oferta: imprescindible o valorable con banda mínima, tres pasos tipo LinkedIn, relleno desde documento con IA (`parse-job-doc`), encaje por grupos (19/10). Pendiente de commit.

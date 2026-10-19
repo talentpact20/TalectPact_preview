@@ -9,7 +9,8 @@
  * (máx. 8, de ellas 4 imprescindibles). Si llega, manda: required_skills y
  * required_level se derivan de ahí. Sin ella se acepta la forma antigua.
  *
- * area: una de las 7 áreas funcionales (lib/taxonomia.json). `sector` sigue
+ * area: una de las 9 áreas funcionales generales (lib/taxonomia.json);
+ * especialidad: una de sus áreas concretas (21 en total). `sector` sigue
  * guardándose con el valor antiguo equivalente (IT, Finance…) para el código
  * que aún lo lee; también se acepta un `sector` antiguo sin área.
  *       { id, status: "closed" | "open" }   → cerrar o reabrir

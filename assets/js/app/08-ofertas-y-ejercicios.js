@@ -41,7 +41,8 @@ function tpTarjetaOferta(j,co,o){
   const sk=req.slice(0,MAX).map(x=>`<span class="job-tag tp-skill-req ${o.tiene&&o.tiene(x)?'ok':''}">${o.tiene&&o.tiene(x)?'✓ ':''}${escHtml(nom(x))}</span>`).join('')+(req.length>MAX?`<span class="job-tag" title="${escHtml(req.slice(MAX).map(nom).join(', '))}">+${req.length-MAX}</span>`:'');
   // Área funcional del puesto (y especialidad si la hay); las ofertas antiguas la deducen de su sector.
   const area=typeof tpAreaDeOferta==='function'?tpAreaDeOferta(j):null;
-  const areaTxt=area?tpAreaNombre(area,true)+(j.especialidad?' · '+j.especialidad:''):(TP_SECTOR_ES[j.sector]||j.sector);
+  const esp=j.especialidad&&j.especialidad!==tpAreaNombre(area)?j.especialidad:'';
+  const areaTxt=area?tpAreaNombre(area,true)+(esp?' · '+esp:''):(TP_SECTOR_ES[j.sector]||j.sector);
   const pie=o.pie||`<span class="level-badge level-${escHtml(nivel)}">${nivelTxt}</span>`;
   return `<div class="job-card tp-oferta" role="button" tabindex="0" onclick="${o.click}" onkeydown="if(event.key==='Enter')${o.click}">${empresa}<div class="tp-oferta-sector">${escHtml(areaTxt)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j,o.prefs)}<div class="job-tags">${sk}</div><div class="tp-oferta-pie">${pie}</div></div>`;
 }

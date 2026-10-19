@@ -1,89 +1,38 @@
 /**
- * Tres pilares de habilidades (producto):
- *   hard | soft | transferibles
+ * Dos bloques de habilidades (producto):
+ *   hard — la parte técnica (por sector profesional y área)
+ *   soft — las 6 dimensiones del diccionario de competencias (lib/taxonomia.json)
+ *
+ * Una skill es soft si tiene dimensión; si no, es técnica. Los idiomas y las
+ * herramientas son técnicas aunque su reto esté entre los comunes.
  *
  * Misma lógica en servidor (pool) y espejada en assets/js/app/19-rrhh.js.
- *
- * Compat: «Personas» ≈ soft; «Cognitivo» ≈ transferibles; «sector» ≈ hard.
+ * Compat: «Personas» ≈ soft; «sector» ≈ hard.
  */
-
-const SKILL_FAMILIA = {
-  // Soft — cómo se relaciona y se regula
-  "Comunicación Escrita": "soft",
-  "Negociación": "soft",
-  "Atención al Cliente": "soft",
-  "Trabajo en Equipo": "soft",
-  "Escucha": "soft",
-  "Toma de Decisiones": "soft",
-  "Inteligencia emocional": "soft",
-  "Inteligencia Emocional": "soft",
-  "Resiliencia": "soft",
-  "Gestión de la incertidumbre": "soft",
-  "Gestión de la Incertidumbre": "soft",
-  "Liderazgo": "soft",
-
-  // Transferibles — valen en cualquier puesto / sector
-  "Pensamiento Analítico": "transferibles",
-  "Razonamiento Lógico": "transferibles",
-  "Resolución de Problemas": "transferibles",
-  "Creatividad": "transferibles",
-  "Creatividad e Innovación": "transferibles",
-  "Pensamiento Estratégico": "transferibles",
-  "Pensamiento crítico": "transferibles",
-  "Pensamiento Crítico": "transferibles",
-  "Agilidad de aprendizaje": "transferibles",
-  "Agilidad de Aprendizaje": "transferibles",
-  "Pensamiento lateral": "transferibles",
-  "Pensamiento Lateral": "transferibles",
-  "Gestión del Tiempo": "transferibles",
-  "Proactividad": "transferibles",
-  "Iniciativa": "transferibles",
-  "Responsabilidad personal": "transferibles",
-  "Responsabilidad Personal": "transferibles"
-};
-
-/** Herramientas → hard (técnicas). */
-const HERRAMIENTAS = {
-  "Excel y Datos": true,
-  "Inglés (Speaking)": true
-};
+const { T, dimensionDeSkill } = require("./taxonomia");
 
 const LABELS = {
   hard: "Hard skills",
-  soft: "Soft skills",
-  transferibles: "Transferibles"
+  soft: "Soft skills"
 };
 
 function familiaDe(skill) {
-  const n = String(skill || "");
-  if (HERRAMIENTAS[n]) return "hard";
-  return SKILL_FAMILIA[n] || null;
+  const n = String(skill || "").trim();
+  if (!n) return null;
+  return dimensionDeSkill(n) ? "soft" : "hard";
 }
 
-function esPersona(skill) {
-  return familiaDe(skill) === "soft";
-}
-
-function esCognitivo(skill) {
-  return familiaDe(skill) === "transferibles";
-}
-
-function esHard(skill) {
-  return familiaDe(skill) === "hard";
-}
-
-function esTransferible(skill) {
-  return familiaDe(skill) === "transferibles";
-}
-
-/** Compat: mapas booleanos que ya usaban tests / código antiguo. */
-const PERSONAS = Object.keys(SKILL_FAMILIA).reduce((acc, k) => {
-  if (SKILL_FAMILIA[k] === "soft") acc[k] = true;
+/** Bloque de cada skill clasificada como soft (para tests y código antiguo). */
+const SKILL_FAMILIA = Object.keys(T.competenciasDeSkill).reduce((acc, k) => {
+  acc[k] = "soft";
   return acc;
 }, {});
 
-const COGNITIVO = Object.keys(SKILL_FAMILIA).reduce((acc, k) => {
-  if (SKILL_FAMILIA[k] === "transferibles") acc[k] = true;
+const esPersona = (skill) => familiaDe(skill) === "soft";
+const esHard = (skill) => familiaDe(skill) === "hard";
+
+const PERSONAS = Object.keys(SKILL_FAMILIA).reduce((acc, k) => {
+  acc[k] = true;
   return acc;
 }, {});
 
@@ -100,15 +49,11 @@ function extraerPersonas(skills) {
 
 module.exports = {
   SKILL_FAMILIA,
-  HERRAMIENTAS,
   FAMILIAS_PERSONA,
   LABELS,
   PERSONAS,
-  COGNITIVO,
   familiaDe,
   esPersona,
-  esCognitivo,
   esHard,
-  esTransferible,
   extraerPersonas
 };

@@ -1,0 +1,298 @@
+DICCIONARIO DE COMPETENCIAS
+TalentPact | Modelo funcional de evaluación de soft skills
+Propuesta avanzada · Versión 2.0 · Octubre de 2026
+Marco propio de 6 dimensiones y 32 competencias observables, diseñado para la selección de habilidades, la creación de retos y la futura medición estructurada en una plataforma digital.
+Resumen ejecutivo
+Este documento ofrece a TalentPact una taxonomía operativa de competencias transversales. No reproduce instrumentos propietarios ni equivale a una prueba psicométrica validada. Su objetivo es permitir que el equipo seleccione qué habilidades evaluar y construya evidencias y rúbricas específicas antes de asignar puntuaciones.
+1. Arquitectura y principios
+Dimensión
+N.º
+Enfoque
+01 · Pensamiento estratégico y criterio
+5
+Pensamiento analítico y crítico; Pensamiento estratégico…
+02 · Ejecución y orientación a resultados
+5
+Orientación a resultados; Planificación y priorización…
+03 · Liderazgo de personas y desarrollo del talento
+5
+Inspiración y movilización; Desarrollo del talento y feedback…
+04 · Influencia, colaboración y relaciones
+6
+Comunicación clara y adaptativa; Escucha activa y empatía…
+05 · Transformación, innovación y adaptabilidad
+6
+Adaptabilidad; Aprendizaje continuo…
+06 · Autoliderazgo, integridad y potencial de desarrollo
+5
+Autoconocimiento y apertura al feedback; Integridad y criterio ético…
+Principios: (1) una competencia = un constructo delimitado; (2) observación antes que impresión; (3) distinguir capacidad demostrada, potencial y conocimientos técnicos; (4) adaptar expectativas al nivel y contexto del puesto; (5) ausencia de evidencia ≠ bajo desempeño; (6) ninguna decisión automatizada de contratación basada únicamente en estas puntuaciones.
+2. Diccionario: fichas de competencias
+01 · Pensamiento estratégico y criterio
+01.1  Pensamiento analítico y crítico
+Definición  Descompone problemas complejos, contrasta fuentes, distingue hechos de hipótesis y obtiene conclusiones justificadas.
+Indicadores observables  Verifica calidad de datos; identifica causas y sesgos; integra evidencia contradictoria.
+Señales de alerta  Acepta la primera explicación; confunde correlación y causalidad.
+Evidencia / reto sugerido  Caso con datos incompletos: identificar hipótesis, pruebas y recomendación.
+Anclajes de puntuación (1 / 3 / 5)  1 — Identifica hechos aislados sin comprobarlos.  |  3 — Contrasta alternativas y explica su razonamiento.  |  5 — Construye marcos de análisis robustos y detecta riesgos sistémicos.
+01.2  Pensamiento estratégico
+Definición  Anticipa escenarios y conecta tendencias externas, capacidades internas y decisiones de largo plazo.
+Indicadores observables  Considera horizontes temporales; identifica trade-offs; formula opciones y prioridades.
+Señales de alerta  Confunde estrategia con lista de tareas.
+Evidencia / reto sugerido  Caso: elegir dos prioridades ante cambios de mercado y justificar renuncias.
+Anclajes de puntuación (1 / 3 / 5)  1 — Se centra exclusivamente en el corto plazo.  |  3 — Relaciona decisiones con objetivos futuros.  |  5 — Anticipa escenarios y alinea decisiones de múltiples áreas.
+01.3  Toma de decisiones y juicio
+Definición  Elige y sostiene cursos de acción proporcionados al riesgo, incluso con información imperfecta.
+Indicadores observables  Define criterios; sopesa consecuencias; decide a tiempo; revisa ante evidencia nueva.
+Señales de alerta  Evita decidir o se aferra a una decisión errónea.
+Evidencia / reto sugerido  Simulación de decisión con información parcial y nuevas evidencias.
+Anclajes de puntuación (1 / 3 / 5)  1 — Decide impulsivamente o paraliza la acción.  |  3 — Explica criterios y riesgos, y toma una decisión razonada.  |  5 — Resuelve dilemas complejos y reajusta con agilidad.
+01.4  Visión de negocio y orientación al cliente
+Definición  Comprende cómo la organización crea valor y cómo sus decisiones afectan a clientes y resultados.
+Indicadores observables  Conecta necesidades del cliente con prioridades; considera coste, calidad y sostenibilidad del valor.
+Señales de alerta  Optimiza su tarea sin considerar al usuario o negocio.
+Evidencia / reto sugerido  Caso: priorizar mejoras con restricciones presupuestarias y necesidades del cliente.
+Anclajes de puntuación (1 / 3 / 5)  1 — Ignora consecuencias para clientes y negocio.  |  3 — Integra necesidades del cliente y viabilidad.  |  5 — Anticipa necesidades y equilibra valor, riesgo y retorno.
+01.5  Gestión de la complejidad y ambigüedad
+Definición  Actúa con claridad ante problemas interdependientes, prioridades cambiantes y ausencia de respuestas únicas.
+Indicadores observables  Distingue certezas de incertidumbres; estructura opciones; explicita supuestos.
+Señales de alerta  Exige certeza total antes de actuar.
+Evidencia / reto sugerido  Caso ambiguo: diseñar un plan reversible con supuestos y señales de revisión.
+Anclajes de puntuación (1 / 3 / 5)  1 — Se bloquea o simplifica en exceso.  |  3 — Prioriza y avanza con supuestos explícitos.  |  5 — Orquesta respuestas sistémicas bajo incertidumbre elevada.
+02 · Ejecución y orientación a resultados
+02.1  Orientación a resultados
+Definición  Convierte objetivos en entregables verificables, preservando calidad y criterios éticos.
+Indicadores observables  Define métricas; hace seguimiento; ajusta acciones; cierra compromisos.
+Señales de alerta  Confunde actividad con impacto.
+Evidencia / reto sugerido  Ejercicio: plan de 30 días con hitos, métricas y contingencias.
+Anclajes de puntuación (1 / 3 / 5)  1 — No concreta resultados ni hace seguimiento.  |  3 — Cumple objetivos y corrige desviaciones.  |  5 — Eleva sostenidamente resultados con impacto transversal.
+02.2  Planificación y priorización
+Definición  Organiza tiempo, recursos y dependencias según impacto, urgencia y restricciones.
+Indicadores observables  Secuencia actividades; gestiona cuellos de botella; renegocia plazos a tiempo.
+Señales de alerta  Trata todo como urgente; ignora dependencias.
+Evidencia / reto sugerido  Bandeja de entrada con diez solicitudes simultáneas: priorizar y explicar.
+Anclajes de puntuación (1 / 3 / 5)  1 — Planifica de forma reactiva.  |  3 — Prioriza y anticipa dependencias.  |  5 — Optimiza carteras de trabajo y recursos cambiantes.
+02.3  Responsabilidad y autonomía
+Definición  Asume compromisos, ejerce criterio dentro de su ámbito y rinde cuentas por las consecuencias.
+Indicadores observables  Cumple acuerdos; comunica incidencias; pide ayuda oportunamente; aprende de errores.
+Señales de alerta  Culpa a terceros; oculta retrasos.
+Evidencia / reto sugerido  Incidente de proyecto: explicar acciones, escalado y comunicación.
+Anclajes de puntuación (1 / 3 / 5)  1 — Evita responsabilidad y depende de instrucciones continuas.  |  3 — Responde por sus entregables y escala riesgos.  |  5 — Genera cultura de accountability sin culpabilizar.
+02.4  Iniciativa y proactividad
+Definición  Identifica necesidades y emprende acciones pertinentes sin esperar instrucciones exhaustivas.
+Indicadores observables  Detecta oportunidades; propone soluciones viables; obtiene apoyos.
+Señales de alerta  Actúa sin evaluar consecuencias o permanece pasivo.
+Evidencia / reto sugerido  Caso: proponer una mejora no solicitada y plan de validación.
+Anclajes de puntuación (1 / 3 / 5)  1 — Espera instrucciones ante necesidades evidentes.  |  3 — Propone y ejecuta mejoras pertinentes.  |  5 — Anticipa oportunidades y moviliza iniciativas de alto impacto.
+02.5  Mejora continua y calidad
+Definición  Revisa procesos y resultados para aumentar fiabilidad, eficiencia y aprendizaje.
+Indicadores observables  Mide errores; identifica causas raíz; estandariza buenas prácticas.
+Señales de alerta  Busca velocidad a costa de calidad o repite fallos.
+Evidencia / reto sugerido  Caso: reducir errores recurrentes sin añadir recursos.
+Anclajes de puntuación (1 / 3 / 5)  1 — Corrige síntomas sin medir resultados.  |  3 — Identifica causas y aplica mejoras medibles.  |  5 — Implanta sistemas sostenibles de mejora y calidad.
+03 · Liderazgo de personas y desarrollo del talento
+03.1  Inspiración y movilización
+Definición  Genera propósito compartido y compromiso para alcanzar objetivos colectivos.
+Indicadores observables  Comunica dirección; reconoce contribuciones; mantiene coherencia entre discurso y acción.
+Señales de alerta  Utiliza presión o entusiasmo sin dirección.
+Evidencia / reto sugerido  Situación: equipo desmotivado ante un objetivo exigente.
+Anclajes de puntuación (1 / 3 / 5)  1 — No ofrece dirección ni moviliza al equipo.  |  3 — Conecta propósito, objetivos y contribuciones.  |  5 — Moviliza equipos diversos en situaciones complejas.
+03.2  Desarrollo del talento y feedback
+Definición  Ayuda a otras personas a mejorar capacidades mediante observación, feedback útil y oportunidades de desarrollo.
+Indicadores observables  Da feedback específico; acuerda planes; realiza seguimiento; reconoce fortalezas.
+Señales de alerta  Confunde desarrollo con corregir errores puntuales.
+Evidencia / reto sugerido  Role-play: conversación de desarrollo basada en desempeño observable.
+Anclajes de puntuación (1 / 3 / 5)  1 — Da feedback vago o evita conversaciones.  |  3 — Ofrece feedback accionable y seguimiento.  |  5 — Desarrolla talento y sucesores de forma consistente.
+03.3  Delegación y empoderamiento
+Definición  Distribuye responsabilidades con claridad y autonomía proporcionada, sin abdicar de la responsabilidad final.
+Indicadores observables  Define resultados y límites; ajusta seguimiento; evita microgestión.
+Señales de alerta  Delega solo tareas menores o controla cada detalle.
+Evidencia / reto sugerido  Caso: asignar proyecto crítico a equipo con niveles distintos.
+Anclajes de puntuación (1 / 3 / 5)  1 — Retiene decisiones o delega sin contexto.  |  3 — Delega resultados y acuerda puntos de control.  |  5 — Escala autonomía y capacidad de decisión del equipo.
+03.4  Construcción de equipos inclusivos
+Definición  Crea condiciones de confianza, contribución equitativa y cooperación entre personas con perspectivas diversas.
+Indicadores observables  Invita a participar; distribuye voz; establece normas de colaboración; aborda exclusiones.
+Señales de alerta  Confunde armonía con inclusión; favorece siempre a los mismos.
+Evidencia / reto sugerido  Simulación: reunión con voces dominantes y discrepancias.
+Anclajes de puntuación (1 / 3 / 5)  1 — Tolera exclusiones y baja participación.  |  3 — Integra perspectivas y genera confianza.  |  5 — Construye equipos diversos con alto rendimiento sostenible.
+03.5  Gestión del desempeño y conversaciones difíciles
+Definición  Aclara expectativas, aborda desviaciones y sostiene conversaciones exigentes con respeto y precisión.
+Indicadores observables  Define estándares; conversa a tiempo; documenta acuerdos; combina exigencia y apoyo.
+Señales de alerta  Evita el conflicto o personaliza las críticas.
+Evidencia / reto sugerido  Role-play: bajo desempeño reiterado con impacto en el equipo.
+Anclajes de puntuación (1 / 3 / 5)  1 — Evita abordar desviaciones o acusa.  |  3 — Ofrece feedback claro y acuerda acciones.  |  5 — Resuelve situaciones sensibles preservando justicia y rendimiento.
+04 · Influencia, colaboración y relaciones
+04.1  Comunicación clara y adaptativa
+Definición  Expresa ideas comprensibles, precisas y adecuadas al interlocutor, canal y propósito.
+Indicadores observables  Estructura mensajes; sintetiza; ajusta lenguaje; comprueba comprensión.
+Señales de alerta  Utiliza jerga o transmite mensajes ambiguos.
+Evidencia / reto sugerido  Explicar una decisión compleja a públicos técnicos y no técnicos.
+Anclajes de puntuación (1 / 3 / 5)  1 — Mensajes confusos y poco adaptados.  |  3 — Comunica con claridad y adapta el formato.  |  5 — Consigue alineamiento en audiencias diversas y exigentes.
+04.2  Escucha activa y empatía
+Definición  Comprende perspectivas, necesidades y emociones ajenas sin asumirlas ni perder criterio.
+Indicadores observables  Pregunta; reformula; identifica preocupaciones; responde con respeto.
+Señales de alerta  Interrumpe; presupone intenciones; confunde empatía con acuerdo.
+Evidencia / reto sugerido  Role-play: conversación con una persona preocupada por un cambio.
+Anclajes de puntuación (1 / 3 / 5)  1 — No escucha o invalida perspectivas.  |  3 — Escucha, verifica comprensión y responde adecuadamente.  |  5 — Integra perspectivas sensibles en decisiones complejas.
+04.3  Influencia sin autoridad
+Definición  Logra adhesión legítima mediante argumentos, confianza y comprensión de intereses, incluso sin jerarquía.
+Indicadores observables  Mapea interlocutores; adapta propuestas; construye coaliciones transparentes.
+Señales de alerta  Recurre a presión, manipulación o cargo.
+Evidencia / reto sugerido  Caso: impulsar una iniciativa transversal sin autoridad formal.
+Anclajes de puntuación (1 / 3 / 5)  1 — No logra apoyo o recurre a presión.  |  3 — Influye con evidencia y relaciones de confianza.  |  5 — Alinea actores con intereses divergentes y alto impacto.
+04.4  Colaboración transversal
+Definición  Coopera más allá de equipos y especialidades para conseguir resultados compartidos.
+Indicadores observables  Comparte información; gestiona interdependencias; reconoce aportaciones.
+Señales de alerta  Protege silos; retiene información útil.
+Evidencia / reto sugerido  Caso: coordinar tres áreas con prioridades incompatibles.
+Anclajes de puntuación (1 / 3 / 5)  1 — Trabaja aislado y dificulta la coordinación.  |  3 — Colabora y resuelve dependencias.  |  5 — Crea mecanismos duraderos de cooperación interfuncional.
+04.5  Negociación y resolución de desacuerdos
+Definición  Explora intereses y alternativas para alcanzar acuerdos viables, respetuosos y sostenibles.
+Indicadores observables  Prepara opciones; escucha intereses; explicita límites; documenta acuerdos.
+Señales de alerta  Confunde negociar con imponer o ceder sin criterio.
+Evidencia / reto sugerido  Role-play: negociación con restricciones y prioridades distintas.
+Anclajes de puntuación (1 / 3 / 5)  1 — Se polariza o acepta acuerdos inviables.  |  3 — Busca acuerdos equilibrados y claros.  |  5 — Resuelve negociaciones multiparte de alta complejidad.
+04.6  Construcción de relaciones y confianza
+Definición  Desarrolla relaciones profesionales recíprocas y fiables a través del tiempo.
+Indicadores observables  Cumple compromisos; actúa con discreción; mantiene contactos relevantes.
+Señales de alerta  Networking instrumental sin reciprocidad.
+Evidencia / reto sugerido  Caso: reconstruir confianza tras incumplimiento.
+Anclajes de puntuación (1 / 3 / 5)  1 — Genera relaciones frágiles y poco fiables.  |  3 — Construye relaciones basadas en consistencia.  |  5 — Sostiene redes de confianza en entornos complejos.
+05 · Transformación, innovación y adaptabilidad
+05.1  Adaptabilidad
+Definición  Ajusta enfoques y conductas ante cambios sin perder de vista objetivos esenciales.
+Indicadores observables  Revisa prioridades; prueba alternativas; incorpora información nueva.
+Señales de alerta  Se aferra a procesos obsoletos o cambia sin criterio.
+Evidencia / reto sugerido  Cambio inesperado de requisitos: replantear plan y explicar decisiones.
+Anclajes de puntuación (1 / 3 / 5)  1 — Se resiste o pierde eficacia ante cambios.  |  3 — Ajusta el enfoque y conserva resultados.  |  5 — Facilita adaptación de equipos y sistemas complejos.
+05.2  Aprendizaje continuo
+Definición  Identifica brechas de conocimiento, aprende activamente y transfiere lo aprendido a la práctica.
+Indicadores observables  Busca feedback; experimenta; reflexiona; aplica nuevas habilidades.
+Señales de alerta  Acumula cursos sin aplicar aprendizajes.
+Evidencia / reto sugerido  Describir aprendizaje reciente y demostrar transferencia a un caso nuevo.
+Anclajes de puntuación (1 / 3 / 5)  1 — No identifica necesidades ni aplica aprendizaje.  |  3 — Aprende y mejora su desempeño.  |  5 — Acelera aprendizaje propio y colectivo.
+05.3  Liderazgo del cambio
+Definición  Impulsa transiciones explicando su sentido, gestionando resistencias y asegurando adopción.
+Indicadores observables  Identifica afectados; escucha objeciones; diseña hitos; mide adopción.
+Señales de alerta  Comunica el cambio una vez y asume que se implantó.
+Evidencia / reto sugerido  Caso: implementar nueva herramienta con resistencia de usuarios.
+Anclajes de puntuación (1 / 3 / 5)  1 — Impone cambios sin gestionar impacto.  |  3 — Moviliza y acompaña una transición.  |  5 — Lidera transformaciones con adopción sostenible.
+05.4  Creatividad e innovación aplicada
+Definición  Genera alternativas originales y útiles, y contrasta su viabilidad mediante experimentación.
+Indicadores observables  Reformula problemas; propone opciones; prototipa; aprende de pruebas.
+Señales de alerta  Confunde novedad con valor; evita probar hipótesis.
+Evidencia / reto sugerido  Reto: diseñar tres soluciones y un experimento barato para validarlas.
+Anclajes de puntuación (1 / 3 / 5)  1 — Repite soluciones conocidas sin explorar.  |  3 — Propone y prueba soluciones útiles.  |  5 — Crea condiciones para innovación replicable.
+05.5  Resolución de problemas
+Definición  Identifica causas, diseña alternativas y ejecuta soluciones comprobando su eficacia.
+Indicadores observables  Define problema; identifica restricciones; selecciona solución; mide efecto.
+Señales de alerta  Salta a soluciones sin comprender el problema.
+Evidencia / reto sugerido  Caso operativo con causa oculta: investigar, actuar y verificar.
+Anclajes de puntuación (1 / 3 / 5)  1 — Ataca síntomas sin diagnóstico.  |  3 — Resuelve problemas con método y seguimiento.  |  5 — Resuelve problemas sistémicos y previene recurrencia.
+05.6  Criterio digital y uso responsable de IA
+Definición  Selecciona y utiliza herramientas digitales e IA con juicio crítico, considerando fiabilidad, privacidad e impacto.
+Indicadores observables  Verifica resultados; reconoce límites; protege datos; documenta decisiones relevantes.
+Señales de alerta  Acepta respuestas automáticas sin contraste o comparte datos sensibles.
+Evidencia / reto sugerido  Caso: revisar una recomendación de IA con errores y datos confidenciales.
+Anclajes de puntuación (1 / 3 / 5)  1 — Usa herramientas sin verificar ni proteger información.  |  3 — Verifica salidas y aplica controles adecuados.  |  5 — Diseña prácticas responsables y escalables de uso digital.
+06 · Autoliderazgo, integridad y potencial de desarrollo
+06.1  Autoconocimiento y apertura al feedback
+Definición  Reconoce fortalezas, límites y patrones propios y utiliza feedback para mejorar.
+Indicadores observables  Solicita opiniones; reconoce errores; cambia conductas observables.
+Señales de alerta  Se justifica sistemáticamente o se infravalora sin evidencia.
+Evidencia / reto sugerido  CAR: feedback difícil recibido y cambio concreto posterior.
+Anclajes de puntuación (1 / 3 / 5)  1 — Rechaza o ignora feedback relevante.  |  3 — Reconoce áreas de mejora y actúa.  |  5 — Modela reflexión y aprendizaje continuo en otros.
+06.2  Integridad y criterio ético
+Definición  Actúa con honestidad, equidad y responsabilidad ante dilemas e incentivos contrapuestos.
+Indicadores observables  Declara conflictos; protege confidencialidad; sostiene límites; documenta decisiones.
+Señales de alerta  Justifica atajos perjudiciales por resultados.
+Evidencia / reto sugerido  Dilema: presión para utilizar datos o métricas de forma engañosa.
+Anclajes de puntuación (1 / 3 / 5)  1 — Oculta información o normaliza conductas impropias.  |  3 — Aplica principios incluso con costes personales.  |  5 — Previene riesgos éticos y promueve decisiones íntegras.
+06.3  Resiliencia y autorregulación
+Definición  Mantiene juicio y capacidad de recuperación ante contratiempos, gestionando presión de forma sostenible.
+Indicadores observables  Prioriza; pide apoyo; regula reacciones; aprende y se recupera.
+Señales de alerta  Normaliza sobrecarga crónica o reacciona impulsivamente.
+Evidencia / reto sugerido  CAR: revés significativo y acciones para recuperar eficacia.
+Anclajes de puntuación (1 / 3 / 5)  1 — Pierde criterio y no busca alternativas.  |  3 — Gestiona contratiempos y recupera eficacia.  |  5 — Sostiene decisiones y bienestar colectivo en crisis.
+06.4  Curiosidad intelectual
+Definición  Explora perspectivas y conocimientos nuevos con preguntas rigurosas y apertura a revisar creencias.
+Indicadores observables  Pregunta por causas; busca perspectivas diferentes; contrasta hipótesis.
+Señales de alerta  Se conforma con explicaciones superficiales.
+Evidencia / reto sugerido  Caso desconocido: formular preguntas para aprender antes de decidir.
+Anclajes de puntuación (1 / 3 / 5)  1 — Evita explorar o cuestionar supuestos.  |  3 — Investiga activamente y revisa creencias.  |  5 — Detecta conexiones nuevas y genera aprendizaje estratégico.
+06.5  Determinación y perseverancia inteligente
+Definición  Sostiene esfuerzos ante obstáculos y sabe modificar o abandonar vías ineficaces.
+Indicadores observables  Mantiene foco; solicita ayuda; revisa estrategia; reconoce límites.
+Señales de alerta  Confunde persistencia con obstinación.
+Evidencia / reto sugerido  CAR: objetivo difícil, obstáculos, cambios de estrategia y resultado.
+Anclajes de puntuación (1 / 3 / 5)  1 — Abandona prematuramente o insiste sin evaluar.  |  3 — Persevera y adapta métodos.  |  5 — Supera obstáculos complejos sin comprometer criterio ni personas.
+3. Reglas de medición para la aplicación
+3.1 Escala común
+Nivel
+Interpretación
+NE
+No evaluado / evidencia insuficiente: no asignar nota.
+1
+Evidencia de desempeño claramente por debajo de lo requerido en el contexto.
+2
+Desempeño parcial o inconsistente; requiere apoyo relevante.
+3
+Desempeño efectivo y autónomo en situaciones habituales.
+4
+Desempeño sólido en situaciones complejas, con impacto demostrable.
+5
+Desempeño sobresaliente y sostenido en contextos de alta complejidad; eleva la capacidad de otros.
+Los anclajes 1/3/5 de cada ficha son ejemplos de referencia; antes de lanzar una evaluación real deben desarrollarse también los niveles 2 y 4 por competencia y por tipo de ejercicio. No inferir automáticamente 4 a partir de un ejemplo de nivel 5.
+3.2 Qué puede demostrar cada tipo de evidencia
+Formato
+Útil para
+Límite
+Entrevista CAR estructurada
+Conductas pasadas, contexto, acciones y resultados
+Autorreporte; requiere repreguntas y contraste.
+Caso situacional
+Criterio, priorización, análisis y decisión
+Mide desempeño en el caso, no necesariamente en el puesto.
+Simulación / role-play
+Comunicación, feedback, negociación, influencia
+Necesita escenarios equivalentes y rúbricas.
+Work sample / ejercicio práctico
+Resolución, calidad, colaboración si es grupal
+Debe representar tareas relevantes del puesto.
+Feedback de terceros
+Patrones observados en distintos contextos
+Exige consentimiento, calidad de fuente y control de sesgos.
+3.3 Estructura de una evaluación digital
+Por cada ejercicio registrar: ID de competencia; definición; perfil objetivo; nivel profesional; formato; consigna; tiempo; respuesta; evidencias textuales o conductuales; criterios; puntuación por criterio; nivel asignado; grado de confianza; información insuficiente; revisión humana; versión de rúbrica/modelo; fecha y trazabilidad.
+Regla de evaluación: exigir al menos dos evidencias relevantes e independientes para una valoración robusta cuando sea viable; diferenciar “no observado” de “observado y débil”; no usar fluidez verbal, estilo cultural, acento o longitud de respuesta como sustitutos de la competencia.
+3.4 Selección por perfil: paquetes iniciales orientativos
+Perfil
+Competencias sugeridas
+Prácticas / junior
+Aprendizaje continuo; responsabilidad; colaboración transversal; comunicación clara; adaptabilidad; pensamiento analítico.
+Especialista
+Pensamiento analítico; resolución de problemas; resultados; planificación; criterio digital; colaboración.
+Project / product manager
+Priorización; influencia sin autoridad; negociación; ambigüedad; resultados; comunicación.
+Manager de equipos
+Desarrollo del talento; delegación; gestión del desempeño; construcción de equipos; resultados; liderazgo del cambio.
+Dirección / executive
+Pensamiento estratégico; juicio; movilización; influencia; gestión de la complejidad; liderazgo del cambio; integridad.
+Comercial / cliente
+Orientación al cliente; comunicación; negociación; relaciones; resultados; resiliencia.
+Estas combinaciones son hipótesis de diseño: cada puesto requiere análisis de tareas y validación de competencias críticas; no constituyen perfiles normativos ni puntuaciones mínimas universales.
+4. Distinguir liderazgo y potencial
+Liderazgo es una capacidad compuesta y contextual: no se reduce a una nota. Sus manifestaciones se distribuyen en movilización, desarrollo del talento, delegación, gestión del desempeño, influencia y cambio. Puede existir liderazgo sin responsabilidad jerárquica.
+Potencial de crecimiento NO se mide directamente con una sola pregunta o con “curiosidad”. Debe tratarse como hipótesis longitudinal basada en varias evidencias —aprendizaje aplicado, adaptación a nuevas exigencias, complejidad asumida y motivación— y contrastarse con desempeño y contexto. Evitar etiquetar a candidatos como “alto/bajo potencial” sin validación específica.
+5. Diseño de calidad, validación y gobernanza
+• Análisis del puesto: definir resultados, tareas críticas y comportamientos relevantes antes de seleccionar competencias.
+• Validez de contenido: revisión por expertos y profesionales del puesto; comprobar cobertura y ausencia de constructos irrelevantes.
+• Fiabilidad: evaluar consistencia entre jueces y estabilidad de puntuaciones; calibrar con respuestas ancla.
+• Equidad y accesibilidad: revisar diferencias por grupos cuando legalmente proceda; ofrecer ajustes razonables; evaluar impacto adverso.
+• IA y explicabilidad: conservar evidencia concreta que fundamenta cada puntuación; registrar versión, límites, errores y supervisión humana.
+• Privacidad y regulación: minimización de datos, base jurídica, retención limitada y evaluación jurídica de RGPD y Reglamento de IA de la UE.
+• Piloto: comenzar con 6–8 competencias y 2–3 familias de puestos; comparar evaluación humana e IA, revisar discrepancias y mejorar rúbricas.
+6. Referencias de inspiración y alcance
+Marco de elaboración original inspirado en prácticas públicas de evaluación conductual y liderazgo de Korn Ferry (Leadership Architect), Spencer Stuart (Leadership Capabilities), Heidrick & Struggles (leadership assessment), Egon Zehnder (potential) y Russell Reynolds Associates (leadership assessment). Las categorías, definiciones, retos y anclajes de este documento son una propuesta independiente de TalentPact, no una reproducción ni una validación equivalente a la de esos modelos.
+Referencias orientativas para investigación adicional: Korn Ferry, Leadership Architect; Spencer Stuart, Leadership Capabilities; Heidrick & Struggles, Leadership Assessment; Egon Zehnder, Potential Model; European Commission, AI Act; Reglamento (UE) 2016/679 (RGPD).
+Estado del documento: taxonomía funcional avanzada para diseño de producto. No es un instrumento psicométrico certificado, baremado ni validado predictivamente.

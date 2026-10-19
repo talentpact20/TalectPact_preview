@@ -4,26 +4,21 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { esPersona, esCognitivo, familiaDe, extraerPersonas } = require("../netlify/functions/lib/personas.js");
+const { esPersona, familiaDe, extraerPersonas } = require("../netlify/functions/lib/personas.js");
 const { limpiarPreguntas, limpiarDilemas, validarOferta } = require("../netlify/functions/lib/handlers/save-job.js");
 const { construirPool } = require("../netlify/functions/lib/handlers/get-talent-pool.js");
 const { ESTADOS } = require("../netlify/functions/lib/handlers/applications.js");
 const { limpiarRespuestasDilema } = require("../netlify/functions/lib/handlers/apply.js");
 
-test("taxonomía: hard / soft / transferibles", () => {
-  assert.equal(familiaDe("Liderazgo"), "soft");
-  assert.equal(familiaDe("Trabajo en Equipo"), "soft");
-  assert.equal(familiaDe("Toma de Decisiones"), "soft");
-  assert.equal(familiaDe("Comunicación Escrita"), "soft");
-  assert.equal(familiaDe("Gestión del Tiempo"), "transferibles");
-  assert.equal(familiaDe("Pensamiento Analítico"), "transferibles");
-  assert.equal(familiaDe("Resolución de Problemas"), "transferibles");
-  assert.equal(familiaDe("Excel y Datos"), "hard");
+test("dos bloques: soft si tiene dimensión del diccionario, hard si no", () => {
+  for (const n of ["Liderazgo", "Trabajo en Equipo", "Toma de Decisiones", "Atención al Cliente", "Comunicación Escrita",
+    "Gestión del Tiempo", "Pensamiento Analítico", "Resolución de Problemas", "Social Skills"]) {
+    assert.equal(familiaDe(n), "soft", n);
+  }
+  for (const n of ["Excel y Datos", "Inglés (Speaking)", "React", "Contabilidad"]) assert.equal(familiaDe(n), "hard", n);
+  assert.equal(familiaDe(""), null);
   assert.equal(esPersona("Liderazgo"), true);
-  assert.equal(esCognitivo("Pensamiento Analítico"), true);
   assert.equal(esPersona("React"), false);
-  assert.equal(esCognitivo("React"), false);
-  assert.equal(esCognitivo("Excel y Datos"), false);
 });
 
 test("extraerPersonas ordena soft skills por nota y limita a 5", () => {
@@ -31,10 +26,12 @@ test("extraerPersonas ordena soft skills por nota y limita a 5", () => {
     { n: "React", v: 99 },
     { n: "Liderazgo", v: 70 },
     { n: "Trabajo en Equipo", v: 88 },
-    { n: "Gestión del Tiempo", v: 60 }, // transferible: no entra en soft
-    { n: "Comunicación Escrita", v: 65 }
+    { n: "Gestión del Tiempo", v: 60 },
+    { n: "Comunicación Escrita", v: 65 },
+    { n: "Negociación", v: 50 },
+    { n: "Creatividad", v: 40 }
   ]);
-  assert.deepEqual(out.map((s) => s.n), ["Trabajo en Equipo", "Liderazgo", "Comunicación Escrita"]);
+  assert.deepEqual(out.map((s) => s.n), ["Trabajo en Equipo", "Liderazgo", "Comunicación Escrita", "Gestión del Tiempo", "Negociación"]);
   assert.equal(out[0].v, 88);
 });
 

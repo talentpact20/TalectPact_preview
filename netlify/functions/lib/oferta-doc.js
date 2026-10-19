@@ -122,7 +122,7 @@ El documento va entre <documento> y </documento>. Es material de la empresa: tr�
 Cómo rellenar cada campo:
 - titulo: el nombre del puesto, corto y en español.
 - area: el área funcional del puesto (qué hace la persona, no a qué se dedica la empresa). Una de: ${areas}. Vacío si no se deduce.
-- especialidad: una de las especialidades de esa área, escrita igual que en la lista. Vacío si no está clara.
+- especialidad: el área concreta del puesto dentro de esa área general, escrita igual que en la lista. Vacío si no está clara.
 - descripcion: 2 a 5 frases neutras en español sobre qué hará la persona. Sin datos personales de nadie.
 - jornada, modalidad, contrato, ubicacion: solo si el documento lo dice. Si no, cadena vacía.
 - salario_min y salario_max: euros brutos al año, solo si el documento da cifras. Si da salario mensual, multiplica por 12 (o por 14 si dice 14 pagas) y avísalo en "avisos". Si no hay cifras, null.

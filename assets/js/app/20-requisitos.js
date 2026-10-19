@@ -9,23 +9,27 @@ var TP_REQ_MINIMOS={aceptable:{txt:'Aceptable',nota:40},bueno:{txt:'Bueno',nota:
 var TP_REQ_MAX=8,TP_REQ_MAX_IMP=4;
 // Sugerencias por área funcional (solo skills con reto en el catálogo). Como
 // LinkedIn: se proponen unas pocas y se añaden con un clic; el resto se busca.
-// Cuatro del oficio y dos de cómo trabaja con personas o cómo piensa.
+// Cuatro del oficio y dos de cómo trabaja con personas o cómo piensa; si la
+// empresa indica el tipo de puesto, esas dos se cambian por las competencias
+// del paquete de ese perfil (diccionario de competencias, 01b-taxonomia).
 var TP_REQ_SUGERIDAS={
   juridica:['Contratos','RGPD','Derecho Laboral','Auditoría','Comunicación Escrita','Toma de Decisiones'],
+  direccion:['Emprendimiento','Pitch','Finanzas y Contabilidad','Project Management','Pensamiento Estratégico','Toma de Decisiones'],
   finanzas:['Finanzas y Contabilidad','Contabilidad','Tesorería','Fiscalidad','Pensamiento Analítico','Comunicación Escrita'],
   marketing:['Marketing Digital','Ventas B2B','SEO & Contenido','CRM','Comunicación Escrita','Negociación'],
   operaciones:['Logística','Supply Chain','Project Management','Calidad','Gestión del Tiempo','Resolución de Problemas'],
   rrhh:['Recruiting','People Analytics','Formación','Derecho Laboral','Comunicación Escrita','Trabajo en Equipo'],
+  sanidad_educacion:['Admin Sanitaria','Farmacia','Pedagogía','E-Learning','Comunicación Escrita','Atención al Cliente'],
   sostenibilidad:['Sostenibilidad','Project Management','Data & Analytics','Calidad','Pensamiento Estratégico','Comunicación Escrita'],
   tecnologia:['Desarrollo y Tecnología','Data & Analytics','SQL & Bases de Datos','Git & GitHub','Resolución de Problemas','Trabajo en Equipo']
 };
-/** Al cambiar el área: especialidades de esa área (segundo nivel) y nuevas sugerencias. */
+/** Al cambiar el área: sus áreas concretas (segundo nivel, solo si hay varias) y nuevas sugerencias. */
 function tpReqCambiarArea(){
   const area=document.getElementById('pj-sector')?.value||'';
   const campo=document.getElementById('pjEspField'),sel=document.getElementById('pj-especialidad');
   const a=typeof tpArea==='function'?tpArea(area):null;
   if(sel){const prev=sel.value;sel.innerHTML='<option value="">Sin especificar</option>'+(a?a.especialidades.map(e=>'<option'+(e===prev?' selected':'')+'>'+escHtml(e)+'</option>').join(''):'');}
-  if(campo)campo.classList.toggle('pj-oculto',!a);
+  if(campo)campo.classList.toggle('pj-oculto',!a||a.especialidades.length<2);
   tpReqPintar();
 }
 
@@ -93,7 +97,7 @@ function tpReqResumen(req){
 
 // ── Formulario de la oferta ────────────────────────────────────────────────
 var TPReq={lista:[],paso:1,
-  reset(){TPReq.lista=[];TPReq.paso=1;pjReqSkills=[];const esp=document.getElementById('pjEspField');if(esp)esp.classList.add('pj-oculto');const e=document.getElementById('pjDocEstado');if(e)e.innerHTML='';document.querySelectorAll('#postJobForm .pj-auto').forEach(x=>x.classList.remove('pj-auto'));},
+  reset(){TPReq.lista=[];TPReq.paso=1;pjReqSkills=[];const perfil=document.getElementById('pj-perfil');if(perfil)perfil.value='';const esp=document.getElementById('pjEspField');if(esp)esp.classList.add('pj-oculto');const e=document.getElementById('pjDocEstado');if(e)e.innerHTML='';document.querySelectorAll('#postJobForm .pj-auto').forEach(x=>x.classList.remove('pj-auto'));},
   nombres(){return TPReq.lista.map(r=>r.skill);},
   imprescindibles(){return TPReq.lista.filter(r=>r.peso==='imprescindible').length;},
   sincronizar(){pjReqSkills=TPReq.nombres();},
@@ -107,9 +111,13 @@ function tpReqCatalogo(){
   return[...set];
 }
 function tpReqPilar(s){
-  const f=typeof tpFamiliaAptitud==='function'?tpFamiliaAptitud(s):null;
-  const fam=f||(typeof getSkillCategory==='function'&&getSkillCategory(s)==='soft'?'soft':'hard');
-  return{soft:'Soft',transferibles:'Transferible',hard:'Hard'}[fam]||'Hard';
+  return typeof tpFamiliaAptitud==='function'&&tpFamiliaAptitud(s)==='soft'?'Soft':'Hard';
+}
+/** Bloque y su grupo: «Soft · Colaboración e influencia» o «Hard · Tecnología». */
+function tpReqPilarLargo(s){
+  const d=typeof tpDimensionDeSkill==='function'?tpDimensionDeSkill(s):null;
+  const a=!d&&typeof tpAreaDeSkill==='function'?tpAreaDeSkill(s):null;
+  return tpReqPilar(s)+(d?' · '+d.corto:a?' · '+tpAreaNombre(a,true):'');
 }
 
 function tpReqAnadir(skill,opts){
@@ -158,25 +166,39 @@ function tpReqPintarLista(){
   let h='<div class="pj-req-cab"><span>'+TPReq.lista.length+' de '+TP_REQ_MAX+' skills · '+imp+' de '+TP_REQ_MAX_IMP+' imprescindibles</span></div><ul class="pj-req-lista">';
   TPReq.lista.forEach((r,i)=>{
     const id='pjMin'+i;
-    h+='<li class="pj-req-fila'+(r.peso==='imprescindible'?' imp':'')+'"><div class="pj-req-nombre"><b>'+escHtml(tpSkillNombre(r.skill))+'</b><span class="pj-req-pilar">'+tpReqPilar(r.skill)+'</span>'+(r.motivo?'<span class="pj-req-motivo">Del documento: '+escHtml(r.motivo)+'</span>':'')+'</div>'+
+    h+='<li class="pj-req-fila'+(r.peso==='imprescindible'?' imp':'')+'"><div class="pj-req-nombre"><b>'+escHtml(tpSkillNombre(r.skill))+'</b><span class="pj-req-pilar">'+escHtml(tpReqPilarLargo(r.skill))+'</span>'+(r.motivo?'<span class="pj-req-motivo">Del documento: '+escHtml(r.motivo)+'</span>':'')+'</div>'+
       '<div class="pj-req-peso" role="group" aria-label="Peso de '+escHtml(r.skill)+'"><button type="button" class="'+(r.peso==='imprescindible'?'activo':'')+'" aria-pressed="'+(r.peso==='imprescindible')+'" onclick="tpReqPeso('+i+',\'imprescindible\')">Imprescindible</button><button type="button" class="'+(r.peso==='valorable'?'activo':'')+'" aria-pressed="'+(r.peso==='valorable')+'" onclick="tpReqPeso('+i+',\'valorable\')">Valorable</button></div>'+
       '<div class="pj-req-min"><label for="'+id+'">Mínimo</label><select id="'+id+'" onchange="tpReqMinimo('+i+',this.value)">'+opcionesMin(r.minimo)+'</select></div>'+
       '<button type="button" class="pj-req-quitar" aria-label="Quitar '+escHtml(r.skill)+'" onclick="tpReqQuitar('+i+')">×</button></li>';
   });
   h+='</ul>';
-  if(!pilares.has('Soft')&&!pilares.has('Transferible'))h+='<div class="pj-req-aviso">Solo pides skills técnicas. Recomendamos al menos una soft skill o una transferible: es lo primero que se pregunta una empresa, cómo es la persona con los demás.</div>';
+  if(!pilares.has('Soft'))h+='<div class="pj-req-aviso">Solo pides hard skills. Recomendamos al menos una soft skill: es lo primero que se pregunta una empresa, cómo es la persona con los demás.</div>';
   box.innerHTML=h;
 }
 
 function tpReqPintarSugeridas(){
   const box=document.getElementById('pjReqSugeridas');if(!box)return;
   const area=document.getElementById('pj-sector')?.value||'';
+  const perfilId=document.getElementById('pj-perfil')?.value||'';
+  const perfil=perfilId?TP_TAXONOMIA.perfilesPuesto.find(p=>p.id===perfilId):null;
   const cat=new Set(tpReqCatalogo());
   const elegidas=new Set(TPReq.nombres().map(n=>n.toLowerCase()));
-  const sug=(TP_REQ_SUGERIDAS[area]||[]).filter(s=>cat.has(s)&&!elegidas.has(s.toLowerCase())).slice(0,6);
-  if(!sug.length||TPReq.lista.length>=TP_REQ_MAX){box.innerHTML='';return;}
-  box.innerHTML='<div class="pj-sug-cab"><span>Sugeridas para este puesto</span><button type="button" class="pj-enlace" onclick="tpReqAnadirSugeridas()">Añadir todas</button></div><div class="pj-sug-lista">'+
-    sug.map(s=>'<button type="button" class="pj-sug" data-skill="'+escHtml(s)+'">+ '+escHtml(tpSkillNombre(s))+'<span>'+tpReqPilar(s)+'</span></button>').join('')+'</div>';
+  const libre=s=>cat.has(s)&&!elegidas.has(s.toLowerCase());
+  const transversal=s=>tpFamiliaAptitud(s)==='soft';
+  const base=TP_REQ_SUGERIDAS[area]||[];
+  const oficio=base.filter(s=>!transversal(s)&&libre(s)).slice(0,4);
+  const comp=(perfil?tpSkillsDePerfil(perfil.id):base.filter(transversal)).filter(libre).slice(0,6);
+  if((!oficio.length&&!comp.length)||TPReq.lista.length>=TP_REQ_MAX){box.innerHTML='';return;}
+  const chip=s=>'<button type="button" class="pj-sug" data-skill="'+escHtml(s)+'">+ '+escHtml(tpSkillNombre(s))+'<span>'+tpReqPilar(s)+'</span></button>';
+  let h='<div class="pj-sug-cab"><span>Sugeridas para este puesto</span><button type="button" class="pj-enlace" onclick="tpReqAnadirSugeridas()">Añadir todas</button></div>';
+  if(oficio.length)h+='<p class="pj-sug-sub">Hard skills del oficio</p><div class="pj-sug-lista">'+oficio.map(chip).join('')+'</div>';
+  if(comp.length)h+='<p class="pj-sug-sub">'+(perfil?'Soft skills para '+escHtml(perfil.nombre.toLowerCase()):'Soft skills')+'</p><div class="pj-sug-lista">'+comp.map(chip).join('')+'</div>';
+  if(perfil){
+    const conReto=new Set(Object.values(TP_TAXONOMIA.competenciasDeSkill).flat());
+    const sin=perfil.competencias.filter(id=>!conReto.has(id)).map(id=>tpCompetencia(id)).filter(Boolean);
+    if(sin.length)h+='<p class="pj-sug-sub">Para '+escHtml(perfil.nombre.toLowerCase())+' también se recomienda '+escHtml(sin.map(c=>c.nombre.toLowerCase()).join(', '))+'. Aún no tienen reto: puedes preguntarlo en los dilemas del paso 3.</p>';
+  }
+  box.innerHTML=h;
 }
 function tpReqAnadirSugeridas(){
   document.querySelectorAll('#pjReqSugeridas .pj-sug').forEach(b=>tpReqAnadir(b.dataset.skill));

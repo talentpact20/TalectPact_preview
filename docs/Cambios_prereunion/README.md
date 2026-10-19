@@ -19,7 +19,7 @@ Carpeta viva de lo que se cambia en producto **antes de hablar con la asesora** 
 1. **¿Qué falta para que funcione en producción?** → [05_errores_y_mejoras.md](05_errores_y_mejoras.md), apartado «Lo que queda abierto».
 2. **¿Qué le preguntamos a la asesora?** → [00_contexto_reunion.md](00_contexto_reunion.md), apartado «Preguntas para la asesora».
 3. **¿Hacia dónde vamos después?** → [04_estrategia.md](04_estrategia.md) y el plan [07_plan_semanal.md](07_plan_semanal.md).
-4. **¿Cómo se clasifican las aptitudes y qué lleva la oferta?** → [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md).
+4. **¿Cómo se clasifican las aptitudes y qué lleva la oferta?** → [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) y, con la propuesta de la asesora (áreas, sectores y 6 dimensiones), [09_clasificacion_retos_y_competencias.md](09_clasificacion_retos_y_competencias.md).
 5. **¿La pieza disruptiva? (para explicársela a la asesora y a Xavi)** → [06_encaje_modelo_empresa.md](06_encaje_modelo_empresa.md).
 
 ## Índice
@@ -36,3 +36,4 @@ Carpeta viva de lo que se cambia en producto **antes de hablar con la asesora** 
 | [06_encaje_modelo_empresa.md](06_encaje_modelo_empresa.md) | **Briefing** para asesora y Xavi: encaje con el modelo de empresa (antes de desarrollar) | Propuesta validable |
 | [07_plan_semanal.md](07_plan_semanal.md) | Planificación por semanas (incluye lo disruptivo en S5–S6) | Vivo |
 | [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) | **Taxonomía** Hard / Soft / Transferibles y oferta = skills + 3 preguntas + 1–3 dilemas | En código; falta SQL dilemas en Supabase |
+| [09_clasificacion_retos_y_competencias.md](09_clasificacion_retos_y_competencias.md) | Propuesta de la asesora: 21 áreas y 22 sectores en dos niveles, 6 dimensiones y 32 competencias, competencias sugeridas por tipo de puesto | En código; por validar con la asesora |

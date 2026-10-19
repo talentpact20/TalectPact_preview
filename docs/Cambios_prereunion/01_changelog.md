@@ -346,3 +346,31 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Para el usuario.** Ejecutar `tfm/tech/supabase_schema_sello.sql`. Sin él, el sello sale como «todavía no disponible».
 
 **Ficheros.** `lib/sello.js`, `handlers/pay-seal.js`, `pay-seal.mjs`, `anchor-credential.js`, `stripe-webhook.js`, `verify-credential.js`; `06`, `09`, `99`, `verify.html`, `index.html`, `componentes.css`; `tests/sello.test.js` (2). Tests → 170 en 23 ficheros. Pendiente de revisar en el navegador.
+
+---
+
+## 2026-10-19 — Clasificación de la asesora: áreas y sectores ampliados, 6 dimensiones de competencias
+
+**Qué.**
+- **Áreas del puesto:** 9 generales (las 7 resumidas más «Dirección, estrategia y consultoría» y «Sanidad, educación e investigación»), con las 21 de la versión ampliada como «Área concreta». La concreta aparece solo si el área general tiene varias. El tablón filtra por las 9.
+- **Sector de la empresa:** 12 generales y «Concretamente» con los 22 ampliados, en dos pasos (Ajustes y «Completa los datos de tu empresa»).
+- **Diccionario de competencias** (Word de la asesora): 6 dimensiones y 32 competencias, con su definición, en `taxonomia.json`. Las dimensiones 01, 02 y 05 van a Transferibles; las 03, 04 y 06, a Soft. Cada reto transversal indica qué competencias evalúa. El pilar de una skill ya no se escribe a mano: sale de su dimensión.
+- **Catálogo de retos** (portada y panel): al elegir un pilar aparece una segunda fila con sus dimensiones o sus áreas, cada una con su número de retos. En el panel, la dimensión elegida enseña sus competencias y resalta las que tienen reto.
+- **Oferta, paso 2:** selector «Tipo de puesto» con los 6 paquetes del diccionario. Sugiere «Del oficio» (por área) y «Competencias para…» (por paquete), y avisa de las competencias del paquete que aún no tienen reto.
+- Cambian de pilar: Toma de decisiones (de Soft a Transferibles) y Networking (de Hard a Soft).
+
+**Por qué.** Propuesta de la asesora: versión ampliada, selección progresiva, sector separado del área y competencias sugeridas por tipo de puesto. Detalle y huecos del catálogo: [09_clasificacion_retos_y_competencias.md](09_clasificacion_retos_y_competencias.md).
+
+**Para validar con la asesora.** Las dos áreas generales nuevas, el reparto de dimensiones entre Soft y Transferibles, y las competencias asignadas a cada reto.
+
+**Ficheros.** `lib/taxonomia.json`, `lib/taxonomia.js`, `lib/personas.js`, `tools/generar_taxonomia.js`, `01b-taxonomia.js`, `save-job.js`, `save-company.js`, `oferta-doc.js`; `08`, `09`, `19`, `20`, `21`, `23-clasificacion.js` (nuevo); `index.html`, `componentes.css`; `docs/plan_post_reunion/asesora/` (diccionario original); `tests/taxonomia.test.js` (+2), `tests/rrhh.test.js`. Tests → 172 en 23 ficheros. Sin SQL nuevo.
+
+---
+
+## 2026-10-19 (noche) — Retos en dos bloques: Hard skills (sector → área) y Soft skills (dimensión → enfoque)
+
+**Qué.** Fuera los tres pilares: no hay «Transferibles». **Hard skills:** 10 sectores (las 9 áreas generales e Idiomas) y, dentro, las 21 áreas concretas. Cada reto técnico tiene la suya (`areaConcretaDeSkill`). **Soft skills:** las 6 dimensiones del diccionario y, dentro, sus 32 enfoques. Una skill es soft si tiene dimensión y hard si no. Panel del candidato rehecho: dos tarjetas grandes (Hard / Soft), tarjetas de sectores o dimensiones con su número de retos, chips de áreas o enfoques (los que no tienen reto se ven, desactivados), definición del enfoque elegido, línea de «dónde estás» y filtro Todos / Pendientes / Completados. La portada usa los mismos niveles. En la oferta y en la ficha del candidato solo quedan Hard y Soft.
+
+**Por qué.** Petición del equipo: olvidar la estructura anterior y que los retos se vean divididos así, de forma sencilla y visible.
+
+**Ficheros.** `lib/taxonomia.json`, `lib/taxonomia.js`, `lib/personas.js`, `tools/generar_taxonomia.js`, `01b-taxonomia.js`, `19-rrhh.js`, `20-requisitos.js`, `23-clasificacion.js`; `index.html`, `componentes.css`; `tests/taxonomia.test.js`, `tests/rrhh.test.js`. Tests → 172 (sin cambio de número).
