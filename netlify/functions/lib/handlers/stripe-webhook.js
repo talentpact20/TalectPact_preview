@@ -14,6 +14,12 @@ const { notificarDesbloqueo } = require("../notify");
 
 /** Marca la fila como pagada. Idempotente: Stripe reintenta los webhooks. */
 async function markPaid(session) {
+  // Sello público del SkillPass (candidato): su propia tabla.
+  if (session && session.metadata && session.metadata.producto === "sello") {
+    const { marcarSelloPagado } = require("./pay-seal");
+    const filas = await marcarSelloPagado(session);
+    return Array.isArray(filas) ? filas.length : 0;
+  }
   const rows = await sb.update(
     "unlocks",
     `stripe_session_id=eq.${encodeURIComponent(session.id)}&status=neq.paid`,
@@ -75,7 +81,7 @@ exports.handler = async (event) => {
       case "checkout.session.async_payment_failed": {
         const session = stripeEvent.data.object;
         await sb.update(
-          "unlocks",
+          session.metadata && session.metadata.producto === "sello" ? "seal_payments" : "unlocks",
           `stripe_session_id=eq.${encodeURIComponent(session.id)}&status=eq.pending`,
           { status: stripeEvent.type.endsWith("expired") ? "expired" : "failed" }
         );

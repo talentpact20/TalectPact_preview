@@ -297,3 +297,52 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Para el usuario.** Activar Google en Supabase (Client ID y secreto de Google Cloud; valores exactos en Pendientes), ejecutar `tfm/tech/supabase_schema_verificacion.sql` y, cuando se pueda, exigir confirmar el email.
 
 **Ficheros.** `netlify/functions/lib/verificacion.js`, `lib/tp.js`, `get-company.js`, `save-company.js`, `list-jobs.js`; `assets/js/app/21-empresa.js`, `08`, `09`, `17`; `index.html`, `componentes.css`; `tfm/tech/supabase_schema_verificacion.sql`; `tests/verificacion.test.js` (6). Tests → 156 en 20 ficheros; cifras canónicas, informe, Q&A, guion, deck y resumen del plan de negocio actualizados (los HTML de Q&A y guion seguían en 139).
+
+---
+
+## 2026-10-19 — Áreas de empleo como LinkedIn y vocabulario
+
+**Qué.**
+- **Un solo vocabulario** (`netlify/functions/lib/taxonomia.json`, copia generada para el navegador en `assets/js/app/01b-taxonomia.js` con `npm run taxonomia`): 7 áreas funcionales con sus especialidades, 12 sectores con los 22 ampliados colgando de ellos, área de cada skill del catálogo y nombre visible en español de cada skill.
+- **Área = el puesto, sector = la empresa** (como LinkedIn: función e industria separadas):
+  - Tablón de ofertas: filtros por las 7 áreas (antes 10 botones mezclados en inglés: IT / Dev, Data, Business…). La búsqueda encuentra también por área, especialidad y nombre en español de la skill.
+  - Publicar oferta: «Área del puesto» con las 7 áreas; al elegirla aparece la **especialidad** (segundo nivel, opcional). Las skills sugeridas dependen del área.
+  - Empresa: «Sector de la empresa» con los 12 sectores (ajustes y paso «Completa los datos de tu empresa»).
+  - Candidato: «Área que más te interesa» en el registro y en ajustes.
+  - Tarjeta de oferta: «Recursos humanos · Selección y atracción de talento».
+- **Nombres en español** sin tocar lo guardado: «Recruiting» → «Selección de personal», «Data & Analytics» → «Análisis de datos», «Comunicación Escrita» → «Comunicación escrita»… (oferta, tarjetas, encaje y búsqueda).
+- **Ofertas antiguas**: su «sector» (IT, Data, Sales…) se traduce a área al leerlas; al guardar se sigue rellenando el sector antiguo para el código que aún lo lee.
+- La lectura del documento de la empresa propone área y especialidad.
+- Arreglado: en el tablón público, sin sesión, las condiciones salían en rojo («✕ Jornada completa») comparadas con preferencias que el visitante no había indicado; ahora se muestran neutras. Los filtros de área ya no desmarcan otros filtros de la página.
+
+**Para el usuario.** Ejecutar `tfm/tech/supabase_schema_areas.sql` (rellena el área de las ofertas existentes).
+
+**Ficheros.** `lib/taxonomia.json`, `lib/taxonomia.js`, `tools/generar_taxonomia.js`, `01b-taxonomia.js`, `save-job.js`, `list-jobs.js`, `save-company.js`, `oferta-doc.js`; `07`, `08`, `17`, `20`, `21`; `index.html`; `tests/taxonomia.test.js` (5), ajustes en `ofertas`, `requisitos` y `diseno`. Tests → 161 en 21 ficheros.
+
+---
+
+## 2026-10-19 — Antitrampas: contenido en el servidor, intento único y cámara obligatoria
+
+**Qué pasaba (grave).** Los enunciados, los datos y las **soluciones** de los 103 retos estaban en `07-retos-comunes.js`, que descarga cualquiera: se podía leer un reto sin empezarlo y sacar un 100 en las clasificaciones. Las secuencias numéricas se corregían en el navegador. Se podía abrir un reto, cerrarlo y repetirlo, y la cámara era opcional.
+
+**Qué.**
+- **Contenido solo en el servidor** (`lib/catalogo-retos.json`, única fuente; `tools/separar_contenido_retos.js` lo movió una vez). En la web quedan los metadatos. Al empezar, el servidor entrega el enunciado y los datos **sin soluciones ni pistas del corrector**. Se retira `tools/generar_catalogo_servidor.js`; el test de catálogo ahora impide que vuelva contenido al navegador.
+- **Un intento por persona y reto** (`retos-intento`, tablas `attempts` y `attempt_requests`): abrir el reto lo consume; el reloj es del servidor; cerrar y volver dentro del plazo retoma el mismo intento. Pasado el plazo, ya está usado: se puede **pedir otra oportunidad explicando el motivo**, que revisa una persona (al aprobarla, el intento se anula solo).
+- **Una nota oficial solo se guarda con un intento válido, y una sola vez** (`save-evaluation`); el intento queda «entregado».
+- **Cuenta y cámara obligatorias.** Pantalla «Antes de empezar»: activar cámara con vista previa y comprobación de luz y de persona delante, normas, casilla de intento único. Sin cámara activa no se puede empezar; quien no pueda usarla pide una alternativa (por ejemplo, videollamada). Al empezar se pide pantalla completa; salir de ella queda en el informe de integridad. Aviso al cerrar a mitad.
+- **Secuencias y clasificaciones** se corrigen en el servidor; si falla la corrección no se inventa una nota local.
+- `legal.html` §05: un intento por reto, cámara obligatoria con base en interés legítimo (con EIPD) y alternativa sin cámara. Pendiente de revisión legal.
+
+**Para el usuario.** Ejecutar `tfm/tech/supabase_schema_intentos.sql`. Hacer la EIPD antes de exigir la cámara en producción. Las solicitudes se resuelven de momento con el `update` del propio SQL.
+
+**Ficheros.** `lib/intentos.js`, `lib/handlers/retos-intento.js`, `retos-intento.mjs`, `save-evaluation.js`, `evaluator.js` (`corregirSecuencias`), `evaluate-exercise.js`, `catalogo.js`, `catalogo-retos.json`; `07` (solo metadatos), `08`, `13`, `22-reto-oficial.js`; `index.html`, `componentes.css`, `legal.html`; `tfm/tech/supabase_schema_intentos.sql`; `tests/intentos.test.js` (5), `tests/catalogo.test.js` (3, nuevo). Tests → 168 en 22 ficheros.
+
+---
+
+## 2026-10-19 — SkillPass: el sello en blockchain pasa a ser de pago
+
+**Qué.** «Generar mi SkillPass» emite la credencial gratis (enlace y QR; verify.html y el panel de empresa la muestran como «Emitido por TalentPact»). El sello público en blockchain es un extra de 4,99 € (`SEAL_PRICE_CENTS`), ofrecido en una línea pequeña al final de la tarjeta: pago con Stripe (`pay-seal`, vuelta `?sello=ok`), confirmación con Stripe o webhook, y solo entonces `anchor-credential` ancla (402 `sello_no_pagado` sin pago). Verificar sigue siendo gratis.
+
+**Para el usuario.** Ejecutar `tfm/tech/supabase_schema_sello.sql`. Sin él, el sello sale como «todavía no disponible».
+
+**Ficheros.** `lib/sello.js`, `handlers/pay-seal.js`, `pay-seal.mjs`, `anchor-credential.js`, `stripe-webhook.js`, `verify-credential.js`; `06`, `09`, `99`, `verify.html`, `index.html`, `componentes.css`; `tests/sello.test.js` (2). Tests → 170 en 23 ficheros. Pendiente de revisar en el navegador.

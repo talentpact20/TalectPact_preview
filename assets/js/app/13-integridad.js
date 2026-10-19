@@ -53,6 +53,10 @@ var TPIntegrity=(function(){
       // Texto que aparece de golpe sin teclearlo: autocompletado, dictado o un pegado que se escapó.
       if(now-prev>40&&e.inputType!=='insertText'){log('insercion_masiva',now-prev);warn('Se ha detectado texto insertado de golpe. Queda registrado.');}
     },
+    fullscreenchange(){
+      if(!cur||document.fullscreenElement)return;
+      log('salida_pantalla_completa');warn('Has salido de la pantalla completa: queda registrado en el informe.');
+    },
     visibilitychange(){
       if(!cur)return;
       if(document.hidden){cur.hiddenAt=Date.now();log('salida_pestana');}
@@ -62,7 +66,7 @@ var TPIntegrity=(function(){
     focus(){document.body.classList.remove('tp-exam-blur');},
     beforeprint(){if(cur)log('imprimir_bloqueado');}
   };
-  const DOC=['copy','cut','paste','beforeinput','drop','dragstart','contextmenu','keydown','input','visibilitychange'];
+  const DOC=['copy','cut','paste','beforeinput','drop','dragstart','contextmenu','keydown','input','visibilitychange','fullscreenchange'];
   const WIN=['blur','focus','beforeprint'];
   let attached=false;
   function attach(){if(attached)return;attached=true;DOC.forEach(t=>document.addEventListener(t,H[t],true));WIN.forEach(t=>window.addEventListener(t,H[t]));document.body.classList.add('tp-exam');marcaDeAgua(true);}
@@ -164,7 +168,7 @@ var TPIntegrity=(function(){
 
   // ── Informe ───────────────────────────────────────────────────────────────
   function riesgo(r){
-    const pts=r.tabSwitches*2+r.bulkInserts*3+r.pasteBlocked+r.relaunches*2+r.cameraIncidents*2+r.screenshots
+    const pts=r.tabSwitches*2+r.bulkInserts*3+r.pasteBlocked+r.relaunches*2+r.cameraIncidents*2+r.screenshots+(r.fullscreenExits||0)*2
       +(r.hiddenSeconds>30?2:0)+(['denegada','rechazada','no disponible','interrumpida'].includes(r.camera)?1:0);
     return pts<=1?'bajo':pts<=5?'medio':'alto';
   }
@@ -174,11 +178,11 @@ var TPIntegrity=(function(){
       tabSwitches:c.salida_pestana||0,hiddenSeconds:Math.round(hid/1000),blurs:c.ventana_sin_foco||0,
       pasteBlocked:c.pegado_bloqueado||0,copyBlocked:c.copia_bloqueada||0,bulkInserts:c.insercion_masiva||0,
       relaunches:c.relanzado||0,screenshots:c.captura_pantalla||0,keystrokes:s.keys,
-      camera:s.camera||cam.state,cameraIncidents:c.camara_incidencia||0,events:s.events.slice(-30)};
+      camera:s.camera||cam.state,cameraIncidents:c.camara_incidencia||0,fullscreenExits:c.salida_pantalla_completa||0,events:s.events.slice(-30)};
     r.risk=riesgo(r);
     return r;
   }
-  const NUM=['durationS','tabSwitches','hiddenSeconds','blurs','pasteBlocked','copyBlocked','bulkInserts','relaunches','screenshots','keystrokes','cameraIncidents'];
+  const NUM=['durationS','tabSwitches','hiddenSeconds','blurs','pasteBlocked','copyBlocked','bulkInserts','relaunches','screenshots','keystrokes','cameraIncidents','fullscreenExits'];
   const PEOR=['activa','no solicitada','rechazada','no disponible','denegada','interrumpida'];
   function aggregate(list){
     const v=(list||[]).filter(Boolean);if(!v.length)return null;
@@ -197,6 +201,20 @@ var TPIntegrity=(function(){
 
   return {
     prepare,stopCamera,html,aggregate,
+    // Pantalla «Antes de empezar» (22-reto-oficial.js): la persona ya ha leído
+    // las condiciones y marcado que acepta; no se vuelve a preguntar.
+    async activarCamara(){cam.consent='si';try{sessionStorage.setItem('tp_cam_consent','si');}catch(e){}await prepare();return cam.state;},
+    camara(){return{estado:cam.state,stream:cam.stream};},
+    async comprobarImagen(video){
+      // Luz suficiente y, donde el navegador lo permite, una sola cara delante.
+      const c=document.createElement('canvas');c.width=32;c.height=24;
+      const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(video,0,0,32,24);
+      const px=ctx.getImageData(0,0,32,24).data;let lum=0;for(let k=0;k<px.length;k+=4)lum+=0.2126*px[k]+0.7152*px[k+1]+0.0722*px[k+2];
+      lum/=px.length/4;
+      let caras=null;
+      if('FaceDetector' in window){try{caras=(await new window.FaceDetector({fastMode:true,maxDetectedFaces:3}).detect(video)).length;}catch(e){caras=null;}}
+      return{luz:lum>=16,caras};
+    },
     begin(i,ex){
       const k=keyOf(i);
       if(cur&&cur.key!==k)detach();

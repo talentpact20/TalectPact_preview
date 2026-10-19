@@ -10,6 +10,7 @@ llamar desde un `onclick` del HTML o desde `10-…`.
 | `head/scroll.js` | Vuelta al inicio al cargar (antes del primer pintado). |
 | `head/analitica.js` | Google Analytics solo con consentimiento previo. |
 | `app/01-datos-ofertas.js` | Ofertas, empresas y condiciones de cada oferta (jornada, modalidad, salario). |
+| `app/01b-taxonomia.js` | GENERADO (`npm run taxonomia`) desde `netlify/functions/lib/taxonomia.json`: áreas funcionales, sectores, especialidades y nombres visibles de las skills (`tpAreaDeOferta`, `tpAreaNombre`, `tpSkillNombre`…). No editar a mano. |
 | `app/02-grabacion.js` | Motor de grabación de audio y vídeo de los retos. |
 | `app/03-datos-retos.js` | Ejercicios de los retos de ventas, idiomas, cognitivos, diseño y RRHH. |
 | `app/04-estado-y-nube.js` | Perfil del candidato, persistencia local (`TP`) y Supabase (`TPCloud`). |
@@ -31,6 +32,7 @@ llamar desde un `onclick` del HTML o desde `10-…`.
 | `app/19-rrhh.js` | Tres pilares (Hard / Soft / Transferibles), preguntas y dilemas de la vacante, avisos y pipeline. |
 | `app/20-requisitos.js` | Oferta en tres pasos, requisitos de skill (imprescindible o valorable, con banda mínima), encaje por requisitos y relleno de la oferta desde el documento de la empresa (`parse-job-doc`). Espejo de `netlify/functions/lib/requisitos.js`. |
 | `app/21-empresa.js` | `TPEmpresa`: ficha y verificación de la empresa en su panel (Google Workspace o email corporativo), sello «Empresa verificada» y el paso «Completa los datos de tu empresa» tras entrar con Google. |
+| `app/22-reto-oficial.js` | `TPReto`: reto oficial con cuenta obligatoria, pantalla «Antes de empezar» (cámara, normas, intento único), contenido que llega del servidor al empezar (`retos-intento`), solicitudes de otra oportunidad o de alternativa a la cámara y aviso al salir a mitad. |
 | `app/99-arranque.js` | Restaura la sesión cuando todo lo anterior está definido. |
 
 ## Regla de orden

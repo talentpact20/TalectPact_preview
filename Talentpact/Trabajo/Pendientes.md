@@ -15,6 +15,8 @@
 - [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
 
 ## Supabase (usuario)
+- [ ] **Ejecutar `supabase_schema_intentos.sql`** (intento único por reto y solicitudes). Sin él los retos funcionan sin control de intento. Resolver solicitudes, de momento, con el `update` que trae el propio SQL.
+- [ ] **Ejecutar `supabase_schema_areas.sql`** (área y especialidad en `jobs`; rellena las ofertas existentes desde su sector antiguo). Sin él, el área se deduce del sector antiguo y la especialidad no se guarda.
 - [ ] **Activar Google** (Authentication → Sign In / Providers → Google, con el Client ID y el secreto de Google Cloud). En Google Cloud: origen `https://talentpact.es` y redirección `https://vqyqedmizxqneniynxqp.supabase.co/auth/v1/callback`. Comprobar con `npm run check:google -- https://talentpact.es`. El código ya está: el botón aparece solo.
 - [ ] **Ejecutar `supabase_schema_verificacion.sql`** (columnas de verificación en `companies`). Sin él, la verificación se calcula pero no se guarda y las ofertas no muestran el sello.
 - [ ] **Exigir confirmar el email** (desactivar la confirmación automática): hasta entonces un email corporativo no verifica a la empresa; solo Google Workspace.
@@ -28,6 +30,12 @@
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
 
 ## Código (Claude)
+- [x] Antitrampas fase 0 + intento único + cámara obligatoria (19/10): contenido y soluciones fuera del navegador, `retos-intento`, comprobación previa, pantalla completa, solicitudes de reapertura y de alternativa a la cámara, secuencias corregidas en el servidor. Pendiente de commit.
+- [ ] Backoffice: cola de solicitudes (reapertura / sin cámara) con aprobar y rechazar, y aviso al candidato en su bandeja.
+- [ ] Antitrampas siguientes: variantes por intento (datos distintos y detalle trampa), defensa de 2 preguntas, patrón de escritura, detección de móvil y segunda persona, segundo monitor; retos de oferta (`EX_DB`, `03-datos-retos.js`) aún con contenido en el navegador.
+- [ ] Legal: evaluación de impacto (EIPD) antes de activar la cámara obligatoria en producción; revisar `legal.html` §05 con asesoría.
+- [x] Áreas de empleo tipo LinkedIn y vocabulario (19/10): `taxonomia.json` único (7 áreas + especialidades, 12 sectores + ampliados, nombres de skills en español), oferta con área y especialidad, tablón filtrado por área, sector de empresa (12), área de interés del candidato. Pendiente de commit.
+- [ ] Siguiente de áreas: filtro de área en el catálogo de retos y en el pool; «Recomendados para ti» por área del candidato; códigos ESCO.
 - [x] Google integrado para empresas (paso «Completa los datos de tu empresa», aviso de Workspace) y verificación de empresa con sello en las ofertas (19/10). Pendiente de commit.
 - [ ] Decidir si el pool o el desbloqueo exigen empresa verificada (propuesta del doc 04_estrategia).
 - [x] Oferta: imprescindible o valorable con banda mínima, tres pasos tipo LinkedIn, relleno desde documento con IA (`parse-job-doc`), encaje por grupos (19/10). Pendiente de commit.

@@ -8,12 +8,14 @@
  */
 const { jsonResponse, sb, authUser, faltaEnEsquema, errorInterno } = require("../tp");
 const { limpiarRequisitos } = require("../requisitos");
+const { areaDeOferta } = require("../taxonomia");
 
 const CAMPOS_BASE = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
   "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at";
 const CAMPOS_QS = CAMPOS_BASE + ",culture_questions";
 const CAMPOS_DIL = CAMPOS_QS + ",dilemmas";
-const CAMPOS = CAMPOS_DIL + ",skill_requirements";
+const CAMPOS_REQ = CAMPOS_DIL + ",skill_requirements";
+const CAMPOS = CAMPOS_REQ + ",area,especialidad";
 
 function textosJson(v, max, len) {
   if (!Array.isArray(v)) return [];
@@ -27,6 +29,8 @@ function aOferta(f) {
     id: f.id,
     title: f.title,
     sector: f.sector,
+    area: areaDeOferta(f),
+    especialidad: f.especialidad || null,
     desc: f.description,
     requiredSkills: f.required_skills || [],
     skillRequirements: limpiarRequisitos(f.skill_requirements).requisitos || [],
@@ -63,7 +67,8 @@ async function seleccionar(filtro) {
   const joinMin = "companies(company_name,company_size)";
   const intentos = [
     `select=${CAMPOS},${joinVer}&${filtro}`,
-    `select=${CAMPOS},${join}&${filtro}`,
+    `select=${CAMPOS_REQ},${joinVer}&${filtro}`,
+    `select=${CAMPOS_REQ},${join}&${filtro}`,
     `select=${CAMPOS_DIL},${join}&${filtro}`,
     `select=${CAMPOS_QS},${join}&${filtro}`,
     `select=${CAMPOS_BASE},${join}&${filtro}`,
@@ -75,7 +80,7 @@ async function seleccionar(filtro) {
       return await sb.select("jobs", q);
     } catch (err) {
       ultimo = err;
-      if (!faltaEnEsquema(err, /verificacion|skill_requirements|culture_questions|dilemmas|description|sector|website|location/i)) throw err;
+      if (!faltaEnEsquema(err, /area|especialidad|verificacion|skill_requirements|culture_questions|dilemmas|description|sector|website|location/i)) throw err;
     }
   }
   throw ultimo || new Error("No se pudieron cargar las ofertas");

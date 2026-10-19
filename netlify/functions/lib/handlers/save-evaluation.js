@@ -1,6 +1,6 @@
 /**
  * save-evaluation — persiste una evaluación de IA en Supabase.
- * Body: { challengeId, skill, score, criteria?, reasoning?,
+ * Body: { challengeId, skill, score, attemptId?, criteria?, reasoning?,
  *         modelUsed?, tokensIn?, tokensOut?, costEur?, receipts?, integrity? }
  * Cabecera: Authorization: Bearer <access token de Supabase>
  *
@@ -10,6 +10,26 @@
  */
 const { jsonResponse, sb, authUser, ensureProfileByUser, faltaEnEsquema, errorInterno } = require("../tp");
 const { verifyReceipt } = require("../evaluator");
+const { puedeGuardar } = require("../intentos");
+const { isUuid } = require("../tp");
+
+/**
+ * Reto oficial del catálogo: la nota solo se guarda si va unida a un intento
+ * válido de esta persona (uno por reto) y solo una vez. Devuelve { intento } si
+ * vale, { error } si no, o { sinControl } si la migración aún no está.
+ */
+async function comprobarIntento(userId, challengeId, attemptId) {
+  let filas;
+  try {
+    filas = isUuid(String(attemptId || "")) ? await sb.select("attempts", `id=eq.${attemptId}&select=*&limit=1`) : [];
+  } catch (err) {
+    if (faltaEnEsquema(err, /attempts/i)) return { sinControl: true };
+    throw err;
+  }
+  const intento = Array.isArray(filas) ? filas[0] : null;
+  const r = puedeGuardar(intento, { userId, challengeId });
+  return r.ok ? { intento } : { error: r.motivo };
+}
 const { retoComun } = require("../catalogo");
 
 const MAX_TEXT = 20000;
@@ -85,6 +105,15 @@ exports.handler = async (event) => {
     const reto = retoComun(b.challengeId);
     const skill = reto ? reto.skill : String(b.skill).slice(0, 120);
 
+    // Un reto oficial sin intento válido no se guarda: es lo que impide repetirlo
+    // o subir una nota hecha fuera de la plataforma.
+    let intento = null;
+    if (reto) {
+      const c = await comprobarIntento(user.id, reto.id, b.attemptId);
+      if (c.error) return jsonResponse(409, { error: c.error, code: "intento_no_valido" });
+      intento = c.intento || null;
+    }
+
     const profile = await ensureProfileByUser(user.id);
     const score = Math.max(0, Math.min(100, Math.round(Number(b.score) || 0)));
     const cost = Number(b.costEur);
@@ -120,6 +149,11 @@ exports.handler = async (event) => {
     }
 
     const row = Array.isArray(inserted) ? inserted[0] : inserted;
+    if (intento) {
+      await sb.update("attempts", `id=eq.${intento.id}&estado=neq.entregado`, {
+        estado: "entregado", entregado_en: new Date().toISOString(), evaluation_id: row && row.id
+      });
+    }
     return jsonResponse(200, {
       ok: true, profileId: profile.id, evaluationId: row && row.id,
       verified: integrity.verified, reason: integrity.reason || null

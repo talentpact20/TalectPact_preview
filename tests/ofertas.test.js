@@ -25,7 +25,7 @@ test("una oferta válida se normaliza y una incompleta o incoherente se rechaza"
   assert.deepEqual(fila.required_skills, ["Pensamiento Analítico"]);
   const casos = [
     [{ title: "x" }, /título/],
-    [{ sector: "Astrología" }, /Sector/],
+    [{ sector: "Astrología" }, /Área/],
     [{ description: "corta" }, /descripción/],
     [{ requiredSkills: [] }, /skill/],
     [{ salMin: 40000, salMax: 30000 }, /salario/],

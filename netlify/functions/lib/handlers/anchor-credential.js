@@ -19,8 +19,10 @@
  */
 const {
   jsonResponse, sb, authUser, getContract, getProvider,
-  chainConfigured, isHash32, isUuid, CHAIN, explorerTx, explorerAddress, errorInterno
+  chainConfigured, isHash32, isUuid, CHAIN, explorerTx, explorerAddress, errorInterno,
+  faltaEnEsquema, formatAmount
 } = require("../tp");
+const { SEAL_PRICE, selloPagado } = require("../sello");
 
 // Margen de espera antes de devolver `pending`. Corto a propósito: la persona
 // no espera a la red, y el resto de la petición (auth, Supabase, difusión) va aparte.
@@ -169,6 +171,17 @@ exports.handler = async (event) => {
         explorerUrl: cred.tx_hash ? explorerTx(cred.tx_hash) : null,
         note: "El hash ya estaba anclado en la cadena; se ha reconciliado el registro."
       }));
+    }
+
+    // ── ④ El sello público es de pago (lib/sello.js): sin pago no se ancla.
+    // Recoger el recibo de una transacción ya enviada (arriba) no cobra de nuevo. ──
+    const pagado = await selloPagado(sb, faltaEnEsquema, cred.id, user.id);
+    if (pagado === null) return jsonResponse(503, { error: "El sello público todavía no está disponible.", code: "sello_no_disponible" });
+    if (!pagado) {
+      return jsonResponse(402, {
+        error: "El sello público es un extra de pago", code: "sello_no_pagado",
+        precio: formatAmount(SEAL_PRICE.amountCents, SEAL_PRICE.currency)
+      });
     }
 
     if (await cupoAgotado(profile.id)) {

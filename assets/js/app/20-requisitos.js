@@ -7,21 +7,27 @@
 
 var TP_REQ_MINIMOS={aceptable:{txt:'Aceptable',nota:40},bueno:{txt:'Bueno',nota:60},muy_bueno:{txt:'Muy bueno',nota:80}};
 var TP_REQ_MAX=8,TP_REQ_MAX_IMP=4;
-// Sugerencias por área (solo skills con reto en el catálogo). Como LinkedIn:
-// se proponen unas pocas y se añaden con un clic; el resto se busca.
+// Sugerencias por área funcional (solo skills con reto en el catálogo). Como
+// LinkedIn: se proponen unas pocas y se añaden con un clic; el resto se busca.
+// Cuatro del oficio y dos de cómo trabaja con personas o cómo piensa.
 var TP_REQ_SUGERIDAS={
-  Marketing:['Marketing Digital','SEO & Contenido','Social Media','Copywriting','Comunicación Escrita','Creatividad'],
-  Sales:['Ventas B2B','Ventas y Comercial','CRM','Negociación','Atención al Cliente','Comunicación Escrita'],
-  IT:['Desarrollo y Tecnología','JavaScript','Git & GitHub','Testing & QA','Resolución de Problemas','Trabajo en Equipo'],
-  Data:['Data & Analytics','SQL & Bases de Datos','Python Data','Power BI','Pensamiento Analítico','Comunicación Escrita'],
-  Design:['UX/UI Design','Figma','UX Research','Product Design','Creatividad','Comunicación Escrita'],
-  Business:['Pensamiento Estratégico','Pensamiento Analítico','Project Management','Toma de Decisiones','Negociación','Comunicación Escrita'],
-  Finance:['Finanzas y Contabilidad','Contabilidad','Tesorería','Excel Avanzado','Pensamiento Analítico','Comunicación Escrita'],
-  Legal:['Contratos','RGPD','Derecho Laboral','Comunicación Escrita','Toma de Decisiones','Pensamiento Analítico'],
-  RRHH:['Recruiting','People Analytics','Formación','Comunicación Escrita','Trabajo en Equipo','Gestión del Tiempo'],
-  Ops:['Logística','Supply Chain','Project Management','Gestión del Tiempo','Resolución de Problemas','Trabajo en Equipo'],
-  Languages:['Business English','English B1','Inglés (Speaking)','Comunicación Escrita','Atención al Cliente','Trabajo en Equipo']
+  juridica:['Contratos','RGPD','Derecho Laboral','Auditoría','Comunicación Escrita','Toma de Decisiones'],
+  finanzas:['Finanzas y Contabilidad','Contabilidad','Tesorería','Fiscalidad','Pensamiento Analítico','Comunicación Escrita'],
+  marketing:['Marketing Digital','Ventas B2B','SEO & Contenido','CRM','Comunicación Escrita','Negociación'],
+  operaciones:['Logística','Supply Chain','Project Management','Calidad','Gestión del Tiempo','Resolución de Problemas'],
+  rrhh:['Recruiting','People Analytics','Formación','Derecho Laboral','Comunicación Escrita','Trabajo en Equipo'],
+  sostenibilidad:['Sostenibilidad','Project Management','Data & Analytics','Calidad','Pensamiento Estratégico','Comunicación Escrita'],
+  tecnologia:['Desarrollo y Tecnología','Data & Analytics','SQL & Bases de Datos','Git & GitHub','Resolución de Problemas','Trabajo en Equipo']
 };
+/** Al cambiar el área: especialidades de esa área (segundo nivel) y nuevas sugerencias. */
+function tpReqCambiarArea(){
+  const area=document.getElementById('pj-sector')?.value||'';
+  const campo=document.getElementById('pjEspField'),sel=document.getElementById('pj-especialidad');
+  const a=typeof tpArea==='function'?tpArea(area):null;
+  if(sel){const prev=sel.value;sel.innerHTML='<option value="">Sin especificar</option>'+(a?a.especialidades.map(e=>'<option'+(e===prev?' selected':'')+'>'+escHtml(e)+'</option>').join(''):'');}
+  if(campo)campo.classList.toggle('pj-oculto',!a);
+  tpReqPintar();
+}
 
 // ── Lógica pura (mismo cálculo que el servidor) ────────────────────────────
 /** Requisitos de una oferta; las antiguas (lista + nivel único) cuentan todas como imprescindibles. */
@@ -82,12 +88,12 @@ function tpReqResumen(req){
   const marca={cumple:'✓',por_debajo:'–',pendiente:'?'};
   const titulo={cumple:'Cumple',por_debajo:'Por debajo del mínimo',pendiente:'Sin prueba todavía'};
   return '<div class="tp-req-resumen">'+(i.total?tpChip(i.cumple+' de '+i.total+' imprescindibles',tipoImp):'')+(v.total?tpChip(v.cumple+' de '+v.total+' valorables'):'')+'</div>'+
-    '<div class="tp-req-estados">'+req.estados.map(e=>'<span class="tp-req-est e-'+e.estado+(e.peso==='imprescindible'?' imp':'')+'" title="'+escHtml(titulo[e.estado]+' · mínimo '+TP_REQ_MINIMOS[e.minimo].txt)+'"><b aria-hidden="true">'+marca[e.estado]+'</b>'+escHtml(e.skill)+'<span class="sr-only">: '+escHtml(titulo[e.estado])+'</span></span>').join('')+'</div>';
+    '<div class="tp-req-estados">'+req.estados.map(e=>'<span class="tp-req-est e-'+e.estado+(e.peso==='imprescindible'?' imp':'')+'" title="'+escHtml(titulo[e.estado]+' · mínimo '+TP_REQ_MINIMOS[e.minimo].txt)+'"><b aria-hidden="true">'+marca[e.estado]+'</b>'+escHtml(typeof tpSkillNombre==='function'?tpSkillNombre(e.skill):e.skill)+'<span class="sr-only">: '+escHtml(titulo[e.estado])+'</span></span>').join('')+'</div>';
 }
 
 // ── Formulario de la oferta ────────────────────────────────────────────────
 var TPReq={lista:[],paso:1,
-  reset(){TPReq.lista=[];TPReq.paso=1;pjReqSkills=[];const e=document.getElementById('pjDocEstado');if(e)e.innerHTML='';document.querySelectorAll('#postJobForm .pj-auto').forEach(x=>x.classList.remove('pj-auto'));},
+  reset(){TPReq.lista=[];TPReq.paso=1;pjReqSkills=[];const esp=document.getElementById('pjEspField');if(esp)esp.classList.add('pj-oculto');const e=document.getElementById('pjDocEstado');if(e)e.innerHTML='';document.querySelectorAll('#postJobForm .pj-auto').forEach(x=>x.classList.remove('pj-auto'));},
   nombres(){return TPReq.lista.map(r=>r.skill);},
   imprescindibles(){return TPReq.lista.filter(r=>r.peso==='imprescindible').length;},
   sincronizar(){pjReqSkills=TPReq.nombres();},
@@ -130,8 +136,8 @@ renderPjSkills=function(){
     if(!q){box.innerHTML='';}
     else{
       const elegidas=new Set(TPReq.nombres().map(n=>n.toLowerCase()));
-      const res=tpReqCatalogo().filter(s=>s.toLowerCase().includes(q)&&!elegidas.has(s.toLowerCase())).slice(0,8);
-      box.innerHTML=res.length?res.map(s=>'<button type="button" class="pj-sug" data-skill="'+escHtml(s)+'">+ '+escHtml(s)+'<span>'+tpReqPilar(s)+'</span></button>').join('')
+      const res=tpReqCatalogo().filter(s=>tpSkillCoincide(s,q)&&!elegidas.has(s.toLowerCase())).slice(0,8);
+      box.innerHTML=res.length?res.map(s=>'<button type="button" class="pj-sug" data-skill="'+escHtml(s)+'">+ '+escHtml(tpSkillNombre(s))+'<span>'+tpReqPilar(s)+'</span></button>').join('')
         :'<span class="pj-ayuda">Ninguna skill con ese nombre tiene reto todavía. Puedes añadirla como etiqueta técnica libre.</span>';
     }
   }
@@ -152,7 +158,7 @@ function tpReqPintarLista(){
   let h='<div class="pj-req-cab"><span>'+TPReq.lista.length+' de '+TP_REQ_MAX+' skills · '+imp+' de '+TP_REQ_MAX_IMP+' imprescindibles</span></div><ul class="pj-req-lista">';
   TPReq.lista.forEach((r,i)=>{
     const id='pjMin'+i;
-    h+='<li class="pj-req-fila'+(r.peso==='imprescindible'?' imp':'')+'"><div class="pj-req-nombre"><b>'+escHtml(r.skill)+'</b><span class="pj-req-pilar">'+tpReqPilar(r.skill)+'</span>'+(r.motivo?'<span class="pj-req-motivo">Del documento: '+escHtml(r.motivo)+'</span>':'')+'</div>'+
+    h+='<li class="pj-req-fila'+(r.peso==='imprescindible'?' imp':'')+'"><div class="pj-req-nombre"><b>'+escHtml(tpSkillNombre(r.skill))+'</b><span class="pj-req-pilar">'+tpReqPilar(r.skill)+'</span>'+(r.motivo?'<span class="pj-req-motivo">Del documento: '+escHtml(r.motivo)+'</span>':'')+'</div>'+
       '<div class="pj-req-peso" role="group" aria-label="Peso de '+escHtml(r.skill)+'"><button type="button" class="'+(r.peso==='imprescindible'?'activo':'')+'" aria-pressed="'+(r.peso==='imprescindible')+'" onclick="tpReqPeso('+i+',\'imprescindible\')">Imprescindible</button><button type="button" class="'+(r.peso==='valorable'?'activo':'')+'" aria-pressed="'+(r.peso==='valorable')+'" onclick="tpReqPeso('+i+',\'valorable\')">Valorable</button></div>'+
       '<div class="pj-req-min"><label for="'+id+'">Mínimo</label><select id="'+id+'" onchange="tpReqMinimo('+i+',this.value)">'+opcionesMin(r.minimo)+'</select></div>'+
       '<button type="button" class="pj-req-quitar" aria-label="Quitar '+escHtml(r.skill)+'" onclick="tpReqQuitar('+i+')">×</button></li>';
@@ -170,7 +176,7 @@ function tpReqPintarSugeridas(){
   const sug=(TP_REQ_SUGERIDAS[area]||[]).filter(s=>cat.has(s)&&!elegidas.has(s.toLowerCase())).slice(0,6);
   if(!sug.length||TPReq.lista.length>=TP_REQ_MAX){box.innerHTML='';return;}
   box.innerHTML='<div class="pj-sug-cab"><span>Sugeridas para este puesto</span><button type="button" class="pj-enlace" onclick="tpReqAnadirSugeridas()">Añadir todas</button></div><div class="pj-sug-lista">'+
-    sug.map(s=>'<button type="button" class="pj-sug" data-skill="'+escHtml(s)+'">+ '+escHtml(s)+'<span>'+tpReqPilar(s)+'</span></button>').join('')+'</div>';
+    sug.map(s=>'<button type="button" class="pj-sug" data-skill="'+escHtml(s)+'">+ '+escHtml(tpSkillNombre(s))+'<span>'+tpReqPilar(s)+'</span></button>').join('')+'</div>';
 }
 function tpReqAnadirSugeridas(){
   document.querySelectorAll('#pjReqSugeridas .pj-sug').forEach(b=>tpReqAnadir(b.dataset.skill));
@@ -191,7 +197,7 @@ function tpReqValidarPaso(n){
   const v=id=>(document.getElementById(id)?.value||'').trim();
   if(n===1){
     if(v('pj-title').length<3){toast('Escribe el título del puesto.');document.getElementById('pj-title')?.focus();return false;}
-    if(!v('pj-sector')){toast('Elige el área del puesto.');document.getElementById('pj-sector')?.focus();return false;}
+    if(!v('pj-sector')){toast('Elige el área del puesto: qué hará la persona.');document.getElementById('pj-sector')?.focus();return false;}
     if(v('pj-desc').length<20){toast('Describe el puesto en al menos 20 caracteres.');document.getElementById('pj-desc')?.focus();return false;}
   }
   if(n===2&&!TPReq.lista.length){toast('Elige al menos una skill que tenga que demostrar.');return false;}
@@ -267,7 +273,7 @@ function tpReqAplicarPropuesta(p){
     el.addEventListener('input',()=>el.classList.remove('pj-auto'),{once:true});
     if(nombre&&!rellenados.includes(nombre))rellenados.push(nombre);
   };
-  poner('pj-title',p.title,'título');poner('pj-sector',p.sector,'área');poner('pj-desc',p.description,'descripción');
+  poner('pj-title',p.title,'título');poner('pj-sector',p.area,'área');tpReqCambiarArea();poner('pj-especialidad',p.especialidad,'especialidad');poner('pj-desc',p.description,'descripción');
   poner('pj-jornada',p.jornada,'condiciones');poner('pj-mode',p.modalidad,'condiciones');poner('pj-contrato',p.contrato,'condiciones');
   poner('pj-city',p.ubicacion,'condiciones');poner('pj-sal-min',p.salMin,'salario');poner('pj-sal-max',p.salMax,'salario');
   (p.cultureQuestions||[]).slice(0,3).forEach((q,i)=>poner('pj-q'+(i+1),q,'preguntas'));

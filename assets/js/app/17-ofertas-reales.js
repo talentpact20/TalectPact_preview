@@ -63,7 +63,7 @@ publishJob=async function(){
   if(!tpCompany){toast('Inicia sesión con tu cuenta de empresa para publicar ofertas.');return;}
   const v=id=>(document.getElementById(id).value||'').trim();
   const datos={
-    title:v('pj-title'),sector:v('pj-sector'),description:v('pj-desc'),
+    title:v('pj-title'),area:v('pj-sector'),especialidad:v('pj-especialidad'),description:v('pj-desc'),
     skillRequirements:typeof TPReq!=='undefined'?TPReq.paraEnviar():[],
     requiredSkills:pjReqSkills.slice(),tags:pjSkills.slice(0,6),requiredLevel:pjLevel,exerciseConfig:pjExConfigVal,
     jornada:v('pj-jornada'),modalidad:v('pj-mode'),contrato:v('pj-contrato'),ubicacion:v('pj-city'),
@@ -71,7 +71,7 @@ publishJob=async function(){
     cultureQuestions:typeof tpLeerPreguntasVacante==='function'?tpLeerPreguntasVacante():[],
     dilemmas:typeof tpLeerDilemasVacante==='function'?tpLeerDilemasVacante():[]
   };
-  if(!datos.title||!datos.sector||datos.description.length<20){toast('Faltan el título, el sector o una descripción de al menos 20 caracteres.');return;}
+  if(!datos.title||!datos.area||datos.description.length<20){toast('Faltan el título, el área o una descripción de al menos 20 caracteres.');if(typeof tpReqIr==='function')tpReqIr(1,true);return;}
   if(!datos.requiredSkills.length){toast('Elige al menos una skill que tenga que demostrar.');if(typeof tpReqIr==='function')tpReqIr(2,true);return;}
   if(datos.salMin&&datos.salMax&&datos.salMin>datos.salMax){toast('El salario mínimo no puede superar al máximo.');return;}
   if(datos.modalidad!=='remoto'&&!datos.ubicacion){toast('Indica la ubicación: la oferta no es 100 % remota.');return;}

@@ -115,7 +115,7 @@ test("las tarjetas de oferta escapan lo que escriben las empresas", () => {
   const js = leer("assets/js/app/08-ofertas-y-ejercicios.js");
   const f = js.slice(js.indexOf("function tpTarjetaOferta"), js.indexOf("function renderJobs"));
   assert.match(f, /escHtml\(co\.name\)/);
-  assert.match(f, /escHtml\(x\)/);
+  assert.match(f, /escHtml\(nom\(x\)\)/);   // la skill se muestra con su nombre visible, escapado
   assert.doesNotMatch(f, /\$\{co\.name\}|\$\{s\}/, "nombre de empresa o skill sin escapar");
   assert.doesNotMatch(leer("assets/js/app/19-rrhh.js"), /window\.prompt/);
 });

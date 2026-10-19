@@ -6,6 +6,7 @@
  * La empresa se deduce del token, nunca de un `userId` enviado por el cliente.
  */
 const { jsonResponse, authUser, ensureCompanyByUser, verificacionDeEmpresa, faltaEnEsquema, errorInterno } = require("../tp");
+const { esSector } = require("../taxonomia");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -31,7 +32,8 @@ exports.handler = async (event) => {
       company_size: txt(b.companySize, 40),
       // Ficha pública que ven los candidatos en cada oferta.
       description: txt(b.description, 1500),
-      sector: txt(b.sector, 60),
+      // Sector de la empresa: uno de los 12 de lib/taxonomia.json.
+      sector: esSector(b.sector) ? b.sector : undefined,
       // Solo enlaces http(s): esta URL se pinta como enlace para candidatos.
       website: web && /^https?:\/\/[^\s<>"']+$/i.test(web) ? web : undefined,
       location: txt(b.location, 80)

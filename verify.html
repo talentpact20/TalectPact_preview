@@ -408,6 +408,17 @@ async function verifyPayload(payload){
     if(note)note.textContent=data.chainName+' · demo TFM';
   }
 
+  // Sin sello público pero emitido por TalentPact: es el SkillPass gratuito.
+  if(r.ok&&data&&data.verified===false&&data.emitida){
+    const skills=data.skills||[];
+    pass.className='pass show';
+    pass.innerHTML='<div class="sp"><div class="top"><div><div class="kicker">Verifiable credential</div><h2>SkillPass emitido por TalentPact</h2>'+
+      '<p class="lead">Estas skills constan en el registro de TalentPact tal como se muestran. No tiene sello público en blockchain: es un extra opcional del candidato.</p></div>'+
+      '<div class="seal"><i>Firmado<br>TalentPact</i></div></div>'+
+      '<div class="chips">'+(skills.map(chip).join('')||'')+'</div>'+
+      '<div class="foot"><div class="meta"><div>Hash · '+esc(data.cvHash||'')+'</div></div></div></div>';
+    return;
+  }
   if(!r.ok||!data||!data.verified){
     showError(
       data&&data.verified===false?'Sin sello válido.':'No se pudo verificar.',

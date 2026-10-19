@@ -86,6 +86,7 @@ function tpDialogoDatosEmpresa(){
     '<div class="pj-field pj-full"><label for="tde-empresa">Nombre de la empresa</label><input id="tde-empresa" autocomplete="organization" maxlength="120"></div>'+
     '<div class="pj-field"><label for="tde-nombre">Tu nombre</label><input id="tde-nombre" autocomplete="name" maxlength="120"></div>'+
     '<div class="pj-field"><label for="tde-cargo">Tu cargo</label><input id="tde-cargo" autocomplete="organization-title" maxlength="120" placeholder="Ej.: Responsable de selección"></div>'+
+    '<div class="pj-field pj-full"><label for="tde-sector">Sector de la empresa</label><select id="tde-sector"><option value="">Selecciona…</option>'+TP_TAXONOMIA.sectores.map(x=>'<option value="'+x.id+'">'+escHtml(x.nombre)+'</option>').join('')+'</select></div>'+
     '<div class="pj-field"><label for="tde-tam">Tamaño</label><select id="tde-tam"><option value="">Selecciona…</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>'+
     '<div class="pj-field"><label for="tde-web">Web</label><input id="tde-web" type="url" inputmode="url" maxlength="200" placeholder="https://empresa.com"></div>'+
     '</div><div class="tp-dialogo-msg" id="tde-msg" role="status" aria-live="polite"></div>'+
@@ -96,6 +97,7 @@ function tpDialogoDatosEmpresa(){
   d.querySelector('#tde-cargo').value=m.position||'';
   d.querySelector('#tde-web').value=m.web||web;
   if(m.size)d.querySelector('#tde-tam').value=m.size;
+  if(m.sector)d.querySelector('#tde-sector').value=m.sector;
   const cerrar=()=>{try{d.close();}catch(e){}d.remove();};
   d.querySelector('[data-r=luego]').onclick=cerrar;
   d.addEventListener('cancel',e=>{e.preventDefault();cerrar();});
@@ -108,8 +110,8 @@ function tpDialogoDatosEmpresa(){
     let w=v('tde-web');if(w&&!/^https?:\/\//i.test(w))w='https://'+w;
     const btn=d.querySelector('#tde-ok');btn.disabled=true;msg.textContent='Guardando…';
     try{
-      await TPCloud.saveMeta({company:v('tde-empresa'),contact_name:v('tde-nombre'),position:v('tde-cargo'),size:v('tde-tam'),web:w});
-      const r=await TPCloud.saveCompany(tpCompany,{companyName:v('tde-empresa'),contactName:v('tde-nombre'),jobTitle:v('tde-cargo'),companySize:v('tde-tam'),website:w});
+      await TPCloud.saveMeta({company:v('tde-empresa'),contact_name:v('tde-nombre'),position:v('tde-cargo'),size:v('tde-tam'),web:w,sector:v('tde-sector')});
+      const r=await TPCloud.saveCompany(tpCompany,{companyName:v('tde-empresa'),contactName:v('tde-nombre'),jobTitle:v('tde-cargo'),companySize:v('tde-tam'),website:w,sector:v('tde-sector')});
       if(!r||r.error)throw new Error((r&&(r.details||r.error))||'error');
       TPEmpresa.ficha=r.company||TPEmpresa.ficha;TPEmpresa.verificacion=r.verificacion||TPEmpresa.verificacion;
       if(typeof applyCompanyIdentity==='function')applyCompanyIdentity();

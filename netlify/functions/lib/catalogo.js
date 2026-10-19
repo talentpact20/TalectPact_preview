@@ -1,7 +1,10 @@
 /**
  * Catálogo de retos comunes del lado del servidor.
  *
- * Copia generada de assets/js/app/07-retos-comunes.js (tools/generar_catalogo_servidor.js).
+ * catalogo-retos.json es la ÚNICA fuente del contenido de los retos (enunciado,
+ * datos, soluciones, tiempo). Desde el 19/10/2026 el navegador solo tiene los
+ * metadatos (07-retos-comunes.js) y recibe el contenido, sin soluciones, al
+ * empezar un intento (handlers/retos-intento.js). Ver tools/separar_contenido_retos.js.
  * Sirve para dos cosas:
  *  · evaluate-exercise corrige con el enunciado de aquí, no con el que mande el navegador;
  *  · save-evaluation sabe qué skill mide cada reto y no acepta otra.

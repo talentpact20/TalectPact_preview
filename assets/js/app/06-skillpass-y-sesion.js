@@ -92,11 +92,11 @@ const SkillPass={
     // Solo se declara sellado cuando la cadena lo confirma: tener txHash
     // difundido todavía no es una garantía.
     const sealed=!pending&&!!(c.anchoredAt||opts.verified);
-    const sealTxt=sealed?'Sello<br>on-chain':(pending?'Sellado<br>en curso':'Pendiente<br>de sello');
+    const sealTxt=sealed?'Sellado<br>blockchain':(pending?'Sellado<br>en curso':'Firmado<br>TalentPact');
     const lead=sealed
-      ? 'Habilidades demostradas con IA y selladas en blockchain. Portable a cualquier plataforma.'
+      ? 'Habilidades demostradas y selladas en blockchain. Comprobable incluso sin TalentPact.'
       : (pending?'Transacción enviada a la red. El sello queda firme en cuanto se confirme el bloque.'
-               :'Habilidades demostradas con IA. Aún sin sellar en blockchain.');
+               :'Habilidades demostradas en retos reales. Cualquier empresa lo comprueba con el enlace o el QR.');
     return '<div class="sp-pass-wrap"><div class="sp-pass">'+
       '<div class="sp-pass-top"><div><div class="sp-pass-kicker">TalentPact · verifiable credential</div>'+
       '<div class="sp-pass-brand">talent<span>pact</span></div>'+
@@ -105,7 +105,7 @@ const SkillPass={
       '<div class="sp-pass-seal'+(pending?' pending':'')+'"><i>'+sealTxt+'</i></div></div>'+
       '<div class="sp-pass-chips">'+(skills.map(SkillPass._chip).join('')||'<div class="sp-pass-chip">Sin skills</div>')+'</div>'+
       '<div class="sp-pass-foot"><div class="sp-pass-meta">'+
-      '<div>Red · '+escHtml(SkillPass.chain.name)+'</div>'+
+      (sealed||pending?'<div>Red · '+escHtml(SkillPass.chain.name)+'</div>':'<div>Emitido por TalentPact</div>')+
       (fecha?'<div>Anclado · '+escHtml(fecha)+'</div>':'')+
       (c.blockNumber?'<div>Bloque · '+escHtml(String(c.blockNumber))+'</div>':'')+
       (c.cvHash?'<div>Hash · '+escHtml(c.cvHash)+'</div>':'')+
@@ -120,6 +120,7 @@ const SkillPass={
     const dl=document.getElementById('spChainDownload'); if(dl)dl.style.display='inline-flex';
     const pdf=document.getElementById('spChainPdf'); if(pdf)pdf.style.display='inline-flex';
     const sh=document.getElementById('spChainShare'); if(sh)sh.style.display='inline-flex';
+    SkillPass._renderSello();
   },
 
   /** Vuelca en la credencial lo que acaba de decir el servidor y repinta. */
@@ -151,69 +152,115 @@ const SkillPass={
     return null;
   },
 
+  // Emitir es gratis: la credencial queda firmada por TalentPact y cualquiera la
+  // comprueba con el enlace o el QR. El sello en blockchain es un extra de pago
+  // (sellar()), que se ofrece pequeño al final de la tarjeta.
   async generate(){
     const unlocked=Object.values(candidateProfile.skills||{}).filter(s=>s&&s.unlocked).length;
     if(!unlocked){
-      SkillPass._status('info','Aún no tienes ninguna skill validada. Completa al menos un reto y vuelve aquí para sellar tu credencial.');
-      return;
+      SkillPass._status('info','Aún no tienes ninguna skill validada. Completa al menos un reto y vuelve aquí para emitir tu SkillPass.');
+      return null;
     }
     let user=null;
     try{ user=await TPCloud.currentUser(); }catch(e){}
     if(!user){
       SkillPass._status('info','Necesitas iniciar sesión: la credencial se emite sobre las evaluaciones guardadas en tu cuenta, no sobre el progreso local de este navegador.');
-      return;
+      return null;
     }
-
     try{
-      SkillPass._busy(true,'Emitiendo credencial…');
-      SkillPass._status('info','① Componiendo tu SkillPass CV y calculando su huella criptográfica…');
+      SkillPass._busy(true,'Emitiendo…');
       // Sin userId: el servidor lo deduce del token de sesión.
       const issued=await TPCloud._postAuth('issue-credential',{});
-      if(issued.error){ SkillPass._statusError('No se pudo emitir la credencial',issued); return; }
+      if(issued.error){ SkillPass._statusError('No se pudo emitir la credencial',issued); return null; }
       SkillPass._learnChain(issued);
       SkillPass.cred={credentialId:issued.credentialId,cvJson:issued.cvJson,cvHash:issued.cvHash,
                       txHash:issued.txHash||null,blockNumber:issued.blockNumber||null,
                       anchoredAt:issued.anchoredAt||null,pending:!!issued.pending};
       SkillPass._render();
+      if(issued.pending){ await SkillPass._anclar(issued.credentialId,true); return issued; }
+      SkillPass._status('ok','Tu SkillPass está listo. Compártelo con el enlace o el QR: cualquier empresa lo comprueba en TalentPact, gratis.');
+      return issued;
+    }catch(e){
+      SkillPass._status('error','Error de red al emitir la credencial: '+escHtml(e.message||String(e)));
+      return null;
+    }finally{
+      SkillPass._busy(false,'Actualizar mi SkillPass');
+    }
+  },
 
-      if(issued.anchored){
-        SkillPass._status('ok','Tu SkillPass ya estaba sellado en blockchain'+SkillPass._txLine()+
-          '. El CV no ha cambiado, así que su anclaje sigue siendo válido.');
-        return;
-      }
-
+  /** Ancla la credencial ya pagada (o recoge el recibo de un anclaje en curso). */
+  async _anclar(credentialId,yaEnCurso){
+    try{
       let res;
-      if(issued.pending){
-        // Un intento anterior dejó la transacción difundida sin confirmar.
-        SkillPass._status('warn','② Ya había un sellado en curso'+SkillPass._txLine()+'. Esperando a que la red lo confirme…');
-        res={pending:true,txHash:issued.txHash};
+      if(yaEnCurso){
+        SkillPass._status('warn','Ya había un sellado en curso'+SkillPass._txLine()+'. Esperando a que la red lo confirme…');
+        res={pending:true};
       }else{
-        SkillPass._busy(true,'Anclando en blockchain…');
-        SkillPass._status('info','② Enviando la huella a '+escHtml(SkillPass.chain.name)+' y esperando confirmación de la red…');
-        res=await TPCloud._postAuth('anchor-credential',{credentialId:issued.credentialId});
-        if(res.error){ SkillPass._statusError('La credencial se emitió, pero no se pudo anclar',res); return; }
+        SkillPass._status('info','Sellando en '+escHtml(SkillPass.chain.name)+'…');
+        res=await TPCloud._postAuth('anchor-credential',{credentialId});
+        if(res.error){
+          if(res.code==='sello_no_pagado')SkillPass._status('info','El sello público es un extra de '+escHtml(res.precio||'4,99 €')+'. Puedes añadirlo al final de la tarjeta.');
+          else SkillPass._statusError('No se pudo sellar',res);
+          return res;
+        }
         SkillPass._apply(res);
       }
-
       if(res.pending){
-        SkillPass._busy(true,'Esperando confirmación…');
-        const done=await SkillPass._awaitConfirmation(issued.credentialId);
-        if(done&&done.error){ SkillPass._statusError('La transacción se envió, pero la confirmación falló',done); return; }
-        if(!done){
-          SkillPass._status('warn','② Transacción enviada'+SkillPass._txLine()+', pero la red aún no la ha confirmado. '+
-            'No se pierde nada: vuelve a pulsar el botón en un minuto y se recogerá el recibo sin gastar gas de nuevo.');
-          return;
-        }
+        const done=await SkillPass._awaitConfirmation(credentialId);
+        if(done&&done.error){ SkillPass._statusError('La transacción se envió, pero la confirmación falló',done); return done; }
+        if(!done){ SkillPass._status('warn','Sello enviado'+SkillPass._txLine()+'. La red aún no lo ha confirmado: vuelve en un minuto, no se cobra de nuevo.'); return null; }
         res=done;
       }
-
-      SkillPass._status('ok','SkillPass sellado'+(res.blockNumber?' (bloque '+escHtml(String(res.blockNumber))+')':'')+
-        SkillPass._txLine()+'. Descarga el PDF certificado o copia el enlace para enseñarlo fuera de TalentPact.');
+      SkillPass._status('ok','SkillPass sellado en blockchain'+SkillPass._txLine()+'. Ya se puede comprobar incluso sin TalentPact.');
+      return res;
     }catch(e){
-      SkillPass._status('error','Error de red al generar la credencial: '+escHtml(e.message||String(e)));
-    }finally{
-      SkillPass._busy(false,'Sellar de nuevo');
+      SkillPass._status('error','Error de red al sellar: '+escHtml(e.message||String(e)));
+      return null;
+    }finally{ SkillPass._renderSello(); }
+  },
+
+  /** «Añadir sello»: explica qué aporta, cobra con Stripe y, pagado, sella. */
+  async sellar(){
+    const c=SkillPass.cred;
+    if(!c){ const r=await SkillPass.generate(); if(!r)return; }
+    if(SkillPass.cred.anchoredAt)return;
+    const si=await tpConfirmar({titulo:'Sello público en blockchain',
+      texto:'Tu SkillPass ya es verificable en TalentPact, gratis. El sello publica su huella en una blockchain pública con fecha: cualquiera puede comprobarlo incluso sin TalentPact y nadie puede cambiarlo después. Pago único por esta versión de tu SkillPass. Tus datos personales no salen de TalentPact: en la cadena solo va una huella.',
+      si:'Pagar 4,99 € y sellar',no:'Ahora no'});
+    if(!si)return;
+    const r=await TPCloud._postAuth('pay-seal',{accion:'pagar',credentialId:SkillPass.cred.credentialId,returnUrl:location.origin+location.pathname});
+    if(!r||r.error){ SkillPass._statusError('No se pudo iniciar el pago',r||{}); return; }
+    if(r.yaSellado||r.pagado){ await SkillPass._anclar(SkillPass.cred.credentialId); return; }
+    if(r.url)location.href=r.url;
+  },
+
+  /** Vuelta de Stripe: ?sello=ok&session_id=… o ?sello=cancelado. */
+  async volverDePago(){
+    const qs=new URLSearchParams(location.search);
+    const estado=qs.get('sello');if(!estado)return;
+    const sid=qs.get('session_id')||'';
+    try{const u=new URL(location.href);['sello','session_id'].forEach(k=>u.searchParams.delete(k));history.replaceState({},document.title,u.pathname+(u.search||''));}catch(e){}
+    if(!tpUser)return;
+    if(typeof openDashCand==='function')openDashCand();
+    if(typeof switchCandTab==='function'){const t=[...document.querySelectorAll('#candDashTabs .dash-tab')].find(b=>/perfil|skills/i.test(b.textContent));if(t)switchCandTab('profile',t);}
+    if(estado!=='ok'){ SkillPass._status('info','Pago cancelado. No se ha cobrado nada; tu SkillPass sigue siendo verificable en TalentPact.'); return; }
+    const r=await TPCloud._postAuth('pay-seal',{accion:'confirmar',sessionId:sid});
+    if(!r||r.error||!r.pagado){ SkillPass._status('warn','Stripe aún no confirma el pago. En cuanto lo haga, podrás sellar desde aquí sin pagar de nuevo.'); return; }
+    const issued=await SkillPass.generate();
+    if(issued&&!SkillPass.cred.anchoredAt)await SkillPass._anclar(SkillPass.cred.credentialId);
+  },
+
+  /** Línea pequeña al final de la tarjeta: el sello es un extra, no lo principal. */
+  _renderSello(){
+    const box=document.getElementById('spSelloLinea');if(!box)return;
+    const c=SkillPass.cred;
+    if(!c){box.innerHTML='';return;}
+    if(c.anchoredAt){
+      box.innerHTML='<details class="sp-sello"><summary>Sello público en blockchain · '+escHtml(new Date(c.anchoredAt).toLocaleDateString('es-ES'))+'</summary>'+
+        '<div>Red: '+escHtml(SkillPass.chain.name)+(c.blockNumber?' · bloque '+escHtml(String(c.blockNumber)):'')+(c.txHash?' · <a href="'+SkillPass.txUrl(c.txHash)+'" target="_blank" rel="noopener">ver la transacción</a>':'')+'<br>Huella: <code>'+escHtml(c.cvHash||'')+'</code></div></details>';
+      return;
     }
+    box.innerHTML='<div class="sp-sello">Sello público en blockchain, opcional · 4,99 € · <button type="button" class="pj-enlace" onclick="SkillPass.sellar()">Añadir sello</button></div>';
   },
 
   download(){

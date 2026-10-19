@@ -5,6 +5,8 @@ Fuente: `TALENTPACT PROPUESTE DE SECTORES & FUNCIONES.docx` (versión resumida 1
 
 ---
 
+> **Estado (19/10/2026): implementado** lo esencial — `netlify/functions/lib/taxonomia.json` (fuente única), tablón filtrado por área, oferta con área y especialidad, sector de empresa con los 12, área de interés del candidato y nombres de skills en español. Pendiente: filtro de área en retos y pool, recomendados por área, ESCO, máximo de 8 skills ya aplicado.
+
 ## 1. El problema de hoy
 
 1. **El campo «Sector» de la oferta no es un sector.** Las opciones actuales (`Marketing, IT, Data, Business, Design, RRHH, Finance, Legal, Ops, Sales, Languages`) son **áreas funcionales** (qué hace la persona), no sectores (a qué se dedica la empresa). Una oferta de «Contable en un hotel» es *Finanzas* en el sector *Hostelería*; hoy no se puede expresar.

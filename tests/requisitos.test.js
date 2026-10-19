@@ -182,7 +182,7 @@ test("el formato de salida obliga a elegir skills del catálogo", () => {
 test("el servidor vuelve a validar la propuesta del modelo antes de enseñarla", () => {
   const cat = skillsDelCatalogo();
   const p = doc.normalizarPropuesta({
-    titulo: "Técnico de selección", sector: "Astrología", descripcion: "Cribado.", jornada: "completa", modalidad: "lunar", contrato: "",
+    titulo: "Técnico de selección", area: "astrologia", especialidad: "Tarot", descripcion: "Cribado.", jornada: "completa", modalidad: "lunar", contrato: "",
     ubicacion: "Madrid", salario_min: 30000, salario_max: 24000,
     skills: [
       { skill: "Recruiting", peso: "imprescindible", minimo: "bueno", motivo: "experiencia en selección" },
@@ -194,7 +194,8 @@ test("el servidor vuelve a validar la propuesta del modelo antes de enseñarla",
     ],
     otras_skills: ["Teamtailor"], preguntas: ["¿Turnos?"], dilemas: [], avisos: ["El documento pedía edad: no se ha copiado."]
   }, cat);
-  assert.equal(p.sector, "");              // fuera de la lista: vacío, no se adivina
+  assert.equal(p.area, "");                // fuera de la lista: vacío, no se adivina
+  assert.equal(p.especialidad, "");
   assert.equal(p.modalidad, "");
   assert.deepEqual([p.salMin, p.salMax], [24000, 30000]);
   assert.ok(!p.skillRequirements.some((s) => s.skill === "Inventada"));
@@ -220,7 +221,7 @@ test("parse-job-doc: solo empresas, documento validado y propuesta normalizada",
   h.usarClienteDePrueba({ beta: { messages: { create: async (p) => {
     peticion = p;
     return { stop_reason: "end_turn", content: [{ type: "thinking", thinking: "" }, { type: "text", text: JSON.stringify({
-      titulo: "Técnico de selección", sector: "RRHH", descripcion: "Cribado de candidaturas.", jornada: "", modalidad: "remoto", contrato: "",
+      titulo: "Técnico de selección", area: "rrhh", especialidad: "Selección y atracción de talento", descripcion: "Cribado de candidaturas.", jornada: "", modalidad: "remoto", contrato: "",
       ubicacion: "", salario_min: null, salario_max: null,
       skills: [{ skill: "Recruiting", peso: "imprescindible", minimo: "bueno", motivo: "dos años en selección" }],
       otras_skills: [], preguntas: [], dilemas: [], avisos: []

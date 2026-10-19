@@ -62,7 +62,8 @@ exports.handler = async (event) => {
     }
     // El hash se recalcula desde el JSON recibido: si alguien retocó un score,
     // el hash cambia y el anclaje deja de encontrarse. Ahí está la garantía.
-    return verifyOnChain(hashCv(cvJson), cvJson);
+    // Si TalentPact la emitió, manda nuestro registro (y se sabe que es «emitida»).
+    return verifyByHash(hashCv(cvJson));
   } catch (err) {
     return errorInterno("No se pudo verificar la credencial", err);
   }
@@ -95,10 +96,10 @@ async function verifyByHash(raw) {
 
   // Que TalentPact no la conozca no decide nada: la verdad está en la cadena.
   if (!cred) return verifyOnChain(cvHash, null, null, null);
-  return verifyOnChain(cred.cv_hash, cred.cv_json, cred.tx_hash, cred.block_number);
+  return verifyOnChain(cred.cv_hash, cred.cv_json, cred.tx_hash, cred.block_number, true);
 }
 
-async function verifyOnChain(cvHash, cvJson, txHash, blockNumber) {
+async function verifyOnChain(cvHash, cvJson, txHash, blockNumber, enRegistro = false) {
   if (!chainConfigured()) return jsonResponse(503, NOT_CONFIGURED);
 
   let exists, timestamp;
@@ -117,11 +118,14 @@ async function verifyOnChain(cvHash, cvJson, txHash, blockNumber) {
   if (!exists) {
     return jsonResponse(200, chainMeta({
       verified: false,
+      // Sin sello público, pero emitida por TalentPact (está en nuestro registro):
+      // es el SkillPass gratuito. El sello es un extra de pago del candidato.
+      emitida: !!enRegistro,
       cvHash,
       skills,
       reason: cvJson
-        ? "El hash no está anclado en la blockchain (o el CV fue modificado después de sellarlo)."
-        : "Este hash no está anclado en la blockchain."
+        ? (enRegistro ? "Emitida por TalentPact, sin sello público en blockchain (el sello es opcional)." : "El hash no está anclado en la blockchain (o el CV fue modificado después de sellarlo).")
+        : "Este hash no está anclado en la blockchain y TalentPact no lo ha emitido."
     }));
   }
 

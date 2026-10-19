@@ -6,6 +6,8 @@ Principios que no cambian (decisiones del 12/10): **la integridad nunca descarta
 
 ---
 
+> **Estado (19/10/2026): implementados** los pasos 1 y 2 del §7 y parte del 6 — contenido y soluciones solo en el servidor (`catalogo-retos.json`), intento único con reloj de servidor (`retos-intento`, `supabase_schema_intentos.sql`), cámara obligatoria con comprobación previa y alternativa solicitable, pantalla completa registrada, reapertura justificada. Decisión del equipo: cámara obligatoria en todos los retos oficiales (no solo en «Supervisado») y un intento por persona sin plazo de 30 días.
+
 ## 1. Hallazgo importante: hoy el examen está en el código de la página
 
 Los enunciados, tablas y guías de los retos viven en `assets/js/app/03-datos-retos.js` y `07-retos-comunes.js`, que el navegador descarga al abrir la web. Cualquiera puede ver todo el catálogo con «Ver código fuente», sin empezar ningún reto ni tener cuenta. **Peor aún: en las clasificaciones viaja también la solución** (campo `correct` de cada opción, y la respuesta de las secuencias numéricas). El servidor ya corrige con su propio catálogo (`catalogo-retos.json`, que se genera *a partir* del fichero del navegador), pero **el contenido y las soluciones son públicos**: una clasificación se puede sacar con un 100 sin pensar. Además, el cronómetro y el estado del intento son del navegador.

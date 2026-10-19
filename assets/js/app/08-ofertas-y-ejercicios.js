@@ -37,15 +37,22 @@ function tpTarjetaOferta(j,co,o){
   const nivelTxt={basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'}[nivel]||'Básico';
   const m=co?companyMonogram(co.name):null;
   const empresa=co?`<div class="tp-oferta-emp"><span class="tp-mono-mini tp-tinte-${m.tinte}" aria-hidden="true">${escHtml(m.iniciales)}</span><span>${escHtml(co.name)}${co.size&&co.size!=='—'?' · '+escHtml(co.size)+' empleados':''}</span>${co.verificacion&&co.verificacion!=='sin_verificar'&&typeof tpSelloEmpresa==='function'?tpSelloEmpresa(co.verificacion):''}</div>`:'';
-  const sk=req.slice(0,MAX).map(x=>`<span class="job-tag tp-skill-req ${o.tiene&&o.tiene(x)?'ok':''}">${o.tiene&&o.tiene(x)?'✓ ':''}${escHtml(x)}</span>`).join('')+(req.length>MAX?`<span class="job-tag" title="${escHtml(req.slice(MAX).join(', '))}">+${req.length-MAX}</span>`:'');
+  const nom=x=>typeof tpSkillNombre==='function'?tpSkillNombre(x):x;
+  const sk=req.slice(0,MAX).map(x=>`<span class="job-tag tp-skill-req ${o.tiene&&o.tiene(x)?'ok':''}">${o.tiene&&o.tiene(x)?'✓ ':''}${escHtml(nom(x))}</span>`).join('')+(req.length>MAX?`<span class="job-tag" title="${escHtml(req.slice(MAX).map(nom).join(', '))}">+${req.length-MAX}</span>`:'');
+  // Área funcional del puesto (y especialidad si la hay); las ofertas antiguas la deducen de su sector.
+  const area=typeof tpAreaDeOferta==='function'?tpAreaDeOferta(j):null;
+  const areaTxt=area?tpAreaNombre(area,true)+(j.especialidad?' · '+j.especialidad:''):(TP_SECTOR_ES[j.sector]||j.sector);
   const pie=o.pie||`<span class="level-badge level-${escHtml(nivel)}">${nivelTxt}</span>`;
-  return `<div class="job-card tp-oferta" role="button" tabindex="0" onclick="${o.click}" onkeydown="if(event.key==='Enter')${o.click}">${empresa}<div class="tp-oferta-sector">${escHtml(TP_SECTOR_ES[j.sector]||j.sector)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j,o.prefs)}<div class="job-tags">${sk}</div><div class="tp-oferta-pie">${pie}</div></div>`;
+  return `<div class="job-card tp-oferta" role="button" tabindex="0" onclick="${o.click}" onkeydown="if(event.key==='Enter')${o.click}">${empresa}<div class="tp-oferta-sector">${escHtml(areaTxt)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j,o.prefs)}<div class="job-tags">${sk}</div><div class="tp-oferta-pie">${pie}</div></div>`;
 }
-function renderJobs(list){_ultimasOfertas=list;const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');const total=list.length;document.getElementById('resultsCount').textContent=`${total} oferta${total!==1?'s':''} de empresas`;if(!total){g.innerHTML='';nr.style.display='block';const m0=document.getElementById('jobsMore');if(m0)m0.innerHTML='';return;}nr.style.display='none';const visibles=_jobsExpandido?list:list.slice(0,JOBS_VISIBLES);const more=document.getElementById('jobsMore');if(more){more.innerHTML=total>JOBS_VISIBLES?`<button class="btn btn-outline" onclick="toggleJobs()">${_jobsExpandido?'Ver menos':'Ver las '+total+' ofertas'}</button>`:'';}g.innerHTML=visibles.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return tpTarjetaOferta(j,co,{click:"openAuth('candidate')"});}).join('');}
+function renderJobs(list){_ultimasOfertas=list;const g=document.getElementById('jobsGrid'),nr=document.getElementById('noResults');const total=list.length;document.getElementById('resultsCount').textContent=`${total} oferta${total!==1?'s':''} de empresas`;if(!total){g.innerHTML='';nr.style.display='block';const m0=document.getElementById('jobsMore');if(m0)m0.innerHTML='';return;}nr.style.display='none';const visibles=_jobsExpandido?list:list.slice(0,JOBS_VISIBLES);const more=document.getElementById('jobsMore');if(more){more.innerHTML=total>JOBS_VISIBLES?`<button class="btn btn-outline" onclick="toggleJobs()">${_jobsExpandido?'Ver menos':'Ver las '+total+' ofertas'}</button>`:'';}g.innerHTML=visibles.map(j=>{const co=COMPANIES.find(c=>c.id===j.company);const req=j.requiredSkills||[];const reqLevel=j.requiredLevel||'basico';const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';const levelCls='level-'+reqLevel;const configLabel=j.exerciseConfig==='common+custom'?'Comunes + personalizados':j.exerciseConfig==='custom'?'Personalizados':j.exerciseConfig==='contact'?'A medida':'Comunes';const configCls=j.exerciseConfig==='common+custom'?'ecb-common':j.exerciseConfig==='custom'?'ecb-custom':'ecb-contact';return tpTarjetaOferta(j,co,{click:"openAuth('candidate')",prefs:(typeof tpUser!=='undefined'&&tpUser)?undefined:null});}).join('');}
 // Ofertas visibles para los candidatos: se excluyen las de cuentas pausadas.
 function publicJobs(){ return empPostedJobs.filter(j=>!j.paused); }
-function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(publicJobs());if(currentSector!=='all')l=l.filter(j=>j.sector===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||j.sector.toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||j.tags.some(t=>t.toLowerCase().includes(q)));renderJobs(l);}
-function setSector(s,btn){currentSector=s;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterJobs();}
+// Filtro por área funcional (como LinkedIn: el puesto, no el sector de la empresa).
+// La búsqueda encuentra también por el nombre del área, la especialidad y el
+// nombre visible de las skills.
+function filterJobs(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.getElementById('searchClear').classList.toggle('show',q.length>0);let l=JOBS.concat(publicJobs());if(currentSector!=='all')l=l.filter(j=>tpAreaDeOferta(j)===currentSector);if(q)l=l.filter(j=>j.title.toLowerCase().includes(q)||tpAreaNombre(tpAreaDeOferta(j)).toLowerCase().includes(q)||String(j.especialidad||'').toLowerCase().includes(q)||j.desc.toLowerCase().includes(q)||(j.tags||[]).some(t=>t.toLowerCase().includes(q))||(j.requiredSkills||[]).some(s=>tpSkillCoincide(s,q)));renderJobs(l);}
+function setSector(s,btn){currentSector=s;document.querySelectorAll('#sectorFilters .filter-btn').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-pressed','false');});btn.classList.add('active');btn.setAttribute('aria-pressed','true');filterJobs();}
 function clearSearch(){document.getElementById('searchInput').value='';document.getElementById('searchClear').classList.remove('show');filterJobs();}
 
 // ═══ JOB MODAL ═══
@@ -262,7 +269,7 @@ function renderExActive(el,i){
   let h=timerHTML+`<div class="ex-body u-user-select-none"><div class="scenario-box"><div class="scenario-label">Escenario</div><p>${ex.scenario}</p></div>`;
 
   if(ex.type==='analysis'&&ex.data){const hd=ex.data.headers;h+=`<table class="ex-data-table"><thead><tr>${hd.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${ex.data.table.map(r=>`<tr><td>${r.n}</td><td class="${r.cls}">${r.a}</td><td>${r.b}</td><td>${r.c}</td><td>${r.d}</td></tr>`).join('')}</tbody></table><span class="ex-textarea-label">${ex.data.q}</span><textarea class="ex-textarea" id="exAns" placeholder="Escribe tu análisis…" oncopy="return false"></textarea>`;}
-  else if(ex.type==='decision'&&ex.data){_exState.asgn={};ex.data.keys.forEach(k=>_exState.asgn[k]=[]);h+=`<p class="u-fs-peq u-c-slate-500 u-mb-12">Clasifica cada elemento haciendo clic:</p><div id="decItems">${ex.data.options.map(o=>`<div class="ex-choice" id="dc_${o.id}" onclick="cycleD('${o.id}',this)" data-correct="${o.correct}" data-cat=""><h4>${o.text}</h4><p id="dl_${o.id}">Sin asignar</p></div>`).join('')}</div><div class="u-d-flex u-gap-6 u-fw-wrap-wrap u-m-10-0">${ex.data.cats.map(c=>`<span class="job-tag u-fs-micro">${c}</span>`).join('')}</div>`;}
+  else if(ex.type==='decision'&&ex.data){_exState.asgn={};ex.data.keys.forEach(k=>_exState.asgn[k]=[]);h+=`<p class="u-fs-peq u-c-slate-500 u-mb-12">Clasifica cada elemento haciendo clic:</p><div id="decItems">${ex.data.options.map(o=>`<div class="ex-choice" id="dc_${o.id}" onclick="cycleD('${o.id}',this)" data-cat=""><h4>${o.text}</h4><p id="dl_${o.id}">Sin asignar</p></div>`).join('')}</div><div class="u-d-flex u-gap-6 u-fw-wrap-wrap u-m-10-0">${ex.data.cats.map(c=>`<span class="job-tag u-fs-micro">${c}</span>`).join('')}</div>`;}
   else if(ex.type==='email'&&ex.data){h+=`<div class="ex-email-mock"><div class="ex-email-head"><div class="ex-email-row"><label>Para:</label><input value="${ex.data.to}" readonly></div><div class="ex-email-row"><label>Asunto:</label><input id="exSubj" value="${ex.data.subject||''}" placeholder="Asunto…"></div></div><div class="ex-email-body"><textarea id="exAns" placeholder="${ex.data.hint||'Escribe…'}" style="min-height:150px" oncopy="return false"></textarea></div></div>`;}
   else if(ex.type==='audio'&&ex.data){
     const dur=ex.data.duration||ex.data.maxTime||120;
@@ -282,7 +289,7 @@ function renderExActive(el,i){
     h+=`</div>`;ct.innerHTML=h;startExTimer(i);return;
   }
   else if(ex.type==='cognitive'&&ex.data){
-    const puzzles=ex.data.puzzles;_exState.cogAnswers=new Array(puzzles.length).fill(-1);_exState.cogCorrect=puzzles.map(p=>p.correct);
+    const puzzles=ex.data.puzzles;_exState.cogAnswers=new Array(puzzles.length).fill(-1);
     h+=`<div id="cogPuzzles">`;
     puzzles.forEach((p,pi)=>{
       h+=`<div class="u-bg-superficie u-b-1-solid-slate-200 u-r-radius u-p-18 u-mb-14"><div style="font-family:'JetBrains Mono',monospace;font-size:.625rem;color:var(--slate-400);margin-bottom:10px">PUZZLE ${pi+1} de ${puzzles.length}</div><div class="cog-sequence">${(p.seq||p.sequence||[]).map(s=>`<div class="cog-seq-item${s==='?'?' mystery':''}">${s}</div>`).join('')}</div><div class="cog-options">${p.options.map((o,oi)=>`<div class="cog-opt" id="cog_${pi}_${oi}" onclick="selectCog(${pi},${oi})">${o}</div>`).join('')}</div></div>`;
@@ -371,17 +378,15 @@ async function submitEx(i){
     const items=document.querySelectorAll('#decItems .ex-choice');
     let assigned=0;items.forEach(el=>{if(el.dataset.cat)assigned++;});
     if(assigned<items.length-1){toast('Falta clasificar algún elemento.');return;}
-    let choices=[];items.forEach(el=>{choices.push({text:el.querySelector('h4')?.textContent||'',chosen:el.dataset.cat,correct:el.dataset.correct});});
+    let choices=[];items.forEach(el=>{choices.push({text:el.querySelector('h4')?.textContent||'',chosen:el.dataset.cat});});
     candidateResponse=JSON.stringify(choices);
     evaluationType='deterministic_plus_ai';
   }else if(ex.type==='cognitive'){
-    const answers=_exState.cogAnswers||[];const correct=_exState.cogCorrect||[];
+    // La solución ya no está en el navegador: corrige el servidor.
+    const answers=_exState.cogAnswers||[];
     if(answers.some(a=>a===-1)){toast('Falta responder a algún puzzle.');return;}
-    let hits=0;answers.forEach((a,j)=>{if(a===correct[j])hits++;});
-    const sc=Math.min(100,Math.round((hits/correct.length)*90)+10);
-    exResults[i]={score:sc,time:_exTimeLeft?((getExercises(activeJob)[i].timeLimit||300)-_exTimeLeft):120,feedback:{overall:`Has acertado ${hits} de ${correct.length} secuencias.`,criteria:[{name:'Aciertos',score:Math.round((hits/correct.length)*100),comment:`${hits}/${correct.length} respuestas correctas`},{name:'Razonamiento lógico',score:sc,comment:sc>80?'Excelente capacidad de reconocimiento de patrones.':sc>60?'Buen nivel de razonamiento. Practica secuencias más complejas.':'Necesitas mejorar el reconocimiento de patrones numéricos y lógicos.'}],aiPowered:false}};
-    recordEval(ex,sc,false,'Test de patrones (selección de opciones)',exResults[i].feedback);
-    switchEx(i);return;
+    candidateResponse=JSON.stringify(answers);
+    evaluationType='deterministic_plus_ai';
   }else if(ex.type==='audio'||ex.type==='video'||ex.type==='image_audit'){
     if(_recState.elapsed<5){toast('Graba al menos 5 segundos antes de enviar.');return;}
     stopRecording();
@@ -410,6 +415,9 @@ async function submitEx(i){
   }catch(err){
     clearInterval(stepInterval);
     console.error('AI eval error:',err);
+    // Clasificaciones y secuencias las corrige el servidor con su solución: sin
+    // él no hay nota local posible. Se vuelve al ejercicio para reenviarlo.
+    if(evaluationType==='deterministic_plus_ai'){toast('No se ha podido corregir. Tu tiempo sigue: vuelve a enviarlo.');switchEx(i);return;}
     // Fallback to rubric-based scoring
     const fallback=fallbackScore(ex,candidateResponse);
     exResults[i]={score:fallback.score,time:_exTimeLeft?((ex.timeLimit||300)-_exTimeLeft):120,feedback:fallback};
@@ -619,7 +627,8 @@ function showFinal(){const el=getExercises(activeJob),sc=el.map((_,i)=>exResults
         if(fb.overall)overalls.push((ex&&ex.title?ex.title+': ':'')+fb.overall);
       });
       const receipts=exs.map((_,i)=>exResults[i]&&exResults[i].feedback&&exResults[i].feedback.receipt).filter(Boolean);
-      const res=await TPCloud.saveEvaluation(u,{challengeId:activeJob.id,skill:skill,score:avg,criteria:crit.length?crit:null,reasoning:overalls.join('\n\n')||null,modelUsed:model,tokensIn:tin||null,tokensOut:tout||null,costEur:cost||null,receipts,integrity:integ});
+      const res=await TPCloud.saveEvaluation(u,{challengeId:activeJob.id,attemptId:activeJob._attemptId||null,skill:skill,score:avg,criteria:crit.length?crit:null,reasoning:overalls.join('\n\n')||null,modelUsed:model,tokensIn:tin||null,tokensOut:tout||null,costEur:cost||null,receipts,integrity:integ});
+      if(res&&res.error){toast('Tu nota no se ha guardado: '+res.error);console.warn('[TP] save-evaluation',res);return;}
       console.info('[TP] save-evaluation OK →',(ai?'IA '+(model||''):'sin IA'),res);
     }catch(e){console.warn('[TP] save-evaluation ERROR',e);}
   })();

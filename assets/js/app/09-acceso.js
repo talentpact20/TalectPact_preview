@@ -874,6 +874,11 @@ async function verifySkillPassAtCompany(){
           (fecha?' desde el '+escHtml(fecha):'')+' y no ha sido manipulada.'+
           (data.explorerUrl?' <a href="'+escHtml(data.explorerUrl)+'" target="_blank" rel="noopener">Ver la transacción</a>.':'');
         if(card) card.innerHTML=SkillPass.cardHtml({cvHash:data.cvHash,txHash:data.txHash,blockNumber:data.blockNumber,anchoredAt:data.anchoredAt,skills:data.skills||[]},{verified:true,url:(location.origin||'')+'/verify.html?h='+encodeURIComponent(data.cvHash||'')});
+      }else if(data&&data.emitida){
+        // SkillPass gratuito: auténtico en el registro de TalentPact, sin sello público.
+        st.style.background='var(--slate-50)';st.style.color='var(--slate-700)';st.style.border='1px solid var(--slate-200)';
+        st.innerHTML='<strong>Emitido por TalentPact.</strong> Las skills constan en nuestro registro tal como se muestran. No tiene sello público en blockchain (es opcional para el candidato).';
+        if(card) card.innerHTML=SkillPass.cardHtml({cvHash:data.cvHash,skills:data.skills||[]},{url:(location.origin||'')+'/verify.html?h='+encodeURIComponent(data.cvHash||'')});
       }else{
         st.style.background='#fef2f2';st.style.color='#b91c1c';st.style.border='1px solid #fecaca';
         st.innerHTML='<strong>No verificado.</strong> '+(escHtml((data&&(data.reason||data.error))||'La credencial no es auténtica o fue modificada.'));
@@ -920,6 +925,9 @@ async function verifyOnLanding(){
         (fecha?' el '+escHtml(fecha):'')+' y sin alterar desde entonces.'+
         (chips?'<div class="sp-verify-chips">'+chips+'</div>':'')+
         (data.explorerUrl?'<a class="sp-verify-link" href="'+escHtml(data.explorerUrl)+'" target="_blank" rel="noopener">Ver la transacción en el explorador →</a>':''));
+    }else if(data&&data.emitida){
+      const chips=(data.skills||[]).slice(0,8).map(sk=>'<span class="sp-verify-chip">'+escHtml(sk.skill||'')+' <b>'+(Number(sk.score)||0)+'</b></span>').join('');
+      show('ok','<strong>Emitido por TalentPact.</strong> Las skills constan en nuestro registro tal como se muestran. Sin sello público en blockchain (opcional).'+(chips?'<div class="sp-verify-chips">'+chips+'</div>':''));
     }else{
       show('bad','<strong>Sin sello válido.</strong> '+
         escHtml((data&&(data.reason||data.error))||'No se pudo verificar esta credencial.'));

@@ -277,6 +277,33 @@ function corregirDecision(oficial, respuesta) {
   };
 }
 
+/**
+ * Secuencias numéricas: antes se corregían en el navegador, que tenía la
+ * solución. Ahora la solución solo está en el servidor. La respuesta es la
+ * lista de opciones elegidas (índices). Se descuenta el azar como en las
+ * clasificaciones (con 4 opciones, al azar se acierta 1 de cada 4).
+ */
+function corregirSecuencias(oficial, respuesta) {
+  const puzzles = (oficial && oficial.data && Array.isArray(oficial.data.puzzles)) ? oficial.data.puzzles : [];
+  let elegidas = [];
+  try { elegidas = JSON.parse(respuesta); } catch (_e) { elegidas = []; }
+  if (!Array.isArray(elegidas)) elegidas = [];
+  const total = puzzles.length;
+  const aciertos = puzzles.filter((p, i) => Number(elegidas[i]) === p.correct).length;
+  const k = Math.max(2, ...puzzles.map((p) => (Array.isArray(p.options) ? p.options.length : 2)));
+  const acierto = total ? aciertos / total : 0;
+  const score = Math.round(Math.max(0, (acierto - 1 / k) / (1 - 1 / k)) * 100);
+  const comentario = `Has acertado ${aciertos} de ${total} secuencias. Al azar se acertaría 1 de cada ${k}: la nota descuenta ese azar.`;
+  return {
+    score,
+    criteria: [{ id: "secuencias", name: "Secuencias resueltas", weight: 100, score, comment: comentario }],
+    overall: aciertos === total ? "Todas las secuencias resueltas." : "Revisa el patrón de las secuencias que has fallado.",
+    aiPowered: false,
+    deterministic: true,
+    aciertos, total
+  };
+}
+
 function buildUserPrompt(ex, response, nonce, injection) {
   const aviso = injection && injection.suspicious
     ? `\nAVISO DEL SISTEMA: el filtro automático detectó una señal de manipulación (${injection.signals.join(", ")}). Evalúa solo el contenido profesional.\n`
@@ -374,6 +401,7 @@ function clientIp(event) {
 }
 
 module.exports = {
+  corregirSecuencias,
   EVALUATOR_VERSION,
   RUBRICAS,
   TOPES,

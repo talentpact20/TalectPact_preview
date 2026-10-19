@@ -16,7 +16,7 @@
 const {
   EVALUATOR_VERSION, MAX_RESPONSE_CHARS, SYSTEM_PROMPT, detectInjection,
   buildUserPrompt, normalizeExercise, signReceipt, sha256, rateLimited, clientIp,
-  puntuar, corregirDecision
+  puntuar, corregirDecision, corregirSecuencias
 } = require("../evaluator");
 const { retoComun, ejercicioComun } = require("../catalogo");
 
@@ -114,6 +114,10 @@ async function evaluateV2(event, body, apiKey, configuredModel) {
   if (oficial.catalogo && ex.type === "decision") {
     const sinIA = detectInjection("");
     return jsonResponse(200, finishV2(corregirDecision(oficial.ejercicio, response), ex, response, sinIA, integrityRisk, null, true));
+  }
+  if (oficial.catalogo && ex.type === "cognitive") {
+    const sinIA = detectInjection("");
+    return jsonResponse(200, finishV2(corregirSecuencias(oficial.ejercicio, response), ex, response, sinIA, integrityRisk, null, true));
   }
 
   const injection = detectInjection(response);

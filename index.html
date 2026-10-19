@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261019b">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261019e">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
@@ -49,7 +49,7 @@
   <div class="auth-form-side"><div class="auth-form-wrap"><button class="auth-back" onclick="closeAuth('authCandidate')">← Volver</button><h2 id="candAuthTitle">Bienvenido.</h2><p class="auth-subtitle" id="candAuthSub">Accede o crea tu cuenta para empezar los retos.</p>
     <div class="auth-tabs" id="candTabs" role="tablist" aria-label="Acceso o alta"><button type="button" class="auth-tab active" id="candTabLogin" role="tab" aria-selected="true" aria-controls="cand-login" onclick="switchAuthTab('cand','login',this)" onkeydown="authTabKeys(event)">Iniciar sesión</button><button type="button" class="auth-tab" id="candTabReg" role="tab" aria-selected="false" aria-controls="cand-register" tabindex="-1" onclick="switchAuthTab('cand','register',this)" onkeydown="authTabKeys(event)">Crear cuenta</button></div>
     <form class="auth-form" id="cand-login" role="tabpanel" aria-labelledby="candTabLogin" novalidate onsubmit="event.preventDefault();loginCandidate()"><div class="a-field"><label for="cand-login-email">Email</label><input type="email" placeholder="tu@email.com" id="cand-login-email" name="username" autocomplete="username"><div class="a-err" id="cand-login-email-err"></div></div><div class="a-field"><label for="cand-login-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="••••••••" id="cand-login-pw" name="password" autocomplete="current-password" onkeyup="capsHint(event,'cand-login-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('cand-login-pw',this)">Ver</button></div><div class="a-err" id="cand-login-pw-err"></div><div class="a-caps" id="cand-login-caps">Bloq Mayús está activado.</div></div><div class="a-forgot"><a href="#" onclick="event.preventDefault();showRecover('cand',true)">¿Olvidaste tu contraseña?</a></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candLoginBtn">Iniciar sesión →</button></div><div class="auth-divider"><span>o</span></div><div class="auth-social"><button type="button" class="auth-social-btn" id="btnGoogleAuth" onclick="oauthLogin('google')"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button><button type="button" class="auth-social-btn" id="btnLinkedinAuth" onclick="oauthLogin('linkedin_oidc')"><svg viewBox="0 0 24 24"><path fill="#0A66C2" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>LinkedIn</button></div><div class="auth-oauth-msg" id="candAuthMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a onclick="guestCandidate()">Explorar como invitado (sin cuenta) →</a></div></form><form class="auth-form" id="cand-recover" style="display:none" novalidate onsubmit="event.preventDefault();sendRecovery('cand')"><p class="auth-recover-lead">Escribe el email de tu cuenta y te enviamos un enlace para elegir una contraseña nueva. El enlace caduca en una hora y solo sirve una vez.</p><div class="a-field"><label for="cand-rec-email">Email</label><input type="email" id="cand-rec-email" name="username" autocomplete="username" placeholder="tu@email.com" aria-describedby="cand-rec-email-err"><div class="a-err" id="cand-rec-email-err"></div></div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRecBtn">Enviar enlace →</button></div><div class="auth-oauth-msg" id="candRecMsg" role="status" aria-live="polite"></div><div class="auth-guest"><a href="#" onclick="event.preventDefault();showRecover('cand',false)">← Volver a iniciar sesión</a></div></form>
-    <form class="auth-form" id="cand-register" role="tabpanel" aria-labelledby="candTabReg" novalidate onsubmit="event.preventDefault();registerCandidate()" style="display:none"><div class="a-field-row"><div class="a-field"><label for="reg-name">Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name" autocomplete="given-name"><div class="a-err" id="reg-name-err"></div></div><div class="a-field"><label for="reg-last">Apellido</label><input type="text" placeholder="Apellido" id="reg-last" autocomplete="family-name"></div></div><div class="a-field"><label for="reg-email">Email</label><input type="email" placeholder="tu@email.com" id="reg-email" name="username" autocomplete="username"><div class="a-err" id="reg-email-err"></div></div><div class="a-field"><label for="reg-phone">Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone" autocomplete="tel"><span class="hint u-fs-micro u-c-slate-400">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label for="reg-linkedin">LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin" autocomplete="url"></div><div class="a-field"><label for="reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 10 caracteres, letras y números" id="reg-pw" autocomplete="new-password" oninput="pwStrength('reg-pw','reg-strength')" onkeyup="capsHint(event,'reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div><div class="pw-meter" id="reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="reg-pw-err"></div></div><div class="a-field"><label for="reg-sector">Sector preferido</label><select id="reg-sector"><option value="">Selecciona…</option><option>Marketing</option><option>IT / Dev</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div><div class="u-bg-emerald-50 u-b-1-solid-emerald-100 u-r-8 u-p-10-12 u-fs-micro u-c-emerald-600 u-mb-4"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></form>
+    <form class="auth-form" id="cand-register" role="tabpanel" aria-labelledby="candTabReg" novalidate onsubmit="event.preventDefault();registerCandidate()" style="display:none"><div class="a-field-row"><div class="a-field"><label for="reg-name">Nombre</label><input type="text" placeholder="Tu nombre" id="reg-name" autocomplete="given-name"><div class="a-err" id="reg-name-err"></div></div><div class="a-field"><label for="reg-last">Apellido</label><input type="text" placeholder="Apellido" id="reg-last" autocomplete="family-name"></div></div><div class="a-field"><label for="reg-email">Email</label><input type="email" placeholder="tu@email.com" id="reg-email" name="username" autocomplete="username"><div class="a-err" id="reg-email-err"></div></div><div class="a-field"><label for="reg-phone">Teléfono</label><input type="tel" placeholder="+34 612 345 678" id="reg-phone" autocomplete="tel"><span class="hint u-fs-micro u-c-slate-400">Solo visible para empresas que paguen el contacto</span></div><div class="a-field"><label for="reg-linkedin">LinkedIn (opcional)</label><input type="url" placeholder="linkedin.com/in/tu-perfil" id="reg-linkedin" autocomplete="url"></div><div class="a-field"><label for="reg-pw">Contraseña</label><div class="a-pw"><input type="password" placeholder="Mín. 10 caracteres, letras y números" id="reg-pw" autocomplete="new-password" oninput="pwStrength('reg-pw','reg-strength')" onkeyup="capsHint(event,'reg-pw-caps')"><button type="button" class="a-pw-toggle" onclick="togglePw('reg-pw',this)">Ver</button></div><div class="pw-meter" id="reg-strength"><div class="pw-meter-bar"><i></i></div><div class="pw-meter-lbl"></div></div><div class="a-caps" id="reg-pw-caps">Bloq Mayús está activado.</div><div class="a-err" id="reg-pw-err"></div></div><div class="a-field"><label for="reg-sector">Área que más te interesa</label><select id="reg-sector"><option value="">Selecciona…</option><option>Asesoría jurídica, riesgos y cumplimiento</option><option>Finanzas</option><option>Marketing, ventas y comunicación</option><option>Operaciones</option><option>Recursos humanos</option><option>Sostenibilidad</option><option>Tecnología</option></select></div><div class="u-bg-emerald-50 u-b-1-solid-emerald-100 u-r-8 u-p-10-12 u-fs-micro u-c-emerald-600 u-mb-4"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg> Tus datos personales solo se comparten cuando una empresa paga por tu contacto. Tu perfil siempre aparece anónimo.</div><div class="auth-submit"><button type="submit" class="btn btn-primary btn-lg" id="candRegBtn">Crear cuenta →</button></div><div class="auth-oauth-msg" id="candRegMsg" role="status" aria-live="polite"></div></form>
     <div class="auth-success" id="cand-success"><h3>¡Bienvenido!</h3><p>Redirigiendo a tu panel…</p></div>
     <div class="auth-footer" id="cand-footer">¿Eres empresa? <a href="#" onclick="closeAuth('authCandidate');openAuth('empresa')">Accede aquí</a></div>
   </div></div>
@@ -151,15 +151,16 @@
           <div class="sp-meta">Credencial portable · verificable en cualquier plataforma</div>
         </div>
       </div>
-      <p class="sp-pass-note">No es un PDF más de LinkedIn: es un <strong>sello criptográfico</strong>. Tú lo emites; cualquier empresa o plataforma lo comprueba en 2 segundos. Tus datos personales no salen de Europa.</p>
+      <p class="sp-pass-note">Tu credencial con las skills que has demostrado. Compártela con un enlace o un QR: cualquier empresa la comprueba en TalentPact, gratis. Tus datos personales no salen de Europa.</p>
       <div class="sp-pass-actions u-mt-0">
-        <button type="button" class="btn btn-primary" id="spChainBtn" onclick="generateSkillPass()">Sellar mi SkillPass</button>
+        <button type="button" class="btn btn-primary" id="spChainBtn" onclick="generateSkillPass()">Generar mi SkillPass</button>
         <button type="button" class="btn btn-outline btn-sm" id="spChainDownload" onclick="downloadSkillPass()" style="display:none">JSON</button>
         <button type="button" class="btn btn-outline btn-sm" id="spChainPdf" onclick="downloadSkillPassPdf()" style="display:none">PDF certificado</button>
         <button type="button" class="btn btn-outline btn-sm" id="spChainShare" onclick="copySkillPassLink()" style="display:none">Copiar enlace</button>
       </div>
       <div id="spChainStatus" style="display:none" class="u-mt-14 u-p-12-14 u-r-10 u-fs-peq u-lh-1_6"></div>
       <div id="spChainResult" style="display:none"></div>
+      <div id="spSelloLinea"></div>
     </div>
   </div>
 
@@ -344,7 +345,7 @@
       <section class="pj-paso activo" data-paso="1" aria-label="Paso 1: el puesto">
         <div class="pj-grid">
           <div class="pj-field pj-full"><label for="pj-title">Título del puesto</label><input type="text" id="pj-title" maxlength="120" placeholder="Ej.: Técnico de selección junior"></div>
-          <div class="pj-field"><label for="pj-sector">Área del puesto</label><select id="pj-sector" aria-label="Área del puesto" onchange="tpReqPintar()"><option value="">Selecciona…</option><option value="Marketing">Marketing</option><option value="Sales">Ventas</option><option value="IT">Tecnología</option><option value="Data">Datos y analítica</option><option value="Design">Diseño</option><option value="Business">Negocio y estrategia</option><option value="Finance">Finanzas</option><option value="Legal">Jurídico</option><option value="RRHH">Recursos humanos</option><option value="Ops">Operaciones</option><option value="Languages">Idiomas</option></select></div>
+          <div class="pj-field"><label for="pj-sector">Área del puesto</label><select id="pj-sector" aria-label="Área del puesto" onchange="tpReqCambiarArea()"><option value="">Selecciona…</option><option value="juridica">Asesoría jurídica, riesgos y cumplimiento</option><option value="finanzas">Finanzas</option><option value="marketing">Marketing, ventas y comunicación</option><option value="operaciones">Operaciones</option><option value="rrhh">Recursos humanos</option><option value="sostenibilidad">Sostenibilidad</option><option value="tecnologia">Tecnología</option></select></div><div class="pj-field pj-oculto" id="pjEspField"><label for="pj-especialidad">Especialidad <span class="pj-cuenta">opcional</span></label><select id="pj-especialidad" aria-label="Especialidad del puesto"><option value="">Sin especificar</option></select></div>
           <div class="pj-field pj-full"><label for="pj-desc">Qué hará la persona</label><textarea id="pj-desc" maxlength="4000" placeholder="Dos o tres frases sobre el día a día del puesto"></textarea></div>
         </div>
       </section>
@@ -450,7 +451,7 @@
         </div>
         <div class="st-field"><label for="st-cand-email">Email</label><input type="email" id="st-cand-email" autocomplete="email"></div>
         <div class="st-grid">
-          <div class="st-field"><label for="st-cand-sector">Sector preferido</label><select id="st-cand-sector"><option value="">Sin especificar</option><option>IT / Dev</option><option>Marketing</option><option>Data</option><option>Business</option><option>Diseño</option><option>RRHH</option><option>Finanzas</option><option>Legal</option><option>Operaciones</option></select></div>
+          <div class="st-field"><label for="st-cand-sector">Área que más te interesa</label><select id="st-cand-sector"><option value="">Sin especificar</option><option>Asesoría jurídica, riesgos y cumplimiento</option><option>Finanzas</option><option>Marketing, ventas y comunicación</option><option>Operaciones</option><option>Recursos humanos</option><option>Sostenibilidad</option><option>Tecnología</option></select></div>
           <div class="st-field"><label for="st-cand-city">Ciudad</label><input type="text" id="st-cand-city" placeholder="Barcelona…"></div>
         </div>
         <div class="st-grid">
@@ -587,7 +588,7 @@
       <div class="st-card">
         <div class="st-grid">
           <div class="st-field"><label for="st-emp-company">Nombre de empresa</label><input type="text" id="st-emp-company" autocomplete="organization"></div>
-          <div class="st-field"><label for="st-emp-sector">Sector principal</label><select id="st-emp-sector"><option value="">Sin especificar</option><option>IT / Tecnología</option><option>Marketing</option><option>Finanzas</option><option>RRHH</option><option>Consultoría</option><option>Retail</option><option>Salud</option><option>Educación</option><option>Otro</option></select></div>
+          <div class="st-field"><label for="st-emp-sector">Sector de la empresa</label><select id="st-emp-sector"><option value="">Sin especificar</option><option value="capital_privado">Capital privado</option><option value="consumo">Consumo</option><option value="deporte">Deporte</option><option value="educacion_impacto">Educación e impacto social</option><option value="sector_publico">Gobierno y sector público</option><option value="hosteleria_turismo">Hostelería, turismo y ocio</option><option value="industria">Industria</option><option value="salud">Salud y ciencias de la vida</option><option value="servicios_financieros">Servicios financieros</option><option value="servicios_profesionales">Servicios profesionales</option><option value="sostenibilidad_clima">Sostenibilidad y clima</option><option value="tecnologia_medios">Tecnología, medios y telecomunicaciones</option></select></div>
         </div>
         <div class="st-grid">
           <div class="st-field"><label for="st-emp-size">Tamaño</label><select id="st-emp-size"><option value="">Sin especificar</option><option>1-10 (Startup)</option><option>11-50</option><option>51-200</option><option>201-1000</option><option>+1000</option></select></div>
@@ -874,18 +875,16 @@
     </div>
 
     <div class="reveal u-mt-56"><div class="section-label">Ofertas de empresas</div><h2 class="section-title display">Empresas que buscan talento.</h2><p class="section-desc">Cada empresa publica ofertas con retos personalizados. Consulta qué skills necesitan y postula.</p></div>
-    <div class="search-bar-wrap reveal d1"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar" id="searchInput" type="search" aria-label="Buscar ofertas de empleo" placeholder="Busca por rol, sector o skill…" oninput="filterJobs()"><button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button></div>
-    <div class="filters-row reveal d1" id="sectorFilters">
-      <button class="filter-btn active" onclick="setSector('all',this)">Todos</button>
-      <button class="filter-btn" onclick="setSector('Marketing',this)">Marketing</button>
-      <button class="filter-btn" onclick="setSector('IT',this)">IT / Dev</button>
-      <button class="filter-btn" onclick="setSector('Data',this)">Data</button>
-      <button class="filter-btn" onclick="setSector('Business',this)">Business</button>
-      <button class="filter-btn" onclick="setSector('Design',this)">Diseño</button>
-      <button class="filter-btn" onclick="setSector('RRHH',this)">RRHH</button>
-      <button class="filter-btn" onclick="setSector('Finance',this)">Finanzas</button>
-      <button class="filter-btn" onclick="setSector('Sales',this)">Ventas</button>
-      <button class="filter-btn" onclick="setSector('Languages',this)">Idiomas</button>
+    <div class="search-bar-wrap reveal d1"><span class="search-icon"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input class="search-bar" id="searchInput" type="search" aria-label="Buscar ofertas de empleo" placeholder="Busca por puesto, área o skill…" oninput="filterJobs()"><button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button></div>
+    <div class="filters-row reveal d1" id="sectorFilters" role="group" aria-label="Filtrar por área">
+      <button class="filter-btn active" onclick="setSector('all',this)">Todas las áreas</button>
+      <button class="filter-btn" onclick="setSector('juridica',this)">Jurídico y cumplimiento</button>
+      <button class="filter-btn" onclick="setSector('finanzas',this)">Finanzas</button>
+      <button class="filter-btn" onclick="setSector('marketing',this)">Marketing y ventas</button>
+      <button class="filter-btn" onclick="setSector('operaciones',this)">Operaciones</button>
+      <button class="filter-btn" onclick="setSector('rrhh',this)">Recursos humanos</button>
+      <button class="filter-btn" onclick="setSector('sostenibilidad',this)">Sostenibilidad</button>
+      <button class="filter-btn" onclick="setSector('tecnologia',this)">Tecnología</button>
     </div>
     <div class="results-meta" id="resultsCount"></div>
     <div class="jobs-grid" id="jobsGrid"></div>
@@ -1115,27 +1114,29 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/app/00-iconos.js?v=20261015c"></script>
 <script src="assets/js/app/01-datos-ofertas.js?v=20261015c"></script>
+<script src="assets/js/app/01b-taxonomia.js?v=20261019c"></script>
 <script src="assets/js/app/02-grabacion.js?v=20261015e"></script>
 <script src="assets/js/app/03-datos-retos.js?v=20261015c"></script>
 <script src="assets/js/app/04-estado-y-nube.js?v=20261015j"></script>
 <script src="assets/js/app/05-qr.js?v=20261015c"></script>
-<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261015e"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261019a"></script>
-<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261019b"></script>
-<script src="assets/js/app/09-acceso.js?v=20261019b"></script>
+<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261019e"></script>
+<script src="assets/js/app/07-retos-comunes.js?v=20261019d"></script>
+<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261019d"></script>
+<script src="assets/js/app/09-acceso.js?v=20261019e"></script>
 <script src="assets/js/app/10-paneles-y-pagos.js?v=20261019a"></script>
 <script src="assets/js/app/11-superadmin.js?v=20261015c"></script>
 <script src="assets/js/app/12-soporte-y-ranking.js?v=20261015e"></script>
-<script src="assets/js/app/13-integridad.js?v=20261015c"></script>
+<script src="assets/js/app/13-integridad.js?v=20261019d"></script>
 <script src="assets/js/app/14-empleo.js?v=20261015c"></script>
 <script src="assets/js/app/15-proteccion-acceso.js?v=20261015j"></script>
 <script src="assets/js/app/16-pool-real.js?v=20261015e"></script>
-<script src="assets/js/app/17-ofertas-reales.js?v=20261019b"></script>
+<script src="assets/js/app/17-ofertas-reales.js?v=20261019c"></script>
 <script src="assets/js/app/18-interfaz.js?v=20261015c"></script>
 <script src="assets/js/app/19-rrhh.js?v=20261015j"></script>
-<script src="assets/js/app/20-requisitos.js?v=20261019a"></script>
-<script src="assets/js/app/21-empresa.js?v=20261019b"></script>
-<script src="assets/js/app/99-arranque.js?v=20261015c"></script>
+<script src="assets/js/app/20-requisitos.js?v=20261019c"></script>
+<script src="assets/js/app/21-empresa.js?v=20261019c"></script>
+<script src="assets/js/app/22-reto-oficial.js?v=20261019d"></script>
+<script src="assets/js/app/99-arranque.js?v=20261019e"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->
 <script src="analytics-talentpact.js"></script>
