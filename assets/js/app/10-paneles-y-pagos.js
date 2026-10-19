@@ -68,9 +68,11 @@ function showOfferCandidates(jobId){
   document.getElementById('empOfferCandTitle').textContent='Candidatos para: '+job.title;
   // Encajan por skills, o se han postulado ellos (aunque aún no tengan las skills).
   const enProceso=c=>typeof TPApps!=='undefined'&&!!TPApps.estadoDe(jobId,c.id);
+  // Orden por grupos (cumple las imprescindibles → pendientes → por debajo);
+  // dentro de cada grupo, por encaje. Nadie desaparece por una sola skill.
   const lista=CANDIDATES.map(c=>({c,e:encajeOferta(job,c)}))
-    .filter(x=>x.e.pct>0||enProceso(x.c))
-    .sort((x,y)=>y.e.pct-x.e.pct||y.c.score-x.c.score);
+    .filter(x=>x.e.pct>0||x.e.demostradas||enProceso(x.c))
+    .sort((x,y)=>(x.e.grupo||9)-(y.e.grupo||9)||y.e.pct-x.e.pct||y.c.score-x.c.score);
   const chip=(ok,txt)=>ok===null?'':`<span class="tp-cond-chip ${ok?'ok':'ko'}">${ok?'✓':'✕'} ${escHtml(txt)}</span>`;
   let h='';
   lista.forEach(({c:ca,e})=>{
@@ -81,7 +83,7 @@ function showOfferCandidates(jobId){
       <div class="oc-score-pill"><div class="score-circle ${scoreCls}">${ca.score}</div></div>
       <div class="oc-info">
         <h4>${escHtml(TPPool.alias(ca))}</h4>
-        ${tpEncaje(e.pct)}
+        ${e.req&&typeof tpReqResumen==='function'?tpReqResumen(e.req):tpEncaje(e.pct)}
         <div class="oc-meta">${escHtml(ca.sector)} · ${(ca.skills||[]).length} skills${ca._real?' · '+verif+' verificadas':''}</div>
         <div class="oc-skills">${(ca.skills||[]).map(s=>`<span class="job-tag">${escHtml(s.n)}: <strong>${s.v}</strong></span>`).join('')}</div>
         <div class="tp-cond">${chip(e.jor,TP_COND.jornadas[job.jornada]||'')}${chip(e.mod,TP_COND.modalidades[job.modalidad]||'')}</div>

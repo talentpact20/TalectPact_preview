@@ -196,7 +196,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
-<<<<<<< Updated upstream
 ## 2026-10-15 — Tres pilares: Hard / Soft / Transferibles
 
 **Qué.** Los filtros de retos y el selector de skills de la oferta pasan a tres pilares claros: **Hard skills**, **Soft skills** y **Transferibles** (sustituye Cognitivas / Interpersonales / Autogestión / Ejecución / Técnicas).
@@ -205,21 +204,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
-## 2026-10-15 — Una cuenta nueva aparecía con retos de otra sesión
-
-**Qué pasaba.** El progreso guardado en el navegador no sabía de quién era: no se borraba al cerrar sesión y, al entrar con cualquier cuenta (también una recién creada), se mezclaba con ella y se subía a la nube como suyo.
-
-**Arreglo.**
-- El progreso local lleva dueño (cuenta o invitado). Solo se mezcla con su cuenta; el de otra se descarta.
-- Lo hecho sin sesión no se sube solo: se pregunta «¿Son tuyos?» y, si se acepta, se guarda como no verificado.
-- Al cerrar sesión (a mano o por inactividad) se vacía el progreso del navegador.
-- Tarjeta «Tu Perfil de Skills»:
-  - alias real en vez de «AC · Candidato anónimo» escrito a mano;
-  - fuera el título «Habilidades verificadas», que no era cierto;
-  - cuadrícula corregida;
-  - «Avanzado» en verde.
-- Diálogos propios centrados (el reset de márgenes los pegaba arriba a la izquierda).
-=======
 ## 2026-10-15 — Una cuenta nueva aparecía con retos de otra sesión
 
 **Qué pasaba.** El progreso que guarda el navegador no sabía de quién era. Al cerrar sesión no se borraba y, al entrar con cualquier cuenta (también una recién creada), se mezclaba con ella y **se subía a la nube** como si fuera suyo. En un ordenador compartido, los retos de una persona acababan en la cuenta de otra.
@@ -238,7 +222,6 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Fusión.** El commit `dc38352` se subió con conflictos sin resolver (`<<<<<<<`) en `index.html`, las cifras canónicas y 11 documentos. Están resueltos: se conservan las dos partes en los documentos y se usa el recuento real de tests (139 en 18 ficheros).
 
 **Acción usuario.** Tu cuenta nueva ya tiene en Supabase las notas que se subieron desde el navegador (motivo «(sincronizado desde el dispositivo)»). Para quitarlas, ver la consulta en la respuesta del chat o borrar la cuenta desde Ajustes y crearla de nuevo.
->>>>>>> Stashed changes
 
 **Ficheros.** `04-estado-y-nube.js`, `07-retos-comunes.js`, `09-acceso.js`, `15-proteccion-acceso.js`, `componentes.css`, `index.html`
 
@@ -264,3 +247,36 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Añadido (18/10).** `resumen_general.md` (lo general de cada concepto) y su PDF `TalentPact_Plan_resumen.pdf` (16 páginas: portada, índice, resumen visual y una página por concepto). Generador reproducible: `python3 tools/generar_plan_pdf.py` (con `--completo` saca la versión larga con los documentos enteros).
 
 **Cambiado (18/10).** El PDF pasa a ser estructural, no técnico: `estructura_plataforma.md` → `TalentPact_Estructura_plataforma.pdf` (14 páginas, una por parte: la plataforma en una página, mapa de cuatro zonas, cómo se ordena la información, tres pilares, catálogo, recorridos de candidato y empresa, rama IA, cómo se pone la nota, confianza, gratis y de pago, orden de construcción). Generador: `python3 tools/generar_estructura_pdf.py`. Se retira el PDF resumido anterior (se puede regenerar con `tools/generar_plan_pdf.py`).
+
+---
+
+## 2026-10-19 — Búsqueda de candidatos tipo LinkedIn Recruiter (documentos)
+
+**Qué.** Parte 08 nueva en `estructura_plataforma.md` y en el PDF (16 páginas): boceto del buscador con columna fija de filtros principales, secciones plegables (condiciones, evidencia, perfil, actividad y proceso), contador en vivo, listas, notas y búsquedas guardadas. Qué no se copia de Recruiter (nombre, colegio, empresa, red, código postal) y por qué. Nota técnica en el doc 01, §8.
+
+**Ficheros.** `docs/plan_post_reunion/estructura_plataforma.md`, `01_sectores_areas_y_vocabulario.md`, `TalentPact_Estructura_plataforma.pdf`, `tools/generar_estructura_pdf.py`. Sin cambios de código de producto.
+
+---
+
+## 2026-10-19 — Hard y soft skills en la plataforma (documento)
+
+**Qué.** `skills_en_la_plataforma.md` → `TalentPact_Skills_en_la_plataforma.pdf` (10 páginas). Tres pilares; tres grados de confianza (declarada, demostrada, verificada; las soft nunca se declaran); cuatro bandas; catálogo de skills; qué pedimos al candidato (registro, pasaporte básico de tres retos, retos por oferta); cómo lo exige la empresa (imprescindible o valorable con banda mínima por skill, máx. 8 y 4 imprescindibles); encaje con tres estados (cumple, por debajo, pendiente) y orden por grupos; cómo lo ven candidato y empresa. Bocetos de perfil, requisitos y encaje.
+
+**Ficheros.** `docs/plan_post_reunion/skills_en_la_plataforma.md`, `TalentPact_Skills_en_la_plataforma.pdf`; `tools/generar_estructura_pdf.py` admite ahora varios documentos (`skills`). Sin cambios de código de producto.
+
+---
+
+## 2026-10-19 — Oferta: imprescindible o valorable, en tres pasos y desde un documento
+
+**Qué.**
+- **Cada skill de la oferta lleva su peso y su mínimo**: imprescindible o valorable, con banda mínima (Aceptable ≥40, Bueno ≥60, Muy bueno ≥80). Máximo 8 skills y 4 imprescindibles. Sustituye al único nivel para toda la oferta (básico ≥30 / intermedio ≥50 / avanzado ≥75). Las ofertas antiguas siguen funcionando: sus skills cuentan como imprescindibles con el mínimo equivalente.
+- **Publicar en tres pasos**, como LinkedIn: el puesto → qué tiene que demostrar → condiciones. En el paso 2 salen 6 skills sugeridas según el área (se añaden con un clic) y una búsqueda que solo enseña coincidencias; ya no hay una rejilla con todo el catálogo. Preguntas, dilemas, etiquetas libres y configuración de ejercicios van plegados con su contador. Aviso si la oferta solo pide skills técnicas.
+- **Rellenar la oferta desde un documento** (PDF, Word o texto pegado): la función `parse-job-doc` lo lee con Claude (`claude-opus-5-5`, salida con esquema obligatorio y skills limitadas al catálogo del servidor) y propone título, área, descripción, condiciones, salario, skills con peso y mínimo (con la frase del documento que lo justifica), preguntas, dilemas y avisos. Nada se publica sin que la empresa revise los tres pasos; los campos rellenados van marcados. El documento no se guarda. Los criterios discriminatorios del documento (edad, sexo, origen…) no se copian y se avisa.
+- **Encaje por requisitos**: cada skill del candidato queda como cumple, por debajo o pendiente (sin prueba no es un suspenso). La lista de candidatos de una oferta se ordena por grupos (cumple las imprescindibles → con condición por hablar → le falta alguna por demostrar → por debajo) y muestra «3 de 3 imprescindibles · 1 de 2 valorables» con una marca por skill. El candidato ve en «Ofertas para ti» cuántas imprescindibles cumple.
+- Áreas del formulario en español (Tecnología, Ventas, Recursos humanos…), con los mismos valores internos.
+
+**Arreglado al probar.** `index.html` y 6 documentos (informe técnico, QA de la defensa, README y changelog de la prerreunión, Decisiones y Pendientes de la bóveda) se habían subido en `a765750` con marcas de un conflicto de git sin resolver: la web cargaba siete scripts dos veces (errores «Identifier has already been declared») y las marcas podían verse. Resueltos conservando la versión vigente (en el changelog, las dos partes). Nuevo test que impide volver a subir marcas de conflicto.
+
+**Para el usuario.** Ejecutar `tfm/tech/supabase_schema_requisitos.sql` en Supabase (hasta entonces las ofertas se guardan sin requisitos, con la lista de skills de siempre). `ANTHROPIC_API_KEY` ya está en Netlify; opcional `ANTHROPIC_DOC_MODEL` para usar otro modelo en la lectura de documentos.
+
+**Ficheros.** `netlify/functions/lib/requisitos.js`, `lib/oferta-doc.js`, `lib/handlers/parse-job-doc.js`, `parse-job-doc.mjs`, `save-job.js`, `list-jobs.js`, `lib/catalogo.js`; `assets/js/app/20-requisitos.js`, `07`, `10`, `17`; `index.html`, `componentes.css`; `tfm/tech/supabase_schema_requisitos.sql`; `tests/requisitos.test.js` (10) y `tests/plataforma.test.js` (1). Dependencia nueva: `@anthropic-ai/sdk`. Tests → 150 en 19 ficheros (cifras canónicas y documentos actualizados).

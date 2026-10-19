@@ -129,9 +129,25 @@ Reglas de interacción:
 | API | `GET /taxonomy` (público, cacheado) y `GET /taxonomy/suggest?titulo=…` que devuelve área, nivel y skills sugeridas. Primera versión: reglas por palabras del título + packs del doc 06; más adelante, aprendida de las ofertas reales. |
 | Interfaz | Componente único de autocompletado (`tpBuscador`) en `18-interfaz.js`, reutilizado en oferta, perfil y filtros. |
 
-## 8. Decisiones para el equipo
+## 8. Búsqueda avanzada de candidatos (referencia: LinkedIn Recruiter)
+
+Añadido el 19/10 a partir de capturas de Recruiter Advanced Search. La estructura visual está en `estructura_plataforma.md`, parte 08.
+
+| Pieza de Recruiter | En TalentPact | Dato que lo alimenta |
+| --- | --- | --- |
+| Columna fija: puesto, ubicación (*Can have / Current*), skills, sector, palabras clave, seniority | Puesto o área, ubicación (vive en / puede trabajar en), skills demostradas con banda mínima, pilar, nivel, sector de interés, palabras clave | `taxonomy_terms`, `competency_scores`, `profiles.empleo` |
+| Secciones plegables con «+» | Condiciones · Evidencia · Perfil · Actividad y proceso | `profiles.empleo`, `competency_scores` (banda, confianza, integridad, revisión, fecha), `applications` |
+| Sugerencias con recuento (`Python (21M+)`) | Recuento real de candidatos visibles por skill | Consulta agregada sobre el pool con los filtros actuales |
+| Contador «N total candidates» | «N candidatos encajan» + pista para relajar filtros cuando sale 0 | Misma consulta, recontando sin cada filtro |
+| Projects, Notes, Hide previously viewed | Listas, notas del equipo, ocultar ya vistos | Tablas nuevas `company_lists`, `company_notes`, `profile_views` (por empresa) |
+| Búsquedas guardadas | Búsquedas guardadas con aviso de candidatos nuevos | Tabla `saved_searches` + aviso en la bandeja de la empresa |
+
+No se copian nombre, centro de estudios, empresas actuales o anteriores, red de contactos ni código postal: el candidato es anónimo hasta el contacto y esos campos son atajos del CV que meten sesgo. Filtros principales y condiciones en todos los planes; evidencia, perfil, actividad, listas, notas y búsquedas guardadas en Pro y Enterprise.
+
+## 9. Decisiones para el equipo
 
 - [ ] ¿12 sectores visibles o 14 (sacando Inmobiliario y Transporte)?
 - [ ] ¿Idiomas como bloque propio fuera de las skills? (Recomendado: sí.)
 - [ ] ¿Límite de 8 skills por oferta?
 - [ ] ¿Se valida la lista con la asesora antes de migrar las ofertas existentes?
+- [ ] ¿Búsqueda de candidatos con la estructura de Recruiter, y la parte avanzada solo en Pro y Enterprise?

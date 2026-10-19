@@ -1173,16 +1173,19 @@ function openCommonEx(id){
 }
 
 function getJobMatches(){
+  // Cada skill se compara con su propio mínimo (20-requisitos.js); las ofertas
+  // antiguas, con su nivel único, cuentan todas como imprescindibles.
   return JOBS.map(j=>{
-    const req=j.requiredSkills||[];
-    const reqLevel=j.requiredLevel||'basico';
-    const threshold=reqLevel==='avanzado'?75:reqLevel==='intermedio'?50:30;
-    const has=req.filter(s=>{const sk=candidateProfile.skills[s];return sk?.unlocked&&sk.score>=threshold;});
-    const missing=req.filter(s=>{const sk=candidateProfile.skills[s];return !sk?.unlocked||sk.score<threshold;});
-    const matchScore=req.length?Math.round((has.length/req.length)*100):10;
+    const reqs=tpReqDeOferta(j);
+    const notas={};reqs.forEach(r=>{const sk=candidateProfile.skills[r.skill];if(sk?.unlocked)notas[r.skill]=sk.score;});
+    const enc=tpReqEncaje(reqs,notas,null);
+    const has=enc.estados.filter(e=>e.estado==='cumple').map(e=>e.skill);
+    const missing=enc.estados.filter(e=>e.estado!=='cumple').map(e=>e.skill);
+    const imp=enc.imprescindibles;
+    const matchScore=reqs.length?Math.round((imp.total?imp.cumple/imp.total:has.length/reqs.length)*100):10;
     const co=COMPANIES.find(c=>c.id===j.company);
-    return{...j,matchScore,has,missing,companyName:co?.name||'',companyLogo:co?.logo||'',threshold};
-  }).sort((a,b)=>b.matchScore-a.matchScore);
+    return{...j,matchScore,has,missing,enc,companyName:co?.name||'',companyLogo:co?.logo||''};
+  }).sort((a,b)=>a.enc.grupo-b.enc.grupo||b.matchScore-a.matchScore);
 }
 
 function renderJobMatches(){
@@ -1202,13 +1205,11 @@ function renderJobMatches(){
   }
   if(sinRetos)html+=tpSiguiente({icono:'target',titulo:'Haz tu primer reto para ver tu % de encaje',sub:'Ya puedes ver todas las ofertas; el encaje se calcula con tus skills verificadas.',boton:'Ir a los retos',accion:irRetos});
   matches.forEach(m=>{
-    const req=m.requiredSkills||[];
     const reqLevel=m.requiredLevel||'basico';
-    const threshold=m.threshold;
-    const hasCount=req.filter(s=>{const sk=candidateProfile.skills[s];return sk?.unlocked&&sk.score>=threshold;}).length;
-    const allMet=hasCount===req.length&&req.length>0;
-    const cls=sinRetos?'match-low':allMet?'match-high':hasCount>0?'match-mid':'match-low';
-    const pct=req.length?Math.round((hasCount/req.length)*100):0;
+    const imp=m.enc.imprescindibles;
+    const allMet=m.enc.grupo<=2&&m.enc.estados.length>0;
+    const cls=sinRetos?'match-low':allMet?'match-high':m.has.length>0?'match-mid':'match-low';
+    const pct=m.matchScore;
     const levelCls='level-'+reqLevel;
     const levelLabel=reqLevel==='avanzado'?'Avanzado':reqLevel==='intermedio'?'Intermedio':'Básico';
     html+=`<div class="match-card" onclick="openJob('${escHtml(m.id)}')">
@@ -1217,9 +1218,9 @@ function renderJobMatches(){
         <h4>${escHtml(m.title)} <span class="level-badge ${levelCls} tp-va-medio">${levelLabel}</span></h4>
         <div class="match-company">${escHtml(m.companyName)}</div>
         ${tpCondChips(m)}
-        <div class="tp-match-skills">${req.map(s=>{const sk=candidateProfile.skills[s];const ok=sk?.unlocked&&sk.score>=threshold;return`<span class="job-tag tp-skill-req ${ok?'ok':'falta'}">${ok?'✓ ':''}${escHtml(s)}</span>`;}).join('')}</div>
+        <div class="tp-match-skills">${m.enc.estados.map(e=>{const ok=e.estado==='cumple';const min=TP_REQ_MINIMOS[e.minimo].txt;return`<span class="job-tag tp-skill-req ${ok?'ok':'falta'}${e.peso==='imprescindible'?' imp':''}" title="${e.peso==='imprescindible'?'Imprescindible':'Valorable'} · mínimo ${min}">${ok?'✓ ':''}${escHtml(e.skill)}</span>`;}).join('')}</div>
       </div>
-      <div class="match-why">${sinRetos?'Ver oferta →':allMet?'✓ Puedes aplicar':hasCount+'/'+req.length+' skills'}</div>
+      <div class="match-why">${sinRetos?'Ver oferta →':allMet?'✓ Cumples las imprescindibles':imp.total?imp.cumple+' de '+imp.total+' imprescindibles':m.has.length+' de '+m.enc.estados.length+' skills'}</div>
     </div>`;
   });
   if(!matches.length)html+=tpVacio({icono:'search',titulo:'Ninguna oferta cumple esos filtros',texto:'Prueba a quitar algún filtro de jornada o modalidad.'});

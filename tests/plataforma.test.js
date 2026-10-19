@@ -115,3 +115,21 @@ test("la web no muestra avisos de demostración ni de versión preliminar", () =
     assert.doesNotMatch(visible, /datos de demostraci[oó]n|versi[oó]n preliminar|fase de preview|esta preview|durante la preview/i, f);
   }
 });
+
+test("ningún fichero del repositorio lleva marcas de un conflicto de git sin resolver", () => {
+  // Ya se subieron dos veces (dc38352 y a765750): index.html cargaba scripts
+  // dos veces y las marcas se veían en la web publicada.
+  const raiz = path.join(__dirname, "..");
+  const ignorar = new Set(["node_modules", ".git", ".netlify"]);
+  const marcas = /^(<<<<<<<|>>>>>>>) |^=======$/m;
+  const malos = [];
+  (function recorrer(dir) {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (ignorar.has(e.name)) continue;
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) recorrer(p);
+      else if (/\.(html|js|mjs|css|md|json|sql|toml)$/.test(e.name) && marcas.test(fs.readFileSync(p, "utf8"))) malos.push(path.relative(raiz, p));
+    }
+  })(raiz);
+  assert.deepEqual(malos, []);
+});

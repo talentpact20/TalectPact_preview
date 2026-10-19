@@ -52,7 +52,7 @@ Perfil y preferencias
 # Área de la empresa
 Inicio — ofertas activas y novedades
 Ofertas — crear en 3 pasos
-Candidatos — buscar y filtrar el pool
+Candidatos — búsqueda avanzada, listas y avisos
 Proceso — lista corta y etapas
 Verificar credenciales
 Equipo — reclutadores de la empresa
@@ -207,7 +207,69 @@ Paso 3 · Condiciones | Condiciones, hasta 3 preguntas y hasta 3 dilemas; plegad
 ### Su panel
 **Ofertas** (activas y candidatos de cada una) · **Candidatos** (buscar en todo el pool) · **Proceso** (lista corta y etapas) · **Verificar** (cualquier credencial) · **Equipo** (varios reclutadores) · **Plan**. Toda la información sale también como **informe PDF** o tabla para su programa de selección.
 
-## 08 · La rama de IA
+## 08 · Búsqueda de candidatos
+
+Referencia: **LinkedIn Recruiter** (la versión de pago), la herramienta que más valoran los reclutadores. Tomamos su estructura y la adaptamos a lo que nos diferencia: **buscamos por lo que se ha demostrado, no por el CV**.
+
+```buscador
+< Filtros principales
+Puesto o área | Título del puesto o área funcional, con sugerencias
+Ubicación | Vive en · o puede trabajar en (como «Can have / Current»)
+Skills demostradas | Con banda mínima; sugerencias con su número real: «Comunicación escrita (37)»
+Pilar | Soft · Transferibles · Hard
+Nivel | Prácticas · Junior · Intermedio · Sénior · Dirección
+Sector de interés | Dónde le gustaría trabajar
+Palabras clave | En skills, especialidades y herramientas
+> Condiciones
+Jornada | Completa, parcial, por horas
+Modalidad | Remoto, híbrido, presencial
+Contrato | Indefinido, temporal, prácticas
+Salario esperado | Dentro de mi rango
+Incorporación | Inmediata, en 1 mes…
+> Evidencia
+Banda mínima por skill | Aceptable, Bueno, Muy bueno
+Confianza | Alta o media
+Nivel de control | Estándar, Supervisado, Alto
+Revisión humana | Solo notas revisadas
+Antigüedad de la prueba | Últimos 6 o 12 meses
+> Perfil
+Idiomas | Con nivel demostrado
+Años de experiencia | Declarados por el candidato
+Certificación IA | Por itinerario
+Formación | Solo nivel (grado, máster, FP), sin centro
+> Actividad y proceso (equipo)
+Se ha postulado a mis ofertas | 
+En mis listas | Como los «Projects» de Recruiter
+Notas del equipo | 
+Activo recientemente | Últimos 30 días
+Ocultar ya vistos | 
+Etapa del proceso | Lista corta, entrevista…
+```
+
+### Lo que tomamos de Recruiter
+- **Una columna fija** con los filtros que se usan siempre, y el resto **plegado en secciones** que se abren con «+». No hay una pared de opciones.
+- **Sugerencias con cifra real** al escribir (cuántos candidatos tienen esa skill). Así la empresa sabe si está pidiendo un imposible.
+- **Contador en vivo** arriba: «37 candidatos encajan». Si sale 0, en vez de una pantalla vacía, una pista real: «Si quitas la banda mínima en Negociación, aparecen 12».
+- **Filtros de trabajo en equipo**: listas, notas, ocultar ya vistos, búsquedas guardadas y **aviso cuando aparezca alguien nuevo** que encaje.
+
+### Lo que no copiamos, y por qué
+
+| En Recruiter | En TalentPact | Por qué |
+| --- | --- | --- |
+| Nombre y apellidos | Alias anónimo hasta el contacto | El anonimato es nuestra propuesta de valor |
+| Colegio y año de graduación | Solo nivel de formación | Son atajos del CV que meten sesgo |
+| Empresa actual y anteriores | No se filtra por ello | Igual: se busca por evidencia, no por marca |
+| Red de contactos | No existe | Nadie entra por conocer a alguien |
+| Código postal | Ciudad o provincia | Evita identificar a la persona |
+
+### Cómo se ve cada resultado
+Una fila por candidato con **alias · área y nivel · ubicación y modalidad · sus 3–4 mejores skills con banda · encaje con la oferta · nivel de control · última actividad**. Acciones: guardar en lista, añadir nota, desbloquear contacto.
+
+### Por plan
+- **Pago por uso y prueba gratis**: filtros principales y condiciones.
+- **Pro y Enterprise**: evidencia, perfil y actividad, búsquedas guardadas con aviso, listas y notas compartidas con el equipo. Es la misma lógica que LinkedIn: la búsqueda potente es lo que se paga.
+
+## 09 · La rama de IA
 
 La IA tiene **dos sitios** en la plataforma, y no se mezclan:
 
@@ -232,7 +294,7 @@ IA aplicada en empresa | Automatizar procesos con IA de forma segura
 - **Empresa**: elige un itinerario al crear la oferta; puede pedir un **diagnóstico de IA de su plantilla** (cada vez más empresas tienen que acreditar que su personal sabe usar la IA).
 - **Expertos**: una red de profesionales de IA que escriben y revisan los retos.
 
-## 09 · Cómo se pone la nota
+## 10 · Cómo se pone la nota
 
 ```flujo
 1 · Entrega | El candidato responde dentro del tiempo
@@ -251,7 +313,7 @@ IA aplicada en empresa | Automatizar procesos con IA de forma segura
 
 Antes de usarlo con empresas, la asesora y alguien del equipo corrigen un conjunto de respuestas a mano para comprobar que la IA coincide con ellas.
 
-## 10 · Confianza y juego limpio
+## 11 · Confianza y juego limpio
 
 ### Cuatro niveles de control, según lo que esté en juego
 
@@ -277,24 +339,24 @@ Verificar una credencial es **siempre gratis** para cualquier empresa, desde su 
 ### Para que la empresa confíe
 Prueba gratuita con su caso real · «haz el reto tú» con su equipo · garantía de respuesta · página de confianza con el método y la calidad medida · nunca demos con datos inventados.
 
-## 11 · Qué es gratis y qué es de pago
+## 12 · Qué es gratis y qué es de pago
 
 | | Gratis | De pago |
 | --- | --- | --- |
 | **Candidato** | Perfil, pool, todos los retos oficiales, feedback, postular, credencial firmada | **Plus 6,99 €/mes o 49 €/año**: práctica ilimitada, plan de mejora, estadísticas, informe, sellos. Sueltos: sello 4,99 €, revisión 9,99 €, certificación IA 39 € |
-| **Empresa** | Prueba de 30 días, verificar credenciales, ver cifras del pool | **49 €** por contacto (perfil IA 89 €) · **Pro 199 €/mes** · **Enterprise 499 €/mes** · reto a medida 299 € · diagnóstico IA de plantilla |
+| **Empresa** | Prueba de 30 días, verificar credenciales, ver cifras del pool, búsqueda con filtros principales | **49 €** por contacto (perfil IA 89 €) · **Pro 199 €/mes** (búsqueda avanzada, listas, avisos) · **Enterprise 499 €/mes** · reto a medida 299 € · diagnóstico IA de plantilla |
 | **Eventos Impact** | Inscripción del candidato | Patrocinio de empresas por evento |
 
 Todas las cifras son propuestas; el modelo financiero se actualiza cuando las aprobéis.
 
-## 12 · Orden de construcción
+## 13 · Orden de construcción
 
 ```flujo
 1 · Arreglar | Que los retos no se puedan ver antes de empezar
 2 · Ordenar | Sectores, áreas y skills con un solo vocabulario; oferta en 3 pasos
 3 · Medir | Comprobar la corrección con la asesora
 4 · Completar | Retos nuevos y fichas de cada ejercicio
-5 · Abrir a empresas | Prueba gratis, «haz el reto tú», página de confianza
+5 · Abrir a empresas | Prueba gratis, «haz el reto tú», búsqueda avanzada, página de confianza
 6 · Monetizar | Plus, sello, informes
 7 · Rama IA | Itinerarios, expertos y certificación
 ```
@@ -304,6 +366,7 @@ Todas las cifras son propuestas; el modelo financiero se actualiza cuando las ap
 - [ ] ¿12 sectores y 7 áreas visibles?
 - [ ] ¿Orden de la ficha del candidato: condiciones, personas, cómo piensa, oficio?
 - [ ] ¿Un intento oficial cada 30 días y modo práctica aparte?
+- [ ] ¿Búsqueda de candidatos con la estructura de Recruiter (columna fija + secciones plegables + contador)?
 - [ ] ¿Rama IA dentro de Tecnología e «IA en el trabajo» para todos?
 - [ ] ¿Precios propuestos para candidato y empresa?
 - [ ] ¿Prueba gratuita de 30 días para empresas?

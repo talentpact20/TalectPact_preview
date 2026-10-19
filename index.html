@@ -32,11 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<<<<<<< Updated upstream
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261015j">
-=======
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261015i">
->>>>>>> Stashed changes
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261019a">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
@@ -326,21 +322,76 @@
       </p>
     </div>
 
-    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div><div id="postJobForm" style="display:none"><div class="post-job"><div class="pj-title">Nueva oferta de trabajo</div><div class="pj-grid"><div class="pj-field"><label>Título</label><input type="text" id="pj-title" placeholder="Ej: Frontend Developer Junior"></div><div class="pj-field"><label>Sector</label><select id="pj-sector" aria-label="Sector de la oferta"><option value="">Selecciona…</option><option>Marketing</option><option>IT</option><option>Data</option><option>Business</option><option>Design</option><option>RRHH</option><option>Finance</option><option>Legal</option><option>Ops</option><option>Sales</option><option>Languages</option></select></div><div class="pj-field pj-full"><label>Descripción</label><textarea id="pj-desc" placeholder="Describe el puesto…"></textarea></div><div class="pj-field"><label for="pj-sal-min">Salario mínimo (€/año)</label><input type="number" id="pj-sal-min" min="0" step="1000" inputmode="numeric" placeholder="22000"></div><div class="pj-field"><label for="pj-sal-max">Salario máximo (€/año)</label><input type="number" id="pj-sal-max" min="0" step="1000" inputmode="numeric" placeholder="28000"></div><div class="pj-field"><label for="pj-jornada">Jornada</label><select id="pj-jornada" aria-label="Tipo de jornada"><option value="completa">Jornada completa</option><option value="parcial">Media jornada</option><option value="horas">Por horas / flexible</option><option value="practicas">Prácticas</option></select></div><div class="pj-field"><label for="pj-mode">Modalidad</label><select id="pj-mode" aria-label="Modalidad de trabajo"><option value="remoto">Remoto</option><option value="hibrido">Híbrido</option><option value="presencial">Presencial</option></select></div><div class="pj-field"><label for="pj-contrato">Contrato</label><select id="pj-contrato" aria-label="Tipo de contrato"><option value="indefinido">Indefinido</option><option value="temporal">Temporal</option><option value="freelance">Freelance / autónomo</option><option value="practicas">Convenio de prácticas</option></select></div><div class="pj-field"><label for="pj-city">Ubicación</label><input type="text" id="pj-city" placeholder="Madrid (o vacío si es remoto)"></div><div class="pj-field pj-full"><label>Skills técnicos (Enter para añadir)</label><input type="text" id="pj-skill-input" placeholder="React, Python, SQL…" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div></div>
-    <div class="pj-field pj-full"><label>Skills de plataforma requeridos</label><p class="u-fs-micro u-c-slate-400 u-mb-8">Tres pilares: Hard skills, Soft skills y Transferibles. Escribe para filtrar.</p><input class="search-bar u-fs-micro u-p-8-12 u-mb-8 u-bs-border-box u-w-100pct" id="pjSkillSearch" type="text" placeholder="Buscar skill: liderazgo, resolución, python…" oninput="renderPjSkills()"><div class="u-d-flex u-gap-6 u-mb-8 u-fw-wrap-wrap"><button class="filter-btn active u-fs-micro u-p-3-8" onclick="setPjSkillCat('all',this)">Todos</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('hard',this)">Hard skills</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('soft',this)">Soft skills</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('transferibles',this)">Transferibles</button><button class="filter-btn u-fs-micro u-p-3-8" onclick="setPjSkillCat('selected',this)">Seleccionados</button></div><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
-    <div class="pj-field pj-full"><label>Preguntas de la vacante (opcionales, máx. 3)</label><p class="u-fs-micro u-c-slate-400 u-mb-8">Para conocer al candidato (turnos, viajes, preferencias). No es un test de personalidad.</p>
-      <input class="search-bar u-fs-micro u-p-8-12 u-mb-6 u-bs-border-box u-w-100pct" id="pj-q1" maxlength="200" placeholder="Ej.: ¿Aceptas turnos de tarde 2 días/semana?">
-      <input class="search-bar u-fs-micro u-p-8-12 u-mb-6 u-bs-border-box u-w-100pct" id="pj-q2" maxlength="200" placeholder="Ej.: ¿Viajes 1 semana al mes te encajan?">
-      <input class="search-bar u-fs-micro u-p-8-12 u-bs-border-box u-w-100pct" id="pj-q3" maxlength="200" placeholder="Ej.: ¿Disponibilidad para guardias ocasionales?">
-    </div>
-    <div class="pj-field pj-full"><label>Dilemas del día a día (opcionales, máx. 3)</label><p class="u-fs-micro u-c-slate-400 u-mb-8">Situaciones reales de <em>vuestra</em> empresa. El candidato las resuelve al postularse para que veáis cómo actuaría.</p>
-      <textarea class="search-bar u-fs-micro u-p-8-12 u-mb-6 u-bs-border-box u-w-100pct" id="pj-d1" rows="2" maxlength="600" placeholder="Ej.: El cliente pide entregar el viernes algo que rompe el proceso de calidad. ¿Qué haces?"></textarea>
-      <textarea class="search-bar u-fs-micro u-p-8-12 u-mb-6 u-bs-border-box u-w-100pct" id="pj-d2" rows="2" maxlength="600" placeholder="Ej.: Dos áreas pelean por el mismo recurso y tú decides."></textarea>
-      <textarea class="search-bar u-fs-micro u-p-8-12 u-bs-border-box u-w-100pct" id="pj-d3" rows="2" maxlength="600" placeholder="Ej.: Hay un rumor interno que afecta a un compañero; el equipo te mira."></textarea>
-    </div>
-    <div class="pj-field pj-full"><label>Nivel mínimo requerido</label><p class="u-fs-micro u-c-slate-400 u-mb-8">¿Qué nivel mínimo de score deben tener los candidatos en cada skill?</p><div class="level-selector" id="pjLevelSelector"><div class="level-opt selected" onclick="selectPjLevel('basico',this)"><span class="lvl-dot lvl-basico"></span>Básico <span class="u-fs-micro u-c-slate-400">(Score ≥30)</span></div><div class="level-opt" onclick="selectPjLevel('intermedio',this)"><span class="lvl-dot lvl-intermedio"></span>Intermedio <span class="u-fs-micro u-c-slate-400">(Score ≥50)</span></div><div class="level-opt" onclick="selectPjLevel('avanzado',this)"><span class="lvl-dot lvl-avanzado"></span>Avanzado <span class="u-fs-micro u-c-slate-400">(Score ≥75)</span></div></div></div>
-    <div class="pj-field pj-full"><label>Configuración de ejercicios</label><p class="u-fs-micro u-c-slate-400 u-mb-8">¿Cómo quieres evaluar a los candidatos además de los retos comunes de la plataforma?</p><div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div></div>
-    </div><div class="u-d-flex u-gap-10 u-mt-16"><button class="btn btn-primary" onclick="publishJob()">Publicar oferta →</button><button class="btn btn-outline" onclick="togglePostJob()">Cancelar</button></div></div></div></div>
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div>
+    <div id="postJobForm" style="display:none"><div class="post-job">
+      <div class="pj-cab"><div class="pj-title">Nueva oferta</div><div id="pjPasos"></div></div>
+
+      <div class="pj-doc" id="pjDoc">
+        <div class="pj-doc-txt"><strong>¿Ya tienes un documento con los requisitos del puesto?</strong><span>Súbelo y rellenamos la oferta por ti. Revisarás cada paso antes de publicar.</span></div>
+        <div class="pj-doc-acc">
+          <label class="btn btn-outline btn-sm pj-doc-btn">Subir documento<input type="file" id="pjDocFile" class="sr-only" accept=".pdf,.docx,.txt,.md" aria-label="Subir documento con los requisitos del puesto (PDF, Word o texto)" onchange="tpReqLeerArchivo(this)"></label>
+          <button type="button" class="pj-enlace" onclick="tpReqMostrarPegar()">o pega el texto</button>
+        </div>
+        <div class="pj-doc-pegar" id="pjDocPegar">
+          <label for="pjDocTexto" class="sr-only">Texto con los requisitos del puesto</label>
+          <textarea id="pjDocTexto" rows="5" maxlength="60000" placeholder="Pega aquí la descripción del puesto y sus requisitos"></textarea>
+          <button type="button" class="btn btn-primary btn-sm" onclick="tpReqLeerTexto()">Rellenar la oferta</button>
+        </div>
+        <div id="pjDocEstado" role="status" aria-live="polite"></div>
+      </div>
+
+      <section class="pj-paso activo" data-paso="1" aria-label="Paso 1: el puesto">
+        <div class="pj-grid">
+          <div class="pj-field pj-full"><label for="pj-title">Título del puesto</label><input type="text" id="pj-title" maxlength="120" placeholder="Ej.: Técnico de selección junior"></div>
+          <div class="pj-field"><label for="pj-sector">Área del puesto</label><select id="pj-sector" aria-label="Área del puesto" onchange="tpReqPintar()"><option value="">Selecciona…</option><option value="Marketing">Marketing</option><option value="Sales">Ventas</option><option value="IT">Tecnología</option><option value="Data">Datos y analítica</option><option value="Design">Diseño</option><option value="Business">Negocio y estrategia</option><option value="Finance">Finanzas</option><option value="Legal">Jurídico</option><option value="RRHH">Recursos humanos</option><option value="Ops">Operaciones</option><option value="Languages">Idiomas</option></select></div>
+          <div class="pj-field pj-full"><label for="pj-desc">Qué hará la persona</label><textarea id="pj-desc" maxlength="4000" placeholder="Dos o tres frases sobre el día a día del puesto"></textarea></div>
+        </div>
+      </section>
+
+      <section class="pj-paso" data-paso="2" aria-label="Paso 2: qué tiene que demostrar">
+        <p class="pj-ayuda">Elige hasta 8 skills. Marca como <strong>imprescindibles</strong> las que no pueden faltar (hasta 4) y pon la banda mínima de cada una.</p>
+        <div id="pjReqLista"></div>
+        <div id="pjReqSugeridas"></div>
+        <div class="pj-field pj-full"><label for="pjSkillSearch">Añadir otra skill</label><input type="text" id="pjSkillSearch" placeholder="Busca: negociación, contabilidad, SQL…" oninput="renderPjSkills()" autocomplete="off"><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
+        <details class="pj-plegable"><summary>Etiquetas técnicas libres <span class="pj-cuenta" id="pjCuentaTags">opcional</span></summary>
+          <p class="pj-ayuda">Herramientas o requisitos que no tienen reto (por ejemplo, SAP o carné de conducir). Se muestran en la oferta, pero no se comprueban.</p>
+          <input type="text" id="pj-skill-input" placeholder="Escribe y pulsa Enter" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div>
+        </details>
+      </section>
+
+      <section class="pj-paso" data-paso="3" aria-label="Paso 3: condiciones y extras">
+        <div class="pj-grid">
+          <div class="pj-field"><label for="pj-jornada">Jornada</label><select id="pj-jornada" aria-label="Tipo de jornada"><option value="completa">Jornada completa</option><option value="parcial">Media jornada</option><option value="horas">Por horas / flexible</option><option value="practicas">Prácticas</option></select></div>
+          <div class="pj-field"><label for="pj-mode">Modalidad</label><select id="pj-mode" aria-label="Modalidad de trabajo"><option value="remoto">Remoto</option><option value="hibrido">Híbrido</option><option value="presencial">Presencial</option></select></div>
+          <div class="pj-field"><label for="pj-contrato">Contrato</label><select id="pj-contrato" aria-label="Tipo de contrato"><option value="indefinido">Indefinido</option><option value="temporal">Temporal</option><option value="freelance">Freelance / autónomo</option><option value="practicas">Convenio de prácticas</option></select></div>
+          <div class="pj-field"><label for="pj-city">Ubicación</label><input type="text" id="pj-city" placeholder="Madrid (o vacío si es remoto)"></div>
+          <div class="pj-field"><label for="pj-sal-min">Salario mínimo (€/año)</label><input type="number" id="pj-sal-min" min="0" step="1000" inputmode="numeric" placeholder="22000"></div>
+          <div class="pj-field"><label for="pj-sal-max">Salario máximo (€/año)</label><input type="number" id="pj-sal-max" min="0" step="1000" inputmode="numeric" placeholder="28000"></div>
+        </div>
+        <details class="pj-plegable"><summary>Preguntas de la vacante <span class="pj-cuenta" id="pjCuentaQ">0 de 3</span></summary>
+          <p class="pj-ayuda">Para conocer al candidato (turnos, viajes, preferencias). No es un test de personalidad.</p>
+          <input class="search-bar" id="pj-q1" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Aceptas turnos de tarde 2 días/semana?">
+          <input class="search-bar" id="pj-q2" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Viajes 1 semana al mes te encajan?">
+          <input class="search-bar" id="pj-q3" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Disponibilidad para guardias ocasionales?">
+        </details>
+        <details class="pj-plegable"><summary>Dilemas del día a día <span class="pj-cuenta" id="pjCuentaD">0 de 3</span></summary>
+          <p class="pj-ayuda">Situaciones reales de <em>vuestra</em> empresa. El candidato las resuelve al postularse para que veáis cómo actuaría.</p>
+          <textarea class="search-bar" id="pj-d1" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: El cliente pide entregar el viernes algo que rompe el proceso de calidad. ¿Qué haces?"></textarea>
+          <textarea class="search-bar" id="pj-d2" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: Dos áreas pelean por el mismo recurso y tú decides."></textarea>
+          <textarea class="search-bar" id="pj-d3" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: Hay un rumor interno que afecta a un compañero; el equipo te mira."></textarea>
+        </details>
+        <details class="pj-plegable"><summary>Ejercicios de la oferta <span class="pj-cuenta">retos comunes + personalizados</span></summary>
+          <div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div>
+        </details>
+      </section>
+
+      <div class="pj-nav">
+        <button type="button" class="btn btn-outline" id="pjAtras" onclick="tpReqIr(TPReq.paso-1)">Atrás</button>
+        <button type="button" class="btn btn-outline" onclick="togglePostJob()">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="pjSiguiente" onclick="tpReqIr(TPReq.paso+1)">Siguiente</button>
+        <button type="button" class="btn btn-primary" id="pjPublicar" onclick="publishJob()">Publicar oferta</button>
+      </div>
+    </div></div></div>
 
     <div class="dash-section u-mt-8" id="empVerifySection">
       <div class="dash-section-head">
@@ -1065,35 +1116,23 @@
 <script src="assets/js/app/01-datos-ofertas.js?v=20261015c"></script>
 <script src="assets/js/app/02-grabacion.js?v=20261015e"></script>
 <script src="assets/js/app/03-datos-retos.js?v=20261015c"></script>
-<<<<<<< Updated upstream
 <script src="assets/js/app/04-estado-y-nube.js?v=20261015j"></script>
 <script src="assets/js/app/05-qr.js?v=20261015c"></script>
 <script src="assets/js/app/06-skillpass-y-sesion.js?v=20261015e"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261015j"></script>
+<script src="assets/js/app/07-retos-comunes.js?v=20261019a"></script>
 <script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261015j"></script>
 <script src="assets/js/app/09-acceso.js?v=20261015j"></script>
-=======
-<script src="assets/js/app/04-estado-y-nube.js?v=20261015h"></script>
-<script src="assets/js/app/05-qr.js?v=20261015c"></script>
-<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261015e"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261015i"></script>
-<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261015j"></script>
-<script src="assets/js/app/09-acceso.js?v=20261015h"></script>
->>>>>>> Stashed changes
-<script src="assets/js/app/10-paneles-y-pagos.js?v=20261015e"></script>
+<script src="assets/js/app/10-paneles-y-pagos.js?v=20261019a"></script>
 <script src="assets/js/app/11-superadmin.js?v=20261015c"></script>
 <script src="assets/js/app/12-soporte-y-ranking.js?v=20261015e"></script>
 <script src="assets/js/app/13-integridad.js?v=20261015c"></script>
 <script src="assets/js/app/14-empleo.js?v=20261015c"></script>
-<<<<<<< Updated upstream
 <script src="assets/js/app/15-proteccion-acceso.js?v=20261015j"></script>
-=======
-<script src="assets/js/app/15-proteccion-acceso.js?v=20261015h"></script>
->>>>>>> Stashed changes
 <script src="assets/js/app/16-pool-real.js?v=20261015e"></script>
-<script src="assets/js/app/17-ofertas-reales.js?v=20261015i"></script>
+<script src="assets/js/app/17-ofertas-reales.js?v=20261019a"></script>
 <script src="assets/js/app/18-interfaz.js?v=20261015c"></script>
 <script src="assets/js/app/19-rrhh.js?v=20261015j"></script>
+<script src="assets/js/app/20-requisitos.js?v=20261019a"></script>
 <script src="assets/js/app/99-arranque.js?v=20261015c"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->

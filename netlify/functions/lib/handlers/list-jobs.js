@@ -7,11 +7,13 @@
  * Nunca devuelve `company_user_id`: el id de la cuenta que publica no es público.
  */
 const { jsonResponse, sb, authUser, faltaEnEsquema, errorInterno } = require("../tp");
+const { limpiarRequisitos } = require("../requisitos");
 
 const CAMPOS_BASE = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
   "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at";
 const CAMPOS_QS = CAMPOS_BASE + ",culture_questions";
-const CAMPOS = CAMPOS_QS + ",dilemmas";
+const CAMPOS_DIL = CAMPOS_QS + ",dilemmas";
+const CAMPOS = CAMPOS_DIL + ",skill_requirements";
 
 function textosJson(v, max, len) {
   if (!Array.isArray(v)) return [];
@@ -27,6 +29,7 @@ function aOferta(f) {
     sector: f.sector,
     desc: f.description,
     requiredSkills: f.required_skills || [],
+    skillRequirements: limpiarRequisitos(f.skill_requirements).requisitos || [],
     tags: f.tags || [],
     requiredLevel: f.required_level,
     exerciseConfig: f.exercise_config,
@@ -57,6 +60,7 @@ async function seleccionar(filtro) {
   const joinMin = "companies(company_name,company_size)";
   const intentos = [
     `select=${CAMPOS},${join}&${filtro}`,
+    `select=${CAMPOS_DIL},${join}&${filtro}`,
     `select=${CAMPOS_QS},${join}&${filtro}`,
     `select=${CAMPOS_BASE},${join}&${filtro}`,
     `select=${CAMPOS_BASE},${joinMin}&${filtro}`
@@ -67,7 +71,7 @@ async function seleccionar(filtro) {
       return await sb.select("jobs", q);
     } catch (err) {
       ultimo = err;
-      if (!faltaEnEsquema(err, /culture_questions|dilemmas|description|sector|website|location/i)) throw err;
+      if (!faltaEnEsquema(err, /skill_requirements|culture_questions|dilemmas|description|sector|website|location/i)) throw err;
     }
   }
   throw ultimo || new Error("No se pudieron cargar las ofertas");

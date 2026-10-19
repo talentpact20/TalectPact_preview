@@ -25,4 +25,9 @@ function ejercicioComun(challengeId, exerciseId) {
   return r.exercises.find((e) => e.id === String(exerciseId || "")) || null;
 }
 
-module.exports = { retoComun, ejercicioComun, total: retos.length };
+/** Nombres de skill con reto en el catálogo, sin repetir (las únicas que se pueden exigir). */
+function skillsDelCatalogo() {
+  return [...new Set(retos.map((r) => r.skill).filter(Boolean))];
+}
+
+module.exports = { retoComun, ejercicioComun, skillsDelCatalogo, total: retos.length };

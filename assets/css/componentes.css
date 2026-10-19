@@ -271,3 +271,88 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
 .tp-final-skill.u-d-block{display:block}
 /* Contenedor del perfil de skills: bloque normal; las cuadrículas van dentro. */
 .sp-skills{display:block}
+
+/* ─── Oferta en tres pasos y requisitos de skill (20-requisitos.js) ─────────
+   Como LinkedIn: un paso a la vez, sugerencias en vez de listas enteras y lo
+   opcional plegado. */
+.pj-cab{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap;margin-bottom:var(--sp-4)}
+.pj-cab .pj-title{margin-bottom:0}
+.pj-oculto{display:none!important}
+.pj-paso{display:none}
+.pj-paso.activo{display:block}
+.pj-ayuda{font-size:var(--fs-micro);color:var(--c-texto-3);margin:0 0 var(--sp-3)}
+.pj-enlace{background:none;border:0;padding:0;color:var(--c-marca);font:inherit;font-size:var(--fs-micro);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.pj-enlace:hover{color:var(--c-marca-hover)}
+.pj-auto{border-color:var(--c-info)!important;background:var(--c-info-suave)!important}
+
+.pj-doc{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);flex-wrap:wrap;padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-4);border:1px dashed var(--c-borde-fuerte);border-radius:var(--radius);background:var(--c-superficie-2)}
+.pj-doc-txt{display:flex;flex-direction:column;gap:2px;font-size:var(--fs-peq);color:var(--c-texto);min-width:0;flex:1 1 260px}
+.pj-doc-txt span{font-size:var(--fs-micro);color:var(--c-texto-3)}
+.pj-doc-acc{display:flex;align-items:center;gap:var(--sp-3)}
+.pj-doc-btn{cursor:pointer}
+.pj-doc-btn:focus-within{outline:2px solid var(--c-foco);outline-offset:2px}
+.pj-doc-pegar{display:none;width:100%;flex-direction:column;gap:var(--sp-2)}
+.pj-doc-pegar.abierto{display:flex}
+.pj-doc-pegar textarea{width:100%;min-height:96px;resize:vertical;padding:var(--sp-2) var(--sp-3);border:1.5px solid var(--c-borde);border-radius:var(--radius);background:var(--c-superficie);color:var(--c-texto);font:inherit;font-size:var(--fs-peq)}
+.pj-doc-pegar .btn{align-self:flex-start}
+#pjDocEstado{width:100%}
+#pjDocEstado:empty{display:none}
+.pj-doc-estado{font-size:var(--fs-micro);line-height:1.5;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius);border:1px solid var(--c-borde);background:var(--c-superficie);color:var(--c-texto-2)}
+.pj-doc-estado ul{margin:var(--sp-1) 0 0;padding-left:var(--sp-4)}
+.pj-doc-estado.ok{border-color:var(--emerald-200);background:var(--c-ok-suave);color:var(--emerald-700)}
+.pj-doc-estado.error{border-color:var(--red-200);background:var(--c-error-suave);color:var(--red-700)}
+.pj-doc-estado.cargando{border-color:var(--blue-200);background:var(--c-info-suave);color:var(--blue-700)}
+[aria-disabled="true"]{pointer-events:none;opacity:.55}
+
+.pj-req-vacio{font-size:var(--fs-micro);color:var(--c-texto-3);padding:var(--sp-3);border:1px dashed var(--c-borde);border-radius:var(--radius);margin-bottom:var(--sp-3)}
+.pj-req-cab{font-size:var(--fs-micro);font-weight:600;color:var(--c-texto-2);margin-bottom:var(--sp-2)}
+.pj-req-lista{list-style:none;margin:0 0 var(--sp-3);padding:0;border:1px solid var(--c-borde);border-radius:var(--radius);overflow:hidden}
+.pj-req-fila{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;align-items:center;gap:var(--sp-3);padding:var(--sp-2) var(--sp-3);border-top:1px solid var(--c-borde);background:var(--c-superficie)}
+.pj-req-fila:first-child{border-top:0}
+.pj-req-fila.imp{box-shadow:inset 3px 0 0 var(--c-marca)}
+.pj-req-nombre{display:flex;flex-direction:column;gap:2px;min-width:0}
+.pj-req-nombre b{font-size:var(--fs-peq);color:var(--c-texto)}
+.pj-req-pilar{font-size:var(--fs-micro);color:var(--c-texto-3)}
+.pj-req-motivo{font-size:var(--fs-micro);color:var(--c-info);font-style:italic}
+.pj-req-peso{display:inline-flex;border:1px solid var(--c-borde-fuerte);border-radius:var(--radius-full);overflow:hidden}
+.pj-req-peso button{border:0;background:var(--c-superficie);color:var(--c-texto-2);font:inherit;font-size:var(--fs-micro);font-weight:600;padding:5px 10px;cursor:pointer}
+.pj-req-peso button+button{border-left:1px solid var(--c-borde-fuerte)}
+.pj-req-peso button.activo{background:var(--c-marca);color:var(--c-sobre-tinta)}
+.pj-req-peso button:not(.activo):hover{background:var(--c-superficie-2)}
+.pj-req-min{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-micro);color:var(--c-texto-3)}
+.pj-req-min select{font:inherit;font-size:var(--fs-micro);padding:4px 6px;border:1.5px solid var(--c-borde);border-radius:6px;background:var(--c-superficie);color:var(--c-texto)}
+.pj-req-quitar{border:0;background:none;color:var(--c-texto-3);font-size:var(--fs-dest);line-height:1;cursor:pointer;padding:2px 6px;border-radius:6px}
+.pj-req-quitar:hover{color:var(--c-error);background:var(--c-error-suave)}
+.pj-req-aviso{font-size:var(--fs-micro);line-height:1.5;color:var(--amber-700);background:var(--c-aviso-suave);border:1px solid var(--amber-200);border-radius:var(--radius);padding:var(--sp-2) var(--sp-3);margin-bottom:var(--sp-3)}
+.pj-sug-cab{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);font-size:var(--fs-micro);font-weight:600;color:var(--c-texto-2);margin-bottom:var(--sp-2)}
+.pj-sug-lista,.pj-req-skills-grid{display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-3)}
+#pjRequiredSkills:empty{display:none}
+.pj-sug{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--c-borde-fuerte);background:var(--c-superficie);color:var(--c-texto);border-radius:var(--radius-full);padding:5px 12px;font:inherit;font-size:var(--fs-micro);font-weight:600;cursor:pointer}
+.pj-sug span{font-weight:500;color:var(--c-texto-3)}
+.pj-sug:hover{border-color:var(--c-marca);background:var(--c-marca-suave)}
+
+.pj-plegable{border:1px solid var(--c-borde);border-radius:var(--radius);padding:var(--sp-2) var(--sp-3);margin-top:var(--sp-3);background:var(--c-superficie)}
+.pj-plegable summary{cursor:pointer;font-size:var(--fs-peq);font-weight:600;color:var(--c-texto);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3)}
+.pj-plegable[open] summary{margin-bottom:var(--sp-2)}
+.pj-plegable input,.pj-plegable textarea{width:100%;box-sizing:border-box;margin-bottom:var(--sp-2)}
+.pj-cuenta{font-size:var(--fs-micro);font-weight:500;color:var(--c-texto-3)}
+.pj-nav{display:flex;justify-content:flex-end;gap:var(--sp-3);margin-top:var(--sp-4);flex-wrap:wrap}
+.pj-nav #pjAtras{margin-right:auto}
+
+/* Encaje por requisitos en la lista de candidatos de una oferta */
+.tp-req-resumen{display:flex;gap:var(--sp-2);flex-wrap:wrap;margin:var(--sp-1) 0}
+.tp-req-estados{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:var(--sp-1)}
+.tp-req-est{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-micro);padding:2px 8px;border-radius:var(--radius-full);border:1px solid var(--c-borde);color:var(--c-texto-2);background:var(--c-superficie)}
+.tp-req-est b{font-weight:700}
+.tp-req-est.imp{font-weight:600}
+.tp-req-est.e-cumple{border-color:var(--emerald-200);color:var(--emerald-700);background:var(--c-ok-suave)}
+.tp-req-est.e-por_debajo{border-color:var(--amber-200);color:var(--amber-700);background:var(--c-aviso-suave)}
+.tp-req-est.e-pendiente{border-style:dashed}
+.tp-skill-req.imp{font-weight:700}
+
+@media (max-width:640px){
+  .pj-req-fila{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"nombre quitar" "peso peso" "min min"}
+  .pj-req-nombre{grid-area:nombre}.pj-req-quitar{grid-area:quitar}.pj-req-peso{grid-area:peso;justify-self:start}.pj-req-min{grid-area:min}
+  .pj-nav .btn{flex:1 1 auto}
+  .pj-nav #pjAtras{margin-right:0}
+}

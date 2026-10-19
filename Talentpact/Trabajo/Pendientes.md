@@ -2,6 +2,8 @@
 
 ## Decide el equipo
 - [ ] **Plan post reunión** (`docs/plan_post_reunion/00_plan_maestro.md`, §5): fase 0 antitrampas, diccionario canónico, 12 sectores + 7 áreas, intento oficial cada 30 días, precios (Plus 6,99 €/mes · 49 €/año, sello 4,99 €, certificación IA 39 €, perfil IA 89 €), prueba gratuita 30 días, quién hace el gold set, pago del candidato con Stripe. Ver [[Plan post reunión]].
+- [ ] **Skills en la plataforma** (19/10, `skills_en_la_plataforma.md`, parte 08): grados declarada/demostrada/verificada, pasaporte básico de 3 retos. Hecho en código el 19/10: imprescindible/valorable con banda mínima por skill, oferta en 3 pasos, relleno desde documento y encaje en 3 estados.
+- [ ] **Búsqueda de candidatos tipo LinkedIn Recruiter** (19/10): columna fija + secciones plegables (condiciones, evidencia, perfil, actividad) + contador en vivo + listas, notas y búsquedas guardadas. ¿Parte avanzada solo en Pro/Enterprise? Ver `estructura_plataforma.md`, parte 08, y doc 01 §8.
 - [ ] **Ofertas de ejemplo en producción**: el seed de Iván (NortePay, Orbit Labs, ClaroData, Verde Brand) choca con la regla de no mostrar contenido de demostración. ¿Se quitan, se marcan o se mantienen para la reunión?
 
 - [ ] Decisiones de `04_estrategia.md`: perfil de trabajo inicial, plazo entre reintentos, nota por bloques, pool solo para empresas verificadas. Ver [[Estrategia]].
@@ -13,18 +15,19 @@
 - [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
 
 ## Supabase (usuario)
+- [ ] **Ejecutar `supabase_schema_requisitos.sql`** (requisitos imprescindible/valorable por skill en `jobs`). Sin él, las ofertas se guardan sin requisitos.
 - [ ] **Activar Google** en Authentication → Providers (hoy Google y LinkedIn están desactivados; ver `docs/Cambios_prereunion/01_changelog.md`, 15/10). Añadir `https://talentpact.es/` a Redirect URLs.
 - [ ] Decidir si se exige confirmar el email al registrarse (hoy `mailer_autoconfirm` está activo: cualquiera puede registrarse con un correo ajeno).
 - [ ] Ejecutar `supabase_schema_pool_fix.sql` si falta.
 - [ ] Ejecutar `supabase_schema_rrhh_corto.sql` (preguntas de vacante, avisos, pipeline).
 - [ ] Rol admin en `app_metadata` y **`EVAL_SIGNING_SECRET` en Netlify** (sin él ninguna nota sale verificada).
 - [ ] Ejecutar `supabase_schema_dilemmas.sql` (dilemas en oferta + respuestas al postularse).
-<<<<<<< Updated upstream
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
-=======
->>>>>>> Stashed changes
 
 ## Código (Claude)
+- [x] Oferta: imprescindible o valorable con banda mínima, tres pasos tipo LinkedIn, relleno desde documento con IA (`parse-job-doc`), encaje por grupos (19/10). Pendiente de commit.
+- [ ] Probar `parse-job-doc` con documentos reales de empresas (cuando esté desplegado) y revisar la calidad de las propuestas.
+- [ ] Ficha del candidato en la empresa: tres bloques por pilar con banda (hoy aún números 0–100).
 - [ ] **Fase 0 (grave)**: enunciados y soluciones de las clasificaciones están en `07-retos-comunes.js` (público). Servirlos desde el servidor al empezar el intento; reloj e intento de servidor (doc 08 del plan post reunión). Pendiente de aprobación.
 - [x] **Seguridad (XSS)**: en `08-ofertas-y-ejercicios.js` (renderJobs) el nombre de empresa y las skills se insertan sin escapar en la portada.
 - [x] Rediseñar tarjeta de oferta (empresa arriba, máx. 4 skills + «+N», sector en español, sin colores a mano en `TP_MONO_TINTS`).

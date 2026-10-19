@@ -13,5 +13,8 @@ Tareas de la reunión (18/10) enfocadas en `docs/plan_post_reunion/` (índice: `
 - **09 Ejercicios**: ficha única; 42 de soft definidos; inventario 309 en `09b`.
 - **10 Confianza**: prueba 30 días sin tarjeta, «haz el reto tú», garantía de respuesta 7 días, `/confianza`.
 
+- **Estructura de la plataforma** (19/10): `estructura_plataforma.md` → PDF de 16 páginas. Parte 08: búsqueda de candidatos con la estructura de LinkedIn Recruiter, sin nombre, colegio ni empresa (anonimato y sesgo).
+- **Skills en la plataforma** (19/10): `skills_en_la_plataforma.md` → PDF de 10 páginas. Declarada / demostrada / verificada (soft solo demostradas), 4 bandas, pasaporte básico (1 reto por pilar) para entrar al pool, oferta con imprescindible/valorable y banda mínima por skill, encaje en 3 estados sin porcentaje.
+
 Nada aprobado aún: cifras canónicas sin tocar.
 Ver: [[Pendientes]] · [[Estrategia]] · [[Concepto TalentPact]]

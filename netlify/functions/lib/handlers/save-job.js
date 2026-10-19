@@ -1,9 +1,13 @@
 /**
  * save-job — publica, edita o cierra una oferta de la empresa autenticada.
  *
- * Body: { id?, title, sector, description, requiredSkills, tags?, requiredLevel?,
- *         exerciseConfig?, jornada?, modalidad?, contrato?, ubicacion?, salMin?, salMax?,
- *         cultureQuestions?, dilemmas? }
+ * Body: { id?, title, sector, description, skillRequirements?, requiredSkills?, tags?,
+ *         requiredLevel?, exerciseConfig?, jornada?, modalidad?, contrato?, ubicacion?,
+ *         salMin?, salMax?, cultureQuestions?, dilemmas? }
+ *
+ * skillRequirements: [{ skill, peso: "imprescindible"|"valorable", minimo: "aceptable"|"bueno"|"muy_bueno" }]
+ * (máx. 8, de ellas 4 imprescindibles). Si llega, manda: required_skills y
+ * required_level se derivan de ahí. Sin ella se acepta la forma antigua.
  *       { id, status: "closed" | "open" }   → cerrar o reabrir
  * Cabecera: Authorization: Bearer <access token de Supabase>
  *
@@ -11,6 +15,7 @@
  * solo la puede tocar quien la publicó: la propiedad se impone en el filtro.
  */
 const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema, errorInterno } = require("../tp");
+const { limpiarRequisitos, nivelDerivado } = require("../requisitos");
 
 const SECTORES = ["Marketing", "IT", "Data", "Business", "Design", "RRHH", "Finance", "Legal", "Ops", "Sales", "Languages"];
 const NIVELES = ["basico", "intermedio", "avanzado"];
@@ -18,6 +23,9 @@ const CONFIGS = ["common", "common+custom", "custom", "contact"];
 const JORNADAS = ["completa", "parcial", "horas", "practicas"];
 const MODALIDADES = ["remoto", "hibrido", "presencial"];
 const CONTRATOS = ["indefinido", "temporal", "freelance", "practicas"];
+
+// Columnas que añaden migraciones posteriores a supabase_schema_jobs.sql.
+const OPCIONALES = ["skill_requirements", "dilemmas", "culture_questions"];
 
 const texto = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 const lista = (v, max, n) => (Array.isArray(v) ? [...new Set(v.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim().slice(0, n)))].slice(0, max) : []);
@@ -44,13 +52,17 @@ function limpiarDilemas(v) {
 
 /** Valida y normaliza una oferta. Devuelve { fila } o { error }. */
 function validarOferta(b) {
+  const req = limpiarRequisitos(b.skillRequirements);
+  if (req.error) return { error: req.error };
+  const requisitos = req.requisitos;
   const fila = {
     title: texto(b.title, 120),
     sector: texto(b.sector, 40),
     description: texto(b.description, 4000),
-    required_skills: lista(b.requiredSkills, 8, 60),
+    required_skills: requisitos.length ? requisitos.map((r) => r.skill) : lista(b.requiredSkills, 8, 60),
     tags: lista(b.tags, 6, 40),
-    required_level: uno(b.requiredLevel, NIVELES, "basico"),
+    required_level: requisitos.length ? nivelDerivado(requisitos) : uno(b.requiredLevel, NIVELES, "basico"),
+    skill_requirements: requisitos,
     exercise_config: uno(b.exerciseConfig, CONFIGS, "common+custom"),
     jornada: uno(b.jornada, JORNADAS, "completa"),
     modalidad: uno(b.modalidad, MODALIDADES, "presencial"),
@@ -99,10 +111,7 @@ exports.handler = async (event) => {
     const { fila, error } = validarOferta(b);
     if (error) return jsonResponse(400, { error });
 
-    async function guardar(opts) {
-      let datos = fila;
-      if (!opts.preguntas) datos = (({ culture_questions: _q, ...resto }) => resto)(datos);
-      if (!opts.dilemas) datos = (({ dilemmas: _d, ...resto }) => resto)(datos);
+    async function guardar(datos) {
       if (b.id) {
         const filas = await sb.update("jobs", propia(b.id), datos);
         if (!Array.isArray(filas) || !filas.length) return jsonResponse(404, { error: "Oferta no encontrada" });
@@ -113,23 +122,19 @@ exports.handler = async (event) => {
       return jsonResponse(200, { ok: true, id: row && row.id });
     }
 
-    const intentos = [
-      { preguntas: true, dilemas: true },
-      { preguntas: true, dilemas: false },
-      { preguntas: false, dilemas: false }
-    ];
-    let ultimo = null;
-    for (const opts of intentos) {
+    // Columnas de migraciones que pueden no estar aún en Supabase: si falta una
+    // de verdad, se guarda sin ella. Cualquier otro error se propaga.
+    let datos = fila;
+    for (let i = 0; i <= OPCIONALES.length; i++) {
       try {
-        return await guardar(opts);
+        return await guardar(datos);
       } catch (err) {
-        ultimo = err;
-        const faltaPreg = faltaEnEsquema(err, /culture_questions/i);
-        const faltaDil = faltaEnEsquema(err, /dilemmas/i);
-        if (!faltaPreg && !faltaDil) throw err;
+        const falta = OPCIONALES.find((col) => col in datos && faltaEnEsquema(err, new RegExp(col, "i")));
+        if (!falta) throw err;
+        datos = Object.fromEntries(Object.entries(datos).filter(([k]) => k !== falta));
       }
     }
-    throw ultimo || new Error("No se pudo guardar la oferta");
+    throw new Error("No se pudo guardar la oferta");
   } catch (err) {
     return errorInterno("No se pudo guardar la oferta", err);
   }
