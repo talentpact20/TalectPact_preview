@@ -15,7 +15,7 @@ var TPOfertas={
   /** Oferta del servidor → forma que usan las vistas (empresa en COMPANIES). */
   adaptar(o){
     const c=o.company||{};const id=TPOfertas._clave(c.name);
-    if(!COMPANIES.find(x=>x.id===id))COMPANIES.push({id,name:c.name||'Empresa',size:c.size||'—',sector:c.sector||o.sector,desc:c.description||'',website:c.website||null,location:c.location||null,logo:''});
+    if(!COMPANIES.find(x=>x.id===id))COMPANIES.push({id,name:c.name||'Empresa',size:c.size||'—',sector:c.sector||o.sector,desc:c.description||'',website:c.website||null,location:c.location||null,verificacion:c.verificacion||'sin_verificar',logo:''});
     return Object.assign({},o,{company:id,companyInfo:c,badge:TPOfertas.BADGE[o.sector]||'jb-it',tags:(o.tags&&o.tags.length)?o.tags:[o.sector],paused:o.status==='closed'});
   },
   async cargar(){

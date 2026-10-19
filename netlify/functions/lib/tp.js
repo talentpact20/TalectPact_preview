@@ -210,6 +210,45 @@ function pickCompanyFields(fields = {}) {
   return out;
 }
 
+// ─── Verificación de empresa ─────────────────────────────────────────────────
+// ¿Confirma Supabase los emails? Si no (mailer_autoconfirm), un email
+// corporativo no prueba nada. Se consulta /auth/v1/settings y se recuerda 10 min.
+let _autoconfirm = { valor: null, hasta: 0 };
+async function autoconfirmDelProyecto() {
+  if (Date.now() < _autoconfirm.hasta) return _autoconfirm.valor;
+  let valor = null;
+  try {
+    const { url, key } = supabaseEnv();
+    const res = await fetch(`${url}/auth/v1/settings`, { headers: { apikey: key }, signal: conLimite() });
+    const j = res.ok ? await res.json() : null;
+    if (j && typeof j.mailer_autoconfirm === "boolean") valor = j.mailer_autoconfirm;
+  } catch (_e) { valor = null; }   // si no se sabe, se trata como «no confirma»
+  _autoconfirm = { valor, hasta: Date.now() + 10 * 60 * 1000 };
+  return valor;
+}
+
+/**
+ * Calcula la verificación de la empresa y, si ha cambiado, la guarda en su
+ * ficha. Sin la migración supabase_schema_verificacion.sql no se guarda, pero
+ * se devuelve igual.
+ */
+async function verificacionDeEmpresa(user, company) {
+  const { verificarEmpresa, AYUDA } = require("./verificacion");
+  const v = verificarEmpresa(user, { autoconfirm: await autoconfirmDelProyecto(), web: company && company.website });
+  if (company && company.id && company.verificacion !== v.nivel) {
+    try {
+      await sb.update("companies", `id=eq.${company.id}`, {
+        verificacion: v.nivel,
+        dominio_verificado: v.dominio,
+        verificada_en: v.nivel === "sin_verificar" ? null : new Date().toISOString()
+      });
+    } catch (err) {
+      if (!faltaEnEsquema(err, /verificacion|dominio_verificado|verificada_en/i)) throw err;
+    }
+  }
+  return Object.assign({}, v, { ayuda: v.motivo ? AYUDA[v.motivo] : null });
+}
+
 /** Devuelve (creando o actualizando) la ficha de empresa vinculada a Auth. */
 async function ensureCompanyByUser(userId, fields = {}) {
   if (!userId) throw new Error("userId requerido");
@@ -412,6 +451,8 @@ function formatAmount(cents, currency) {
 }
 
 module.exports = {
+  autoconfirmDelProyecto,
+  verificacionDeEmpresa,
   jsonResponse,
   errorInterno,
   textoCorto,

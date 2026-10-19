@@ -356,3 +356,25 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
   .pj-nav .btn{flex:1 1 auto}
   .pj-nav #pjAtras{margin-right:0}
 }
+
+/* ─── Verificación de empresa (21-empresa.js) ─────────────────────────────── */
+.tp-sello-emp{display:inline-flex;align-items:center;gap:4px;margin-left:var(--sp-2);padding:1px 8px;border-radius:var(--radius-full);font-size:var(--fs-micro);font-weight:600;color:var(--emerald-700);background:var(--c-ok-suave);border:1px solid var(--emerald-200);white-space:nowrap}
+.tp-sello-emp svg{width:12px;height:12px}
+.tp-verif{display:flex;gap:var(--sp-3);align-items:flex-start;padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-4);border-radius:var(--radius-lg);border:1px solid var(--c-borde);background:var(--c-superficie)}
+.tp-verif.ok{border-color:var(--emerald-200);background:var(--c-ok-suave)}
+.tp-verif.pendiente{border-color:var(--amber-200);background:var(--c-aviso-suave)}
+.tp-verif-ico{flex-shrink:0;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--c-sobre-tinta);background:var(--c-ok)}
+.tp-verif.pendiente .tp-verif-ico{background:var(--c-aviso)}
+.tp-verif-ico svg{width:16px;height:16px}
+.tp-verif-txt{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:var(--fs-peq);color:var(--c-texto)}
+.tp-verif-txt>span{font-size:var(--fs-micro);color:var(--c-texto-2)}
+.tp-verif-acc{display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;margin-top:var(--sp-2);font-size:var(--fs-micro);color:var(--c-texto-2)}
+.tp-verif-acc span{flex:1 1 220px}
+.tp-dialogo-ancho{width:min(560px,94vw)}
+.tp-dialogo-ancho .pj-grid{margin-bottom:var(--sp-2)}
+.tp-dialogo-msg{font-size:var(--fs-micro);color:var(--c-texto-2);min-height:1.2em;margin-bottom:var(--sp-2)}
+.auth-social-nota{font-size:var(--fs-micro);color:var(--c-texto-3);margin:var(--sp-2) 0 0;line-height:1.5}
+@media (max-width:640px){.tp-dialogo-ancho .pj-grid{grid-template-columns:1fr}}
+/* En la tarjeta de oferta el sello baja de línea si no cabe junto al nombre. */
+.tp-oferta-emp{flex-wrap:wrap;row-gap:var(--sp-1)}
+.tp-oferta-emp .tp-sello-emp{margin-left:0}

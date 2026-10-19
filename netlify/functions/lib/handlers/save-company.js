@@ -5,7 +5,7 @@
  *
  * La empresa se deduce del token, nunca de un `userId` enviado por el cliente.
  */
-const { jsonResponse, authUser, ensureCompanyByUser, faltaEnEsquema, errorInterno } = require("../tp");
+const { jsonResponse, authUser, ensureCompanyByUser, verificacionDeEmpresa, faltaEnEsquema, errorInterno } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -46,7 +46,8 @@ exports.handler = async (event) => {
       company = await ensureCompanyByUser(user.id, resto);
     }
 
-    return jsonResponse(200, { ok: true, companyId: company.id, company });
+    const verificacion = await verificacionDeEmpresa(user, company);
+    return jsonResponse(200, { ok: true, companyId: company.id, company, verificacion });
   } catch (err) {
     return errorInterno("No se pudo guardar la empresa", err);
   }

@@ -15,6 +15,9 @@
 - [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
 
 ## Supabase (usuario)
+- [ ] **Activar Google** (Authentication → Sign In / Providers → Google, con el Client ID y el secreto de Google Cloud). En Google Cloud: origen `https://talentpact.es` y redirección `https://vqyqedmizxqneniynxqp.supabase.co/auth/v1/callback`. Comprobar con `npm run check:google -- https://talentpact.es`. El código ya está: el botón aparece solo.
+- [ ] **Ejecutar `supabase_schema_verificacion.sql`** (columnas de verificación en `companies`). Sin él, la verificación se calcula pero no se guarda y las ofertas no muestran el sello.
+- [ ] **Exigir confirmar el email** (desactivar la confirmación automática): hasta entonces un email corporativo no verifica a la empresa; solo Google Workspace.
 - [ ] **Ejecutar `supabase_schema_requisitos.sql`** (requisitos imprescindible/valorable por skill en `jobs`). Sin él, las ofertas se guardan sin requisitos.
 - [ ] **Activar Google** en Authentication → Providers (hoy Google y LinkedIn están desactivados; ver `docs/Cambios_prereunion/01_changelog.md`, 15/10). Añadir `https://talentpact.es/` a Redirect URLs.
 - [ ] Decidir si se exige confirmar el email al registrarse (hoy `mailer_autoconfirm` está activo: cualquiera puede registrarse con un correo ajeno).
@@ -25,6 +28,8 @@
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
 
 ## Código (Claude)
+- [x] Google integrado para empresas (paso «Completa los datos de tu empresa», aviso de Workspace) y verificación de empresa con sello en las ofertas (19/10). Pendiente de commit.
+- [ ] Decidir si el pool o el desbloqueo exigen empresa verificada (propuesta del doc 04_estrategia).
 - [x] Oferta: imprescindible o valorable con banda mínima, tres pasos tipo LinkedIn, relleno desde documento con IA (`parse-job-doc`), encaje por grupos (19/10). Pendiente de commit.
 - [ ] Probar `parse-job-doc` con documentos reales de empresas (cuando esté desplegado) y revisar la calidad de las propuestas.
 - [ ] Ficha del candidato en la empresa: tres bloques por pilar con banda (hoy aún números 0–100).

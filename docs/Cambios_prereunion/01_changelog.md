@@ -280,3 +280,20 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Para el usuario.** Ejecutar `tfm/tech/supabase_schema_requisitos.sql` en Supabase (hasta entonces las ofertas se guardan sin requisitos, con la lista de skills de siempre). `ANTHROPIC_API_KEY` ya está en Netlify; opcional `ANTHROPIC_DOC_MODEL` para usar otro modelo en la lectura de documentos.
 
 **Ficheros.** `netlify/functions/lib/requisitos.js`, `lib/oferta-doc.js`, `lib/handlers/parse-job-doc.js`, `parse-job-doc.mjs`, `save-job.js`, `list-jobs.js`, `lib/catalogo.js`; `assets/js/app/20-requisitos.js`, `07`, `10`, `17`; `index.html`, `componentes.css`; `tfm/tech/supabase_schema_requisitos.sql`; `tests/requisitos.test.js` (10) y `tests/plataforma.test.js` (1). Dependencia nueva: `@anthropic-ai/sdk`. Tests → 150 en 19 ficheros (cifras canónicas y documentos actualizados).
+
+---
+
+## 2026-10-19 — Google para empresas y verificación de empresa
+
+**Revisión de lo subido.** `main` limpio y desplegado: talentpact.es carga la oferta en tres pasos, sin scripts duplicados ni errores en consola; las ofertas cargan aunque falte el SQL de requisitos. Aviso: el commit intermedio `3d66fd1` volvió a subir marcas de conflicto (`stash pop`); `4f265de` las quitó. El test nuevo lo habría parado.
+
+**Qué.**
+- **Google.** El acceso con Google ya estaba en el código pero **está desactivado en Supabase** (`npm run check:google`); el botón aparece solo al activarlo. Faltaba el caso de empresa: al entrar por primera vez con Google la ficha nacía solo con el email (y las ofertas salían con el email como nombre). Ahora se abre «Completa los datos de tu empresa» con nombre y web propuestos a partir del dominio corporativo y el nombre de la persona desde Google. Las cuentas creadas con email que tenían los datos solo en la cuenta se copian a la ficha pública sin preguntar. En el acceso de empresa, aviso «entra con la cuenta de Google de tu empresa (Google Workspace)», visible solo si Google está activo.
+- **Verificación de empresa** (`lib/verificacion.js`), decidida por el servidor con datos que el usuario no puede editar:
+  - *Google Workspace*: Google certifica (claim `hd` de la identidad) que la cuenta es del dominio del email.
+  - *Email corporativo*: dominio propio (no Gmail, Hotmail…), email confirmado y el proyecto exige confirmar emails. Hoy la confirmación es automática, así que esta vía no verifica hasta cambiarlo.
+  - Se recalcula al abrir el panel o guardar la ficha y se guarda en `companies`. Las ofertas muestran «Empresa verificada» (sin publicar el dominio). En el panel, tarjeta con el estado, el motivo si no está verificada y el botón «Verificar con Google».
+
+**Para el usuario.** Activar Google en Supabase (Client ID y secreto de Google Cloud; valores exactos en Pendientes), ejecutar `tfm/tech/supabase_schema_verificacion.sql` y, cuando se pueda, exigir confirmar el email.
+
+**Ficheros.** `netlify/functions/lib/verificacion.js`, `lib/tp.js`, `get-company.js`, `save-company.js`, `list-jobs.js`; `assets/js/app/21-empresa.js`, `08`, `09`, `17`; `index.html`, `componentes.css`; `tfm/tech/supabase_schema_verificacion.sql`; `tests/verificacion.test.js` (6). Tests → 156 en 20 ficheros; cifras canónicas, informe, Q&A, guion, deck y resumen del plan de negocio actualizados (los HTML de Q&A y guion seguían en 139).

@@ -529,7 +529,7 @@ Si “lo mismo” es **la misma idea con otras palabras**, la nota debe caer en 
 
 **¿Cómo sabéis que el Skill Score es correcto si no lo habéis validado con humanos?**
 No lo sabemos, y por eso no lo afirmamos. Lo que sí hemos medido es que discrimina
-**87 puntos** (96 vs 9), que el coste es **€0,0165**, que los ataques ensayados no compran la nota, y que hay **139 tests**. La concordancia con evaluadores humanos
+**87 puntos** (96 vs 9), que el coste es **€0,0165**, que los ataques ensayados no compran la nota, y que hay **156 tests**. La concordancia con evaluadores humanos
 es el siguiente hito: el protocolo y el corpus ya están escritos.
 
 **¿Nos estáis pidiendo 180.000 € a nosotros?**

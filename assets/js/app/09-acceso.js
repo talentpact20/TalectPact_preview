@@ -766,7 +766,10 @@ async function refreshOAuthButtons(portal){
     const hay=Object.keys(map).some(p=>prov[p]!==false);
     const form=document.getElementById(map[Object.keys(map)[0]]||'');
     const caja=form&&form.closest('form');
-    if(caja)caja.querySelectorAll('.auth-divider,.auth-social').forEach(e=>{e.hidden=!hay;});
+    if(caja)caja.querySelectorAll('.auth-divider,.auth-social,.auth-social-nota').forEach(e=>{e.hidden=!hay;});
+    // El aviso de Google Workspace solo tiene sentido si Google está activo.
+    const nota=document.getElementById('empNotaWorkspace');
+    if(nota&&portal==='empresa')nota.hidden=prov.google===false;
   }catch(e){}
 }
 

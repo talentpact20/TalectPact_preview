@@ -36,7 +36,7 @@ function tpTarjetaOferta(j,co,o){
   const nivel=j.requiredLevel||'basico';
   const nivelTxt={basico:'Básico',intermedio:'Intermedio',avanzado:'Avanzado'}[nivel]||'Básico';
   const m=co?companyMonogram(co.name):null;
-  const empresa=co?`<div class="tp-oferta-emp"><span class="tp-mono-mini tp-tinte-${m.tinte}" aria-hidden="true">${escHtml(m.iniciales)}</span><span>${escHtml(co.name)}${co.size&&co.size!=='—'?' · '+escHtml(co.size)+' empleados':''}</span></div>`:'';
+  const empresa=co?`<div class="tp-oferta-emp"><span class="tp-mono-mini tp-tinte-${m.tinte}" aria-hidden="true">${escHtml(m.iniciales)}</span><span>${escHtml(co.name)}${co.size&&co.size!=='—'?' · '+escHtml(co.size)+' empleados':''}</span>${co.verificacion&&co.verificacion!=='sin_verificar'&&typeof tpSelloEmpresa==='function'?tpSelloEmpresa(co.verificacion):''}</div>`:'';
   const sk=req.slice(0,MAX).map(x=>`<span class="job-tag tp-skill-req ${o.tiene&&o.tiene(x)?'ok':''}">${o.tiene&&o.tiene(x)?'✓ ':''}${escHtml(x)}</span>`).join('')+(req.length>MAX?`<span class="job-tag" title="${escHtml(req.slice(MAX).join(', '))}">+${req.length-MAX}</span>`:'');
   const pie=o.pie||`<span class="level-badge level-${escHtml(nivel)}">${nivelTxt}</span>`;
   return `<div class="job-card tp-oferta" role="button" tabindex="0" onclick="${o.click}" onkeydown="if(event.key==='Enter')${o.click}">${empresa}<div class="tp-oferta-sector">${escHtml(TP_SECTOR_ES[j.sector]||j.sector)}</div><h3>${escHtml(j.title)}</h3><div class="job-desc">${escHtml(j.desc)}</div>${tpCondChips(j,o.prefs)}<div class="job-tags">${sk}</div><div class="tp-oferta-pie">${pie}</div></div>`;

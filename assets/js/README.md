@@ -30,6 +30,7 @@ llamar desde un `onclick` del HTML o desde `10-…`.
 | `app/18-interfaz.js` | Sistema de diseño: tema (`TPTema`), pasos, barra de nota, anillo, chips, encaje, esqueleto y autoguardado de respuestas. |
 | `app/19-rrhh.js` | Tres pilares (Hard / Soft / Transferibles), preguntas y dilemas de la vacante, avisos y pipeline. |
 | `app/20-requisitos.js` | Oferta en tres pasos, requisitos de skill (imprescindible o valorable, con banda mínima), encaje por requisitos y relleno de la oferta desde el documento de la empresa (`parse-job-doc`). Espejo de `netlify/functions/lib/requisitos.js`. |
+| `app/21-empresa.js` | `TPEmpresa`: ficha y verificación de la empresa en su panel (Google Workspace o email corporativo), sello «Empresa verificada» y el paso «Completa los datos de tu empresa» tras entrar con Google. |
 | `app/99-arranque.js` | Restaura la sesión cuando todo lo anterior está definido. |
 
 ## Regla de orden

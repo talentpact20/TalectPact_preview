@@ -1,8 +1,9 @@
 /**
  * get-company — devuelve la ficha de empresa del usuario autenticado.
  * Cabecera: Authorization: Bearer <access token de Supabase>
+ * Devuelve también `verificacion` ({ nivel, dominio, motivo, ayuda }): ver lib/verificacion.js.
  */
-const { jsonResponse, authUser, ensureCompanyByUser, errorInterno } = require("../tp");
+const { jsonResponse, authUser, ensureCompanyByUser, verificacionDeEmpresa, errorInterno } = require("../tp");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -15,7 +16,8 @@ exports.handler = async (event) => {
     // Sin crear ficha de empresa a una cuenta de candidato (ver save-company).
     if ((user.user_metadata || {}).role === "candidate") return jsonResponse(200, { ok: true, company: null });
     const company = await ensureCompanyByUser(user.id);
-    return jsonResponse(200, { ok: true, company });
+    const verificacion = await verificacionDeEmpresa(user, company);
+    return jsonResponse(200, { ok: true, company, verificacion });
   } catch (err) {
     return errorInterno("No se pudo cargar la empresa", err);
   }

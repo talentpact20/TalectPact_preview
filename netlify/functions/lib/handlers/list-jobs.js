@@ -50,15 +50,19 @@ function aOferta(f) {
       description: c.description || null,
       sector: c.sector || null,
       website: c.website || null,
-      location: c.location || null
+      location: c.location || null,
+      // Solo el nivel: el dominio verificado no se publica.
+      verificacion: ["google_workspace", "email_corporativo"].includes(c.verificacion) ? c.verificacion : "sin_verificar"
     }
   };
 }
 
 async function seleccionar(filtro) {
+  const joinVer = "companies(company_name,company_size,description,sector,website,location,verificacion)";
   const join = "companies(company_name,company_size,description,sector,website,location)";
   const joinMin = "companies(company_name,company_size)";
   const intentos = [
+    `select=${CAMPOS},${joinVer}&${filtro}`,
     `select=${CAMPOS},${join}&${filtro}`,
     `select=${CAMPOS_DIL},${join}&${filtro}`,
     `select=${CAMPOS_QS},${join}&${filtro}`,
@@ -71,7 +75,7 @@ async function seleccionar(filtro) {
       return await sb.select("jobs", q);
     } catch (err) {
       ultimo = err;
-      if (!faltaEnEsquema(err, /skill_requirements|culture_questions|dilemmas|description|sector|website|location/i)) throw err;
+      if (!faltaEnEsquema(err, /verificacion|skill_requirements|culture_questions|dilemmas|description|sector|website|location/i)) throw err;
     }
   }
   throw ultimo || new Error("No se pudieron cargar las ofertas");
