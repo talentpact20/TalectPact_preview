@@ -1,0 +1,287 @@
+[
+  {
+    "id": "common_git", "title": "Git y control de versiones",
+    "desc": "Recupera un repositorio después de un error, propón un flujo de trabajo para un equipo y decide qué comandos son seguros en una rama compartida.",
+    "exercises": [
+      {
+        "id": "e1", "title": "El viernes en que se rompió main", "type": "analysis", "timeLimit": 480, "difficulty": "basico",
+        "briefing": "Verás el historial de lo que pasó en un repositorio un viernes por la tarde. Tendrás que explicar qué salió mal y cómo arreglarlo.",
+        "sub": "Diagnóstico — 8 min", "skills": {"hard": ["Git", "Historial"], "soft": ["Calma bajo presión"]},
+        "scenario": "Un equipo de cinco personas trabaja en la rama main de una aplicación. El viernes a las 18:00 la aplicación dejó de compilar en producción y alguien intentó arreglarlo deprisa. Este es el registro de lo que ocurrió.\n\nResponde en tres partes:\n\nA) Qué acción causó cada problema y por qué.\n\nB) Cómo recuperarías el trabajo perdido y dejarías main funcionando, con los comandos concretos.\n\nC) Qué reglas pondrías para que no vuelva a pasar.",
+        "data": {
+          "headers": ["Hora", "Quién", "Qué hizo", "Consecuencia", "Estado"],
+          "table": [
+            {"n": "17:40", "a": "Ana", "b": "Subió directamente a main un cambio sin pasar las pruebas", "c": "La compilación falla", "d": "Revisar", "cls": "v-bad"},
+            {"n": "17:55", "a": "Luis", "b": "git push --force para «volver atrás»", "c": "Desaparecen 3 commits de otras dos personas", "d": "Revisar", "cls": "v-bad"},
+            {"n": "18:10", "a": "Marta", "b": "git pull y resolvió conflictos aceptando siempre «lo suyo»", "c": "Se pierde una corrección de seguridad", "d": "Revisar", "cls": "v-bad"},
+            {"n": "18:30", "a": "Ana", "b": "Commit «arreglos varios» con 41 ficheros", "c": "Nadie sabe qué cambia", "d": "Revisar", "cls": "v-warn"},
+            {"n": "18:45", "a": "Luis", "b": "Los commits de las otras personas siguen en su copia local", "c": "Se pueden recuperar", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con lo que muestra el registro.",
+          "kw": ["force", "reescribe el historial", "reflog", "revert", "cherry-pick", "rama protegida", "pull request", "revisión", "integración continua", "commits pequeños", "conflictos"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un flujo de trabajo para el equipo", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo debe trabajar con Git un equipo que crece y hace entregas cada semana.",
+        "sub": "Propuesta — 10 min", "skills": {"hard": ["Flujos de Git", "Revisión de código"], "soft": ["Comunicación"]},
+        "scenario": "Una startup pasa de 3 a 12 desarrolladores. Hoy todos suben a main, las entregas son los jueves y cada jueves hay algún problema. Además, a veces hay que corregir un error urgente en producción mientras la siguiente versión está a medias. El CTO te pide una propuesta de una página.",
+        "data": {
+          "to": "CTO",
+          "subject": "Propuesta: cómo trabajamos con Git a partir de ahora",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. El flujo de ramas que propones y por qué ese y no otro para este equipo.\n\n2. Cómo se integra un cambio: pull request, revisión, pruebas automáticas y quién aprueba.\n\n3. Cómo se corrige un error urgente en producción sin arrastrar trabajo a medias.\n\n4. Convenciones (mensajes de commit, tamaño de los cambios, versiones) y cómo vais a medir si funciona.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["ramas cortas", "trunk", "pull request", "revisión", "integración continua", "rama protegida", "hotfix", "etiquetas", "versión", "commits pequeños", "medir"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Seguro en una rama compartida?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué operaciones de Git son seguras cuando otras personas trabajan en la misma rama.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Git"], "soft": ["Criterio"]},
+        "scenario": "Tu equipo comparte la rama develop. Clasifica cada operación:\n\nSegura — No afecta al trabajo de los demás.\n\nPeligrosa — Reescribe el historial que otros ya tienen o puede borrar su trabajo.",
+        "data": {
+          "options": [
+            {"id": "g1", "text": "git revert de un commit que rompió algo", "correct": "segura"},
+            {"id": "g2", "text": "git push --force después de un rebase de develop", "correct": "peligrosa"},
+            {"id": "g3", "text": "git commit --amend de un commit que aún no has subido", "correct": "segura"},
+            {"id": "g4", "text": "git reset --hard a un commit anterior y luego push --force", "correct": "peligrosa"},
+            {"id": "g5", "text": "git rebase de tu rama personal sobre develop antes de abrir el pull request", "correct": "segura"},
+            {"id": "g6", "text": "Cambiar el mensaje de un commit que ya está en develop y volver a subirlo", "correct": "peligrosa"},
+            {"id": "g7", "text": "git merge de develop en tu rama para ponerte al día", "correct": "segura"},
+            {"id": "g8", "text": "Borrar la rama develop remota para «empezar limpio»", "correct": "peligrosa"}
+          ],
+          "cats": ["Segura", "Peligrosa"],
+          "keys": ["segura", "peligrosa"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_devops", "title": "DevOps y despliegues",
+    "desc": "Encuentra el cuello de botella de un proceso de despliegue, diseña un despliegue sin caída de servicio y decide qué alertas merecen despertar a alguien.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Desplegar tarda una tarde", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los pasos y tiempos del proceso de despliegue de un equipo. Tendrás que proponer cómo acelerarlo sin perder seguridad.",
+        "sub": "Análisis de proceso — 9 min", "skills": {"hard": ["Integración continua", "Despliegue"], "soft": ["Priorización"]},
+        "scenario": "Un equipo despliega su aplicación una vez cada dos semanas porque el proceso es largo y da miedo. El último despliegue tardó 4 horas y 20 minutos. Estos son los pasos.\n\nResponde en tres partes:\n\nA) Dónde se va el tiempo y qué pasos son un riesgo.\n\nB) Qué automatizarías primero y cuánto esperas ahorrar.\n\nC) Qué indicadores usarías para saber si el proceso mejora (frecuencia, fallos, tiempo de recuperación).",
+        "data": {
+          "headers": ["Paso", "Duración", "Cómo se hace", "Fallos en los últimos 10", "Estado"],
+          "table": [
+            {"n": "Compilar y pasar pruebas", "a": "35 min", "b": "En el portátil de quien despliega", "c": "2", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Aprobación del responsable", "a": "1 h 40 min", "b": "Esperar a que conteste un correo", "c": "0", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Copiar ficheros al servidor", "a": "25 min", "b": "Manual, por SSH, siguiendo un documento", "c": "3", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Migración de base de datos", "a": "50 min", "b": "Script manual con la web parada", "c": "1", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Comprobación final", "a": "50 min", "b": "Dos personas prueban la web a mano", "c": "0", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los tiempos y fallos de la tabla.",
+          "kw": ["automatizar", "pipeline", "integración continua", "artefacto", "infraestructura como código", "migraciones compatibles", "sin parar", "pruebas automáticas", "frecuencia de despliegue", "tiempo de recuperación", "DORA"]
+        }
+      },
+      {
+        "id": "e2", "title": "Desplegar sin cerrar la tienda", "type": "email", "timeLimit": 660, "difficulty": "intermedio",
+        "briefing": "Diseñarás cómo desplegar una tienda online sin que los clientes noten una caída.",
+        "sub": "Diseño — 11 min", "skills": {"hard": ["Despliegue sin caída", "Base de datos"], "soft": ["Comunicación técnica"]},
+        "scenario": "Una tienda online vende 24 horas y hoy pone un cartel de «en mantenimiento» 40 minutos en cada despliegue. El próximo cambio renombra la columna «direccion» de la tabla de clientes a «direccion_envio» y añade un servicio nuevo de cálculo de envíos. Tienes dos servidores detrás de un balanceador.",
+        "data": {
+          "to": "Equipo de plataforma",
+          "subject": "Cómo desplegamos el cambio de envíos sin parar la tienda",
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. La estrategia de despliegue (por turnos, azul-verde o canario) y por qué.\n\n2. Cómo cambias la columna sin romper la versión que sigue en marcha (en varios pasos compatibles).\n\n3. Qué comprobaciones automáticas deciden si se sigue o se vuelve atrás.\n\n4. Cómo se vuelve atrás si algo falla y cuánto tarda.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["azul-verde", "canario", "por turnos", "balanceador", "compatibilidad", "expandir y contraer", "migración en pasos", "comprobación de salud", "rollback", "métricas"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Alerta de guardia o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué alertas de producción justifican despertar a alguien.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Monitorización"], "soft": ["Priorización"]},
+        "scenario": "Son las 3:00. Clasifica cada alerta de la plataforma:\n\nDespertar ya — Los clientes están afectados o lo van a estar en minutos.\n\nPor la mañana — Hay que mirarlo, pero puede esperar al horario laboral.",
+        "data": {
+          "options": [
+            {"id": "d1", "text": "El 20 % de los pagos falla desde hace 5 minutos", "correct": "ya"},
+            {"id": "d2", "text": "Un disco de registros está al 70 % y crece un 1 % al día", "correct": "manana"},
+            {"id": "d3", "text": "El certificado HTTPS de la web caduca en 2 horas", "correct": "ya"},
+            {"id": "d4", "text": "La CPU de un servidor de pruebas está al 95 %", "correct": "manana"},
+            {"id": "d5", "text": "La web principal no responde desde dos regiones distintas", "correct": "ya"},
+            {"id": "d6", "text": "Una tarea nocturna de informes ha tardado el doble que ayer", "correct": "manana"},
+            {"id": "d7", "text": "La base de datos tiene el disco al 97 % y sube rápido", "correct": "ya"},
+            {"id": "d8", "text": "Ha subido un 5 % la latencia media de una API interna", "correct": "manana"}
+          ],
+          "cats": ["Despertar ya", "Por la mañana"],
+          "keys": ["ya", "manana"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_mobile", "title": "Desarrollo móvil",
+    "desc": "Prioriza los fallos de una app según sus datos reales, planifica una versión con funciones sin conexión y decide qué va en el dispositivo y qué en el servidor.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Las valoraciones de la app se hunden", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los datos de estabilidad y opiniones de una app móvil tras su última versión.",
+        "sub": "Diagnóstico — 9 min", "skills": {"hard": ["Apps móviles", "Estabilidad"], "soft": ["Priorización"]},
+        "scenario": "La app de una cadena de gimnasios ha bajado de 4,5 a 3,1 estrellas en las tiendas desde la versión 5.2. Tienes los datos de las dos últimas semanas.\n\nResponde en tres partes:\n\nA) Qué problema arreglarías primero y por qué, con las cifras.\n\nB) Cómo lo investigarías y qué harías mientras tanto con los usuarios afectados.\n\nC) Qué cambiarías en el proceso de publicación para detectarlo antes.",
+        "data": {
+          "headers": ["Problema", "Usuarios afectados", "Desde", "Dispositivos", "Estado"],
+          "table": [
+            {"n": "Cierre inesperado al abrir la reserva de clases", "a": "18 % de las sesiones", "b": "Versión 5.2", "c": "Android 10 y anteriores", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Batería: la app sigue activa en segundo plano", "a": "9 % (quejas)", "b": "Versión 5.1", "c": "Todos", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Tarda 6 s en arrancar", "a": "Todos", "b": "Versión 5.2", "c": "Móviles de gama baja", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Texto cortado en el menú", "a": "3 %", "b": "Versión 5.0", "c": "Letra grande activada", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Pagos", "a": "0,2 % de errores", "b": "", "c": "Estable", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de la tabla.",
+          "kw": ["cierres", "registro de fallos", "versión mínima", "reproducir", "despliegue progresivo", "porcentaje de usuarios", "segundo plano", "arranque", "accesibilidad", "pruebas en dispositivos"]
+        }
+      },
+      {
+        "id": "e2", "title": "Reservas sin cobertura", "type": "email", "timeLimit": 660, "difficulty": "intermedio",
+        "briefing": "Diseñarás cómo funciona una app cuando el usuario se queda sin conexión.",
+        "sub": "Diseño — 11 min", "skills": {"hard": ["Modo sin conexión", "Sincronización"], "soft": ["Comunicación técnica"]},
+        "scenario": "Muchos usuarios del gimnasio abren la app en el vestuario, donde no hay cobertura, para ver su rutina y apuntar sus series. Hoy la app muestra una pantalla en blanco sin conexión. Te piden que funcione sin red y que no se pierda nada de lo que se apunta.",
+        "data": {
+          "to": "Equipo de producto",
+          "subject": "Propuesta: la app también funciona sin cobertura",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Qué funciones deben ir sin conexión y cuáles no (por ejemplo, reservar una plaza) y por qué.\n\n2. Cómo se guardan los datos en el móvil y cómo se envían cuando vuelve la red.\n\n3. Qué haces si el mismo dato cambia en el móvil y en el servidor a la vez.\n\n4. Cómo se lo enseñas al usuario y cómo lo pruebas.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["almacenamiento local", "cola de cambios", "sincronización", "conflictos", "última escritura", "idempotente", "reintentos", "estado sin conexión", "reserva requiere conexión", "pruebas"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿En el móvil o en el servidor?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás dónde debe vivir cada dato o cada decisión de una app.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Arquitectura móvil"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada elemento de la app de un banco:\n\nEn el dispositivo — Puede guardarse o decidirse en el móvil sin riesgo.\n\nEn el servidor — Si va en el móvil, alguien puede leerlo o saltárselo.",
+        "data": {
+          "options": [
+            {"id": "m1", "text": "La clave para firmar las peticiones a la API de pagos", "correct": "servidor"},
+            {"id": "m2", "text": "El tema claro u oscuro elegido por el usuario", "correct": "dispositivo"},
+            {"id": "m3", "text": "El límite de transferencia diaria del cliente", "correct": "servidor"},
+            {"id": "m4", "text": "Las últimas pantallas visitadas para volver atrás", "correct": "dispositivo"},
+            {"id": "m5", "text": "Comprobar que el cliente tiene saldo antes de transferir", "correct": "servidor"},
+            {"id": "m6", "text": "Un borrador de transferencia que aún no se ha enviado", "correct": "dispositivo"},
+            {"id": "m7", "text": "La lista de cuentas a las que el usuario puede enviar dinero sin confirmar", "correct": "servidor"},
+            {"id": "m8", "text": "El token de sesión, guardado en el almacén cifrado del sistema", "correct": "dispositivo"}
+          ],
+          "cats": ["En el dispositivo", "En el servidor"],
+          "keys": ["dispositivo", "servidor"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_ai_ml", "title": "IA y machine learning aplicado",
+    "desc": "Elige qué proceso de una empresa merece un modelo, explica a dirección qué se puede esperar de un proyecto de IA y distingue los casos con buenos datos de los que no.",
+    "exercises": [
+      {
+        "id": "e1", "title": "¿Dónde ponemos la IA primero?", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás varias propuestas de proyectos de IA de una empresa. Tendrás que elegir por cuál empezar.",
+        "sub": "Priorización — 9 min", "skills": {"hard": ["Casos de uso de IA", "Datos"], "soft": ["Priorización"]},
+        "scenario": "Una empresa de distribución de material eléctrico (300 empleados) tiene presupuesto para un primer proyecto de IA. Dirección ha recogido cinco ideas con lo que se sabe de cada una.\n\nResponde en tres partes:\n\nA) Por cuál empezarías y por qué, comparando valor, datos y riesgo.\n\nB) Qué descartarías por ahora y qué le falta.\n\nC) Cómo medirías si el proyecto elegido funciona en los primeros tres meses.",
+        "data": {
+          "headers": ["Idea", "Ahorro estimado al año", "Datos disponibles", "Riesgo si se equivoca", "Estado"],
+          "table": [
+            {"n": "Prever la demanda de 8.000 productos por almacén", "a": "380.000 € en stock", "b": "6 años de ventas limpias", "c": "Roturas de stock", "d": "Revisar", "cls": "v-good"},
+            {"n": "Clasificar automáticamente los correos de clientes", "a": "60.000 €", "b": "40.000 correos sin etiquetar", "c": "Un correo va al equipo equivocado", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Decidir a quién se da crédito comercial", "a": "200.000 € en impagos", "b": "1.200 casos", "c": "Alto: decisión sobre personas y empresas", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Asistente que redacta ofertas comerciales", "a": "No calculado", "b": "Plantillas sueltas", "c": "Precios o plazos inventados", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Detectar albaranes duplicados", "a": "45.000 €", "b": "Todos los albaranes digitales", "c": "Bajo: lo revisa una persona", "d": "Revisar", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C comparando las filas de la tabla.",
+          "kw": ["valor", "calidad de los datos", "etiquetas", "riesgo", "supervisión humana", "piloto", "métrica de negocio", "línea base", "reglamento de IA", "alto riesgo"]
+        }
+      },
+      {
+        "id": "e2", "title": "Explicar a dirección qué esperar", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Explicarás a dirección, sin tecnicismos, qué puede y qué no puede hacer un modelo de previsión.",
+        "sub": "Comunicación — 10 min", "skills": {"hard": ["Métricas de modelos"], "soft": ["Comunicación con negocio"]},
+        "scenario": "El primer modelo de previsión de demanda acierta las ventas semanales con un error medio del 14 % (hasta ahora, el equipo de compras tenía un 23 %). En productos nuevos y en semanas de rebajas el error sube al 40 %. El director general pregunta: «¿Entonces podemos despedir al equipo de compras?».",
+        "data": {
+          "to": "Director general",
+          "subject": "Qué podemos esperar del modelo de previsión",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Qué mejora aporta el modelo, con las cifras y en lenguaje de negocio.\n\n2. Dónde falla y por qué (productos nuevos, rebajas), sin tecnicismos.\n\n3. Qué papel tiene el equipo de compras a partir de ahora y por qué sigue haciendo falta.\n\n4. Cómo se va a vigilar que el modelo no empeore y quién decide en caso de duda.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["error medio", "23 %", "14 %", "productos nuevos", "rebajas", "datos históricos", "supervisión humana", "revisar las excepciones", "vigilar", "deriva"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Hay datos suficientes para empezar?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás si cada proyecto tiene los datos que necesita un modelo.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Preparación de datos"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada proyecto según sus datos:\n\nSe puede empezar — Hay datos suficientes y fiables para un primer modelo.\n\nFalta trabajo de datos — Antes hay que recoger, limpiar o etiquetar.",
+        "data": {
+          "options": [
+            {"id": "a1", "text": "Prever averías con 5 años de lecturas de sensores y el registro de cada avería", "correct": "si"},
+            {"id": "a2", "text": "Detectar fraude con 30 casos confirmados en 4 años", "correct": "no"},
+            {"id": "a3", "text": "Clasificar incidencias con 50.000 tickets ya asignados a su equipo", "correct": "si"},
+            {"id": "a4", "text": "Recomendar productos cuando las ventas están en Excel distintos por tienda y con códigos diferentes", "correct": "no"},
+            {"id": "a5", "text": "Prever el tráfico de la web con 3 años de visitas diarias", "correct": "si"},
+            {"id": "a6", "text": "Valorar la satisfacción de clientes con 200 encuestas sin relación con sus pedidos", "correct": "no"},
+            {"id": "a7", "text": "Estimar plazos de entrega con 2 años de envíos y su fecha real de llegada", "correct": "si"},
+            {"id": "a8", "text": "Predecir bajas de empleados sin registro de por qué se fue cada uno", "correct": "no"}
+          ],
+          "cats": ["Se puede empezar", "Falta trabajo de datos"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_cloud", "title": "Cloud",
+    "desc": "Recorta una factura de nube sin perder servicio, diseña una arquitectura que aguante un pico de tráfico y separa lo que es responsabilidad del proveedor de lo que es tuyo.",
+    "exercises": [
+      {
+        "id": "e1", "title": "La factura de la nube se ha duplicado", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás el desglose de una factura de nube. Tendrás que decidir dónde recortar.",
+        "sub": "Optimización de costes — 9 min", "skills": {"hard": ["Costes de nube"], "soft": ["Priorización"]},
+        "scenario": "La factura mensual de nube de una empresa de software ha pasado de 9.000 € a 18.400 € en seis meses sin que crezcan los clientes. Finanzas pide recortar al menos un 30 % sin afectar al servicio.\n\nResponde en tres partes:\n\nA) Dónde está el gasto evitable, con las cifras.\n\nB) Qué harías en cada partida y cuánto ahorrarías.\n\nC) Qué pondrías en marcha para que no vuelva a crecer sin control.",
+        "data": {
+          "headers": ["Partida", "Coste al mes", "Uso real", "Detalle", "Estado"],
+          "table": [
+            {"n": "Servidores de producción", "a": "6.200 €", "b": "CPU media 11 %", "c": "Tamaño elegido «por si acaso»", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Entornos de pruebas", "a": "4.800 €", "b": "Encendidos 24 h, se usan 9 h laborables", "c": "Nadie los apaga", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Copias de discos", "a": "3.100 €", "b": "2.400 copias, la más antigua de 2022", "c": "Sin política de borrado", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Transferencia de datos", "a": "2.600 €", "b": "Las imágenes se sirven desde el servidor", "c": "Sin red de distribución (CDN)", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Base de datos gestionada", "a": "1.700 €", "b": "Uso 60 %", "c": "Ajustada", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de cada partida.",
+          "kw": ["ajustar el tamaño", "apagar fuera de horario", "autoescalado", "retención", "ciclo de vida", "CDN", "instancias reservadas", "etiquetas", "presupuesto", "alertas de coste"]
+        }
+      },
+      {
+        "id": "e2", "title": "El pico del Black Friday", "type": "email", "timeLimit": 660, "difficulty": "intermedio",
+        "briefing": "Diseñarás cómo debe aguantar una tienda online un pico de tráfico diez veces mayor de lo normal.",
+        "sub": "Arquitectura — 11 min", "skills": {"hard": ["Escalabilidad", "Arquitectura en la nube"], "soft": ["Comunicación técnica"]},
+        "scenario": "Una tienda online recibe normalmente 300 pedidos por hora. El año pasado, en Black Friday, llegaron 3.500 por hora, la web se cayó 2 horas y se perdieron unos 90.000 € en ventas. Hoy funciona en un único servidor grande con la base de datos en la misma máquina. Faltan seis semanas.",
+        "data": {
+          "to": "Dirección técnica",
+          "subject": "Plan para aguantar el próximo Black Friday",
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. Qué falla de la arquitectura actual y por qué se cayó.\n\n2. La arquitectura que propones (varios servidores, balanceador, escalado automático, base de datos separada, caché, colas para lo que puede esperar).\n\n3. Cómo lo pruebas antes (prueba de carga con cifras objetivo).\n\n4. Qué pasa si aun así se satura (degradar con elegancia) y cuánto cuesta.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["punto único de fallo", "balanceador", "autoescalado", "sin estado", "caché", "CDN", "cola", "base de datos separada", "réplicas de lectura", "prueba de carga", "degradar"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Del proveedor o tuyo?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás de quién es la responsabilidad de cada aspecto de seguridad en la nube.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Responsabilidad compartida"], "soft": ["Criterio"]},
+        "scenario": "Tu empresa usa máquinas virtuales y almacenamiento de un proveedor de nube. Clasifica cada aspecto:\n\nEl proveedor — Lo garantiza la plataforma.\n\nTu empresa — Si no lo haces tú, nadie lo hace.",
+        "data": {
+          "options": [
+            {"id": "k1", "text": "La seguridad física de los centros de datos", "correct": "proveedor"},
+            {"id": "k2", "text": "Que un almacenamiento de ficheros no sea público por error", "correct": "tuyo"},
+            {"id": "k3", "text": "Aplicar los parches del sistema operativo de tus máquinas virtuales", "correct": "tuyo"},
+            {"id": "k4", "text": "El hardware de los servidores y su red interna", "correct": "proveedor"},
+            {"id": "k5", "text": "Quién de tu equipo tiene permisos de administración", "correct": "tuyo"},
+            {"id": "k6", "text": "Que el hipervisor aísle tus máquinas de las de otros clientes", "correct": "proveedor"},
+            {"id": "k7", "text": "Las copias de seguridad de tu base de datos y probar que se restauran", "correct": "tuyo"},
+            {"id": "k8", "text": "Cifrar los datos personales de tus clientes y gestionar sus claves", "correct": "tuyo"}
+          ],
+          "cats": ["El proveedor", "Tu empresa"],
+          "keys": ["proveedor", "tuyo"]
+        }
+      }
+    ]
+  }
+]

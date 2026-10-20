@@ -81,7 +81,7 @@ test("pagar el sello: el importe lo pone el servidor y el pago queda pendiente h
   });
 });
 
-test("sellar en blockchain exige el sello pagado; pagado, se ancla", async () => {
+test("sellar exige el sello pagado; pagado, entra en la cola del lote sin enviar ninguna transacción", async () => {
   let anclados = 0;
   class Contrato {
     async isAnchored() { return [false, 0n]; }
@@ -95,13 +95,15 @@ test("sellar en blockchain exige el sello pagado; pagado, se ancla", async () =>
       const r = await anclar();
       assert.equal(r.statusCode, 402);
       assert.equal(JSON.parse(r.body).code, "sello_no_pagado");
-      assert.equal(anclados, 0);
     });
     await con({ pagos: [{ user_id: USER, credential_id: CRED, status: "paid" }] }, async (db) => {
       const r = await anclar();
       assert.equal(r.statusCode, 200, r.body);
-      assert.equal(anclados, 1);
-      assert.equal(db.credentials[0].tx_hash, "0x" + "cd".repeat(32));
+      assert.equal(JSON.parse(r.body).sello.estado, "en_cola");
+      assert.ok(db.credentials[0].seal_paid_at, "la credencial pagada entra en la cola");
+      // El sello va por lotes: aquí no se gasta gas ni hay tope diario.
+      assert.equal(anclados, 0);
+      assert.equal(db.credentials[0].tx_hash, null);
     });
   } finally {
     tp.usarEthers(null);

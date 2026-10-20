@@ -1,0 +1,230 @@
+[
+  {
+    "id": "common_english_b1", "title": "Inglés B1",
+    "desc": "Resuelve en inglés situaciones de trabajo reales: entender un problema con un cliente, contestar un correo y reconocer errores frecuentes.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un problema con una reserva", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Leerás en inglés los datos de una reserva de hotel con problemas. Tendrás que explicar en inglés qué ha pasado y qué ofrecer.",
+        "sub": "Comprensión y respuesta — 10 min", "skills": {"hard": ["Inglés escrito", "Comprensión lectora"], "soft": ["Atención al cliente"]},
+        "scenario": "Trabajas en la recepción de un hotel de Málaga. Un cliente británico, Mr. Davies, se queja de su reserva. Tienes los datos en el sistema (en inglés).\n\nResponde EN INGLÉS, en tres partes:\n\nA) What went wrong with Mr. Davies's booking? Use the data in the table.\n\nB) What would you offer him and why?\n\nC) What would you change so that this does not happen again?",
+        "data": {
+          "headers": ["Item", "Booked", "Received", "Note", "Estado"],
+          "table": [
+            {"n": "Room type", "a": "Double room with sea view", "b": "Double room facing the car park", "c": "Sea view rooms fully booked", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Breakfast", "a": "Included", "b": "Charged 15 € per day", "c": "System error", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Check-in time", "a": "15:00", "b": "17:30", "c": "Room not ready", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Nights", "a": "4", "b": "4", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Guest status", "a": "Third stay this year", "b": "", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Answer parts A, B and C in English, using the information in the table.",
+          "kw": ["sea view", "car park", "breakfast", "charged", "refund", "apologise", "upgrade", "late check-in", "loyal guest", "compensation", "we will"]
+        }
+      },
+      {
+        "id": "e2", "title": "Contestar a un cliente molesto", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Escribirás en inglés la respuesta a un cliente que se queja por correo.",
+        "sub": "Correo en inglés — 10 min", "skills": {"hard": ["Inglés escrito"], "soft": ["Empatía"]},
+        "scenario": "Mr. Davies ha enviado este correo al hotel:\n\n«I am very disappointed. I booked a sea view room months ago and you gave me a room facing the car park. You also charged me for breakfast, which was included. This is my third stay this year and I expected better.»\n\nEl hotel puede ofrecer: devolver los 60 € del desayuno, un cambio a habitación con vistas al mar las dos últimas noches (se ha quedado libre una) y una cena gratis en el restaurante del hotel.\n\nEscribe la respuesta EN INGLÉS.",
+        "data": {
+          "to": "Mr. Davies",
+          "subject": "Re: Your stay at our hotel",
+          "hint": "Write the email in English, in four parts:\n\n1. Thank him for writing and apologise sincerely for each problem.\n\n2. Explain clearly what you are going to do about the breakfast charge.\n\n3. Offer the room change and the dinner, with the details (when, how).\n\n4. Close politely and give him a way to contact you directly.",
+          "minChars": 380, "minWords": 70,
+          "kw": ["thank you", "apologise", "sorry", "refund", "60", "sea view", "move", "dinner", "complimentary", "please let me know", "kind regards"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Correcta o con error?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué frases en inglés son correctas.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Gramática inglesa"], "soft": ["Precisión"]},
+        "scenario": "Un compañero te pide que revises estas frases antes de enviar unos correos a clientes británicos. Clasifica cada frase:\n\nCorrect — The sentence is grammatically correct.\n\nHas a mistake — The sentence contains a grammar mistake.",
+        "data": {
+          "options": [
+            {"id": "b1", "text": "I have worked here since 2020.", "correct": "ok"},
+            {"id": "b2", "text": "She don't like the new system.", "correct": "error"},
+            {"id": "b3", "text": "Could you send me the invoice, please?", "correct": "ok"},
+            {"id": "b4", "text": "I am agree with you.", "correct": "error"},
+            {"id": "b5", "text": "We received your order yesterday.", "correct": "ok"},
+            {"id": "b6", "text": "He explained me the problem.", "correct": "error"},
+            {"id": "b7", "text": "I look forward to hearing from you.", "correct": "ok"},
+            {"id": "b8", "text": "I didn't went to the meeting.", "correct": "error"}
+          ],
+          "cats": ["Correct", "Has a mistake"],
+          "keys": ["ok", "error"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_english_c1", "title": "Inglés de negocios (C1)",
+    "desc": "Trabaja en inglés a nivel profesional avanzado: resume resultados para dirección, negocia por escrito con un socio y elige el registro adecuado.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Resumen de resultados para el consejo", "type": "analysis", "timeLimit": 660, "difficulty": "basico",
+        "briefing": "Escribirás en inglés un resumen ejecutivo a partir de los resultados de un trimestre.",
+        "sub": "Resumen ejecutivo — 11 min", "skills": {"hard": ["Business English", "Síntesis"], "soft": ["Comunicación ejecutiva"]},
+        "scenario": "Trabajas en una empresa española de software que tiene un consejo con inversores de Estados Unidos. Debes preparar el resumen del trimestre.\n\nAnswer IN ENGLISH, in three parts:\n\nA) The three key messages of the quarter, with figures.\n\nB) The main risk and what the company is doing about it.\n\nC) One clear recommendation for the board.",
+        "data": {
+          "headers": ["Metric", "Q2", "Q3", "Comment", "Estado"],
+          "table": [
+            {"n": "Revenue", "a": "2.1 M€", "b": "2.5 M€", "c": "+19 % quarter on quarter", "d": "Bien", "cls": "v-good"},
+            {"n": "New customers", "a": "48", "b": "71", "c": "Driven by the UK launch", "d": "Bien", "cls": "v-good"},
+            {"n": "Customer churn", "a": "2.1 %", "b": "3.8 %", "c": "Mostly small customers after a price increase", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Cash runway", "a": "18 months", "b": "15 months", "c": "Hiring plan ahead of schedule", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Gross margin", "a": "71 %", "b": "73 %", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Answer parts A, B and C in English, concisely, as you would write to a board.",
+          "kw": ["revenue grew", "quarter on quarter", "UK launch", "churn", "price increase", "small customers", "runway", "mitigate", "we recommend", "going forward"]
+        }
+      },
+      {
+        "id": "e2", "title": "Negociar por escrito con un socio", "type": "email", "timeLimit": 660, "difficulty": "intermedio",
+        "briefing": "Responderás en inglés a un socio que propone condiciones que no te convienen.",
+        "sub": "Negociación en inglés — 11 min", "skills": {"hard": ["Business English", "Negociación"], "soft": ["Firmeza con tacto"]},
+        "scenario": "A US distributor wants to resell your software. Their proposal: a 45 % commission, exclusivity in the whole of North America for 5 years, and payment to you 120 days after each sale. Your limits: up to 30 % commission, exclusivity only if they reach a minimum of 500,000 $ in sales per year, and payment in 45 days. You want the deal, but not at any price.\n\nWrite your reply IN ENGLISH.",
+        "data": {
+          "to": "Head of Partnerships, US distributor",
+          "subject": "Re: Distribution agreement proposal",
+          "hint": "Write the email in English, in four parts:\n\n1. Show genuine interest in the partnership and acknowledge their proposal.\n\n2. Explain your position on commission, exclusivity and payment terms, with reasons.\n\n3. Make a counter-proposal that could work for both sides.\n\n4. Propose a concrete next step (a call, a date).",
+          "minChars": 420, "minWords": 76,
+          "kw": ["we appreciate", "partnership", "commission", "30 %", "exclusivity", "minimum", "500,000", "payment terms", "45 days", "counter-proposal", "next step"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Registro adecuado?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué frases son adecuadas para un correo formal a un cliente nuevo.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Registro formal en inglés"], "soft": ["Criterio"]},
+        "scenario": "Estás escribiendo tu primer correo a un cliente nuevo de una gran empresa británica. Clasifica cada frase:\n\nAppropriate — Suitable for a formal email to a new client.\n\nInappropriate — Too informal, rude or unclear for this context.",
+        "data": {
+          "options": [
+            {"id": "r1", "text": "Please find attached the revised proposal.", "correct": "ok"},
+            {"id": "r2", "text": "Hey guys, wanna jump on a call?", "correct": "no"},
+            {"id": "r3", "text": "I would appreciate it if you could confirm by Friday.", "correct": "ok"},
+            {"id": "r4", "text": "As I already told you twice, the price is final.", "correct": "no"},
+            {"id": "r5", "text": "We regret to inform you that the delivery will be delayed.", "correct": "ok"},
+            {"id": "r6", "text": "Need this ASAP pls.", "correct": "no"},
+            {"id": "r7", "text": "Should you have any questions, please do not hesitate to contact me.", "correct": "ok"},
+            {"id": "r8", "text": "Your team clearly messed up the order.", "correct": "no"}
+          ],
+          "cats": ["Appropriate", "Inappropriate"],
+          "keys": ["ok", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_french", "title": "Francés profesional",
+    "desc": "Resuelve en francés situaciones de trabajo con clientes y proveedores, y reconoce los errores más frecuentes.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un pedido que llega incompleto", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Leerás en francés los datos de un pedido con incidencias. Tendrás que explicar en francés qué ha pasado.",
+        "sub": "Comprensión y respuesta — 10 min", "skills": {"hard": ["Francés escrito", "Comprensión lectora"], "soft": ["Rigor"]},
+        "scenario": "Trabajas en compras de una cadena de tiendas de decoración. Un proveedor de Lyon os ha enviado un pedido con problemas. Tienes el albarán (en francés).\n\nRéponds EN FRANÇAIS, en trois parties :\n\nA) Quels sont les problèmes de la livraison ? Utilise les données du tableau.\n\nB) Que demandes-tu au fournisseur et dans quel délai ?\n\nC) Que proposes-tu pour éviter que cela se reproduise ?",
+        "data": {
+          "headers": ["Article", "Commandé", "Livré", "Remarque", "Estado"],
+          "table": [
+            {"n": "Vases en céramique", "a": "200", "b": "140", "c": "60 manquants", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Coussins en lin", "a": "300", "b": "300", "c": "Couleur différente (gris au lieu de beige)", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Bougies parfumées", "a": "500", "b": "500", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Cadres photo", "a": "150", "b": "150", "c": "18 cassés pendant le transport", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Date de livraison", "a": "3 mars", "b": "10 mars", "c": "Sans prévenir", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Réponds aux parties A, B et C en français, à partir du tableau.",
+          "kw": ["manquants", "couleur", "beige", "cassés", "retard", "remplacement", "avoir", "délai", "prévenir", "nous vous prions", "cordialement"]
+        }
+      },
+      {
+        "id": "e2", "title": "Escribir al proveedor", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Escribirás en francés un correo de reclamación firme pero cordial.",
+        "sub": "Correo en francés — 10 min", "skills": {"hard": ["Francés escrito"], "soft": ["Firmeza con tacto"]},
+        "scenario": "Con los problemas del pedido anterior, necesitas que el proveedor envíe los 60 jarrones que faltan y los 18 marcos rotos antes del 20 de marzo, que cambie los cojines por los de color beige y que confirme por escrito una fecha. Lleváis cinco años trabajando juntos y quieres mantener la relación.\n\nÉcris le courriel EN FRANÇAIS.",
+        "data": {
+          "to": "Service client du fournisseur",
+          "subject": "Commande n° 4587 – livraison incomplète",
+          "hint": "Écris le courriel en français, en quatre parties :\n\n1. Une introduction polie qui rappelle la commande et la relation.\n\n2. Les problèmes, avec les chiffres.\n\n3. Ce que tu demandes, avec une date limite (20 mars).\n\n4. Une formule de politesse adaptée et une demande de confirmation écrite.",
+          "minChars": 380, "minWords": 66,
+          "kw": ["Madame, Monsieur", "commande", "nous avons constaté", "manquants", "cassés", "beige", "remplacer", "avant le 20 mars", "confirmer par écrit", "salutations distinguées"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Correcta o con error?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué frases en francés son correctas.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Gramática francesa"], "soft": ["Precisión"]},
+        "scenario": "Revisas unas frases antes de enviarlas a un cliente de París. Clasifica cada una :\n\nCorrecte — La phrase est grammaticalement correcte.\n\nAvec une erreur — La phrase contient une faute de grammaire.",
+        "data": {
+          "options": [
+            {"id": "f1", "text": "Je vous remercie de votre réponse rapide.", "correct": "ok"},
+            {"id": "f2", "text": "Je suis allé au réunion à 9 heures.", "correct": "error"},
+            {"id": "f3", "text": "Pourriez-vous m'envoyer la facture, s'il vous plaît ?", "correct": "ok"},
+            {"id": "f4", "text": "Les produits sont arrivé en retard.", "correct": "error"},
+            {"id": "f5", "text": "Nous avons reçu votre commande hier.", "correct": "ok"},
+            {"id": "f6", "text": "Si j'aurais su, je vous aurais appelé.", "correct": "error"},
+            {"id": "f7", "text": "Veuillez agréer, Madame, l'expression de mes salutations distinguées.", "correct": "ok"},
+            {"id": "f8", "text": "Il faut que vous venez demain.", "correct": "error"}
+          ],
+          "cats": ["Correcte", "Avec une erreur"],
+          "keys": ["ok", "error"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_german", "title": "Alemán profesional",
+    "desc": "Resuelve en alemán situaciones de trabajo con clientes y socios, y reconoce los errores más frecuentes.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Una visita de un cliente de Múnich", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Leerás en alemán la agenda de una visita con cambios. Tendrás que explicar en alemán cómo la reorganizarías.",
+        "sub": "Comprensión y respuesta — 10 min", "skills": {"hard": ["Alemán escrito", "Comprensión lectora"], "soft": ["Organización"]},
+        "scenario": "Trabajas en una empresa de maquinaria agrícola de Zaragoza. Un cliente de Múnich viene de visita y su asistente te ha enviado cambios en la agenda (en alemán).\n\nAntworte AUF DEUTSCH, in drei Teilen:\n\nA) Welche Probleme gibt es in der Agenda? Nutze die Daten der Tabelle.\n\nB) Wie würdest du die Agenda neu organisieren?\n\nC) Was musst du noch mit dem Kunden klären?",
+        "data": {
+          "headers": ["Termin", "Geplant", "Neu", "Hinweis", "Estado"],
+          "table": [
+            {"n": "Ankunft am Flughafen", "a": "Montag, 9:00 Uhr", "b": "Montag, 13:00 Uhr", "c": "Flug verschoben", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Besuch der Fabrik", "a": "Montag, 11:00 Uhr", "b": "?", "c": "Die Fabrik schließt um 15:00 Uhr", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Mittagessen mit der Geschäftsführung", "a": "Montag, 14:00 Uhr", "b": "Montag, 14:00 Uhr", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Vorführung der neuen Maschine", "a": "Dienstag, 10:00 Uhr", "b": "Dienstag, 10:00 Uhr", "c": "Regen vorhergesagt", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Rückflug", "a": "Dienstag, 18:00 Uhr", "b": "Dienstag, 15:00 Uhr", "c": "", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Beantworte die Teile A, B und C auf Deutsch, mit den Daten der Tabelle.",
+          "kw": ["verschoben", "Fabrik", "schließt", "Dienstag", "Vorführung", "Halle", "Regen", "Rückflug", "neuer Termin", "bestätigen", "Mit freundlichen Grüßen"]
+        }
+      },
+      {
+        "id": "e2", "title": "Confirmar la nueva agenda", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Escribirás en alemán un correo para confirmar una agenda modificada.",
+        "sub": "Correo en alemán — 10 min", "skills": {"hard": ["Alemán escrito"], "soft": ["Cortesía profesional"]},
+        "scenario": "Has reorganizado la visita: la visita a la fábrica pasa al martes a las 9:00, la demostración de la máquina se hace a las 11:00 en la nave cubierta por la previsión de lluvia, y un compañero recogerá al cliente en el aeropuerto el lunes a las 13:00. Necesitas que confirme los cambios antes del viernes.\n\nSchreibe die E-Mail AUF DEUTSCH.",
+        "data": {
+          "to": "Frau Becker, Assistentin der Geschäftsführung",
+          "subject": "Neue Agenda für den Besuch in Zaragoza",
+          "hint": "Schreibe die E-Mail auf Deutsch, in vier Teilen:\n\n1. Eine höfliche Anrede und ein Dank für die Information.\n\n2. Die neue Agenda, Tag für Tag und mit Uhrzeiten.\n\n3. Der Grund für die Änderungen (Fabrik, Regen).\n\n4. Die Bitte um Bestätigung bis Freitag und eine passende Grußformel.",
+          "minChars": 360, "minWords": 56,
+          "kw": ["Sehr geehrte Frau Becker", "vielen Dank", "Montag", "Dienstag", "um 9:00 Uhr", "Fabrik", "Halle", "abholen", "bestätigen", "bis Freitag", "Mit freundlichen Grüßen"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Correcta o con error?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué frases en alemán son correctas.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Gramática alemana"], "soft": ["Precisión"]},
+        "scenario": "Revisas unas frases antes de enviarlas a un socio de Hamburgo. Clasifica cada una:\n\nKorrekt — Der Satz ist grammatisch korrekt.\n\nMit Fehler — Der Satz enthält einen Grammatikfehler.",
+        "data": {
+          "options": [
+            {"id": "g1", "text": "Vielen Dank für Ihre schnelle Antwort.", "correct": "ok"},
+            {"id": "g2", "text": "Ich habe nach Berlin gefahren.", "correct": "error"},
+            {"id": "g3", "text": "Können Sie mir die Unterlagen schicken?", "correct": "ok"},
+            {"id": "g4", "text": "Der Rechnung ist falsch.", "correct": "error"},
+            {"id": "g5", "text": "Wir haben die Ware gestern geschickt.", "correct": "ok"},
+            {"id": "g6", "text": "Gestern ich habe den Vertrag unterschrieben.", "correct": "error"},
+            {"id": "g7", "text": "Ich freue mich auf Ihre Antwort.", "correct": "ok"},
+            {"id": "g8", "text": "Ich warte auf Ihnen.", "correct": "error"}
+          ],
+          "cats": ["Korrekt", "Mit Fehler"],
+          "keys": ["ok", "error"]
+        }
+      }
+    ]
+  }
+]

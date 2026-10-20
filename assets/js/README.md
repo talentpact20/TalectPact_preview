@@ -29,7 +29,7 @@ llamar desde un `onclick` del HTML o desde `10-…`.
 | `app/16-pool-real.js` | `TPPool`: pool real desde Supabase, contacto real tras el pago y sincronización de preferencias. |
 | `app/17-ofertas-reales.js` | `TPOfertas`: ofertas reales (publicar, cerrar, reabrir) y cifras del panel de empresa. |
 | `app/18-interfaz.js` | Sistema de diseño: tema (`TPTema`), pasos, barra de nota, anillo, chips, encaje, esqueleto y autoguardado de respuestas. |
-| `app/19-rrhh.js` | Tres pilares (Hard / Soft / Transferibles), preguntas y dilemas de la vacante, avisos y pipeline. |
+| `app/19-rrhh.js` | Dos bloques (Hard / Soft según `taxonomia.json`), preguntas y dilemas de la vacante, avisos y pipeline. |
 | `app/20-requisitos.js` | Oferta en tres pasos, requisitos de skill (imprescindible o valorable, con banda mínima), encaje por requisitos y relleno de la oferta desde el documento de la empresa (`parse-job-doc`). Espejo de `netlify/functions/lib/requisitos.js`. |
 | `app/21-empresa.js` | `TPEmpresa`: ficha y verificación de la empresa en su panel (Google Workspace o email corporativo), sello «Empresa verificada» y el paso «Completa los datos de tu empresa» tras entrar con Google. |
 | `app/22-reto-oficial.js` | `TPReto`: reto oficial con cuenta obligatoria, pantalla «Antes de empezar» (cámara, normas, intento único), contenido que llega del servidor al empezar (`retos-intento`), solicitudes de otra oportunidad o de alternativa a la cámara y aviso al salir a mitad. |

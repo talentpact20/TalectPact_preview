@@ -10,14 +10,26 @@
  * como un endpoint de función.
  */
 
+/**
+ * Respuesta JSON de las funciones.
+ *  · CORS solo para el propio dominio (SITE_URL): la web llama a sus funciones
+ *    desde el mismo origen, y así otra página no puede usar desde el navegador
+ *    de una víctima las funciones caras o las que leen datos de su cuenta. Las
+ *    que son públicas por diseño (verificar un SkillPass, la lista de
+ *    revocación, el documento DID) ponen «*» por su cuenta.
+ *  · no-store: ni el navegador ni un proxy guardan respuestas con datos de una cuenta.
+ */
 function jsonResponse(statusCode, payload) {
   return {
     statusCode,
     headers: {
       "content-type": "application/json",
-      "access-control-allow-origin": "*",
+      "access-control-allow-origin": String(process.env.SITE_URL || "https://talentpact.es").replace(/\/+$/, ""),
       "access-control-allow-headers": "content-type, authorization",
-      "access-control-allow-methods": "GET, POST, OPTIONS"
+      "access-control-allow-methods": "GET, POST, OPTIONS",
+      "vary": "origin",
+      "cache-control": "no-store",
+      "x-content-type-options": "nosniff"
     },
     body: JSON.stringify(payload)
   };
@@ -399,6 +411,46 @@ function getContract({ signer = false } = {}) {
   return new ethers.Contract(address, SKILLPASS_ABI, provider);
 }
 
+// ─── Sello por lotes (contrato v2, capa 2) ───────────────────────────────────
+/**
+ * El sello público nuevo publica una raíz de Merkle al día en una capa 2 de
+ * Ethereum (docs/plan_post_reunion/03, §4.4): céntimos por lote. SEAL_CHAIN
+ * elige la red: «base-sepolia» (pruebas, por defecto) o «base» (producción).
+ * Las credenciales selladas con el contrato v1 (Sepolia, una tx por hash)
+ * siguen verificándose con CHAIN y getContract().
+ */
+const SEAL_CHAINS = {
+  "base-sepolia": { chainId: 84532, name: "Base Sepolia", slug: "base-sepolia", defaultRpc: "https://sepolia.base.org", explorer: "https://sepolia.basescan.org" },
+  base: { chainId: 8453, name: "Base", slug: "base", defaultRpc: "https://mainnet.base.org", explorer: "https://basescan.org" }
+};
+function sealChain() {
+  return SEAL_CHAINS[process.env.SEAL_CHAIN] || SEAL_CHAINS["base-sepolia"];
+}
+const SKILLPASS_V2_ABI = [
+  "function anchorRoot(bytes32 root, uint32 leaves) external",
+  "function rootAnchoredAt(bytes32 root) view returns (uint256)",
+  "function verifyLeaf(bytes32 leaf, bytes32[] proof, bytes32 root) view returns (bool included, uint256 timestamp)",
+  "function issuer() view returns (address)"
+];
+function sealChainConfigured({ signer = false } = {}) {
+  if (!process.env.SKILLPASS_V2_CONTRACT_ADDRESS) return false;
+  if (signer && !process.env.ISSUER_PRIVATE_KEY) return false;
+  return true;
+}
+function getSealContract({ signer = false } = {}) {
+  const { ethers } = getEthers();
+  const address = process.env.SKILLPASS_V2_CONTRACT_ADDRESS;
+  if (!address) throw new Error("Falta SKILLPASS_V2_CONTRACT_ADDRESS en variables de entorno");
+  const red = sealChain();
+  const provider = new ethers.JsonRpcProvider(process.env.SEAL_RPC || red.defaultRpc, red.chainId, { staticNetwork: true });
+  if (signer) {
+    const pk = process.env.ISSUER_PRIVATE_KEY;
+    if (!pk) throw new Error("Falta ISSUER_PRIVATE_KEY en variables de entorno");
+    return new ethers.Contract(address, SKILLPASS_V2_ABI, new ethers.Wallet(pk, provider));
+  }
+  return new ethers.Contract(address, SKILLPASS_V2_ABI, provider);
+}
+
 /** keccak256 del CV canonicalizado -> string 0x... (bytes32). */
 function hashCv(cvJson) {
   const { ethers } = getEthers();
@@ -478,6 +530,12 @@ module.exports = {
   explorerTx,
   explorerAddress,
   SKILLPASS_ABI,
+  SKILLPASS_V2_ABI,
+  SEAL_CHAINS,
+  sealChain,
+  sealChainConfigured,
+  getSealContract,
+  getEthers,
   UNLOCK_PRICE,
   stripeConfigured,
   stripeLiveMode,

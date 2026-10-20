@@ -451,3 +451,94 @@ body.tp-exam .ai-chat-fab,body.tp-exam .chat-fab,body.tp-exam #aiChatWidget{disp
 .sp-sello{margin-top:var(--sp-3);padding-top:var(--sp-2);border-top:1px solid var(--c-borde);font-size:var(--fs-micro);color:var(--c-texto-3);line-height:1.6}
 .sp-sello summary{cursor:pointer;color:var(--c-texto-2)}
 .sp-sello code{font-size:var(--fs-micro);word-break:break-all}
+
+/* ─── Bandas de nota: cuatro segmentos + nombre (Insuficiente → Muy bueno) ─ */
+.tp-banda{display:inline-flex;align-items:center;gap:var(--sp-2);white-space:nowrap;font-size:var(--fs-micro);color:var(--c-texto-2)}
+.tp-banda-seg{display:inline-flex;gap:2px}
+.tp-banda-seg i{width:10px;height:6px;border-radius:2px;background:var(--c-borde)}
+.tp-banda-txt{font-weight:600}
+.tp-banda-txt b{font-weight:500;color:var(--c-texto-3);margin-left:2px}
+.tp-banda-insuficiente .tp-banda-seg i:nth-child(-n+1){background:var(--red-400)}
+.tp-banda-aceptable .tp-banda-seg i:nth-child(-n+2){background:var(--amber-500)}
+.tp-banda-bueno .tp-banda-seg i:nth-child(-n+3){background:var(--emerald-500)}
+.tp-banda-muy_bueno .tp-banda-seg i:nth-child(n){background:var(--emerald-700)}
+.tp-skill-banda{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);padding:var(--sp-2) 0;border-bottom:1px solid var(--c-borde)}
+.tp-skill-banda:last-child{border-bottom:0}
+.tp-skill-banda-nombre{font-size:var(--fs-peq);color:var(--c-texto);min-width:0;overflow-wrap:anywhere}
+.tp-bloques-skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--sp-4)}
+.tp-bloque-skills{border:1px solid var(--c-borde);border-radius:var(--radius-lg);padding:var(--sp-3) var(--sp-4);background:var(--c-superficie)}
+.tp-bloque-skills h4{font-size:var(--fs-micro);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--c-texto-2);margin:0 0 var(--sp-2)}
+.tp-bloque-vacio{font-size:var(--fs-micro);color:var(--c-texto-3);margin:0}
+.tp-cond-chip.tp-chip-banda.tp-banda-insuficiente{border-color:var(--red-200);background:var(--red-50);color:var(--red-700)}
+.tp-cond-chip.tp-chip-banda.tp-banda-aceptable{border-color:var(--amber-200);background:var(--amber-50);color:var(--amber-700)}
+.tp-cond-chip.tp-chip-banda.tp-banda-bueno,.tp-cond-chip.tp-chip-banda.tp-banda-muy_bueno{border-color:var(--emerald-200);background:var(--emerald-50);color:var(--emerald-700)}
+.tp-cond-chip.tp-chip-banda.tp-banda-muy_bueno{font-weight:700}
+
+/* ─── Verificación de un SkillPass: cinco estados ─ */
+.vf-estado{padding:var(--sp-3) var(--sp-4);border-radius:var(--radius);border:1px solid var(--c-borde);font-size:var(--fs-peq);line-height:1.55;margin-bottom:var(--sp-4)}
+.vf-ok{background:var(--emerald-50);border-color:var(--emerald-200);color:var(--emerald-800)}
+.vf-aviso{background:var(--amber-50);border-color:var(--amber-200);color:var(--amber-800)}
+.vf-error{background:var(--red-50);border-color:var(--red-200);color:var(--red-700)}
+.vf-neutro{background:var(--c-superficie-2);color:var(--c-texto-2)}
+.vf-meta{display:grid;grid-template-columns:max-content 1fr;gap:var(--sp-1) var(--sp-4);font-size:var(--fs-peq);margin:0 0 var(--sp-4)}
+.vf-meta dt{color:var(--c-texto-3)}
+.vf-meta dd{margin:0;color:var(--c-texto);min-width:0;overflow-wrap:anywhere}
+.vf-meta code,.vf-datos code,.vf-detalles code{font-size:var(--fs-micro);word-break:break-all}
+.vf-skill-meta{display:block;font-size:var(--fs-micro);color:var(--c-texto-3)}
+.vf-linea{font-size:var(--fs-peq);color:var(--c-texto-2);margin:var(--sp-4) 0 0}
+.vf-detalles{margin-top:var(--sp-4);font-size:var(--fs-peq);color:var(--c-texto-2);border-top:1px solid var(--c-borde);padding-top:var(--sp-3)}
+.vf-detalles summary{cursor:pointer;color:var(--c-texto)}
+.vf-detalles-cuerpo{padding-top:var(--sp-2);display:grid;gap:var(--sp-2)}
+.vf-paso{margin:0;line-height:1.55}
+.vf-datos{display:grid;grid-template-columns:max-content 1fr;gap:var(--sp-1) var(--sp-3);margin:0}
+.vf-datos dt{color:var(--c-texto-3)}
+.vf-datos dd{margin:0;min-width:0}
+.vf-subir{display:inline-flex;align-items:center;gap:var(--sp-2);font-size:var(--fs-peq);color:var(--c-texto-2);cursor:pointer}
+.vf-subir input{max-width:220px;font-size:var(--fs-micro)}
+@media (max-width:480px){.vf-meta,.vf-datos{grid-template-columns:1fr}.vf-meta dt,.vf-datos dt{margin-top:var(--sp-2)}}
+.sp-verify-out:not([hidden]){display:block;padding:0;background:none;border:0}
+.sp-verify-out .vf-meta dd,.sp-verify-out .vf-linea,.sp-verify-out .vf-detalles{color:var(--slate-200)}
+.sp-verify-out .vf-meta dt{color:var(--slate-400)}
+.sp-verify-out .vf-detalles summary{color:var(--c-sobre-tinta)}
+
+/* ─── verify.html ─ */
+body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
+.vf-envoltorio{max-width:760px;margin:0 auto;padding:var(--sp-12) var(--sp-4) var(--sp-16)}
+.vf-marca{display:inline-block;font-size:var(--fs-t3);text-decoration:none;color:var(--c-texto);margin-bottom:var(--sp-8)}
+.vf-envoltorio h1{font-size:var(--fs-t2);margin:0 0 var(--sp-2)}
+.vf-intro{color:var(--c-texto-2);font-size:var(--fs-cuerpo);line-height:1.6;margin:0 0 var(--sp-6)}
+.vf-tarjeta{background:var(--c-superficie);border:1px solid var(--c-borde);border-radius:var(--radius-lg);padding:var(--sp-4)}
+.vf-tarjeta label{display:block;font-size:var(--fs-peq);font-weight:600;margin-bottom:var(--sp-2)}
+.vf-tarjeta textarea{width:100%;box-sizing:border-box;font:inherit;font-size:var(--fs-peq);padding:var(--sp-3);border:1px solid var(--c-borde);border-radius:var(--radius);background:var(--c-superficie);color:var(--c-texto);resize:vertical}
+.vf-acciones{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-4);margin-top:var(--sp-3)}
+.vf-resultado{margin-top:var(--sp-6)}
+.vf-pie{margin-top:var(--sp-8);font-size:var(--fs-micro);color:var(--c-texto-3);line-height:1.6}
+.vf-pie a{color:var(--c-texto-2)}
+.sp-pass .tp-banda-txt{color:var(--emerald-100)}
+.sp-pass .tp-banda-seg i{background:var(--slate-600)}
+
+/* ─── Paneles con menú lateral (candidato y empresa) ─ */
+.dash-body.dash-con-menu{max-width:1240px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:var(--sp-6);align-items:start}
+.dash-menu{position:sticky;top:76px;display:flex;flex-direction:column;gap:2px;padding:var(--sp-2);background:var(--c-superficie);border:1px solid var(--c-borde);border-radius:var(--radius-lg)}
+.dash-menu-item{display:block;width:100%;text-align:left;padding:9px 12px;border:0;border-radius:var(--radius);background:none;color:var(--c-texto-2);font:inherit;font-size:var(--fs-peq);font-weight:500;cursor:pointer;white-space:nowrap}
+.dash-menu-item:hover{background:var(--c-superficie-2);color:var(--c-texto)}
+.dash-menu-item[aria-current="page"]{background:var(--emerald-50);color:var(--emerald-800);font-weight:600}
+.dash-menu-item:focus-visible{outline:2px solid var(--c-foco);outline-offset:1px}
+.dash-menu-sep{height:1px;background:var(--c-borde);margin:var(--sp-2) var(--sp-1)}
+.dash-main{min-width:0}
+.dash-pagina-cab{margin-bottom:var(--sp-4)}
+.dash-pagina-cab h2{font-size:var(--fs-t2);margin:0}
+.dash-pagina-cab p{font-size:var(--fs-peq);color:var(--c-texto-3);margin:var(--sp-1) 0 0}
+.st-body.st-pagina{overflow:visible;padding:0;max-width:760px}
+@media (max-width:900px){
+  .dash-body.dash-con-menu{grid-template-columns:minmax(0,1fr);gap:var(--sp-3)}
+  .dash-menu{top:52px;z-index:5;flex-direction:row;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .dash-menu::-webkit-scrollbar{display:none}
+  .dash-menu-item{width:auto;flex-shrink:0}
+  .dash-menu-sep{width:1px;height:auto;margin:var(--sp-1) var(--sp-1)}
+}
+.dash-accesos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-3);margin-top:var(--sp-4)}
+.dash-acceso{display:flex;flex-direction:column;gap:var(--sp-1);text-align:left;padding:var(--sp-4);border:1px solid var(--c-borde);border-radius:var(--radius-lg);background:var(--c-superficie);color:var(--c-texto);font:inherit;cursor:pointer}
+.dash-acceso:hover{border-color:var(--emerald-300)}
+.dash-acceso b{font-size:var(--fs-cuerpo)}
+.dash-acceso span{font-size:var(--fs-peq);color:var(--c-texto-3)}

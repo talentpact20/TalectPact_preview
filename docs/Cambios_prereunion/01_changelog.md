@@ -374,3 +374,91 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Por qué.** Petición del equipo: olvidar la estructura anterior y que los retos se vean divididos así, de forma sencilla y visible.
 
 **Ficheros.** `lib/taxonomia.json`, `lib/taxonomia.js`, `lib/personas.js`, `tools/generar_taxonomia.js`, `01b-taxonomia.js`, `19-rrhh.js`, `20-requisitos.js`, `23-clasificacion.js`; `index.html`, `componentes.css`; `tests/taxonomia.test.js`, `tests/rrhh.test.js`. Tests → 172 (sin cambio de número).
+
+---
+
+## 2026-10-20 — Revisión del código de Iván (14–20/10): ofertas de ejemplo fuera y pipeline acotado
+
+**Qué.**
+- Retirado `supabase_seed_ofertas_demo.sql` (4 empresas ficticias y 8 ofertas). Su limpieza nunca funcionaba: buscaba `%@demo.talentpact.es` y los correos eran `rrhh@nortepay.demo.talentpact.es`. En su lugar, `supabase_limpiar_ofertas_demo.sql` borra esas empresas y ofertas por sus ids fijos y por el dominio correcto (hay que ejecutarlo en Supabase).
+- Pipeline (`applications`): una empresa ya no puede meter en su proceso, ni avisar, a un candidato que no se ha postulado a esa oferta y que se ha ocultado del pool. Antes bastaba con conocer el id del perfil para mandarle «Enhorabuena: te han elegido».
+- Dilemas: la respuesta vacía conserva su hueco (antes se descartaba y las siguientes se corrían al dilema de antes), en el navegador y en el servidor.
+- `viewProfile` usa `tpPoolCondChips` sin copia duplicada; `assets/js/README.md` ya no habla de Transferibles.
+
+**Por qué.** Regla de no mostrar contenido de demostración; un candidato oculto no debe recibir avisos de una empresa con la que no ha tenido relación.
+
+**Ficheros.** `tfm/tech/supabase_limpiar_ofertas_demo.sql`, `netlify/functions/lib/handlers/applications.js`, `netlify/functions/lib/handlers/apply.js`, `assets/js/app/08-ofertas-y-ejercicios.js`, `assets/js/app/19-rrhh.js`, `assets/js/app/10-paneles-y-pagos.js`, `tests/pool.test.js`, `tests/rrhh.test.js`. Tests: 174.
+
+---
+
+## 2026-10-20 — Notas en bandas, no de 0 a 100
+
+**Qué.** Cada skill se enseña con su banda (Insuficiente < 40 · Aceptable 40–59 · Bueno 60–79 · Muy bueno ≥ 80) y cuatro segmentos. El candidato ve banda y nota; la empresa ve la banda y el número solo al pasar el ratón. La ficha del candidato para la empresa agrupa las skills en dos bloques (Hard skills / Soft skills). Fuera la nota media global: el pool ya no tiene columna «Score», la tarjeta de candidato de una oferta no lleva el círculo con la media, el panel del candidato cuenta «Skills en Bueno o más» y «Skills demostradas», y la estadística de empresa cuenta candidatos con alguna skill en «Muy bueno». El resultado de un reto muestra la banda junto a la nota.
+
+**Por qué.** Documento «Skills en la plataforma»: la empresa ve lo que se puede defender (una banda), no una cifra exacta; nada de nota media ni de ranking por media.
+
+**Pendiente de decidir.** El ranking del candidato sigue ordenando por media (ahora enseña bandas). El documento de skills pide no tener ranking por media.
+
+**Ficheros.** `assets/js/app/18-interfaz.js` (`tpBanda`, `tpBandaHtml`, `tpBloquesSkills`, `tpChipsBanda`), `netlify/functions/lib/bandas.js`, `07`, `08`, `10`, `16`, `17`, `19`, `23`, `index.html`, `componentes.css`, `tests/bandas.test.js` (2). Tests: 176 en 24 ficheros.
+
+---
+
+## 2026-10-20 — SkillPass definitivo: credencial W3C firmada, revocación, caducidad y sello por lotes (plan 03 completo)
+
+**Qué.**
+- **Credencial**: el SkillPass es ahora una credencial verificable W3C VC 2.0, firmada por TalentPact con Ed25519 (`eddsa-jcs-2022`), emisor `did:web:talentpact.es`. Lleva un seudónimo (no el email ni el id del perfil), las skills con su bloque y su **banda** (no la nota exacta), la fecha, si la nota está verificada y la versión de la rúbrica. Caduca a los 12 meses.
+- **Revocación**: el titular puede retirar su SkillPass desde el panel; un admin puede revocarlo por fraude con motivo. Lista pública `/status/1` (Bitstring Status List, 131.072 entradas, índice al azar): quien verifica descarga la lista entera y nadie sabe qué credencial mira.
+- **Clave pública** en `/.well-known/did.json`: cualquiera comprueba la firma sin preguntarnos.
+- **Verificación en cinco estados** (empresa, portada y `verify.html`): válida y vigente, válida pero caducada, revocada, alterada, no encontrada. Detalle con skills en dos bloques y bandas, fecha, verificación, rúbrica; sello público plegado con «Comprobar sin TalentPact» (contrato, raíz, hoja, sal y prueba). Se puede pegar el enlace, el código o subir el .json.
+- **Sello por lotes**: pagar el sello (4,99 €) mete la credencial en la cola; `anchor-batch` (función programada, 00:05 UTC) publica una sola raíz de Merkle al día con `anchorRoot` del nuevo contrato `SkillPassRegistryV2` en una capa 2 (Base; Base Sepolia para pruebas). Cada credencial guarda su hoja (keccak256(sal ‖ credencial)) y su prueba. Si el envío falla, vuelve a la cola; con más de 3 días de espera se avisa en el registro. Desaparece el tope de 3 sellados al día.
+- **RGPD**: al borrar la cuenta se borran la credencial y su sal; lo publicado queda como un número que ya no se vincula a nadie (explicado en `legal.html` §06).
+- **Interfaz** (plan 03 §5.1): «Firmado por TalentPact · válido hasta … · Copiar enlace»; «Sello público: no · Añadir sello (4,99 €)» o plegado con los detalles. Fuera «blockchain» de los titulares: «Habilidades demostradas y verificables».
+- Las credenciales v1 (Sepolia, una transacción por huella) se siguen verificando.
+
+**Para el usuario.** 1) `npm run vc:clave` y pegar `VC_SIGNING_KEY` en Netlify. 2) Ejecutar `tfm/tech/supabase_schema_vc.sql`. 3) Fondear la cartera emisora en Base Sepolia y `npm run deploy:contract:v2`; pegar `SKILLPASS_V2_CONTRACT_ADDRESS` (y `SEAL_CHAIN=base` cuando sea en producción). Sin 1, el SkillPass se emite sin firma; sin 2, se emite pero no se puede revocar ni sellar; sin 3, el sello queda en cola.
+
+**Ficheros.** `lib/vc.js`, `lib/merkle.js`, `lib/statuslist.js`, `lib/skillpass.js`, `lib/bandas.js`, `lib/tp.js`; handlers `issue-credential`, `anchor-credential`, `anchor-batch` (nuevo, programado), `verify-credential`, `revoke-credential`, `status-list`, `did-web` (nuevos), `pay-seal`; `SkillPassRegistryV2.sol`; `supabase_schema_vc.sql`; `06-skillpass-y-sesion.js`, `24-verificar.js` (nuevo), `09-acceso.js`, `index.html`, `verify.html` (rehecho con los tokens), `legal.html`, `componentes.css`, `netlify.toml`, `serve-demo.js`, `deploy-contract.js --v2`, `generar-clave-vc.js`; `tests/skillpass-v2.test.js` (8), `tests/sello.test.js`. Tests: 184 en 25 ficheros.
+
+---
+
+## 2026-10-20 — Rama IA: apartado propio con 11 retos complejos (plan 02)
+
+**Qué.**
+- Tercer bloque en el catálogo, **Inteligencia artificial**, junto a Hard y Soft (panel del candidato y portada, filtro «IA»): **Rama técnica** (por los 6 itinerarios del plan: Ingeniería de IA/ML, IA generativa/LLM, Investigación, Plataforma, Seguridad, IA aplicada) e **IA en el trabajo** (para cualquier puesto).
+- **10 retos técnicos (ola 1)**: Python para IA, Datos para ML, Machine learning, LLM, APIs de LLM, RAG, Agentes, Evaluación de modelos, MLOps/LLMOps y Seguridad de IA. Cada uno con 3 ejercicios: diagnóstico o revisión de un artefacto (código, traza, métricas), diseño o lectura de resultados con restricciones reales (presupuesto, latencia, permisos, Reglamento de IA) y una clasificación que se corrige sin IA. Ejemplos: buscador interno con permisos (35 min), A/B con intervalos y reparto desequilibrado, inyección indirecta en un asistente de correo, agente de reembolsos con límites.
+- **IA en el trabajo** (competencia 05.6, cuenta como soft): revisar un informe de IA con 3 errores y un dato confidencial, encargar bien una tarea, y clasificar 8 usos en «Sí / Sí, con controles / No».
+- **Corrector 2.2.0**: rúbrica `tecnico_ia` (corrección técnica 35 · justificación 25 · riesgos y límites 20 · comunicación técnica 20) que fija el catálogo, no el navegador; y **errores que penalizan** por ejercicio, escritos como criterio de experto: si la respuesta comete uno (p. ej. «filtra los permisos después de generar»), ese criterio no pasa de su tope. Nunca llegan al navegador.
+- Portada: «114 retos (14 transversales, 89 de sector y 11 de inteligencia artificial)», calculado del catálogo.
+
+**Pendiente.** Revisión de los 33 ejercicios por un experto en IA (indicadores y errores que penalizan) y gold set; fase 2 (ejecutar código en un entorno aislado) y defensa de 2 preguntas; itinerarios de IA en la oferta.
+
+**Ficheros.** `tools/retos_ia.json` (contenido), `tools/agregar_retos_ia.js` (lo vuelca en `catalogo-retos.json`, `07-retos-comunes.js` y `taxonomia.json`), `evaluator.js`, `evaluate-exercise.js`, `intentos.js`, `19-rrhh.js`, `23-clasificacion.js`, `18-interfaz.js`, `00-iconos.js`, `index.html`, `tests/rama-ia.test.js` (5). Tests: 189 en 26 ficheros.
+
+---
+
+## 2026-10-20 — Paneles con menú lateral y Ajustes como página propia
+
+**Qué.**
+- **Candidato**: menú lateral con Mi perfil, Retos, Ofertas, Ranking, Explorar, Ajustes y Ayuda (antes, pestañas horizontales). Las cifras del perfil pasan a la página «Mi perfil».
+- **Empresa**: el panel era una sola página larga; ahora tiene Resumen (cifras, avisos y accesos rápidos), Ofertas (publicar, mis ofertas y sus candidatos), Talento (pool), Verificar credencial, Plan y Ajustes.
+- **Ajustes** deja de ser un cajón que tapaba el panel: es una página del menú, con el mismo contenido y los mismos campos (datos, preferencias, privacidad, seguridad, borrar cuenta). El engranaje de la barra superior lleva a ella.
+- En móvil el menú es una barra horizontal fija que se desplaza; sin desbordes a 375 px, en claro y en oscuro.
+
+**Ficheros.** `index.html`, `10-paneles-y-pagos.js` (`tpPanelIr`, `openSettings`), `07-retos-comunes.js`, `06`, `08`, `14`, `20`, `componentes.css`.
+
+---
+
+## 2026-10-20 — Seguridad: límites persistentes, CORS cerrado y RLS comprobado en todas las tablas
+
+**Qué.**
+- **Límite de frecuencia persistente** (`lib/limites.js`, tabla `rate_events`): el de antes vivía en la memoria de cada instancia y se reiniciaba en cada arranque en frío. Ahora cuenta también en Supabase (la clave se guarda como hash, sin IPs en claro). Se aplica al corrector (60 cada 10 min por cuenta; 12 por IP sin sesión), al chat de ayuda, a la lectura de documentos de oferta, a verificar SkillPass (120 cada 10 min por IP), a emitir SkillPass y a postularse. El navegador manda la sesión al corrector para que el límite vaya por cuenta.
+- **CORS cerrado**: las funciones solo aceptan llamadas del propio dominio (`SITE_URL`). Antes cualquier web podía usarlas desde el navegador de un visitante (incluidas las que gastan IA). Solo verificar, la lista de revocación y el documento DID siguen abiertos, porque son públicos por diseño.
+- **Sin caché** (`no-store`) y `nosniff` en todas las respuestas de las funciones.
+- **RLS**: test que obliga a que toda tabla de los SQL tenga RLS activado y a que `npm run check:rls` la revise (ahora las 14 tablas; antes solo 5).
+- Revisado: sin secretos en el repositorio; el webhook de Stripe exige firma; las funciones caras exigen o sesión o límite por IP; el pipeline ya no deja avisar a candidatos ajenos (arreglo del mismo día).
+
+**Para el usuario.** Ejecutar `tfm/tech/supabase_schema_seguridad.sql` y después `npm run check:rls`.
+
+**Pendiente (decisión o configuración, no código).** Exigir confirmar el email; activar la verificación en dos pasos (TOTP) y la protección contra contraseñas filtradas de Supabase; quitar `'unsafe-inline'` de la CSP (requiere pasar los `onclick` del HTML a JavaScript); copias con PITR en Supabase; rotar las claves si alguna se compartió.
+
+**Ficheros.** `lib/limites.js`, `lib/tp.js`, handlers `evaluate-exercise`, `support-chat`, `parse-job-doc`, `verify-credential`, `issue-credential`, `apply`, `status-list`, `did-web`; `08-ofertas-y-ejercicios.js`; `check-rls.js`; `supabase_schema_seguridad.sql`; `tests/seguridad.test.js` (3). Tests: 192 en 27 ficheros.

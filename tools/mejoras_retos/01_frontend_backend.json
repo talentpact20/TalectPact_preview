@@ -1,0 +1,289 @@
+[
+  {
+    "id": "common_react", "title": "React y componentes",
+    "desc": "Encuentra por qué una pantalla de React va lenta, revisa un componente con errores de estado y decide qué patrones usar en cada caso.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Una pantalla que se vuelve a pintar sin parar", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás el perfil de renderizado de una pantalla de React lenta. Tendrás que explicar qué pasa y cómo arreglarlo.",
+        "sub": "Diagnóstico — 9 min", "skills": {"hard": ["React", "Rendimiento"], "soft": ["Diagnóstico"]},
+        "scenario": "La pantalla de pedidos de un panel interno tarda casi un segundo en responder cada vez que alguien escribe en el buscador. Tiene una lista de 2.000 pedidos y un filtro por texto. Has abierto el perfilador de React y has escrito un pedido de 5 letras.\n\nResponde en tres partes:\n\nA) Qué está causando la lentitud, apoyándote en las cifras de la tabla.\n\nB) Qué cambiarías, en orden, y qué esperas ganar con cada cambio.\n\nC) Cómo comprobarías después que de verdad va más rápido.",
+        "data": {
+          "headers": ["Componente", "Veces que se pinta", "Tiempo total", "Motivo según el perfilador", "Estado"],
+          "table": [
+            {"n": "PantallaPedidos", "a": "5", "b": "40 ms", "c": "Cambia el estado del buscador", "d": "Bien", "cls": "v-good"},
+            {"n": "ListaPedidos", "a": "5", "b": "610 ms", "c": "Recibe un array nuevo en cada pintado", "d": "Revisar", "cls": "v-bad"},
+            {"n": "FilaPedido (×2.000)", "a": "10.000", "b": "520 ms", "c": "Recibe una función onClick nueva", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Cabecera", "a": "5", "b": "35 ms", "c": "Su padre se ha vuelto a pintar", "d": "Revisar", "cls": "v-warn"},
+            {"n": "filtrarPedidos()", "a": "5", "b": "180 ms", "c": "Se ejecuta dentro del render, sin memorizar", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": ["useMemo", "useCallback", "memo", "referencia", "render", "virtualiz", "debounce", "key", "perfilador", "medir"]
+        }
+      },
+      {
+        "id": "e2", "title": "Revisión de un formulario con errores de estado", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Revisarás el código de un formulario de React que a veces envía datos antiguos y otras veces se queda colgado.",
+        "sub": "Revisión de código — 10 min", "skills": {"hard": ["React", "Estado y efectos"], "soft": ["Rigor"]},
+        "scenario": "Un compañero ha abierto un pull request con el formulario de alta de clientes. Soporte dice que a veces se guarda el correo que había antes de corregirlo y que, si se cambia rápido de cliente, aparecen los datos del anterior.\n\n```jsx\nfunction FichaCliente({ id }) {\n  const [cliente, setCliente] = useState({});\n  const [email, setEmail] = useState(\"\");\n\n  useEffect(() => {\n    fetch(`/api/clientes/${id}`).then(r => r.json()).then(setCliente);\n  }, []);\n\n  function guardar() {\n    setEmail(email.trim());\n    fetch(\"/api/clientes/\" + id, { method: \"PUT\", body: JSON.stringify({ ...cliente, email }) });\n  }\n\n  return <input value={email} onChange={e => setEmail(e.target.value)} onBlur={guardar} />;\n}\n```",
+        "data": {
+          "to": "Pull request — Revisión de código",
+          "subject": "Revisión: FichaCliente",
+          "hint": "Escribe la revisión en cuatro bloques:\n\n1. Los problemas que ves, de más a menos grave, con la línea y qué provoca para el usuario.\n\n2. Por qué se guarda a veces el correo antiguo (qué hace setState y cuándo se aplica).\n\n3. Por qué aparecen datos de otro cliente al cambiar rápido, y cómo lo evitarías (dependencias del efecto, cancelar la petición o ignorar respuestas viejas).\n\n4. El código corregido de las partes críticas y una prueba que añadirías.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["dependencia", "useEffect", "id", "estado asíncrono", "setState", "valor anterior", "carrera", "abort", "cancel", "error", "prueba"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Estado local, compartido o del servidor?", "type": "decision", "timeLimit": 330, "difficulty": "avanzado",
+        "briefing": "Decidirás dónde debe vivir cada dato de una aplicación React.",
+        "sub": "Clasificación — 6 min", "skills": {"hard": ["Arquitectura de React"], "soft": ["Criterio"]},
+        "scenario": "Estás diseñando una aplicación de reservas de salas. Coloca cada dato en el sitio donde debe vivir:\n\nEstado local — Solo lo usa un componente y se pierde al cerrarlo sin problema.\n\nEstado compartido — Lo usan varios componentes de la interfaz a la vez (contexto o almacén).\n\nDatos del servidor — Vienen de la API: se piden, se guardan en caché y se vuelven a pedir cuando cambian.",
+        "data": {
+          "options": [
+            {"id": "s1", "text": "Si el desplegable de filtros de una tabla está abierto o cerrado", "correct": "local"},
+            {"id": "s2", "text": "La lista de salas y su disponibilidad de hoy", "correct": "servidor"},
+            {"id": "s3", "text": "El usuario que ha iniciado sesión y su idioma", "correct": "compartido"},
+            {"id": "s4", "text": "Lo que se va escribiendo en el campo de búsqueda antes de enviarlo", "correct": "local"},
+            {"id": "s5", "text": "Las reservas del usuario, que también cambian si otra persona cancela", "correct": "servidor"},
+            {"id": "s6", "text": "El tema claro u oscuro elegido para toda la aplicación", "correct": "compartido"},
+            {"id": "s7", "text": "La pestaña activa dentro de un modal de detalle", "correct": "local"},
+            {"id": "s8", "text": "Los datos de una sala que se acaban de editar y hay que confirmar con la API", "correct": "servidor"},
+            {"id": "s9", "text": "El carrito de reservas pendientes que se ve en la cabecera y en el pago", "correct": "compartido"}
+          ],
+          "cats": ["Estado local", "Estado compartido", "Datos del servidor"],
+          "keys": ["local", "compartido", "servidor"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_css_design", "title": "CSS y maquetación",
+    "desc": "Arregla una maquetación que se rompe en móvil, propón un sistema de estilos mantenible y decide cuándo usar flexbox, grid o ninguno.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Una ficha que se rompe en móvil", "type": "analysis", "timeLimit": 480, "difficulty": "basico",
+        "briefing": "Verás los fallos de una ficha de producto en distintos tamaños de pantalla. Tendrás que encontrar la causa en el CSS.",
+        "sub": "Diagnóstico — 8 min", "skills": {"hard": ["CSS", "Diseño adaptable"], "soft": ["Diagnóstico"]},
+        "scenario": "La ficha de producto de una tienda online se ve bien en escritorio, pero en móvil aparece una barra de desplazamiento horizontal y el botón de compra queda fuera de la pantalla. El equipo de QA ha probado en cuatro anchos y ha anotado el CSS de cada bloque.\n\nResponde en tres partes:\n\nA) Qué bloque o bloques provocan el desbordamiento y por qué.\n\nB) Cómo lo corregirías, con las propiedades concretas.\n\nC) Qué comprobarías para que no vuelva a pasar con otro producto (textos largos, imágenes grandes).",
+        "data": {
+          "headers": ["Bloque", "CSS actual", "Ancho a 375 px", "Qué se ve", "Estado"],
+          "table": [
+            {"n": "Galería de imágenes", "a": "width: 600px", "b": "600 px", "c": "Se sale por la derecha", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Nombre del producto", "a": "white-space: nowrap", "b": "512 px con nombres largos", "c": "Corta el texto fuera de pantalla", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Fila precio + botón", "a": "display: flex; gap: 24px", "b": "375 px", "c": "El botón se encoge a 40 px", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Contenedor", "a": "padding: 0 32px; box-sizing: content-box", "b": "439 px", "c": "Más ancho que la pantalla", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Descripción", "a": "max-width: 65ch", "b": "343 px", "c": "Correcta", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C apoyándote en el CSS de cada bloque.",
+          "kw": ["max-width", "100%", "box-sizing", "border-box", "overflow-wrap", "nowrap", "flex-wrap", "min-width", "media", "unidades relativas"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un CSS que nadie se atreve a tocar", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo ordenar los estilos de una web que ha crecido sin reglas.",
+        "sub": "Propuesta técnica — 10 min", "skills": {"hard": ["Arquitectura CSS", "Sistemas de diseño"], "soft": ["Comunicación técnica"]},
+        "scenario": "La web corporativa tiene un único fichero de 9.000 líneas de CSS. Hay 31 tonos de gris distintos, 14 tamaños de letra, 600 usos de !important y cada cambio de color de un botón rompe otra página. El equipo de marketing quiere lanzar un modo oscuro en dos meses. Te piden una propuesta para tu responsable.",
+        "data": {
+          "to": "Responsable de desarrollo",
+          "subject": "Propuesta: cómo ordenar el CSS antes del modo oscuro",
+          "hint": "Organiza la propuesta en cuatro bloques:\n\n1. Diagnóstico con las cifras del caso y por qué el modo oscuro es inviable tal como está.\n\n2. La base: variables (tokens) de color, tamaño y espaciado, y cómo se definen para claro y oscuro.\n\n3. Cómo se organizan y se nombran los componentes para que un cambio no rompa otra página, y qué haces con los !important.\n\n4. Plan por fases sin parar la web, cómo lo compruebas (capturas, revisión visual) y qué riesgo tiene.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["variables", "custom properties", "tokens", "especificidad", "important", "componente", "prefers-color-scheme", "fases", "regresión visual", "nomenclatura"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Flexbox, grid o ninguno?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué técnica de maquetación encaja en cada caso.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Maquetación"], "soft": ["Criterio"]},
+        "scenario": "Coloca cada necesidad en la técnica más adecuada:\n\nFlexbox — Elementos en una sola dirección que reparten el espacio entre ellos.\n\nGrid — Filas y columnas a la vez, o una rejilla que se tiene que alinear en dos ejes.\n\nNinguno — Basta con el flujo normal del documento o una propiedad sencilla.",
+        "data": {
+          "options": [
+            {"id": "c1", "text": "Una barra de navegación con el logotipo a la izquierda y los enlaces a la derecha", "correct": "flex"},
+            {"id": "c2", "text": "Un panel con cabecera, barra lateral, contenido y pie que cambian de sitio en móvil", "correct": "grid"},
+            {"id": "c3", "text": "Un artículo de blog con párrafos, títulos e imágenes uno debajo de otro", "correct": "ninguno"},
+            {"id": "c4", "text": "Un grupo de etiquetas que salta de línea cuando no caben", "correct": "flex"},
+            {"id": "c5", "text": "Una galería de tarjetas que se ajusta sola al número de columnas que caben", "correct": "grid"},
+            {"id": "c6", "text": "Centrar un icono dentro de un botón junto a su texto", "correct": "flex"},
+            {"id": "c7", "text": "Un calendario mensual de 7 columnas", "correct": "grid"},
+            {"id": "c8", "text": "Que una imagen no se salga de su contenedor", "correct": "ninguno"},
+            {"id": "c9", "text": "Limitar el ancho de un texto para que se lea bien", "correct": "ninguno"}
+          ],
+          "cats": ["Flexbox", "Grid", "Ninguno"],
+          "keys": ["flex", "grid", "ninguno"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_javascript", "title": "JavaScript moderno",
+    "desc": "Depura errores de asincronía, revisa código con trampas habituales del lenguaje y distingue lo que bloquea el navegador de lo que no.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un total que no cuadra", "type": "analysis", "timeLimit": 480, "difficulty": "basico",
+        "briefing": "Verás los resultados de una función de JavaScript que calcula importes. Tendrás que explicar por qué fallan.",
+        "sub": "Depuración — 8 min", "skills": {"hard": ["JavaScript", "Tipos y números"], "soft": ["Rigor"]},
+        "scenario": "Una tienda calcula el total del carrito en el navegador sumando los precios que llegan de un formulario y de la API. El equipo de soporte ha recogido cinco carritos con resultados raros.\n\nResponde en tres partes:\n\nA) Por qué falla cada caso de la tabla.\n\nB) Cómo escribirías el cálculo para que sea correcto (tipos, redondeo, céntimos).\n\nC) Qué pruebas añadirías para que no vuelva a pasar.",
+        "data": {
+          "headers": ["Caso", "Entrada", "Resultado", "Esperado", "Estado"],
+          "table": [
+            {"n": "Precio del formulario", "a": "\"19.90\" + 5", "b": "\"19.905\"", "c": "24,90", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Dos productos", "a": "0.1 + 0.2", "b": "0.30000000000000004", "c": "0,30", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Descuento vacío", "a": "total - descuento (undefined)", "b": "NaN", "c": "Total sin descuento", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Cantidad en blanco", "a": "precio * \"\"", "b": "0", "c": "Avisar del error", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Comparar precios", "a": "\"10\" > \"9\"", "b": "false", "c": "true", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C caso por caso.",
+          "kw": ["conversión", "Number", "parseFloat", "concatenación", "coma flotante", "céntimos", "enteros", "NaN", "validar", "comparación de cadenas", "prueba"]
+        }
+      },
+      {
+        "id": "e2", "title": "Las peticiones que llegan desordenadas", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Revisarás un buscador con autocompletado que muestra resultados de búsquedas anteriores.",
+        "sub": "Revisión de código — 10 min", "skills": {"hard": ["Asincronía", "Promesas"], "soft": ["Comunicación técnica"]},
+        "scenario": "El buscador de una web de viajes sugiere destinos mientras se escribe. Si se escribe rápido «Mad», a veces aparecen resultados de «Ma». Además, la API cobra por petición y la factura se ha triplicado.\n\n```js\ninput.addEventListener(\"input\", async (e) => {\n  const res = await fetch(\"/api/destinos?q=\" + e.target.value);\n  const datos = await res.json();\n  pintar(datos);\n});\n```",
+        "data": {
+          "to": "Equipo de frontend",
+          "subject": "Por qué el buscador muestra resultados viejos y cómo lo arreglamos",
+          "hint": "Escribe la explicación en cuatro bloques:\n\n1. Por qué una respuesta antigua puede pintarse después de la nueva.\n\n2. Por qué se disparan tantas peticiones y cuánto se podría reducir.\n\n3. La solución con código: esperar a que se deje de escribir, cancelar la petición anterior o ignorar las respuestas viejas, y codificar el texto de la URL.\n\n4. Qué pasa si la API falla o tarda, y cómo se lo enseñas al usuario.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["carrera", "orden", "debounce", "AbortController", "cancelar", "encodeURIComponent", "error", "res.ok", "petición", "coste"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Bloquea el navegador o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué operaciones dejan la página congelada.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Bucle de eventos"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada operación según su efecto en una página web:\n\nBloquea — Mientras dura, la página no responde a clics ni a teclas.\n\nNo bloquea — Se espera en segundo plano y la página sigue respondiendo.",
+        "data": {
+          "options": [
+            {"id": "j1", "text": "Un bucle que procesa un millón de filas en el hilo principal", "correct": "bloquea"},
+            {"id": "j2", "text": "await fetch() de una API que tarda 3 segundos", "correct": "no"},
+            {"id": "j3", "text": "JSON.parse de un fichero de 80 MB", "correct": "bloquea"},
+            {"id": "j4", "text": "setTimeout con una espera de 5 segundos", "correct": "no"},
+            {"id": "j5", "text": "Ordenar un array de 2 millones de objetos con sort()", "correct": "bloquea"},
+            {"id": "j6", "text": "El mismo cálculo pesado hecho dentro de un Web Worker", "correct": "no"},
+            {"id": "j7", "text": "Un await dentro de una función async que espera a otra petición", "correct": "no"},
+            {"id": "j8", "text": "Un while que espera a que cambie una variable sin ceder el control", "correct": "bloquea"}
+          ],
+          "cats": ["Bloquea la página", "No bloquea"],
+          "keys": ["bloquea", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_typescript", "title": "TypeScript",
+    "desc": "Lee errores del compilador, tipa una API que devuelve datos inciertos y decide cuándo un tipo protege de verdad.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Errores del compilador en una migración", "type": "analysis", "timeLimit": 480, "difficulty": "basico",
+        "briefing": "Verás los errores más frecuentes al pasar un proyecto a TypeScript estricto. Tendrás que explicar qué significan y cómo resolverlos.",
+        "sub": "Diagnóstico — 8 min", "skills": {"hard": ["TypeScript", "Tipado estricto"], "soft": ["Rigor"]},
+        "scenario": "Tu equipo ha activado el modo estricto en un proyecto de 40.000 líneas y el compilador devuelve 1.180 errores. Has agrupado los más frecuentes. El jefe de proyecto propone añadir «any» en todos y seguir.\n\nResponde en tres partes:\n\nA) Qué significa cada grupo de errores y qué fallo real puede esconder en producción.\n\nB) En qué orden los atacarías y cómo, sin parar el desarrollo.\n\nC) Qué le contestas al jefe de proyecto sobre usar «any».",
+        "data": {
+          "headers": ["Error", "Ocurrencias", "Ejemplo", "Riesgo", "Estado"],
+          "table": [
+            {"n": "Object is possibly 'undefined'", "a": "512", "b": "usuario.direccion.calle", "c": "Error en tiempo de ejecución", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Parameter implicitly has an 'any' type", "a": "388", "b": "function total(items)", "c": "Sin comprobación de tipos", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Argument of type 'string' is not assignable to 'number'", "a": "121", "b": "calcular(form.cantidad)", "c": "Cálculos erróneos", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Property does not exist on type", "a": "97", "b": "pedido.estdo", "c": "Erratas que hoy fallan en silencio", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Not all code paths return a value", "a": "62", "b": "switch sin default", "c": "Devuelve undefined", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": ["undefined", "null", "estrechamiento", "encadenamiento opcional", "any", "unknown", "conversión", "erratas", "exhaustivo", "never", "por módulos"]
+        }
+      },
+      {
+        "id": "e2", "title": "Tipar una API en la que no confías", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo tipar los datos de una API externa que a veces cambia su formato.",
+        "sub": "Diseño — 10 min", "skills": {"hard": ["Tipos", "Validación en tiempo de ejecución"], "soft": ["Comunicación técnica"]},
+        "scenario": "Tu aplicación consume la API de un proveedor de envíos. El código hace `const envio = (await res.json()) as Envio` y confía en ese tipo. La semana pasada el proveedor empezó a devolver «estado» en mayúsculas y la fecha como número; la aplicación no avisó de nada y mostró envíos «perdidos» que no lo estaban.",
+        "data": {
+          "to": "Equipo de desarrollo",
+          "subject": "Cómo dejamos de confiar a ciegas en la API de envíos",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Por qué «as Envio» no protegió de nada (qué hace TypeScript y qué no hace en ejecución).\n\n2. Cómo validarías los datos al entrar: un esquema, qué campos y qué haces si no cuadra.\n\n3. Cómo tiparías el estado del envío para que el compilador te avise si aparece uno nuevo (unión de literales, comprobación exhaustiva).\n\n4. Qué registras y a quién avisas cuando el proveedor cambie algo.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["as", "aserción", "ejecución", "esquema", "validar", "zod", "unknown", "unión", "literales", "exhaustivo", "never", "registro"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿El tipo te protege o solo lo parece?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas de TypeScript protegen de errores reales.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Sistema de tipos"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada práctica:\n\nProtege — El compilador detectaría el error antes de que llegue a producción.\n\nSolo lo parece — Calla al compilador pero el error puede seguir ocurriendo.",
+        "data": {
+          "options": [
+            {"id": "t1", "text": "Usar una unión de literales para el estado de un pedido y un switch exhaustivo", "correct": "protege"},
+            {"id": "t2", "text": "Poner «as any» para que deje de quejarse un tipo que no encaja", "correct": "parece"},
+            {"id": "t3", "text": "Activar strictNullChecks en todo el proyecto", "correct": "protege"},
+            {"id": "t4", "text": "Añadir el operador «!» para decir que un valor nunca es null", "correct": "parece"},
+            {"id": "t5", "text": "Recibir los datos externos como unknown y validarlos antes de usarlos", "correct": "protege"},
+            {"id": "t6", "text": "Hacer una aserción «as Usuario» del JSON que devuelve la API", "correct": "parece"},
+            {"id": "t7", "text": "Tipos marcados (branded) para no confundir un id de cliente con uno de pedido", "correct": "protege"},
+            {"id": "t8", "text": "Desactivar la regla con «// @ts-ignore» en la línea que falla", "correct": "parece"}
+          ],
+          "cats": ["Protege de verdad", "Solo lo parece"],
+          "keys": ["protege", "parece"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_nodejs", "title": "Node.js y APIs",
+    "desc": "Diagnostica una API de Node.js que se cae con carga, revisa un endpoint con fallos de seguridad y decide qué va en el servidor y qué no.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Una API que se cae los lunes", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás las métricas de una API de Node.js que deja de responder en los picos de uso.",
+        "sub": "Diagnóstico — 9 min", "skills": {"hard": ["Node.js", "Rendimiento"], "soft": ["Diagnóstico"]},
+        "scenario": "La API de una aplicación de fichajes deja de responder todos los lunes entre las 8:55 y las 9:10, cuando 4.000 empleados fichan a la vez. Tienes las métricas de la última incidencia.\n\nResponde en tres partes:\n\nA) Cuál es la causa más probable y qué cifra lo demuestra.\n\nB) Qué cambiarías en el código y en la infraestructura, en orden de impacto.\n\nC) Cómo lo probarías antes del próximo lunes.",
+        "data": {
+          "headers": ["Métrica", "Normal", "Lunes 9:00", "Detalle", "Estado"],
+          "table": [
+            {"n": "Retraso del bucle de eventos", "a": "4 ms", "b": "2.300 ms", "c": "Un endpoint genera un PDF de forma síncrona", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Conexiones abiertas a la base de datos", "a": "12", "b": "10 (máximo del pool)", "c": "830 peticiones esperando conexión", "d": "Revisar", "cls": "v-bad"},
+            {"n": "CPU del proceso", "a": "15 %", "b": "100 %", "c": "Un solo proceso en una máquina de 4 núcleos", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Memoria", "a": "180 MB", "b": "1,4 GB", "c": "Sube y no baja tras el pico", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Tiempo de respuesta de la base de datos", "a": "8 ms", "b": "11 ms", "c": "Estable", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": ["bucle de eventos", "síncrono", "bloquea", "worker", "cola", "pool", "cluster", "procesos", "fuga de memoria", "prueba de carga"]
+        }
+      },
+      {
+        "id": "e2", "title": "Revisión de un endpoint de pagos", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Revisarás un endpoint de Express con varios problemas de seguridad y robustez.",
+        "sub": "Revisión de código — 10 min", "skills": {"hard": ["Express", "Seguridad"], "soft": ["Rigor"]},
+        "scenario": "Este endpoint aplica un cupón de descuento a un pedido y se usa desde la web y la aplicación móvil.\n\n```js\napp.post(\"/api/pedidos/:id/cupon\", async (req, res) => {\n  const pedido = await db.query(`SELECT * FROM pedidos WHERE id = ${req.params.id}`);\n  const { codigo, descuento } = req.body;\n  pedido.total = pedido.total - descuento;\n  await db.query(`UPDATE pedidos SET total = ${pedido.total} WHERE id = ${req.params.id}`);\n  res.json(pedido);\n});\n```",
+        "data": {
+          "to": "Pull request — Revisión de código",
+          "subject": "Revisión: aplicar cupón",
+          "hint": "Escribe la revisión en cuatro bloques:\n\n1. Los problemas de seguridad, de más a menos grave, y cómo los explotaría alguien.\n\n2. Los problemas de lógica y robustez (quién puede tocar el pedido, de dónde sale el descuento, errores sin capturar).\n\n3. El endpoint reescrito con lo crítico resuelto.\n\n4. Qué pruebas añadirías, incluida una de intento de abuso.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["inyección SQL", "consultas parametrizadas", "autorización", "propietario", "descuento del cliente", "servidor", "validar", "try", "error", "total negativo", "prueba"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿En el servidor o en el cliente?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué lógica tiene que vivir en el servidor obligatoriamente.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Arquitectura web"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada pieza de lógica de una tienda online:\n\nSolo en el servidor — Si se hace en el navegador, cualquiera puede saltársela o verla.\n\nPuede ir en el cliente — Hacerla en el navegador no pone en riesgo nada (aunque el servidor también pueda comprobarla).",
+        "data": {
+          "options": [
+            {"id": "n1", "text": "Calcular el precio final con descuentos antes de cobrar", "correct": "servidor"},
+            {"id": "n2", "text": "Mostrar un aviso si el correo no tiene un formato válido", "correct": "cliente"},
+            {"id": "n3", "text": "Comprobar que el usuario puede ver ese pedido", "correct": "servidor"},
+            {"id": "n4", "text": "Ordenar la lista de productos por precio en la pantalla", "correct": "cliente"},
+            {"id": "n5", "text": "Guardar la clave secreta de la pasarela de pago", "correct": "servidor"},
+            {"id": "n6", "text": "Recordar en qué pestaña estaba el usuario", "correct": "cliente"},
+            {"id": "n7", "text": "Decidir si un cupón es válido y cuánto descuenta", "correct": "servidor"},
+            {"id": "n8", "text": "Desactivar el botón de comprar mientras se envía el pedido", "correct": "cliente"}
+          ],
+          "cats": ["Solo en el servidor", "Puede ir en el cliente"],
+          "keys": ["servidor", "cliente"]
+        }
+      }
+    ]
+  }
+]

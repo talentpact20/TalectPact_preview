@@ -1,0 +1,985 @@
+[
+  {
+    "id": "common_crm",
+    "title": "CRM y gestión comercial",
+    "desc": "Limpia y ordena un CRM que nadie se cree, propón cómo debe usarlo un equipo de ventas y decide qué datos merece la pena registrar.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un CRM en el que nadie confía",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás el estado del CRM de un equipo comercial. Tendrás que explicar por qué la previsión de ventas no se cumple nunca.",
+        "sub": "Diagnóstico — 9 min",
+        "skills": {
+          "hard": [
+            "CRM",
+            "Previsión de ventas"
+          ],
+          "soft": [
+            "Rigor"
+          ]
+        },
+        "scenario": "El CRM de una empresa de software para clínicas veterinarias prevé cerrar 480.000 € este trimestre. El trimestre anterior previó 450.000 € y se cerraron 190.000 €. El director comercial te pide que revises los datos.\n\nResponde en tres partes:\n\nA) Por qué la previsión está inflada, con las cifras.\n\nB) Qué limpiarías y qué reglas pondrías para cada etapa.\n\nC) Cómo calcularías una previsión más realista para este trimestre.",
+        "data": {
+          "headers": [
+            "Hecho",
+            "Cifra",
+            "Detalle",
+            "Efecto",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Oportunidades sin actividad en 90 días",
+              "a": "142 (210.000 €)",
+              "b": "Siguen en «Negociación»",
+              "c": "Inflan la previsión",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Fecha de cierre ya pasada",
+              "a": "61",
+              "b": "Nadie las actualiza",
+              "c": "Se arrastran de trimestre",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Etapa «Propuesta enviada»",
+              "a": "Probabilidad 70 %",
+              "b": "Históricamente cierra el 22 %",
+              "c": "Probabilidad irreal",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Contactos duplicados",
+              "a": "18 %",
+              "b": "Misma clínica escrita de varias formas",
+              "c": "Varias personas llaman al mismo cliente",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Oportunidades con próximo paso y fecha",
+              "a": "35 %",
+              "b": "",
+              "c": "Las que sí avanzan",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": [
+            "oportunidades estancadas",
+            "fecha de cierre",
+            "probabilidad histórica",
+            "criterios de etapa",
+            "próximo paso",
+            "duplicados",
+            "limpiar",
+            "previsión ponderada",
+            "tasa de cierre",
+            "revisión semanal"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Que el equipo use el CRM de verdad",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Propondrás cómo conseguir que un equipo comercial registre bien su actividad sin perder tiempo.",
+        "sub": "Propuesta — 10 min",
+        "skills": {
+          "hard": [
+            "Procesos comerciales"
+          ],
+          "soft": [
+            "Gestión del cambio"
+          ]
+        },
+        "scenario": "Los ocho comerciales de la empresa dicen que el CRM «es para que el jefe nos controle» y que les quita una hora al día. Apuntan las cosas el viernes de memoria o no las apuntan. El director quiere una previsión fiable sin convertir al equipo en administrativos.",
+        "data": {
+          "to": "Director comercial",
+          "subject": "Cómo conseguimos que el CRM sea útil para el equipo",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Por qué no lo usan, desde el punto de vista de los comerciales.\n\n2. Qué campos y pasos son imprescindibles y cuáles se pueden quitar o automatizar.\n\n3. Qué gana cada comercial usándolo (información, priorización, comisiones bien calculadas).\n\n4. Cómo lo implantarías y cómo sabréis en un mes si funciona.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "punto de vista del comercial",
+            "campos mínimos",
+            "automatizar",
+            "correo y calendario",
+            "móvil",
+            "beneficio para el comercial",
+            "comisiones",
+            "formación",
+            "reunión semanal",
+            "indicadores de uso"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Merece la pena registrarlo?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué información debe guardar un CRM y cuál sobra o no se puede guardar.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Datos de clientes"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada dato que un comercial podría apuntar en el CRM:\n\nRegistrar — Ayuda a vender o a dar servicio y se puede guardar.\n\nNo registrar — No aporta, es una opinión personal o la ley no permite guardarlo sin motivo.",
+        "data": {
+          "options": [
+            {
+              "id": "c1",
+              "text": "Quién decide la compra en la clínica y quién la usa",
+              "correct": "si"
+            },
+            {
+              "id": "c2",
+              "text": "«Me cae fatal, es muy pesado»",
+              "correct": "no"
+            },
+            {
+              "id": "c3",
+              "text": "El próximo paso acordado y su fecha",
+              "correct": "si"
+            },
+            {
+              "id": "c4",
+              "text": "La religión del dueño de la clínica",
+              "correct": "no"
+            },
+            {
+              "id": "c5",
+              "text": "El software que usan ahora y cuándo vence su contrato",
+              "correct": "si"
+            },
+            {
+              "id": "c6",
+              "text": "Que el contacto está de baja por una enfermedad concreta",
+              "correct": "no"
+            },
+            {
+              "id": "c7",
+              "text": "Las objeciones que planteó en la última reunión",
+              "correct": "si"
+            },
+            {
+              "id": "c8",
+              "text": "Fotos de su perfil personal de redes sociales",
+              "correct": "no"
+            }
+          ],
+          "cats": [
+            "Registrar",
+            "No registrar"
+          ],
+          "keys": [
+            "si",
+            "no"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_b2b_sales",
+    "title": "Ventas B2B",
+    "desc": "Cualifica oportunidades con criterio, prepara una propuesta para un comité de compra y reconoce las señales de una venta que no va a cerrarse.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "¿Cuál de estas oportunidades es real?",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás varias oportunidades de venta. Tendrás que decidir en cuáles centrar tu tiempo.",
+        "sub": "Cualificación — 9 min",
+        "skills": {
+          "hard": [
+            "Cualificación de oportunidades"
+          ],
+          "soft": [
+            "Priorización"
+          ]
+        },
+        "scenario": "Vendes un software de control de flotas para empresas de transporte (precio medio 24.000 € al año). Tienes tiempo para trabajar a fondo tres oportunidades este mes. Estas son las cinco abiertas.\n\nResponde en tres partes:\n\nA) Qué tres oportunidades eliges y por qué, con lo que sabes de cada una.\n\nB) Qué te falta saber de cada una y cómo lo averiguarías.\n\nC) Qué harías con las dos que descartas.",
+        "data": {
+          "headers": [
+            "Empresa",
+            "Presupuesto",
+            "Quién decide",
+            "Necesidad y plazo",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Transportes Ebro (120 camiones)",
+              "a": "Aprobado: 30.000 €",
+              "b": "Has hablado con el director de operaciones",
+              "c": "Multas por tacógrafo; quiere decidir antes de enero",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Logística Sur (40 camiones)",
+              "a": "Sin presupuesto",
+              "b": "Un jefe de tráfico «interesado»",
+              "c": "«Quizá el año que viene»",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Frío Norte (85 camiones)",
+              "a": "En discusión",
+              "b": "El gerente, en la segunda reunión",
+              "c": "Le roban gasóleo; urgente",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Mudanzas Levante (12 camiones)",
+              "a": "8.000 €",
+              "b": "El dueño",
+              "c": "Lo quiere ya, pero es pequeña",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Distribuciones Meseta (200 camiones)",
+              "a": "Desconocido",
+              "b": "Un comprador que pide 4 presupuestos",
+              "c": "Concurso con plazo en 2 semanas",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con lo que sabes de cada empresa.",
+          "kw": [
+            "presupuesto",
+            "autoridad",
+            "necesidad",
+            "plazo",
+            "BANT",
+            "dolor",
+            "decisor",
+            "concurso",
+            "tamaño del contrato",
+            "siguiente paso"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Una propuesta para un comité de compra",
+        "type": "email",
+        "timeLimit": 660,
+        "difficulty": "intermedio",
+        "briefing": "Escribirás el resumen ejecutivo de una propuesta que leerán varias personas con intereses distintos.",
+        "sub": "Propuesta comercial — 11 min",
+        "skills": {
+          "hard": [
+            "Propuestas B2B",
+            "Retorno de la inversión"
+          ],
+          "soft": [
+            "Escritura persuasiva"
+          ]
+        },
+        "scenario": "Frío Norte (85 camiones) decidirá en comité: el gerente (quiere cortar los robos de gasóleo, unos 70.000 € al año), la directora financiera (desconfía del coste), el jefe de tráfico (teme que los conductores lo rechacen) y el responsable de informática (le preocupa la integración con su programa de facturación). Tu software cuesta 24.000 € al año más 6.000 € de instalación.",
+        "data": {
+          "to": "Comité de dirección de Frío Norte",
+          "subject": "Propuesta: control de flota y consumo",
+          "hint": "Escribe el resumen ejecutivo en cuatro bloques:\n\n1. El problema de Frío Norte con sus cifras y el resultado que propones conseguir.\n\n2. El retorno de la inversión, con un cálculo que pueda revisar la directora financiera.\n\n3. Cómo respondes a las preocupaciones del jefe de tráfico y de informática.\n\n4. El siguiente paso concreto (prueba piloto, fecha, quién participa).",
+          "minChars": 420,
+          "minWords": 70,
+          "kw": [
+            "robos de gasóleo",
+            "70.000",
+            "retorno",
+            "coste total",
+            "plazo de recuperación",
+            "conductores",
+            "integración",
+            "piloto",
+            "fecha",
+            "comité"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Señal de compra o de alarma?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué señales indican que una venta avanza y cuáles que se está enfriando.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Gestión de oportunidades"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada señal de una venta B2B en curso:\n\nAvanza — Indica compromiso real del cliente.\n\nAlarma — Indica que la venta se está enfriando o que te están usando de referencia.",
+        "data": {
+          "options": [
+            {
+              "id": "v1",
+              "text": "El cliente te presenta a la directora financiera por iniciativa propia",
+              "correct": "avanza"
+            },
+            {
+              "id": "v2",
+              "text": "Te piden «el mejor precio posible» antes de haber visto una demostración",
+              "correct": "alarma"
+            },
+            {
+              "id": "v3",
+              "text": "Acuerdan contigo las fechas de una prueba piloto",
+              "correct": "avanza"
+            },
+            {
+              "id": "v4",
+              "text": "Tu contacto deja de contestar y te pide que «le escribas en unos meses»",
+              "correct": "alarma"
+            },
+            {
+              "id": "v5",
+              "text": "Te envían su borrador de contrato para revisarlo",
+              "correct": "avanza"
+            },
+            {
+              "id": "v6",
+              "text": "Solo hablas con un técnico que dice que «no sabe quién decide»",
+              "correct": "alarma"
+            },
+            {
+              "id": "v7",
+              "text": "Te piden referencias de clientes de su sector",
+              "correct": "avanza"
+            },
+            {
+              "id": "v8",
+              "text": "Te piden la propuesta con 24 horas de plazo para compararla con el proveedor que ya tienen",
+              "correct": "alarma"
+            }
+          ],
+          "cats": [
+            "Avanza",
+            "Alarma"
+          ],
+          "keys": [
+            "avanza",
+            "alarma"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_retail",
+    "title": "Retail y punto de venta",
+    "desc": "Analiza por qué una tienda vende menos que las demás, organiza un equipo de tienda en temporada alta y decide qué acciones mejoran la venta en el punto de venta.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "La tienda que se queda atrás",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás los indicadores de varias tiendas de una cadena. Tendrás que explicar por qué una vende menos.",
+        "sub": "Análisis de tienda — 9 min",
+        "skills": {
+          "hard": [
+            "Indicadores de tienda"
+          ],
+          "soft": [
+            "Diagnóstico"
+          ]
+        },
+        "scenario": "Una cadena de zapaterías tiene cinco tiendas en centros comerciales parecidos. La tienda de Getafe vende un 30 % menos que la media y el responsable de zona te pide un diagnóstico antes de la campaña de Navidad.\n\nResponde en tres partes:\n\nA) Qué indicador explica la diferencia de Getafe, con las cifras.\n\nB) Qué causas probables ves y cómo las comprobarías en la tienda.\n\nC) Tres acciones para las próximas cuatro semanas y cómo medirías su efecto.",
+        "data": {
+          "headers": [
+            "Tienda",
+            "Visitantes al día",
+            "Conversión",
+            "Ticket medio",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Getafe",
+              "a": "820",
+              "b": "9 %",
+              "c": "58 €",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Alcorcón",
+              "a": "790",
+              "b": "17 %",
+              "c": "55 €",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Leganés",
+              "a": "640",
+              "b": "16 %",
+              "c": "61 €",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Móstoles",
+              "a": "700",
+              "b": "15 %",
+              "c": "57 €",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Getafe: otros datos",
+              "a": "2 vendedores en tarde (resto: 3)",
+              "b": "Roturas de talla: 22 % (resto: 8 %)",
+              "c": "Cola de caja de 9 min los sábados",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C comparando Getafe con las demás tiendas.",
+          "kw": [
+            "tráfico",
+            "conversión",
+            "ticket medio",
+            "ventas = visitas × conversión × ticket",
+            "personal en horas punta",
+            "roturas de talla",
+            "reposición",
+            "cola de caja",
+            "observar en tienda",
+            "medir"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "El equipo de tienda en Navidad",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Organizarás el equipo de una tienda para las semanas de más venta del año.",
+        "sub": "Organización — 10 min",
+        "skills": {
+          "hard": [
+            "Gestión de equipos de tienda"
+          ],
+          "soft": [
+            "Liderazgo"
+          ]
+        },
+        "scenario": "Eres responsable de la tienda de Getafe. De diciembre al 6 de enero, las visitas se duplican y los sábados por la tarde se triplican. Tienes 6 personas en plantilla y presupuesto para 2 refuerzos de 20 horas semanales. El año pasado hubo colas de 20 minutos y dos personas de baja por estrés.",
+        "data": {
+          "to": "Responsable de zona",
+          "subject": "Plan de equipo para la campaña de Navidad",
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. Cómo repartes las horas según los picos de visitas (con los refuerzos).\n\n2. Qué hace cada persona en las horas punta (venta, caja, almacén, probadores).\n\n3. Cómo preparas a los refuerzos y cómo cuidas al equipo para evitar las bajas del año pasado.\n\n4. Qué indicadores mirarás cada día y qué harás si se forman colas.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "horas punta",
+            "cuadrante",
+            "refuerzos",
+            "roles",
+            "caja",
+            "reposición",
+            "formación",
+            "descansos",
+            "carga de trabajo",
+            "indicadores diarios"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Vende más o solo parece?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué acciones en tienda aumentan de verdad las ventas.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Venta en tienda"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada acción en una zapatería:\n\nVende más — Aumenta visitas, conversión o ticket medio de forma rentable.\n\nSolo lo parece — Mueve producto pero pierde margen, molesta al cliente o no cambia nada.",
+        "data": {
+          "options": [
+            {
+              "id": "t1",
+              "text": "Tener todas las tallas del modelo del escaparate en tienda",
+              "correct": "si"
+            },
+            {
+              "id": "t2",
+              "text": "Poner un descuento del 40 % en toda la tienda el primer día de campaña",
+              "correct": "no"
+            },
+            {
+              "id": "t3",
+              "text": "Ofrecer calcetines o un cuidado del calzado al cobrar",
+              "correct": "si"
+            },
+            {
+              "id": "t4",
+              "text": "Que el personal persiga a cada cliente desde la puerta",
+              "correct": "no"
+            },
+            {
+              "id": "t5",
+              "text": "Abrir una segunda caja los sábados por la tarde",
+              "correct": "si"
+            },
+            {
+              "id": "t6",
+              "text": "Llenar el escaparate con 60 modelos distintos",
+              "correct": "no"
+            },
+            {
+              "id": "t7",
+              "text": "Saludar y ofrecer probar la talla cuando el cliente coge un zapato",
+              "correct": "si"
+            },
+            {
+              "id": "t8",
+              "text": "Sustituir a vendedores por una pantalla de autoservicio en hora punta",
+              "correct": "no"
+            }
+          ],
+          "cats": [
+            "Vende más",
+            "Solo lo parece"
+          ],
+          "keys": [
+            "si",
+            "no"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_telemarketing",
+    "title": "Telemarketing",
+    "desc": "Analiza los resultados de una campaña telefónica, escribe un guion que no suene a guion y decide qué prácticas de llamada son correctas y legales.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Una campaña que llama mucho y vende poco",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás los datos de una campaña de llamadas. Tendrás que encontrar dónde se pierden las ventas.",
+        "sub": "Análisis de campaña — 9 min",
+        "skills": {
+          "hard": [
+            "Métricas de telemarketing"
+          ],
+          "soft": [
+            "Diagnóstico"
+          ]
+        },
+        "scenario": "Un equipo de 10 agentes llama a clientes de una compañía eléctrica para ofrecerles pasar a una tarifa con placas solares. En una semana han hecho 6.000 llamadas y han cerrado 21 contratos. El objetivo era 80.\n\nResponde en tres partes:\n\nA) En qué paso se pierden las ventas, con las cifras.\n\nB) Qué causas ves (a quién se llama, cuándo, qué se dice).\n\nC) Qué cambiarías la semana que viene y cómo medirías si mejora.",
+        "data": {
+          "headers": [
+            "Paso",
+            "Cifra",
+            "Detalle",
+            "Comparación",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Llamadas contestadas",
+              "a": "1.500 (25 %)",
+              "b": "Se llama de 10:00 a 13:00",
+              "c": "Por la tarde contesta el 41 %",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Hablan con quien decide",
+              "a": "690 (46 %)",
+              "b": "Muchos son inquilinos",
+              "c": "Un inquilino no puede poner placas",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Escuchan la oferta completa",
+              "a": "250 (36 %)",
+              "b": "Los agentes leen un guion de 3 minutos",
+              "c": "Cuelgan en el primer minuto",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Piden información",
+              "a": "95",
+              "b": "Se envía un PDF genérico",
+              "c": "Nadie hace seguimiento",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Contratos firmados",
+              "a": "21",
+              "b": "",
+              "c": "Objetivo: 80",
+              "d": "Revisar",
+              "cls": "v-bad"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de cada paso.",
+          "kw": [
+            "horario",
+            "tasa de contacto",
+            "base de datos",
+            "segmentar",
+            "propietarios",
+            "guion",
+            "primeros segundos",
+            "preguntas",
+            "seguimiento",
+            "embudo"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Un guion que no suena a guion",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Escribirás la estructura de una llamada comercial que escuche al cliente.",
+        "sub": "Diseño de guion — 10 min",
+        "skills": {
+          "hard": [
+            "Guiones de llamada",
+            "Objeciones"
+          ],
+          "soft": [
+            "Escucha activa"
+          ]
+        },
+        "scenario": "La compañía eléctrica quiere un guion nuevo para la oferta de placas solares (instalación desde 4.500 €, ahorro medio de 600 € al año, financiación a 0 % en 5 años). Las objeciones más frecuentes son «es muy caro», «vivo de alquiler», «ya me han llamado otros» y «no me fío».",
+        "data": {
+          "to": "Coordinadora del equipo de llamadas",
+          "subject": "Propuesta de guion para la oferta solar",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Los primeros 20 segundos: cómo te presentas y por qué el cliente debería seguir escuchando.\n\n2. Las preguntas para saber si la oferta le encaja (vivienda, propiedad, consumo).\n\n3. Cómo responderías a cada una de las cuatro objeciones.\n\n4. Cómo se cierra la llamada (cita, envío de un estudio) y cuándo hay que despedirse sin insistir.",
+          "minChars": 420,
+          "minWords": 70,
+          "kw": [
+            "presentación",
+            "motivo de la llamada",
+            "preguntas",
+            "propietario",
+            "consumo",
+            "objeciones",
+            "financiación",
+            "ahorro",
+            "cita",
+            "no insistir"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Correcto o no se puede hacer?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas de llamadas comerciales son correctas y legales en España.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Normativa de llamadas comerciales"
+          ],
+          "soft": [
+            "Ética"
+          ]
+        },
+        "scenario": "Revisas las prácticas de un centro de llamadas que vende en España. Clasifica cada una:\n\nCorrecta — Se puede hacer.\n\nNo se puede — Está prohibida por la normativa de llamadas comerciales o es engañosa.",
+        "data": {
+          "options": [
+            {
+              "id": "l1",
+              "text": "Llamar a un cliente propio que ha aceptado recibir ofertas",
+              "correct": "si"
+            },
+            {
+              "id": "l2",
+              "text": "Llamar a quien está en la Lista Robinson sin su consentimiento",
+              "correct": "no"
+            },
+            {
+              "id": "l3",
+              "text": "Decir al principio el nombre de la empresa y el motivo comercial",
+              "correct": "si"
+            },
+            {
+              "id": "l4",
+              "text": "Decir que se llama «de parte de su compañía de siempre» cuando no es así",
+              "correct": "no"
+            },
+            {
+              "id": "l5",
+              "text": "Anotar que no quiere más llamadas y dejar de llamarle",
+              "correct": "si"
+            },
+            {
+              "id": "l6",
+              "text": "Llamar desde un número oculto para que conteste más gente",
+              "correct": "no"
+            },
+            {
+              "id": "l7",
+              "text": "Enviar por escrito las condiciones antes de que firme",
+              "correct": "si"
+            },
+            {
+              "id": "l8",
+              "text": "Dar por contratado el servicio porque el cliente dijo «vale» a una pregunta",
+              "correct": "no"
+            }
+          ],
+          "cats": [
+            "Correcta",
+            "No se puede"
+          ],
+          "keys": [
+            "si",
+            "no"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_customer_success",
+    "title": "Customer success",
+    "desc": "Detecta qué clientes están a punto de irse, prepara una revisión de resultados con un cliente importante y decide qué acciones previenen bajas de verdad.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "¿Quién se va a ir?",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás los datos de uso de varios clientes de un software. Tendrás que decidir a quién atender primero.",
+        "sub": "Riesgo de baja — 9 min",
+        "skills": {
+          "hard": [
+            "Indicadores de salud del cliente"
+          ],
+          "soft": [
+            "Priorización"
+          ]
+        },
+        "scenario": "Gestionas la cartera de 60 clientes de un software de nóminas. Este trimestre renuevan cinco de los más grandes. Tienes tiempo para dedicar una semana entera a dos de ellos.\n\nResponde en tres partes:\n\nA) Qué dos clientes eliges y por qué, con los datos.\n\nB) Qué harías con cada uno esa semana.\n\nC) Qué señales automáticas pondrías para detectar antes este riesgo.",
+        "data": {
+          "headers": [
+            "Cliente",
+            "Ingresos al año",
+            "Uso (usuarios activos)",
+            "Otras señales",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Grupo Hostelero Mar",
+              "a": "42.000 €",
+              "b": "Baja del 85 % al 40 %",
+              "c": "Ha cambiado la directora de RR. HH.",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Clínicas Vitalia",
+              "a": "18.000 €",
+              "b": "Estable al 90 %",
+              "c": "Ha pedido dos funciones nuevas",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Construcciones Aranda",
+              "a": "36.000 €",
+              "b": "Estable al 70 %",
+              "c": "4 incidencias graves en 2 meses sin resolver",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Colegios Nexo",
+              "a": "12.000 €",
+              "b": "Sube al 95 %",
+              "c": "Ha preguntado por el plan superior",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Transportes Iber",
+              "a": "30.000 €",
+              "b": "Baja al 60 %",
+              "c": "No contesta a los correos desde hace un mes",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C comparando los clientes de la tabla.",
+          "kw": [
+            "riesgo de baja",
+            "uso",
+            "cambio de interlocutor",
+            "incidencias",
+            "ingresos en riesgo",
+            "plan de acción",
+            "patrocinador",
+            "valor demostrado",
+            "alertas",
+            "indicador de salud"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "La revisión trimestral con un cliente clave",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Prepararás una reunión de revisión con un cliente que está en riesgo de irse.",
+        "sub": "Gestión de cuenta — 10 min",
+        "skills": {
+          "hard": [
+            "Revisión de negocio con cliente"
+          ],
+          "soft": [
+            "Comunicación con cliente"
+          ]
+        },
+        "scenario": "Grupo Hostelero Mar (42.000 € al año, 12 hoteles) tiene una directora de RR. HH. nueva que viene de una empresa que usaba la competencia. Desde que llegó, el uso ha caído a la mitad. Datos de valor: con vuestro software el grupo redujo el tiempo de cierre de nóminas de 5 a 2 días y los errores de 30 al mes a 4. La reunión es en una semana.",
+        "data": {
+          "to": "Directora de RR. HH. de Grupo Hostelero Mar",
+          "subject": "Revisión de resultados y próximos pasos",
+          "hint": "Escribe el correo de preparación de la reunión en cuatro bloques:\n\n1. Bienvenida a la directora y el objetivo de la reunión, centrado en sus prioridades.\n\n2. Los resultados conseguidos con cifras.\n\n3. Las preguntas que le harás para entender qué necesita ella y qué echa de menos.\n\n4. Una propuesta concreta (formación de su equipo, sesión de configuración) y la agenda de la reunión.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "sus objetivos",
+            "resultados",
+            "5 a 2 días",
+            "errores",
+            "preguntas",
+            "escuchar",
+            "formación",
+            "agenda",
+            "próximos pasos",
+            "relación"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Previene bajas o no?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué acciones reducen las bajas de clientes de verdad.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Retención de clientes"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada acción de un equipo de customer success:\n\nPreviene bajas — Aumenta el valor que el cliente obtiene o resuelve su problema.\n\nNo previene — Retrasa la baja, molesta o solo mejora una métrica interna.",
+        "data": {
+          "options": [
+            {
+              "id": "s1",
+              "text": "Una sesión de puesta en marcha con cada cliente nuevo en su primera semana",
+              "correct": "si"
+            },
+            {
+              "id": "s2",
+              "text": "Poner trabas para que el cliente pueda darse de baja",
+              "correct": "no"
+            },
+            {
+              "id": "s3",
+              "text": "Avisar al cliente cuando un usuario clave deja de entrar",
+              "correct": "si"
+            },
+            {
+              "id": "s4",
+              "text": "Enviar una encuesta cada semana a todos los usuarios",
+              "correct": "no"
+            },
+            {
+              "id": "s5",
+              "text": "Resolver las incidencias graves con un responsable y un plazo",
+              "correct": "si"
+            },
+            {
+              "id": "s6",
+              "text": "Ofrecer un descuento del 50 % solo cuando el cliente ya ha avisado de que se va",
+              "correct": "no"
+            },
+            {
+              "id": "s7",
+              "text": "Revisar con el cliente cada trimestre los resultados frente a sus objetivos",
+              "correct": "si"
+            },
+            {
+              "id": "s8",
+              "text": "Cerrar las incidencias rápido para mejorar el tiempo medio aunque no estén resueltas",
+              "correct": "no"
+            }
+          ],
+          "cats": [
+            "Previene bajas",
+            "No previene"
+          ],
+          "keys": [
+            "si",
+            "no"
+          ]
+        }
+      }
+    ]
+  }
+]

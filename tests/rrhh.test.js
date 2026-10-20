@@ -70,7 +70,8 @@ test("las preguntas de vacante se limitan a 3 y 200 caracteres", () => {
 test("dilemas de oferta y respuestas del candidato se limitan", () => {
   assert.deepEqual(limpiarDilemas(["  A  ", "", "B", "C", "D"]), ["A", "B", "C"]);
   assert.equal(limpiarDilemas(["x".repeat(700)])[0].length, 600);
-  assert.deepEqual(limpiarRespuestasDilema([" sí ", "", "no", "tal vez", "extra"]), ["sí", "no", "tal vez"]);
+  // Una respuesta vacía conserva su hueco: si no, la siguiente acabaría en el dilema equivocado.
+  assert.deepEqual(limpiarRespuestasDilema([" sí ", "", "no", "tal vez", "extra"]), ["sí", "", "no"]);
   assert.equal(limpiarRespuestasDilema(["y".repeat(2500)])[0].length, 2000);
 });
 

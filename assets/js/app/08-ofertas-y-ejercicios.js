@@ -102,16 +102,16 @@ function openJob(id){
   let skillsHTML='';
   has.forEach(s=>{
     const sc=candidateProfile.skills[s]?.score||0;
-    skillsHTML+=`<div class="apply-skill-row has"><div class="ask-icon ok">✓</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Nivel ${levelLabel} alcanzado (≥${levelThreshold})</p></div><div class="ask-score high">${sc}/100</div></div>`;
+    skillsHTML+=`<div class="apply-skill-row has"><div class="ask-icon ok">✓</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Nivel ${levelLabel} alcanzado</p></div><div class="ask-score high">${tpBandaHtml(sc,true)}</div></div>`;
   });
   missing.forEach(s=>{
     const sk=candidateProfile.skills[s];
     const isUnlockedButLow=sk?.unlocked&&sk.score<levelThreshold;
     const commonEx=COMMON_EXERCISES.find(ce=>ce.skill===s);
     if(isUnlockedButLow){
-      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">↑</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Tu score (${sk.score}) no alcanza el nivel ${levelLabel} (≥${levelThreshold}). Repite el reto para mejorar.</p></div><div class="ask-score pending">${sk.score}/${levelThreshold}</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Repetir reto →</button>`:''}</div></div>`;
+      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">↑</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Tu banda (${tpBanda(sk.score).txt}, ${sk.score}) no alcanza la que pide la oferta (${tpBanda(levelThreshold).txt}). Repite el reto para mejorar.</p></div><div class="ask-score pending">${tpBandaHtml(sk.score,true)}</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Repetir reto →</button>`:''}</div></div>`;
     }else{
-      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">!</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Necesitas completar este reto (nivel ${levelLabel}, ≥${levelThreshold})</p></div><div class="ask-score pending">Pendiente</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Hacer reto →</button>`:`<span class="ex-config-badge ecb-contact">Próximamente</span>`}</div></div>`;
+      skillsHTML+=`<div class="apply-skill-row missing"><div class="ask-icon need">!</div><div class="ask-info"><h4>${escHtml(s)}</h4><p>Necesitas completar este reto (la oferta pide ${tpBanda(levelThreshold).txt} o más)</p></div><div class="ask-score pending">Pendiente</div><div class="ask-action">${commonEx?`<button class="btn btn-primary btn-sm" onclick="goToCommonFromApply('${commonEx.id}','${j.id}')">Hacer reto →</button>`:`<span class="ex-config-badge ecb-contact">Próximamente</span>`}</div></div>`;
     }
   });
   
@@ -134,7 +134,7 @@ function openJob(id){
       <button class="btn btn-primary u-mt-12" onclick="applyDirectly()">Aplicar con mis skills actuales →</button>`
       :`<button class="btn btn-primary" onclick="applyDirectly()">Aplicar a esta oferta →</button>`}
     </div>`:
-    `<div class="u-ta-center u-p-16-0"><button class="btn btn-primary btn-lg" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1]),100)">Ir a completar retos comunes →</button></div>`}
+    `<div class="u-ta-center u-p-16-0"><button class="btn btn-primary btn-lg" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common'),100)">Ir a completar retos comunes →</button></div>`}
   </div>`;
   
   document.getElementById('jobModal').classList.add('open');document.getElementById('jobModal').scrollTop=0;
@@ -178,7 +178,7 @@ async function tpEnviarConDilemas(){
   const j=activeJob;
   const ds=(j&&j.dilemmas)||[];
   const answers=typeof tpLeerRespuestasDilema==='function'?tpLeerRespuestasDilema():[];
-  if(ds.length&&answers.length<ds.length){toast('Responde los '+ds.length+' dilemas antes de postularte.');return;}
+  if(answers.slice(0,ds.length).filter(Boolean).length<ds.length){toast('Responde los '+ds.length+' dilemas antes de postularte.');return;}
   return applyDirectly(true);
 }
 
@@ -201,7 +201,7 @@ async function applyDirectly(dilemasOk){
   }
   _pendingJobId=null;
   TPPostulaciones.porOferta[j.id]=(r.application&&r.application.status)||'aplicado';
-  const habilidades=(j.requiredSkills||[]).map(x=>{const sc=candidateProfile.skills[x]?.score||0;return`<span class="job-tag">${escHtml(x)}: <strong>${sc}</strong></span>`;}).join('');
+  const habilidades=(j.requiredSkills||[]).map(x=>{const sc=candidateProfile.skills[x]?.score||0;return`<span class="job-tag">${escHtml(x)}: <strong>${tpBanda(sc).txt}</strong></span>`;}).join('');
   box.innerHTML=`<div class="apply-screen u-ta-center"><div class="tp-final"><span class="tp-vacio-ico">${tpIcon('check')}</span><div><div class="tp-final-tit">${r.yaPostulado?'Ya te habías postulado':'Postulación enviada'}</div><p class="tp-final-sub">Tu perfil anónimo de skills${ds.length?' y tus respuestas a los dilemas están':' está'} a disposición de <strong>${escHtml(co?co.name:'la empresa')}</strong>. Te avisaremos en tu bandeja cuando cambie tu etapa. Si desbloquean tu contacto, se pondrán en contacto contigo.</p></div><div class="tp-final-skill u-d-block"><div class="u-fs-micro u-fw-600">Lo que verá la empresa</div><div class="job-tags u-mt-8">${habilidades}</div><div class="u-fs-micro u-mt-8">Tu nombre, email y teléfono permanecen ocultos hasta que la empresa pague.</div></div><div class="tp-res-acciones"><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button></div></div></div>`;
 }
 function goToCommonFromApply(commonExId, jobId){
@@ -483,9 +483,12 @@ async function evaluateWithAI(ex, response, evalType){
     data:{table:d.table,kw:d.kw,to:d.to,subject:d.subject,hint:d.hint,context:d.context}
   };
   const integ=(window.TPIntegrity&&TPIntegrity.current())||null;
+  // Con sesión, el límite de correcciones va por cuenta y no por IP (más holgado).
+  const evHeaders={'Content-Type':'application/json'};
+  try{const t=window.TPCloud&&await TPCloud.accessToken();if(t)evHeaders['Authorization']='Bearer '+t;}catch(e){}
   const res=await fetch('/.netlify/functions/evaluate-exercise',{
     method:'POST',
-    headers:{'Content-Type':'application/json'},
+    headers:evHeaders,
     body:JSON.stringify({exercise,response,integrity:integ?{risk:integ.risk}:null})
   });
   if(!res.ok){
@@ -576,7 +579,7 @@ function renderDone(ex,i,el){
   document.getElementById('exContent').innerHTML=`<div class="ex-body"><div class="tp-res">
     <div class="tp-res-cab"><div><div class="tp-res-tit">Resultado</div><div class="tp-res-sub">${escHtml(ex.title)} · ejercicio ${i+1} de ${el.length}</div></div><div class="tp-res-chips">${verif}${origen}</div></div>
     ${fb.capped?`<div class="tp-integrity-note warn">Nota limitada: ${escHtml(fb.capped)}.</div>`:''}
-    <div class="tp-res-cuerpo"><div class="tp-res-nota">${tpAnillo(r.score,'sobre 100')}<div class="tp-res-dato"><span>Tiempo</span><b>${tiempo}</b></div></div>${crit}</div>
+    <div class="tp-res-cuerpo"><div class="tp-res-nota">${tpAnillo(r.score,'sobre 100')}<div class="tp-res-dato"><span>Banda</span><b>${tpBanda(r.score).txt}</b></div><div class="tp-res-dato"><span>Tiempo</span><b>${tiempo}</b></div></div>${crit}</div>
     ${pares}
     ${fb.overall?`<div class="tp-res-global">${escHtml(fb.overall)}</div>`:''}
     ${window.TPIntegrity?TPIntegrity.html(r.integrity):''}
@@ -638,7 +641,7 @@ function showFinal(){const el=getExercises(activeJob),sc=el.map((_,i)=>exResults
   const isCommon=activeJob._isCommon;
   const hasPending=isCommon&&_pendingJobId;
   const titulo=avg>=80?'Perfil activado':avg>=60?'Buen nivel':'Sigue practicando';
-  const botones=hasPending?`<button class="btn btn-primary" onclick="closeJobModal();openJob('${_pendingJobId}');_pendingJobId=null;">← Volver a la oferta</button><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Ir al panel</button>`:`<button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button><button class="btn btn-primary" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common',document.querySelectorAll('#candDashTabs .dash-tab')[1]),100)">${isCommon?'Más retos →':'Ver resultados →'}</button>`;
+  const botones=hasPending?`<button class="btn btn-primary" onclick="closeJobModal();openJob('${_pendingJobId}');_pendingJobId=null;">← Volver a la oferta</button><button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Ir al panel</button>`:`<button class="btn btn-outline" onclick="closeJobModal();openDashCand()">Volver al panel</button><button class="btn btn-primary" onclick="closeJobModal();openDashCand();setTimeout(()=>switchCandTab('common'),100)">${isCommon?'Más retos →':'Ver resultados →'}</button>`;
   document.getElementById('exContent').innerHTML=`<div class="ex-body"><div class="tp-final">
     ${tpAnillo(avg,'media')}
     <div><div class="tp-final-tit">${titulo}</div><p class="tp-final-sub">Has completado los ${el.length} ejercicios de <strong>${escHtml(activeJob.title)}</strong>.${isCommon?' Tu skill se ha actualizado en tu perfil.':''}</p></div>

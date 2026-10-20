@@ -189,9 +189,8 @@ renderRanking=function(sector,btn){
   if(!lista.length){box.innerHTML=msg('Todavía no hay candidatos con notas en este sector.');return;}
   box.innerHTML=lista.slice(0,50).map((c,i)=>{
     const es=c.alias===yo;
-    const color=c.score>=80?'u-c-emerald-600':c.score>=60?'u-c-amber-500':'u-c-slate-500';
     return `<div class="ranking-row ${es?'is-you':''}"><div class="ranking-pos ${i<3?['gold','silver','bronze'][i]:'normal'}">${i+1}</div>
       <div class="ranking-name">${es?'<strong>Tú</strong>':escHtml(c.alias)} <span>${escHtml(c.sector)} · ${c.retos||c.skills.length} skills${c.verified?' · verificado':''}</span></div>
-      <div class="ranking-score ${color}">${c.score}</div></div>`;
+      <div class="ranking-score">${tpBandaHtml(c.score,es)}</div></div>`;
   }).join('');
 };

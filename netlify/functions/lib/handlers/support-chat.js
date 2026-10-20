@@ -7,7 +7,8 @@
  * Un `systemPrompt` en el body se ignora.
  */
 const { buildSupportPrompt } = require("../support-prompt");
-const { rateLimited, clientIp } = require("../evaluator");
+const { clientIp } = require("../evaluator");
+const { limitar } = require("../limites");
 
 const MODELOS = ["claude-sonnet-4-6", "claude-sonnet-4-5", "claude-3-5-haiku-latest"];
 
@@ -34,7 +35,7 @@ exports.handler = async (event) => {
   if (!apiKey) {
     return jsonResponse(500, { error: "Missing ANTHROPIC_API_KEY in environment variables" });
   }
-  if (rateLimited("chat:" + clientIp(event), { max: 40, windowMs: 10 * 60 * 1000 })) {
+  if (await limitar("chat:" + clientIp(event), { max: 40, ventanaS: 600 })) {
     return jsonResponse(429, { error: "Demasiados mensajes seguidos. Espera unos minutos." });
   }
 

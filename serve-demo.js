@@ -151,6 +151,10 @@ function serveStatic(req, res) {
 const server = http.createServer((req, res) => {
   const fnMatch = req.url.match(/^\/\.netlify\/functions\/([\w-]+)/);
   if (fnMatch) return handleFunction(req, res, fnMatch[1]);
+  // Las mismas reescrituras que [[redirects]] en netlify.toml.
+  const ruta = req.url.split("?")[0];
+  if (ruta === "/.well-known/did.json") return handleFunction(req, res, "did-web");
+  if (ruta === "/status/1") return handleFunction(req, res, "status-list");
   if (req.method === "POST" && req.url === "/") {
     // El formulario de contacto hace POST a "/"; respondemos 200 sin procesar.
     res.writeHead(200, { "content-type": "text/plain" });

@@ -1,0 +1,345 @@
+[
+  {
+    "id": "common_google_ads", "title": "Google Ads",
+    "desc": "Reparte el presupuesto entre campañas con datos de conversión, rescata una campaña que gasta sin vender y decide qué ajustes mejoran de verdad el rendimiento.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Dónde poner el siguiente euro", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los resultados de las campañas de Google Ads de una tienda. Tendrás que decidir cómo repartir el presupuesto.",
+        "sub": "Análisis de campañas — 9 min", "skills": {"hard": ["Google Ads", "Coste por adquisición"], "soft": ["Decisión con datos"]},
+        "scenario": "Una tienda online de café de especialidad invierte 6.000 € al mes en Google Ads. Su margen medio por pedido es de 22 €, así que todo pedido que cueste más de 22 € de publicidad pierde dinero. Estos son los datos del último mes.\n\nResponde en tres partes:\n\nA) Qué campañas ganan dinero y cuáles lo pierden, con el cálculo.\n\nB) Cómo repartirías el presupuesto el mes que viene y por qué.\n\nC) Qué datos te faltan para estar seguro y cómo los conseguirías.",
+        "data": {
+          "headers": ["Campaña", "Gasto", "Pedidos", "Coste por pedido", "Estado"],
+          "table": [
+            {"n": "Búsqueda: marca propia", "a": "400 €", "b": "160", "c": "2,50 €", "d": "Bien", "cls": "v-good"},
+            {"n": "Búsqueda: «café de especialidad»", "a": "2.100 €", "b": "105", "c": "20,00 €", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Shopping", "a": "1.800 €", "b": "120", "c": "15,00 €", "d": "Bien", "cls": "v-good"},
+            {"n": "Display (banners)", "a": "1.200 €", "b": "16", "c": "75,00 €", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Búsqueda: «cafetera barata»", "a": "500 €", "b": "8", "c": "62,50 €", "d": "Revisar", "cls": "v-bad"}
+          ],
+          "q": "Responde a las partes A, B y C con el margen de 22 € por pedido.",
+          "kw": ["coste por pedido", "margen", "rentable", "pierde dinero", "redistribuir", "marca", "intención de compra", "palabras negativas", "valor del cliente", "atribución"]
+        }
+      },
+      {
+        "id": "e2", "title": "Una campaña que gasta y no vende", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Explicarás a un cliente por qué su campaña no funciona y cómo la vas a arreglar.",
+        "sub": "Gestión de cliente — 10 min", "skills": {"hard": ["Optimización de campañas"], "soft": ["Comunicación con cliente"]},
+        "scenario": "Gestionas desde una agencia la campaña de una clínica dental de Valencia. En 30 días ha gastado 2.400 € y ha conseguido 3 citas. Al revisarla ves que: el anuncio aparece en toda España; el 40 % del gasto viene de búsquedas como «dentista gratis» o «cursos de higienista»; la página a la que lleva es la portada de la web, que tarda 7 segundos en cargar en el móvil; y no se miden las llamadas. El cliente te escribe enfadado.",
+        "data": {
+          "to": "Gerente de la clínica",
+          "subject": "Re: La campaña no funciona",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Reconoce el problema sin excusas y resume las causas, con las cifras.\n\n2. Lo que vas a cambiar esta semana (zona, palabras negativas, página de destino, medición de llamadas).\n\n3. Qué resultado razonable esperas y en qué plazo, sin prometer de más.\n\n4. Qué necesitas de la clínica y cuándo volvéis a revisar los datos.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["segmentación geográfica", "palabras negativas", "términos de búsqueda", "página de destino", "velocidad", "llamadas", "conversiones", "expectativas", "plazo", "revisión"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Mejora el rendimiento o solo lo parece?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué ajustes de una cuenta de Google Ads mejoran de verdad los resultados.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Google Ads"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada ajuste de una cuenta que vende cursos online:\n\nMejora real — Aumenta las ventas o baja su coste.\n\nSolo lo parece — Mejora una métrica que no paga las facturas o esconde el problema.",
+        "data": {
+          "options": [
+            {"id": "g1", "text": "Añadir como negativas las búsquedas «gratis» y «PDF»", "correct": "real"},
+            {"id": "g2", "text": "Optimizar la campaña para conseguir más clics al menor coste", "correct": "parece"},
+            {"id": "g3", "text": "Medir como conversión la compra, y no solo la visita a la página de precios", "correct": "real"},
+            {"id": "g4", "text": "Celebrar que el porcentaje de clics ha subido gracias a un anuncio con «100 % gratis»", "correct": "parece"},
+            {"id": "g5", "text": "Llevar cada anuncio a la página del curso que anuncia y no a la portada", "correct": "real"},
+            {"id": "g6", "text": "Subir la puja para salir siempre primero en la palabra más cara", "correct": "parece"},
+            {"id": "g7", "text": "Separar en otra campaña las búsquedas de la propia marca para medirlas aparte", "correct": "real"},
+            {"id": "g8", "text": "Contar como resultado las impresiones en Display", "correct": "parece"}
+          ],
+          "cats": ["Mejora real", "Solo lo parece"],
+          "keys": ["real", "parece"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_social_media", "title": "Redes sociales",
+    "desc": "Lee las métricas de las redes de una marca sin dejarte llevar por las vanidosas, gestiona una crisis en comentarios y decide qué contenido encaja en cada red.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Muchos seguidores, pocas ventas", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás las métricas de redes de una marca de cosmética. Tendrás que decir qué funciona de verdad.",
+        "sub": "Análisis — 9 min", "skills": {"hard": ["Métricas de redes"], "soft": ["Pensamiento crítico"]},
+        "scenario": "Una marca de cosmética natural vende en su web. Dirección está contenta porque Instagram ha pasado de 20.000 a 85.000 seguidores en un año, pero las ventas que llegan desde redes no han crecido. Tienes los datos del último trimestre.\n\nResponde en tres partes:\n\nA) Qué métricas son vanidosas y cuáles importan, con las cifras.\n\nB) Por qué crecen los seguidores y no las ventas.\n\nC) Qué cambiarías en el próximo trimestre y cómo medirías si funciona.",
+        "data": {
+          "headers": ["Red o acción", "Alcance", "Interacción", "Ventas atribuidas", "Estado"],
+          "table": [
+            {"n": "Instagram: sorteos", "a": "1,2 millones", "b": "9 %", "c": "14", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Instagram: tutoriales de uso", "a": "180.000", "b": "4,1 %", "c": "310", "d": "Bien", "cls": "v-good"},
+            {"n": "TikTok: tendencias virales", "a": "2,4 millones", "b": "6 %", "c": "22", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Pinterest: fichas de producto", "a": "60.000", "b": "1,2 %", "c": "190", "d": "Bien", "cls": "v-good"},
+            {"n": "Nuevos seguidores del trimestre", "a": "38.000", "b": "", "c": "El 70 % sigue cuentas de sorteos", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C apoyándote en las cifras de la tabla.",
+          "kw": ["métricas vanidosas", "seguidores", "alcance", "ventas", "conversión", "público objetivo", "sorteos", "tutoriales", "enlaces con seguimiento", "coste por venta"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un comentario que se hace viral", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Prepararás la respuesta pública de una marca ante una queja que se está difundiendo.",
+        "sub": "Gestión de crisis — 10 min", "skills": {"hard": ["Gestión de comunidades"], "soft": ["Comunicación en crisis"]},
+        "scenario": "Una clienta ha publicado un vídeo en TikTok enseñando una reacción en la piel tras usar una crema de la marca. Tiene 400.000 visualizaciones en 6 horas y cientos de comentarios. Calidad ha confirmado que ese lote salió con un conservante distinto por un error del proveedor; afecta a unas 2.000 unidades. Te piden la respuesta pública y el plan de las próximas 48 horas.",
+        "data": {
+          "to": "Dirección de marca y equipo legal",
+          "subject": "Propuesta de respuesta pública y plan de 48 horas",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. El texto de la respuesta pública, tal como se publicaría.\n\n2. Qué se ofrece a la clienta y al resto de personas con ese lote (retirada, reembolso, cómo saber si su crema es de ese lote).\n\n3. Cómo se gestionan los comentarios: qué se responde, qué no se borra y quién atiende cada caso.\n\n4. Qué se comunica en 24 y en 48 horas, y cómo sabrás si la crisis está controlada.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["disculpa", "responsabilidad", "lote", "retirada", "reembolso", "atención por privado", "no borrar", "transparencia", "seguimiento", "48 horas"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Encaja en esa red?", "type": "decision", "timeLimit": 330, "difficulty": "avanzado",
+        "briefing": "Decidirás en qué red funciona mejor cada tipo de contenido de una empresa B2B.",
+        "sub": "Clasificación — 6 min", "skills": {"hard": ["Estrategia de contenidos"], "soft": ["Criterio"]},
+        "scenario": "Trabajas para una empresa de software de gestión para despachos de abogados. Coloca cada contenido en la red donde más sentido tiene:\n\nLinkedIn — Profesionales, decisores, contenido de valor para el trabajo.\n\nInstagram — Lo visual, la cultura de empresa, el día a día.\n\nNo publicar — No aporta, puede perjudicar o no corresponde a redes.",
+        "data": {
+          "options": [
+            {"id": "r1", "text": "Un caso de éxito: un despacho que redujo un 30 % el tiempo de facturación", "correct": "linkedin"},
+            {"id": "r2", "text": "Fotos de la comida de verano del equipo", "correct": "instagram"},
+            {"id": "r3", "text": "Capturas del panel con datos reales de un cliente sin su permiso", "correct": "no"},
+            {"id": "r4", "text": "Guía sobre los cambios del reglamento de facturación electrónica", "correct": "linkedin"},
+            {"id": "r5", "text": "Un vídeo corto de cómo trabaja por dentro el equipo de soporte", "correct": "instagram"},
+            {"id": "r6", "text": "Un meme sobre la competencia con su logotipo", "correct": "no"},
+            {"id": "r7", "text": "Invitación a un webinar para socios de despachos", "correct": "linkedin"},
+            {"id": "r8", "text": "Presentación de las personas nuevas del equipo con su permiso", "correct": "instagram"},
+            {"id": "r9", "text": "Una queja interna sobre un cliente que no paga", "correct": "no"}
+          ],
+          "cats": ["LinkedIn", "Instagram", "No publicar"],
+          "keys": ["linkedin", "instagram", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_email_mkt", "title": "Email marketing",
+    "desc": "Encuentra por qué los correos de una tienda acaban en spam, diseña una secuencia de bienvenida que venda y separa las prácticas legales de las que no lo son.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Los correos ya no llegan", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás las métricas de envío de una tienda online. Tendrás que explicar por qué sus correos han dejado de funcionar.",
+        "sub": "Diagnóstico — 9 min", "skills": {"hard": ["Entregabilidad", "Métricas de email"], "soft": ["Diagnóstico"]},
+        "scenario": "Una tienda de material deportivo envía su boletín a 120.000 contactos dos veces por semana. En tres meses la apertura ha caído del 24 % al 8 % y las ventas por correo a la mitad. Has revisado la cuenta.\n\nResponde en tres partes:\n\nA) Por qué los correos han dejado de llegar a la bandeja de entrada.\n\nB) Qué harías, en orden, para recuperar la entregabilidad.\n\nC) Qué indicadores vigilarías cada semana a partir de ahora.",
+        "data": {
+          "headers": ["Indicador", "Hace 3 meses", "Ahora", "Detalle", "Estado"],
+          "table": [
+            {"n": "Apertura", "a": "24 %", "b": "8 %", "c": "Caída brusca en Gmail y Outlook", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Rebotes", "a": "0,8 %", "b": "6,5 %", "c": "Se importó una lista comprada de 40.000 contactos", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Quejas por spam", "a": "0,02 %", "b": "0,4 %", "c": "Muy por encima del 0,1 % recomendado", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Autenticación del dominio", "a": "SPF sí", "b": "Sin DKIM ni DMARC", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Contactos sin abrir en 12 meses", "a": "", "b": "55.000", "c": "Se les sigue enviando todo", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": ["lista comprada", "rebotes", "quejas", "reputación", "SPF", "DKIM", "DMARC", "limpiar la lista", "inactivos", "segmentar", "calentar"]
+        }
+      },
+      {
+        "id": "e2", "title": "Una secuencia de bienvenida", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Diseñarás los correos que recibe alguien que se acaba de suscribir.",
+        "sub": "Diseño de automatización — 10 min", "skills": {"hard": ["Automatizaciones", "Segmentación"], "soft": ["Escritura persuasiva"]},
+        "scenario": "La tienda de material deportivo consigue 3.000 suscriptores nuevos al mes con un 10 % de descuento en la primera compra. Hoy solo reciben un correo con el código y luego el boletín general. El 80 % no compra nunca. Te piden una secuencia automática para los primeros 14 días.",
+        "data": {
+          "to": "Equipo de marketing",
+          "subject": "Propuesta: secuencia de bienvenida de 14 días",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Cuántos correos, en qué días y el objetivo de cada uno.\n\n2. Qué cambia según lo que haga la persona (si compra, si abre, qué deporte ha mirado).\n\n3. El asunto y las dos primeras frases del primer correo.\n\n4. Cómo medirás si funciona y con qué compararás.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["secuencia", "objetivo de cada correo", "condiciones", "si compra sale", "segmentar por interés", "asunto", "llamada a la acción", "primera compra", "grupo de control", "tasa de conversión"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Se puede hacer o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas de email marketing son legales en España y Europa.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["RGPD y comunicaciones comerciales"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada práctica de una tienda online:\n\nSe puede — Cumple el RGPD y la ley de comunicaciones comerciales.\n\nNo se puede — Incumple la normativa aunque sea habitual.",
+        "data": {
+          "options": [
+            {"id": "e1x", "text": "Enviar ofertas de productos parecidos a quien ya te compró, con un enlace para darse de baja", "correct": "si"},
+            {"id": "e2x", "text": "Comprar una base de datos de correos y enviarles el boletín", "correct": "no"},
+            {"id": "e3x", "text": "Suscribirse con una casilla sin marcar que la persona marca ella misma", "correct": "si"},
+            {"id": "e4x", "text": "Incluir la suscripción en la aceptación de las condiciones de compra", "correct": "no"},
+            {"id": "e5x", "text": "Darse de baja con un solo clic y sin iniciar sesión", "correct": "si"},
+            {"id": "e6x", "text": "Seguir enviando durante un mes después de que alguien pida la baja", "correct": "no"},
+            {"id": "e7x", "text": "Guardar la fecha y la forma en que cada persona dio su consentimiento", "correct": "si"},
+            {"id": "e8x", "text": "Enviar ofertas a los correos de quienes dejaron una reseña en otra web", "correct": "no"}
+          ],
+          "cats": ["Se puede", "No se puede"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_analytics_web", "title": "Analítica web",
+    "desc": "Encuentra dónde abandona la gente un proceso de compra, plantea qué medir en una web nueva y distingue los datos fiables de los que engañan.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Dónde se pierden los compradores", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás el embudo de compra de una web con datos por dispositivo. Tendrás que encontrar dónde y por qué se pierde gente.",
+        "sub": "Análisis de embudo — 9 min", "skills": {"hard": ["Analítica web", "Embudos"], "soft": ["Diagnóstico"]},
+        "scenario": "Una agencia de viajes online vende escapadas de fin de semana. El 68 % de sus visitas son desde el móvil, pero solo el 30 % de las reservas. Has sacado el embudo de compra del último mes.\n\nResponde en tres partes:\n\nA) En qué paso se pierde más gente y en qué dispositivo, con los porcentajes.\n\nB) Qué hipótesis tienes para cada caída y cómo la comprobarías.\n\nC) Qué cambio probarías primero y cómo medirías si funciona.",
+        "data": {
+          "headers": ["Paso", "Escritorio (sigue)", "Móvil (sigue)", "Detalle", "Estado"],
+          "table": [
+            {"n": "Ficha del hotel → Elegir fechas", "a": "62 %", "b": "58 %", "c": "Parecido", "d": "Bien", "cls": "v-good"},
+            {"n": "Elegir fechas → Datos del viajero", "a": "48 %", "b": "21 %", "c": "El calendario no se ve entero en móvil", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Datos del viajero → Pago", "a": "71 %", "b": "52 %", "c": "Formulario de 14 campos", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Pago → Reserva confirmada", "a": "88 %", "b": "61 %", "c": "Errores de la pasarela en móvil: 9 %", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Tiempo medio de carga", "a": "1,9 s", "b": "5,8 s", "c": "", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los porcentajes de cada paso.",
+          "kw": ["embudo", "tasa de abandono", "móvil", "calendario", "formulario", "campos", "errores de pago", "velocidad", "hipótesis", "test A/B"]
+        }
+      },
+      {
+        "id": "e2", "title": "Qué medir en una web nueva", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás el plan de medición de una web antes de lanzarla.",
+        "sub": "Plan de medición — 10 min", "skills": {"hard": ["Plan de medición", "Eventos"], "soft": ["Comunicación"]},
+        "scenario": "Una escuela de formación profesional lanza su nueva web en un mes. Quiere saber qué campañas traen alumnos, qué cursos interesan y por qué la gente pide información pero no se matricula. Hoy solo miran las visitas totales. El responsable de marketing te pide un plan de medición y que respete la normativa de cookies.",
+        "data": {
+          "to": "Responsable de marketing",
+          "subject": "Plan de medición de la nueva web",
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. Los objetivos del negocio y los 4 o 5 indicadores que los miden.\n\n2. Los eventos que hay que registrar (con nombre y cuándo se disparan) y cómo se marcan las campañas.\n\n3. Cómo se cumple la normativa de cookies y qué se pierde si alguien no da su consentimiento.\n\n4. Cómo se comprueba que la medición funciona antes del lanzamiento y qué informe recibirá cada mes.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["objetivos", "indicadores", "eventos", "conversiones", "UTM", "campañas", "consentimiento", "cookies", "modo de consentimiento", "probar la medición", "informe"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Dato fiable o trampa?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué datos de analítica se pueden usar para tomar decisiones.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Calidad de los datos"], "soft": ["Pensamiento crítico"]},
+        "scenario": "Clasifica cada dato de la analítica de una web:\n\nFiable — Se puede usar para decidir.\n\nTrampa — Está sesgado, duplicado o mal medido y llevaría a una mala decisión.",
+        "data": {
+          "options": [
+            {"id": "w1", "text": "Las visitas incluyen las del propio equipo, que entra 200 veces al día", "correct": "trampa"},
+            {"id": "w2", "text": "Compras confirmadas cruzadas con el sistema de pedidos", "correct": "fiable"},
+            {"id": "w3", "text": "La conversión se duplica porque la página de gracias se registra al recargar", "correct": "trampa"},
+            {"id": "w4", "text": "Comparación de abandono de un paso antes y después de un cambio, con las mismas fechas del año anterior", "correct": "fiable"},
+            {"id": "w5", "text": "El tráfico directo se dispara porque las campañas de email no llevan UTM", "correct": "trampa"},
+            {"id": "w6", "text": "Un pico de 30.000 visitas de un país sin clientes en una sola hora", "correct": "trampa"},
+            {"id": "w7", "text": "Tasa de abandono por paso calculada solo con quien ha aceptado la medición, indicándolo", "correct": "fiable"},
+            {"id": "w8", "text": "Ingresos por campaña comparados con lo que dice contabilidad", "correct": "fiable"}
+          ],
+          "cats": ["Fiable", "Trampa"],
+          "keys": ["fiable", "trampa"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_copywriting", "title": "Copywriting",
+    "desc": "Reescribe textos de venta que no convierten, escribe una página de producto con beneficios claros y separa las promesas que se pueden hacer de las que no.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Textos que no convierten", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los textos y resultados de varios anuncios. Tendrás que explicar por qué unos funcionan y otros no.",
+        "sub": "Análisis de mensajes — 9 min", "skills": {"hard": ["Copywriting", "Propuesta de valor"], "soft": ["Empatía con el cliente"]},
+        "scenario": "Una aplicación de contabilidad para autónomos ha probado cinco titulares en sus anuncios con el mismo presupuesto. Su público son autónomos que hoy hacen las facturas en Excel y pierden tiempo cada trimestre con los impuestos.\n\nResponde en tres partes:\n\nA) Por qué los mejores titulares funcionan mejor que los peores.\n\nB) Qué patrón ves y qué le falta a cada titular flojo.\n\nC) Escribe dos titulares nuevos que probarías y di qué esperas de cada uno.",
+        "data": {
+          "headers": ["Titular", "Clics", "Altas", "Qué destaca", "Estado"],
+          "table": [
+            {"n": "«La plataforma integral de gestión financiera»", "a": "0,4 %", "b": "11", "c": "Lo que es la empresa", "d": "Revisar", "cls": "v-bad"},
+            {"n": "«Haz tus facturas en 30 segundos desde el móvil»", "a": "2,1 %", "b": "96", "c": "Un resultado concreto", "d": "Bien", "cls": "v-good"},
+            {"n": "«Tecnología de vanguardia con IA para tu negocio»", "a": "0,6 %", "b": "9", "c": "Palabras de moda", "d": "Revisar", "cls": "v-bad"},
+            {"n": "«Llega al trimestre sin sustos: el IVA te sale calculado»", "a": "2,6 %", "b": "131", "c": "El miedo del cliente y la solución", "d": "Bien", "cls": "v-good"},
+            {"n": "«La mejor app de contabilidad del mercado»", "a": "0,9 %", "b": "14", "c": "Una afirmación sin prueba", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de cada titular.",
+          "kw": ["beneficio", "característica", "resultado concreto", "dolor del cliente", "específico", "cifra", "lenguaje del cliente", "prueba", "palabras vacías", "test A/B"]
+        }
+      },
+      {
+        "id": "e2", "title": "La página de un producto", "type": "email", "timeLimit": 660, "difficulty": "intermedio",
+        "briefing": "Escribirás los textos principales de la página de un producto.",
+        "sub": "Redacción — 11 min", "skills": {"hard": ["Páginas de venta"], "soft": ["Escritura clara"]},
+        "scenario": "Una empresa vende un purificador de aire de 249 € para pisos de hasta 40 m². Datos: filtro HEPA que retiene el 99,9 % de partículas de 0,3 micras, 24 decibelios en modo noche (menos que un susurro), el filtro dura 12 meses y cuesta 39 €, garantía de 3 años, 4.200 opiniones con 4,6 de media. Su cliente típico tiene alergia o niños pequeños. Hoy la página empieza con «Purificador Modelo AP-40 con tecnología HEPA H13».",
+        "data": {
+          "to": "Equipo de e-commerce",
+          "subject": "Textos nuevos para la página del purificador",
+          "hint": "Escribe los textos en cuatro bloques:\n\n1. El titular y el subtítulo.\n\n2. Tres beneficios con su prueba (convertir cada dato técnico en algo que le importa al cliente).\n\n3. Cómo respondes a las dudas habituales: el ruido, el coste del filtro, si sirve para su piso.\n\n4. La llamada a la acción y qué pondrías cerca del botón para dar confianza.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["titular", "beneficio", "alergia", "dormir", "silencioso", "prueba", "opiniones", "garantía", "coste del filtro", "llamada a la acción"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Se puede prometer?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué afirmaciones publicitarias se pueden publicar.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Publicidad responsable"], "soft": ["Ética"]},
+        "scenario": "Clasifica cada frase de un anuncio de un complemento alimenticio:\n\nSe puede publicar — Es cierta, se puede demostrar y no engaña.\n\nNo se puede — Es engañosa, no se puede probar o la normativa la prohíbe.",
+        "data": {
+          "options": [
+            {"id": "x1", "text": "«Contiene vitamina C, que contribuye al funcionamiento normal del sistema inmunitario»", "correct": "si"},
+            {"id": "x2", "text": "«Cura la ansiedad en dos semanas»", "correct": "no"},
+            {"id": "x3", "text": "«4,5 de media en 2.300 opiniones verificadas»", "correct": "si"},
+            {"id": "x4", "text": "«Recomendado por el 100 % de los médicos»", "correct": "no"},
+            {"id": "x5", "text": "«Devolución gratis durante 30 días»", "correct": "si"},
+            {"id": "x6", "text": "«Últimas 3 unidades» cuando hay 4.000 en el almacén", "correct": "no"},
+            {"id": "x7", "text": "«Sin azúcares añadidos», cuando no los lleva", "correct": "si"},
+            {"id": "x8", "text": "«Pierde 10 kilos sin dieta ni ejercicio»", "correct": "no"}
+          ],
+          "cats": ["Se puede publicar", "No se puede"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_branding", "title": "Branding y marca",
+    "desc": "Diagnostica una marca que se percibe de forma distinta a la que quiere, redacta un posicionamiento claro y decide qué acciones refuerzan o diluyen la marca.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Lo que dice la marca y lo que oye el cliente", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los resultados de un estudio de percepción de marca. Tendrás que explicar la distancia entre lo que la empresa quiere transmitir y lo que percibe el cliente.",
+        "sub": "Diagnóstico de marca — 9 min", "skills": {"hard": ["Posicionamiento", "Investigación de marca"], "soft": ["Pensamiento crítico"]},
+        "scenario": "Una cadena de panaderías quiere posicionarse como «pan artesano de calidad, hecho cada día». Ha encargado un estudio a 800 clientes y no clientes de su zona.\n\nResponde en tres partes:\n\nA) Dónde está la distancia entre lo que quiere ser la marca y cómo se percibe, con las cifras.\n\nB) Qué puntos de contacto la están causando.\n\nC) Qué tres cambios harías primero para cerrar esa distancia.",
+        "data": {
+          "headers": ["Atributo", "Lo que quiere transmitir", "Lo que percibe el cliente", "Punto de contacto que influye", "Estado"],
+          "table": [
+            {"n": "Artesano", "a": "Sí, el principal", "b": "Solo el 22 % lo asocia", "c": "Bolsas de plástico genéricas y cartelería con ofertas «3×2»", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Calidad", "a": "Alta", "b": "Media para el 61 %", "c": "Pan del día anterior a mitad de precio en el escaparate", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Cercanía", "a": "Media", "b": "Alta para el 74 %", "c": "El trato del personal", "d": "Bien", "cls": "v-good"},
+            {"n": "Precio", "a": "Justo por la calidad", "b": "«Caro para lo que es» para el 48 %", "c": "No se explica cómo se hace el pan", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Recuerdo del nombre", "a": "", "b": "31 % sin ayuda", "c": "Logotipo cambiado tres veces en 5 años", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los porcentajes del estudio.",
+          "kw": ["posicionamiento", "percepción", "coherencia", "puntos de contacto", "promesa", "prueba", "precio percibido", "contar el proceso", "identidad visual", "consistencia"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un posicionamiento en una frase", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Redactarás el posicionamiento de una marca y cómo se traduce en sus mensajes.",
+        "sub": "Estrategia de marca — 10 min", "skills": {"hard": ["Plataforma de marca"], "soft": ["Síntesis"]},
+        "scenario": "Una empresa de reformas de Zaragoza (15 personas) compite con cientos de autónomos y grandes cadenas. Lo que la diferencia: da un presupuesto cerrado que no cambia, cumple el plazo pactado o descuenta un 5 % por semana de retraso, y un único responsable atiende al cliente de principio a fin. Su web dice «Reformas integrales de calidad con los mejores profesionales».",
+        "data": {
+          "to": "Gerente de la empresa",
+          "subject": "Propuesta de posicionamiento",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Para quién es la marca y qué problema le resuelve, en una frase.\n\n2. El posicionamiento propuesto y por qué es creíble (las pruebas que tenéis).\n\n3. Cómo cambiaría el titular de la web, el presupuesto que se envía y la primera llamada con el cliente.\n\n4. Qué no debe decir nunca la marca y cómo sabréis si el posicionamiento funciona.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["público", "problema", "presupuesto cerrado", "plazo garantizado", "un solo responsable", "diferencia", "prueba", "titular", "coherencia", "medir"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Refuerza o diluye la marca?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué acciones refuerzan el posicionamiento de una marca premium.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Gestión de marca"], "soft": ["Criterio"]},
+        "scenario": "Una marca de mochilas de alta gama se posiciona por su durabilidad («para toda la vida», reparación gratis de por vida). Clasifica cada acción:\n\nRefuerza — Es coherente con su promesa.\n\nDiluye — Contradice o debilita lo que la marca promete.",
+        "data": {
+          "options": [
+            {"id": "b1", "text": "Publicar historias de clientes con mochilas de hace 15 años", "correct": "refuerza"},
+            {"id": "b2", "text": "Lanzar una línea barata con materiales de menor duración y el mismo logotipo", "correct": "diluye"},
+            {"id": "b3", "text": "Abrir talleres de reparación en las tiendas", "correct": "refuerza"},
+            {"id": "b4", "text": "Hacer descuentos del 50 % cada mes", "correct": "diluye"},
+            {"id": "b5", "text": "Explicar en cada etiqueta de qué está hecha y cuánto dura", "correct": "refuerza"},
+            {"id": "b6", "text": "Patrocinar una campaña de moda rápida de temporada", "correct": "diluye"},
+            {"id": "b7", "text": "Vender piezas de repuesto para que el cliente repare en casa", "correct": "refuerza"},
+            {"id": "b8", "text": "Cambiar el logotipo cada año para parecer moderna", "correct": "diluye"}
+          ],
+          "cats": ["Refuerza", "Diluye"],
+          "keys": ["refuerza", "diluye"]
+        }
+      }
+    ]
+  }
+]

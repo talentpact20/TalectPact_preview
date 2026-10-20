@@ -173,3 +173,40 @@ test("una cuenta sin ficha de empresa no puede pagar por el contacto de un candi
     if (k === undefined) delete process.env.STRIPE_SECRET_KEY; else process.env.STRIPE_SECRET_KEY = k;
   }
 });
+
+test("una empresa no mete en su proceso (ni avisa) a quien ni se postuló ni está visible en el pool", async () => {
+  const { handler } = require("../netlify/functions/lib/handlers/applications.js");
+  const OFERTA = "33333333-4444-4555-8666-777777777777";
+  const sim = simularSupabase([
+    ["/auth/v1/user", { id: EMPRESA, email: "rrhh@empresa.es" }],
+    ["/rest/v1/jobs", [{ id: OFERTA }]],
+    ["/rest/v1/applications", (url, opts) => (opts.method && opts.method !== "GET" ? [{ id: "x" }] : [])],
+    // Perfil oculto: la consulta con pool_visible=is.true no lo devuelve.
+    ["/rest/v1/profiles", (url) => (url.includes("pool_visible=is.true") ? [] : [{ id: CAND, user_id: "aaaa" }])],
+    ["/rest/v1/notifications", [{ id: "n" }]]
+  ]);
+  try {
+    const res = await handler(conToken({ jobId: OFERTA, candidateRef: CAND, status: "contratado" }));
+    assert.equal(res.statusCode, 404);
+    assert.ok(!sim.pedidas.some((p) => p.url.includes("/rest/v1/notifications")), "no debe avisar al candidato");
+    assert.ok(!sim.pedidas.some((p) => p.url.includes("/rest/v1/applications") && p.method === "POST"), "no debe crear la postulación");
+  } finally { sim.restaurar(); }
+});
+
+test("una empresa sí puede mover a un candidato visible en el pool, y se le avisa", async () => {
+  const { handler } = require("../netlify/functions/lib/handlers/applications.js");
+  const OFERTA = "33333333-4444-4555-8666-777777777777";
+  const sim = simularSupabase([
+    ["/auth/v1/user", { id: EMPRESA, email: "rrhh@empresa.es" }],
+    ["/rest/v1/jobs", [{ id: OFERTA }]],
+    ["/rest/v1/applications", (url, opts) => (opts.method && opts.method !== "GET" ? [{ id: "x" }] : [])],
+    ["/rest/v1/profiles", [{ id: CAND, user_id: "aaaa" }]],
+    ["/rest/v1/notifications", [{ id: "n" }]]
+  ]);
+  try {
+    const res = await handler(conToken({ jobId: OFERTA, candidateRef: CAND, status: "preseleccionado" }));
+    assert.equal(res.statusCode, 200);
+    assert.ok(sim.pedidas.some((p) => p.url.includes("/rest/v1/applications") && p.method === "POST"));
+    assert.ok(sim.pedidas.some((p) => p.url.includes("/rest/v1/notifications") && p.method === "POST"));
+  } finally { sim.restaurar(); }
+});

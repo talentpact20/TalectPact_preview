@@ -5,9 +5,9 @@
  *       { accion: "confirmar", sessionId }            → { pagado, credentialId }
  * Cabecera: Authorization: Bearer <access token de Supabase>
  *
- * El importe lo fija el servidor (lib/sello.js). Pagar no sella: deja el pago
- * en `paid` (aquí, verificándolo con Stripe, o en stripe-webhook) y entonces
- * anchor-credential acepta anclar esa credencial.
+ * El importe lo fija el servidor (lib/sello.js). Pagar deja el pago en `paid`
+ * (aquí, verificándolo con Stripe, o en stripe-webhook) y mete la credencial en
+ * la cola del sello: anchor-batch la publica en el lote de esa noche.
  */
 const { jsonResponse, sb, authUser, getStripe, stripeConfigured, stripeLiveMode, formatAmount, isUuid, faltaEnEsquema, errorInterno } = require("../tp");
 const { SEAL_PRICE, selloPagado } = require("../sello");
@@ -17,7 +17,7 @@ async function credencialDe(userId, credentialId) {
   const perfiles = await sb.select("profiles", `user_id=eq.${userId}&select=id&limit=1`);
   const perfil = Array.isArray(perfiles) ? perfiles[0] : null;
   if (!perfil) return null;
-  const f = await sb.select("credentials", `id=eq.${credentialId}&profile_id=eq.${perfil.id}&select=id,cv_hash,tx_hash,anchored_at&limit=1`);
+  const f = await sb.select("credentials", `id=eq.${credentialId}&profile_id=eq.${perfil.id}&select=id,cv_hash,tx_hash,anchored_at,batch_id,revoked_at&limit=1`);
   return Array.isArray(f) ? f[0] : null;
 }
 
@@ -25,7 +25,8 @@ async function pagar(event, user, b) {
   if (!isUuid(String(b.credentialId || ""))) return jsonResponse(400, { error: "credentialId no válido" });
   const cred = await credencialDe(user.id, b.credentialId);
   if (!cred) return jsonResponse(404, { error: "Credencial no encontrada" });
-  if (cred.anchored_at) return jsonResponse(200, { ok: true, yaSellado: true });
+  if (cred.anchored_at || cred.batch_id) return jsonResponse(200, { ok: true, yaSellado: true });
+  if (cred.revoked_at) return jsonResponse(409, { error: "Esta credencial está revocada: no se puede sellar." });
   const pagado = await selloPagado(sb, faltaEnEsquema, cred.id, user.id);
   if (pagado === null) return jsonResponse(503, { error: "El sello público todavía no está disponible.", code: "sello_no_disponible" });
   if (pagado) return jsonResponse(200, { ok: true, pagado: true, credentialId: cred.id });
@@ -42,7 +43,7 @@ async function pagar(event, user, b) {
       price_data: {
         currency: SEAL_PRICE.currency,
         unit_amount: SEAL_PRICE.amountCents,
-        product_data: { name: SEAL_PRICE.label, description: "Huella de tu SkillPass anclada en blockchain, comprobable sin TalentPact" }
+        product_data: { name: SEAL_PRICE.label, description: "Huella de tu SkillPass publicada en una blockchain pública, comprobable sin TalentPact" }
       }
     }],
     metadata: { producto: "sello", user_id: user.id, credential_id: cred.id },
@@ -69,12 +70,27 @@ async function confirmar(user, b) {
   return jsonResponse(200, { ok: true, pagado: true, credentialId: m.credential_id });
 }
 
-/** Marca el sello como pagado (lo usan confirmar y stripe-webhook). */
+/**
+ * Marca el sello como pagado (lo usan confirmar y stripe-webhook) y mete la
+ * credencial en la cola del lote. Aunque la persona no vuelva de Stripe, el
+ * webhook basta para que se selle esa noche.
+ */
 async function marcarSelloPagado(session) {
-  return sb.update("seal_payments", `stripe_session_id=eq.${encodeURIComponent(session.id)}&status=neq.paid`, {
-    status: "paid", paid_at: new Date().toISOString(),
+  const ahora = new Date().toISOString();
+  const filas = await sb.update("seal_payments", `stripe_session_id=eq.${encodeURIComponent(session.id)}&status=neq.paid`, {
+    status: "paid", paid_at: ahora,
     stripe_payment_intent: typeof session.payment_intent === "string" ? session.payment_intent : (session.payment_intent && session.payment_intent.id) || null
   });
+  const credId = session.metadata && session.metadata.credential_id;
+  if (isUuid(String(credId || ""))) {
+    try {
+      await sb.update("credentials", `id=eq.${credId}&seal_paid_at=is.null`, { seal_paid_at: ahora });
+    } catch (err) {
+      // Sin supabase_schema_vc.sql la cola no existe: el pago queda registrado igual.
+      if (!faltaEnEsquema(err, /seal_paid_at/i)) throw err;
+    }
+  }
+  return filas;
 }
 
 exports.handler = async (event) => {

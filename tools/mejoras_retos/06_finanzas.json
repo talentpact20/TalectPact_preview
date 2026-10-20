@@ -1,0 +1,992 @@
+[
+  {
+    "id": "common_accounting",
+    "title": "Contabilidad",
+    "desc": "Cuadra una conciliación bancaria, explica por qué una empresa con beneficios no tiene dinero y distingue gastos de inversiones.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "El banco y la contabilidad no cuadran",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás las partidas pendientes de una conciliación bancaria. Tendrás que explicar la diferencia y qué asientos hacen falta.",
+        "sub": "Conciliación bancaria — 9 min",
+        "skills": {
+          "hard": [
+            "Contabilidad",
+            "Conciliación"
+          ],
+          "soft": [
+            "Rigor"
+          ]
+        },
+        "scenario": "A 31 de marzo, el extracto del banco de una distribuidora dice que hay 48.320 € en la cuenta. La contabilidad dice 52.905 €. Has revisado los movimientos que no aparecen en los dos lados.\n\nResponde en tres partes:\n\nA) Explica la diferencia de 4.585 € con las partidas de la tabla.\n\nB) Qué partidas exigen un asiento en contabilidad y cuáles se resolverán solas.\n\nC) Qué procedimiento propondrías para que la conciliación se haga cada semana y no a fin de trimestre.",
+        "data": {
+          "headers": [
+            "Partida",
+            "Importe",
+            "Dónde aparece",
+            "Detalle",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Comisión de mantenimiento",
+              "a": "45 €",
+              "b": "Solo en el banco",
+              "c": "Cargada el 31 de marzo",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Cheque entregado a un proveedor",
+              "a": "3.200 €",
+              "b": "Solo en contabilidad",
+              "c": "El proveedor aún no lo ha cobrado",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Recibo de un cliente devuelto",
+              "a": "1.840 €",
+              "b": "Solo en el banco",
+              "c": "El cliente no tenía fondos",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Transferencia de un cliente",
+              "a": "500 €",
+              "b": "Solo en el banco",
+              "c": "No se sabe a qué factura corresponde",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Diferencia total",
+              "a": "4.585 €",
+              "b": "Contabilidad 52.905 € · Banco 48.320 €",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C cuadrando la diferencia partida por partida.",
+          "kw": [
+            "conciliación",
+            "partidas pendientes",
+            "cheque en circulación",
+            "comisión",
+            "recibo devuelto",
+            "cliente",
+            "asiento",
+            "identificar el cobro",
+            "saldo conciliado",
+            "periodicidad"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Ganamos dinero y no hay dinero",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Explicarás al gerente por qué la empresa tiene beneficios pero le falta dinero en el banco.",
+        "sub": "Comunicación financiera — 10 min",
+        "skills": {
+          "hard": [
+            "Devengo y caja",
+            "Capital circulante"
+          ],
+          "soft": [
+            "Comunicación con negocio"
+          ]
+        },
+        "scenario": "El gerente de una empresa de instalaciones eléctricas no entiende nada: la cuenta de resultados del año dice que ha ganado 120.000 €, pero no puede pagar la paga extra del mes que viene. Datos: los clientes pagan a 90 días y deben 340.000 € (el año anterior, 180.000 €); se compraron dos furgonetas por 70.000 € al contado; el almacén tiene material por 95.000 € (antes, 40.000 €); se devolvió un préstamo de 30.000 €.",
+        "data": {
+          "to": "Gerente",
+          "subject": "Por qué hay beneficio pero falta dinero",
+          "hint": "Escribe la explicación en cuatro bloques:\n\n1. La diferencia entre beneficio y dinero en el banco, en palabras sencillas.\n\n2. A dónde ha ido el dinero, partida por partida, con las cifras.\n\n3. Qué se puede hacer a corto plazo para pagar la paga extra.\n\n4. Qué cambiaría para que no vuelva a pasar (plazos de cobro, compras de material, previsión de tesorería).",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "beneficio",
+            "tesorería",
+            "devengo",
+            "clientes",
+            "plazo de cobro",
+            "inversión",
+            "existencias",
+            "préstamo",
+            "capital circulante",
+            "previsión"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Gasto del año o inversión?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás cómo se contabiliza cada compra de una empresa.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Plan General Contable"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Una empresa de reformas registra estas operaciones del año. Clasifica cada una:\n\nGasto del ejercicio — Se consume en el año y va a la cuenta de resultados.\n\nInversión (activo) — Se usa varios años: va al balance y se amortiza.",
+        "data": {
+          "options": [
+            {
+              "id": "a1",
+              "text": "Una furgoneta para las obras",
+              "correct": "activo"
+            },
+            {
+              "id": "a2",
+              "text": "El alquiler de la nave de enero a diciembre",
+              "correct": "gasto"
+            },
+            {
+              "id": "a3",
+              "text": "Un programa de gestión con licencia para cinco años",
+              "correct": "activo"
+            },
+            {
+              "id": "a4",
+              "text": "El gasóleo de los vehículos",
+              "correct": "gasto"
+            },
+            {
+              "id": "a5",
+              "text": "Una máquina de corte que se usará unos ocho años",
+              "correct": "activo"
+            },
+            {
+              "id": "a6",
+              "text": "La factura de la luz de la oficina",
+              "correct": "gasto"
+            },
+            {
+              "id": "a7",
+              "text": "La reforma del local que alarga su vida útil",
+              "correct": "activo"
+            },
+            {
+              "id": "a8",
+              "text": "Los sueldos y la seguridad social del personal",
+              "correct": "gasto"
+            }
+          ],
+          "cats": [
+            "Gasto del ejercicio",
+            "Inversión (activo)"
+          ],
+          "keys": [
+            "gasto",
+            "activo"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_tax",
+    "title": "Fiscalidad",
+    "desc": "Revisa la liquidación trimestral de IVA de una empresa, explica a un autónomo sus obligaciones y separa los gastos que se pueden deducir de los que no.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "La liquidación de IVA del trimestre",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás las operaciones de un trimestre. Tendrás que revisar el IVA a ingresar y detectar errores.",
+        "sub": "IVA — 9 min",
+        "skills": {
+          "hard": [
+            "IVA",
+            "Modelo 303"
+          ],
+          "soft": [
+            "Rigor"
+          ]
+        },
+        "scenario": "Un estudio de diseño gráfico de Sevilla prepara su declaración trimestral de IVA. La gestoría ha calculado un resultado a ingresar de 6.813 €, pero el responsable sospecha que hay errores y te pide que lo revises.\n\nResponde en tres partes:\n\nA) Qué partidas están mal tratadas y por qué.\n\nB) Cuál sería el resultado correcto, con el cálculo.\n\nC) Qué control propondrías para que no se repita.",
+        "data": {
+          "headers": [
+            "Operación",
+            "Base",
+            "IVA aplicado",
+            "Detalle",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Facturas a clientes en España",
+              "a": "30.000 €",
+              "b": "21 %: 6.300 €",
+              "c": "Correcto",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Factura a una empresa de Alemania",
+              "a": "4.000 €",
+              "b": "21 %: 840 €",
+              "c": "El cliente tiene NIF intracomunitario válido",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Compra de ordenadores",
+              "a": "3.000 €",
+              "b": "Soportado 630 €",
+              "c": "No se ha deducido",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Alquiler del estudio",
+              "a": "1.500 €",
+              "b": "Soportado 315 €",
+              "c": "Deducido",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Comida con un cliente sin factura completa",
+              "a": "120 €",
+              "b": "Soportado 12 € deducido",
+              "c": "Solo hay un ticket",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C rehaciendo el cálculo del IVA del trimestre.",
+          "kw": [
+            "IVA repercutido",
+            "IVA soportado",
+            "operación intracomunitaria",
+            "inversión del sujeto pasivo",
+            "NIF intracomunitario",
+            "factura completa",
+            "ticket",
+            "deducible",
+            "resultado a ingresar",
+            "control",
+            "5.355"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Un autónomo que empieza",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Explicarás a una persona que se da de alta como autónoma qué obligaciones fiscales tiene.",
+        "sub": "Asesoramiento — 10 min",
+        "skills": {
+          "hard": [
+            "Obligaciones fiscales del autónomo"
+          ],
+          "soft": [
+            "Explicar con claridad"
+          ]
+        },
+        "scenario": "Una fisioterapeuta deja su empleo en una clínica y abre su propia consulta en Valencia. Te escribe: «No sé qué tengo que presentar a Hacienda ni cuándo, me da miedo equivocarme y que me multen. ¿Cobro IVA? ¿Cuánto tengo que guardar para impuestos?». Los servicios sanitarios de fisioterapia prestados por profesionales titulados están exentos de IVA.",
+        "data": {
+          "to": "Fisioterapeuta",
+          "subject": "Lo que tienes que saber de impuestos para empezar",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Los trámites para darse de alta (Hacienda y Seguridad Social) en orden.\n\n2. Si debe cobrar IVA en sus servicios y qué pasa con el IVA de sus compras.\n\n3. Qué declaraciones tendrá que presentar y con qué frecuencia (pagos fraccionados del IRPF, declaración anual), y qué guardar.\n\n4. Un consejo práctico para apartar dinero cada mes y cuándo conviene que hable con una gestoría.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "alta censal",
+            "modelo 036",
+            "037",
+            "RETA",
+            "exenta de IVA",
+            "IVA soportado no deducible",
+            "modelo 130",
+            "IRPF",
+            "declaración de la renta",
+            "facturas",
+            "apartar"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Gasto deducible o no?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué gastos puede deducir un diseñador autónomo en su IRPF.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Gastos deducibles"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Un diseñador autónomo que trabaja en una oficina alquilada te enseña estos gastos. Clasifica cada uno:\n\nDeducible — Está relacionado con su actividad, tiene factura y se puede justificar.\n\nNo deducible — No está vinculado a la actividad o la ley no lo permite.",
+        "data": {
+          "options": [
+            {
+              "id": "f1",
+              "text": "La cuota mensual de autónomos",
+              "correct": "si"
+            },
+            {
+              "id": "f2",
+              "text": "Una multa de tráfico con su coche",
+              "correct": "no"
+            },
+            {
+              "id": "f3",
+              "text": "El alquiler de la oficina donde trabaja",
+              "correct": "si"
+            },
+            {
+              "id": "f4",
+              "text": "Ropa de calle para ir a reuniones",
+              "correct": "no"
+            },
+            {
+              "id": "f5",
+              "text": "La suscripción a un programa de diseño que usa para sus encargos",
+              "correct": "si"
+            },
+            {
+              "id": "f6",
+              "text": "Las vacaciones familiares de verano",
+              "correct": "no"
+            },
+            {
+              "id": "f7",
+              "text": "La amortización del ordenador con el que trabaja",
+              "correct": "si"
+            },
+            {
+              "id": "f8",
+              "text": "Un gasto sin factura, solo con un recibo escrito a mano",
+              "correct": "no"
+            }
+          ],
+          "cats": [
+            "Deducible",
+            "No deducible"
+          ],
+          "keys": [
+            "si",
+            "no"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_treasury",
+    "title": "Tesorería",
+    "desc": "Prevé la caja de las próximas semanas, decide cómo cubrir un agujero de tesorería y distingue las medidas que liberan caja de las que la consumen.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Las próximas ocho semanas de caja",
+        "type": "analysis",
+        "timeLimit": 600,
+        "difficulty": "basico",
+        "briefing": "Verás la previsión de cobros y pagos de una empresa. Tendrás que detectar cuándo faltará dinero y qué hacer.",
+        "sub": "Previsión de tesorería — 10 min",
+        "skills": {
+          "hard": [
+            "Previsión de tesorería"
+          ],
+          "soft": [
+            "Anticipación"
+          ]
+        },
+        "scenario": "Una empresa de catering tiene hoy 85.000 € en el banco y una póliza de crédito de 60.000 € sin usar. Has preparado la previsión de las próximas ocho semanas, por bloques de dos semanas.\n\nResponde en tres partes:\n\nA) En qué momento falta dinero y cuánto, con el cálculo del saldo.\n\nB) Qué harías para cubrirlo, en orden de preferencia.\n\nC) Qué supuestos de la previsión son más arriesgados y cómo los vigilarías.",
+        "data": {
+          "headers": [
+            "Periodo",
+            "Cobros previstos",
+            "Pagos previstos",
+            "Detalle",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Semanas 1-2",
+              "a": "70.000 €",
+              "b": "60.000 €",
+              "c": "Normal",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Semanas 3-4",
+              "a": "40.000 €",
+              "b": "130.000 €",
+              "c": "Nóminas, paga extra y pago de IVA",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Semanas 5-6",
+              "a": "110.000 €",
+              "b": "65.000 €",
+              "c": "Cobro de un gran evento de 50.000 €",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Semanas 7-8",
+              "a": "60.000 €",
+              "b": "70.000 €",
+              "c": "Compra de un horno de 25.000 €",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Cliente del gran evento",
+              "a": "Paga a 60 días",
+              "b": "",
+              "c": "Se retrasó dos veces este año",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C calculando el saldo al final de cada periodo.",
+          "kw": [
+            "saldo final",
+            "déficit",
+            "póliza de crédito",
+            "aplazar",
+            "adelantar cobros",
+            "factoring",
+            "colchón",
+            "escenario pesimista",
+            "supuestos",
+            "seguimiento semanal"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Hablar con el banco antes de que sea tarde",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Escribirás al banco para pedir financiación ante un desfase de tesorería previsto.",
+        "sub": "Relación bancaria — 10 min",
+        "skills": {
+          "hard": [
+            "Financiación a corto plazo"
+          ],
+          "soft": [
+            "Negociación"
+          ]
+        },
+        "scenario": "La empresa de catering prevé que en tres meses, por un contrato nuevo con un hospital que paga a 120 días, le faltarán 90.000 € durante unos cuatro meses. El contrato es rentable (margen del 18 %, 600.000 € al año). Tiene buena relación con su banco y una póliza de 60.000 € que renueva en dos meses.",
+        "data": {
+          "to": "Gestora de empresas del banco",
+          "subject": "Solicitud de ampliación de financiación de circulante",
+          "hint": "Escribe la solicitud en cuatro bloques:\n\n1. El motivo de la necesidad y por qué es una buena noticia para la empresa.\n\n2. Cuánto se necesita, durante cuánto tiempo y para qué, con la previsión.\n\n3. Cómo y cuándo se devolverá, y qué garantías o documentos aportas (contrato, cuentas).\n\n4. Qué productos te parecen adecuados (ampliar la póliza, anticipo de facturas) y una propuesta de reunión.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "contrato",
+            "plazo de cobro",
+            "120 días",
+            "necesidad de circulante",
+            "importe",
+            "duración",
+            "devolución",
+            "previsión",
+            "anticipo de facturas",
+            "póliza",
+            "reunión"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Libera caja o la consume?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué medidas mejoran la tesorería de una empresa a corto plazo.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Gestión del circulante"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada medida según su efecto en el dinero disponible en los próximos tres meses:\n\nLibera caja — Hay más dinero disponible.\n\nConsume caja — Hay menos dinero disponible, aunque pueda ser buena idea por otros motivos.",
+        "data": {
+          "options": [
+            {
+              "id": "q1",
+              "text": "Pasar a cobrar a los clientes a 30 días en lugar de a 60",
+              "correct": "libera"
+            },
+            {
+              "id": "q2",
+              "text": "Comprar materia prima para seis meses aprovechando un descuento",
+              "correct": "consume"
+            },
+            {
+              "id": "q3",
+              "text": "Negociar con proveedores pagar a 60 días en lugar de a 30",
+              "correct": "libera"
+            },
+            {
+              "id": "q4",
+              "text": "Amortizar anticipadamente un préstamo",
+              "correct": "consume"
+            },
+            {
+              "id": "q5",
+              "text": "Vender el material del almacén que no se mueve desde hace un año",
+              "correct": "libera"
+            },
+            {
+              "id": "q6",
+              "text": "Pagar al contado una furgoneta nueva",
+              "correct": "consume"
+            },
+            {
+              "id": "q7",
+              "text": "Anticipar en el banco las facturas de un cliente solvente",
+              "correct": "libera"
+            },
+            {
+              "id": "q8",
+              "text": "Ofrecer a los clientes pagar a 90 días para vender más",
+              "correct": "consume"
+            }
+          ],
+          "cats": [
+            "Libera caja",
+            "Consume caja"
+          ],
+          "keys": [
+            "libera",
+            "consume"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_audit",
+    "title": "Auditoría y control interno",
+    "desc": "Prioriza los hallazgos de una auditoría por su riesgo, comunica un problema serio a dirección y distingue controles que previenen de los que solo detectan.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Los hallazgos de la auditoría interna",
+        "type": "analysis",
+        "timeLimit": 600,
+        "difficulty": "basico",
+        "briefing": "Verás los hallazgos de una auditoría de compras. Tendrás que priorizarlos por su riesgo.",
+        "sub": "Evaluación de riesgos — 10 min",
+        "skills": {
+          "hard": [
+            "Auditoría",
+            "Control interno"
+          ],
+          "soft": [
+            "Priorización"
+          ]
+        },
+        "scenario": "Has hecho la auditoría interna del proceso de compras de una cadena de supermercados (compras de 40 millones de euros al año) y has encontrado cinco cosas. El comité de auditoría solo dedicará diez minutos al informe.\n\nResponde en tres partes:\n\nA) Ordena los hallazgos por riesgo (probabilidad e impacto) y justifica el orden.\n\nB) Qué recomendación harías para los dos más graves.\n\nC) Cómo comprobarías dentro de tres meses que se han corregido.",
+        "data": {
+          "headers": [
+            "Hallazgo",
+            "Muestra revisada",
+            "Resultado",
+            "Posible impacto",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "La misma persona da de alta proveedores y aprueba sus pagos",
+              "a": "Todo el departamento",
+              "b": "3 personas con ambos permisos",
+              "c": "Fraude con proveedores ficticios",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Pedidos sin aprobación por encima del límite",
+              "a": "60 pedidos",
+              "b": "7 sin aprobación (12 %)",
+              "c": "Compras no autorizadas",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Cuenta bancaria de un proveedor cambiada por correo sin verificar",
+              "a": "15 cambios",
+              "b": "2 sin llamada de confirmación",
+              "c": "Pagos a estafadores",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Facturas pagadas fuera de plazo",
+              "a": "200 facturas",
+              "b": "14 %",
+              "c": "Intereses de demora y peor relación",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Contratos marco de proveedores",
+              "a": "20 contratos",
+              "b": "Todos firmados y vigentes",
+              "c": "",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con los resultados de cada hallazgo.",
+          "kw": [
+            "segregación de funciones",
+            "probabilidad",
+            "impacto",
+            "fraude",
+            "aprobación",
+            "límites",
+            "verificación de cuentas bancarias",
+            "fraude del CEO",
+            "recomendación",
+            "seguimiento"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Una mala noticia para el comité",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Comunicarás a dirección un hallazgo grave sin alarmar ni minimizar.",
+        "sub": "Informe — 10 min",
+        "skills": {
+          "hard": [
+            "Informes de auditoría"
+          ],
+          "soft": [
+            "Comunicación difícil"
+          ]
+        },
+        "scenario": "Revisando los pagos has encontrado que un proveedor de mantenimiento dado de alta hace un año ha cobrado 186.000 € y no hay constancia de ningún trabajo hecho. Su dirección coincide con el domicilio de un empleado del departamento de compras. Aún no has hablado con nadie de compras. El director financiero, que es tu jefe, es amigo de ese empleado.",
+        "data": {
+          "to": "Presidenta del comité de auditoría",
+          "subject": "Hallazgo relevante en la revisión de pagos a proveedores",
+          "hint": "Escribe la comunicación en cuatro bloques:\n\n1. Qué has encontrado, con datos y sin acusar a nadie.\n\n2. Por qué te diriges al comité y no solo a tu jefe.\n\n3. Qué medidas inmediatas propones para proteger las pruebas y a la empresa.\n\n4. Qué falta por comprobar, quién debería hacerlo y en qué plazo.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "hechos",
+            "presunción de inocencia",
+            "independencia",
+            "conflicto de interés",
+            "conservar pruebas",
+            "bloquear pagos",
+            "confidencialidad",
+            "investigación",
+            "asesoría legal",
+            "plazo"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Previene o detecta?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás si cada control evita un error o lo descubre después.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Diseño de controles"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada control del proceso de compras y pagos:\n\nPreventivo — Evita que el error o el fraude ocurra.\n\nDetectivo — Lo descubre después de que ha ocurrido.",
+        "data": {
+          "options": [
+            {
+              "id": "x1",
+              "text": "El sistema no deja pagar una factura que no coincide con su pedido y su albarán",
+              "correct": "preventivo"
+            },
+            {
+              "id": "x2",
+              "text": "Revisar cada mes los pagos duplicados al mismo proveedor",
+              "correct": "detectivo"
+            },
+            {
+              "id": "x3",
+              "text": "Separar quién da de alta proveedores y quién aprueba los pagos",
+              "correct": "preventivo"
+            },
+            {
+              "id": "x4",
+              "text": "Conciliar el banco cada semana",
+              "correct": "detectivo"
+            },
+            {
+              "id": "x5",
+              "text": "Llamar al proveedor a su teléfono conocido antes de cambiar su cuenta bancaria",
+              "correct": "preventivo"
+            },
+            {
+              "id": "x6",
+              "text": "Analizar al cierre del año los proveedores con la misma dirección que un empleado",
+              "correct": "detectivo"
+            },
+            {
+              "id": "x7",
+              "text": "Exigir dos firmas para pagos de más de 10.000 €",
+              "correct": "preventivo"
+            },
+            {
+              "id": "x8",
+              "text": "Una auditoría por muestreo de las compras del trimestre",
+              "correct": "detectivo"
+            }
+          ],
+          "cats": [
+            "Preventivo",
+            "Detectivo"
+          ],
+          "keys": [
+            "preventivo",
+            "detectivo"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_investment",
+    "title": "Inversión y valoración",
+    "desc": "Compara proyectos de inversión con criterios financieros, explica una valoración a un fundador y separa las afirmaciones razonables de las que no lo son.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Dos proyectos y un solo presupuesto",
+        "type": "analysis",
+        "timeLimit": 600,
+        "difficulty": "basico",
+        "briefing": "Verás los datos de dos proyectos de inversión. Tendrás que recomendar cuál hacer.",
+        "sub": "Análisis de inversiones — 10 min",
+        "skills": {
+          "hard": [
+            "VAN",
+            "TIR",
+            "Plazo de recuperación"
+          ],
+          "soft": [
+            "Decisión con datos"
+          ]
+        },
+        "scenario": "Una fábrica de envases tiene 500.000 € para invertir y debe elegir entre dos proyectos. Su coste de capital es del 8 %. El director de planta prefiere el proyecto B porque «se recupera antes».\n\nResponde en tres partes:\n\nA) Qué proyecto recomiendas con estos datos y por qué.\n\nB) Qué indica cada criterio y por qué pueden contradecirse.\n\nC) Qué riesgos o datos adicionales revisarías antes de decidir.",
+        "data": {
+          "headers": [
+            "Indicador",
+            "Proyecto A: línea automatizada",
+            "Proyecto B: mejora de la línea actual",
+            "Detalle",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Inversión",
+              "a": "500.000 €",
+              "b": "500.000 €",
+              "c": "",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Vida útil",
+              "a": "10 años",
+              "b": "4 años",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "VAN al 8 %",
+              "a": "+310.000 €",
+              "b": "+95.000 €",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-good"
+            },
+            {
+              "n": "TIR",
+              "a": "17 %",
+              "b": "16 %",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Plazo de recuperación",
+              "a": "4,2 años",
+              "b": "2,6 años",
+              "c": "B vuelve a necesitar inversión al cuarto año",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con los indicadores de la tabla.",
+          "kw": [
+            "VAN",
+            "valor actual neto",
+            "TIR",
+            "plazo de recuperación",
+            "vida útil",
+            "coste de capital",
+            "crea valor",
+            "flujos después del plazo",
+            "riesgo",
+            "sensibilidad"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Lo que vale tu empresa",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Explicarás a un fundador por qué su empresa vale menos de lo que cree.",
+        "sub": "Valoración — 10 min",
+        "skills": {
+          "hard": [
+            "Valoración por múltiplos"
+          ],
+          "soft": [
+            "Comunicación difícil"
+          ]
+        },
+        "scenario": "El fundador de una empresa de software para gimnasios quiere vender el 20 % a un inversor. Su empresa factura 1,8 millones al año, crece un 15 % anual y tiene un 4 % de margen. Él la valora en 30 millones porque «una startup famosa del sector se vendió por 20 veces su facturación». Esa startup crecía un 120 % al año y tenía clientes en 15 países. Empresas comparables a la suya se han vendido entre 2 y 4 veces su facturación.",
+        "data": {
+          "to": "Fundador",
+          "subject": "Una valoración realista antes de hablar con inversores",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Por qué la comparación con la startup famosa no sirve, con las cifras.\n\n2. Una horquilla de valoración razonable y cómo se calcula.\n\n3. Qué haría subir el valor de su empresa en los próximos dos años.\n\n4. Qué riesgo corre si sale a buscar inversores con 30 millones y cómo plantearía la negociación.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "múltiplo",
+            "facturación",
+            "crecimiento",
+            "margen",
+            "comparables",
+            "horquilla",
+            "3,6",
+            "7,2",
+            "valor",
+            "negociación",
+            "credibilidad"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Razonable o no?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué afirmaciones sobre inversiones y valoraciones tienen sentido.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Finanzas corporativas"
+          ],
+          "soft": [
+            "Pensamiento crítico"
+          ]
+        },
+        "scenario": "En una reunión de inversión se dicen estas frases. Clasifica cada una:\n\nRazonable — Es correcta desde el punto de vista financiero.\n\nNo es razonable — Es un error de concepto o una trampa habitual.",
+        "data": {
+          "options": [
+            {
+              "id": "i1",
+              "text": "«Un proyecto con VAN positivo al coste de capital crea valor»",
+              "correct": "si"
+            },
+            {
+              "id": "i2",
+              "text": "«Como la TIR es del 30 %, el proyecto no tiene riesgo»",
+              "correct": "no"
+            },
+            {
+              "id": "i3",
+              "text": "«A más riesgo, exigiremos una rentabilidad mayor»",
+              "correct": "si"
+            },
+            {
+              "id": "i4",
+              "text": "«Los costes ya gastados en el estudio previo deben pesar en la decisión»",
+              "correct": "no"
+            },
+            {
+              "id": "i5",
+              "text": "«Un euro hoy vale más que un euro dentro de cinco años»",
+              "correct": "si"
+            },
+            {
+              "id": "i6",
+              "text": "«Si el año pasado subió un 40 %, este año también subirá»",
+              "correct": "no"
+            },
+            {
+              "id": "i7",
+              "text": "«Hay que comparar el proyecto con lo que rendiría el dinero en otra alternativa»",
+              "correct": "si"
+            },
+            {
+              "id": "i8",
+              "text": "«Hay que elegir siempre el proyecto que se recupera antes, aunque cree menos valor»",
+              "correct": "no"
+            }
+          ],
+          "cats": [
+            "Razonable",
+            "No es razonable"
+          ],
+          "keys": [
+            "si",
+            "no"
+          ]
+        }
+      }
+    ]
+  }
+]

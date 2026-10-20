@@ -4,7 +4,7 @@
 - [ ] **Plan post reunión** (`docs/plan_post_reunion/00_plan_maestro.md`, §5): fase 0 antitrampas, diccionario canónico, 12 sectores + 7 áreas, intento oficial cada 30 días, precios (Plus 6,99 €/mes · 49 €/año, sello 4,99 €, certificación IA 39 €, perfil IA 89 €), prueba gratuita 30 días, quién hace el gold set, pago del candidato con Stripe. Ver [[Plan post reunión]].
 - [ ] **Skills en la plataforma** (19/10, `skills_en_la_plataforma.md`, parte 08): grados declarada/demostrada/verificada, pasaporte básico de 3 retos. Hecho en código el 19/10: imprescindible/valorable con banda mínima por skill, oferta en 3 pasos, relleno desde documento y encaje en 3 estados.
 - [ ] **Búsqueda de candidatos tipo LinkedIn Recruiter** (19/10): columna fija + secciones plegables (condiciones, evidencia, perfil, actividad) + contador en vivo + listas, notas y búsquedas guardadas. ¿Parte avanzada solo en Pro/Enterprise? Ver `estructura_plataforma.md`, parte 08, y doc 01 §8.
-- [ ] **Ofertas de ejemplo en producción**: el seed de Iván (NortePay, Orbit Labs, ClaroData, Verde Brand) choca con la regla de no mostrar contenido de demostración. ¿Se quitan, se marcan o se mantienen para la reunión?
+- [x] **Ofertas de ejemplo en producción** (20/10): decidido quitarlas. Seed retirado del repo.
 
 - [ ] Decisiones de `04_estrategia.md`: perfil de trabajo inicial, plazo entre reintentos, nota por bloques, pool solo para empresas verificadas. Ver [[Estrategia]].
 
@@ -15,6 +15,9 @@
 - [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
 
 ## Supabase (usuario)
+- [ ] **Ejecutar `supabase_schema_seguridad.sql`** (límite de frecuencia persistente) y luego `npm run check:rls`.
+- [ ] **SkillPass v2**: `npm run vc:clave` → `VC_SIGNING_KEY` en Netlify; ejecutar `supabase_schema_vc.sql`; fondear la cartera en Base Sepolia y `npm run deploy:contract:v2` → `SKILLPASS_V2_CONTRACT_ADDRESS`. Para producción, `SEAL_CHAIN=base`. Ver changelog 20/10.
+- [ ] **Ejecutar `supabase_limpiar_ofertas_demo.sql`** para borrar las 4 empresas y 8 ofertas de ejemplo que siguen en producción.
 - [ ] **Ejecutar `supabase_schema_intentos.sql`** (intento único por reto y solicitudes). Sin él los retos funcionan sin control de intento. Resolver solicitudes, de momento, con el `update` que trae el propio SQL.
 - [ ] **Ejecutar `supabase_schema_areas.sql`** (área y especialidad en `jobs`; rellena las ofertas existentes desde su sector antiguo). Sin él, el área se deduce del sector antiguo y la especialidad no se guarda.
 - [ ] **Activar Google** (Authentication → Sign In / Providers → Google, con el Client ID y el secreto de Google Cloud). En Google Cloud: origen `https://talentpact.es` y redirección `https://vqyqedmizxqneniynxqp.supabase.co/auth/v1/callback`. Comprobar con `npm run check:google -- https://talentpact.es`. El código ya está: el botón aparece solo.
@@ -30,6 +33,15 @@
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
 
 ## Código (Claude)
+- [x] Menú lateral en los paneles de candidato y empresa y Ajustes como página propia (20/10).
+- [x] Rama IA (20/10): bloque propio en el catálogo, 10 retos técnicos de la ola 1 + IA en el trabajo (33 ejercicios), rúbrica técnica y errores que penalizan (corrector 2.2.0).
+- [ ] Rama IA: revisión por un experto, gold set, itinerarios en la oferta, fase 2 (sandbox) y defensa de 2 preguntas; ola 2 (6 competencias).
+- [x] Blockchain definitivo (plan 03): VC 2.0 firmada, revocación, caducidad, verificación en 5 estados, lote Merkle diario, contrato v2 (20/10).
+- [ ] Blockchain: verificación por lotes (CSV) y API `GET /verify/{id}` para Pro/Enterprise; multifirma 2 de 2 como emisor del contrato v2; EBSI más adelante.
+- [x] Pasada de seguridad (20/10): límites persistentes, CORS cerrado, no-store, RLS de las 14 tablas comprobado por test.
+- [ ] Seguridad siguiente: quitar 'unsafe-inline' de la CSP (pasar los onclick a JS), TOTP y protección de contraseñas filtradas en Supabase, PITR.
+- [ ] Mejorar cada ejercicio uno por uno (pedido el 20/10, después de lo demás).
+- [x] Revisión del código de Iván (20/10): seed fuera, pipeline solo con postulados o visibles en el pool, dilemas alineados.
 - [x] Antitrampas fase 0 + intento único + cámara obligatoria (19/10): contenido y soluciones fuera del navegador, `retos-intento`, comprobación previa, pantalla completa, solicitudes de reapertura y de alternativa a la cámara, secuencias corregidas en el servidor. Pendiente de commit.
 - [ ] Backoffice: cola de solicitudes (reapertura / sin cámara) con aprobar y rechazar, y aviso al candidato en su bandeja.
 - [ ] Antitrampas siguientes: variantes por intento (datos distintos y detalle trampa), defensa de 2 preguntas, patrón de escritura, detección de móvil y segunda persona, segundo monitor; retos de oferta (`EX_DB`, `03-datos-retos.js`) aún con contenido en el navegador.
@@ -44,7 +56,8 @@
 - [ ] Decidir si el pool o el desbloqueo exigen empresa verificada (propuesta del doc 04_estrategia).
 - [x] Oferta: imprescindible o valorable con banda mínima, tres pasos tipo LinkedIn, relleno desde documento con IA (`parse-job-doc`), encaje por grupos (19/10). Pendiente de commit.
 - [ ] Probar `parse-job-doc` con documentos reales de empresas (cuando esté desplegado) y revisar la calidad de las propuestas.
-- [ ] Ficha del candidato en la empresa: tres bloques por pilar con banda (hoy aún números 0–100).
+- [x] Ficha del candidato en la empresa: dos bloques (Hard / Soft) con banda; fuera la nota media (20/10).
+- [ ] ¿Se quita el ranking del candidato? Ordena por media, y el documento de skills pide no tenerlo.
 - [ ] **Fase 0 (grave)**: enunciados y soluciones de las clasificaciones están en `07-retos-comunes.js` (público). Servirlos desde el servidor al empezar el intento; reloj e intento de servidor (doc 08 del plan post reunión). Pendiente de aprobación.
 - [x] **Seguridad (XSS)**: en `08-ofertas-y-ejercicios.js` (renderJobs) el nombre de empresa y las skills se insertan sin escapar en la portada.
 - [x] Rediseñar tarjeta de oferta (empresa arriba, máx. 4 skills + «+N», sector en español, sin colores a mano en `TP_MONO_TINTS`).

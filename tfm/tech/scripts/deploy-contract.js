@@ -7,17 +7,24 @@
  *
  * Uso:   npm run deploy:contract
  *        npm run deploy:contract -- --dry-run     (solo compila, no despliega)
+ *        npm run deploy:contract -- --v2          (SkillPassRegistryV2, sello por
+ *                                                  lotes, en la red de SEAL_CHAIN:
+ *                                                  base-sepolia por defecto o base)
  *
- * Requiere en .env:  ISSUER_PRIVATE_KEY   (y opcionalmente SEPOLIA_RPC)
+ * Requiere en .env:  ISSUER_PRIVATE_KEY   (y opcionalmente SEPOLIA_RPC / SEAL_RPC)
  */
 const fs = require("fs");
 const path = require("path");
-const { ROOT, loadDotEnv, env, requireEnv, normalizePrivateKey, CHAIN } = require("./lib-env");
+const { ROOT, loadDotEnv, env, requireEnv, normalizePrivateKey, CHAIN: CHAIN_V1 } = require("./lib-env");
 
 loadDotEnv();
 
-const CONTRACT_PATH = path.join(ROOT, "tfm", "tech", "contracts", "SkillPassRegistry.sol");
-const CONTRACT_NAME = "SkillPassRegistry";
+const V2 = process.argv.includes("--v2");
+const SEAL = V2 ? require(path.join(ROOT, "netlify", "functions", "lib", "tp.js")).sealChain() : null;
+const CHAIN = V2 ? Object.assign({ faucet: "https://docs.base.org/tools/network-faucets" }, SEAL) : CHAIN_V1;
+const CONTRACT_NAME = V2 ? "SkillPassRegistryV2" : "SkillPassRegistry";
+const CONTRACT_PATH = path.join(ROOT, "tfm", "tech", "contracts", CONTRACT_NAME + ".sol");
+const ENV_VAR = V2 ? "SKILLPASS_V2_CONTRACT_ADDRESS" : "SKILLPASS_CONTRACT_ADDRESS";
 const BUILD_DIR = path.join(ROOT, "tfm", "tech", "build");
 const DRY_RUN = process.argv.includes("--dry-run");
 
@@ -26,7 +33,7 @@ function compile() {
   const source = fs.readFileSync(CONTRACT_PATH, "utf8");
   const input = {
     language: "Solidity",
-    sources: { "SkillPassRegistry.sol": { content: source } },
+    sources: { [CONTRACT_NAME + ".sol"]: { content: source } },
     settings: {
       optimizer: { enabled: true, runs: 200 },
       outputSelection: { "*": { "*": ["abi", "evm.bytecode.object"] } }
@@ -42,7 +49,7 @@ function compile() {
     throw new Error("La compilacion fallo.");
   }
 
-  const artifact = output.contracts["SkillPassRegistry.sol"][CONTRACT_NAME];
+  const artifact = output.contracts[CONTRACT_NAME + ".sol"][CONTRACT_NAME];
   const abi = artifact.abi;
   const bytecode = "0x" + artifact.evm.bytecode.object;
 
@@ -70,7 +77,7 @@ async function main() {
   }
 
   const { ethers } = require("ethers");
-  const rpc = env("SEPOLIA_RPC") || env("POLYGON_AMOY_RPC") || CHAIN.defaultRpc;
+  const rpc = V2 ? (env("SEAL_RPC") || CHAIN.defaultRpc) : (env("SEPOLIA_RPC") || env("POLYGON_AMOY_RPC") || CHAIN.defaultRpc);
   const pk = normalizePrivateKey(
     requireEnv("ISSUER_PRIVATE_KEY", "Paso 2 del SETUP_CHECKLIST: exporta la clave de la wallet de testnet.")
   );
@@ -84,7 +91,7 @@ async function main() {
   console.log("     chainId:    " + network.chainId);
   if (Number(network.chainId) !== CHAIN.chainId) {
     throw new Error(
-      `El RPC responde chainId ${network.chainId}, pero se esperaba ${CHAIN.chainId} (${CHAIN.name}). Revisa SEPOLIA_RPC.`
+      `El RPC responde chainId ${network.chainId}, pero se esperaba ${CHAIN.chainId} (${CHAIN.name}). Revisa ${V2 ? "SEAL_RPC" : "SEPOLIA_RPC"}.`
     );
   }
 
@@ -95,9 +102,9 @@ async function main() {
   }
 
   const balance = await provider.getBalance(wallet.address);
-  console.log("     saldo:      " + ethers.formatEther(balance) + " POL");
+  console.log("     saldo:      " + ethers.formatEther(balance) + " ETH");
   if (balance === 0n) {
-    throw new Error("La wallet no tiene ETH de Sepolia. Pide gas gratis (solo Gmail) en " + CHAIN.faucet);
+    throw new Error("La wallet no tiene ETH en " + CHAIN.name + ". Consíguelo en " + CHAIN.faucet);
   }
 
   console.log("\n  3. Desplegando ...");
@@ -118,10 +125,10 @@ async function main() {
   console.log("     explorer:   " + CHAIN.explorer + "/address/" + address);
 
   console.log("\n  Ultimo paso — anade esta linea a tu .env (y a Netlify):\n");
-  console.log("     SKILLPASS_CONTRACT_ADDRESS=" + address + "\n");
+  console.log("     " + ENV_VAR + "=" + address + (V2 ? "\n     SEAL_CHAIN=" + CHAIN.slug : "") + "\n");
 
   fs.writeFileSync(
-    path.join(BUILD_DIR, "deployment-sepolia.json"),
+    path.join(BUILD_DIR, V2 ? "deployment-" + CHAIN.slug + ".json" : "deployment-sepolia.json"),
     JSON.stringify(
       {
         contractName: CONTRACT_NAME,

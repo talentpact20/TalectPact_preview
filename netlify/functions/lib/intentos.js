@@ -27,7 +27,8 @@ function duracionIntento(reto) {
 /** Datos del ejercicio sin soluciones ni pistas para el corrector. */
 function sanear(data) {
   const d = JSON.parse(JSON.stringify(data || {}));
-  delete d.kw;   // conceptos que busca el corrector
+  delete d.kw;        // conceptos que busca el corrector
+  delete d.penaliza;  // errores que penalizan (rama IA): solo los ve el corrector
   if (Array.isArray(d.options)) d.options = d.options.map(({ correct: _c, ...o }) => o);
   if (Array.isArray(d.puzzles)) d.puzzles = d.puzzles.map(({ correct: _c, hint: _h, ...p }) => p);
   return d;

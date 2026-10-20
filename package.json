@@ -15,7 +15,9 @@
     "deploy:contract": "node tfm/tech/scripts/deploy-contract.js",
     "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run",
     "test:supabase": "node tfm/tech/scripts/test-supabase.js",
-    "taxonomia": "node tools/generar_taxonomia.js"
+    "taxonomia": "node tools/generar_taxonomia.js",
+    "vc:clave": "node tfm/tech/scripts/generar-clave-vc.js",
+    "deploy:contract:v2": "node tfm/tech/scripts/deploy-contract.js --v2"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.135.0",

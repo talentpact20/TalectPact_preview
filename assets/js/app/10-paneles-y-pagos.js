@@ -30,14 +30,14 @@ function openDashCand(){document.getElementById('dashCandidate').classList.add('
   applyCandidateIdentity();
   updateCandProfile();renderCommonExercises();renderJobMatches();renderOnboarding();renderRanking('all');renderFAQ();
   renderCandOfertas();
-  // Reset to profile tab
-  document.querySelectorAll('#candDashTabs .dash-tab').forEach((t,i)=>t.classList.toggle('active',i===0));
-  document.querySelectorAll('[id^="candTab-"]').forEach((c,i)=>c.classList.toggle('active',i===0));
+  // Al abrir, la portada del panel: «Mi perfil».
+  tpPanelIr('cand','profile');
 }
 function openDashEmp(){
   document.getElementById('dashEmpresa').classList.add('open');
   document.body.style.overflow='hidden';
   applyCompanyIdentity();renderEmpJobs();renderEmpPool();tpActividadEmpresa();
+  tpPanelIr('emp','resumen');
   // Los desbloqueos los manda el servidor, no localStorage: si esta cuenta pago
   // desde otro dispositivo, el contacto tiene que seguir estando desbloqueado.
   Pay.sync().then(function(r){ if(r&&r.unlocks)renderEmpPool(); tpActividadEmpresa(); }).catch(function(){});
@@ -76,16 +76,14 @@ function showOfferCandidates(jobId){
   const chip=(ok,txt)=>ok===null?'':`<span class="tp-cond-chip ${ok?'ok':'ko'}">${ok?'✓':'✕'} ${escHtml(txt)}</span>`;
   let h='';
   lista.forEach(({c:ca,e})=>{
-    const scoreCls=ca.score>=80?'score-high':'score-mid';
     const verif=(ca.skills||[]).filter(s=>s.verified).length;
     h+=`<div class="offer-cand-card" data-ref="${escHtml(ca.id)}">
       <div class="oc-avatar">${escHtml(ca.i)}</div>
-      <div class="oc-score-pill"><div class="score-circle ${scoreCls}">${ca.score}</div></div>
       <div class="oc-info">
         <h4>${escHtml(TPPool.alias(ca))}</h4>
         ${e.req&&typeof tpReqResumen==='function'?tpReqResumen(e.req):tpEncaje(e.pct)}
         <div class="oc-meta">${escHtml(ca.sector)} · ${(ca.skills||[]).length} skills${ca._real?' · '+verif+' verificadas':''}</div>
-        <div class="oc-skills">${(ca.skills||[]).map(s=>`<span class="job-tag">${escHtml(s.n)}: <strong>${s.v}</strong></span>`).join('')}</div>
+        <div class="oc-skills">${tpChipsBanda(ca.skills,6)}</div>
         <div class="tp-cond">${chip(e.jor,TP_COND.jornadas[job.jornada]||'')}${chip(e.mod,TP_COND.modalidades[job.modalidad]||'')}</div>
       </div>
       <div class="oc-actions">
@@ -127,7 +125,7 @@ function unlockContact(candId){
   _payingForCand=c;
   document.getElementById('payAvatar').textContent=c.i;
   document.getElementById('payName').textContent='Candidato #'+(1000+Math.floor(Date.now()/1000)%900);
-  document.getElementById('payMeta').textContent='Score: '+c.score+' · '+c.sector;
+  document.getElementById('payMeta').textContent=(c.sector||'')+' · '+(c.retos||(c.skills||[]).length)+' skills demostradas';
   Pay._status('');
   Pay.applyGateway();          // pinta el importe y el aviso de modo pruebas
   document.getElementById('payModal').classList.add('open');
@@ -412,7 +410,19 @@ function clearExSearch(){
 }
 
 function renderEmpPool(){ /* lo sustituyen 14-empleo.js y 19-rrhh.js (pool real) */ }
-function viewProfile(id){const c=CANDIDATES.find(p=>p.id===id);if(!c)return;document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${escHtml(c.i)}</div><div class="cp-info"><h3>${escHtml(c.alias||"Candidato anónimo")}</h3><div class="cp-meta">${escHtml(c.sector)} · Score: ${c.score} · Perfil ciego</div>${(()=>{if(typeof tpPoolCondChips==='function'){const chips=tpPoolCondChips(c.cond);const integ=c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'';return chips+integ;}const cd=c.cond||{};const t=[...(cd.jornadas||[]).map(k=>TP_COND.jornadas[k]),...(cd.modalidades||[]).map(k=>TP_COND.modalidades[k]),...(cd.contratos||[]).map(k=>TP_COND.contratos[k]),cd.ciudad?(cd.ciudad+(cd.reubicacion?' · acepta mudarse':'')):'',cd.disponibilidad?(TP_COND.disponibilidad[cd.disponibilidad]||cd.disponibilidad):'',cd.horas?cd.horas+' h/sem':'',cd.salMin?'Desde '+Math.round(cd.salMin/1000)+' k€':''].filter(Boolean);return (t.length?`<div class="tp-cond">${t.map(x=>`<span class="tp-cond-chip">${escHtml(x)}</span>`).join('')}</div>`:'<div class="tp-cond"><span class="tp-cond-chip muted">Sin condiciones indicadas</span></div>')+(c.integ?`<div class="tp-cond"><span class="tp-risk r-${c.integ}">Integridad: riesgo ${c.integ}</span>${c.verified?'<span class="tp-verified">✓ Notas verificadas</span>':''}</div>`:'');})()}</div><button class="jm-close u-pos-absolute u-right-16 u-top-16" onclick="closeM('profileModal')">✕</button></div><div class="cp-body"><div class="u-fs-micro u-fw-600 u-c-slate-600 u-tt-uppercase u-ls-_04em u-mb-12">Skills evaluados</div><div class="cp-skills">${c.skills.map(s=>`<div class="cp-skill"><div class="cp-skill-name">${escHtml(s.n)}${s.verified?' <span class="tp-verified">✓</span>':''}</div><div class="cp-bar"><div class="cp-bar-fill" style="width:${s.v}%"></div></div><div class="cp-score">${s.v}/100</div></div>`).join('')}</div><div class="u-d-flex u-gap-10 u-mt-16"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${escHtml(c.id)}')">${c._unlocked?'Ver contacto →':'Desbloquear contacto · €49 →'}</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;document.getElementById('profileModal').classList.add('open');}
+// Ficha ciega para la empresa: condiciones, integridad y las skills en sus dos
+// bloques con banda (el número exacto solo al pasar el ratón; sin nota media).
+function tpSkillsDeFicha(c){
+  const vistos=new Set(),out=[];
+  [...(c.skills||[]),...(c.personas||[])].forEach(s=>{const k=String(s&&s.n||'').toLowerCase();if(k&&!vistos.has(k)){vistos.add(k);out.push(s);}});
+  return out;
+}
+function viewProfile(id){
+  const c=CANDIDATES.find(p=>String(p.id)===String(id));if(!c)return;
+  const retos=c.retos||tpSkillsDeFicha(c).length;
+  document.getElementById('profileContent').innerHTML=`<div class="cp-card"><div class="cp-head"><div class="cp-avatar">${escHtml(c.i)}</div><div class="cp-info"><h3>${escHtml(c.alias||"Candidato anónimo")}</h3><div class="cp-meta">${escHtml(c.sector)} · ${retos} ${retos===1?'skill demostrada':'skills demostradas'} · Perfil ciego</div>${tpPoolCondChips(c.cond)}<div class="tp-cond">${typeof tpIntegridadDetalle==='function'?tpIntegridadDetalle(c):''}</div></div><button class="jm-close u-pos-absolute u-right-16 u-top-16" onclick="closeM('profileModal')" aria-label="Cerrar">✕</button></div><div class="cp-body">${tpBloquesSkills(tpSkillsDeFicha(c),{conNota:false})}<div class="u-d-flex u-gap-10 u-mt-16"><button class="btn btn-primary" onclick="closeM('profileModal');unlockContact('${escHtml(c.id)}')">${c._unlocked?'Ver contacto →':'Desbloquear contacto · 49 € →'}</button><button class="btn btn-outline" onclick="closeM('profileModal')">Cerrar</button></div></div></div>`;
+  document.getElementById('profileModal').classList.add('open');
+}
 
 // ═══ POST JOB ═══
 let pjExConfigVal='common+custom';
@@ -581,25 +591,26 @@ function toast(msg, tipo){
 function goTo(id){const el=document.getElementById(id);if(el){window.scrollTo({top:el.getBoundingClientRect().top+window.scrollY-70,behavior:'smooth'});}}
 function goHome(){closeDash('dashCandidate');closeDash('dashEmpresa');closeAdmin();closeAuth('authCandidate');closeAuth('authEmpresa');closeSettings('cand');closeSettings('emp');window.scrollTo({top:0,behavior:'smooth'});}
 
-// ═══ SETTINGS DRAWER ═══
-function openSettings(type){
-  const id=type==='cand'?'stDrawerCand':'stDrawerEmp';
-  const ov=type==='cand'?'stOverlayCand':'stOverlayEmp';
-  const d=document.getElementById(id);
-  const o=document.getElementById(ov);
-  if(d)d.classList.add('open');
-  if(o)o.classList.add('open');
-  if(type==='cand'){ updateStCandIncentives(); loadCandSettings(); }
-  else loadEmpSettings();
+// ═══ MENÚ LATERAL DE LOS PANELES ═══
+// Cada panel tiene un menú lateral (en móvil, una barra que se desplaza) y sus
+// páginas son los bloques [id^="candTab-"] / [id^="empTab-"]. Ajustes es una
+// página más: antes era un cajón que tapaba el panel.
+function tpPanelIr(panel,pagina){
+  const pref=panel==='cand'?'candTab-':'empTab-';
+  if(!document.getElementById(pref+pagina))return;
+  document.querySelectorAll('[id^="'+pref+'"]').forEach(c=>c.classList.toggle('active',c.id===pref+pagina));
+  const menu=document.getElementById(panel==='cand'?'candMenu':'empMenu');
+  if(menu)menu.querySelectorAll('.dash-menu-item').forEach(b=>{
+    if(b.dataset.tab===pagina){b.setAttribute('aria-current','page');b.scrollIntoView({block:'nearest',inline:'nearest'});}
+    else b.removeAttribute('aria-current');
+  });
+  const ov=document.getElementById(panel==='cand'?'dashCandidate':'dashEmpresa');
+  if(ov)ov.scrollTop=0;
+  if(pagina==='ajustes'){if(panel==='cand')loadCandSettings();else loadEmpSettings();}
 }
-function closeSettings(type){
-  const id=type==='cand'?'stDrawerCand':'stDrawerEmp';
-  const ov=type==='cand'?'stOverlayCand':'stOverlayEmp';
-  const d=document.getElementById(id);
-  const o=document.getElementById(ov);
-  if(d)d.classList.remove('open');
-  if(o)o.classList.remove('open');
-}
+// Ajustes ya no es un cajón: el botón del engranaje lleva a su página.
+function openSettings(type){tpPanelIr(type==='cand'?'cand':'emp','ajustes');}
+function closeSettings(_type){}
 function updateStCandIncentives(){
   // TalentPact es gratis para candidatos; no hay pago por retos
 }

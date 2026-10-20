@@ -19,3 +19,5 @@ node_modules/
 tfm/tech/build/*
 !tfm/tech/build/deployment-amoy.json
 !tfm/tech/build/deployment-sepolia.json
+!tfm/tech/build/deployment-base-sepolia.json
+!tfm/tech/build/deployment-base.json

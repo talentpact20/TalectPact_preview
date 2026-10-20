@@ -1,0 +1,998 @@
+[
+  {
+    "id": "common_python_data",
+    "title": "Python para datos",
+    "desc": "Limpia un conjunto de datos real con pandas, explica un análisis que da resultados raros y decide qué operaciones cambian los datos sin avisar.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un fichero de ventas que no cuadra",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás el resumen de un fichero de ventas cargado con pandas. Tendrás que explicar por qué los totales no cuadran con contabilidad.",
+        "sub": "Limpieza de datos — 9 min",
+        "skills": {
+          "hard": [
+            "pandas",
+            "Limpieza de datos"
+          ],
+          "soft": [
+            "Rigor"
+          ]
+        },
+        "scenario": "Has cargado con pandas el fichero de ventas del año (412.000 filas) para un informe. Tu total sale 1,9 millones de euros por encima de lo que dice contabilidad. Has sacado un resumen de las columnas.\n\nResponde en tres partes:\n\nA) Qué problemas de los datos explican la diferencia.\n\nB) Cómo los limpiarías con pandas, paso a paso.\n\nC) Cómo comprobarías que el total ya cuadra y qué dejarías documentado.",
+        "data": {
+          "headers": [
+            "Columna o hecho",
+            "Lo que ves",
+            "Detalle",
+            "Efecto",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Filas duplicadas",
+              "a": "11.340",
+              "b": "Mismo número de factura repetido",
+              "c": "Suma ventas dos veces",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "importe",
+              "a": "dtype object",
+              "b": "\"1.250,00\" y \"1250.00\" mezclados",
+              "c": "Algunos importes se leen ×100",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "fecha",
+              "a": "dtype object",
+              "b": "dd/mm y mm/dd mezclados",
+              "c": "Ventas en el mes equivocado",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Abonos",
+              "a": "2.100 filas",
+              "b": "Importes en positivo con tipo «abono»",
+              "c": "Se suman en vez de restarse",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "cliente",
+              "a": "0,4 % nulos",
+              "b": "Ventas de mostrador",
+              "c": "Sin efecto en el total",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con lo que muestra cada fila.",
+          "kw": [
+            "drop_duplicates",
+            "duplicados",
+            "to_numeric",
+            "separador decimal",
+            "to_datetime",
+            "dayfirst",
+            "abonos",
+            "signo",
+            "conciliar",
+            "validar el total",
+            "documentar"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Una media que engaña",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Explicarás a un responsable de negocio por qué un análisis hecho en Python le da una conclusión equivocada.",
+        "sub": "Análisis y comunicación — 10 min",
+        "skills": {
+          "hard": [
+            "Agregaciones",
+            "Análisis exploratorio"
+          ],
+          "soft": [
+            "Comunicación con negocio"
+          ]
+        },
+        "scenario": "La directora comercial te reenvía un análisis de un becario: con `df.groupby(\"comercial\")[\"importe\"].mean()` concluye que Pedro es el mejor vendedor (ticket medio de 9.800 €) y propone ponerle de ejemplo. Al revisarlo ves que Pedro tiene 4 ventas en el año y una de ellas es un contrato de 36.000 €; los demás tienen entre 180 y 260 ventas con tickets medios de 1.900 a 2.400 €.",
+        "data": {
+          "to": "Directora comercial",
+          "subject": "Sobre el análisis del mejor vendedor",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Por qué la media del ticket no sirve aquí para comparar vendedores, con las cifras del caso.\n\n2. Qué medidas usarías en su lugar (total vendido, número de ventas, mediana, margen) y por qué.\n\n3. El código o la tabla que enseñarías y cómo leerla.\n\n4. Qué conclusión se puede sacar y cuál no, sin desacreditar al becario.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "media",
+            "valor atípico",
+            "tamaño de la muestra",
+            "mediana",
+            "total",
+            "número de ventas",
+            "agg",
+            "margen",
+            "contexto",
+            "conclusión"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Cambia los datos sin avisar?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué operaciones de pandas pueden alterar los datos sin que te des cuenta.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "pandas"
+          ],
+          "soft": [
+            "Rigor"
+          ]
+        },
+        "scenario": "Clasifica cada operación de pandas:\n\nSegura — Hace lo que parece y no pierde ni inventa datos.\n\nRiesgo silencioso — Puede perder filas, duplicarlas o convertir valores sin dar ningún error.",
+        "data": {
+          "options": [
+            {
+              "id": "p1",
+              "text": "merge entre dos tablas cuando la clave está repetida en las dos",
+              "correct": "riesgo"
+            },
+            {
+              "id": "p2",
+              "text": "df.shape antes y después de cada paso de limpieza",
+              "correct": "segura"
+            },
+            {
+              "id": "p3",
+              "text": "pd.to_numeric(..., errors=\"coerce\") sin contar cuántos NaN aparecen",
+              "correct": "riesgo"
+            },
+            {
+              "id": "p4",
+              "text": "merge con validate=\"many_to_one\"",
+              "correct": "segura"
+            },
+            {
+              "id": "p5",
+              "text": "dropna() sobre todo el DataFrame para quitar nulos",
+              "correct": "riesgo"
+            },
+            {
+              "id": "p6",
+              "text": "Leer el CSV indicando dtype y el separador decimal",
+              "correct": "segura"
+            },
+            {
+              "id": "p7",
+              "text": "groupby sobre una columna con nulos sin dropna=False",
+              "correct": "riesgo"
+            },
+            {
+              "id": "p8",
+              "text": "Comprobar que la suma de importes coincide con el total de contabilidad",
+              "correct": "segura"
+            }
+          ],
+          "cats": [
+            "Segura",
+            "Riesgo silencioso"
+          ],
+          "keys": [
+            "segura",
+            "riesgo"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_powerbi",
+    "title": "Power BI",
+    "desc": "Arregla un informe de Power BI que da cifras distintas a contabilidad, diseña un cuadro de mando para dirección y elige la visualización adecuada para cada pregunta.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "El informe no da lo mismo que finanzas",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás un modelo de datos de Power BI con problemas. Tendrás que encontrar por qué las cifras no cuadran.",
+        "sub": "Modelo de datos — 9 min",
+        "skills": {
+          "hard": [
+            "Power BI",
+            "Modelado"
+          ],
+          "soft": [
+            "Rigor"
+          ]
+        },
+        "scenario": "El informe de ventas de Power BI dice que la empresa vendió 14,2 millones de euros el año pasado; finanzas dice 12,6. Has revisado el modelo de datos.\n\nResponde en tres partes:\n\nA) Qué elementos del modelo explican la diferencia.\n\nB) Cómo los corregirías (relaciones, medidas, filtros).\n\nC) Cómo validarías el informe con finanzas antes de publicarlo.",
+        "data": {
+          "headers": [
+            "Elemento",
+            "Cómo está",
+            "Detalle",
+            "Efecto",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Relación Ventas – Productos",
+              "a": "Muchos a muchos",
+              "b": "El código de producto se repite en la tabla de productos",
+              "c": "Ventas multiplicadas",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Tabla de fechas",
+              "a": "No existe",
+              "b": "Se usa la fecha de la tabla de ventas",
+              "c": "Comparaciones de periodos erróneas",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Medida Ventas",
+              "a": "SUM(Ventas[Importe])",
+              "b": "Incluye pedidos anulados",
+              "c": "Suma lo que no se cobró",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "IVA",
+              "a": "Importe con IVA",
+              "b": "Finanzas reporta sin IVA",
+              "c": "Diferencia del 21 % en parte",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Filtro de la página",
+              "a": "Año = 2025",
+              "b": "Correcto",
+              "c": "",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C explicando cada elemento de la tabla.",
+          "kw": [
+            "modelo en estrella",
+            "dimensión",
+            "relación uno a muchos",
+            "duplicados",
+            "tabla de calendario",
+            "CALCULATE",
+            "filtro",
+            "anulados",
+            "sin IVA",
+            "conciliar con finanzas"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Un cuadro de mando para el comité",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Propondrás el cuadro de mando que verá el comité de dirección cada lunes.",
+        "sub": "Diseño de informes — 10 min",
+        "skills": {
+          "hard": [
+            "Cuadros de mando",
+            "DAX"
+          ],
+          "soft": [
+            "Comunicación con negocio"
+          ]
+        },
+        "scenario": "El comité de dirección de una cadena de 40 tiendas de óptica recibe cada lunes un Excel de 12 pestañas que nadie lee entero. Quieren un único cuadro de mando en Power BI que se lea en cinco minutos. Les preocupan las ventas frente al objetivo, el margen, las tiendas que van mal y los pedidos de lentes que llegan tarde.",
+        "data": {
+          "to": "Comité de dirección",
+          "subject": "Propuesta del cuadro de mando de los lunes",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Los 4 o 5 indicadores que pondrías arriba, con su definición exacta (qué entra y qué no).\n\n2. Cómo se compara cada uno (con el objetivo, con el año anterior) y cómo se marca lo que va mal.\n\n3. Qué pasa al pulsar una tienda o un indicador (detalle) y qué permisos tiene cada persona.\n\n4. De dónde salen los datos, cada cuánto se actualizan y cómo sabrá el comité que son fiables.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "indicadores",
+            "definición",
+            "objetivo",
+            "año anterior",
+            "semáforo",
+            "margen",
+            "detalle",
+            "seguridad por filas",
+            "actualización",
+            "fuente única"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Qué gráfico responde a la pregunta?",
+        "type": "decision",
+        "timeLimit": 330,
+        "difficulty": "avanzado",
+        "briefing": "Elegirás el tipo de visualización adecuado para cada pregunta de negocio.",
+        "sub": "Clasificación — 6 min",
+        "skills": {
+          "hard": [
+            "Visualización de datos"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Coloca cada pregunta en la visualización que mejor la responde:\n\nLíneas — Evolución en el tiempo.\n\nBarras — Comparar categorías entre sí.\n\nTabla o tarjeta — Un dato exacto o pocos valores que hay que leer con precisión.",
+        "data": {
+          "options": [
+            {
+              "id": "v1",
+              "text": "¿Cómo han evolucionado las ventas mes a mes en los dos últimos años?",
+              "correct": "lineas"
+            },
+            {
+              "id": "v2",
+              "text": "¿Qué 10 tiendas venden más este trimestre?",
+              "correct": "barras"
+            },
+            {
+              "id": "v3",
+              "text": "¿Cuánto hemos facturado exactamente este mes?",
+              "correct": "tabla"
+            },
+            {
+              "id": "v4",
+              "text": "¿Cómo cambia el margen semana a semana desde el cambio de proveedor?",
+              "correct": "lineas"
+            },
+            {
+              "id": "v5",
+              "text": "¿Qué categoría de producto tiene más devoluciones?",
+              "correct": "barras"
+            },
+            {
+              "id": "v6",
+              "text": "¿Cuál es el número de pedido, el cliente y el importe de los 5 retrasos más graves?",
+              "correct": "tabla"
+            },
+            {
+              "id": "v7",
+              "text": "¿Las visitas a la web suben antes de las campañas?",
+              "correct": "lineas"
+            },
+            {
+              "id": "v8",
+              "text": "¿Qué región tiene el ticket medio más alto?",
+              "correct": "barras"
+            },
+            {
+              "id": "v9",
+              "text": "¿Hemos llegado al objetivo anual de ventas y en qué porcentaje?",
+              "correct": "tabla"
+            }
+          ],
+          "cats": [
+            "Líneas",
+            "Barras",
+            "Tabla o tarjeta"
+          ],
+          "keys": [
+            "lineas",
+            "barras",
+            "tabla"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_tableau",
+    "title": "Tableau",
+    "desc": "Encuentra el error en un análisis visual que engaña, prepara una historia de datos para un cliente y separa los gráficos honestos de los que manipulan.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un gráfico que cuenta otra historia",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás un panel de Tableau que ha llevado a una conclusión equivocada. Tendrás que explicar por qué.",
+        "sub": "Lectura crítica — 9 min",
+        "skills": {
+          "hard": [
+            "Tableau",
+            "Visualización"
+          ],
+          "soft": [
+            "Pensamiento crítico"
+          ]
+        },
+        "scenario": "Un panel de Tableau sobre la satisfacción de clientes de una aseguradora ha llegado al consejo con el titular «La satisfacción se ha disparado este año». El responsable de calidad no se lo cree. Has revisado cómo está construido cada gráfico.\n\nResponde en tres partes:\n\nA) Qué decisiones de diseño o de datos llevan a esa conclusión.\n\nB) Cómo rehacer el panel para que sea honesto.\n\nC) Qué titular pondrías con los datos reales.",
+        "data": {
+          "headers": [
+            "Gráfico",
+            "Cómo está hecho",
+            "Dato real",
+            "Efecto en quien lo lee",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Evolución de la satisfacción",
+              "a": "Eje vertical de 7,8 a 8,1",
+              "b": "Sube de 7,9 a 8,0",
+              "c": "Parece un salto enorme",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Respuestas por canal",
+              "a": "Solo la encuesta de la app",
+              "b": "La app la usa el 12 % de clientes, los más jóvenes",
+              "c": "Muestra no representativa",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Satisfacción por oficina",
+              "a": "Media de las medias de cada oficina",
+              "b": "Oficinas con 5 respuestas pesan igual que con 900",
+              "c": "Media distorsionada",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Mapa de reclamaciones",
+              "a": "Colores por número absoluto",
+              "b": "No se divide por clientes de cada provincia",
+              "c": "Destacan las provincias grandes",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Tiempo de respuesta",
+              "a": "Barras con eje desde 0",
+              "b": "Baja de 6 a 4 días",
+              "c": "Correcto",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C, gráfico por gráfico.",
+          "kw": [
+            "eje",
+            "escala",
+            "representativa",
+            "sesgo",
+            "ponderar",
+            "número de respuestas",
+            "tasa",
+            "normalizar",
+            "contexto",
+            "titular honesto"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Contar con datos a un cliente",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Prepararás la estructura de una presentación con datos para el cliente de una consultora.",
+        "sub": "Historia con datos — 10 min",
+        "skills": {
+          "hard": [
+            "Historias con datos"
+          ],
+          "soft": [
+            "Comunicación"
+          ]
+        },
+        "scenario": "Trabajas en una consultora. Un cliente, una cadena de gimnasios, ha perdido el 18 % de sus socios en un año. Tienes los datos: el 70 % de las bajas son de socios que fueron menos de 4 veces en su primer mes; las bajas se concentran en enero y febrero; los gimnasios con clases dirigidas pierden la mitad que los que no las tienen. La reunión con el director general dura 20 minutos.",
+        "data": {
+          "to": "Director del proyecto",
+          "subject": "Estructura de la presentación para el cliente",
+          "hint": "Propón la presentación en cuatro bloques:\n\n1. El mensaje principal en una frase y por qué ese.\n\n2. Los 3 o 4 gráficos que usarías, en qué orden y qué debe ver el cliente en cada uno.\n\n3. Qué datos dejarías fuera aunque sean interesantes, y por qué.\n\n4. La recomendación final y cómo propondrías medir si funciona.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "mensaje principal",
+            "primer mes",
+            "70 %",
+            "enero",
+            "clases dirigidas",
+            "un gráfico por idea",
+            "orden",
+            "recomendación",
+            "medir",
+            "acción"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Honesto o manipulador?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué decisiones de diseño de un gráfico son honestas.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Visualización de datos"
+          ],
+          "soft": [
+            "Ética"
+          ]
+        },
+        "scenario": "Clasifica cada decisión de diseño:\n\nHonesta — Ayuda a entender los datos tal como son.\n\nManipuladora — Exagera, oculta o distorsiona aunque los números sean ciertos.",
+        "data": {
+          "options": [
+            {
+              "id": "h1",
+              "text": "Empezar el eje de un gráfico de barras en 0",
+              "correct": "honesta"
+            },
+            {
+              "id": "h2",
+              "text": "Mostrar solo los meses en los que las ventas subieron",
+              "correct": "manipuladora"
+            },
+            {
+              "id": "h3",
+              "text": "Dividir las reclamaciones por el número de clientes de cada provincia",
+              "correct": "honesta"
+            },
+            {
+              "id": "h4",
+              "text": "Usar un gráfico 3D inclinado para que la porción propia parezca mayor",
+              "correct": "manipuladora"
+            },
+            {
+              "id": "h5",
+              "text": "Indicar cuántas respuestas hay detrás de cada media",
+              "correct": "honesta"
+            },
+            {
+              "id": "h6",
+              "text": "Comparar dos años con escalas distintas en dos gráficos lado a lado",
+              "correct": "manipuladora"
+            },
+            {
+              "id": "h7",
+              "text": "Marcar en el gráfico el día del cambio de precio",
+              "correct": "honesta"
+            },
+            {
+              "id": "h8",
+              "text": "Elegir colores rojos para el competidor y verdes para la propia marca con los mismos datos",
+              "correct": "manipuladora"
+            }
+          ],
+          "cats": [
+            "Honesta",
+            "Manipuladora"
+          ],
+          "keys": [
+            "honesta",
+            "manipuladora"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_bigdata",
+    "title": "Big Data",
+    "desc": "Encuentra por qué un proceso de datos masivo tarda horas, diseña un flujo de datos para una empresa que crece y decide qué tecnología encaja con cada volumen.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un proceso nocturno que no acaba",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás las métricas de un proceso de datos que ya no termina antes de que empiece la jornada.",
+        "sub": "Diagnóstico — 9 min",
+        "skills": {
+          "hard": [
+            "Procesamiento distribuido",
+            "Rendimiento"
+          ],
+          "soft": [
+            "Diagnóstico"
+          ]
+        },
+        "scenario": "Una operadora logística procesa cada noche los eventos de seguimiento de sus envíos (unos 900 millones de filas al día) con Spark. El proceso tardaba 2 horas y ahora tarda 7 y termina después de las 8:00, cuando los clientes ya consultan sus envíos.\n\nResponde en tres partes:\n\nA) Qué está frenando el proceso, con las cifras.\n\nB) Qué cambiarías en los datos y en el código.\n\nC) Cómo vigilarías que no vuelva a degradarse.",
+        "data": {
+          "headers": [
+            "Elemento",
+            "Valor",
+            "Detalle",
+            "Efecto",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Ficheros de entrada",
+              "a": "2,4 millones",
+              "b": "CSV de 30 KB cada uno",
+              "c": "Demasiados ficheros pequeños",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Partición más grande",
+              "a": "41 % de los datos",
+              "b": "Un solo cliente concentra los envíos",
+              "c": "Una tarea tarda 5 h; el resto 10 min",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Unión con la tabla de clientes",
+              "a": "Tabla de 8 MB",
+              "b": "Se reparte por la red en cada ejecución",
+              "c": "Movimiento de datos innecesario",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Columnas leídas",
+              "a": "Todas (64)",
+              "b": "El informe usa 9",
+              "c": "Se lee 7 veces más de lo necesario",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Recursos del clúster",
+              "a": "Uso medio 35 %",
+              "b": "",
+              "c": "No falta máquina",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": [
+            "ficheros pequeños",
+            "compactar",
+            "parquet",
+            "formato columnar",
+            "particionado",
+            "sesgo",
+            "salting",
+            "broadcast",
+            "leer solo las columnas",
+            "monitorizar duración"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "El flujo de datos de una empresa que crece",
+        "type": "email",
+        "timeLimit": 660,
+        "difficulty": "intermedio",
+        "briefing": "Propondrás cómo organizar los datos de una empresa que ha superado sus hojas de cálculo.",
+        "sub": "Arquitectura de datos — 11 min",
+        "skills": {
+          "hard": [
+            "Arquitectura de datos"
+          ],
+          "soft": [
+            "Comunicación técnica"
+          ]
+        },
+        "scenario": "Una plataforma de reparto a domicilio tiene datos en su base de datos de pedidos, en la app de los repartidores, en la herramienta de soporte y en Google Analytics. Cada departamento exporta a Excel y saca sus propias cifras: marketing dice 1,2 millones de pedidos al mes y operaciones 1,05. Quieren una única fuente de verdad y paneles que se actualicen cada hora.",
+        "data": {
+          "to": "Dirección de datos",
+          "subject": "Propuesta: una sola fuente de datos para toda la empresa",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Por qué cada departamento obtiene una cifra distinta y qué hay que definir antes de tocar la tecnología.\n\n2. El flujo que propones: cómo se extraen los datos de cada fuente, dónde se guardan y cómo se transforman.\n\n3. Cómo se garantiza la calidad (pruebas de datos, alertas) y quién es responsable de cada definición.\n\n4. Por dónde empezar, qué se entrega primero y cuánto cuesta aproximadamente.",
+          "minChars": 420,
+          "minWords": 70,
+          "kw": [
+            "definición de pedido",
+            "fuente de verdad",
+            "almacén de datos",
+            "lago de datos",
+            "ELT",
+            "transformaciones",
+            "pruebas de datos",
+            "linaje",
+            "responsable",
+            "por fases"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Hace falta Big Data?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás si cada caso necesita herramientas distribuidas o basta con algo sencillo.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Elección de tecnología"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada caso:\n\nBasta con algo sencillo — Una base de datos normal, una hoja de cálculo o un script en un ordenador.\n\nHace falta procesamiento distribuido — El volumen o la velocidad no caben en una sola máquina.",
+        "data": {
+          "options": [
+            {
+              "id": "b1",
+              "text": "Analizar 2 millones de ventas anuales de una cadena de tiendas",
+              "correct": "sencillo"
+            },
+            {
+              "id": "b2",
+              "text": "Procesar en tiempo real 400.000 eventos por segundo de sensores de una red eléctrica",
+              "correct": "distribuido"
+            },
+            {
+              "id": "b3",
+              "text": "Un informe mensual con 50.000 filas de un CRM",
+              "correct": "sencillo"
+            },
+            {
+              "id": "b4",
+              "text": "Entrenar sobre 30 TB de registros de navegación de varios años",
+              "correct": "distribuido"
+            },
+            {
+              "id": "b5",
+              "text": "Consultar el inventario de 15.000 productos",
+              "correct": "sencillo"
+            },
+            {
+              "id": "b6",
+              "text": "Unir cada noche 900 millones de eventos de seguimiento con sus envíos",
+              "correct": "distribuido"
+            },
+            {
+              "id": "b7",
+              "text": "Un panel con las encuestas de satisfacción de 3.000 clientes",
+              "correct": "sencillo"
+            },
+            {
+              "id": "b8",
+              "text": "Detectar fraude sobre todas las transacciones con tarjeta de un banco al momento",
+              "correct": "distribuido"
+            }
+          ],
+          "cats": [
+            "Basta con algo sencillo",
+            "Hace falta procesamiento distribuido"
+          ],
+          "keys": [
+            "sencillo",
+            "distribuido"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_statistics",
+    "title": "Estadística aplicada",
+    "desc": "Interpreta un experimento con su margen de error, explica a negocio por qué una correlación no prueba una causa y distingue conclusiones válidas de las que no lo son.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "¿Funciona la nueva página de pago?",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás los resultados de un experimento A/B. Tendrás que decir si la mejora es real.",
+        "sub": "Experimentos — 9 min",
+        "skills": {
+          "hard": [
+            "Contraste de hipótesis",
+            "Intervalos"
+          ],
+          "soft": [
+            "Pensamiento crítico"
+          ]
+        },
+        "scenario": "Una tienda online ha probado durante 10 días una nueva página de pago con la mitad de sus visitantes. El equipo de producto quiere lanzarla ya porque «convierte un 12 % más». Tienes los resultados.\n\nResponde en tres partes:\n\nA) Qué dicen de verdad los resultados.\n\nB) Qué problemas tiene el experimento.\n\nC) Qué harías antes de decidir y qué le dirías al equipo de producto.",
+        "data": {
+          "headers": [
+            "Medida",
+            "Página actual",
+            "Página nueva",
+            "Diferencia (intervalo 95 %)",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Visitantes",
+              "a": "4.120",
+              "b": "4.090",
+              "c": "",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Compras",
+              "a": "103",
+              "b": "114",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Tasa de conversión",
+              "a": "2,50 %",
+              "b": "2,79 %",
+              "c": "+0,29 pp (−0,40 a +0,98)",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Valor p",
+              "a": "",
+              "b": "",
+              "c": "0,41",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Duración",
+              "a": "10 días",
+              "b": "",
+              "c": "Incluye un solo fin de semana y una campaña de email",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": [
+            "mejora relativa",
+            "intervalo de confianza",
+            "incluye el cero",
+            "valor p",
+            "no significativo",
+            "tamaño de muestra",
+            "potencia",
+            "duración",
+            "estacionalidad",
+            "decidir antes"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Correlación no es causa",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Explicarás a dirección por qué un dato que parece obvio no justifica la inversión que proponen.",
+        "sub": "Comunicación — 10 min",
+        "skills": {
+          "hard": [
+            "Causalidad",
+            "Variables de confusión"
+          ],
+          "soft": [
+            "Comunicación con negocio"
+          ]
+        },
+        "scenario": "Recursos Humanos ha visto que los empleados que hacen el curso de liderazgo opcional ascienden el doble que el resto (24 % frente a 12 % en tres años) y propone hacerlo obligatorio para los 1.800 empleados, con un coste de 900.000 €. Sabes que el curso lo eligen sobre todo personas que ya tenían una evaluación de desempeño alta.",
+        "data": {
+          "to": "Directora de Recursos Humanos",
+          "subject": "Antes de hacer obligatorio el curso de liderazgo",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Qué dicen los datos y qué no dicen, con las cifras del caso.\n\n2. Qué otras explicaciones hay (quién se apunta al curso, evaluación previa) y por qué importan.\n\n3. Cómo se podría comprobar si el curso causa los ascensos (comparar con personas parecidas, piloto con grupos al azar).\n\n4. Qué recomiendas hacer ahora y cuánto cuesta comprobarlo frente a los 900.000 €.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "correlación",
+            "causalidad",
+            "autoselección",
+            "variable de confusión",
+            "evaluación previa",
+            "grupo de control",
+            "aleatorio",
+            "piloto",
+            "comparar",
+            "coste"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Conclusión válida o no?",
+        "type": "decision",
+        "timeLimit": 330,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué conclusiones se pueden sacar de cada resultado estadístico.",
+        "sub": "Clasificación — 6 min",
+        "skills": {
+          "hard": [
+            "Inferencia estadística"
+          ],
+          "soft": [
+            "Rigor"
+          ]
+        },
+        "scenario": "Un equipo de análisis presenta estas conclusiones en una reunión. Clasifica cada una:\n\nVálida — Se sigue de los datos que se describen.\n\nNo válida — Va más allá de lo que los datos permiten afirmar.",
+        "data": {
+          "options": [
+            {
+              "id": "c1",
+              "text": "Con un intervalo del 95 % de +2 a +6 puntos, «la mejora es positiva con bastante seguridad»",
+              "correct": "valida"
+            },
+            {
+              "id": "c2",
+              "text": "Con p = 0,30, «hemos demostrado que no hay ninguna diferencia»",
+              "correct": "no"
+            },
+            {
+              "id": "c3",
+              "text": "Con una encuesta a 40 clientes de una tienda, «el 70 % de todos nuestros clientes está satisfecho»",
+              "correct": "no"
+            },
+            {
+              "id": "c4",
+              "text": "En un experimento con asignación al azar, «el cambio ha causado la subida»",
+              "correct": "valida"
+            },
+            {
+              "id": "c5",
+              "text": "Las ventas de helados y los ahogamientos suben a la vez, «los helados provocan ahogamientos»",
+              "correct": "no"
+            },
+            {
+              "id": "c6",
+              "text": "Con 20 métricas probadas y una sola con p < 0,05, «esa métrica ha mejorado de verdad»",
+              "correct": "no"
+            },
+            {
+              "id": "c7",
+              "text": "Con la mediana del salario por debajo de la media, «hay salarios altos que tiran de la media»",
+              "correct": "valida"
+            },
+            {
+              "id": "c8",
+              "text": "Con un intervalo de −1 a +5 puntos, «no podemos afirmar todavía que haya mejora»",
+              "correct": "valida"
+            }
+          ],
+          "cats": [
+            "Válida",
+            "No válida"
+          ],
+          "keys": [
+            "valida",
+            "no"
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -12,13 +12,14 @@
  * desbloqueo de pago).
  */
 const { jsonResponse, sb, authUser, ensureProfileByUser, isUuid, faltaEnEsquema, esDuplicado, errorInterno } = require("../tp");
+const { limitar } = require("../limites");
 
+/** Respuestas en la misma posición que su dilema: una vacía se queda vacía, no corre las demás. */
 function limpiarRespuestasDilema(v) {
   if (!Array.isArray(v)) return [];
   return v
-    .map((x) => (typeof x === "string" ? x.trim().slice(0, 2000) : ""))
-    .filter(Boolean)
-    .slice(0, 3);
+    .slice(0, 3)
+    .map((x) => (typeof x === "string" ? x.trim().slice(0, 2000) : ""));
 }
 
 function aPostulacion(a) {
@@ -46,6 +47,9 @@ exports.handler = async (event) => {
     const perfil = await ensureProfileByUser(user.id);
 
     if (b.jobId != null) {
+      if (await limitar("apply:" + user.id, { max: 30, ventanaS: 3600 })) {
+        return jsonResponse(429, { error: "Te has postulado a muchas ofertas seguidas. Prueba dentro de un rato." });
+      }
       const jobId = String(b.jobId);
       if (!isUuid(jobId)) return jsonResponse(400, { error: "jobId no válido" });
       let jobs;
@@ -62,7 +66,7 @@ exports.handler = async (event) => {
         ? jobs[0].dilemmas.filter((x) => typeof x === "string" && x.trim()).slice(0, 3)
         : [];
       const respuestas = limpiarRespuestasDilema(b.dilemmaAnswers);
-      if (prompts.length && respuestas.length < prompts.length) {
+      if (respuestas.slice(0, prompts.length).filter(Boolean).length < prompts.length) {
         return jsonResponse(400, {
           error: "Responde los dilemas de la empresa antes de postularte (" + prompts.length + " en total)"
         });

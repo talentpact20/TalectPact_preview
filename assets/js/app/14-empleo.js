@@ -42,7 +42,7 @@ var TPEmpleo={
     const sinPrefs=!TPEmpleo.tiene();
     return `<div class="tp-filterbar"><label>Jornada <select onchange="TPEmpleo.filtro.jornada=this.value;renderJobMatches()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TPEmpleo.filtro.modalidad=this.value;renderJobMatches()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloEncaje?' checked':''}${sinPrefs?' disabled':''} onchange="TPEmpleo.filtro.soloEncaje=this.checked;renderJobMatches()"> Solo las que encajan con mis condiciones</label>${sinPrefs?`<button class="btn btn-outline btn-sm" onclick="TPEmpleo.abrirAjustes()">Indicar mis preferencias →</button>`:''}</div>`;
   },
-  abrirAjustes(){openSettings('cand');setTimeout(()=>{const s=document.getElementById('st-cand-empleo');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});},150);},
+  abrirAjustes(){if(typeof openDashCand==='function'&&!document.getElementById('dashCandidate').classList.contains('open'))openDashCand();openSettings('cand');setTimeout(()=>{const s=document.getElementById('st-cand-empleo');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});},150);},
   pintarAjustes(){
     const p=TPEmpleo.prefs();
     document.querySelectorAll('#st-cand-empleo .tp-chips').forEach(box=>{

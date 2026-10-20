@@ -19,6 +19,8 @@ const {
   puntuar, corregirDecision, corregirSecuencias
 } = require("../evaluator");
 const { retoComun, ejercicioComun } = require("../catalogo");
+const { limitar } = require("../limites");
+const { authUser } = require("../tp");
 
 // La corrección tarda ~17 s; Netlify corta a los 60 s. Sin límite, una API
 // lenta agotaba la función entera y el candidato perdía su respuesta sin aviso.
@@ -65,6 +67,8 @@ function enunciadoOficial(ex) {
       scenario: oficial.scenario,
       type: oficial.type,
       data: oficial.data || {},
+      // La rúbrica la fija el catálogo (p. ej. «tecnico_ia»); el navegador no la elige.
+      rubrica: oficial.rubrica || null,
       jobTitle: retoComun(ex.challengeId).title,
       sector: "Universal"
     })
@@ -94,7 +98,12 @@ async function evaluateRaw(body, apiKey, configuredModel) {
 
 // ─── Corrector v2 ────────────────────────────────────────────────────────────
 async function evaluateV2(event, body, apiKey, configuredModel) {
-  if (rateLimited("eval:" + clientIp(event))) {
+  // Cada corrección cuesta una llamada a la IA. Con sesión, el límite va por
+  // cuenta; sin ella, por IP y más estricto. Persistente (lib/limites.js).
+  let user = null;
+  try { user = await authUser(event, body); } catch (_e) { user = null; }
+  const clave = user ? "eval:u:" + user.id : "eval:ip:" + clientIp(event);
+  if (await limitar(clave, user ? { max: 60, ventanaS: 600 } : { max: 12, ventanaS: 600 })) {
     return jsonResponse(429, { error: "Demasiadas evaluaciones seguidas. Espera unos minutos." });
   }
   const oficial = enunciadoOficial(normalizeExercise(body.exercise));
@@ -311,7 +320,7 @@ function clampScore(value) {
 function jsonResponse(statusCode, payload) {
   return {
     statusCode,
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", "cache-control": "no-store", "x-content-type-options": "nosniff" },
     body: JSON.stringify(payload)
   };
 }

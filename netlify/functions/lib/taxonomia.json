@@ -525,6 +525,9 @@
     ],
     "Creatividad": [
       "05.4"
+    ],
+    "IA en el trabajo": [
+      "05.6"
     ]
   },
   "perfilesPuesto": [
@@ -687,7 +690,17 @@
     "Product Management": "tecnologia",
     "AutoCAD": "tecnologia",
     "Emprendimiento": "direccion",
-    "Excel y Datos": "tecnologia"
+    "Excel y Datos": "tecnologia",
+    "Python para IA": "tecnologia",
+    "Datos para ML": "tecnologia",
+    "Machine Learning": "tecnologia",
+    "LLM y Transformers": "tecnologia",
+    "APIs de LLM": "tecnologia",
+    "RAG": "tecnologia",
+    "Agentes de IA": "tecnologia",
+    "Evaluación de modelos": "tecnologia",
+    "MLOps y LLMOps": "tecnologia",
+    "Seguridad de IA": "tecnologia"
   },
   "areaConcretaDeSkill": {
     "Derecho Laboral": "Asesoría jurídica, riesgos y cumplimiento normativo",
@@ -774,7 +787,17 @@
     "UX Research": "Diseño y producto",
     "Product Design": "Diseño y producto",
     "Product Management": "Diseño y producto",
-    "AutoCAD": "Ingeniería e I+D"
+    "AutoCAD": "Ingeniería e I+D",
+    "Python para IA": "Ingeniería e I+D",
+    "Datos para ML": "Ingeniería e I+D",
+    "Machine Learning": "Ingeniería e I+D",
+    "LLM y Transformers": "Ingeniería e I+D",
+    "APIs de LLM": "Ingeniería e I+D",
+    "RAG": "Ingeniería e I+D",
+    "Agentes de IA": "Ingeniería e I+D",
+    "Evaluación de modelos": "Ingeniería e I+D",
+    "MLOps y LLMOps": "Ingeniería e I+D",
+    "Seguridad de IA": "Ingeniería e I+D"
   },
   "nombreSkill": {
     "Pensamiento Analítico": "Pensamiento analítico",
@@ -843,5 +866,169 @@
     "Cloud": "Cloud",
     "DevOps": "DevOps",
     "Lean": "Lean"
+  },
+  "ia": {
+    "nota": "Rama especial de IA (docs/plan_post_reunion/02_rama_ia.md). Competencias con el id del diccionario de IA v4.0; solo las que tienen nombre en el plan.",
+    "grupos": [
+      {
+        "id": "ia_tecnica",
+        "nombre": "Rama técnica de IA",
+        "corto": "Rama técnica",
+        "desc": "Para quien construye IA: datos, modelos, LLM, RAG, agentes, evaluación, operación y seguridad."
+      },
+      {
+        "id": "ia_trabajo",
+        "nombre": "IA en el trabajo",
+        "corto": "IA en el trabajo",
+        "desc": "Para cualquier puesto: usar la IA con criterio, verificar lo que produce y proteger los datos."
+      }
+    ],
+    "competencias": {
+      "01.01": "Python para IA",
+      "01.03": "Datos para machine learning",
+      "02.01": "Machine learning",
+      "02.02": "Deep learning",
+      "02.03": "Transformers y LLM",
+      "03.02": "APIs de LLM",
+      "03.03": "RAG y recuperación",
+      "03.04": "Agentes",
+      "04.01": "Evaluación de modelos",
+      "04.02": "Experimentación",
+      "04.03": "Fine-tuning",
+      "05.01": "Ingeniería de software para IA",
+      "05.02": "MLOps y LLMOps",
+      "05.04": "Inferencia y costes",
+      "06.01": "Seguridad de IA",
+      "06.03": "Privacidad"
+    },
+    "itinerarios": [
+      {
+        "id": "ingenieria_ml",
+        "nombre": "Ingeniería de IA / ML",
+        "competencias": [
+          "01.01",
+          "01.03",
+          "02.01",
+          "02.02",
+          "02.04",
+          "05.01",
+          "05.02",
+          "04.01"
+        ]
+      },
+      {
+        "id": "generativa",
+        "nombre": "IA generativa / LLM",
+        "competencias": [
+          "02.03",
+          "03.01",
+          "03.02",
+          "03.03",
+          "03.04",
+          "04.01",
+          "05.02",
+          "06.01"
+        ]
+      },
+      {
+        "id": "investigacion",
+        "nombre": "Investigación",
+        "competencias": [
+          "01.02",
+          "02.02",
+          "02.03",
+          "02.04",
+          "04.01",
+          "04.02",
+          "04.03",
+          "04.04"
+        ]
+      },
+      {
+        "id": "plataforma",
+        "nombre": "Plataforma e infraestructura",
+        "competencias": [
+          "03.02",
+          "05.01",
+          "05.02",
+          "05.03",
+          "05.04",
+          "05.05",
+          "06.01"
+        ]
+      },
+      {
+        "id": "seguridad",
+        "nombre": "Seguridad de IA",
+        "competencias": [
+          "03.04",
+          "04.01",
+          "06.01",
+          "06.02",
+          "06.03",
+          "05.02"
+        ]
+      },
+      {
+        "id": "aplicada",
+        "nombre": "IA aplicada en empresa",
+        "competencias": [
+          "01.03",
+          "03.01",
+          "03.02",
+          "03.03",
+          "03.05",
+          "04.01",
+          "05.01",
+          "06.03"
+        ]
+      }
+    ],
+    "skills": {
+      "Python para IA": {
+        "grupo": "ia_tecnica",
+        "competencia": "01.01"
+      },
+      "Datos para ML": {
+        "grupo": "ia_tecnica",
+        "competencia": "01.03"
+      },
+      "Machine Learning": {
+        "grupo": "ia_tecnica",
+        "competencia": "02.01"
+      },
+      "LLM y Transformers": {
+        "grupo": "ia_tecnica",
+        "competencia": "02.03"
+      },
+      "APIs de LLM": {
+        "grupo": "ia_tecnica",
+        "competencia": "03.02"
+      },
+      "RAG": {
+        "grupo": "ia_tecnica",
+        "competencia": "03.03"
+      },
+      "Agentes de IA": {
+        "grupo": "ia_tecnica",
+        "competencia": "03.04"
+      },
+      "Evaluación de modelos": {
+        "grupo": "ia_tecnica",
+        "competencia": "04.01"
+      },
+      "MLOps y LLMOps": {
+        "grupo": "ia_tecnica",
+        "competencia": "05.02"
+      },
+      "Seguridad de IA": {
+        "grupo": "ia_tecnica",
+        "competencia": "06.01"
+      },
+      "IA en el trabajo": {
+        "grupo": "ia_trabajo",
+        "competencia": "05.6"
+      }
+    }
   }
 }

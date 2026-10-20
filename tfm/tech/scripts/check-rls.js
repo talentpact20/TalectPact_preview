@@ -23,7 +23,12 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const RAIZ = path.join(__dirname, "..", "..", "..");
-const TABLAS = ["profiles", "evaluations", "credentials", "companies", "unlocks"];
+// Todas las tablas de tfm/tech/*.sql: ninguna debe dejarse leer ni escribir con la clave pública.
+const TABLAS = [
+  "profiles", "evaluations", "credentials", "companies", "unlocks", "jobs", "applications",
+  "notifications", "contact_access", "seal_payments", "anchor_batches", "attempts",
+  "attempt_requests", "rate_events"
+];
 const PROBE = process.argv.includes("--probe-write");
 
 // La URL y la clave pública viven en assets/js/app/04-estado-y-nube.js: son públicas por diseño.

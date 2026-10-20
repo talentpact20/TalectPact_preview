@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261019g">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261020d">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
@@ -98,25 +98,29 @@
 
 <!-- ═══ DASH CANDIDATO ═══ -->
 <div class="dash-overlay" id="dashCandidate" role="main" aria-label="Panel de candidato"><div class="dash-topbar"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" class="logo-a"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" class="logo-b"/><circle cx="16" cy="16" r="4" class="logo-c"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar u-bg-emerald-100 u-c-emerald-600" id="candAvatar">—</div><span id="candName">Mi perfil</span><button class="dash-gear-btn" onclick="logoutCand()" title="Cerrar sesión" aria-label="Cerrar sesión"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></button><button type="button" class="tp-tema-btn" onclick="tpCambiarTema()" aria-label="Cambiar tema"></button><button class="dash-gear-btn" onclick="openSettings('cand')" title="Ajustes" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="closeDash('dashCandidate')">Volver a la web</button></div></div>
-<div class="dash-body">
-  <div class="dash-stats">
-    <div class="dash-stat-card"><div class="dsc-val u-c-emerald-600" id="cDashCompleted">0</div><div class="dsc-lbl">Retos completados</div></div>
-    <div class="dash-stat-card"><div class="dsc-val u-c-blue-500" id="cDashScore">—</div><div class="dsc-lbl">Score medio</div></div>
-    <div class="dash-stat-card"><div class="dsc-val u-c-emerald-500" id="cDashRank">—</div><div class="dsc-lbl">Ranking</div></div>
-    <div class="dash-stat-card"><div class="dsc-val u-c-slate-600" id="cDashMatches">0</div><div class="dsc-lbl">Ofertas que encajan</div></div>
-  </div>
+<div class="dash-body dash-con-menu">
+  <nav class="dash-menu" id="candMenu" aria-label="Secciones del panel">
+    <button type="button" class="dash-menu-item" data-tab="profile" aria-current="page" onclick="tpPanelIr('cand','profile')">Mi perfil</button>
+    <button type="button" class="dash-menu-item" data-tab="common" onclick="tpPanelIr('cand','common')">Retos</button>
+    <button type="button" class="dash-menu-item" data-tab="matches" onclick="tpPanelIr('cand','matches')">Ofertas</button>
+    <button type="button" class="dash-menu-item" data-tab="ranking" onclick="tpPanelIr('cand','ranking')">Ranking</button>
+    <button type="button" class="dash-menu-item" data-tab="all" onclick="tpPanelIr('cand','all')">Explorar</button>
+    <div class="dash-menu-sep" role="separator"></div>
+    <button type="button" class="dash-menu-item" data-tab="ajustes" onclick="tpPanelIr('cand','ajustes')">Ajustes</button>
+    <button type="button" class="dash-menu-item" data-tab="support" onclick="tpPanelIr('cand','support')">Ayuda</button>
+  </nav>
+  <div class="dash-main">
+
   
-  <div class="dash-tabs" id="candDashTabs">
-    <button class="dash-tab active" onclick="switchCandTab('profile',this)">Mi Perfil</button>
-    <button class="dash-tab" onclick="switchCandTab('common',this)">Retos</button>
-    <button class="dash-tab" onclick="switchCandTab('ranking',this)">Ranking</button>
-    <button class="dash-tab" onclick="switchCandTab('matches',this)">Ofertas</button>
-    <button class="dash-tab" onclick="switchCandTab('all',this)">Explorar</button>
-    <button class="dash-tab" onclick="switchCandTab('support',this)">Soporte</button>
-  </div>
 
   <!-- TAB: Mi Perfil -->
   <div class="dash-tab-content active" id="candTab-profile">
+    <div class="dash-stats">
+    <div class="dash-stat-card"><div class="dsc-val u-c-emerald-600" id="cDashCompleted">0</div><div class="dsc-lbl">Retos completados</div></div>
+    <div class="dash-stat-card"><div class="dsc-val u-c-blue-500" id="cDashScore">—</div><div class="dsc-lbl">Skills en Bueno o más</div></div>
+    <div class="dash-stat-card"><div class="dsc-val u-c-emerald-500" id="cDashRank">—</div><div class="dsc-lbl">Ranking</div></div>
+    <div class="dash-stat-card"><div class="dsc-val u-c-slate-600" id="cDashMatches">0</div><div class="dsc-lbl">Ofertas que encajan</div></div>
+  </div>
     <div class="onboarding-bar" id="onboardingBar">
       <div class="ob-header"><h4>Completa tu perfil</h4><div class="ob-pct" id="obPct">0%</div></div>
       <div class="ob-track"><div class="ob-fill" id="obFill" style="width:0%"></div></div>
@@ -135,7 +139,7 @@
       <div class="sp-header">
         <div class="sp-avatar" id="spAvatar" aria-hidden="true">—</div>
         <div class="sp-info"><h3>Tu Perfil de Skills</h3><div class="sp-meta" id="spMeta">Completa retos para desbloquear skills</div></div>
-        <div class="sp-global-score"><div class="score-ring"><span class="ring-val" id="spGlobalScore">—</span></div><div class="ring-lbl">SCORE GLOBAL</div></div>
+        <div class="sp-global-score"><div class="score-ring"><span class="ring-val" id="spGlobalScore">—</span></div><div class="ring-lbl">SKILLS DEMOSTRADAS</div></div>
       </div>
       <div class="sp-skills" id="spSkillsGrid">
       </div>
@@ -244,205 +248,11 @@
     </div>
   </div>
 
-</div><!-- /dash-body --></div><!-- /dashCandidate -->
 
-<!-- ═══ DASH EMPRESA ═══ -->
-<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar u-bbc-slate-200"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" class="logo-a"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" class="logo-b"/><circle cx="16" cy="16" r="4" class="logo-c"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar u-bg-blue-100 u-c-blue-500" id="empAvatar">—</div><span id="empName">Empresa</span><button type="button" class="tp-tema-btn" onclick="tpCambiarTema()" aria-label="Cambiar tema"></button><button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="logoutEmp()">Cerrar sesión</button></div></div>
-
-<div class="dash-body">
-  <div id="empVerificacion"></div>
-  <!-- Estadísticas siempre visibles -->
-  <div class="dash-stats"><div class="dash-stat-card"><div class="dsc-val" id="empStatOffers">—</div><div class="dsc-lbl">Ofertas abiertas</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatPool">—</div><div class="dsc-lbl">Candidatos en el pool</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatTop">—</div><div class="dsc-lbl">Con nota media de 80 o más</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatUnlocks">—</div><div class="dsc-lbl">Contactos desbloqueados</div></div></div>
-
-    <!-- SUSCRIPCIÓN -->
-    <div class="dash-section">
-      <div class="dash-section-head">
-        <div class="dash-section-title">Plan de suscripción</div>
-        <span class="u-fs-micro u-c-slate-400">Plan actual: <strong class="u-c-blue-500">Free</strong></span>
-      </div>
-
-      <!-- Uso actual -->
-      <!-- Planes -->
-      <div class="emp-sub-wrap">
-
-        <!-- FREE -->
-        <div class="emp-sub-card current">
-          <div class="emp-sub-badge current-badge">Plan actual</div>
-          <div class="emp-sub-name">Free</div>
-          <div class="emp-sub-price">€0 <span>/ mes</span></div>
-          <div class="emp-sub-desc">Accede al pool y publica ofertas. Paga solo cuando contrates.</div>
-          <ul class="emp-sub-features">
-            <li>Ofertas ilimitadas</li>
-            <li>Pool completo de candidatos</li>
-            <li>Desbloqueo por contacto: <strong>€49</strong></li>
-            <li>Retos comunes de plataforma</li>
-            <li class="no">Contactos incluidos en mensual</li>
-            <li class="no">Retos a medida</li>
-            <li class="no">Soporte prioritario</li>
-          </ul>
-          <button class="emp-sub-btn active">Plan activo</button>
-        </div>
-
-        <!-- PRO -->
-        <div class="emp-sub-card popular">
-          <div class="emp-sub-badge">Más popular</div>
-          <div class="emp-sub-name">Pro</div>
-          <div class="emp-sub-price">€199 <span>/ mes</span></div>
-          <div class="emp-sub-desc">Para equipos de RRHH con contratación activa y recurrente.</div>
-          <ul class="emp-sub-features">
-            <li>Ofertas ilimitadas</li>
-            <li>Pool completo de candidatos</li>
-            <li><strong>5 contactos incluidos</strong>/mes</li>
-            <li>Desbloqueo adicional: €49/contacto</li>
-            <li>Retos comunes de plataforma</li>
-            <li>Analytics avanzado</li>
-            <li class="no">Soporte prioritario</li>
-          </ul>
-          <button class="emp-sub-btn cta" onclick="openContact('Plan Pro')">Activar Pro →</button>
-        </div>
-
-        <!-- ENTERPRISE -->
-        <div class="emp-sub-card">
-          <div class="emp-sub-name">Enterprise</div>
-          <div class="emp-sub-price">€499 <span>/ mes</span></div>
-          <div class="emp-sub-desc">Volumen alto de selección, retos a medida y soporte dedicado.</div>
-          <ul class="emp-sub-features">
-            <li>Ofertas ilimitadas</li>
-            <li>Pool completo de candidatos</li>
-            <li><strong>Contactos ilimitados</strong></li>
-            <li>Retos a medida: desde <strong>€299</strong>/vacante</li>
-            <li>Retos comunes de plataforma</li>
-            <li>Analytics avanzado + exportación</li>
-            <li>Soporte prioritario 24h</li>
-          </ul>
-          <button class="emp-sub-btn cta" onclick="openContact('Plan Enterprise')">Contratar Enterprise →</button>
-        </div>
-
-      </div>
-
-      <!-- Nota retos a medida -->
-      <p class="u-fs-micro u-c-slate-400 u-mt-10 u-ta-center">
-        ¿Necesitas retos diseñados a medida para una vacante específica? Disponibles desde <strong class="u-c-slate-600">€299/vacante</strong> en cualquier plan. <a href="mailto:hello@talentpact.io" class="u-c-blue-500">Contáctanos →</a>
-      </p>
-    </div>
-
-    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div>
-    <div id="postJobForm" style="display:none"><div class="post-job">
-      <div class="pj-cab"><div class="pj-title">Nueva oferta</div><div id="pjPasos"></div></div>
-
-      <div class="pj-doc" id="pjDoc">
-        <div class="pj-doc-txt"><strong>¿Ya tienes un documento con los requisitos del puesto?</strong><span>Súbelo y rellenamos la oferta por ti. Revisarás cada paso antes de publicar.</span></div>
-        <div class="pj-doc-acc">
-          <label class="btn btn-outline btn-sm pj-doc-btn">Subir documento<input type="file" id="pjDocFile" class="sr-only" accept=".pdf,.docx,.txt,.md" aria-label="Subir documento con los requisitos del puesto (PDF, Word o texto)" onchange="tpReqLeerArchivo(this)"></label>
-          <button type="button" class="pj-enlace" onclick="tpReqMostrarPegar()">o pega el texto</button>
-        </div>
-        <div class="pj-doc-pegar" id="pjDocPegar">
-          <label for="pjDocTexto" class="sr-only">Texto con los requisitos del puesto</label>
-          <textarea id="pjDocTexto" rows="5" maxlength="60000" placeholder="Pega aquí la descripción del puesto y sus requisitos"></textarea>
-          <button type="button" class="btn btn-primary btn-sm" onclick="tpReqLeerTexto()">Rellenar la oferta</button>
-        </div>
-        <div id="pjDocEstado" role="status" aria-live="polite"></div>
-      </div>
-
-      <section class="pj-paso activo" data-paso="1" aria-label="Paso 1: el puesto">
-        <div class="pj-grid">
-          <div class="pj-field pj-full"><label for="pj-title">Título del puesto</label><input type="text" id="pj-title" maxlength="120" placeholder="Ej.: Técnico de selección junior"></div>
-          <div class="pj-field"><label for="pj-sector">Área del puesto</label><select id="pj-sector" aria-label="Área del puesto" onchange="tpReqCambiarArea()"><option value="">Selecciona…</option><option value="juridica">Asesoría jurídica, riesgos y cumplimiento normativo</option><option value="direccion">Dirección, estrategia y consultoría</option><option value="finanzas">Finanzas</option><option value="marketing">Marketing, ventas y comunicación</option><option value="operaciones">Operaciones</option><option value="rrhh">Recursos humanos</option><option value="sanidad_educacion">Sanidad, educación e investigación</option><option value="sostenibilidad">Sostenibilidad</option><option value="tecnologia">Tecnología</option></select></div><div class="pj-field pj-oculto" id="pjEspField"><label for="pj-especialidad">Área concreta <span class="pj-cuenta">opcional</span></label><select id="pj-especialidad" aria-label="Área concreta del puesto"><option value="">Sin especificar</option></select></div>
-          <div class="pj-field pj-full"><label for="pj-desc">Qué hará la persona</label><textarea id="pj-desc" maxlength="4000" placeholder="Dos o tres frases sobre el día a día del puesto"></textarea></div>
-        </div>
-      </section>
-
-      <section class="pj-paso" data-paso="2" aria-label="Paso 2: qué tiene que demostrar">
-        <p class="pj-ayuda">Elige hasta 8 skills. Marca como <strong>imprescindibles</strong> las que no pueden faltar (hasta 4) y pon la banda mínima de cada una.</p>
-        <div id="pjReqLista"></div>
-        <div class="pj-field pj-full"><label for="pj-perfil">Tipo de puesto <span class="pj-cuenta">para sugerirte competencias</span></label><select id="pj-perfil" onchange="tpReqPintar()"><option value="">Sin especificar</option><option value="junior">Prácticas o junior</option><option value="especialista">Especialista</option><option value="proyecto">Project o product manager</option><option value="manager">Manager de equipos</option><option value="direccion">Dirección</option><option value="comercial">Comercial o atención al cliente</option></select></div>
-        <div id="pjReqSugeridas"></div>
-        <div class="pj-field pj-full"><label for="pjSkillSearch">Añadir otra skill</label><input type="text" id="pjSkillSearch" placeholder="Busca: negociación, contabilidad, SQL…" oninput="renderPjSkills()" autocomplete="off"><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
-        <details class="pj-plegable"><summary>Etiquetas técnicas libres <span class="pj-cuenta" id="pjCuentaTags">opcional</span></summary>
-          <p class="pj-ayuda">Herramientas o requisitos que no tienen reto (por ejemplo, SAP o carné de conducir). Se muestran en la oferta, pero no se comprueban.</p>
-          <input type="text" id="pj-skill-input" placeholder="Escribe y pulsa Enter" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div>
-        </details>
-      </section>
-
-      <section class="pj-paso" data-paso="3" aria-label="Paso 3: condiciones y extras">
-        <div class="pj-grid">
-          <div class="pj-field"><label for="pj-jornada">Jornada</label><select id="pj-jornada" aria-label="Tipo de jornada"><option value="completa">Jornada completa</option><option value="parcial">Media jornada</option><option value="horas">Por horas / flexible</option><option value="practicas">Prácticas</option></select></div>
-          <div class="pj-field"><label for="pj-mode">Modalidad</label><select id="pj-mode" aria-label="Modalidad de trabajo"><option value="remoto">Remoto</option><option value="hibrido">Híbrido</option><option value="presencial">Presencial</option></select></div>
-          <div class="pj-field"><label for="pj-contrato">Contrato</label><select id="pj-contrato" aria-label="Tipo de contrato"><option value="indefinido">Indefinido</option><option value="temporal">Temporal</option><option value="freelance">Freelance / autónomo</option><option value="practicas">Convenio de prácticas</option></select></div>
-          <div class="pj-field"><label for="pj-city">Ubicación</label><input type="text" id="pj-city" placeholder="Madrid (o vacío si es remoto)"></div>
-          <div class="pj-field"><label for="pj-sal-min">Salario mínimo (€/año)</label><input type="number" id="pj-sal-min" min="0" step="1000" inputmode="numeric" placeholder="22000"></div>
-          <div class="pj-field"><label for="pj-sal-max">Salario máximo (€/año)</label><input type="number" id="pj-sal-max" min="0" step="1000" inputmode="numeric" placeholder="28000"></div>
-        </div>
-        <details class="pj-plegable"><summary>Preguntas de la vacante <span class="pj-cuenta" id="pjCuentaQ">0 de 3</span></summary>
-          <p class="pj-ayuda">Para conocer al candidato (turnos, viajes, preferencias). No es un test de personalidad.</p>
-          <input class="search-bar" id="pj-q1" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Aceptas turnos de tarde 2 días/semana?">
-          <input class="search-bar" id="pj-q2" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Viajes 1 semana al mes te encajan?">
-          <input class="search-bar" id="pj-q3" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Disponibilidad para guardias ocasionales?">
-        </details>
-        <details class="pj-plegable"><summary>Dilemas del día a día <span class="pj-cuenta" id="pjCuentaD">0 de 3</span></summary>
-          <p class="pj-ayuda">Situaciones reales de <em>vuestra</em> empresa. El candidato las resuelve al postularse para que veáis cómo actuaría.</p>
-          <textarea class="search-bar" id="pj-d1" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: El cliente pide entregar el viernes algo que rompe el proceso de calidad. ¿Qué haces?"></textarea>
-          <textarea class="search-bar" id="pj-d2" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: Dos áreas pelean por el mismo recurso y tú decides."></textarea>
-          <textarea class="search-bar" id="pj-d3" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: Hay un rumor interno que afecta a un compañero; el equipo te mira."></textarea>
-        </details>
-        <details class="pj-plegable"><summary>Ejercicios de la oferta <span class="pj-cuenta">retos comunes + personalizados</span></summary>
-          <div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div>
-        </details>
-      </section>
-
-      <div class="pj-nav">
-        <button type="button" class="btn btn-outline" id="pjAtras" onclick="tpReqIr(TPReq.paso-1)">Atrás</button>
-        <button type="button" class="btn btn-outline" onclick="togglePostJob()">Cancelar</button>
-        <button type="button" class="btn btn-primary" id="pjSiguiente" onclick="tpReqIr(TPReq.paso+1)">Siguiente</button>
-        <button type="button" class="btn btn-primary" id="pjPublicar" onclick="publishJob()">Publicar oferta</button>
-      </div>
-    </div></div></div>
-
-    <div class="dash-section u-mt-8" id="empVerifySection">
-      <div class="dash-section-head">
-        <div class="dash-section-title">Verificar SkillPass</div>
-      </div>
-      <div class="emp-verify-box">
-        <p class="u-c-slate-600 u-fs-peq u-mb-12 u-lh-1_55">
-          Pega el JSON o el enlace que te ha enviado el candidato. En segundos ves si el sello de blockchain es auténtico — algo que LinkedIn no puede ofrecer.
-        </p>
-        <textarea id="empVerifyJson" rows="5" placeholder="Pega el JSON del SkillPass o un hash 0x…"></textarea>
-        <div class="u-d-flex u-gap-10 u-fw-wrap-wrap u-mt-10 u-ai-center">
-          <button type="button" class="btn btn-primary" id="empVerifyBtn" onclick="verifySkillPassAtCompany()">Verificar sello</button>
-          <a class="btn btn-outline btn-sm" href="verify.html" target="_blank" rel="noopener">Verificador público</a>
-        </div>
-        <div id="empVerifyStatus" style="display:none" class="u-mt-12 u-p-12-14 u-r-10 u-fs-peq u-lh-1_6"></div>
-        <div id="empVerifyCard"></div>
-      </div>
-    </div>
-
-    <div id="empInbox" class="u-mb-16" hidden></div>
-    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Mis ofertas</div></div><div id="empJobsList"></div></div>
-
-    <div class="dash-section" id="empOfferCandidatesSection" style="display:none">
-      <div class="dash-section-head"><div class="dash-section-title" id="empOfferCandTitle">Candidatos para: —</div><button class="btn btn-outline btn-sm" onclick="hideOfferCandidates()">← Volver a ofertas</button></div>
-      <p class="u-c-slate-500 u-fs-peq u-mb-16">Candidatos que encajan con esta oferta según sus skills verificados. Para ver su contacto real, desbloquea el perfil.</p>
-      <div id="empOfferCandList"></div>
-    </div>
-
-    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p class="u-c-slate-500 u-fs-peq u-mb-12">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
-
-</div><!-- /dash-body --></div><!-- /dashEmpresa -->
-
-<!-- ═══ SETTINGS DRAWER — CANDIDATO ═══ -->
-<div class="st-overlay" id="stOverlayCand" onclick="closeSettings('cand')"></div>
-<aside class="st-drawer" id="stDrawerCand" aria-label="Ajustes de candidato">
-  <div class="st-topbar">
-    <div class="st-topbar-left">
-      <div class="st-topbar-icon u-bg-emerald-50"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald-600)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-      <div>
-        <h2>Ajustes</h2>
-        <p id="stCandWho">Cuenta de candidato</p>
-      </div>
-    </div>
-    <button class="st-close" onclick="closeSettings('cand')">✕</button>
-  </div>
-  <div class="st-body">
+  <!-- TAB: Ajustes (antes era un cajón lateral) -->
+  <div class="dash-tab-content" id="candTab-ajustes">
+    <div class="dash-pagina-cab"><h2>Ajustes</h2><p id="stCandWho">Cuenta de candidato</p></div>
+    <div class="st-body st-pagina">
 
     <!-- DATOS PERSONALES — se leen y se guardan en Supabase -->
     <div class="st-section">
@@ -568,22 +378,225 @@
     </div>
 
   </div>
-</aside>
+  </div>
+  </div><!-- /dash-main -->
+</div><!-- /dash-body --></div><!-- /dashCandidate -->
 
-<!-- ═══ SETTINGS DRAWER — EMPRESA ═══ -->
-<div class="st-overlay" id="stOverlayEmp" onclick="closeSettings('emp')"></div>
-<aside class="st-drawer" id="stDrawerEmp" aria-label="Ajustes de empresa">
-  <div class="st-topbar">
-    <div class="st-topbar-left">
-      <div class="st-topbar-icon u-bg-blue-50"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue-500)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
-      <div>
-        <h2>Ajustes</h2>
-        <p id="stEmpWho">Cuenta de empresa</p>
+<!-- ═══ DASH EMPRESA ═══ -->
+<div class="dash-overlay" id="dashEmpresa" role="main" aria-label="Panel de empresa"><div class="dash-topbar u-bbc-slate-200"><div class="logo" onclick="goHome()"><div class="logo-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M8 6C8 4.9 8.9 4 10 4h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V6z" class="logo-a"/><path d="M17 14c0-1.1.9-2 2-2h5c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2h-5c-1.1 0-2-.9-2-2V14z" class="logo-b"/><circle cx="16" cy="16" r="4" class="logo-c"/></svg></div><div class="logo-text">talent<span>pact</span></div></div><div class="dash-user"><div class="dash-avatar u-bg-blue-100 u-c-blue-500" id="empAvatar">—</div><span id="empName">Empresa</span><button type="button" class="tp-tema-btn" onclick="tpCambiarTema()" aria-label="Cambiar tema"></button><button class="dash-gear-btn" onclick="openSettings('emp')" title="Ajustes" aria-label="Ajustes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn btn-ghost btn-sm" onclick="logoutEmp()">Cerrar sesión</button></div></div>
+
+<div class="dash-body dash-con-menu">
+  <nav class="dash-menu" id="empMenu" aria-label="Secciones del panel">
+    <button type="button" class="dash-menu-item" data-tab="resumen" aria-current="page" onclick="tpPanelIr('emp','resumen')">Resumen</button>
+    <button type="button" class="dash-menu-item" data-tab="ofertas" onclick="tpPanelIr('emp','ofertas')">Ofertas</button>
+    <button type="button" class="dash-menu-item" data-tab="talento" onclick="tpPanelIr('emp','talento')">Talento</button>
+    <button type="button" class="dash-menu-item" data-tab="verificar" onclick="tpPanelIr('emp','verificar')">Verificar credencial</button>
+    <button type="button" class="dash-menu-item" data-tab="plan" onclick="tpPanelIr('emp','plan')">Plan</button>
+    <div class="dash-menu-sep" role="separator"></div>
+    <button type="button" class="dash-menu-item" data-tab="ajustes" onclick="tpPanelIr('emp','ajustes')">Ajustes</button>
+  </nav>
+  <div class="dash-main">
+
+    <!-- Resumen -->
+    <div class="dash-tab-content active" id="empTab-resumen">
+  <div id="empVerificacion"></div>
+  <!-- Estadísticas siempre visibles -->
+  <div class="dash-stats"><div class="dash-stat-card"><div class="dsc-val" id="empStatOffers">—</div><div class="dsc-lbl">Ofertas abiertas</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatPool">—</div><div class="dsc-lbl">Candidatos en el pool</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatTop">—</div><div class="dsc-lbl">Con alguna skill en «Muy bueno»</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatUnlocks">—</div><div class="dsc-lbl">Contactos desbloqueados</div></div></div>
+    <div id="empInbox" class="u-mb-16" hidden></div>
+      <div class="dash-accesos" role="group" aria-label="Accesos rápidos">
+        <button type="button" class="dash-acceso" onclick="togglePostJob()"><b>Publicar una oferta</b><span>Tres pasos; puedes rellenarla desde tu documento.</span></button>
+        <button type="button" class="dash-acceso" onclick="tpPanelIr('emp','talento')"><b>Buscar talento</b><span>Perfiles anónimos con skills demostradas.</span></button>
+        <button type="button" class="dash-acceso" onclick="tpPanelIr('emp','verificar')"><b>Verificar una credencial</b><span>Comprueba un SkillPass en segundos, gratis.</span></button>
       </div>
     </div>
-    <button class="st-close" onclick="closeSettings('emp')">✕</button>
-  </div>
-  <div class="st-body">
+
+    <!-- Ofertas: publicar, las mías y sus candidatos -->
+    <div class="dash-tab-content" id="empTab-ofertas">
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div>
+    <div id="postJobForm" style="display:none"><div class="post-job">
+      <div class="pj-cab"><div class="pj-title">Nueva oferta</div><div id="pjPasos"></div></div>
+
+      <div class="pj-doc" id="pjDoc">
+        <div class="pj-doc-txt"><strong>¿Ya tienes un documento con los requisitos del puesto?</strong><span>Súbelo y rellenamos la oferta por ti. Revisarás cada paso antes de publicar.</span></div>
+        <div class="pj-doc-acc">
+          <label class="btn btn-outline btn-sm pj-doc-btn">Subir documento<input type="file" id="pjDocFile" class="sr-only" accept=".pdf,.docx,.txt,.md" aria-label="Subir documento con los requisitos del puesto (PDF, Word o texto)" onchange="tpReqLeerArchivo(this)"></label>
+          <button type="button" class="pj-enlace" onclick="tpReqMostrarPegar()">o pega el texto</button>
+        </div>
+        <div class="pj-doc-pegar" id="pjDocPegar">
+          <label for="pjDocTexto" class="sr-only">Texto con los requisitos del puesto</label>
+          <textarea id="pjDocTexto" rows="5" maxlength="60000" placeholder="Pega aquí la descripción del puesto y sus requisitos"></textarea>
+          <button type="button" class="btn btn-primary btn-sm" onclick="tpReqLeerTexto()">Rellenar la oferta</button>
+        </div>
+        <div id="pjDocEstado" role="status" aria-live="polite"></div>
+      </div>
+
+      <section class="pj-paso activo" data-paso="1" aria-label="Paso 1: el puesto">
+        <div class="pj-grid">
+          <div class="pj-field pj-full"><label for="pj-title">Título del puesto</label><input type="text" id="pj-title" maxlength="120" placeholder="Ej.: Técnico de selección junior"></div>
+          <div class="pj-field"><label for="pj-sector">Área del puesto</label><select id="pj-sector" aria-label="Área del puesto" onchange="tpReqCambiarArea()"><option value="">Selecciona…</option><option value="juridica">Asesoría jurídica, riesgos y cumplimiento normativo</option><option value="direccion">Dirección, estrategia y consultoría</option><option value="finanzas">Finanzas</option><option value="marketing">Marketing, ventas y comunicación</option><option value="operaciones">Operaciones</option><option value="rrhh">Recursos humanos</option><option value="sanidad_educacion">Sanidad, educación e investigación</option><option value="sostenibilidad">Sostenibilidad</option><option value="tecnologia">Tecnología</option></select></div><div class="pj-field pj-oculto" id="pjEspField"><label for="pj-especialidad">Área concreta <span class="pj-cuenta">opcional</span></label><select id="pj-especialidad" aria-label="Área concreta del puesto"><option value="">Sin especificar</option></select></div>
+          <div class="pj-field pj-full"><label for="pj-desc">Qué hará la persona</label><textarea id="pj-desc" maxlength="4000" placeholder="Dos o tres frases sobre el día a día del puesto"></textarea></div>
+        </div>
+      </section>
+
+      <section class="pj-paso" data-paso="2" aria-label="Paso 2: qué tiene que demostrar">
+        <p class="pj-ayuda">Elige hasta 8 skills. Marca como <strong>imprescindibles</strong> las que no pueden faltar (hasta 4) y pon la banda mínima de cada una.</p>
+        <div id="pjReqLista"></div>
+        <div class="pj-field pj-full"><label for="pj-perfil">Tipo de puesto <span class="pj-cuenta">para sugerirte competencias</span></label><select id="pj-perfil" onchange="tpReqPintar()"><option value="">Sin especificar</option><option value="junior">Prácticas o junior</option><option value="especialista">Especialista</option><option value="proyecto">Project o product manager</option><option value="manager">Manager de equipos</option><option value="direccion">Dirección</option><option value="comercial">Comercial o atención al cliente</option></select></div>
+        <div id="pjReqSugeridas"></div>
+        <div class="pj-field pj-full"><label for="pjSkillSearch">Añadir otra skill</label><input type="text" id="pjSkillSearch" placeholder="Busca: negociación, contabilidad, SQL…" oninput="renderPjSkills()" autocomplete="off"><div class="pj-req-skills-grid" id="pjRequiredSkills"></div></div>
+        <details class="pj-plegable"><summary>Etiquetas técnicas libres <span class="pj-cuenta" id="pjCuentaTags">opcional</span></summary>
+          <p class="pj-ayuda">Herramientas o requisitos que no tienen reto (por ejemplo, SAP o carné de conducir). Se muestran en la oferta, pero no se comprueban.</p>
+          <input type="text" id="pj-skill-input" placeholder="Escribe y pulsa Enter" onkeydown="if(event.key==='Enter'){event.preventDefault();addSkill()}"><div class="pj-tags" id="pj-skills-list"></div>
+        </details>
+      </section>
+
+      <section class="pj-paso" data-paso="3" aria-label="Paso 3: condiciones y extras">
+        <div class="pj-grid">
+          <div class="pj-field"><label for="pj-jornada">Jornada</label><select id="pj-jornada" aria-label="Tipo de jornada"><option value="completa">Jornada completa</option><option value="parcial">Media jornada</option><option value="horas">Por horas / flexible</option><option value="practicas">Prácticas</option></select></div>
+          <div class="pj-field"><label for="pj-mode">Modalidad</label><select id="pj-mode" aria-label="Modalidad de trabajo"><option value="remoto">Remoto</option><option value="hibrido">Híbrido</option><option value="presencial">Presencial</option></select></div>
+          <div class="pj-field"><label for="pj-contrato">Contrato</label><select id="pj-contrato" aria-label="Tipo de contrato"><option value="indefinido">Indefinido</option><option value="temporal">Temporal</option><option value="freelance">Freelance / autónomo</option><option value="practicas">Convenio de prácticas</option></select></div>
+          <div class="pj-field"><label for="pj-city">Ubicación</label><input type="text" id="pj-city" placeholder="Madrid (o vacío si es remoto)"></div>
+          <div class="pj-field"><label for="pj-sal-min">Salario mínimo (€/año)</label><input type="number" id="pj-sal-min" min="0" step="1000" inputmode="numeric" placeholder="22000"></div>
+          <div class="pj-field"><label for="pj-sal-max">Salario máximo (€/año)</label><input type="number" id="pj-sal-max" min="0" step="1000" inputmode="numeric" placeholder="28000"></div>
+        </div>
+        <details class="pj-plegable"><summary>Preguntas de la vacante <span class="pj-cuenta" id="pjCuentaQ">0 de 3</span></summary>
+          <p class="pj-ayuda">Para conocer al candidato (turnos, viajes, preferencias). No es un test de personalidad.</p>
+          <input class="search-bar" id="pj-q1" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Aceptas turnos de tarde 2 días/semana?">
+          <input class="search-bar" id="pj-q2" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Viajes 1 semana al mes te encajan?">
+          <input class="search-bar" id="pj-q3" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Disponibilidad para guardias ocasionales?">
+        </details>
+        <details class="pj-plegable"><summary>Dilemas del día a día <span class="pj-cuenta" id="pjCuentaD">0 de 3</span></summary>
+          <p class="pj-ayuda">Situaciones reales de <em>vuestra</em> empresa. El candidato las resuelve al postularse para que veáis cómo actuaría.</p>
+          <textarea class="search-bar" id="pj-d1" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: El cliente pide entregar el viernes algo que rompe el proceso de calidad. ¿Qué haces?"></textarea>
+          <textarea class="search-bar" id="pj-d2" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: Dos áreas pelean por el mismo recurso y tú decides."></textarea>
+          <textarea class="search-bar" id="pj-d3" rows="2" maxlength="600" oninput="tpReqContar()" placeholder="Ej.: Hay un rumor interno que afecta a un compañero; el equipo te mira."></textarea>
+        </details>
+        <details class="pj-plegable"><summary>Ejercicios de la oferta <span class="pj-cuenta">retos comunes + personalizados</span></summary>
+          <div class="ex-config-options" id="pjExConfig"><div class="ex-config-opt selected" onclick="selectExConfig('common+custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Retos comunes + personalizados</h5><p>Usa los retos universales de TalentPact más tus propios ejercicios personalizados. Sin coste adicional.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('custom',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Solo retos personalizados</h5><p>Crea tus propios ejercicios específicos para este puesto. Tú defines los escenarios y criterios.</p></div></div><div class="ex-config-opt" onclick="selectExConfig('contact',this)"><div class="eco-radio"></div><div class="eco-text"><h5>Ejercicios diseñados a medida por TalentPact</h5><p>Nuestro equipo diseña ejercicios exclusivos para tu vacante. Incluye simulaciones con IA, entrevistas por voz y casos reales de tu sector. <strong>Desde €299/vacante.</strong></p></div></div></div>
+        </details>
+      </section>
+
+      <div class="pj-nav">
+        <button type="button" class="btn btn-outline" id="pjAtras" onclick="tpReqIr(TPReq.paso-1)">Atrás</button>
+        <button type="button" class="btn btn-outline" onclick="togglePostJob()">Cancelar</button>
+        <button type="button" class="btn btn-primary" id="pjSiguiente" onclick="tpReqIr(TPReq.paso+1)">Siguiente</button>
+        <button type="button" class="btn btn-primary" id="pjPublicar" onclick="publishJob()">Publicar oferta</button>
+      </div>
+    </div></div></div>
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Mis ofertas</div></div><div id="empJobsList"></div></div>
+    <div class="dash-section" id="empOfferCandidatesSection" style="display:none">
+      <div class="dash-section-head"><div class="dash-section-title" id="empOfferCandTitle">Candidatos para: —</div><button class="btn btn-outline btn-sm" onclick="hideOfferCandidates()">← Volver a ofertas</button></div>
+      <p class="u-c-slate-500 u-fs-peq u-mb-16">Candidatos que encajan con esta oferta según sus skills verificados. Para ver su contacto real, desbloquea el perfil.</p>
+      <div id="empOfferCandList"></div>
+    </div>
+    </div>
+
+    <!-- Pool de talento -->
+    <div class="dash-tab-content" id="empTab-talento">
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p class="u-c-slate-500 u-fs-peq u-mb-12">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
+    </div>
+
+    <!-- Verificar credencial -->
+    <div class="dash-tab-content" id="empTab-verificar">
+    <div class="dash-section" id="empVerifySection">
+      <div class="dash-section-head">
+        <div class="dash-section-title">Verificar credencial</div>
+      </div>
+      <div class="emp-verify-box">
+        <p class="u-c-slate-600 u-fs-peq u-mb-12 u-lh-1_55">
+          Pega el enlace o el código del SkillPass que te ha pasado el candidato, o sube su archivo .json. Verás si es válido, si ha caducado, si se ha revocado o si alguien lo ha modificado. Verificar es siempre gratis.
+        </p>
+        <label class="sr-only" for="empVerifyJson">Enlace, código o JSON del SkillPass</label>
+        <textarea id="empVerifyJson" rows="4" placeholder="https://talentpact.es/verify.html?c=…  ·  el código  ·  o el JSON"></textarea>
+        <div class="u-d-flex u-gap-10 u-fw-wrap-wrap u-mt-10 u-ai-center">
+          <button type="button" class="btn btn-primary" id="empVerifyBtn" onclick="TPVerificar.ejecutar('empVerifyJson','empVerifyCard','empVerifyBtn')">Verificar</button>
+          <label class="vf-subir">Subir .json <input type="file" accept="application/json,.json" onchange="TPVerificar.leerArchivo(this,'empVerifyJson','empVerifyCard','empVerifyBtn')"></label>
+          <a class="btn btn-outline btn-sm" href="verify.html" target="_blank" rel="noopener">Verificador público</a>
+        </div>
+        <div id="empVerifyCard" class="u-mt-12" hidden aria-live="polite"></div>
+      </div>
+    </div>
+    </div>
+
+    <!-- Plan de suscripción -->
+    <div class="dash-tab-content" id="empTab-plan">
+    <!-- SUSCRIPCIÓN -->
+    <div class="dash-section">
+      <div class="dash-section-head">
+        <div class="dash-section-title">Plan de suscripción</div>
+        <span class="u-fs-micro u-c-slate-400">Plan actual: <strong class="u-c-blue-500">Free</strong></span>
+      </div>
+
+      <!-- Uso actual -->
+      <!-- Planes -->
+      <div class="emp-sub-wrap">
+
+        <!-- FREE -->
+        <div class="emp-sub-card current">
+          <div class="emp-sub-badge current-badge">Plan actual</div>
+          <div class="emp-sub-name">Free</div>
+          <div class="emp-sub-price">€0 <span>/ mes</span></div>
+          <div class="emp-sub-desc">Accede al pool y publica ofertas. Paga solo cuando contrates.</div>
+          <ul class="emp-sub-features">
+            <li>Ofertas ilimitadas</li>
+            <li>Pool completo de candidatos</li>
+            <li>Desbloqueo por contacto: <strong>€49</strong></li>
+            <li>Retos comunes de plataforma</li>
+            <li class="no">Contactos incluidos en mensual</li>
+            <li class="no">Retos a medida</li>
+            <li class="no">Soporte prioritario</li>
+          </ul>
+          <button class="emp-sub-btn active">Plan activo</button>
+        </div>
+
+        <!-- PRO -->
+        <div class="emp-sub-card popular">
+          <div class="emp-sub-badge">Más popular</div>
+          <div class="emp-sub-name">Pro</div>
+          <div class="emp-sub-price">€199 <span>/ mes</span></div>
+          <div class="emp-sub-desc">Para equipos de RRHH con contratación activa y recurrente.</div>
+          <ul class="emp-sub-features">
+            <li>Ofertas ilimitadas</li>
+            <li>Pool completo de candidatos</li>
+            <li><strong>5 contactos incluidos</strong>/mes</li>
+            <li>Desbloqueo adicional: €49/contacto</li>
+            <li>Retos comunes de plataforma</li>
+            <li>Analytics avanzado</li>
+            <li class="no">Soporte prioritario</li>
+          </ul>
+          <button class="emp-sub-btn cta" onclick="openContact('Plan Pro')">Activar Pro →</button>
+        </div>
+
+        <!-- ENTERPRISE -->
+        <div class="emp-sub-card">
+          <div class="emp-sub-name">Enterprise</div>
+          <div class="emp-sub-price">€499 <span>/ mes</span></div>
+          <div class="emp-sub-desc">Volumen alto de selección, retos a medida y soporte dedicado.</div>
+          <ul class="emp-sub-features">
+            <li>Ofertas ilimitadas</li>
+            <li>Pool completo de candidatos</li>
+            <li><strong>Contactos ilimitados</strong></li>
+            <li>Retos a medida: desde <strong>€299</strong>/vacante</li>
+            <li>Retos comunes de plataforma</li>
+            <li>Analytics avanzado + exportación</li>
+            <li>Soporte prioritario 24h</li>
+          </ul>
+          <button class="emp-sub-btn cta" onclick="openContact('Plan Enterprise')">Contratar Enterprise →</button>
+        </div>
+
+      </div>
+
+      <!-- Nota retos a medida -->
+      <p class="u-fs-micro u-c-slate-400 u-mt-10 u-ta-center">
+        ¿Necesitas retos diseñados a medida para una vacante específica? Disponibles desde <strong class="u-c-slate-600">€299/vacante</strong> en cualquier plan. <a href="mailto:hello@talentpact.io" class="u-c-blue-500">Contáctanos →</a>
+      </p>
+    </div>
+    </div>
+
+    <!-- Ajustes (antes era un cajón lateral) -->
+    <div class="dash-tab-content" id="empTab-ajustes">
+      <div class="dash-pagina-cab"><h2>Ajustes</h2><p id="stEmpWho">Cuenta de empresa</p></div>
+      <div class="st-body st-pagina">
 
     <!-- PERFIL DE EMPRESA — se guarda en la cuenta de Supabase -->
     <div class="st-section">
@@ -710,7 +723,13 @@
     </div>
 
   </div>
-</aside>
+    </div>
+  </div><!-- /dash-main -->
+</div><!-- /dash-body --></div><!-- /dashEmpresa -->
+
+
+
+
 
 <!-- ═══ PROFILE MODAL ═══ -->
 <div class="modal-overlay" id="profileModal" role="dialog" aria-modal="true" aria-label="Perfil de candidato"><div class="job-modal u-maxw-580"><div id="profileContent"></div></div></div>
@@ -776,8 +795,8 @@
   <div class="sp-sec-inner">
     <div class="reveal">
       <div class="section-label">Credencial verificable</div>
-      <h2 class="section-title display">Un CV que <span class="gradient-text">nadie puede retocar.</span></h2>
-      <p class="section-desc">Un PDF se edita en dos minutos y un perfil de LinkedIn lo escribe uno mismo. Cuando superas un reto en TalentPact, el resultado se sella criptográficamente y su huella queda anclada en blockchain: cualquier empresa comprueba en segundos que es auténtico — sin llamarte, sin creerte y sin cuenta en TalentPact.</p>
+      <h2 class="section-title display">Habilidades demostradas <span class="gradient-text">y verificables.</span></h2>
+      <p class="section-desc">Un PDF se edita en dos minutos y un perfil de LinkedIn lo escribe uno mismo. Tu SkillPass recoge lo que has demostrado en retos reales y va firmado digitalmente por TalentPact: cualquier empresa comprueba en segundos que es auténtico, sin llamarte y sin cuenta en TalentPact.</p>
     </div>
 
     <div class="sp-sec-grid reveal d1">
@@ -785,29 +804,29 @@
         <li>
           <span class="sp-step-n">1</span>
           <div>
-            <h3>La IA evalúa tu reto</h3>
-            <p>Cada skill recibe una puntuación con feedback criterio a criterio. El razonamiento queda registrado, así que la nota se puede auditar.</p>
+            <h3>Demuestras una skill</h3>
+            <p>Cada reto se corrige con una rúbrica y queda en una banda (Aceptable, Bueno, Muy bueno). El razonamiento queda registrado, así que la nota se puede auditar.</p>
           </div>
         </li>
         <li>
           <span class="sp-step-n">2</span>
           <div>
-            <h3>Tu SkillPass genera una huella</h3>
-            <p>Se compone un CV en JSON con tu mejor resultado por skill y se calcula su <code>keccak256</code>. Cambia un solo punto de una nota y la huella cambia entera.</p>
+            <h3>TalentPact firma tu SkillPass</h3>
+            <p>Es una credencial verificable con el estándar europeo (W3C VC 2.0): tus skills con su banda y su fecha, firmadas con nuestra clave. No lleva tu nombre ni tu email, y caduca a los 12 meses.</p>
           </div>
         </li>
         <li>
           <span class="sp-step-n">3</span>
           <div>
-            <h3>La huella se ancla on-chain</h3>
-            <p>Solo el hash viaja a la blockchain, nunca tus datos. Queda con fecha y no se puede borrar ni reescribir — tampoco por nosotros.</p>
+            <h3>Lo compartes</h3>
+            <p>Un enlace, un QR o el archivo. Si cambias de opinión, lo retiras: la empresa verá que está revocado.</p>
           </div>
         </li>
         <li>
           <span class="sp-step-n">4</span>
           <div>
             <h3>Cualquiera lo comprueba</h3>
-            <p>Compartes un enlace, un QR o el JSON. Quien lo reciba recalcula la huella y la busca en el contrato. Si no coincide, no hay sello.</p>
+            <p>Válido, caducado, revocado o alterado: el resultado se explica solo. Verificar es siempre gratis.</p>
           </div>
         </li>
       </ol>
@@ -815,30 +834,29 @@
       <div class="sp-verify">
         <div class="sp-verify-kicker">Pruébalo ahora</div>
         <h3>Verifica un SkillPass</h3>
-        <p>Si tienes un hash, un JSON o un enlace de verificación, compruébalo aquí mismo. La consulta solo lee la cadena: no hace falta cuenta ni cartera, y no deja rastro.</p>
-        <label for="lpVerifyInput">Hash, JSON o enlace</label>
-        <textarea id="lpVerifyInput" placeholder="0x… · el JSON del SkillPass · o el enlace /verify.html?h=…"></textarea>
+        <p>Pega el enlace o el código que te hayan pasado. No hace falta cuenta.</p>
+        <label for="lpVerifyInput">Enlace, código o JSON</label>
+        <textarea id="lpVerifyInput" placeholder="https://talentpact.es/verify.html?c=…  ·  el código  ·  o el JSON"></textarea>
         <div class="sp-verify-actions">
-          <button type="button" class="sp-verify-btn" id="lpVerifyBtn" onclick="verifyOnLanding()">Comprobar sello</button>
+          <button type="button" class="sp-verify-btn" id="lpVerifyBtn" onclick="TPVerificar.ejecutar('lpVerifyInput','lpVerifyOut','lpVerifyBtn')">Verificar</button>
           <a class="sp-verify-alt" href="verify.html" target="_blank" rel="noopener">Abrir el verificador completo →</a>
         </div>
-        <div class="sp-verify-out" id="lpVerifyOut" role="status" aria-live="polite"></div>
+        <div class="sp-verify-out" id="lpVerifyOut" hidden aria-live="polite"></div>
       </div>
     </div>
 
     <div class="sp-facts reveal d2">
       <div class="sp-fact">
-        <h4>Solo el hash sale de Europa</h4>
-        <p>On-chain se publica una huella de 32 bytes. El CV y tus datos personales viven off-chain, en la UE, y siguen siendo borrables — así el anclaje inmutable convive con el RGPD.</p>
+        <h4>Tus datos no salen de TalentPact</h4>
+        <p>La credencial lleva un seudónimo y bandas, nunca tu nombre, tu email ni tus respuestas. Si borras tu cuenta, se borra con ella.</p>
       </div>
       <div class="sp-fact">
-        <h4>Contrato abierto y auditable</h4>
-        <p>SkillPassRegistry, desplegado en Ethereum Sepolia. Puedes leerlo tú mismo:<br>
-          <a href="https://sepolia.etherscan.io/address/0x85418F3d978e691C0f784bA63E4cB2826478f73A" target="_blank" rel="noopener">0x85418F3d978e691C0f784bA63E4cB2826478f73A</a></p>
+        <h4>Sello público, si lo quieres</h4>
+        <p>Por 4,99 € su huella se publica con fecha en una red pública y queda comprobable incluso sin TalentPact. Es opcional: la firma ya basta para verificarlo aquí.</p>
       </div>
       <div class="sp-fact">
         <h4>Verificar es gratis y anónimo</h4>
-        <p>Comprobar un sello solo lee el contrato: no gasta gas, no requiere registro y no le dice a nadie qué credencial has mirado.</p>
+        <p>La lista de revocación se descarga entera: nadie sabe qué credencial has mirado. La clave pública está en <a href="/.well-known/did.json" target="_blank" rel="noopener">talentpact.es/.well-known/did.json</a>.</p>
       </div>
     </div>
   </div>
@@ -860,6 +878,7 @@
             <button class="rpl-cat-btn active" onclick="setExCategory('all',this)">Todos</button>
             <button class="rpl-cat-btn" onclick="setExCategory('hard',this)">Hard skills</button>
             <button class="rpl-cat-btn" onclick="setExCategory('soft',this)">Soft skills</button>
+            <button class="rpl-cat-btn" onclick="setExCategory('ia',this)">IA</button>
           </div>
           <div id="exSubFilters"></div>
           <div class="rpl-legend" aria-hidden="true">
@@ -963,7 +982,7 @@
       <h5>Confianza</h5>
       <a href="legal.html#ia">Cómo evalúa la IA</a>
       <a href="legal.html#privacidad">Qué datos tratamos</a>
-      <a href="legal.html#skillpass">El SkillPass y la blockchain</a>
+      <a href="legal.html#skillpass">El SkillPass y el sello público</a>
       <a href="#" onclick="event.preventDefault();openContact()">Contacto</a>
     </div>
     <div class="footer-col">
@@ -1117,31 +1136,32 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/app/00-iconos.js?v=20261015c"></script>
+<script src="assets/js/app/00-iconos.js?v=20261020b"></script>
 <script src="assets/js/app/01-datos-ofertas.js?v=20261015c"></script>
-<script src="assets/js/app/01b-taxonomia.js?v=20261019e"></script>
+<script src="assets/js/app/01b-taxonomia.js?v=20261020b"></script>
 <script src="assets/js/app/02-grabacion.js?v=20261015e"></script>
 <script src="assets/js/app/03-datos-retos.js?v=20261015c"></script>
 <script src="assets/js/app/04-estado-y-nube.js?v=20261015j"></script>
 <script src="assets/js/app/05-qr.js?v=20261015c"></script>
-<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261019e"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261019d"></script>
-<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261019e"></script>
-<script src="assets/js/app/09-acceso.js?v=20261019f"></script>
-<script src="assets/js/app/10-paneles-y-pagos.js?v=20261019a"></script>
+<script src="assets/js/app/06-skillpass-y-sesion.js?v=20261020c"></script>
+<script src="assets/js/app/07-retos-comunes.js?v=20261020c"></script>
+<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261020d"></script>
+<script src="assets/js/app/09-acceso.js?v=20261020a"></script>
+<script src="assets/js/app/10-paneles-y-pagos.js?v=20261020c"></script>
 <script src="assets/js/app/11-superadmin.js?v=20261015c"></script>
 <script src="assets/js/app/12-soporte-y-ranking.js?v=20261015e"></script>
 <script src="assets/js/app/13-integridad.js?v=20261019d"></script>
-<script src="assets/js/app/14-empleo.js?v=20261015c"></script>
+<script src="assets/js/app/14-empleo.js?v=20261020c"></script>
 <script src="assets/js/app/15-proteccion-acceso.js?v=20261015j"></script>
-<script src="assets/js/app/16-pool-real.js?v=20261015e"></script>
-<script src="assets/js/app/17-ofertas-reales.js?v=20261019c"></script>
-<script src="assets/js/app/18-interfaz.js?v=20261015c"></script>
-<script src="assets/js/app/19-rrhh.js?v=20261019b"></script>
-<script src="assets/js/app/20-requisitos.js?v=20261019e"></script>
+<script src="assets/js/app/16-pool-real.js?v=20261020a"></script>
+<script src="assets/js/app/17-ofertas-reales.js?v=20261020a"></script>
+<script src="assets/js/app/18-interfaz.js?v=20261020b"></script>
+<script src="assets/js/app/19-rrhh.js?v=20261020b"></script>
+<script src="assets/js/app/20-requisitos.js?v=20261020c"></script>
 <script src="assets/js/app/21-empresa.js?v=20261019d"></script>
 <script src="assets/js/app/22-reto-oficial.js?v=20261019d"></script>
-<script src="assets/js/app/23-clasificacion.js?v=20261019b"></script>
+<script src="assets/js/app/23-clasificacion.js?v=20261020b"></script>
+<script src="assets/js/app/24-verificar.js?v=20261020a"></script>
 <script src="assets/js/app/99-arranque.js?v=20261019e"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->

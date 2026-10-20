@@ -1,0 +1,230 @@
+[
+  {
+    "id": "common_public_speaking", "title": "Oratoria y presentaciones",
+    "desc": "Mejora una presentación con los comentarios de su público, prepara una intervención breve ante un comité y decide qué recursos ayudan a convencer.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Una presentación que no convenció", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los comentarios del público sobre una presentación. Tendrás que explicar qué falló y cómo mejorarla.",
+        "sub": "Análisis — 9 min", "skills": {"hard": ["Estructura de presentaciones"], "soft": ["Autocrítica"]},
+        "scenario": "Una jefa de proyecto presentó a la dirección una propuesta para cambiar el programa de gestión de la empresa (inversión de 120.000 €). La presentación duró 35 minutos de los 20 previstos y la dirección pidió «pensarlo más». Al terminar, varios asistentes dieron su opinión.\n\nResponde en tres partes:\n\nA) Qué falló en la presentación, con los comentarios.\n\nB) Cómo la reorganizarías para 15 minutos.\n\nC) Cómo la ensayarías y qué harías con las preguntas difíciles.",
+        "data": {
+          "headers": ["Aspecto", "Lo que se hizo", "Comentario del público", "Efecto", "Estado"],
+          "table": [
+            {"n": "Inicio", "a": "10 minutos de historia de la empresa", "b": "«No sabía a dónde quería llegar»", "c": "Se perdió la atención", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Diapositivas", "a": "42, con párrafos enteros", "b": "«Leía las diapositivas»", "c": "Poca conexión", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Cifras", "a": "Ahorro de 210.000 € en 3 años, en la diapositiva 38", "b": "«El dato importante llegó al final»", "c": "Ya no había tiempo", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Preguntas", "a": "Respuestas largas y a la defensiva", "b": "«Parecía que no quería críticas»", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Conocimiento del tema", "a": "Muy alto", "b": "«Sabe mucho de esto»", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con los comentarios del público.",
+          "kw": ["mensaje principal", "empezar por la conclusión", "estructura", "datos clave al principio", "diapositivas visuales", "tiempo", "ensayo", "preguntas", "escucha", "llamada a la acción"]
+        }
+      },
+      {
+        "id": "e2", "title": "Tres minutos ante el comité", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Escribirás el guion de una intervención de tres minutos para pedir una decisión.",
+        "sub": "Guion de intervención — 10 min", "skills": {"hard": ["Comunicación ejecutiva"], "soft": ["Síntesis", "Persuasión"]},
+        "scenario": "Tienes 3 minutos en el comité de dirección de un hospital para pedir que se apruebe un piloto: un sistema de avisos por SMS para recordar las citas. Datos: el 12 % de los pacientes no acude a su cita, cada cita perdida cuesta unos 60 €, el hospital da 400.000 citas al año, y en otros hospitales los recordatorios reducen las ausencias a la mitad. El piloto cuesta 15.000 € durante 6 meses en dos especialidades.",
+        "data": {
+          "to": "Comité de dirección",
+          "subject": "Guion de la intervención sobre recordatorios de citas",
+          "hint": "Escribe el guion en cuatro bloques:\n\n1. La frase de apertura con el problema y su coste.\n\n2. La propuesta y la cifra que la respalda (sin abrumar con datos).\n\n3. La respuesta a la objeción más probable (privacidad, coste o que los pacientes mayores no usan SMS).\n\n4. El cierre con la decisión concreta que pides y la fecha.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["apertura", "12 %", "48.000 citas", "2,9 millones", "piloto", "15.000", "objeción", "privacidad", "decisión", "fecha"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Ayuda a convencer?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué recursos de una presentación ayudan a convencer a un público profesional.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Retórica"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada recurso de una presentación ante un comité:\n\nAyuda a convencer — Hace el mensaje más claro, creíble o memorable.\n\nNo ayuda — Distrae, resta credibilidad o hace perder tiempo.",
+        "data": {
+          "options": [
+            {"id": "o1", "text": "Empezar diciendo qué decisión se pide y por qué", "correct": "si"},
+            {"id": "o2", "text": "Pedir perdón al principio por «no ser buen orador»", "correct": "no"},
+            {"id": "o3", "text": "Un ejemplo de un paciente real, contado en 30 segundos", "correct": "si"},
+            {"id": "o4", "text": "Leer en voz alta cada diapositiva", "correct": "no"},
+            {"id": "o5", "text": "Una sola cifra destacada por diapositiva", "correct": "si"},
+            {"id": "o6", "text": "Alargar la presentación para «demostrar que se ha trabajado mucho»", "correct": "no"},
+            {"id": "o7", "text": "Anticipar la objeción principal antes de que la planteen", "correct": "si"},
+            {"id": "o8", "text": "Usar siglas internas sin explicarlas", "correct": "no"}
+          ],
+          "cats": ["Ayuda a convencer", "No ayuda"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_writing_pro", "title": "Redacción profesional",
+    "desc": "Corrige un texto de empresa confuso, reescribe un aviso importante para que se entienda a la primera y distingue las frases claras de las que no lo son.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un aviso que nadie entendió", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los problemas de un comunicado que generó confusión. Tendrás que explicar por qué y cómo reescribirlo.",
+        "sub": "Análisis de texto — 9 min", "skills": {"hard": ["Lenguaje claro"], "soft": ["Empatía con el lector"]},
+        "scenario": "Una compañía de agua envió a 30.000 clientes un aviso sobre un corte de suministro por obras. Al día siguiente, el teléfono de atención recibió 2.400 llamadas preguntando lo mismo. Has analizado el texto.\n\nResponde en tres partes:\n\nA) Qué problemas del texto provocaron las llamadas.\n\nB) Cómo lo reescribirías: orden, frases y formato.\n\nC) Cómo comprobarías antes de enviarlo que se entiende.",
+        "data": {
+          "headers": ["Problema", "En el texto", "Detalle", "Efecto", "Estado"],
+          "table": [
+            {"n": "Lo importante, al final", "a": "La fecha y hora del corte en el cuarto párrafo", "b": "", "c": "La mayoría no llegó a leerlo", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Frases muy largas", "a": "Una frase de 74 palabras", "b": "Con tres subordinadas", "c": "Difícil de seguir", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Jerga técnica", "a": "«Afección a la red de abastecimiento en baja»", "b": "", "c": "No se entiende qué pasa", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Zonas afectadas", "a": "Por número de sector interno", "b": "No por calles", "c": "Nadie sabe si le afecta", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Teléfono de contacto", "a": "Bien visible", "b": "", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con los problemas de la tabla.",
+          "kw": ["lo importante primero", "fecha y hora", "frases cortas", "lenguaje claro", "sin jerga", "calles", "qué hacer", "formato", "títulos", "probar con lectores"]
+        }
+      },
+      {
+        "id": "e2", "title": "Reescribir un correo de cambios", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Reescribirás un comunicado interno para que la plantilla sepa qué cambia y qué tiene que hacer.",
+        "sub": "Redacción — 10 min", "skills": {"hard": ["Comunicación interna"], "soft": ["Claridad"]},
+        "scenario": "Recursos Humanos ha redactado este correo para 350 empleados: «En el marco de la optimización de procesos y con la finalidad de dar cumplimiento a la normativa vigente, se procederá a la implementación de una nueva herramienta de gestión de ausencias a partir del próximo periodo, quedando sin efecto los procedimientos anteriores, por lo que se ruega a todo el personal que proceda a familiarizarse con la misma». Datos que faltan: la herramienta se llama Ausencias, empieza el 1 de marzo, las vacaciones ya no se piden por correo sino en la app, hay una sesión de formación de 20 minutos el 25 de febrero y las solicitudes ya aprobadas se mantienen.",
+        "data": {
+          "to": "Toda la plantilla",
+          "subject": "Desde el 1 de marzo, las vacaciones se piden en la app Ausencias",
+          "hint": "Escribe el correo reescrito, cuidando estos cuatro puntos:\n\n1. Qué cambia y desde cuándo, en las dos primeras líneas.\n\n2. Qué tiene que hacer cada persona, en pasos.\n\n3. Qué no cambia (las solicitudes ya aprobadas) para evitar dudas.\n\n4. Dónde aprender y a quién preguntar, con fecha y hora de la formación.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["1 de marzo", "Ausencias", "app", "pasos", "ya aprobadas", "se mantienen", "25 de febrero", "20 minutos", "a quién preguntar", "frases cortas"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Clara o confusa?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué frases de documentos de empresa se entienden a la primera.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Lenguaje claro"], "soft": ["Criterio"]},
+        "scenario": "Revisas frases de los documentos que una empresa envía a sus clientes. Clasifica cada una:\n\nClara — Se entiende a la primera y dice qué hacer.\n\nConfusa — Obliga a releer, usa jerga o esconde la información importante.",
+        "data": {
+          "options": [
+            {"id": "w1", "text": "«Tiene hasta el 15 de mayo para pagar. Puede hacerlo en la web o en cualquier oficina.»", "correct": "clara"},
+            {"id": "w2", "text": "«Se procederá a la tramitación de la incidencia una vez verificada la documentación aportada.»", "correct": "confusa"},
+            {"id": "w3", "text": "«Hemos recibido su queja. Le responderemos en 10 días como máximo.»", "correct": "clara"},
+            {"id": "w4", "text": "«No es posible no aceptar las condiciones si no se desea no continuar.»", "correct": "confusa"},
+            {"id": "w5", "text": "«Si cambia de dirección, avísenos en el 900 100 200.»", "correct": "clara"},
+            {"id": "w6", "text": "«En virtud de lo dispuesto, la entidad podrá, en su caso, modificar las condiciones.»", "correct": "confusa"},
+            {"id": "w7", "text": "«Su seguro cubre la rotura de cristales. No cubre los daños por inundación.»", "correct": "clara"},
+            {"id": "w8", "text": "«La gestión del expediente queda supeditada a la concurrencia de los requisitos.»", "correct": "confusa"}
+          ],
+          "cats": ["Clara", "Confusa"],
+          "keys": ["clara", "confusa"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_journalism", "title": "Periodismo y redacción informativa",
+    "desc": "Ordena la información de una noticia, contrasta fuentes antes de publicar y decide qué prácticas son aceptables en el oficio.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Qué va primero en la noticia", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los datos de un suceso local. Tendrás que decidir cómo construir la noticia.",
+        "sub": "Jerarquía informativa — 9 min", "skills": {"hard": ["Redacción periodística"], "soft": ["Criterio informativo"]},
+        "scenario": "Eres redactor de un periódico local. A las 18:00 te llega esta información sobre un incendio en una nave industrial. Tienes que publicar en la web en 40 minutos.\n\nResponde en tres partes:\n\nA) Qué datos van en el titular y en la entradilla, y por qué.\n\nB) Qué datos no publicarías todavía y qué tendrías que comprobar.\n\nC) Escribe el titular y la entradilla.",
+        "data": {
+          "headers": ["Dato", "Fuente", "Confirmado", "Detalle", "Estado"],
+          "table": [
+            {"n": "Incendio en una nave de reciclaje del polígono Sur", "a": "Bomberos (nota oficial)", "b": "Sí", "c": "Declarado a las 16:30", "d": "Bien", "cls": "v-good"},
+            {"n": "Dos trabajadores trasladados al hospital con humo inhalado", "a": "Servicio de emergencias", "b": "Sí", "c": "Pronóstico leve", "d": "Bien", "cls": "v-good"},
+            {"n": "«Fue provocado»", "a": "Un vecino en redes sociales", "b": "No", "c": "", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Se recomienda cerrar ventanas en los barrios cercanos", "a": "Ayuntamiento", "b": "Sí", "c": "Por el humo", "d": "Bien", "cls": "v-good"},
+            {"n": "La empresa tenía una sanción ambiental de 2023", "a": "Hemeroteca", "b": "Sí, pero sin relación conocida", "c": "", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos confirmados.",
+          "kw": ["qué, quién, cuándo, dónde", "pirámide invertida", "dato de servicio", "cerrar ventanas", "heridos leves", "confirmado", "fuentes oficiales", "rumor", "no publicar", "titular", "entradilla"]
+        }
+      },
+      {
+        "id": "e2", "title": "Antes de publicar una exclusiva", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Explicarás a tu jefa qué hace falta comprobar antes de publicar una información delicada.",
+        "sub": "Verificación — 10 min", "skills": {"hard": ["Verificación de fuentes"], "soft": ["Ética profesional"]},
+        "scenario": "Una fuente anónima del ayuntamiento te ha enviado un documento que indica que la concejala de Urbanismo adjudicó un contrato de 400.000 € a una empresa de su cuñado. La jefa de sección quiere publicarlo esta noche porque otro medio podría adelantarse.",
+        "data": {
+          "to": "Jefa de sección",
+          "subject": "Lo que falta antes de publicar lo del contrato de Urbanismo",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Qué tenemos y qué no tenemos (el documento, su autenticidad, el parentesco).\n\n2. Qué comprobaciones haría falta hacer y cómo (registros públicos, segunda fuente, perfil de contratante).\n\n3. Por qué hay que pedir la versión de la concejala y de la empresa antes de publicar.\n\n4. Qué propones hacer esta noche y qué riesgo hay si se publica sin comprobar.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["autenticidad", "segunda fuente", "registro mercantil", "perfil del contratante", "parentesco", "derecho a réplica", "versión de la concejala", "presunción de inocencia", "riesgo legal", "proteger la fuente"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Práctica aceptable?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas periodísticas son correctas.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Deontología periodística"], "soft": ["Ética"]},
+        "scenario": "Clasifica cada práctica en una redacción:\n\nAceptable — Respeta la verdad, a las personas y a las fuentes.\n\nNo aceptable — Engaña al lector, daña a alguien sin justificación o rompe un compromiso.",
+        "data": {
+          "options": [
+            {"id": "j1", "text": "Corregir un error publicado y decir que se ha corregido", "correct": "si"},
+            {"id": "j2", "text": "Publicar el nombre de una víctima menor de edad", "correct": "no"},
+            {"id": "j3", "text": "Proteger la identidad de una fuente que lo ha pedido", "correct": "si"},
+            {"id": "j4", "text": "Poner un titular que dice algo que la noticia no sostiene para tener más clics", "correct": "no"},
+            {"id": "j5", "text": "Distinguir claramente la información de la opinión", "correct": "si"},
+            {"id": "j6", "text": "Publicar como noticia un texto pagado por una empresa sin indicarlo", "correct": "no"},
+            {"id": "j7", "text": "Pedir la versión de la persona acusada antes de publicar", "correct": "si"},
+            {"id": "j8", "text": "Usar una foto de redes sociales de un particular sin su permiso para ilustrar un rumor", "correct": "no"}
+          ],
+          "cats": ["Aceptable", "No aceptable"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_social_skills", "title": "Relaciones profesionales",
+    "desc": "Prepara un evento de contactos con objetivos claros, retoma el contacto con alguien sin parecer interesado y decide qué comportamientos construyen relaciones profesionales.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un congreso de dos días", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás la agenda de un congreso profesional. Tendrás que decidir cómo aprovecharlo.",
+        "sub": "Planificación — 9 min", "skills": {"hard": ["Networking"], "soft": ["Planificación", "Iniciativa"]},
+        "scenario": "Trabajas en una pequeña empresa de software para el sector agrícola y vas solo a un congreso de dos días. Tu objetivo es conseguir 3 reuniones con posibles clientes y conocer a 2 posibles socios. Tienes la agenda y la lista de asistentes.\n\nResponde en tres partes:\n\nA) A qué actividades irías y a cuáles no, y por qué.\n\nB) Cómo prepararías los contactos antes de ir.\n\nC) Qué harías en las 48 horas siguientes al congreso.",
+        "data": {
+          "headers": ["Actividad", "Cuándo", "Quién va", "Detalle", "Estado"],
+          "table": [
+            {"n": "Charla principal de un ministro", "a": "Día 1, 10:00", "b": "1.200 personas", "c": "Sin turno de preguntas", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Mesa de cooperativas agrícolas", "a": "Día 1, 12:00", "b": "80 personas, 15 gerentes de cooperativas", "c": "Tus clientes ideales", "d": "Bien", "cls": "v-good"},
+            {"n": "Comida de networking", "a": "Día 1, 14:00", "b": "Abierta", "c": "Mesas libres", "d": "Bien", "cls": "v-good"},
+            {"n": "Taller de drones", "a": "Día 2, 10:00", "b": "40 técnicos", "c": "Posibles socios tecnológicos", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Fiesta de clausura", "a": "Día 2, 21:00", "b": "Abierta", "c": "Música alta", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con la agenda del congreso.",
+          "kw": ["objetivo", "priorizar", "preparar la lista", "contactar antes", "pedir reunión", "presentación breve", "escuchar", "aportar valor", "seguimiento en 48 horas", "personalizar"]
+        }
+      },
+      {
+        "id": "e2", "title": "Retomar un contacto sin parecer interesado", "type": "email", "timeLimit": 540, "difficulty": "intermedio",
+        "briefing": "Escribirás a alguien con quien no hablas desde hace tiempo y con quien te interesa colaborar.",
+        "sub": "Mensaje — 9 min", "skills": {"hard": ["Comunicación profesional"], "soft": ["Tacto", "Generosidad"]},
+        "scenario": "Hace dos años coincidiste en un curso con Laura, que ahora es directora de operaciones de una cooperativa agrícola de 2.000 socios. No habéis vuelto a hablar. Tu empresa vende software de gestión de cosechas y te gustaría presentárselo. Has visto en LinkedIn que su cooperativa acaba de ganar un premio de sostenibilidad.",
+        "data": {
+          "to": "Laura, directora de operaciones",
+          "subject": "Enhorabuena por el premio",
+          "hint": "Escribe el mensaje cuidando cuatro puntos:\n\n1. Una apertura personal y sincera que recuerde dónde os conocisteis.\n\n2. Algo de valor para ella antes de pedir nada (felicitación concreta, un dato o contacto útil).\n\n3. Tu propuesta, breve y sin presión.\n\n4. Un cierre que le ponga fácil decir que sí o que no.",
+          "minChars": 320, "minWords": 56,
+          "kw": ["dónde os conocisteis", "premio", "felicitación concreta", "aportar valor", "breve", "sin presión", "propuesta", "conversación de 20 minutos", "fácil decir que no", "personal"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Construye relación o la quema?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué comportamientos crean relaciones profesionales duraderas.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Networking"], "soft": ["Criterio social"]},
+        "scenario": "Clasifica cada comportamiento en tu red de contactos profesionales:\n\nConstruye relación — Genera confianza y hace que la otra persona quiera seguir en contacto.\n\nLa quema — Genera desconfianza o hace que la otra persona se aleje.",
+        "data": {
+          "options": [
+            {"id": "s1", "text": "Presentar a dos contactos que se pueden ayudar sin pedir nada a cambio", "correct": "construye"},
+            {"id": "s2", "text": "Enviar una propuesta comercial a alguien justo después de aceptar su invitación de LinkedIn", "correct": "quema"},
+            {"id": "s3", "text": "Recordar un detalle de la última conversación al volver a escribir", "correct": "construye"},
+            {"id": "s4", "text": "Escribir solo cuando necesitas algo", "correct": "quema"},
+            {"id": "s5", "text": "Cumplir lo que prometiste en una conversación de pasillo", "correct": "construye"},
+            {"id": "s6", "text": "Hablar mal de tu empresa anterior ante alguien que acabas de conocer", "correct": "quema"},
+            {"id": "s7", "text": "Compartir con un contacto un artículo útil para un problema que te contó", "correct": "construye"},
+            {"id": "s8", "text": "Usar el nombre de alguien como recomendación sin preguntarle", "correct": "quema"}
+          ],
+          "cats": ["Construye relación", "La quema"],
+          "keys": ["construye", "quema"]
+        }
+      }
+    ]
+  }
+]

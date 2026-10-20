@@ -88,7 +88,7 @@ footer{border-top:1px solid var(--slate-200);background:var(--c-superficie)}
       <li><a href="#privacidad">Privacidad y datos</a></li>
       <li><a href="#ia">Cómo evalúa la IA</a></li>
       <li><a href="#integridad">Supervisión de las pruebas</a></li>
-      <li><a href="#skillpass">El SkillPass y la blockchain</a></li>
+      <li><a href="#skillpass">El SkillPass y el sello público</a></li>
       <li><a href="#cookies">Cookies y analítica</a></li>
       <li><a href="#condiciones">Condiciones de uso</a></li>
       <li><a href="#contacto">Contacto y reclamaciones</a></li>
@@ -206,15 +206,17 @@ footer{border-top:1px solid var(--slate-200);background:var(--c-superficie)}
   </section>
 
   <section id="skillpass">
-    <h2 class="sec">06 · El SkillPass y la blockchain</h2>
-    <p>Un SkillPass es un documento JSON con tus mejores puntuaciones por habilidad. De él calculamos una huella criptográfica (<code>keccak256</code>, 32 bytes) y <strong>publicamos únicamente esa huella</strong> en una blockchain pública.</p>
+    <h2 class="sec">06 · El SkillPass y el sello público</h2>
+    <p>Un SkillPass es una credencial verificable (estándar W3C VC 2.0) que TalentPact firma digitalmente. Lleva las habilidades que has demostrado, cada una con su banda (Aceptable, Bueno, Muy bueno), su fecha y si la nota está verificada. <strong>No lleva tu nombre, tu correo, tus respuestas ni tu nota exacta</strong>: te identifica un seudónimo que solo TalentPact puede relacionar contigo.</p>
     <ul>
-      <li><strong>Qué sale a la cadena:</strong> 32 bytes ilegibles y la fecha. Nada más.</li>
-      <li><strong>Qué no sale nunca:</strong> tu nombre, tu correo, tus respuestas, tus notas, tu sector. Todo eso vive off-chain, en la base de datos europea.</li>
-      <li><strong>Para qué sirve:</strong> cualquiera puede comprobar que un SkillPass no ha sido retocado, sin tener cuenta en TalentPact y sin fiarse de nosotros. Se hace en <a href="verify.html">la página de verificación</a>.</li>
+      <li><strong>Caducidad:</strong> 12 meses. Después sigue siendo auténtico, pero quien lo compruebe verá que está caducado.</li>
+      <li><strong>Revocación:</strong> puedes retirarlo cuando quieras desde tu panel. También lo retiramos si una revisión humana detecta fraude. La lista de revocación es pública (<a href="/status/1">/status/1</a>) y se descarga entera, así que nadie sabe qué credencial está mirando quien verifica.</li>
+      <li><strong>Verificar:</strong> siempre gratis, sin cuenta, en <a href="verify.html">la página de verificación</a>. La clave pública con la que firmamos está en <a href="/.well-known/did.json">/.well-known/did.json</a>.</li>
     </ul>
-    <p><strong>Cómo convive esto con el derecho al olvido.</strong> Una blockchain no se puede borrar, pero una huella sin su documento no dice nada de nadie: no es reversible ni permite identificar a una persona. Si pides la supresión, borramos el JSON y todos tus datos; la huella queda en la cadena convertida en un número sin significado.</p>
-    <p>El sellado funciona hoy sobre la red <strong>Ethereum Sepolia</strong>, con el contrato <code>0x85418F3d978e691C0f784bA63E4cB2826478f73A</code>. Es una testnet: sirve para probar el mecanismo, no ofrece las garantías de permanencia de una red principal.</p>
+    <h3>Sello público (opcional, de pago)</h3>
+    <p>Si lo pides, cada noche publicamos en una red pública (una capa 2 de Ethereum) <strong>un único número de 32 bytes</strong> que resume todos los SkillPass sellados ese día (la raíz de un árbol de Merkle). Así tu SkillPass se puede comprobar incluso sin TalentPact y nadie, tampoco nosotros, puede cambiar después lo que demuestra.</p>
+    <p><strong>Cómo convive con el derecho al olvido.</strong> Lo que se publica no se puede borrar, pero no dice nada de nadie: la parte que corresponde a tu SkillPass se calcula con una clave aleatoria (sal) que solo guardamos nosotros. Si borras tu cuenta, borramos la credencial y su sal; lo publicado queda como un número sin significado que ya no se puede vincular a ti.</p>
+    <p>Los SkillPass sellados antes de octubre de 2026 usaron el contrato <code>0x85418F3d978e691C0f784bA63E4cB2826478f73A</code> de la red de pruebas Ethereum Sepolia, que no ofrece las garantías de permanencia de una red principal. Se siguen verificando igual.</p>
   </section>
 
   <section id="cookies">

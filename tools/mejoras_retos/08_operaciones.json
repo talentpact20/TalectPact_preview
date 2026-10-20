@@ -1,0 +1,401 @@
+[
+  {
+    "id": "common_logistics", "title": "Logística",
+    "desc": "Encuentra dónde pierde tiempo un almacén, reorganiza las entregas de una ruta y decide qué medidas reducen de verdad el coste logístico.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un almacén que no llega a tiempo", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los datos de un almacén que no consigue preparar los pedidos a tiempo. Tendrás que encontrar el cuello de botella.",
+        "sub": "Análisis de almacén — 9 min", "skills": {"hard": ["Gestión de almacén", "Picking"], "soft": ["Diagnóstico"]},
+        "scenario": "Un almacén de una tienda online de material de oficina debe tener listos antes de las 17:00 los pedidos que entran hasta las 14:00. Últimamente salen tarde el 22 % de los pedidos. Has medido cada fase.\n\nResponde en tres partes:\n\nA) Dónde está el cuello de botella y qué lo causa, con las cifras.\n\nB) Qué cambiarías primero y qué esperas ganar.\n\nC) Qué indicadores pondrías en una pantalla del almacén para seguirlo cada día.",
+        "data": {
+          "headers": ["Fase", "Tiempo medio por pedido", "Personas", "Detalle", "Estado"],
+          "table": [
+            {"n": "Recepción del pedido en el sistema", "a": "1 min", "b": "Automático", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Recogida (picking)", "a": "14 min", "b": "6", "c": "Los 50 productos más vendidos están al fondo del almacén", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Comprobación del pedido", "a": "3 min", "b": "1", "c": "Cola de hasta 40 pedidos a las 15:00", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Embalaje", "a": "4 min", "b": "3", "c": "Faltan cajas de tamaño medio a menudo", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Errores de preparación", "a": "2,8 %", "b": "", "c": "Objetivo: menos del 1 %", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los tiempos de cada fase.",
+          "kw": ["cuello de botella", "ubicación ABC", "productos más vendidos cerca", "rutas de picking", "picking por lotes", "equilibrar la línea", "comprobación con escáner", "material de embalaje", "pedidos a tiempo", "indicadores"]
+        }
+      },
+      {
+        "id": "e2", "title": "Reorganizar una ruta de reparto", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo reorganizar las entregas de una empresa de reparto local.",
+        "sub": "Planificación — 10 min", "skills": {"hard": ["Planificación de rutas"], "soft": ["Comunicación"]},
+        "scenario": "Una distribuidora de bebidas reparte a 140 bares y restaurantes de Bilbao con 4 furgonetas. Cada repartidor decide su ruta. El 30 % de las entregas se hacen cuando el bar está cerrado o en plena hora de comidas y hay que volver otro día. El gasóleo ha subido un 25 % en un año.",
+        "data": {
+          "to": "Gerente de la distribuidora",
+          "subject": "Propuesta para reorganizar las rutas de reparto",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Qué está fallando y cuánto cuesta (entregas fallidas, kilómetros, horas).\n\n2. Cómo organizarías las rutas: zonas, ventanas horarias de cada cliente, orden de las paradas.\n\n3. Qué herramientas o datos necesitas y cómo implicarías a los repartidores.\n\n4. Cómo medirás si funciona y en cuánto tiempo.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["entregas fallidas", "ventanas horarias", "zonas", "secuencia de paradas", "kilómetros", "optimización de rutas", "repartidores", "experiencia", "coste por entrega", "medir"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Baja el coste logístico o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué medidas reducen el coste total de la logística.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Coste logístico total"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada medida de una tienda online:\n\nBaja el coste total — Reduce el coste sin trasladarlo a otro sitio ni empeorar el servicio.\n\nNo lo baja — Ahorra en una parte pero lo paga en otra, o empeora el servicio.",
+        "data": {
+          "options": [
+            {"id": "o1", "text": "Usar cajas ajustadas al tamaño del pedido para no pagar transporte de aire", "correct": "si"},
+            {"id": "o2", "text": "Comprar el transporte más barato aunque pierda el 3 % de los paquetes", "correct": "no"},
+            {"id": "o3", "text": "Agrupar los pedidos del mismo cliente en un solo envío", "correct": "si"},
+            {"id": "o4", "text": "Reducir el stock tanto que se rompa a menudo y haya que hacer envíos urgentes", "correct": "no"},
+            {"id": "o5", "text": "Colocar los productos más vendidos cerca de la zona de embalaje", "correct": "si"},
+            {"id": "o6", "text": "Quitar la comprobación de pedidos para ganar tiempo", "correct": "no"},
+            {"id": "o7", "text": "Ofrecer puntos de recogida además de la entrega a domicilio", "correct": "si"},
+            {"id": "o8", "text": "Prometer entrega en 24 horas en zonas donde el transportista tarda 72", "correct": "no"}
+          ],
+          "cats": ["Baja el coste total", "No lo baja"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_supply_chain", "title": "Cadena de suministro",
+    "desc": "Decide cuánto stock tener de cada producto, gestiona un proveedor que falla y distingue los riesgos de la cadena de suministro de los que no lo son.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Demasiado de lo que no se vende", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás el inventario de una empresa con datos de venta. Tendrás que decidir qué ajustar.",
+        "sub": "Gestión de inventario — 10 min", "skills": {"hard": ["Inventario", "Clasificación ABC"], "soft": ["Priorización"]},
+        "scenario": "Una ferretería industrial tiene 1,9 millones de euros en stock y, aun así, el 9 % de los pedidos no se pueden servir porque falta algún producto. Has clasificado los productos por su peso en las ventas.\n\nResponde en tres partes:\n\nA) Qué está mal en la forma de repartir el stock, con las cifras.\n\nB) Qué harías con cada grupo de productos.\n\nC) Cómo calcularías el stock de seguridad de los productos que más se venden.",
+        "data": {
+          "headers": ["Grupo", "Productos", "Ventas anuales", "Stock actual", "Estado"],
+          "table": [
+            {"n": "A: los que más se venden", "a": "300", "b": "75 %", "c": "15 días de venta · roturas frecuentes", "d": "Revisar", "cls": "v-bad"},
+            {"n": "B: venta media", "a": "900", "b": "20 %", "c": "60 días de venta", "d": "Revisar", "cls": "v-warn"},
+            {"n": "C: venta baja", "a": "3.800", "b": "5 %", "c": "190 días de venta", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Sin ventas en 12 meses", "a": "640", "b": "0 %", "c": "310.000 € inmovilizados", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Plazo de los proveedores principales", "a": "", "b": "", "c": "7 a 21 días, con retrasos de hasta 10", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de cada grupo.",
+          "kw": ["clasificación ABC", "rotación", "días de cobertura", "rotura de stock", "stock de seguridad", "variabilidad de la demanda", "plazo de entrega", "punto de pedido", "stock obsoleto", "liquidar"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un proveedor que falla", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Escribirás a un proveedor clave que está fallando en sus entregas.",
+        "sub": "Gestión de proveedores — 10 min", "skills": {"hard": ["Gestión de proveedores"], "soft": ["Negociación", "Firmeza"]},
+        "scenario": "Tu principal proveedor de tornillería (32 % de tus compras) ha entregado tarde 11 de los últimos 20 pedidos y dos con material defectuoso. Esto te ha costado pedidos perdidos por unos 40.000 €. Lleváis 8 años trabajando juntos y tiene precios un 12 % por debajo de la competencia.",
+        "data": {
+          "to": "Director comercial del proveedor",
+          "subject": "Entregas de los últimos tres meses",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Los hechos con datos (retrasos, defectos, impacto), sin culpar.\n\n2. Qué necesitas a partir de ahora (plazos, calidad, aviso de retrasos) y desde cuándo.\n\n3. Cómo vais a hacer el seguimiento juntos (reunión, indicadores).\n\n4. Qué harás si no mejora, dicho con respeto, y una propuesta de reunión.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["hechos", "11 de 20", "impacto", "plazo", "calidad", "aviso anticipado", "indicadores", "plan de mejora", "proveedor alternativo", "reunión", "relación"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Riesgo real para el suministro?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué situaciones ponen en riesgo el suministro de una empresa.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Gestión de riesgos de suministro"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada situación de un fabricante de muebles:\n\nRiesgo para el suministro — Puede parar la producción o las entregas.\n\nSin riesgo relevante — Es normal o ya está cubierto.",
+        "data": {
+          "options": [
+            {"id": "r1", "text": "Un único proveedor fabrica una bisagra que solo usa tu producto estrella", "correct": "riesgo"},
+            {"id": "r2", "text": "Dos proveedores homologados de tornillería estándar", "correct": "no"},
+            {"id": "r3", "text": "El proveedor de madera está en una zona con incendios frecuentes y no tiene alternativa", "correct": "riesgo"},
+            {"id": "r4", "text": "Un material con stock para 3 meses y plazo de reposición de 2 semanas", "correct": "no"},
+            {"id": "r5", "text": "Un proveedor clave con problemas financieros publicados en la prensa", "correct": "riesgo"},
+            {"id": "r6", "text": "Cajas de cartón que fabrican decenas de empresas cerca", "correct": "no"},
+            {"id": "r7", "text": "Todo el tablero llega por un único puerto con huelgas convocadas", "correct": "riesgo"},
+            {"id": "r8", "text": "Un pequeño retraso de dos días en un pedido con margen de una semana", "correct": "no"}
+          ],
+          "cats": ["Riesgo para el suministro", "Sin riesgo relevante"],
+          "keys": ["riesgo", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_project_mgmt", "title": "Gestión de proyectos",
+    "desc": "Recupera un proyecto que va con retraso, comunica un cambio de alcance al cliente y distingue los riesgos de un proyecto de los problemas que ya han ocurrido.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un proyecto que se va de plazo", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás el estado de un proyecto a mitad de camino. Tendrás que decir si llega y qué hacer.",
+        "sub": "Control del proyecto — 10 min", "skills": {"hard": ["Planificación", "Control de proyectos"], "soft": ["Decisión"]},
+        "scenario": "Diriges la implantación de un nuevo programa de gestión en una cadena de 20 clínicas dentales. Debe estar en marcha el 1 de marzo, cuando caduca la licencia del programa antiguo. Hoy, a mitad del plazo, este es el estado.\n\nResponde en tres partes:\n\nA) ¿Llegará el proyecto a tiempo? Justifícalo con los datos.\n\nB) Qué opciones tienes (recursos, alcance, plazo) y cuál recomiendas.\n\nC) Qué le dirías al comité esta semana.",
+        "data": {
+          "headers": ["Tarea", "Avance previsto", "Avance real", "Detalle", "Estado"],
+          "table": [
+            {"n": "Configuración del programa", "a": "100 %", "b": "100 %", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Migración de datos de pacientes", "a": "60 %", "b": "25 %", "c": "Los datos antiguos tienen un 30 % de duplicados", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Formación del personal", "a": "30 %", "b": "10 %", "c": "Las clínicas no liberan horas", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Integración con la facturación", "a": "50 %", "b": "50 %", "c": "Depende de la migración", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Presupuesto consumido", "a": "50 %", "b": "62 %", "c": "Horas extra del proveedor", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con el avance de cada tarea.",
+          "kw": ["ruta crítica", "dependencias", "desviación", "migración", "limpieza de datos", "alcance", "recursos", "plazo fijo", "ampliar la licencia", "por fases", "comunicar"]
+        }
+      },
+      {
+        "id": "e2", "title": "El cliente pide un cambio", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Responderás a un cliente que pide añadir algo importante a mitad de proyecto.",
+        "sub": "Gestión del alcance — 10 min", "skills": {"hard": ["Control de cambios"], "soft": ["Negociación", "Comunicación con cliente"]},
+        "scenario": "A mitad del proyecto, la directora de las clínicas pide añadir la cita online para pacientes: «Es algo pequeño, ¿no? Lo necesitamos para el 1 de marzo». Tu equipo calcula que son 6 semanas de trabajo y 18.000 €. El contrato no lo incluye y el proyecto ya va justo de plazo.",
+        "data": {
+          "to": "Directora de las clínicas",
+          "subject": "Sobre la cita online",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Muestra que entiendes por qué es importante para ellas.\n\n2. Explica el impacto real en plazo y coste, con las cifras.\n\n3. Propón opciones (después del 1 de marzo, a cambio de quitar otra cosa, con más presupuesto) con sus ventajas e inconvenientes.\n\n4. Qué necesitas que decida, cuándo, y cómo quedará registrado el cambio.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["alcance", "impacto", "6 semanas", "18.000", "opciones", "segunda fase", "priorizar", "decisión", "control de cambios", "por escrito"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Riesgo o problema?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás si cada situación de un proyecto es un riesgo que vigilar o un problema que resolver ya.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Gestión de riesgos"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada situación del proyecto de implantación:\n\nRiesgo — Puede ocurrir: hay que valorar su probabilidad e impacto y preparar una respuesta.\n\nProblema — Ya ha ocurrido: hay que actuar ahora.",
+        "data": {
+          "options": [
+            {"id": "q1", "text": "El experto en migración del proveedor podría irse a otro proyecto en febrero", "correct": "riesgo"},
+            {"id": "q2", "text": "La migración de prueba ha fallado y faltan 4.000 historiales", "correct": "problema"},
+            {"id": "q3", "text": "Puede haber una huelga del personal de clínicas en enero", "correct": "riesgo"},
+            {"id": "q4", "text": "Tres clínicas no han enviado a nadie a la formación", "correct": "problema"},
+            {"id": "q5", "text": "Si el proveedor de facturación cambia su API, habrá que rehacer la integración", "correct": "riesgo"},
+            {"id": "q6", "text": "Se ha gastado el 62 % del presupuesto con el 40 % hecho", "correct": "problema"},
+            {"id": "q7", "text": "La nueva normativa de protección de datos sanitarios podría exigir cambios", "correct": "riesgo"},
+            {"id": "q8", "text": "La directora ha pedido una función fuera del contrato", "correct": "problema"}
+          ],
+          "cats": ["Riesgo", "Problema"],
+          "keys": ["riesgo", "problema"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_lean", "title": "Lean y mejora continua",
+    "desc": "Encuentra los desperdicios de un proceso, propón una mejora con el método adecuado y distingue las acciones lean de las que solo lo parecen.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un proceso de pedidos con desperdicio", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los pasos de un proceso administrativo. Tendrás que encontrar el desperdicio.",
+        "sub": "Mapa de proceso — 9 min", "skills": {"hard": ["Lean", "Mapa de flujo de valor"], "soft": ["Pensamiento crítico"]},
+        "scenario": "En una fábrica de mobiliario de oficina, un pedido de un cliente tarda de media 9 días en llegar a producción. El trabajo real que se hace sobre el pedido suma menos de 2 horas. Has seguido un pedido paso a paso.\n\nResponde en tres partes:\n\nA) Qué tipos de desperdicio ves y en qué pasos.\n\nB) Qué cambiarías para reducir el plazo y cuánto esperas ganar.\n\nC) Cómo involucrarías a las personas que hacen el proceso.",
+        "data": {
+          "headers": ["Paso", "Tiempo de trabajo", "Tiempo de espera", "Detalle", "Estado"],
+          "table": [
+            {"n": "Comercial pasa el pedido a mano a una plantilla", "a": "20 min", "b": "1 día", "c": "Lo hace al final de la semana", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Administración lo vuelve a teclear en el sistema", "a": "25 min", "b": "2 días", "c": "Errores en el 15 % de los pedidos", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Firma del director comercial", "a": "2 min", "b": "3 días", "c": "Para todos los pedidos, aunque sean pequeños", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Oficina técnica revisa las medidas", "a": "45 min", "b": "2 días", "c": "Necesario en pedidos a medida (30 %)", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Planificación lo asigna a una línea", "a": "15 min", "b": "1 día", "c": "", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los tiempos de trabajo y de espera.",
+          "kw": ["desperdicio", "espera", "reprocesos", "duplicar tareas", "errores", "valor añadido", "plazo total", "aprobación por importe", "flujo", "las personas del proceso", "gemba"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un problema que vuelve una y otra vez", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo resolver de raíz un problema que se repite en una línea de producción.",
+        "sub": "Resolución de problemas — 10 min", "skills": {"hard": ["Análisis de causa raíz", "Ciclo PDCA"], "soft": ["Método"]},
+        "scenario": "La línea de montaje de sillas de oficina para dos o tres veces por semana porque la máquina de atornillado se atasca. Cada parada cuesta unos 40 minutos. Hasta ahora, el mantenimiento la desatasca y vuelve a fallar a los pocos días. El jefe de planta te pide que lo resuelvas «de una vez».",
+        "data": {
+          "to": "Jefe de planta",
+          "subject": "Cómo vamos a resolver los atascos de la atornilladora",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Qué datos recogerás primero y por qué no basta con desatascarla.\n\n2. Cómo buscarás la causa raíz (cinco porqués, diagrama de causas) y con quién.\n\n3. Cómo probarás la solución antes de aplicarla en todo (planificar, hacer, comprobar, actuar).\n\n4. Cómo asegurarás que no vuelva (estándar, formación, revisión) y qué indicador seguirás.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["datos", "registro de paradas", "causa raíz", "cinco porqués", "Ishikawa", "operarios", "PDCA", "prueba", "estandarizar", "indicador"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Lean o solo lo parece?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué iniciativas aplican de verdad los principios lean.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Principios lean"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada iniciativa de una empresa que dice «estar haciendo lean»:\n\nLean de verdad — Reduce desperdicio, mejora el flujo y cuenta con quien hace el trabajo.\n\nSolo lo parece — Usa las palabras pero no cambia el proceso o lo empeora.",
+        "data": {
+          "options": [
+            {"id": "n1", "text": "El equipo de la línea propone y prueba mejoras cada semana", "correct": "si"},
+            {"id": "n2", "text": "Pintar el suelo y ordenar el taller una vez para una visita del cliente", "correct": "no"},
+            {"id": "n3", "text": "Producir según lo que se ha vendido en lugar de por previsión de stock", "correct": "si"},
+            {"id": "n4", "text": "Reducir plantilla y llamarlo «eliminar desperdicio»", "correct": "no"},
+            {"id": "n5", "text": "Ir al lugar de trabajo a ver el problema antes de decidir", "correct": "si"},
+            {"id": "n6", "text": "Medir el número de ideas de mejora sin aplicar ninguna", "correct": "no"},
+            {"id": "n7", "text": "Poner una señal visual que avise cuando falta material en la línea", "correct": "si"},
+            {"id": "n8", "text": "Contratar consultores que deciden los cambios sin hablar con los operarios", "correct": "no"}
+          ],
+          "cats": ["Lean de verdad", "Solo lo parece"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_quality", "title": "Calidad",
+    "desc": "Analiza las reclamaciones de clientes para encontrar la causa, prepara la respuesta a una no conformidad y decide qué evidencias sirven en una auditoría ISO 9001.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Las reclamaciones del trimestre", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás las reclamaciones de clientes de una fábrica. Tendrás que decidir en qué centrarte primero.",
+        "sub": "Análisis de calidad — 9 min", "skills": {"hard": ["Gestión de la calidad", "Pareto"], "soft": ["Priorización"]},
+        "scenario": "Una fábrica de electrodomésticos pequeños ha recibido 480 reclamaciones este trimestre, el doble que el anterior. Dirección quiere un plan para reducirlas a la mitad. Has agrupado las reclamaciones por tipo.\n\nResponde en tres partes:\n\nA) En qué tipos te centrarías primero y por qué.\n\nB) Qué causas probables ves en los dos principales y cómo las confirmarías.\n\nC) Qué indicadores seguirías cada semana.",
+        "data": {
+          "headers": ["Tipo de reclamación", "Número", "Coste medio", "Detalle", "Estado"],
+          "table": [
+            {"n": "Batidora: el vaso pierde líquido", "a": "210", "b": "35 €", "c": "Junta de un proveedor nuevo desde hace 4 meses", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Tostadora: no salta", "a": "120", "b": "28 €", "c": "Solo en el lote fabricado en el turno de noche", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Golpes en la caja al llegar", "a": "80", "b": "12 €", "c": "Cambio de transportista", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Instrucciones confusas", "a": "45", "b": "5 €", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Otros", "a": "25", "b": "20 €", "c": "Varios", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los números de cada tipo.",
+          "kw": ["Pareto", "concentración", "coste total", "proveedor", "inspección de entrada", "trazabilidad del lote", "turno", "causa raíz", "acción correctiva", "indicadores"]
+        }
+      },
+      {
+        "id": "e2", "title": "Responder a una no conformidad", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Prepararás la respuesta a una no conformidad detectada en una auditoría.",
+        "sub": "Acciones correctivas — 10 min", "skills": {"hard": ["ISO 9001", "Acciones correctivas"], "soft": ["Rigor"]},
+        "scenario": "En la auditoría de certificación ISO 9001, el auditor ha abierto una no conformidad: «No hay evidencias de que se calibren los equipos de medida de la línea de tostadoras; dos calibres tienen la etiqueta caducada desde hace 7 meses». Tienes 30 días para presentar el análisis y el plan de acción.",
+        "data": {
+          "to": "Auditor de la entidad de certificación",
+          "subject": "Plan de acción de la no conformidad sobre calibración",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. La corrección inmediata (qué se hace ya con los calibres y con los productos medidos con ellos).\n\n2. El análisis de la causa raíz (por qué no se calibraron).\n\n3. La acción correctiva para que no vuelva a pasar, con responsable y fecha.\n\n4. Cómo se comprobará que la acción ha sido eficaz y qué evidencias se aportarán.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["corrección", "productos afectados", "causa raíz", "acción correctiva", "plan de calibración", "responsable", "fecha", "registro", "eficacia", "evidencias"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Sirve como evidencia?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué pruebas son válidas ante un auditor de ISO 9001.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Auditorías de calidad"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada cosa que una empresa enseña al auditor:\n\nEvidencia válida — Es un registro objetivo y verificable de que se hace.\n\nNo sirve — Es una intención, una opinión o algo que no se puede comprobar.",
+        "data": {
+          "options": [
+            {"id": "z1", "text": "El certificado de calibración de un equipo con fecha y laboratorio", "correct": "si"},
+            {"id": "z2", "text": "«Siempre lo hacemos, pero no lo apuntamos»", "correct": "no"},
+            {"id": "z3", "text": "El acta firmada de la revisión por la dirección con sus decisiones", "correct": "si"},
+            {"id": "z4", "text": "Un procedimiento redactado que nadie sigue en la línea", "correct": "no"},
+            {"id": "z5", "text": "El registro de formación de los operarios con fecha y contenido", "correct": "si"},
+            {"id": "z6", "text": "Un correo del jefe diciendo que «la calidad es lo primero»", "correct": "no"},
+            {"id": "z7", "text": "Las fichas de inspección de los lotes con sus resultados", "correct": "si"},
+            {"id": "z8", "text": "Un plan de acciones sin responsables ni fechas", "correct": "no"}
+          ],
+          "cats": ["Evidencia válida", "No sirve"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_manufacturing", "title": "Producción industrial",
+    "desc": "Mide la eficiencia real de una línea de producción, organiza un cambio de turno sin perder calidad y decide qué paradas se pueden evitar.",
+    "exercises": [
+      {
+        "id": "e1", "title": "La eficiencia real de una línea", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás los datos de un turno de una línea de envasado. Tendrás que calcular su eficiencia y dónde se pierde.",
+        "sub": "OEE — 10 min", "skills": {"hard": ["OEE", "Producción"], "soft": ["Rigor"]},
+        "scenario": "Una línea de envasado de zumos tiene una capacidad nominal de 6.000 botellas por hora. En un turno de 8 horas ha producido 30.000 botellas buenas. El jefe de turno dice que «la línea va bien, casi siempre está en marcha».\n\nResponde en tres partes:\n\nA) Calcula la disponibilidad, el rendimiento y la calidad del turno, y la eficiencia global (OEE).\n\nB) Dónde se pierde más y qué harías primero.\n\nC) Qué le dirías al jefe de turno sobre «casi siempre está en marcha».",
+        "data": {
+          "headers": ["Dato del turno", "Valor", "Detalle", "Cálculo", "Estado"],
+          "table": [
+            {"n": "Tiempo del turno", "a": "480 min", "b": "", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Paradas", "a": "60 min", "b": "Cambio de formato 40 min y averías 20 min", "c": "Tiempo en marcha: 420 min", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Botellas producidas", "a": "32.000", "b": "En 420 min podía hacer 42.000", "c": "Microparadas y velocidad reducida", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Botellas rechazadas", "a": "2.000", "b": "Tapón mal colocado", "c": "Buenas: 30.000", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Capacidad nominal", "a": "6.000 por hora", "b": "100 por minuto", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C calculando cada componente del OEE.",
+          "kw": ["disponibilidad", "87,5 %", "rendimiento", "76 %", "calidad", "93,75 %", "OEE", "62,5 %", "microparadas", "velocidad", "cambio de formato", "SMED"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un cambio de turno sin errores", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo debe hacerse el cambio de turno en una planta.",
+        "sub": "Organización — 10 min", "skills": {"hard": ["Gestión de turnos"], "soft": ["Comunicación"]},
+        "scenario": "En la planta de zumos, el 70 % de los rechazos por calidad aparece en la primera hora del turno de noche. El cambio de turno se hace en 5 minutos: el que sale se va y el que entra arranca la máquina con los ajustes que encuentra. Dos veces este mes se ha envasado con el tapón equivocado.",
+        "data": {
+          "to": "Jefa de producción",
+          "subject": "Propuesta para el cambio de turno",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Qué se pierde hoy en el cambio de turno, con los datos.\n\n2. Cómo debería ser el relevo: tiempo, quién se queda, qué información se pasa.\n\n3. Qué comprobaciones hace el turno entrante antes de arrancar (formato, tapón, primera muestra).\n\n4. Cómo se implanta, cómo se forma al personal y qué indicador mostrará que funciona.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["relevo", "solapamiento", "hoja de traspaso", "incidencias del turno", "lista de comprobación", "formato", "primera pieza", "muestra", "formación", "indicador de rechazos"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Parada evitable o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué paradas de una línea se pueden evitar con mejor gestión.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Mantenimiento", "Planificación"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada parada de la línea de envasado:\n\nEvitable — Con mejor planificación, mantenimiento o método no habría ocurrido o duraría mucho menos.\n\nNo evitable — Es inherente al proceso o se ha previsto y planificado.",
+        "data": {
+          "options": [
+            {"id": "p1", "text": "Esperar 30 minutos a que llegue el material de etiquetas que nadie pidió a tiempo", "correct": "evitable"},
+            {"id": "p2", "text": "El mantenimiento preventivo programado del domingo", "correct": "no"},
+            {"id": "p3", "text": "Una avería de una correa que no se revisaba desde hace dos años", "correct": "evitable"},
+            {"id": "p4", "text": "La limpieza obligatoria entre zumo de naranja y zumo de piña por alérgenos", "correct": "no"},
+            {"id": "p5", "text": "Un cambio de formato de 40 minutos que la competencia hace en 10", "correct": "evitable"},
+            {"id": "p6", "text": "Buscar la herramienta para ajustar la máquina porque no tiene sitio fijo", "correct": "evitable"},
+            {"id": "p7", "text": "La parada pactada para la formación de seguridad del trimestre", "correct": "no"},
+            {"id": "p8", "text": "Un corte de luz de toda la zona industrial", "correct": "no"}
+          ],
+          "cats": ["Evitable", "No evitable"],
+          "keys": ["evitable", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_autocad", "title": "AutoCAD y dibujo técnico",
+    "desc": "Revisa un plano con errores antes de enviarlo a obra, organiza los planos de un proyecto en equipo y decide qué prácticas de dibujo técnico son correctas.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un plano que no puede ir a obra", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás la revisión de un plano de distribución antes de enviarlo a obra. Tendrás que decidir qué corregir.",
+        "sub": "Revisión de planos — 9 min", "skills": {"hard": ["AutoCAD", "Normas de dibujo"], "soft": ["Rigor"]},
+        "scenario": "Un estudio de arquitectura va a enviar a la constructora el plano de distribución de una vivienda reformada. El jefe de proyecto ha hecho una revisión rápida y ha encontrado varios problemas.\n\nResponde en tres partes:\n\nA) Qué problemas impiden enviar el plano y por qué.\n\nB) Cómo los corregirías en AutoCAD.\n\nC) Qué comprobaciones harías siempre antes de enviar un plano.",
+        "data": {
+          "headers": ["Elemento", "Lo que se ve", "Detalle", "Consecuencia en obra", "Estado"],
+          "table": [
+            {"n": "Cotas", "a": "Algunas escritas a mano sobre la línea", "b": "No coinciden con la medida del dibujo", "c": "Tabiques mal replanteados", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Escala", "a": "Plano a 1:50", "b": "Bloques de puertas insertados a 1:100", "c": "Puertas de la mitad de tamaño", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Capas", "a": "Todo en la capa 0", "b": "Mobiliario y tabiques juntos", "c": "No se puede imprimir solo la obra", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Cajetín", "a": "Sin fecha ni número de revisión", "b": "", "c": "Confusión entre versiones", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Norte y leyenda", "a": "Presentes", "b": "", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C elemento por elemento.",
+          "kw": ["cotas asociativas", "escala", "bloques", "unidades", "capas", "estándar de capas", "cajetín", "revisión", "fecha", "comprobación antes de emitir"]
+        }
+      },
+      {
+        "id": "e2", "title": "Planos de un proyecto en equipo", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo organizar los planos de un proyecto en el que trabajan varias personas.",
+        "sub": "Organización — 10 min", "skills": {"hard": ["Gestión de planos", "Referencias externas"], "soft": ["Comunicación"]},
+        "scenario": "Cinco personas del estudio trabajan en los planos de un edificio de 40 viviendas. Cada una guarda sus ficheros en su ordenador, se pasan los planos por correo y la constructora ha recibido dos versiones distintas del mismo plano de estructura. El director quiere un sistema antes de la siguiente fase.",
+        "data": {
+          "to": "Director del estudio",
+          "subject": "Cómo organizamos los planos del proyecto",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Dónde se guardan los ficheros y cómo se nombran (con un ejemplo de nombre).\n\n2. Cómo se trabaja a la vez sin pisarse (referencias externas, plano base, capas comunes).\n\n3. Cómo se controlan las revisiones y qué se envía a la constructora.\n\n4. Cómo lo implantarías y quién se encarga de mantenerlo.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["carpeta compartida", "nomenclatura", "referencias externas", "plano base", "plantilla", "capas", "revisiones", "registro de envíos", "una sola versión vigente", "responsable"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Buena práctica de dibujo o error?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas de dibujo técnico son correctas.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Dibujo técnico"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada práctica al dibujar planos en AutoCAD:\n\nBuena práctica — Hace el plano fiable y fácil de mantener.\n\nError — Provoca fallos en obra o en la colaboración.",
+        "data": {
+          "options": [
+            {"id": "a1", "text": "Dibujar a escala real (1:1) en el espacio modelo", "correct": "buena"},
+            {"id": "a2", "text": "Escribir el número de la cota a mano en vez de usar la cota real", "correct": "error"},
+            {"id": "a3", "text": "Usar una plantilla con las capas, estilos y cajetín del estudio", "correct": "buena"},
+            {"id": "a4", "text": "Descomponer los bloques para «poder moverlos mejor»", "correct": "error"},
+            {"id": "a5", "text": "Indicar la revisión y la fecha en el cajetín de cada emisión", "correct": "buena"},
+            {"id": "a6", "text": "Dibujar todo en la capa 0 con colores puestos a mano", "correct": "error"},
+            {"id": "a7", "text": "Imprimir desde presentaciones con su escala definida", "correct": "buena"},
+            {"id": "a8", "text": "Copiar un plano antiguo y cambiarle solo el nombre del cliente", "correct": "error"}
+          ],
+          "cats": ["Buena práctica", "Error"],
+          "keys": ["buena", "error"]
+        }
+      }
+    ]
+  }
+]

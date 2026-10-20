@@ -2,48 +2,27 @@
 // Script clásico: comparte el ámbito global con el resto de assets/js/app/*.js,
 // que index.html carga en orden numérico. Ver assets/js/README.md.
 // ═══════════════════════════════════════════════════════════════════════════
-// SkillPass — credencial verificable anclada en blockchain (Ethereum Sepolia)
-// Flujo: issue-credential (compone el CV + hash) → anchor-credential (tx on-chain)
-// On-chain solo viaja el hash; el CV completo vive off-chain en Supabase (RGPD).
-//
-// El sellado no es instantáneo: un bloque de Sepolia tarda ~12 s y Netlify corta
-// las funciones síncronas, así que el servidor responde `pending` en cuanto difunde
-// la transacción y aquí se consulta hasta que la red la confirma. El txHash es
-// válido y enlazable desde el primer segundo.
+// SkillPass — credencial verificable W3C (VC 2.0) firmada por TalentPact.
+// Flujo: issue-credential (compone y firma) → enlace / QR / archivo para
+// compartir → verify.html la comprueba (válida, caducada, revocada, alterada).
+// El sello público es un extra de pago (pay-seal → anchor-credential): entra en
+// el lote diario que anchor-batch publica en una red pública. En la tarjeta va
+// pequeño y plegado (docs/plan_post_reunion/03 §5.1).
 // ═══════════════════════════════════════════════════════════════════════════
 const SkillPass={
-  cred:null,   // { credentialId, cvJson, cvHash, txHash, blockNumber, anchoredAt, pending }
-  chain:{name:'Ethereum Sepolia',explorer:'https://sepolia.etherscan.io',contractUrl:null},
-  POLL_MS:5000,
-  POLL_TRIES:18,   // ~90 s: margen de sobra para uno o dos bloques de Sepolia
+  cred:null,   // { credentialId, vc, verifyUrl, validUntil, firmada, revocada, sello }
 
-  txUrl(h){ return h?(SkillPass.chain.explorer+'/tx/'+encodeURIComponent(h)):''; },
-
-  // El servidor es la fuente de verdad sobre la red: si mañana se cambia de
-  // cadena, la interfaz lo refleja sin tocar este archivo.
-  _learnChain(r){
-    if(!r)return;
-    if(r.chainName)SkillPass.chain.name=r.chainName;
-    if(r.contractUrl)SkillPass.chain.contractUrl=r.contractUrl;
-    if(r.explorerUrl){ const m=/^(https?:\/\/[^/]+)/.exec(r.explorerUrl); if(m)SkillPass.chain.explorer=m[1]; }
-  },
+  _fecha(d){return d?new Date(d).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'}):'';},
 
   _status(kind,html){
     const el=document.getElementById('spChainStatus'); if(!el)return;
-    const styles={
-      info:{bg:'var(--slate-50)',fg:'var(--slate-700)',bd:'var(--slate-200)'},
-      warn:{bg:'#fffbeb',fg:'#b45309',bd:'#fde68a'},
-      ok:{bg:'var(--emerald-50)',fg:'var(--emerald-600)',bd:'var(--emerald-100)'},
-      error:{bg:'#fef2f2',fg:'#b91c1c',bd:'#fecaca'}
-    };
-    const st=styles[kind]||styles.info;
+    const cls={info:'vf-neutro',warn:'vf-aviso',ok:'vf-ok',error:'vf-error'}[kind]||'vf-neutro';
+    el.className='vf-estado '+cls+' u-mt-14';
     el.style.display='block';
-    el.style.background=st.bg; el.style.color=st.fg; el.style.border='1px solid '+st.bd;
     el.innerHTML=html;
   },
 
-  // Los errores del servidor llegan como {error, details}: se muestran los dos,
-  // porque el `details` es justo lo que dice qué variable falta o qué revirtió.
+  // Los errores del servidor llegan como {error, details}: se muestran los dos.
   _statusError(prefix,r){
     SkillPass._status('error','<strong>'+escHtml(prefix)+'</strong>'+
       ((r&&r.error)?': '+escHtml(r.error):'')+
@@ -52,30 +31,31 @@ const SkillPass={
 
   _busy(on,label){
     const b=document.getElementById('spChainBtn'); if(!b)return;
-    b.disabled=on; b.style.opacity=on?'.6':''; b.style.cursor=on?'wait':'';
+    b.disabled=on; b.setAttribute('aria-busy',on?'true':'false');
     if(label)b.textContent=label;
   },
 
   shareUrl(){
-    const c=SkillPass.cred; if(!c||!c.cvHash)return '';
-    return (location.origin||'')+'/verify.html?h='+encodeURIComponent(c.cvHash);
+    const c=SkillPass.cred; if(!c)return '';
+    return c.verifyUrl||((location.origin||'')+'/verify.html?c='+encodeURIComponent(c.credentialId));
   },
 
-  _txLine(){
-    const c=SkillPass.cred;
-    if(!c||!c.txHash)return '';
-    return ' (<a href="'+SkillPass.txUrl(c.txHash)+'" target="_blank" rel="noopener">ver la transacción</a>)';
+  /** Skills de la credencial (v2: banda; v1: nota → banda). */
+  _skills(c){
+    const vc=c.vc||c.cvJson||{};
+    if(vc.credentialSubject&&Array.isArray(vc.credentialSubject.skills))return vc.credentialSubject.skills;
+    return (vc.skills||c.skills||[]).map(s=>({skill:s.skill,banda:tpBanda(s.score).txt,verificada:!!s.verified}));
   },
 
   _chip(s){
-    const n=Number(s.score)||0;
-    const cls=n>=75?'high':n>=50?'mid':'low';
-    const lvl=n>=75?'Avanzado':n>=50?'Intermedio':'En progreso';
-    return '<div class="sp-pass-chip"><div class="sp-pass-chip-top"><span>'+escHtml(s.skill||'')+'</span><strong class="'+cls+'">'+n+'</strong></div><div class="sp-pass-bar"><i class="'+cls+'" style="width:'+Math.max(6,Math.min(100,n))+'%"></i></div><div class="sp-pass-lvl">'+lvl+'</div></div>';
+    const ids={'Insuficiente':'insuficiente','Aceptable':'aceptable','Bueno':'bueno','Muy bueno':'muy_bueno'};
+    return '<div class="sp-pass-chip"><div class="sp-pass-chip-top"><span>'+escHtml(typeof tpSkillNombre==='function'?tpSkillNombre(s.skill):s.skill)+'</span></div>'+
+      '<span class="tp-banda tp-banda-'+(ids[s.banda]||'insuficiente')+'"><span class="tp-banda-seg" aria-hidden="true">'+'<i></i>'.repeat(4)+'</span><span class="tp-banda-txt">'+escHtml(s.banda||'')+'</span></span>'+
+      (s.verificada?'<div class="sp-pass-lvl">Nota verificada</div>':'')+'</div>';
   },
 
   // QR dibujado en el navegador. Antes se pedía a api.qrserver.com, lo que
-  // enviaba el hash de cada credencial a un tercero en cada render.
+  // enviaba el identificador de cada credencial a un tercero en cada render.
   _qrHtml(url){
     if(!url)return '';
     try{
@@ -85,152 +65,99 @@ const SkillPass={
 
   cardHtml(c, opts){
     opts=opts||{};
-    const skills=(c.cvJson&&c.cvJson.skills)||c.skills||[];
-    const url=opts.url||(c.cvHash?((location.origin||'')+'/verify.html?h='+encodeURIComponent(c.cvHash)):'');
-    const fecha=c.anchoredAt?new Date(c.anchoredAt).toLocaleString('es-ES'):'';
-    const pending=!!c.pending&&!c.anchoredAt;
-    // Solo se declara sellado cuando la cadena lo confirma: tener txHash
-    // difundido todavía no es una garantía.
-    const sealed=!pending&&!!(c.anchoredAt||opts.verified);
-    const sealTxt=sealed?'Sellado<br>blockchain':(pending?'Sellado<br>en curso':'Firmado<br>TalentPact');
-    const lead=sealed
-      ? 'Habilidades demostradas y selladas en blockchain. Comprobable incluso sin TalentPact.'
-      : (pending?'Transacción enviada a la red. El sello queda firme en cuanto se confirme el bloque.'
-               :'Habilidades demostradas en retos reales. Cualquier empresa lo comprueba con el enlace o el QR.');
+    const skills=SkillPass._skills(c);
+    const url=opts.url||SkillPass.shareUrl();
+    const sello=(c.sello&&c.sello.estado==='sellado');
     return '<div class="sp-pass-wrap"><div class="sp-pass">'+
-      '<div class="sp-pass-top"><div><div class="sp-pass-kicker">TalentPact · verifiable credential</div>'+
+      '<div class="sp-pass-top"><div><div class="sp-pass-kicker">TalentPact · credencial verificable</div>'+
       '<div class="sp-pass-brand">talent<span>pact</span></div>'+
       '<h3>SkillPass</h3>'+
-      '<p class="sp-pass-lead">'+lead+'</p></div>'+
-      '<div class="sp-pass-seal'+(pending?' pending':'')+'"><i>'+sealTxt+'</i></div></div>'+
+      '<p class="sp-pass-lead">Habilidades demostradas y verificables. Cualquier empresa lo comprueba con el enlace o el QR.</p></div>'+
+      '<div class="sp-pass-seal"><i>Firmado<br>TalentPact</i></div></div>'+
       '<div class="sp-pass-chips">'+(skills.map(SkillPass._chip).join('')||'<div class="sp-pass-chip">Sin skills</div>')+'</div>'+
       '<div class="sp-pass-foot"><div class="sp-pass-meta">'+
-      (sealed||pending?'<div>Red · '+escHtml(SkillPass.chain.name)+'</div>':'<div>Emitido por TalentPact</div>')+
-      (fecha?'<div>Anclado · '+escHtml(fecha)+'</div>':'')+
-      (c.blockNumber?'<div>Bloque · '+escHtml(String(c.blockNumber))+'</div>':'')+
-      (c.cvHash?'<div>Hash · '+escHtml(c.cvHash)+'</div>':'')+
-      (c.txHash?'<div>Tx · <a href="'+SkillPass.txUrl(c.txHash)+'" target="_blank" rel="noopener">'+escHtml(c.txHash.slice(0,20))+'…</a></div>':'')+
-      '</div>'+SkillPass._qrHtml(url)+'</div></div></div>';
+      '<div>'+(c.revocada?'Revocado':(c.firmada===false?'Emitido por TalentPact':'Firmado por TalentPact'))+'</div>'+
+      (c.validUntil?'<div>Válido hasta · '+escHtml(SkillPass._fecha(c.validUntil))+'</div>':'')+
+      (sello?'<div>Sello público · '+escHtml(SkillPass._fecha(c.sello.fecha))+'</div>':'')+
+      (c.credentialId?'<div>Código · '+escHtml(c.credentialId)+'</div>':'')+
+      '</div>'+(c.revocada?'':SkillPass._qrHtml(url))+'</div></div></div>';
   },
 
   _render(){
     const c=SkillPass.cred; if(!c)return;
     const box=document.getElementById('spChainResult');
-    if(box){ box.style.display='block'; box.innerHTML=SkillPass.cardHtml(c,{url:SkillPass.shareUrl()}); }
-    const dl=document.getElementById('spChainDownload'); if(dl)dl.style.display='inline-flex';
-    const pdf=document.getElementById('spChainPdf'); if(pdf)pdf.style.display='inline-flex';
-    const sh=document.getElementById('spChainShare'); if(sh)sh.style.display='inline-flex';
+    if(box){ box.style.display='block'; box.innerHTML=SkillPass.cardHtml(c); }
+    ['spChainDownload','spChainPdf','spChainShare'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=c.revocada?'none':'inline-flex';});
     SkillPass._renderSello();
   },
 
-  /** Vuelca en la credencial lo que acaba de decir el servidor y repinta. */
-  _apply(r){
-    const c=SkillPass.cred; if(!c||!r)return;
-    if(r.txHash)c.txHash=r.txHash;
-    if(r.blockNumber!=null)c.blockNumber=r.blockNumber;
-    if(r.anchoredAt)c.anchoredAt=r.anchoredAt;
-    c.pending=!!r.pending;
-    SkillPass._learnChain(r);
+  _guardar(r){
+    SkillPass.cred={credentialId:r.credentialId,vc:r.vc||r.cvJson,verifyUrl:r.verifyUrl,validUntil:r.validUntil,
+      firmada:r.firmada!==false,revocada:!!r.revocada,sello:r.sello||{estado:'no'}};
     SkillPass._render();
   },
 
-  /**
-   * Consulta hasta que la red confirme. Cada llamada a anchor-credential con la
-   * misma credencial es idempotente: si ya hay transacción difundida, recoge su
-   * recibo en vez de enviar otra (y de gastar gas otra vez).
-   */
-  async _awaitConfirmation(credentialId){
-    for(let i=0;i<SkillPass.POLL_TRIES;i++){
-      await new Promise(r=>setTimeout(r,SkillPass.POLL_MS));
-      const r=await TPCloud._postAuth('anchor-credential',{credentialId});
-      if(r&&r.error)return r;
-      SkillPass._apply(r);
-      if(r&&!r.pending)return r;
-      SkillPass._status('warn','② Transacción en la red'+SkillPass._txLine()+
-        '. Esperando confirmación… ('+((i+1)*SkillPass.POLL_MS/1000)+' s)');
-    }
-    return null;
-  },
-
   // Emitir es gratis: la credencial queda firmada por TalentPact y cualquiera la
-  // comprueba con el enlace o el QR. El sello en blockchain es un extra de pago
-  // (sellar()), que se ofrece pequeño al final de la tarjeta.
+  // comprueba con el enlace o el QR. El sello público es un extra de pago.
   async generate(){
     const unlocked=Object.values(candidateProfile.skills||{}).filter(s=>s&&s.unlocked).length;
     if(!unlocked){
-      SkillPass._status('info','Aún no tienes ninguna skill validada. Completa al menos un reto y vuelve aquí para emitir tu SkillPass.');
+      SkillPass._status('info','Aún no tienes ninguna skill demostrada. Completa al menos un reto y vuelve aquí para emitir tu SkillPass.');
       return null;
     }
     let user=null;
     try{ user=await TPCloud.currentUser(); }catch(e){}
     if(!user){
-      SkillPass._status('info','Necesitas iniciar sesión: la credencial se emite sobre las evaluaciones guardadas en tu cuenta, no sobre el progreso local de este navegador.');
+      SkillPass._status('info','Necesitas iniciar sesión: la credencial se emite sobre las evaluaciones guardadas en tu cuenta, no sobre el progreso de este navegador.');
       return null;
     }
     try{
       SkillPass._busy(true,'Emitiendo…');
-      // Sin userId: el servidor lo deduce del token de sesión.
       const issued=await TPCloud._postAuth('issue-credential',{});
-      if(issued.error){ SkillPass._statusError('No se pudo emitir la credencial',issued); return null; }
-      SkillPass._learnChain(issued);
-      SkillPass.cred={credentialId:issued.credentialId,cvJson:issued.cvJson,cvHash:issued.cvHash,
-                      txHash:issued.txHash||null,blockNumber:issued.blockNumber||null,
-                      anchoredAt:issued.anchoredAt||null,pending:!!issued.pending};
-      SkillPass._render();
-      if(issued.pending){ await SkillPass._anclar(issued.credentialId,true); return issued; }
-      SkillPass._status('ok','Tu SkillPass está listo. Compártelo con el enlace o el QR: cualquier empresa lo comprueba en TalentPact, gratis.');
+      if(issued.error){ SkillPass._statusError('No se pudo emitir el SkillPass',issued); return null; }
+      SkillPass._guardar(issued);
+      if(issued.aviso)SkillPass._status('warn',escHtml(issued.aviso));
+      else SkillPass._status('ok',issued.reused?'Tu SkillPass sigue al día: tus skills no han cambiado desde la última vez.':'Tu SkillPass está listo. Compártelo con el enlace o el QR: cualquier empresa lo comprueba gratis.');
       return issued;
     }catch(e){
-      SkillPass._status('error','Error de red al emitir la credencial: '+escHtml(e.message||String(e)));
+      SkillPass._status('error','Error de red al emitir el SkillPass: '+escHtml(e.message||String(e)));
       return null;
     }finally{
       SkillPass._busy(false,'Actualizar mi SkillPass');
     }
   },
 
-  /** Ancla la credencial ya pagada (o recoge el recibo de un anclaje en curso). */
-  async _anclar(credentialId,yaEnCurso){
+  /** Con el sello pagado, pide entrar en el lote de esta noche. */
+  async _anclar(credentialId){
     try{
-      let res;
-      if(yaEnCurso){
-        SkillPass._status('warn','Ya había un sellado en curso'+SkillPass._txLine()+'. Esperando a que la red lo confirme…');
-        res={pending:true};
-      }else{
-        SkillPass._status('info','Sellando en '+escHtml(SkillPass.chain.name)+'…');
-        res=await TPCloud._postAuth('anchor-credential',{credentialId});
-        if(res.error){
-          if(res.code==='sello_no_pagado')SkillPass._status('info','El sello público es un extra de '+escHtml(res.precio||'4,99 €')+'. Puedes añadirlo al final de la tarjeta.');
-          else SkillPass._statusError('No se pudo sellar',res);
-          return res;
-        }
-        SkillPass._apply(res);
+      const res=await TPCloud._postAuth('anchor-credential',{credentialId});
+      if(res.error){
+        if(res.code==='sello_no_pagado')SkillPass._status('info','El sello público es un extra de '+escHtml(res.precio||'4,99 €')+'. Puedes añadirlo al final de la tarjeta.');
+        else SkillPass._statusError('No se pudo pedir el sello',res);
+        return res;
       }
-      if(res.pending){
-        const done=await SkillPass._awaitConfirmation(credentialId);
-        if(done&&done.error){ SkillPass._statusError('La transacción se envió, pero la confirmación falló',done); return done; }
-        if(!done){ SkillPass._status('warn','Sello enviado'+SkillPass._txLine()+'. La red aún no lo ha confirmado: vuelve en un minuto, no se cobra de nuevo.'); return null; }
-        res=done;
-      }
-      SkillPass._status('ok','SkillPass sellado en blockchain'+SkillPass._txLine()+'. Ya se puede comprobar incluso sin TalentPact.');
+      if(SkillPass.cred&&res.sello)SkillPass.cred.sello=res.sello;
+      SkillPass._render();
+      SkillPass._status('ok',res.sello&&res.sello.estado==='sellado'?'Tu SkillPass ya tiene sello público.':'Pago recibido. Tu SkillPass se publica en el lote de esta noche; no tienes que hacer nada más.');
       return res;
     }catch(e){
-      SkillPass._status('error','Error de red al sellar: '+escHtml(e.message||String(e)));
+      SkillPass._status('error','Error de red al pedir el sello: '+escHtml(e.message||String(e)));
       return null;
-    }finally{ SkillPass._renderSello(); }
+    }
   },
 
-  /** «Añadir sello»: explica qué aporta, cobra con Stripe y, pagado, sella. */
+  /** «Añadir sello»: explica qué aporta, cobra con Stripe y, pagado, lo pone en la cola. */
   async sellar(){
+    if(!SkillPass.cred){ const r=await SkillPass.generate(); if(!r)return; }
     const c=SkillPass.cred;
-    if(!c){ const r=await SkillPass.generate(); if(!r)return; }
-    if(SkillPass.cred.anchoredAt)return;
-    const si=await tpConfirmar({titulo:'Sello público en blockchain',
-      texto:'Tu SkillPass ya es verificable en TalentPact, gratis. El sello publica su huella en una blockchain pública con fecha: cualquiera puede comprobarlo incluso sin TalentPact y nadie puede cambiarlo después. Pago único por esta versión de tu SkillPass. Tus datos personales no salen de TalentPact: en la cadena solo va una huella.',
-      si:'Pagar 4,99 € y sellar',no:'Ahora no'});
+    if(c.revocada||(c.sello&&c.sello.estado!=='no'))return;
+    const si=await tpConfirmar({titulo:'Sello público',
+      texto:'Tu SkillPass ya es verificable en TalentPact, gratis. El sello publica su huella con fecha en una red pública: se podrá comprobar incluso sin TalentPact y nadie podrá cambiarla después. Se publica en el lote de cada noche. En la red solo va una huella sin datos personales; si borras tu cuenta, deja de poder vincularse a ti.',
+      si:'Pagar 4,99 €',no:'Ahora no'});
     if(!si)return;
-    const r=await TPCloud._postAuth('pay-seal',{accion:'pagar',credentialId:SkillPass.cred.credentialId,returnUrl:location.origin+location.pathname});
+    const r=await TPCloud._postAuth('pay-seal',{accion:'pagar',credentialId:c.credentialId,returnUrl:location.origin+location.pathname});
     if(!r||r.error){ SkillPass._statusError('No se pudo iniciar el pago',r||{}); return; }
-    if(r.yaSellado||r.pagado){ await SkillPass._anclar(SkillPass.cred.credentialId); return; }
+    if(r.yaSellado||r.pagado){ await SkillPass._anclar(c.credentialId); return; }
     if(r.url)location.href=r.url;
   },
 
@@ -242,51 +169,68 @@ const SkillPass={
     try{const u=new URL(location.href);['sello','session_id'].forEach(k=>u.searchParams.delete(k));history.replaceState({},document.title,u.pathname+(u.search||''));}catch(e){}
     if(!tpUser)return;
     if(typeof openDashCand==='function')openDashCand();
-    if(typeof switchCandTab==='function'){const t=[...document.querySelectorAll('#candDashTabs .dash-tab')].find(b=>/perfil|skills/i.test(b.textContent));if(t)switchCandTab('profile',t);}
+    if(typeof switchCandTab==='function')switchCandTab('profile');
     if(estado!=='ok'){ SkillPass._status('info','Pago cancelado. No se ha cobrado nada; tu SkillPass sigue siendo verificable en TalentPact.'); return; }
     const r=await TPCloud._postAuth('pay-seal',{accion:'confirmar',sessionId:sid});
-    if(!r||r.error||!r.pagado){ SkillPass._status('warn','Stripe aún no confirma el pago. En cuanto lo haga, podrás sellar desde aquí sin pagar de nuevo.'); return; }
+    if(!r||r.error||!r.pagado){ SkillPass._status('warn','Stripe aún no confirma el pago. En cuanto lo haga, tu SkillPass entrará solo en el lote del sello.'); return; }
     const issued=await SkillPass.generate();
-    if(issued&&!SkillPass.cred.anchoredAt)await SkillPass._anclar(SkillPass.cred.credentialId);
+    if(issued)await SkillPass._anclar(SkillPass.cred.credentialId);
   },
 
-  /** Línea pequeña al final de la tarjeta: el sello es un extra, no lo principal. */
+  /** Retira el SkillPass: las empresas lo verán como revocado. No se deshace. */
+  async revocar(){
+    const c=SkillPass.cred;if(!c||c.revocada)return;
+    const si=await tpConfirmar({titulo:'Retirar este SkillPass',
+      texto:'Quien lo compruebe verá que está revocado. No se puede deshacer; podrás emitir uno nuevo cuando quieras.',si:'Retirar',no:'Cancelar'});
+    if(!si)return;
+    const r=await TPCloud._postAuth('revoke-credential',{credentialId:c.credentialId});
+    if(!r||r.error){SkillPass._statusError('No se pudo retirar',r||{});return;}
+    c.revocada=true;SkillPass._render();
+    SkillPass._status('info','SkillPass retirado. Pulsa «Actualizar mi SkillPass» para emitir uno nuevo.');
+  },
+
+  /** Dos líneas pequeñas bajo la tarjeta: firma y vigencia; sello público plegado. */
   _renderSello(){
     const box=document.getElementById('spSelloLinea');if(!box)return;
     const c=SkillPass.cred;
     if(!c){box.innerHTML='';return;}
-    if(c.anchoredAt){
-      box.innerHTML='<details class="sp-sello"><summary>Sello público en blockchain · '+escHtml(new Date(c.anchoredAt).toLocaleDateString('es-ES'))+'</summary>'+
-        '<div>Red: '+escHtml(SkillPass.chain.name)+(c.blockNumber?' · bloque '+escHtml(String(c.blockNumber)):'')+(c.txHash?' · <a href="'+SkillPass.txUrl(c.txHash)+'" target="_blank" rel="noopener">ver la transacción</a>':'')+'<br>Huella: <code>'+escHtml(c.cvHash||'')+'</code></div></details>';
-      return;
-    }
-    box.innerHTML='<div class="sp-sello">Sello público en blockchain, opcional · 4,99 € · <button type="button" class="pj-enlace" onclick="SkillPass.sellar()">Añadir sello</button></div>';
+    if(c.revocada){box.innerHTML='<div class="sp-sello">Revocado. Las empresas que lo comprueben verán que lo has retirado.</div>';return;}
+    const s=c.sello||{estado:'no'};
+    let h='<div class="sp-sello">'+(c.firmada?'Firmado por TalentPact':'Emitido por TalentPact')+(c.validUntil?' · válido hasta '+escHtml(SkillPass._fecha(c.validUntil)):'')+
+      ' · <button type="button" class="pj-enlace" onclick="SkillPass.copyLink()">Copiar enlace</button></div>';
+    if(s.estado==='no')h+='<div class="sp-sello">Sello público: no · <button type="button" class="pj-enlace" onclick="SkillPass.sellar()">Añadir sello (4,99 €)</button></div>';
+    else if(s.estado==='en_cola')h+='<div class="sp-sello">Sello público: pagado · se publica en el lote de esta noche</div>';
+    else h+='<details class="sp-sello"><summary>Sello público: '+(s.estado==='sellado'?escHtml(SkillPass._fecha(s.fecha)||'publicado'):'enviado, pendiente de confirmar')+' · Ver detalles</summary>'+
+      '<div>Red: '+escHtml(s.red||'')+(s.lote?' · Lote '+escHtml(s.lote):'')+(s.txHash?' · <a href="'+escHtml(s.explorerUrl||'#')+'" target="_blank" rel="noopener">transacción '+escHtml(s.txHash.slice(0,10))+'…</a>':'')+
+      '<br><a href="'+escHtml(SkillPass.shareUrl())+'" target="_blank" rel="noopener">Cómo comprobarlo por tu cuenta</a></div></details>';
+    h+='<div class="sp-sello"><button type="button" class="pj-enlace" onclick="SkillPass.revocar()">Retirar este SkillPass</button></div>';
+    box.innerHTML=h;
   },
 
   download(){
-    const c=SkillPass.cred; if(!c||!c.cvJson)return;
-    const blob=new Blob([JSON.stringify(c.cvJson,null,2)],{type:'application/json'});
+    const c=SkillPass.cred; if(!c||!c.vc)return;
+    const blob=new Blob([JSON.stringify(c.vc,null,2)],{type:'application/json'});
     const a=document.createElement('a');
     a.href=URL.createObjectURL(blob);
-    a.download='skillpass-'+c.cvHash.slice(2,10)+'.json';
+    a.download='skillpass-'+String(c.credentialId||'').slice(0,8)+'.json';
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     setTimeout(()=>URL.revokeObjectURL(a.href),1000);
   },
 
   copyLink(){
     const url=SkillPass.shareUrl(); if(!url)return;
-    const done=()=>SkillPass._status('ok','Enlace copiado. Cualquiera puede abrirlo y verificar el SkillPass en blockchain, sin cuenta TalentPact.<br><code class="u-fs-micro u-wb-break-all">'+escHtml(url)+'</code>');
+    const done=()=>SkillPass._status('ok','Enlace copiado. Cualquiera puede abrirlo y verificar tu SkillPass, sin cuenta en TalentPact.<br><code class="u-fs-micro u-wb-break-all">'+escHtml(url)+'</code>');
     if(navigator.clipboard&&navigator.clipboard.writeText){
       navigator.clipboard.writeText(url).then(done).catch(()=>{ prompt('Copia este enlace:',url); done(); });
     }else{ prompt('Copia este enlace:',url); done(); }
   },
 
   pdf(){
-    const c=SkillPass.cred; if(!c||!c.cvJson)return;
+    const c=SkillPass.cred; if(!c||!c.vc)return;
     const w=window.open('','_blank');
     if(!w){toast('Permite las ventanas emergentes para generar el PDF.');return;}
-    const card=SkillPass.cardHtml(c,{url:SkillPass.shareUrl()});
-    w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>SkillPass TalentPact</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><style>@page{size:A4;margin:12mm}body{margin:0;background:#f1f5f9;font-family:system-ui,sans-serif;padding:20px}'+
+    const card=SkillPass.cardHtml(c);
+    w.document.write('<!doctype html><html lang="es"><head><meta charset="utf-8"><title>SkillPass TalentPact</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><link rel="stylesheet" href="'+location.origin+'/assets/css/tokens.css"><link rel="stylesheet" href="'+location.origin+'/assets/css/componentes.css"><style>@page{size:A4;margin:12mm}body{margin:0;background:#f1f5f9;font-family:system-ui,sans-serif;padding:20px}'+
       '.sp-pass-wrap{margin:0 auto;max-width:720px;border-radius:20px;overflow:hidden;border:1px solid #12382c}'+
       '.sp-pass{background:radial-gradient(1200px 280px at 10% -20%,rgba(52,211,153,.28),transparent 55%),linear-gradient(165deg,#06281f 0%,#0b3d30 42%,#0f172a 100%);color:#ecfdf5;padding:28px 26px 22px;position:relative}'+
       '.sp-pass::after{content:"";position:absolute;inset:10px;border:1px solid rgba(167,243,208,.18);border-radius:14px;pointer-events:none}'+
@@ -300,7 +244,7 @@ const SkillPass={
       '.sp-pass-chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;position:relative;z-index:1}'+
       '.sp-pass-chip{background:rgba(255,255,255,.06);border:1px solid rgba(167,243,208,.16);border-radius:12px;padding:10px 12px}'+
       '.sp-pass-chip-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px}'+
-      '.sp-pass-chip-top strong{font-family:Inter,sans-serif;font-size:18px;color:#6ee7b7}'+
+      '.sp-pass-chip .tp-banda-txt{color:#ecfdf5}'+
       '.sp-pass-bar{height:5px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden}'+
       '.sp-pass-bar i{display:block;height:100%;background:#34d399}'+
       '.sp-pass-lvl{font-size:10px;color:#94a3b8;margin-top:5px;text-transform:uppercase}'+

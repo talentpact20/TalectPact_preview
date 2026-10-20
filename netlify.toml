@@ -27,3 +27,16 @@
     Permissions-Policy = "camera=(self), microphone=(self), geolocation=(), payment=(), usb=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains"
     Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+
+# ─── SkillPass verificable sin TalentPact ────────────────────────────────────
+# did:web:talentpact.es se resuelve en /.well-known/did.json (clave pública con
+# la que se firman los SkillPass) y la lista de revocación vive en /status/1.
+[[redirects]]
+  from = "/.well-known/did.json"
+  to = "/.netlify/functions/did-web"
+  status = 200
+
+[[redirects]]
+  from = "/status/1"
+  to = "/.netlify/functions/status-list"
+  status = 200

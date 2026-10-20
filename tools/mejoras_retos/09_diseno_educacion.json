@@ -1,0 +1,1188 @@
+[
+  {
+    "id": "common_figma",
+    "title": "Figma y prototipado",
+    "desc": "Ordena un fichero de Figma que el equipo no puede mantener, prepara un prototipo para probar con usuarios y decide qué prácticas hacen escalable un sistema de componentes.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un fichero de diseño inmanejable",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás el estado del fichero de Figma de una aplicación. Tendrás que proponer cómo ordenarlo.",
+        "sub": "Diagnóstico — 9 min",
+        "skills": {
+          "hard": [
+            "Figma",
+            "Componentes"
+          ],
+          "soft": [
+            "Organización"
+          ]
+        },
+        "scenario": "Tres diseñadores trabajan en el fichero de Figma de una app de banca. Cada cambio de color tarda días y desarrollo se queja de que no sabe qué versión de cada pantalla es la buena. Has revisado el fichero.\n\nResponde en tres partes:\n\nA) Qué problemas hacen el fichero difícil de mantener, con las cifras.\n\nB) Cómo lo reorganizarías, en orden.\n\nC) Cómo sabría desarrollo, a partir de ahora, qué pantalla está lista.",
+        "data": {
+          "headers": [
+            "Elemento",
+            "Cifra",
+            "Detalle",
+            "Efecto",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Botones",
+              "a": "47 variantes sueltas",
+              "b": "Copiadas y modificadas a mano",
+              "c": "Un cambio exige tocar 47 sitios",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Colores",
+              "a": "63 valores distintos",
+              "b": "Sin estilos definidos",
+              "c": "Grises casi iguales",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Pantallas",
+              "a": "320",
+              "b": "«Final», «final2», «final_bueno»",
+              "c": "No se sabe cuál es la vigente",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Auto layout",
+              "a": "Se usa en el 10 %",
+              "b": "El resto con posiciones fijas",
+              "c": "Rehacer al cambiar un texto",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Iconos",
+              "a": "Biblioteca única",
+              "b": "Componentizados",
+              "c": "",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con las cifras de la tabla.",
+          "kw": [
+            "componentes",
+            "variantes",
+            "propiedades",
+            "estilos",
+            "variables",
+            "biblioteca compartida",
+            "auto layout",
+            "estados de las pantallas",
+            "listo para desarrollo",
+            "nomenclatura"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Un prototipo para probar con usuarios",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Planificarás un prototipo para probar un flujo nuevo con usuarios reales.",
+        "sub": "Prototipado — 10 min",
+        "skills": {
+          "hard": [
+            "Prototipos",
+            "Pruebas con usuarios"
+          ],
+          "soft": [
+            "Comunicación"
+          ]
+        },
+        "scenario": "La app de banca quiere añadir «enviar dinero a un contacto con su número de teléfono». Antes de programarlo, la jefa de producto quiere probarlo con 6 clientes la semana que viene. Te pregunta qué prototipo harías en Figma y cuánto tiempo necesitas.",
+        "data": {
+          "to": "Jefa de producto",
+          "subject": "Prototipo para la prueba del envío de dinero",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Qué pregunta tiene que responder la prueba y, por tanto, qué pantallas y casos incluye el prototipo (también los errores).\n\n2. El nivel de detalle que elegirías y por qué (ni más ni menos).\n\n3. Las tareas que se pedirán a los usuarios y qué observarás.\n\n4. Cuánto tardarás y qué entregarás después de la prueba.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "pregunta de la prueba",
+            "flujo",
+            "casos de error",
+            "fidelidad",
+            "datos realistas",
+            "tareas",
+            "observar",
+            "sin ayudar",
+            "tiempo",
+            "hallazgos"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Escala o se rompe?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas en Figma hacen que un sistema de diseño crezca sin romperse.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Sistemas de diseño"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada práctica en la biblioteca de componentes de un equipo:\n\nEscala — Facilita mantener y ampliar el sistema.\n\nSe rompe — Genera duplicados, inconsistencias o trabajo manual.",
+        "data": {
+          "options": [
+            {
+              "id": "f1",
+              "text": "Un componente botón con variantes de tamaño, tipo y estado",
+              "correct": "escala"
+            },
+            {
+              "id": "f2",
+              "text": "Separar (detach) el componente cada vez que hay que cambiar un texto",
+              "correct": "rompe"
+            },
+            {
+              "id": "f3",
+              "text": "Variables de color con modos claro y oscuro",
+              "correct": "escala"
+            },
+            {
+              "id": "f4",
+              "text": "Copiar la biblioteca a cada fichero de proyecto",
+              "correct": "rompe"
+            },
+            {
+              "id": "f5",
+              "text": "Documentar en cada componente cuándo usarlo y cuándo no",
+              "correct": "escala"
+            },
+            {
+              "id": "f6",
+              "text": "Crear un componente nuevo para cada pequeña excepción",
+              "correct": "rompe"
+            },
+            {
+              "id": "f7",
+              "text": "Publicar los cambios de la biblioteca con una nota de qué ha cambiado",
+              "correct": "escala"
+            },
+            {
+              "id": "f8",
+              "text": "Poner los tamaños de letra a mano en cada texto",
+              "correct": "rompe"
+            }
+          ],
+          "cats": [
+            "Escala",
+            "Se rompe"
+          ],
+          "keys": [
+            "escala",
+            "rompe"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_graphic_design",
+    "title": "Diseño gráfico",
+    "desc": "Critica una pieza gráfica con criterios objetivos, responde a un briefing ambiguo y decide qué decisiones de diseño mejoran la legibilidad.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un cartel que nadie lee",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás la evaluación de un cartel con problemas. Tendrás que explicar por qué no funciona y cómo arreglarlo.",
+        "sub": "Crítica de diseño — 9 min",
+        "skills": {
+          "hard": [
+            "Jerarquía visual",
+            "Tipografía"
+          ],
+          "soft": [
+            "Pensamiento crítico"
+          ]
+        },
+        "scenario": "Un ayuntamiento ha colgado en las paradas de autobús un cartel para un taller gratuito de empleo juvenil. Se han apuntado 12 personas para 80 plazas. En una prueba rápida, la gente miraba el cartel unos 3 segundos. Has analizado el diseño.\n\nResponde en tres partes:\n\nA) Por qué el cartel no transmite el mensaje en 3 segundos.\n\nB) Cómo lo rediseñarías: qué va primero, qué se quita, cómo se lee.\n\nC) Cómo comprobarías que el nuevo diseño funciona antes de imprimir 500.",
+        "data": {
+          "headers": [
+            "Elemento",
+            "Cómo está",
+            "Detalle",
+            "Efecto",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Titular",
+              "a": "«Programa municipal de dinamización sociolaboral juvenil»",
+              "b": "Mismo tamaño que el resto de textos",
+              "c": "No se entiende qué es",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Información clave",
+              "a": "Fecha, gratuito y cómo apuntarse",
+              "b": "Abajo, en letra de 8 pt",
+              "c": "Nadie llega a leerlo",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Contraste",
+              "a": "Texto amarillo sobre fondo blanco",
+              "b": "",
+              "c": "Ilegible a 2 metros",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Logotipos",
+              "a": "6 logotipos institucionales",
+              "b": "Ocupan un tercio del cartel",
+              "c": "Compiten con el mensaje",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Fotografía",
+              "a": "Jóvenes reales de la ciudad",
+              "b": "",
+              "c": "Llama la atención",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C elemento por elemento.",
+          "kw": [
+            "jerarquía visual",
+            "titular",
+            "beneficio",
+            "contraste",
+            "tamaño",
+            "legibilidad a distancia",
+            "llamada a la acción",
+            "espacio en blanco",
+            "logotipos",
+            "prueba de 5 segundos"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Un briefing que no dice nada",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Responderás a un cliente cuyo encargo es demasiado vago para empezar a diseñar.",
+        "sub": "Gestión del encargo — 10 min",
+        "skills": {
+          "hard": [
+            "Briefing"
+          ],
+          "soft": [
+            "Comunicación con cliente"
+          ]
+        },
+        "scenario": "Una cadena de restaurantes te escribe: «Queremos renovar la carta. Algo moderno pero elegante, que llame la atención pero sin pasarse. Lo necesitamos para la semana que viene. Presupuesto, lo normal». No sabes cuántos platos tiene la carta, dónde se imprime, si hay versión digital ni si tienen guía de marca.",
+        "data": {
+          "to": "Responsable de marketing de la cadena",
+          "subject": "Re: Renovar la carta",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Agradece el encargo y explica por qué necesitas más información antes de empezar.\n\n2. Las preguntas concretas que necesitas que te respondan (contenido, formatos, marca, público, presupuesto).\n\n3. Cómo propones trabajar: fases, número de propuestas y revisiones.\n\n4. Un plazo realista según lo que respondan y el siguiente paso.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "objetivo",
+            "público",
+            "contenido",
+            "número de platos",
+            "impresión",
+            "versión digital",
+            "guía de marca",
+            "presupuesto",
+            "revisiones",
+            "plazo realista"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Mejora la legibilidad?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué decisiones tipográficas y de composición mejoran la lectura.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Tipografía",
+            "Composición"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada decisión en el diseño de un folleto informativo:\n\nMejora la lectura — Hace el texto más fácil de leer y entender.\n\nLa empeora — Dificulta la lectura aunque pueda parecer más atractivo.",
+        "data": {
+          "options": [
+            {
+              "id": "d1",
+              "text": "Líneas de texto de unas 60 a 75 letras de ancho",
+              "correct": "mejora"
+            },
+            {
+              "id": "d2",
+              "text": "Texto largo justificado en columnas muy estrechas",
+              "correct": "empeora"
+            },
+            {
+              "id": "d3",
+              "text": "Interlineado de alrededor de 1,4 veces el tamaño de letra",
+              "correct": "mejora"
+            },
+            {
+              "id": "d4",
+              "text": "Párrafos enteros en mayúsculas para que destaquen",
+              "correct": "empeora"
+            },
+            {
+              "id": "d5",
+              "text": "Una sola familia tipográfica con dos o tres pesos",
+              "correct": "mejora"
+            },
+            {
+              "id": "d6",
+              "text": "Texto gris claro sobre fondo blanco para que sea «más elegante»",
+              "correct": "empeora"
+            },
+            {
+              "id": "d7",
+              "text": "Títulos que resumen lo que dice cada bloque",
+              "correct": "mejora"
+            },
+            {
+              "id": "d8",
+              "text": "Cinco tipografías distintas para dar variedad",
+              "correct": "empeora"
+            }
+          ],
+          "cats": [
+            "Mejora la lectura",
+            "La empeora"
+          ],
+          "keys": [
+            "mejora",
+            "empeora"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_ux_research",
+    "title": "Investigación UX",
+    "desc": "Saca conclusiones de unas entrevistas con usuarios, planifica una investigación con poco tiempo y decide qué preguntas son útiles y cuáles sesgan la respuesta.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Lo que dicen ocho entrevistas",
+        "type": "analysis",
+        "timeLimit": 600,
+        "difficulty": "basico",
+        "briefing": "Verás un resumen de entrevistas con usuarios. Tendrás que sacar conclusiones útiles para el equipo.",
+        "sub": "Síntesis — 10 min",
+        "skills": {
+          "hard": [
+            "Investigación de usuarios",
+            "Síntesis"
+          ],
+          "soft": [
+            "Pensamiento crítico"
+          ]
+        },
+        "scenario": "Has entrevistado a 8 usuarios de una app de reservas de pistas de pádel para entender por qué el 60 % no repite después de la primera reserva. Has agrupado lo que dijeron e hicieron.\n\nResponde en tres partes:\n\nA) Las dos o tres conclusiones principales, apoyadas en lo que observaste.\n\nB) Qué diferencias ves entre lo que dicen y lo que hacen, y qué peso le das a cada cosa.\n\nC) Qué recomendarías al equipo y qué habría que validar con datos de uso.",
+        "data": {
+          "headers": [
+            "Hallazgo",
+            "Usuarios",
+            "Lo que dijeron",
+            "Lo que se observó",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Organizar el partido con otros",
+              "a": "7 de 8",
+              "b": "«Lo difícil es encontrar a tres personas»",
+              "c": "Reservan por WhatsApp y luego en la app",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Precio",
+              "a": "5 de 8",
+              "b": "«Es un poco caro»",
+              "c": "Ninguno comparó precios en la sesión",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Pagar entre cuatro",
+              "a": "6 de 8",
+              "b": "«Siempre pago yo y luego reclamo»",
+              "c": "Usan Bizum aparte",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Diseño de la app",
+              "a": "2 de 8",
+              "b": "«Me gustaría que fuera más bonita»",
+              "c": "Completan la reserva en menos de 1 minuto",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Cancelaciones de última hora",
+              "a": "4 de 8",
+              "b": "«Si alguien falla, pierdo el dinero»",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con lo que se dijo y lo que se observó.",
+          "kw": [
+            "patrón",
+            "necesidad",
+            "organizar el partido",
+            "pago dividido",
+            "decir frente a hacer",
+            "comportamiento",
+            "muestra pequeña",
+            "validar con datos",
+            "hipótesis",
+            "priorizar"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Investigar con dos semanas",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Planificarás una investigación de usuarios con poco tiempo y presupuesto.",
+        "sub": "Plan de investigación — 10 min",
+        "skills": {
+          "hard": [
+            "Métodos de investigación"
+          ],
+          "soft": [
+            "Planificación"
+          ]
+        },
+        "scenario": "La app de pádel quiere decidir en dos semanas si construye «buscar compañeros de partido» o «pagar entre todos». Tienes 1.500 € y acceso a la base de 40.000 usuarios. El director quiere «una encuesta a todos y ya».",
+        "data": {
+          "to": "Director de producto",
+          "subject": "Plan de investigación para decidir la próxima función",
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. La pregunta que hay que responder y qué decisión depende de ella.\n\n2. Los métodos que usarás (datos de uso, entrevistas, encuesta, prueba con prototipo) y por qué esa combinación.\n\n3. A quién reclutas, cuántos y cómo, con el presupuesto.\n\n4. El calendario de las dos semanas y qué entregarás para decidir.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "pregunta de investigación",
+            "decisión",
+            "datos de uso",
+            "entrevistas",
+            "encuesta",
+            "limitaciones de la encuesta",
+            "prototipo",
+            "reclutamiento",
+            "incentivo",
+            "calendario",
+            "recomendación"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Pregunta útil o sesgada?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué preguntas de una entrevista con usuarios dan información fiable.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Entrevistas con usuarios"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada pregunta de un guion de entrevista:\n\nÚtil — Pregunta por hechos y comportamientos reales sin sugerir la respuesta.\n\nSesgada — Sugiere la respuesta, pide opiniones sobre el futuro o confunde al usuario.",
+        "data": {
+          "options": [
+            {
+              "id": "u1",
+              "text": "«Cuéntame la última vez que organizaste un partido. ¿Qué pasó?»",
+              "correct": "util"
+            },
+            {
+              "id": "u2",
+              "text": "«¿No crees que sería genial poder pagar entre todos en la app?»",
+              "correct": "sesgada"
+            },
+            {
+              "id": "u3",
+              "text": "«¿Qué hiciste cuando un compañero canceló a última hora?»",
+              "correct": "util"
+            },
+            {
+              "id": "u4",
+              "text": "«¿Usarías una función para buscar compañeros?»",
+              "correct": "sesgada"
+            },
+            {
+              "id": "u5",
+              "text": "«¿Cómo dividisteis el pago la última vez?»",
+              "correct": "util"
+            },
+            {
+              "id": "u6",
+              "text": "«¿Te parece fácil y rápida la app y la recomendarías?»",
+              "correct": "sesgada"
+            },
+            {
+              "id": "u7",
+              "text": "«¿Qué es lo más difícil de jugar de forma regular?»",
+              "correct": "util"
+            },
+            {
+              "id": "u8",
+              "text": "«¿Cuánto pagarías al mes por la versión premium?»",
+              "correct": "sesgada"
+            }
+          ],
+          "cats": [
+            "Útil",
+            "Sesgada"
+          ],
+          "keys": [
+            "util",
+            "sesgada"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_product_design",
+    "title": "Diseño de producto",
+    "desc": "Encuentra el problema de diseño en un flujo con datos de uso, propón una solución equilibrando negocio y usuario y decide qué patrones respetan al usuario.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un registro que espanta",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás los datos del registro de una aplicación. Tendrás que encontrar el problema de diseño.",
+        "sub": "Diagnóstico — 9 min",
+        "skills": {
+          "hard": [
+            "Diseño de interacción",
+            "Analítica de producto"
+          ],
+          "soft": [
+            "Diagnóstico"
+          ]
+        },
+        "scenario": "Una app de recetas con suscripción tiene 50.000 descargas al mes, pero solo el 18 % termina de registrarse. El registro tiene cinco pasos. Tienes los datos de abandono y lo que vieron las pruebas con usuarios.\n\nResponde en tres partes:\n\nA) Qué pasos causan el abandono y por qué.\n\nB) Cómo rediseñarías el registro, y qué pedirías y en qué momento.\n\nC) Qué medirías para saber si el nuevo registro es mejor sin perjudicar las suscripciones.",
+        "data": {
+          "headers": [
+            "Paso",
+            "Siguen",
+            "Lo que se pide",
+            "Observación",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "1. Bienvenida",
+              "a": "92 %",
+              "b": "Tres pantallas de presentación",
+              "c": "La mayoría las pasa sin leer",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "2. Crear cuenta",
+              "a": "61 %",
+              "b": "Correo, contraseña con 4 reglas y teléfono",
+              "c": "No entienden para qué el teléfono",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "3. Preferencias",
+              "a": "78 %",
+              "b": "12 preguntas sobre gustos",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "4. Suscripción",
+              "a": "40 %",
+              "b": "Pago antes de ver ninguna receta",
+              "c": "«No sé si me va a gustar»",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "5. Primera receta",
+              "a": "100 %",
+              "b": "",
+              "c": "Quien llega, la usa",
+              "d": "Bien",
+              "cls": "v-good"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con los porcentajes de cada paso.",
+          "kw": [
+            "fricción",
+            "pedir solo lo necesario",
+            "valor antes de pedir",
+            "prueba gratuita",
+            "registro con Google o Apple",
+            "preferencias opcionales",
+            "momento adecuado",
+            "embudo",
+            "suscripciones",
+            "test A/B"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Lo que pide negocio y lo que necesita el usuario",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Propondrás una solución de diseño que equilibre un objetivo de negocio con la experiencia del usuario.",
+        "sub": "Propuesta de diseño — 10 min",
+        "skills": {
+          "hard": [
+            "Diseño de producto"
+          ],
+          "soft": [
+            "Negociación con negocio"
+          ]
+        },
+        "scenario": "Dirección de la app de recetas quiere subir las suscripciones anuales y propone poner un aviso a pantalla completa cada vez que alguien abre una receta, con el botón de cerrar pequeño y gris. Los datos dicen que quien cocina 3 recetas en la primera semana se suscribe 4 veces más.",
+        "data": {
+          "to": "Directora de producto",
+          "subject": "Una alternativa al aviso a pantalla completa",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Qué riesgo tiene la propuesta de dirección para el usuario y para el negocio.\n\n2. Qué dicen los datos sobre lo que de verdad lleva a suscribirse.\n\n3. Tu alternativa de diseño, concreta (dónde, cuándo y cómo se ofrece la suscripción).\n\n4. Cómo la probarías frente a la propuesta original y qué métricas mirarías.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "patrón oscuro",
+            "confianza",
+            "valoraciones",
+            "momento de valor",
+            "3 recetas",
+            "activación",
+            "oferta en contexto",
+            "test A/B",
+            "suscripciones",
+            "retención"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Respeta al usuario?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué patrones de diseño respetan al usuario y cuáles son engañosos.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Ética del diseño"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada patrón de diseño de una app con suscripción:\n\nRespeta al usuario — Es claro y le deja decidir con información.\n\nPatrón engañoso — Le empuja a hacer algo que quizá no quiere, aprovechando la confusión.",
+        "data": {
+          "options": [
+            {
+              "id": "x1",
+              "text": "Avisar tres días antes de que termine la prueba gratuita",
+              "correct": "respeta"
+            },
+            {
+              "id": "x2",
+              "text": "Cancelar la suscripción solo llamando por teléfono en horario de oficina",
+              "correct": "enganoso"
+            },
+            {
+              "id": "x3",
+              "text": "Mostrar el precio total al año junto al precio mensual",
+              "correct": "respeta"
+            },
+            {
+              "id": "x4",
+              "text": "Botón «No, prefiero comer mal» para rechazar la oferta",
+              "correct": "enganoso"
+            },
+            {
+              "id": "x5",
+              "text": "Casillas de comunicaciones comerciales sin marcar por defecto",
+              "correct": "respeta"
+            },
+            {
+              "id": "x6",
+              "text": "Un contador falso de «solo quedan 2 plazas» que se reinicia",
+              "correct": "enganoso"
+            },
+            {
+              "id": "x7",
+              "text": "Cancelar desde la app en dos pasos",
+              "correct": "respeta"
+            },
+            {
+              "id": "x8",
+              "text": "Añadir al carrito un seguro que el usuario no ha pedido",
+              "correct": "enganoso"
+            }
+          ],
+          "cats": [
+            "Respeta al usuario",
+            "Patrón engañoso"
+          ],
+          "keys": [
+            "respeta",
+            "enganoso"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_teaching",
+    "title": "Pedagogía y docencia",
+    "desc": "Analiza los resultados de un grupo para ajustar la enseñanza, prepara la comunicación con una familia y decide qué prácticas de evaluación ayudan a aprender.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un grupo que no avanza igual",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás los resultados de un grupo de alumnos. Tendrás que decidir cómo ajustar la enseñanza.",
+        "sub": "Análisis de resultados — 9 min",
+        "skills": {
+          "hard": [
+            "Evaluación formativa",
+            "Atención a la diversidad"
+          ],
+          "soft": [
+            "Diagnóstico"
+          ]
+        },
+        "scenario": "Das matemáticas a un grupo de 26 alumnos de 2.º de ESO. Tras la primera evaluación, la media es 5,8, pero los resultados son muy desiguales. Has analizado la prueba por tipo de pregunta.\n\nResponde en tres partes:\n\nA) Qué dicen los resultados más allá de la media.\n\nB) Cómo ajustarías tus clases de las próximas cuatro semanas.\n\nC) Cómo sabrás si los ajustes funcionan antes del siguiente examen.",
+        "data": {
+          "headers": [
+            "Tipo de pregunta",
+            "Aciertos del grupo",
+            "Detalle",
+            "Observación",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "Cálculo con fracciones",
+              "a": "78 %",
+              "b": "",
+              "c": "Bien asentado",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "Problemas con enunciado",
+              "a": "34 %",
+              "b": "8 alumnos no los intentan",
+              "c": "No saben por dónde empezar",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "Ecuaciones de primer grado",
+              "a": "55 %",
+              "b": "Error típico: pasar términos cambiando mal el signo",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Alumnos por encima de 8",
+              "a": "6",
+              "b": "Terminan en 20 minutos y se aburren",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Alumnos por debajo de 4",
+              "a": "7",
+              "b": "3 tienen informe de dificultad lectora",
+              "c": "",
+              "d": "Revisar",
+              "cls": "v-bad"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con los resultados por tipo de pregunta.",
+          "kw": [
+            "media engañosa",
+            "dispersión",
+            "comprensión lectora",
+            "estrategias de resolución",
+            "error frecuente",
+            "grupos flexibles",
+            "retos de ampliación",
+            "adaptaciones",
+            "evaluación formativa",
+            "comprobar"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Una conversación con una familia",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Escribirás a una familia preocupada por las notas de su hijo.",
+        "sub": "Comunicación con familias — 10 min",
+        "skills": {
+          "hard": [
+            "Tutoría"
+          ],
+          "soft": [
+            "Empatía",
+            "Comunicación difícil"
+          ]
+        },
+        "scenario": "La madre de Marcos, alumno de 2.º de ESO, te escribe molesta: «Marcos ha suspendido matemáticas y dice que usted no explica bien. En primaria sacaba notables. Quiero saber qué va a hacer». Sabes que Marcos falta a menudo a primera hora (9 faltas en el trimestre), no entrega la mitad de las tareas y en clase participa cuando se le pregunta directamente.",
+        "data": {
+          "to": "Madre de Marcos",
+          "subject": "Re: Notas de matemáticas de Marcos",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Reconoce su preocupación sin ponerte a la defensiva.\n\n2. Comparte los hechos (faltas, tareas, lo que hace bien en clase) con datos y sin juicios.\n\n3. Propón un plan concreto entre el centro, Marcos y la familia.\n\n4. Ofrece una reunión con fecha y explica cómo os mantendréis informados.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "entiendo",
+            "preocupación",
+            "hechos",
+            "faltas",
+            "tareas",
+            "fortalezas",
+            "plan",
+            "familia",
+            "reunión",
+            "seguimiento"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Ayuda a aprender o solo califica?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas de evaluación ayudan a los alumnos a aprender.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Evaluación"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Clasifica cada práctica de evaluación:\n\nAyuda a aprender — El alumno sabe qué hacer para mejorar y tiene ocasión de hacerlo.\n\nSolo califica — Pone una nota pero no cambia lo que el alumno aprende.",
+        "data": {
+          "options": [
+            {
+              "id": "e1p",
+              "text": "Devolver el trabajo con un comentario concreto y permitir corregirlo",
+              "correct": "ayuda"
+            },
+            {
+              "id": "e2p",
+              "text": "Un único examen final que decide toda la nota",
+              "correct": "califica"
+            },
+            {
+              "id": "e3p",
+              "text": "Compartir con los alumnos los criterios de evaluación antes de la tarea",
+              "correct": "ayuda"
+            },
+            {
+              "id": "e4p",
+              "text": "Devolver el examen solo con la nota numérica",
+              "correct": "califica"
+            },
+            {
+              "id": "e5p",
+              "text": "Pequeñas pruebas sin nota para ver qué no se ha entendido",
+              "correct": "ayuda"
+            },
+            {
+              "id": "e6p",
+              "text": "Ordenar públicamente al grupo de mejor a peor nota",
+              "correct": "califica"
+            },
+            {
+              "id": "e7p",
+              "text": "Que los alumnos revisen el trabajo de un compañero con una guía",
+              "correct": "ayuda"
+            },
+            {
+              "id": "e8p",
+              "text": "Restar puntos por mala letra en un examen de matemáticas",
+              "correct": "califica"
+            }
+          ],
+          "cats": [
+            "Ayuda a aprender",
+            "Solo califica"
+          ],
+          "keys": [
+            "ayuda",
+            "califica"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_elearning",
+    "title": "E-learning",
+    "desc": "Encuentra por qué un curso online no se termina, rediseña un módulo para que se aprenda de verdad y decide qué recursos digitales aportan al aprendizaje.",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Un curso online que nadie termina",
+        "type": "analysis",
+        "timeLimit": 540,
+        "difficulty": "basico",
+        "briefing": "Verás los datos de un curso online de empresa. Tendrás que explicar por qué se abandona.",
+        "sub": "Analítica de aprendizaje — 9 min",
+        "skills": {
+          "hard": [
+            "Diseño instruccional",
+            "Analítica de aprendizaje"
+          ],
+          "soft": [
+            "Diagnóstico"
+          ]
+        },
+        "scenario": "Una aseguradora ha lanzado un curso online obligatorio de protección de datos para 1.200 empleados. Tras dos meses, solo el 31 % lo ha terminado y la nota media del test final es de 6,2. Tienes los datos de la plataforma por módulo.\n\nResponde en tres partes:\n\nA) Dónde y por qué se abandona el curso, con las cifras.\n\nB) Qué cambiarías en el diseño del curso.\n\nC) Cómo sabrías si los empleados aplican lo aprendido en su trabajo.",
+        "data": {
+          "headers": [
+            "Módulo",
+            "Duración",
+            "Formato",
+            "Lo completan",
+            "Estado"
+          ],
+          "table": [
+            {
+              "n": "1. Introducción",
+              "a": "12 min",
+              "b": "Vídeo de un directivo",
+              "c": "88 %",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "2. Marco legal",
+              "a": "55 min",
+              "b": "PDF de 40 páginas del reglamento",
+              "c": "39 %",
+              "d": "Revisar",
+              "cls": "v-bad"
+            },
+            {
+              "n": "3. Casos prácticos",
+              "a": "20 min",
+              "b": "Situaciones de la propia aseguradora",
+              "c": "92 % de quien llega",
+              "d": "Bien",
+              "cls": "v-good"
+            },
+            {
+              "n": "4. Test final",
+              "a": "30 preguntas",
+              "b": "Preguntas literales del PDF",
+              "c": "Nota media 6,2",
+              "d": "Revisar",
+              "cls": "v-warn"
+            },
+            {
+              "n": "Acceso desde el móvil",
+              "a": "",
+              "b": "El PDF no se ve bien",
+              "c": "El 45 % entra desde el móvil",
+              "d": "Revisar",
+              "cls": "v-warn"
+            }
+          ],
+          "q": "Responde a las partes A, B y C con los datos de cada módulo.",
+          "kw": [
+            "abandono",
+            "duración",
+            "carga cognitiva",
+            "microaprendizaje",
+            "casos prácticos",
+            "aplicar",
+            "evaluación de situaciones",
+            "móvil",
+            "objetivos de aprendizaje",
+            "transferencia al puesto"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Rediseñar el módulo del marco legal",
+        "type": "email",
+        "timeLimit": 600,
+        "difficulty": "intermedio",
+        "briefing": "Propondrás cómo convertir un módulo teórico en uno que se aprenda y se aplique.",
+        "sub": "Diseño instruccional — 10 min",
+        "skills": {
+          "hard": [
+            "Diseño de contenidos formativos"
+          ],
+          "soft": [
+            "Comunicación"
+          ]
+        },
+        "scenario": "El responsable de cumplimiento de la aseguradora insiste en que el módulo del marco legal «tiene que estar entero porque es la ley». Tú sabes que lo que los empleados necesitan es saber qué hacer en su día a día: qué datos pueden pedir, qué pueden enviar por correo y qué hacer ante una brecha.",
+        "data": {
+          "to": "Responsable de cumplimiento",
+          "subject": "Propuesta para el módulo del marco legal",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Los objetivos de aprendizaje: qué tiene que saber hacer un empleado al terminar.\n\n2. Cómo reorganizarías el contenido (situaciones reales, piezas cortas, consulta del texto legal para quien lo necesite).\n\n3. Cómo evaluarías que lo saben aplicar.\n\n4. Cómo garantizas que se cumple la obligación legal de formación y cómo lo registras.",
+          "minChars": 400,
+          "minWords": 66,
+          "kw": [
+            "objetivos de aprendizaje",
+            "situaciones reales",
+            "qué hacer",
+            "piezas cortas",
+            "consulta",
+            "evaluación por casos",
+            "brecha de datos",
+            "registro de la formación",
+            "cumplimiento",
+            "móvil"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Aporta al aprendizaje?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "avanzado",
+        "briefing": "Decidirás qué recursos de un curso online ayudan de verdad a aprender.",
+        "sub": "Clasificación — 5 min",
+        "skills": {
+          "hard": [
+            "Recursos digitales"
+          ],
+          "soft": [
+            "Criterio"
+          ]
+        },
+        "scenario": "Revisas los recursos que el proveedor propone para el nuevo curso online. Clasifica cada uno:\n\nAporta — Ayuda a entender, practicar o recordar.\n\nNo aporta — Distrae, alarga o solo decora.",
+        "data": {
+          "options": [
+            {
+              "id": "r1",
+              "text": "Una simulación en la que el empleado decide qué hacer ante un correo sospechoso",
+              "correct": "si"
+            },
+            {
+              "id": "r2",
+              "text": "Una animación de 2 minutos con el logotipo de la empresa al inicio de cada módulo",
+              "correct": "no"
+            },
+            {
+              "id": "r3",
+              "text": "Preguntas de repaso espaciadas en las semanas siguientes",
+              "correct": "si"
+            },
+            {
+              "id": "r4",
+              "text": "Música de fondo continua mientras se lee",
+              "correct": "no"
+            },
+            {
+              "id": "r5",
+              "text": "Un vídeo corto con un caso real y una pregunta al final",
+              "correct": "si"
+            },
+            {
+              "id": "r6",
+              "text": "Leer en voz alta el mismo texto que aparece escrito en la pantalla",
+              "correct": "no"
+            },
+            {
+              "id": "r7",
+              "text": "Una guía de una página para consultar en el puesto",
+              "correct": "si"
+            },
+            {
+              "id": "r8",
+              "text": "Obligar a pasar cada pantalla después de un tiempo mínimo",
+              "correct": "no"
+            }
+          ],
+          "cats": [
+            "Aporta",
+            "No aporta"
+          ],
+          "keys": [
+            "si",
+            "no"
+          ]
+        }
+      }
+    ]
+  }
+]

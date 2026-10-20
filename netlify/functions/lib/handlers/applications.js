@@ -12,6 +12,22 @@ const { notificarEtapa } = require("../notify");
 
 const ESTADOS = ["aplicado", "retos", "preseleccionado", "entrevista", "contratado", "descartado"];
 
+/**
+ * ¿El perfil existe y no se ha ocultado del pool? Solo si la columna
+ * pool_visible falta de verdad (migración sin aplicar) se mira la existencia;
+ * cualquier otro fallo se propaga para no saltarse el consentimiento.
+ */
+async function visibleEnPool(profileId) {
+  let filas;
+  try {
+    filas = await sb.select("profiles", `id=eq.${profileId}&pool_visible=is.true&select=id&limit=1`);
+  } catch (err) {
+    if (!faltaEnEsquema(err, /pool_visible/i)) throw err;
+    filas = await sb.select("profiles", `id=eq.${profileId}&select=id&limit=1`);
+  }
+  return Array.isArray(filas) && filas.length > 0;
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
   if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed" });
@@ -55,6 +71,12 @@ exports.handler = async (event) => {
         );
         // Solo se avisa al candidato si la etapa cambia de verdad.
         const previa = Array.isArray(existentes) ? existentes[0] || null : null;
+        // Sin postulación previa, la empresa solo puede meter en su proceso a
+        // alguien que sigue visible en el pool; si no, con un id de perfil
+        // podría mandar avisos («te han elegido») a cualquiera.
+        if (!previa && !(await visibleEnPool(ref))) {
+          return jsonResponse(404, { error: "Este candidato no está disponible para tu proceso" });
+        }
         if (previa) {
           await sb.update("applications", `id=eq.${previa.id}`, {
             status: campos.status,
@@ -123,3 +145,4 @@ exports.handler = async (event) => {
 };
 
 module.exports.ESTADOS = ESTADOS;
+module.exports.visibleEnPool = visibleEnPool;

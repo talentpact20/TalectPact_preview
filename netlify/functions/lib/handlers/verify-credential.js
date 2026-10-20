@@ -1,145 +1,198 @@
 /**
- * verify-credential — verifica una credencial contra la blockchain.
+ * verify-credential — comprueba un SkillPass. Público y gratis: verificar nunca
+ * se cobra (docs/plan_post_reunion/03 §2).
  *
- * Body: { cvJson }  o  { cvHash }   ·   GET: ?h=0x…
+ * Entrada:  GET ?c=<id>  ·  GET ?h=<huella v1>
+ *           POST { credentialId }  ·  { vc }  (la credencial pegada o subida)
+ *           POST { cvJson } / { cvHash }  (formato antiguo, sigue valiendo)
  *
- * Deliberadamente público: comprobar un SkillPass no debe exigir cuenta en
- * TalentPact — ese es justo el punto de una credencial verificable. Solo lee
- * de la cadena, nunca escribe, así que no gasta gas.
+ * Resultado: uno de cinco estados, cada uno con su explicación:
+ *   valida      firma correcta, sin revocar y dentro de plazo
+ *   caducada    auténtica, pero tiene más de 12 meses
+ *   revocada    TalentPact la retiró (fraude o petición del titular)
+ *   alterada    el contenido no coincide con la firma o con nuestro registro
+ *   no_encontrada  el código no existe (o el titular la borró)
+ * + detalle (skills con banda y fecha, integridad, rúbrica, revisión humana) y
+ * el sello público si lo tiene, con lo necesario para comprobarlo sin TalentPact.
  *
- * Devuelve: { verified, cvHash, skills, anchoredAt?, txHash?, explorerUrl?, chain }
+ * Nunca devuelve el id del perfil ni datos de contacto: solo el seudónimo.
  */
 const {
-  jsonResponse, sb, hashCv, getContract, chainConfigured, isHash32,
-  CHAIN, explorerTx, explorerAddress, errorInterno
+  jsonResponse, sb, hashCv, canonicalJson, isHash32, isUuid, errorInterno,
+  chainConfigured, getContract, sealChainConfigured, getSealContract
 } = require("../tp");
+const { verificarFirma, EMISOR } = require("../vc");
+const { banda } = require("../bandas");
+const { familiaDe } = require("../personas");
+const { estadoSello, cargarLote, vigenteHasta } = require("../skillpass");
+const merkle = require("../merkle");
+const { limitar } = require("../limites");
+const { clientIp } = require("../evaluator");
 
-function chainMeta(extra) {
-  return Object.assign(
-    {
-      chain: CHAIN.slug,
-      chainName: CHAIN.name,
-      contract: process.env.SKILLPASS_CONTRACT_ADDRESS || null,
-      contractUrl: process.env.SKILLPASS_CONTRACT_ADDRESS
-        ? explorerAddress(process.env.SKILLPASS_CONTRACT_ADDRESS)
-        : null
-    },
-    extra
-  );
-}
-
-const NOT_CONFIGURED = {
-  error: "La verificación en blockchain no está configurada en este entorno",
-  details: "Falta SKILLPASS_CONTRACT_ADDRESS en las variables de entorno del servidor."
+const EXPLICACION = {
+  valida: "Firma de TalentPact correcta, no revocada y dentro de plazo.",
+  caducada: "Es auténtica, pero las notas tienen más de 12 meses. El titular puede renovarla con retos nuevos.",
+  revocada: "TalentPact la ha retirado (fraude detectado en una revisión humana o petición del titular).",
+  alterada: "El contenido no coincide con la firma o con nuestro registro: alguien la ha modificado.",
+  no_encontrada: "Este código no corresponde a ningún SkillPass emitido, o su titular lo ha borrado."
 };
 
-exports.handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
+const resultado = (estado, extra) => jsonResponse(200, Object.assign({ ok: true, estado, explicacion: EXPLICACION[estado] }, extra));
 
-  // Antes de leer nada: sin contrato configurado no hay verificación posible,
-  // y decirlo aquí evita una consulta inútil a Supabase y un 500 sin sentido.
-  if (!chainConfigured()) return jsonResponse(503, NOT_CONFIGURED);
-
-  if (event.httpMethod === "GET") {
-    const q = event.queryStringParameters || {};
-    const hash = q.h || q.hash || "";
-    if (!hash) return jsonResponse(400, { error: "Pasa h= (cvHash) o usa POST con cvJson" });
-    return verifyByHash(String(hash));
+/** Skills para mostrar: banda y fecha; nunca la nota exacta. Acepta v2 y v1. */
+function skillsPublicas(doc) {
+  if (doc && doc.credentialSubject && Array.isArray(doc.credentialSubject.skills)) {
+    return doc.credentialSubject.skills.map((s) => ({
+      skill: String(s.skill || ""), bloque: s.bloque || familiaDe(s.skill) || "hard", banda: s.banda, nivel: s.nivel,
+      evaluadoEl: s.evaluadoEl || null, verificada: !!s.verificada, rubrica: s.rubrica || null, revisionHumana: !!s.revisionHumana
+    }));
   }
-  if (event.httpMethod !== "POST") return jsonResponse(405, { error: "Method not allowed" });
+  const v1 = doc && Array.isArray(doc.skills) ? doc.skills : [];
+  return v1.map((s) => {
+    const b = banda(s.score);
+    return {
+      skill: String(s.skill || ""), bloque: familiaDe(s.skill) || "hard", banda: b.txt, nivel: b.nivel,
+      evaluadoEl: s.evaluatedAt ? String(s.evaluatedAt).slice(0, 10) : null, verificada: !!s.verified, rubrica: null, revisionHumana: false
+    };
+  });
+}
 
+async function buscarPorId(id) {
+  const f = await sb.select("credentials", `id=eq.${id}&select=*&limit=1`);
+  return Array.isArray(f) ? f[0] || null : null;
+}
+async function buscarPorHuella(h) {
+  const f = await sb.select("credentials", `cv_hash=eq.${encodeURIComponent(h)}&select=*&limit=1`);
+  return Array.isArray(f) ? f[0] || null : null;
+}
+
+/** ¿Está la raíz (v2) o la huella (v1) en la cadena? null si no se puede consultar ahora. */
+async function enCadena(sello, cred) {
   try {
-    const b = JSON.parse(event.body || "{}");
-    if (b.cvHash) return verifyByHash(String(b.cvHash));
+    if (sello.version === 2 && sello.comprobar && sello.comprobar.raiz && sealChainConfigured()) {
+      const ts = await getSealContract().rootAnchoredAt(sello.comprobar.raiz);
+      return Number(ts) > 0;
+    }
+    if (sello.version === 1 && chainConfigured()) {
+      const [existe] = await getContract().isAnchored(cred.cv_hash);
+      return !!existe;
+    }
+  } catch (err) {
+    console.warn("[TP] verify: la red no responde:", err.message);
+  }
+  return null;
+}
 
-    let cvJson = b.cvJson;
-    if (typeof cvJson === "string") {
-      try { cvJson = JSON.parse(cvJson); }
-      catch (_e) { return jsonResponse(400, { error: "El CV proporcionado no es un JSON válido" }); }
+async function evaluar(cred, pegado) {
+  const doc = cred.cv_json;
+  const v2 = !!(doc && doc.credentialSubject);
+  // Lo pegado tiene que ser exactamente lo que emitimos.
+  if (pegado && canonicalJson(pegado) !== canonicalJson(doc)) {
+    return resultado("alterada", { motivo: "El documento no coincide con el que emitió TalentPact." });
+  }
+  let firma = { firmada: false, ok: false, motivo: "v1" };
+  if (v2) {
+    firma = verificarFirma(doc);
+    // Firmado y la firma no cuadra: el registro o el documento se han tocado.
+    if (firma.firmada && !firma.ok && firma.motivo !== "sin_clave") {
+      return resultado("alterada", { motivo: "La firma digital no coincide con el contenido." });
     }
-    if (!cvJson || typeof cvJson !== "object") {
-      return jsonResponse(400, { error: "Falta el CV a verificar (cvJson) o el hash (cvHash)" });
+  }
+  const lote = await cargarLote(cred.batch_id);
+  const sello = estadoSello(cred, lote);
+  if (sello.estado === "sellado" && sello.version === 2 && sello.comprobar && sello.comprobar.hoja) {
+    // La prueba guardada tiene que llevar de esta credencial a la raíz publicada.
+    const hojaOk = cred.salt && merkle.hoja(cred.salt, doc) === String(sello.comprobar.hoja).toLowerCase();
+    if (!hojaOk || !merkle.verificar(sello.comprobar.hoja, sello.comprobar.prueba, sello.comprobar.raiz)) {
+      return resultado("alterada", { motivo: "La credencial no coincide con la huella sellada en la cadena." });
     }
-    // El hash se recalcula desde el JSON recibido: si alguien retocó un score,
-    // el hash cambia y el anclaje deja de encontrarse. Ahí está la garantía.
-    // Si TalentPact la emitió, manda nuestro registro (y se sabe que es «emitida»).
-    return verifyByHash(hashCv(cvJson));
+  }
+  if (sello.estado === "sellado" || sello.estado === "enviado") sello.confirmadoEnRed = await enCadena(sello, cred);
+
+  const hasta = vigenteHasta(cred);
+  const detalle = {
+    credentialId: cred.id,
+    formato: v2 ? "W3C VC 2.0" : "SkillPass v1",
+    emisor: v2 ? doc.issuer : EMISOR(),
+    titular: v2 ? doc.credentialSubject.id : "urn:tp:cand:(v1)",
+    emitidaEl: (v2 ? doc.validFrom : doc && doc.issuedAt) || null,
+    validaHasta: hasta ? hasta.toISOString() : null,
+    firma: v2 ? (firma.ok ? "Ed25519 · eddsa-jcs-2022 · correcta" : "Sin firma digital (emitida antes de activar la firma)") : "Registro de TalentPact (formato anterior a la firma)",
+    skills: skillsPublicas(doc),
+    sello,
+    vc: v2 ? doc : null
+  };
+  if (cred.revoked_at) return resultado("revocada", Object.assign(detalle, { revocadaEl: cred.revoked_at }));
+  if (hasta && hasta.getTime() < Date.now()) return resultado("caducada", detalle);
+  return resultado("valida", detalle);
+}
+
+exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") return publica(jsonResponse(200, { ok: true }));
+  // Público y sin cuenta: se limita por IP para que nadie recorra el registro a ciegas.
+  if (await limitar("verify:" + clientIp(event), { max: 120, ventanaS: 600 })) {
+    return publica(jsonResponse(429, { error: "Demasiadas comprobaciones seguidas. Espera unos minutos." }));
+  }
+  return publica(await atender(event));
+};
+
+/** Verificar es público por diseño: cualquier web puede consultarlo. */
+function publica(res) {
+  res.headers = Object.assign({}, res.headers, { "access-control-allow-origin": "*" });
+  return res;
+}
+
+async function atender(event) {
+  try {
+    let b = {};
+    if (event.httpMethod === "GET") {
+      const q = event.queryStringParameters || {};
+      b = { credentialId: q.c || q.id, cvHash: q.h || q.hash };
+    } else if (event.httpMethod === "POST") {
+      try { b = JSON.parse(event.body || "{}"); }
+      catch (_e) { return jsonResponse(400, { error: "Body JSON no válido" }); }
+    } else {
+      return jsonResponse(405, { error: "Method not allowed" });
+    }
+
+    // Credencial pegada o subida (v2 o v1).
+    let pegado = b.vc || b.cvJson || null;
+    if (typeof pegado === "string") {
+      if (pegado.length > 200000) return jsonResponse(413, { error: "El documento es demasiado grande" });
+      try { pegado = JSON.parse(pegado); }
+      catch (_e) { return jsonResponse(400, { error: "Lo que has pegado no es un SkillPass (JSON no válido)" }); }
+    }
+    if (pegado && typeof pegado === "object") {
+      const m = /^urn:uuid:([0-9a-f-]{36})$/i.exec(String(pegado.id || ""));
+      const cred = m && isUuid(m[1]) ? await buscarPorId(m[1]) : await buscarPorHuella(hashCv(pegado));
+      if (!cred) {
+        // No está en nuestro registro: si la firma es nuestra, alguien la ha
+        // modificado o su titular la borró; en ningún caso es válida.
+        const f = verificarFirma(pegado);
+        return f.firmada && !f.ok && f.motivo === "firma_no_coincide"
+          ? resultado("alterada", { motivo: "La firma digital no coincide con el contenido." })
+          : resultado("no_encontrada");
+      }
+      return evaluar(cred, pegado);
+    }
+
+    const id = String(b.credentialId || "").trim();
+    if (id) {
+      if (!isUuid(id)) return resultado("no_encontrada");
+      const cred = await buscarPorId(id);
+      return cred ? evaluar(cred, null) : resultado("no_encontrada");
+    }
+    const h = String(b.cvHash || "").trim();
+    if (h) {
+      if (!isHash32(h)) return jsonResponse(400, { error: "Código no válido", details: "Pega el enlace del SkillPass, su código o el archivo .json." });
+      const cred = await buscarPorHuella(h);
+      return cred ? evaluar(cred, null) : resultado("no_encontrada");
+    }
+    return jsonResponse(400, { error: "Pega el enlace del SkillPass, su código o el archivo .json." });
   } catch (err) {
     return errorInterno("No se pudo verificar la credencial", err);
   }
-};
-
-async function verifyByHash(raw) {
-  const cvHash = String(raw).trim();
-  if (!isHash32(cvHash)) {
-    // Sin validar, un hash malformado llegaría a ethers y devolvería un 500
-    // ilegible en lugar de decirle a la persona qué ha pegado mal.
-    return jsonResponse(400, {
-      error: "Hash no válido",
-      details: "Se espera 0x seguido de 64 caracteres hexadecimales."
-    });
-  }
-  // La consulta a Supabase es best-effort: solo aporta las skills y el txHash
-  // para enriquecer la respuesta. Quien decide si el sello es válido es el
-  // contrato, así que una caída de la base de datos no debe tumbar la
-  // verificación — como mucho, deja la credencial sin detalle.
-  let cred = null;
-  try {
-    const rows = await sb.select(
-      "credentials",
-      `cv_hash=eq.${encodeURIComponent(cvHash)}&select=cv_json,cv_hash,tx_hash,block_number,anchored_at&limit=1`
-    );
-    cred = Array.isArray(rows) ? rows[0] : null;
-  } catch (err) {
-    console.warn("verify-credential: Supabase no disponible, se verifica solo on-chain:", err.message);
-  }
-
-  // Que TalentPact no la conozca no decide nada: la verdad está en la cadena.
-  if (!cred) return verifyOnChain(cvHash, null, null, null);
-  return verifyOnChain(cred.cv_hash, cred.cv_json, cred.tx_hash, cred.block_number, true);
 }
 
-async function verifyOnChain(cvHash, cvJson, txHash, blockNumber, enRegistro = false) {
-  if (!chainConfigured()) return jsonResponse(503, NOT_CONFIGURED);
-
-  let exists, timestamp;
-  try {
-    const contract = getContract({ signer: false });
-    [exists, timestamp] = await contract.isAnchored(cvHash);
-  } catch (err) {
-    return jsonResponse(502, {
-      error: "No se pudo consultar la blockchain",
-      details: err.message,
-      cvHash
-    });
-  }
-
-  const skills = cvJson && Array.isArray(cvJson.skills) ? cvJson.skills : [];
-  if (!exists) {
-    return jsonResponse(200, chainMeta({
-      verified: false,
-      // Sin sello público, pero emitida por TalentPact (está en nuestro registro):
-      // es el SkillPass gratuito. El sello es un extra de pago del candidato.
-      emitida: !!enRegistro,
-      cvHash,
-      skills,
-      reason: cvJson
-        ? (enRegistro ? "Emitida por TalentPact, sin sello público en blockchain (el sello es opcional)." : "El hash no está anclado en la blockchain (o el CV fue modificado después de sellarlo).")
-        : "Este hash no está anclado en la blockchain y TalentPact no lo ha emitido."
-    }));
-  }
-
-  return jsonResponse(200, chainMeta({
-    verified: true,
-    cvHash,
-    skills,
-    issuedAt: (cvJson && cvJson.issuedAt) || null,
-    subject: (cvJson && cvJson.subject) || null,
-    txHash: txHash || null,
-    blockNumber: blockNumber != null ? Number(blockNumber) : null,
-    explorerUrl: txHash ? explorerTx(txHash) : null,
-    // La fecha viene del propio contrato, no de la base de datos: es el dato
-    // que nadie en TalentPact puede alterar.
-    anchoredAt: new Date(Number(timestamp) * 1000).toISOString()
-  }));
-}
+module.exports.skillsPublicas = skillsPublicas;
+module.exports.EXPLICACION = EXPLICACION;

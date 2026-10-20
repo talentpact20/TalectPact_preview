@@ -11,7 +11,7 @@
  * El documento no se almacena ni se registra.
  */
 const { jsonResponse, sb, authUser, errorInterno } = require("../tp");
-const { rateLimited } = require("../evaluator");
+const { limitar } = require("../limites");
 const { skillsDelCatalogo } = require("../catalogo");
 const {
   MAX_BYTES, MAX_TEXTO, tipoDeArchivo, textoDeDocx, esquemaPropuesta, construirPeticion, normalizarPropuesta
@@ -72,7 +72,7 @@ exports.handler = async (event) => {
     if (!user) return jsonResponse(401, { error: "Inicia sesión con tu cuenta de empresa" });
     const empresas = await sb.select("companies", `user_id=eq.${user.id}&select=id&limit=1`);
     if (!Array.isArray(empresas) || !empresas.length) return jsonResponse(403, { error: "Necesitas una cuenta de empresa" });
-    if (rateLimited("doc:" + user.id, { max: 10, windowMs: 60 * 60 * 1000 })) {
+    if (await limitar("doc:" + user.id, { max: 10, ventanaS: 3600 })) {
       return jsonResponse(429, { error: "Has leído muchos documentos seguidos. Prueba de nuevo dentro de un rato." });
     }
 

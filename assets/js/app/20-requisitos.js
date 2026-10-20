@@ -248,8 +248,10 @@ function tpReqContar(){
 (function(){
   const _toggle=togglePostJob;
   togglePostJob=function(){
-    _toggle.apply(this,arguments);
+    // Publicar vive en la página «Ofertas» del panel: si se pide desde otra, se va allí.
     const f=document.getElementById('postJobForm');
+    if(f&&f.style.display==='none'&&typeof tpPanelIr==='function')tpPanelIr('emp','ofertas');
+    _toggle.apply(this,arguments);
     if(f&&f.style.display!=='none'){tpReqIr(TPReq.paso||1,true);tpReqPintar();}
   };
 })();

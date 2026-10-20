@@ -1,0 +1,287 @@
+[
+  {
+    "id": "common_people_analytics", "title": "People analytics",
+    "desc": "Encuentra por qué se va la gente de una empresa con sus datos, presenta a dirección un análisis de brecha salarial y decide qué análisis de personas son éticos.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Por qué se va la gente", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás los datos de rotación de una empresa por equipos. Tendrás que encontrar el patrón.",
+        "sub": "Análisis de rotación — 10 min", "skills": {"hard": ["People analytics", "Rotación"], "soft": ["Pensamiento crítico"]},
+        "scenario": "Una empresa de software de 400 personas ha tenido una rotación voluntaria del 24 % este año (el sector ronda el 13 %). Dirección cree que es «por el sueldo». Has cruzado las bajas con otros datos.\n\nResponde en tres partes:\n\nA) Qué patrón ves en los datos y qué explicación es más probable.\n\nB) Qué datos te faltan para confirmarlo y cómo los conseguirías.\n\nC) Dos acciones concretas para el próximo semestre y cómo medirías su efecto.",
+        "data": {
+          "headers": ["Grupo", "Rotación voluntaria", "Salario frente a mercado", "Otros datos", "Estado"],
+          "table": [
+            {"n": "Equipo de producto A", "a": "41 %", "b": "+5 %", "c": "3 responsables distintos en 18 meses", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Equipo de producto B", "a": "9 %", "b": "+2 %", "c": "Mismo responsable desde hace 4 años", "d": "Bien", "cls": "v-good"},
+            {"n": "Soporte", "a": "32 %", "b": "−8 %", "c": "Horas extra frecuentes", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Personas con menos de 1 año", "a": "38 %", "b": "En mercado", "c": "Sin plan de acogida", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Motivo en la entrevista de salida", "a": "«Mejor oferta» 70 %", "b": "", "c": "La entrevista la hace su responsable directo", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C cruzando las columnas de la tabla.",
+          "kw": ["rotación", "responsable", "liderazgo", "acogida", "primer año", "carga de trabajo", "salario no explica", "entrevista de salida", "sesgo", "encuesta anónima", "medir"]
+        }
+      },
+      {
+        "id": "e2", "title": "La brecha salarial ante dirección", "type": "email", "timeLimit": 660, "difficulty": "intermedio",
+        "briefing": "Presentarás a dirección un análisis de brecha salarial de género y qué hacer con él.",
+        "sub": "Comunicación de resultados — 11 min", "skills": {"hard": ["Brecha salarial", "Registro retributivo"], "soft": ["Comunicación con dirección"]},
+        "scenario": "Preparas el registro retributivo obligatorio de la empresa. La brecha salarial media entre hombres y mujeres es del 19 %. Comparando el mismo puesto y nivel, la diferencia baja al 6 %, pero en los puestos de responsable solo hay un 22 % de mujeres, frente a un 48 % en la plantilla. El consejero delegado dice: «Entonces en realidad no hay brecha».",
+        "data": {
+          "to": "Consejero delegado",
+          "subject": "Lo que dice el análisis de brecha salarial",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Qué significa cada cifra (19 % y 6 %) y por qué las dos importan.\n\n2. Qué explica la diferencia entre ambas (acceso a puestos de responsabilidad) y qué obligaciones legales tiene la empresa.\n\n3. Qué falta analizar dentro del 6 % (complementos, variable, antigüedad).\n\n4. Tres acciones concretas y cómo se medirá el avance cada año.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["brecha media", "mismo puesto", "segregación vertical", "puestos de responsabilidad", "registro retributivo", "complementos", "variable", "plan de igualdad", "acciones", "seguimiento"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Análisis legítimo o invasivo?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué análisis de datos de empleados son aceptables.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Ética y protección de datos"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada análisis que propone el equipo de personas:\n\nLegítimo — Tiene una finalidad clara, es proporcionado y respeta la privacidad.\n\nInvasivo — Vigila de forma desproporcionada, usa datos sensibles sin base o puede discriminar.",
+        "data": {
+          "options": [
+            {"id": "p1", "text": "Comparar la rotación por equipos con datos agregados", "correct": "legitimo"},
+            {"id": "p2", "text": "Analizar los mensajes privados de los empleados para predecir quién se va a ir", "correct": "invasivo"},
+            {"id": "p3", "text": "Calcular la brecha salarial por puesto y nivel", "correct": "legitimo"},
+            {"id": "p4", "text": "Usar los datos de salud de las bajas para decidir a quién se renueva", "correct": "invasivo"},
+            {"id": "p5", "text": "Encuesta de clima anónima con resultados por grupos de más de 5 personas", "correct": "legitimo"},
+            {"id": "p6", "text": "Medir los minutos que cada persona pasa fuera de su ordenador para un ranking", "correct": "invasivo"},
+            {"id": "p7", "text": "Analizar qué formación se relaciona con más promociones internas", "correct": "legitimo"},
+            {"id": "p8", "text": "Puntuar a las candidatas según si tienen hijos", "correct": "invasivo"}
+          ],
+          "cats": ["Legítimo", "Invasivo"],
+          "keys": ["legitimo", "invasivo"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_training", "title": "Formación y desarrollo",
+    "desc": "Decide qué formación merece el presupuesto con datos de necesidades, diseña un plan de acogida y separa las formas de medir el impacto que sirven de las que no.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un presupuesto de formación limitado", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás las peticiones de formación de varios departamentos. Tendrás que decidir en qué invertir.",
+        "sub": "Priorización — 9 min", "skills": {"hard": ["Detección de necesidades", "Plan de formación"], "soft": ["Priorización"]},
+        "scenario": "Tienes 40.000 € de presupuesto anual de formación para una empresa de logística de 250 personas. Han llegado cinco peticiones que suman 92.000 €.\n\nResponde en tres partes:\n\nA) Qué peticiones aprobarías y por qué, relacionándolas con problemas reales del negocio.\n\nB) Qué harías con las que no entran (alternativas más baratas, aplazar).\n\nC) Cómo medirías si la formación aprobada ha funcionado.",
+        "data": {
+          "headers": ["Petición", "Coste", "Problema que resolvería", "Dato que lo respalda", "Estado"],
+          "table": [
+            {"n": "Carretilla elevadora para 30 personas de almacén", "a": "9.000 €", "b": "Accidentes y obligación legal", "c": "4 accidentes leves este año", "d": "Bien", "cls": "v-good"},
+            {"n": "Máster en dirección para 2 directivos", "a": "38.000 €", "b": "«Desarrollo de líderes»", "c": "Sin objetivo definido", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Formación de responsables de turno en dar feedback", "a": "12.000 €", "b": "Rotación del 35 % en almacén", "c": "Las salidas citan al responsable", "d": "Bien", "cls": "v-good"},
+            {"n": "Excel avanzado para administración", "a": "6.000 €", "b": "Cierres lentos", "c": "El cierre tarda 9 días", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Curso de inglés para toda la plantilla", "a": "27.000 €", "b": "«Internacionalización»", "c": "El 3 % de los clientes es extranjero", "d": "Revisar", "cls": "v-bad"}
+          ],
+          "q": "Responde a las partes A, B y C sin pasarte de los 40.000 €.",
+          "kw": ["problema de negocio", "obligación legal", "seguridad", "rotación", "objetivo medible", "alternativas", "formación interna", "bonificación", "FUNDAE", "medir impacto"]
+        }
+      },
+      {
+        "id": "e2", "title": "Los primeros 30 días", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Diseñarás el plan de acogida de las personas nuevas en un almacén.",
+        "sub": "Diseño de acogida — 10 min", "skills": {"hard": ["Onboarding", "Diseño formativo"], "soft": ["Empatía"]},
+        "scenario": "En el almacén de la empresa de logística, el 30 % de las personas nuevas se va en los dos primeros meses. Hoy el primer día se les da un chaleco, se les enseña el almacén en 15 minutos y se les pone a preparar pedidos. Los errores de preparación de los nuevos triplican los de los veteranos.",
+        "data": {
+          "to": "Directora de operaciones",
+          "subject": "Propuesta de plan de acogida para el almacén",
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. Qué pasa el primer día y la primera semana (seguridad, presentación, compañero de referencia).\n\n2. Cómo aprende el trabajo poco a poco hasta los 30 días y cómo se comprueba que lo sabe hacer.\n\n3. Qué papel tiene el responsable de turno y qué conversaciones se hacen (día 7, día 30).\n\n4. Qué indicadores medirás y qué resultado esperas a los tres meses.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["primer día", "seguridad", "compañero de referencia", "aprendizaje progresivo", "comprobar", "responsable", "conversación", "día 30", "errores de preparación", "rotación temprana"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Mide el impacto o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué formas de evaluar una formación demuestran su efecto en el trabajo.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Evaluación de la formación"], "soft": ["Criterio"]},
+        "scenario": "Has dado una formación a los responsables de turno sobre cómo dar feedback. Clasifica cada forma de evaluarla:\n\nMide el impacto — Muestra si ha cambiado lo que pasa en el trabajo.\n\nNo lo mide — Mide satisfacción, asistencia o algo que no demuestra efecto.",
+        "data": {
+          "options": [
+            {"id": "m1", "text": "Comparar la rotación de sus equipos seis meses antes y después", "correct": "si"},
+            {"id": "m2", "text": "La nota de satisfacción que dieron al acabar el curso", "correct": "no"},
+            {"id": "m3", "text": "Preguntar a sus equipos, de forma anónima, si reciben feedback útil", "correct": "si"},
+            {"id": "m4", "text": "El número de horas de formación impartidas", "correct": "no"},
+            {"id": "m5", "text": "Observar una conversación de feedback real con una guía de criterios", "correct": "si"},
+            {"id": "m6", "text": "Un examen tipo test al final del curso", "correct": "no"},
+            {"id": "m7", "text": "Comparar con un grupo de responsables que aún no ha hecho la formación", "correct": "si"},
+            {"id": "m8", "text": "El porcentaje de asistencia", "correct": "no"}
+          ],
+          "cats": ["Mide el impacto", "No lo mide"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_labor_law", "title": "Derecho laboral",
+    "desc": "Revisa la situación laboral de una plantilla, comunica una decisión laboral delicada y separa lo que la ley permite de lo que no.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Revisión laboral de una empresa pequeña", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás varias situaciones laborales de una empresa. Tendrás que detectar los riesgos legales.",
+        "sub": "Revisión de cumplimiento — 10 min", "skills": {"hard": ["Derecho laboral", "Cumplimiento"], "soft": ["Rigor"]},
+        "scenario": "Una agencia de comunicación de 18 personas en Madrid te pide una revisión antes de una inspección de trabajo anunciada. Has recogido la información.\n\nResponde en tres partes:\n\nA) Qué situaciones suponen un riesgo legal y por qué.\n\nB) Qué haría falta corregir antes de la inspección, por orden de gravedad.\n\nC) Qué procedimiento propondrías para que no vuelva a pasar.",
+        "data": {
+          "headers": ["Situación", "Personas", "Detalle", "Riesgo", "Estado"],
+          "table": [
+            {"n": "No hay registro de la jornada", "a": "Toda la plantilla", "b": "Se confía en la palabra de cada uno", "c": "Obligatorio desde 2019", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Diseñadores «autónomos» con horario fijo y mesa en la oficina", "a": "4", "b": "Trabajan solo para la agencia desde hace 2 años", "c": "Falsos autónomos", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Contrato temporal «por obra» renovado varias veces", "a": "2", "b": "Para tareas habituales de la agencia", "c": "Modalidad no válida tras la reforma de 2022", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Horas extra no pagadas ni compensadas", "a": "6", "b": "Unas 8 horas al mes", "c": "Reclamación de cantidades", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Vacaciones", "a": "Toda la plantilla", "b": "30 días naturales, según convenio", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C situación por situación.",
+          "kw": ["registro de jornada", "falsos autónomos", "laboralidad", "dependencia", "ajenidad", "contrato por obra", "reforma laboral", "indefinido", "horas extra", "compensación", "sanción"]
+        }
+      },
+      {
+        "id": "e2", "title": "Comunicar un despido objetivo", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Prepararás la conversación y la comunicación de un despido por causas objetivas.",
+        "sub": "Comunicación — 10 min", "skills": {"hard": ["Despido objetivo"], "soft": ["Comunicación difícil", "Empatía"]},
+        "scenario": "La agencia ha perdido a su mayor cliente (35 % de la facturación) y, tras estudiar alternativas, va a amortizar el puesto de una ejecutiva de cuentas con 6 años de antigüedad que llevaba ese cliente. La decisión está tomada y documentada. Te piden preparar la reunión y el contenido de la carta.",
+        "data": {
+          "to": "Gerente de la agencia",
+          "subject": "Preparación de la reunión y la carta de despido",
+          "hint": "Escribe la preparación en cuatro bloques:\n\n1. Qué debe incluir la carta (causa concreta, fecha de efectos, indemnización) y qué documentación respalda la causa.\n\n2. Lo que corresponde a la trabajadora: indemnización de 20 días por año con el límite legal, preaviso o su compensación, finiquito, y derecho a la representación legal.\n\n3. Cómo debe ser la conversación: quién está, qué se dice primero, qué no se dice.\n\n4. Qué apoyo se le ofrece (referencias, ayuda para buscar empleo) y cómo se comunica al resto del equipo.",
+          "minChars": 420, "minWords": 70,
+          "kw": ["causa objetiva", "económica", "productiva", "carta", "20 días por año", "12 mensualidades", "preaviso de 15 días", "finiquito", "dignidad", "equipo", "documentación"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Lo permite la ley?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas laborales están permitidas en España.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Normativa laboral"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada práctica de una empresa con trabajadores en España:\n\nPermitida — Se ajusta al Estatuto de los Trabajadores y la normativa aplicable.\n\nNo permitida — Es contraria a la ley aunque se pacte o se haga «siempre».",
+        "data": {
+          "options": [
+            {"id": "l1", "text": "Pactar un periodo de prueba dentro de los límites del convenio y la ley", "correct": "si"},
+            {"id": "l2", "text": "Que el trabajador renuncie a sus vacaciones a cambio de dinero sin dejar la empresa", "correct": "no"},
+            {"id": "l3", "text": "Registrar la hora de entrada y salida de cada persona", "correct": "si"},
+            {"id": "l4", "text": "Preguntar en una entrevista si la candidata piensa tener hijos", "correct": "no"},
+            {"id": "l5", "text": "Pagar las horas extra o compensarlas con descanso", "correct": "si"},
+            {"id": "l6", "text": "Despedir a alguien por haber denunciado a la empresa ante la inspección", "correct": "no"},
+            {"id": "l7", "text": "Acordar el teletrabajo por escrito con su compensación de gastos", "correct": "si"},
+            {"id": "l8", "text": "Encadenar contratos temporales para cubrir un puesto permanente", "correct": "no"}
+          ],
+          "cats": ["Permitida", "No permitida"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_contracts", "title": "Contratos mercantiles",
+    "desc": "Revisa las cláusulas de riesgo de un contrato de servicios, explica a un cliente qué firma y decide qué cláusulas son aceptables para una pyme.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Las cláusulas de un contrato de software", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás las cláusulas clave de un contrato que una pyme está a punto de firmar. Tendrás que detectar los riesgos.",
+        "sub": "Revisión de contrato — 10 min", "skills": {"hard": ["Contratos de servicios"], "soft": ["Rigor"]},
+        "scenario": "Una cadena de 12 academias va a firmar con un proveedor un contrato de software de gestión de alumnos por 3 años y 54.000 €. Te han pasado el resumen de las cláusulas principales.\n\nResponde en tres partes:\n\nA) Qué cláusulas suponen un riesgo para las academias y por qué.\n\nB) Qué cambios pedirías en la negociación, por orden de importancia.\n\nC) Qué harías si el proveedor no acepta ningún cambio.",
+        "data": {
+          "headers": ["Cláusula", "Lo que dice", "Detalle", "Riesgo", "Estado"],
+          "table": [
+            {"n": "Duración y renovación", "a": "3 años, renovación automática por otros 3", "b": "Preaviso de 6 meses para no renovar", "c": "Quedar atrapado 6 años", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Responsabilidad", "a": "El proveedor no responde de ningún daño", "b": "Ni por pérdida de datos", "c": "Sin compensación si falla", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Nivel de servicio", "a": "«El proveedor hará lo posible»", "b": "Sin porcentaje de disponibilidad", "c": "No se puede reclamar", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Datos al terminar", "a": "No se menciona", "b": "", "c": "Perder los datos de alumnos", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Precio", "a": "Fijo los 3 años", "b": "", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C cláusula por cláusula.",
+          "kw": ["renovación automática", "preaviso", "limitación de responsabilidad", "nivel de servicio", "disponibilidad", "penalizaciones", "devolución de datos", "encargado del tratamiento", "salida", "negociación"]
+        }
+      },
+      {
+        "id": "e2", "title": "Explicar al cliente qué firma", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Explicarás a un cliente sin formación jurídica los puntos clave de un contrato de distribución.",
+        "sub": "Asesoramiento — 10 min", "skills": {"hard": ["Contratos de distribución"], "soft": ["Explicar con claridad"]},
+        "scenario": "Un fabricante de cosmética natural va a firmar un contrato con un distribuidor para vender en Portugal. El contrato le da al distribuidor exclusividad en todo el país durante 5 años, sin objetivos mínimos de venta, y obliga al fabricante a pagarle una indemnización si termina el contrato antes. El fabricante te escribe: «¿Firmo? Me parece bien, son muy simpáticos».",
+        "data": {
+          "to": "Gerente del fabricante",
+          "subject": "Antes de firmar con el distribuidor de Portugal",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Qué supone en la práctica la exclusividad sin objetivos mínimos, con un ejemplo.\n\n2. Qué riesgo tiene la cláusula de indemnización si las cosas van mal.\n\n3. Qué cambios propondrías (objetivos, periodo de prueba, salida) y cómo plantearlos sin romper la relación.\n\n4. Qué otros puntos conviene revisar (ley aplicable, uso de la marca, precios) y tu recomendación final.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["exclusividad", "objetivos mínimos", "pérdida de la exclusividad", "indemnización", "terminación", "periodo de prueba", "ley aplicable", "jurisdicción", "marca", "recomendación"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Aceptable para una pyme?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué cláusulas puede aceptar una pyme que contrata a un proveedor grande.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Negociación de contratos"], "soft": ["Criterio"]},
+        "scenario": "Una pyme contrata servicios a un proveedor grande. Clasifica cada cláusula:\n\nAceptable — Es equilibrada o habitual en el mercado.\n\nHay que negociarla — Deja a la pyme en una posición de riesgo desproporcionado.",
+        "data": {
+          "options": [
+            {"id": "k1", "text": "Limitar la responsabilidad del proveedor a lo pagado en los últimos 12 meses", "correct": "aceptable"},
+            {"id": "k2", "text": "El proveedor puede subir el precio cuando quiera sin avisar", "correct": "negociar"},
+            {"id": "k3", "text": "Confidencialidad mutua durante el contrato y dos años después", "correct": "aceptable"},
+            {"id": "k4", "text": "La pyme no puede contratar a nadie que haya trabajado en el proveedor durante 10 años", "correct": "negociar"},
+            {"id": "k5", "text": "Disponibilidad del 99,5 % con descuentos si no se cumple", "correct": "aceptable"},
+            {"id": "k6", "text": "Los datos de la pyme pasan a ser propiedad del proveedor", "correct": "negociar"},
+            {"id": "k7", "text": "Resolver los conflictos en los tribunales de la ciudad del proveedor en España", "correct": "aceptable"},
+            {"id": "k8", "text": "El proveedor puede terminar el contrato sin preaviso y la pyme no", "correct": "negociar"}
+          ],
+          "cats": ["Aceptable", "Hay que negociarla"],
+          "keys": ["aceptable", "negociar"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_ip", "title": "Propiedad intelectual",
+    "desc": "Detecta riesgos de propiedad intelectual en un lanzamiento, explica a un cliente cómo proteger su marca y decide qué usos de contenido ajeno están permitidos.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Antes de lanzar una marca nueva", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás la situación de propiedad intelectual de una empresa que va a lanzar un producto. Tendrás que detectar los riesgos.",
+        "sub": "Revisión de riesgos — 9 min", "skills": {"hard": ["Marcas", "Derechos de autor"], "soft": ["Rigor"]},
+        "scenario": "Una startup de bebidas va a lanzar en tres meses su primera bebida con el nombre «Brisa Verde». Ha preparado el envase, la web y la campaña. Antes de imprimir 200.000 latas, te piden una revisión.\n\nResponde en tres partes:\n\nA) Qué elementos suponen un riesgo y por qué.\n\nB) Qué harías antes de imprimir, por orden de urgencia.\n\nC) Qué registros recomiendas y en qué ámbito (España, Unión Europea).",
+        "data": {
+          "headers": ["Elemento", "Situación", "Detalle", "Riesgo", "Estado"],
+          "table": [
+            {"n": "Nombre «Brisa Verde»", "a": "No registrado", "b": "Existe una marca «Brisa» registrada para refrescos", "c": "Oposición o demanda", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Ilustración de la lata", "a": "Hecha por una ilustradora freelance", "b": "Sin contrato de cesión de derechos", "c": "No poder usarla libremente", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Música del anuncio", "a": "Canción conocida", "b": "«La usan muchos en redes»", "c": "Reclamación de derechos", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Fotos de la web", "a": "Banco de imágenes", "b": "Licencia comercial comprada", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Dominio web", "a": "brisaverde.es registrado", "b": ".com en manos de otra persona", "c": "Confusión o reventa", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C elemento por elemento.",
+          "kw": ["búsqueda de anterioridades", "riesgo de confusión", "registro de marca", "OEPM", "EUIPO", "clases", "cesión de derechos", "obra por encargo", "licencia musical", "dominio"]
+        }
+      },
+      {
+        "id": "e2", "title": "Proteger la marca de un cliente", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Explicarás a una emprendedora cómo proteger su marca y su diseño.",
+        "sub": "Asesoramiento — 10 min", "skills": {"hard": ["Registro de marcas y diseños"], "soft": ["Explicar con claridad"]},
+        "scenario": "Una diseñadora de bolsos de Barcelona vende en su web y en dos tiendas de Francia e Italia. Ha visto en una plataforma online bolsos casi idénticos a los suyos con un nombre muy parecido a su marca. No ha registrado nada. Te escribe preocupada preguntando qué puede hacer.",
+        "data": {
+          "to": "Diseñadora",
+          "subject": "Cómo proteger tu marca y tus diseños",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Qué protección tiene hoy sin haber registrado nada y sus límites.\n\n2. Qué registrar (marca y diseño), dónde (España o Unión Europea) y por qué, con plazos aproximados.\n\n3. Qué puede hacer ya con las copias de la plataforma online.\n\n4. Los siguientes pasos ordenados y qué documentación debería reunir (fechas de creación, bocetos, ventas).",
+          "minChars": 400, "minWords": 66,
+          "kw": ["marca no registrada", "diseño comunitario no registrado", "registro", "EUIPO", "marca de la Unión Europea", "diseño registrado", "denuncia en la plataforma", "pruebas de fecha", "copias", "plazos"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Uso permitido o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué usos de contenido creado por otros están permitidos a una empresa.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Derechos de autor"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada uso de contenido ajeno en la web y las redes de una empresa:\n\nPermitido — Hay licencia, el contenido es libre o se cita dentro de los límites legales.\n\nNo permitido — Se usa sin autorización una obra protegida.",
+        "data": {
+          "options": [
+            {"id": "u1", "text": "Una foto de un banco de imágenes con licencia comercial", "correct": "si"},
+            {"id": "u2", "text": "Una foto encontrada en Google Imágenes porque «estaba en internet»", "correct": "no"},
+            {"id": "u3", "text": "Citar un párrafo de un estudio para comentarlo, indicando autor y fuente", "correct": "si"},
+            {"id": "u4", "text": "Copiar entero el artículo de un periódico en el blog de la empresa", "correct": "no"},
+            {"id": "u5", "text": "Una ilustración encargada con contrato de cesión de derechos", "correct": "si"},
+            {"id": "u6", "text": "Usar el logotipo de otra marca en un anuncio para que parezca colaboración", "correct": "no"},
+            {"id": "u7", "text": "Un icono con licencia libre que permite uso comercial, cumpliendo su atribución", "correct": "si"},
+            {"id": "u8", "text": "Poner de fondo de un anuncio una canción comercial sin licencia", "correct": "no"}
+          ],
+          "cats": ["Permitido", "No permitido"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  }
+]

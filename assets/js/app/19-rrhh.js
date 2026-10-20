@@ -17,14 +17,15 @@ function tpFamiliaAptitud(n){
   return typeof tpDimensionDeSkill==='function'&&tpDimensionDeSkill(s)?'soft':'hard';
 }
 function tpEsPersonaSkill(n){return tpFamiliaAptitud(n)==='soft';}
-function tpSegmentoReto(ce){return ce&&tpFamiliaAptitud(ce.skill)||'hard';}
+/** Bloque del catálogo: la rama IA tiene el suyo; el resto, Hard o Soft según su skill. */
+function tpSegmentoReto(ce){if(ce&&ce.rama==='ia')return 'ia';return ce&&tpFamiliaAptitud(ce.skill)||'hard';}
 
 /** Chips de Soft skills (+ integridad) para pool / ficha. */
 function tpPersonasChips(c){
   const list=(c&&c.personas&&c.personas.length)?c.personas
     :(c&&c.skills||[]).filter(s=>tpEsPersonaSkill(s.n)).sort((a,b)=>b.v-a.v).slice(0,5);
   if(!list.length)return '<div class="tp-cond"><span class="tp-cond-chip muted">Sin soft skills aún</span></div>';
-  return '<div class="tp-cond">'+list.map(s=>`<span class="tp-cond-chip tp-chip-personas">${escHtml(s.n)}: ${s.v}</span>`).join('')+'</div>';
+  return tpChipsBanda(list,5);
 }
 function tpIntegridadDetalle(c){
   if(!c||!c.integ)return '<span class="u-c-slate-400">Sin informe de integridad</span>';
@@ -51,40 +52,16 @@ function tpReintentarPool(){TPPool.estado='cargando';renderEmpPool();TPPool.carg
         &&(!f.soloPersonas||pers);
     });
     let h=`<div class="tp-filterbar"><label>Jornada <select onchange="TP_POOL_FILTRO.jornada=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.jornadas,f.jornada)}</select></label><label>Modalidad <select onchange="TP_POOL_FILTRO.modalidad=this.value;renderEmpPool()"><option value="">Todas</option>${opt(TP_COND.modalidades,f.modalidad)}</select></label><label class="tp-filter-check"><input type="checkbox"${f.soloVerificados?' checked':''} onchange="TP_POOL_FILTRO.soloVerificados=this.checked;renderEmpPool()"> Solo notas verificadas</label><label class="tp-filter-check"><input type="checkbox"${f.soloPersonas?' checked':''} onchange="TP_POOL_FILTRO.soloPersonas=this.checked;renderEmpPool()"> Con soft skills</label><span class="tp-filter-count">${lista.length} de ${CANDIDATES.length}</span></div>${window.TPPool&&TPPool.aviso()?`<div class="tp-pool-aviso">${escHtml(TPPool.aviso())}${TPPool.estado==='error'?' <button type="button" class="btn btn-outline btn-sm" onclick="tpReintentarPool()">Reintentar</button>':''}</div>`:''}`;
-    h+='<div class="tp-tabla-scroll"><table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Score</th><th>Soft skills</th><th>Condiciones</th><th>Integridad</th><th>Hard skills</th><th></th></tr></thead><tbody>';
+    h+='<div class="tp-tabla-scroll"><table class="dash-table"><thead><tr><th>Candidato</th><th>Sector</th><th>Soft skills</th><th>Condiciones</th><th>Integridad</th><th>Hard skills</th><th></th></tr></thead><tbody>';
     lista.forEach(c=>{
       const tech=(c.skills||[]).filter(s=>!tpEsPersonaSkill(s.n)).slice(0,2);
       const integ=tpIntegridadDetalle(c);
-      h+=`<tr><td><div class="u-d-flex u-ai-center u-gap-8"><div class="dash-avatar u-bg-emerald-100 u-c-emerald-600">${escHtml(c.i)}</div>${escHtml(String(c.alias||'').replace(/^Candidato /,''))}</div></td><td>${escHtml(c.sector)}</td><td><strong class="u-c-emerald-600">${c.score}</strong></td><td>${tpPersonasChips(c)}</td><td>${tpPoolCondChips(c.cond)}</td><td>${integ}</td><td>${tech.length?tech.map(s=>`<span class="job-tag">${escHtml(s.n)}: ${s.v}</span>`).join(' '):'<span class="u-c-slate-400">—</span>'}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
+      h+=`<tr><td><div class="u-d-flex u-ai-center u-gap-8"><div class="dash-avatar u-bg-emerald-100 u-c-emerald-600">${escHtml(c.i)}</div>${escHtml(String(c.alias||'').replace(/^Candidato /,''))}</div></td><td>${escHtml(c.sector)}</td><td>${tpPersonasChips(c)}</td><td>${tpPoolCondChips(c.cond)}</td><td>${integ}</td><td>${tpChipsBanda(tech,2)}</td><td><button class="btn btn-primary btn-sm" onclick="viewProfile('${escHtml(c.id)}')">${c._unlocked?'Ver contacto':'Ver perfil'}</button></td></tr>`;
     });
-    if(!lista.length)h+='<tr><td colspan="8"><div class="tp-empty">'+(CANDIDATES.length?'Ningún candidato cumple esos filtros.':'Todavía no hay candidatos en el pool.')+'</div></td></tr>';
+    if(!lista.length)h+='<tr><td colspan="7"><div class="tp-empty">'+(CANDIDATES.length?'Ningún candidato cumple esos filtros.':'Todavía no hay candidatos en el pool.')+'</div></td></tr>';
     h+='</tbody></table></div>';
     const box=document.getElementById('empPool');
     if(box)box.innerHTML=h;
-  };
-})();
-
-// Ficha perfil: personas + integridad primero.
-(function(){
-  const _vp=typeof viewProfile==='function'?viewProfile:null;
-  if(!_vp)return;
-  viewProfile=function(id){
-    _vp(id);
-    const c=CANDIDATES.find(p=>String(p.id)===String(id));
-    if(!c)return;
-    const info=document.querySelector('#profileContent .cp-info');
-    if(!info)return;
-    let box=document.getElementById('tpPerfilPersonas');
-    if(!box){
-      box=document.createElement('div');
-      box.id='tpPerfilPersonas';
-      box.className='u-mt-8';
-      info.appendChild(box);
-    }
-    const hard=(c.skills||[]).filter(s=>!tpEsPersonaSkill(s.n)).sort((a,b)=>b.v-a.v).slice(0,5);
-    box.innerHTML='<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mb-4">Soft skills</div>'+tpPersonasChips(c)+
-      (hard.length?'<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mt-8 u-mb-4">Hard skills</div><div class="tp-cond">'+hard.map(s=>`<span class="tp-cond-chip">${escHtml(s.n)}: ${s.v}</span>`).join('')+'</div>':'')+
-      '<div class="u-fs-micro u-fw-600 u-c-slate-600 u-mt-8 u-mb-4">Integridad de la prueba</div><div class="tp-cond">'+tpIntegridadDetalle(c)+'</div>';
   };
 })();
 
@@ -130,7 +107,7 @@ function tpLeerRespuestasDilema(){
   return [1,2,3].map(i=>{
     const el=document.getElementById('tp-dil-a'+i);
     return el?(el.value||'').trim().slice(0,2000):'';
-  }).filter(Boolean);
+  });
 }
 
 // publishJob (17-ofertas-reales.js) envía cultureQuestions + dilemmas.

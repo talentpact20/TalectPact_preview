@@ -1,7 +1,9 @@
 // TalentPact · 23-clasificacion
-// Estructura de los retos, en dos bloques:
+// Estructura de los retos, en tres bloques:
 //   Hard skills (la parte técnica): sector profesional → área.
 //   Soft skills: dimensión (6, diccionario de la asesora) → enfoque (32 competencias).
+//   Inteligencia artificial (rama especial, plan 02): rama técnica → itinerario,
+//   e «IA en el trabajo» para cualquier puesto.
 // Primero se elige lo general y lo concreto aparece solo al abrirlo.
 // También el sector de la empresa en dos pasos (12 generales → 22 concretos).
 // Datos en 01b-taxonomia.js. Script clásico: ámbito global compartido (ver assets/js/README.md).
@@ -9,25 +11,31 @@
 var TPClasif={dash:{bloque:'hard',g1:'all',g2:'all'},landing:{bloque:'all',g1:'all',g2:'all'}};
 var TP_CLASIF_BLOQUES=[
   {id:'hard',nombre:'Hard skills',lema:'La parte técnica',nivel1:'sector',nivel1Pl:'sectores',nivel2:'área',nivel2Pl:'áreas'},
-  {id:'soft',nombre:'Soft skills',lema:'Cómo trabaja con los demás y consigo',nivel1:'dimensión',nivel1Pl:'dimensiones',nivel2:'enfoque',nivel2Pl:'enfoques'}
+  {id:'soft',nombre:'Soft skills',lema:'Cómo trabaja con los demás y consigo',nivel1:'dimensión',nivel1Pl:'dimensiones',nivel2:'enfoque',nivel2Pl:'enfoques'},
+  {id:'ia',nombre:'Inteligencia artificial',lema:'Construir IA y usarla con criterio',nivel1:'rama',nivel1Pl:'ramas',nivel2:'itinerario',nivel2Pl:'itinerarios'}
 ];
+const TP_IA=(TP_TAXONOMIA.ia||{grupos:[],itinerarios:[],competencias:{},skills:{}});
 var TP_CLASIF_IDIOMAS={id:'idiomas',nombre:'Idiomas',corto:'Idiomas',hijos:[]};
 
 function tpClasifBloque(id){return TP_CLASIF_BLOQUES.find(b=>b.id===id)||null;}
 
 /** Primer nivel de un reto: su dimensión (soft) o su sector profesional (hard). */
 function tpRetoNivel1(ce){
+  if(tpSegmentoReto(ce)==='ia')return ce.grupo||'ia_tecnica';
   if(tpSegmentoReto(ce)==='soft'){const d=tpDimensionDeSkill(ce.skill);return d?d.id:'';}
   return tpAreaDeSkill(ce.skill)||'idiomas';
 }
 /** Segundo nivel: los enfoques que evalúa (soft) o su área concreta (hard). */
 function tpRetoNivel2(ce){
+  if(tpSegmentoReto(ce)==='ia'){const c=(TP_IA.skills[ce.skill]||{}).competencia;return TP_IA.itinerarios.filter(i=>i.competencias.includes(c)).map(i=>i.id);}
   if(tpSegmentoReto(ce)==='soft')return TP_TAXONOMIA.competenciasDeSkill[ce.skill]||[];
   const a=tpAreaConcretaDeSkill(ce.skill);return a?[a]:[];
 }
 
 /** Grupos del primer nivel de un bloque, cada uno con sus hijos (segundo nivel). */
 function tpClasifGrupos(bloque){
+  if(bloque==='ia')return TP_IA.grupos.map(g=>({id:g.id,nombre:g.nombre,corto:g.corto,desc:g.desc,
+    hijos:g.id==='ia_tecnica'?TP_IA.itinerarios.map(i=>({id:i.id,nombre:i.nombre,desc:'Competencias: '+i.competencias.map(c=>TP_IA.competencias[c]).filter(Boolean).join(', ')+'.'})):[]}));
   if(bloque==='soft')return TP_TAXONOMIA.dimensiones.map(d=>({id:d.id,num:d.num,nombre:d.nombre,corto:d.corto,hijos:d.competencias.map(c=>({id:c.id,nombre:c.nombre,desc:c.definicion}))}));
   return TP_TAXONOMIA.areas.map(a=>({id:a.id,nombre:a.nombre,corto:a.corto,hijos:a.especialidades.map(e=>({id:e,nombre:e}))})).concat([TP_CLASIF_IDIOMAS]);
 }
@@ -78,14 +86,14 @@ function tpClasifNavegacion(donde,lista){
   const st=TPClasif[donde],b=tpClasifBloque(st.bloque);
   if(!b)return '';
   const grupos=tpClasifGrupos(b.id),{c1,c2}=tpClasifCuentas(lista);
-  let h='<div class="tp-nivel-titulo">'+(b.id==='soft'?'Dimensiones':'Sectores')+'</div><div class="tp-tiles">'+grupos.map(g=>{
+  let h='<div class="tp-nivel-titulo">'+(b.id==='soft'?'Dimensiones':(b.id==='ia'?'Ramas':'Sectores'))+'</div><div class="tp-tiles">'+grupos.map(g=>{
     const n=c1[g.id]||0,on=st.g1===g.id;
     const det=(g.hijos.length>1?g.hijos.length+' '+b.nivel2Pl+' · ':'')+(n?n+' reto'+(n!==1?'s':''):'Sin retos todavía');
     return '<button type="button" class="tp-tile'+(on?' activo':'')+(n?'':' vacio')+'" aria-pressed="'+on+'" title="'+escHtml(g.nombre)+'" onclick="tpClasifElegir1(\''+donde+'\',\''+g.id+'\')">'+(g.num?'<i>'+g.num+'</i>':'')+'<b>'+escHtml(g.corto)+'</b><span>'+det+'</span></button>';
   }).join('')+'</div>';
   const g=grupos.find(x=>x.id===st.g1);
   if(g&&g.hijos.length>1){
-    const tit=b.id==='soft'?'Enfoques de «'+g.nombre+'»':'Áreas de «'+g.nombre+'»';
+    const tit=b.id==='soft'?'Enfoques de «'+g.nombre+'»':(b.id==='ia'?'Itinerarios de «'+g.nombre+'»':'Áreas de «'+g.nombre+'»');
     h+='<div class="tp-nivel-titulo">'+escHtml(tit)+'</div><div class="tp-subfiltros" role="group" aria-label="'+escHtml(tit)+'">'+
       '<button type="button" class="tp-subfiltro'+(st.g2==='all'?' activo':'')+'" aria-pressed="'+(st.g2==='all')+'" onclick="tpClasifElegir2(\''+donde+'\',\'all\')">Todas <span>'+(c1[g.id]||0)+'</span></button>'+
       g.hijos.map(x=>{const n=c2[x.id]||0,on=st.g2===x.id;return '<button type="button" class="tp-subfiltro'+(on?' activo':'')+'" aria-pressed="'+on+'"'+(n?'':' disabled')+(x.desc?' title="'+escHtml(x.desc)+'"':'')+' onclick="tpClasifElegir2(\''+donde+'\',\''+escHtml(x.id)+'\')">'+escHtml(x.nombre)+' <span>'+(n||'sin reto')+'</span></button>';}).join('')+'</div>';
@@ -103,6 +111,7 @@ function tpClasifMigas(donde,n){
   return '<div class="tp-migas">'+partes.map(escHtml).join(' <span aria-hidden="true">›</span> ')+' · '+n+' reto'+(n!==1?'s':'')+'</div>';
 }
 function tpClasifEtiquetas(ce){
+  if(tpSegmentoReto(ce)==='ia'){const g=TP_IA.grupos.find(x=>x.id===ce.grupo);return '<span class="cex-tag">Inteligencia artificial</span>'+(g?'<span class="cex-tag">'+escHtml(g.corto)+'</span>':'');}
   const soft=tpSegmentoReto(ce)==='soft';
   const area=!soft?tpAreaConcretaDeSkill(ce.skill):'';
   const n1=tpClasifNombre1(ce);
@@ -139,7 +148,7 @@ renderCommonExercises=function(filter,cat){
     const done=hecho(ce);
     const otras=ce.tags.filter(t=>t!=='Universal'&&t!=='Sector').map(t=>'<span class="cex-tag">'+escHtml(t)+'</span>').join('');
     return '<div class="common-ex-card '+(done?'completed':'')+'" onclick="openCommonEx(\''+ce.id+'\')"><span class="cex-icon">'+tpMonograma(ce.title,ce.category)+'</span><div class="cex-title">'+ce.title+'</div><div class="cex-desc">'+ce.desc+'</div>'+tpClasifCompetencias(ce)+
-      '<div class="cex-meta">'+tpClasifEtiquetas(ce)+otras+(done?'<span class="cex-tag u-bg-emerald-50 u-c-emerald-600 u-b-1-solid-emerald-100">✓ '+done.score+'/100</span>':'')+'</div></div>';
+      '<div class="cex-meta">'+tpClasifEtiquetas(ce)+otras+(done?'<span class="cex-tag u-bg-emerald-50 u-c-emerald-600 u-b-1-solid-emerald-100">✓ '+tpBanda(done.score).txt+' · '+tpBanda(done.score).nota+'</span>':'')+'</div></div>';
   }).join('');
 };
 
@@ -149,7 +158,7 @@ renderLandingCommon=function(filter,cat,level){
   const el=document.getElementById('landingCommonGrid');
   if(!el)return;
   const st=TPClasif.landing;
-  st.bloque=cat==='hard'||cat==='soft'?cat:'all';
+  st.bloque=cat==='hard'||cat==='soft'||cat==='ia'?cat:'all';
   if(st.bloque==='all'){st.g1='all';st.g2='all';}
   let base=COMMON_EXERCISES.filter(ce=>Array.isArray(ce.exercises)&&ce.exercises.length);
   if(level!=='all')base=base.filter(ce=>ce.exercises.some(e=>e.difficulty===level));
@@ -181,6 +190,7 @@ renderLandingCommon=function(filter,cat,level){
     grupos=tpClasifGrupos(st.bloque).map(g=>({nombre:(g.num?g.num+' · ':'')+g.corto,items:list.filter(ce=>tpRetoNivel1(ce)===g.id)})).filter(g=>g.items.length);
   }
   const subDe=ce=>{
+    if(tpSegmentoReto(ce)==='ia'){const c=(TP_IA.skills[ce.skill]||{}).competencia;return st.bloque==='all'?tpClasifNombre1(ce):(TP_IA.competencias[c]||'Para cualquier puesto');}
     if(tpSegmentoReto(ce)==='soft'){const c=tpCompetenciasDeSkill(ce.skill)[0];return st.bloque==='all'?tpClasifNombre1(ce):(c?c.nombre:'');}
     return st.bloque==='all'?tpClasifNombre1(ce):(tpAreaConcretaDeSkill(ce.skill)||tpClasifNombre1(ce));
   };
@@ -193,9 +203,9 @@ function tpClasifNavCompacta(donde,lista){
   const st=TPClasif[donde],b=tpClasifBloque(st.bloque),{c1,c2}=tpClasifCuentas(lista);
   const chip=(fn,id,txt,n,on,titulo)=>'<button type="button" class="tp-subfiltro'+(on?' activo':'')+'" aria-pressed="'+on+'"'+(n?'':' disabled')+(titulo?' title="'+escHtml(titulo)+'"':'')+' onclick="'+fn+'(\''+donde+'\',\''+escHtml(id)+'\')">'+escHtml(txt)+' <span>'+n+'</span></button>';
   const grupos=tpClasifGrupos(b.id);
-  let h='<div class="tp-nivel-titulo">'+(b.id==='soft'?'Dimensión':'Sector')+'</div><div class="tp-subfiltros">'+grupos.map(g=>chip('tpClasifElegir1',g.id,g.corto,c1[g.id]||0,st.g1===g.id,g.nombre)).join('')+'</div>';
+  let h='<div class="tp-nivel-titulo">'+(b.id==='soft'?'Dimensión':(b.id==='ia'?'Rama':'Sector'))+'</div><div class="tp-subfiltros">'+grupos.map(g=>chip('tpClasifElegir1',g.id,g.corto,c1[g.id]||0,st.g1===g.id,g.nombre)).join('')+'</div>';
   const g=grupos.find(x=>x.id===st.g1);
-  if(g&&g.hijos.length>1)h+='<div class="tp-nivel-titulo">'+(b.id==='soft'?'Enfoque':'Área')+'</div><div class="tp-subfiltros">'+g.hijos.filter(x=>c2[x.id]).map(x=>chip('tpClasifElegir2',x.id,x.nombre,c2[x.id],st.g2===x.id,x.desc)).join('')+'</div>';
+  if(g&&g.hijos.length>1)h+='<div class="tp-nivel-titulo">'+(b.id==='soft'?'Enfoque':(b.id==='ia'?'Itinerario':'Área'))+'</div><div class="tp-subfiltros">'+g.hijos.filter(x=>c2[x.id]).map(x=>chip('tpClasifElegir2',x.id,x.nombre,c2[x.id],st.g2===x.id,x.desc)).join('')+'</div>';
   return h;
 }
 (function(){

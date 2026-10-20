@@ -190,6 +190,6 @@ function tpActividadEmpresa(){
   const poolOk=typeof TPPool!=='undefined'&&TPPool.estado==='ok';
   pon('empStatOffers',tpCompany?String((TPOfertas.mias||[]).filter(j=>j.status==='open').length):'—');
   pon('empStatPool',poolOk?String(TPPool.total||0):'—');
-  pon('empStatTop',poolOk?String(cands.filter(c=>Number(c.score)>=80).length):'—');
+  pon('empStatTop',poolOk?String(cands.filter(c=>(c.skills||[]).some(x=>Number(x.v)>=80)).length):'—');
   pon('empStatUnlocks',String(cands.filter(c=>c._unlocked).length));
 }

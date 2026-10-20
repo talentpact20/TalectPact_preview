@@ -1,83 +1,26 @@
 /**
- * anchor-credential — ancla el hash de una credencial en la blockchain (testnet).
+ * anchor-credential — pide el sello público de una credencial ya pagada.
  *
  * Body: { credentialId }  (o { cvHash })
  * Cabecera: Authorization: Bearer <access token de Supabase>
  *
- * Requiere sesión: cada transacción gasta gas de la wallet emisora, así que sin
- * autenticar cualquiera podría vaciarla. Además solo se ancla una credencial
- * del propio usuario — la propiedad se impone en la consulta, no comparando ids.
+ * Desde el SkillPass v2 el sello va por lotes (docs/plan_post_reunion/03 §4.2):
+ * aquí no se envía ninguna transacción. La credencial pagada entra en la cola
+ * y anchor-batch publica cada noche una sola raíz de Merkle con todas las del
+ * día. El coste para TalentPact es constante y desaparece el tope diario por
+ * persona, que solo existía porque cada sello era una transacción.
  *
- * La confirmación de un bloque de Sepolia tarda ~12 s y Netlify corta las
- * funciones síncronas (60 s en el API moderno; 10 s en el antiguo modo Lambda),
- * y no tiene sentido tener a la persona esperando. Por eso el anclaje NO bloquea hasta la
- * confirmación: difunde la transacción, la guarda, espera un margen corto y, si
- * aún no ha entrado en un bloque, responde `pending` con el txHash. Volver a
- * llamar con el mismo `credentialId` recoge el recibo y cierra el anclaje.
+ * Las credenciales v1 con una transacción ya enviada (contrato v1, Sepolia)
+ * siguen recogiendo aquí su recibo.
  *
- * Devuelve: { txHash, blockNumber, anchoredAt, explorerUrl, pending }
+ * Devuelve: { ok, sello: { estado: no | en_cola | enviado | sellado, … } }
  */
 const {
-  jsonResponse, sb, authUser, getContract, getProvider,
-  chainConfigured, isHash32, isUuid, CHAIN, explorerTx, explorerAddress, errorInterno,
-  faltaEnEsquema, formatAmount
+  jsonResponse, sb, authUser, getProvider, chainConfigured, isHash32, isUuid,
+  errorInterno, faltaEnEsquema, formatAmount
 } = require("../tp");
 const { SEAL_PRICE, selloPagado } = require("../sello");
-
-// Margen de espera antes de devolver `pending`. Corto a propósito: la persona
-// no espera a la red, y el resto de la petición (auth, Supabase, difusión) va aparte.
-const WAIT_MS = Number(process.env.ANCHOR_WAIT_MS || 5000);
-
-// Cada sellado nuevo es una transacción que paga la wallet emisora, y basta con
-// cambiar una nota para tener una credencial nueva que sellar. Sin tope, una
-// sola cuenta podía vaciar la wallet a base de retos repetidos.
-const MAX_ANCLAJES_DIA = Number(process.env.ANCHOR_MAX_PER_DAY || 3);
-
-/** ¿Ha agotado este perfil sus sellados de las últimas 24 h? */
-async function cupoAgotado(profileId) {
-  const desde = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
-  const n = await sb.count("credentials", `profile_id=eq.${profileId}&tx_hash=not.is.null&created_at=gte.${desde}`);
-  return n >= MAX_ANCLAJES_DIA;
-}
-
-function chainMeta(extra) {
-  return Object.assign(
-    {
-      chain: CHAIN.slug,
-      chainName: CHAIN.name,
-      contract: process.env.SKILLPASS_CONTRACT_ADDRESS || null,
-      contractUrl: process.env.SKILLPASS_CONTRACT_ADDRESS
-        ? explorerAddress(process.env.SKILLPASS_CONTRACT_ADDRESS)
-        : null
-    },
-    extra
-  );
-}
-
-/** Espera la confirmación como mucho `ms`; devuelve null si no llega a tiempo. */
-async function waitWithBudget(tx, ms) {
-  let timer;
-  const budget = new Promise((resolve) => { timer = setTimeout(() => resolve(null), ms); });
-  try {
-    // El .catch evita que un rechazo tardío de wait() quede sin manejar cuando
-    // ya hemos respondido `pending`.
-    return await Promise.race([tx.wait(1).catch(() => null), budget]);
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-/** Respuesta de una credencial ya anclada y confirmada. */
-function anchoredResponse(cred, extra) {
-  return jsonResponse(200, chainMeta(Object.assign({
-    ok: true,
-    pending: false,
-    txHash: cred.tx_hash || null,
-    blockNumber: cred.block_number != null ? Number(cred.block_number) : null,
-    anchoredAt: cred.anchored_at || null,
-    explorerUrl: cred.tx_hash ? explorerTx(cred.tx_hash) : null
-  }, extra)));
-}
+const { estadoSello, cargarLote } = require("../skillpass");
 
 exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return jsonResponse(200, { ok: true });
@@ -87,15 +30,6 @@ exports.handler = async (event) => {
   try { b = JSON.parse(event.body || "{}"); }
   catch (_e) { return jsonResponse(400, { error: "Body JSON no válido" }); }
 
-  // ── Sin configuración de cadena no se finge nada: se dice qué falta. ──
-  if (!chainConfigured({ signer: true })) {
-    return jsonResponse(503, {
-      error: "El anclaje en blockchain no está configurado en este entorno",
-      details: "Faltan SKILLPASS_CONTRACT_ADDRESS o ISSUER_PRIVATE_KEY en las variables de entorno del servidor."
-    });
-  }
-
-  // ── Identidad: el servidor decide de quién es la credencial. ──
   let user;
   try { user = await authUser(event, b); }
   catch (err) { return errorInterno("No se pudo validar la sesión", err); }
@@ -107,7 +41,7 @@ exports.handler = async (event) => {
   }
 
   try {
-    // ── Localiza la credencial, siempre acotada al perfil de quien pide. ──
+    // La credencial se busca siempre acotada al perfil de quien pide.
     const profiles = await sb.select("profiles", `user_id=eq.${user.id}&select=id&limit=1`);
     const profile = Array.isArray(profiles) ? profiles[0] : null;
     if (!profile) return jsonResponse(404, { error: "Este usuario no tiene perfil ni credenciales" });
@@ -127,54 +61,22 @@ exports.handler = async (event) => {
     const cred = Array.isArray(rows) ? rows[0] : null;
     if (!cred) return jsonResponse(404, { error: "Credencial no encontrada" });
 
-    // ── ① Ya confirmada: nada que hacer. ──
-    if (cred.tx_hash && cred.block_number != null) return anchoredResponse(cred, { already: true });
-
-    const contract = getContract({ signer: true });
-
-    // ── ② Difundida en una llamada anterior pero sin confirmar: recoge el recibo. ──
-    if (cred.tx_hash) {
+    // ── v1 con transacción ya enviada: solo falta recoger el recibo. ──
+    if (cred.tx_hash && !cred.batch_id && cred.block_number == null && chainConfigured()) {
       const receipt = await getProvider().getTransactionReceipt(cred.tx_hash);
       if (receipt && receipt.blockNumber != null) {
         const anchoredAt = cred.anchored_at || new Date().toISOString();
-        await sb.update("credentials", `id=eq.${cred.id}`, {
-          block_number: Number(receipt.blockNumber),
-          anchored_at: anchoredAt
-        });
-        return anchoredResponse(
-          Object.assign({}, cred, { block_number: Number(receipt.blockNumber), anchored_at: anchoredAt })
-        );
+        await sb.update("credentials", `id=eq.${cred.id}`, { block_number: Number(receipt.blockNumber), anchored_at: anchoredAt });
+        Object.assign(cred, { block_number: Number(receipt.blockNumber), anchored_at: anchoredAt });
       }
-      return jsonResponse(200, chainMeta({
-        ok: true,
-        pending: true,
-        txHash: cred.tx_hash,
-        blockNumber: null,
-        anchoredAt: null,
-        explorerUrl: explorerTx(cred.tx_hash)
-      }));
+      return jsonResponse(200, { ok: true, sello: estadoSello(cred, null) });
     }
-
-    // ── ③ El hash puede estar ya en la cadena aunque la fila no lo refleje.
-    // Sin esta comprobación, anchor() revertiría con "already anchored". ──
-    const [exists, ts] = await contract.isAnchored(cred.cv_hash);
-    if (exists) {
-      const anchoredAt = new Date(Number(ts) * 1000).toISOString();
-      await sb.update("credentials", `id=eq.${cred.id}`, { anchored_at: anchoredAt });
-      return jsonResponse(200, chainMeta({
-        ok: true,
-        already: true,
-        pending: false,
-        txHash: cred.tx_hash || null,
-        blockNumber: null,
-        anchoredAt,
-        explorerUrl: cred.tx_hash ? explorerTx(cred.tx_hash) : null,
-        note: "El hash ya estaba anclado en la cadena; se ha reconciliado el registro."
-      }));
+    if (cred.tx_hash || cred.batch_id) {
+      return jsonResponse(200, { ok: true, already: true, sello: estadoSello(cred, await cargarLote(cred.batch_id)) });
     }
+    if (cred.revoked_at) return jsonResponse(409, { error: "Esta credencial está revocada: no se puede sellar." });
 
-    // ── ④ El sello público es de pago (lib/sello.js): sin pago no se ancla.
-    // Recoger el recibo de una transacción ya enviada (arriba) no cobra de nuevo. ──
+    // ── El sello es de pago (lib/sello.js). ──
     const pagado = await selloPagado(sb, faltaEnEsquema, cred.id, user.id);
     if (pagado === null) return jsonResponse(503, { error: "El sello público todavía no está disponible.", code: "sello_no_disponible" });
     if (!pagado) {
@@ -184,46 +86,21 @@ exports.handler = async (event) => {
       });
     }
 
-    if (await cupoAgotado(profile.id)) {
-      return jsonResponse(429, {
-        error: `Has sellado ${MAX_ANCLAJES_DIA} SkillPass en las últimas 24 horas. Vuelve a intentarlo mañana.`,
-        code: "anchor_quota"
-      });
+    // ── Pagado: entra en la cola del lote de esta noche (idempotente). ──
+    if (!cred.seal_paid_at) {
+      const ahora = new Date().toISOString();
+      try {
+        await sb.update("credentials", `id=eq.${cred.id}&seal_paid_at=is.null`, { seal_paid_at: ahora });
+      } catch (err) {
+        if (faltaEnEsquema(err, /seal_paid_at/i)) {
+          return jsonResponse(503, { error: "El sello por lotes aún no está activado (falta supabase_schema_vc.sql).", code: "sello_no_disponible" });
+        }
+        throw err;
+      }
+      cred.seal_paid_at = ahora;
     }
-
-    // ── ④ Difunde y guarda el txHash antes de esperar: si la respuesta se corta,
-    // la transacción no se pierde y la siguiente llamada la recupera. ──
-    const tx = await contract.anchor(cred.cv_hash);
-    await sb.update("credentials", `id=eq.${cred.id}`, { tx_hash: tx.hash });
-
-    const receipt = await waitWithBudget(tx, WAIT_MS);
-    if (!receipt) {
-      return jsonResponse(200, chainMeta({
-        ok: true,
-        pending: true,
-        txHash: tx.hash,
-        blockNumber: null,
-        anchoredAt: null,
-        explorerUrl: explorerTx(tx.hash),
-        note: "Transacción enviada. La red aún no la ha confirmado; vuelve a consultar en unos segundos."
-      }));
-    }
-
-    const anchoredAt = new Date().toISOString();
-    await sb.update("credentials", `id=eq.${cred.id}`, {
-      block_number: Number(receipt.blockNumber),
-      anchored_at: anchoredAt
-    });
-
-    return jsonResponse(200, chainMeta({
-      ok: true,
-      pending: false,
-      txHash: tx.hash,
-      blockNumber: Number(receipt.blockNumber),
-      anchoredAt,
-      explorerUrl: explorerTx(tx.hash)
-    }));
+    return jsonResponse(200, { ok: true, sello: estadoSello(cred, null) });
   } catch (err) {
-    return errorInterno("No se pudo anclar la credencial", err);
+    return errorInterno("No se pudo pedir el sello", err);
   }
 };

@@ -75,6 +75,56 @@ function tpEncaje(pct){
   return '<div class="tp-encaje" title="Encaje con la oferta"><span class="tp-encaje-pista" role="img" aria-label="Encaje: '+n+' %"><span class="tp-encaje-relleno" style="width:'+n+'%"></span></span><b>'+n+' %</b></div>';
 }
 
+// ── Bandas de nota ─────────────────────────────────────────────────────────
+// Cuatro bandas en vez de un número de 0 a 100 (docs/plan_post_reunion,
+// skills_en_la_plataforma.md). El candidato ve banda y nota; la empresa, la
+// banda, con el número solo al pasar el ratón. Espejo de lib/bandas.js.
+var TP_BANDAS=[
+  {id:'insuficiente',txt:'Insuficiente',min:0},
+  {id:'aceptable',txt:'Aceptable',min:40},
+  {id:'bueno',txt:'Bueno',min:60},
+  {id:'muy_bueno',txt:'Muy bueno',min:80}
+];
+function tpBanda(nota){
+  const n=Math.max(0,Math.min(100,Math.round(Number(nota)||0)));
+  let i=0;TP_BANDAS.forEach((b,k)=>{if(n>=b.min)i=k;});
+  return Object.assign({nota:n,nivel:i+1},TP_BANDAS[i]);
+}
+/** Banda con cuatro segmentos. conNota: el número va escrito (vista del candidato). */
+function tpBandaHtml(nota,conNota){
+  const b=tpBanda(nota);
+  return '<span class="tp-banda tp-banda-'+b.id+'" title="'+b.nota+' sobre 100"><span class="tp-banda-seg" aria-hidden="true">'+'<i></i>'.repeat(4)+'</span>'
+    +'<span class="tp-banda-txt">'+b.txt+(conNota?' <b>'+b.nota+'</b>':'<span class="sr-only"> ('+b.nota+' sobre 100)</span>')+'</span></span>';
+}
+/** Fila «skill · banda». o: {conNota, verificada}. */
+function tpSkillBanda(nombre,nota,o){
+  o=o||{};
+  const vis=typeof tpSkillNombre==='function'?tpSkillNombre(nombre):nombre;
+  return '<div class="tp-skill-banda"><span class="tp-skill-banda-nombre">'+_tpEsc(vis)+(o.verificada?' <span class="tp-verified" title="Nota verificada por el servidor">✓</span>':'')+'</span>'+tpBandaHtml(nota,o.conNota)+'</div>';
+}
+/**
+ * Skills agrupadas en los dos bloques (Hard / Soft), mejor banda primero.
+ * skills: [{n, v, verified}]. o: {conNota, max (por bloque), vacio}.
+ */
+function tpBloquesSkills(skills,o){
+  o=o||{};
+  const fam=n=>typeof tpFamiliaAptitud==='function'?tpFamiliaAptitud(n):'hard';
+  const lista=(skills||[]).filter(s=>s&&s.n).slice().sort((a,b)=>b.v-a.v);
+  const bloque=(id,titulo)=>{
+    const xs=lista.filter(s=>fam(s.n)===id).slice(0,o.max||99);
+    return '<section class="tp-bloque-skills"><h4>'+titulo+'</h4>'+(xs.length
+      ?xs.map(s=>tpSkillBanda(s.n,s.v,{conNota:o.conNota,verificada:s.verified})).join('')
+      :'<p class="tp-bloque-vacio">'+_tpEsc(o.vacio||'Sin retos hechos en este bloque.')+'</p>')+'</section>';
+  };
+  return '<div class="tp-bloques-skills">'+bloque('hard','Hard skills')+bloque('soft','Soft skills')+'</div>';
+}
+/** Chips compactos «skill · banda» (tablas y tarjetas). */
+function tpChipsBanda(skills,max){
+  const xs=(skills||[]).filter(s=>s&&s.n).slice().sort((a,b)=>b.v-a.v).slice(0,max||3);
+  if(!xs.length)return '<span class="u-c-slate-400">—</span>';
+  return '<div class="tp-cond">'+xs.map(s=>{const b=tpBanda(s.v);return '<span class="tp-cond-chip tp-chip-banda tp-banda-'+b.id+'" title="'+b.nota+' sobre 100">'+_tpEsc(typeof tpSkillNombre==='function'?tpSkillNombre(s.n):s.n)+' · '+b.txt+'</span>';}).join('')+'</div>';
+}
+
 // Esqueleto de carga con la forma aproximada del contenido.
 function tpEsqueleto(lineas){return '<div class="tp-esqueleto" aria-hidden="true">'+'<i></i>'.repeat(lineas||3)+'</div><span class="sr-only" role="status">Cargando…</span>';}
 
@@ -93,8 +143,8 @@ function tpVacio(o){
 function tpPintarPruebaPortada(){
   const el=document.getElementById('heroProof');
   if(!el||typeof COMMON_EXERCISES==='undefined'||!COMMON_EXERCISES.length)return;
-  const total=COMMON_EXERCISES.length,soft=COMMON_EXERCISES.filter(c=>c.category==='soft').length;
-  el.innerHTML='<strong>'+total+' retos</strong> ('+soft+' transversales y '+(total-soft)+' de sector) · corrección con IA criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a>';
+  const total=COMMON_EXERCISES.length,soft=COMMON_EXERCISES.filter(c=>c.category==='soft').length,ia=COMMON_EXERCISES.filter(c=>c.rama==='ia').length;
+  el.innerHTML='<strong>'+total+' retos</strong> ('+soft+' transversales, '+(total-soft-ia)+' de sector y '+ia+' de inteligencia artificial) · corrección con IA criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a>';
 }
 
 // ═══ Respuesta en curso: palabras y autoguardado en este navegador ═══
