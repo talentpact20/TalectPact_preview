@@ -130,8 +130,12 @@ function serveStatic(req, res) {
   // Fuera de la raíz, o cualquier ruta con un segmento oculto (.env, .git/…):
   // ahí viven las claves de API y la clave privada del emisor.
   const rel = path.relative(ROOT, filePath);
-  if (rel.startsWith("..") || path.isAbsolute(rel) || rel.split(path.sep).some((s) => s.startsWith(".")) ||
-      rel.split(path.sep)[0] === "node_modules") {
+  // Lo mismo que bloquea netlify.toml: código del servidor (con las soluciones
+  // de los retos), herramientas, tests, SQL y documentos internos.
+  const PRIVADO = ["node_modules", "netlify", "tools", "tests", "Talentpact", "CLAUDE.md", "CONVERSACION_FINAL_PARA_SEGUIR.md", "serve-demo.js", "package.json", "package-lock.json", "deno.lock", "netlify.toml"];
+  const partes = rel.split(path.sep);
+  if (rel.startsWith("..") || path.isAbsolute(rel) || partes.some((s) => s.startsWith(".")) ||
+      PRIVADO.includes(partes[0]) || (partes[0] === "tfm" && partes[1] === "tech")) {
     res.writeHead(403);
     res.end("Forbidden");
     return;

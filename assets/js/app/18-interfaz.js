@@ -125,6 +125,17 @@ function tpChipsBanda(skills,max){
   return '<div class="tp-cond">'+xs.map(s=>{const b=tpBanda(s.v);return '<span class="tp-cond-chip tp-chip-banda tp-banda-'+b.id+'" title="'+b.nota+' sobre 100">'+_tpEsc(typeof tpSkillNombre==='function'?tpSkillNombre(s.n):s.n)+' · '+b.txt+'</span>';}).join('')+'</div>';
 }
 
+// Enunciado de un reto o guía de respuesta: texto escapado, en párrafos, y los
+// bloques ```lenguaje … ``` como código. Antes el enunciado se pintaba tal cual:
+// el código de un ejercicio (p. ej. un <input> de JSX) se convertía en HTML real.
+function tpFormatoEnunciado(texto){
+  const partes=String(texto||'').split(/```[A-Za-z0-9_-]*[ \t]*\n?/);
+  return partes.map((p,i)=>i%2===1
+    ?'<pre class="ex-codigo"><code>'+_tpEsc(p.replace(/\n$/,''))+'</code></pre>'
+    :p.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean).map(x=>'<p>'+_tpEsc(x).replace(/\n/g,'<br>')+'</p>').join('')
+  ).join('');
+}
+
 // Esqueleto de carga con la forma aproximada del contenido.
 function tpEsqueleto(lineas){return '<div class="tp-esqueleto" aria-hidden="true">'+'<i></i>'.repeat(lineas||3)+'</div><span class="sr-only" role="status">Cargando…</span>';}
 

@@ -25,3 +25,4 @@
 - **Rama IA** como tercer bloque del catálogo (rama técnica por itinerarios + IA en el trabajo). Los retos técnicos se corrigen con la rúbrica `tecnico_ia` y con errores que penalizan que fija el catálogo. (20/10)
 - Paneles con **menú lateral** (barra horizontal en móvil) y **Ajustes como página** del menú, no como cajón. Empresa: Resumen · Ofertas · Talento · Verificar credencial · Plan · Ajustes. (20/10)
 - Las funciones solo aceptan su propio dominio (CORS = SITE_URL); verificar, revocación y DID son públicos. Límites de frecuencia persistentes en Supabase, con la clave en hash. (20/10)
+- Calidad mínima de cada ejercicio fijada por test: escenario concreto, tabla real en los análisis, guía en bloques numerados, clasificaciones de 8 o más casos, sin símbolos ni soluciones en el enunciado. (20/10)

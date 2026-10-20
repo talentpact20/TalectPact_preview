@@ -1,0 +1,344 @@
+[
+  {
+    "id": "common_healthcare_admin", "title": "Administración sanitaria",
+    "desc": "Reduce las ausencias a citas de un centro de salud con sus datos, atiende por escrito a un paciente que reclama y decide qué datos clínicos se pueden compartir y con quién.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Pacientes que no vienen a su cita", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los datos de citas de un centro sanitario. Tendrás que explicar por qué se pierden tantas.",
+        "sub": "Gestión de agendas — 9 min", "skills": {"hard": ["Gestión de citas", "Indicadores sanitarios"], "soft": ["Diagnóstico"]},
+        "scenario": "Una clínica privada con 6 especialidades pierde el 14 % de sus citas porque el paciente no acude ni avisa. Cada hueco vacío cuesta unos 70 € y alarga las listas de espera. La gerente te pide un análisis.\n\nResponde en tres partes:\n\nA) Dónde se concentran las ausencias y qué las explica, con las cifras.\n\nB) Qué medidas propondrías, en orden de impacto.\n\nC) Cómo medirías el efecto de cada medida.",
+        "data": {
+          "headers": ["Grupo de citas", "Ausencias", "Antelación media de la cita", "Recordatorio actual", "Estado"],
+          "table": [
+            {"n": "Dermatología", "a": "22 %", "b": "48 días", "c": "Ninguno", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Fisioterapia", "a": "6 %", "b": "5 días", "c": "Llamada el día anterior", "d": "Bien", "cls": "v-good"},
+            {"n": "Primeras visitas", "a": "19 %", "b": "35 días", "c": "Ninguno", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Citas de los lunes a primera hora", "a": "18 %", "b": "", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Pacientes que no pueden cancelar online", "a": "100 %", "b": "Solo por teléfono, de 9 a 14", "c": "", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de cada grupo.",
+          "kw": ["antelación", "recordatorio", "SMS", "confirmar o cancelar", "cancelación online", "lista de espera", "reasignar huecos", "sobreprogramar", "primeras visitas", "medir"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un paciente que reclama", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Responderás por escrito a la reclamación de un paciente.",
+        "sub": "Atención al paciente — 10 min", "skills": {"hard": ["Gestión de reclamaciones"], "soft": ["Empatía", "Claridad"]},
+        "scenario": "Un paciente ha presentado una reclamación: esperó 1 hora y 20 minutos en la sala para una consulta de traumatología, nadie le informó del retraso y, al entrar, la consulta duró 6 minutos. Al revisarlo, ves que el traumatólogo tuvo que atender una urgencia y que recepción no avisó a los pacientes que esperaban.",
+        "data": {
+          "to": "Paciente",
+          "subject": "Respuesta a su reclamación",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Agradece la reclamación y discúlpate por lo que no se hizo bien.\n\n2. Explica qué ocurrió sin excusas y sin dar datos de otros pacientes.\n\n3. Di qué se va a cambiar (aviso de retrasos en sala) y qué se le ofrece a él.\n\n4. Indica cómo puede contactar para cualquier duda y su derecho a acudir a otras vías si no queda conforme.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["agradecemos", "disculpas", "retraso", "urgencia", "no se le informó", "aviso en sala", "nueva cita", "sin datos de otros pacientes", "contacto", "otras vías de reclamación"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Se puede compartir?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué peticiones de información clínica se pueden atender.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Confidencialidad sanitaria"], "soft": ["Criterio"]},
+        "scenario": "Llegan estas peticiones a la recepción de la clínica. Clasifica cada una:\n\nSe puede atender — Hay base legal o consentimiento del paciente.\n\nNo se puede — Se revelaría información de salud sin autorización.",
+        "data": {
+          "options": [
+            {"id": "h1", "text": "El propio paciente pide una copia de su informe, identificándose", "correct": "si"},
+            {"id": "h2", "text": "La empresa del paciente llama para saber qué enfermedad tiene", "correct": "no"},
+            {"id": "h3", "text": "El médico que atiende al paciente consulta su historia para tratarlo", "correct": "si"},
+            {"id": "h4", "text": "Un familiar adulto pide los resultados sin autorización del paciente", "correct": "no"},
+            {"id": "h5", "text": "El padre de un niño de 8 años pide el informe de su hijo", "correct": "si"},
+            {"id": "h6", "text": "Un periodista pregunta si una persona conocida ha venido a la clínica", "correct": "no"},
+            {"id": "h7", "text": "Un juzgado lo solicita por escrito en un procedimiento", "correct": "si"},
+            {"id": "h8", "text": "Una aseguradora de vida pide la historia completa sin consentimiento", "correct": "no"}
+          ],
+          "cats": ["Se puede atender", "No se puede"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_pharmacy", "title": "Atención farmacéutica",
+    "desc": "Ordena el stock y las caducidades de una farmacia, explica a un paciente cómo tomar su tratamiento y decide cuándo atender en la farmacia y cuándo derivar.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Caducidades y roturas de stock", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás el estado del inventario de una farmacia. Tendrás que proponer cómo gestionarlo mejor.",
+        "sub": "Gestión de inventario — 9 min", "skills": {"hard": ["Gestión de farmacia"], "soft": ["Rigor"]},
+        "scenario": "Una farmacia de barrio ha tirado este año 6.800 € en productos caducados y, a la vez, se queda sin algunos medicamentos que piden a diario. La titular te pide que revises el inventario.\n\nResponde en tres partes:\n\nA) Qué problemas ves y qué los causa.\n\nB) Qué cambiarías en la forma de pedir y colocar los productos.\n\nC) Qué indicadores revisarías cada mes.",
+        "data": {
+          "headers": ["Grupo de productos", "Situación", "Detalle", "Coste o efecto", "Estado"],
+          "table": [
+            {"n": "Cremas solares", "a": "Pedido grande en mayo", "b": "Sobran 140 unidades en octubre", "c": "2.100 € caducados", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Medicamentos crónicos (tensión, colesterol)", "a": "Roturas 3 veces al mes", "b": "Se piden cuando ya no quedan", "c": "Pacientes que vuelven otro día", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Colocación en almacén", "a": "Lo nuevo delante", "b": "Lo antiguo queda detrás", "c": "Caducan sin salir", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Parafarmacia de temporada", "a": "Sin datos de ventas del año anterior", "b": "", "c": "Pedidos a ojo", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Revisión de caducidades", "a": "Una vez al año", "b": "", "c": "Se detectan tarde", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con la situación de cada grupo.",
+          "kw": ["caducidad", "primero en caducar, primero en salir", "stock mínimo", "punto de pedido", "crónicos", "estacionalidad", "datos de ventas", "devolución al proveedor", "revisión mensual", "indicadores"]
+        }
+      },
+      {
+        "id": "e2", "title": "Explicar un tratamiento", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Prepararás por escrito las indicaciones para un paciente mayor que empieza varios tratamientos.",
+        "sub": "Comunicación con el paciente — 10 min", "skills": {"hard": ["Atención farmacéutica"], "soft": ["Explicar con claridad", "Empatía"]},
+        "scenario": "Un paciente de 78 años que vive solo sale del hospital con tres medicamentos nuevos prescritos por su médico, cada uno con un horario distinto, además de los dos que ya tomaba. Su hija te escribe preocupada porque su padre se confunde y no sabe si alguno se toma con comida. Las pautas exactas están en el informe del médico.",
+        "data": {
+          "to": "Hija del paciente",
+          "subject": "Cómo organizar la medicación de su padre",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Tranquiliza y explica que las pautas son las del informe del médico, que no se cambian.\n\n2. Propón una forma práctica de organizarlas (tabla por horas, pastillero semanal, sistema personalizado de dosificación).\n\n3. Qué señales deben hacerles consultar (efectos que notan, dosis olvidada, duda con algún medicamento).\n\n4. Ofrece una revisión en la farmacia con todos los medicamentos y di cómo contactar.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["informe del médico", "no cambiar", "tabla de horarios", "pastillero", "sistema personalizado de dosificación", "con o sin comida", "dosis olvidada", "consultar", "revisión de la medicación", "contacto"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Atender en la farmacia o derivar?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué consultas se pueden atender en la farmacia y cuáles hay que derivar.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Indicación farmacéutica"], "soft": ["Criterio"]},
+        "scenario": "Llegan estas consultas al mostrador de la farmacia. Clasifica cada una:\n\nSe atiende en la farmacia — Síntoma leve y habitual que se puede aconsejar o tratar sin receta.\n\nDerivar al médico o a urgencias — Hay signos de alarma o requiere diagnóstico o receta.",
+        "data": {
+          "options": [
+            {"id": "p1", "text": "Un adulto con un resfriado común de dos días, sin fiebre alta", "correct": "farmacia"},
+            {"id": "p2", "text": "Un hombre con dolor en el pecho, sudoroso, desde hace media hora", "correct": "derivar"},
+            {"id": "p3", "text": "Una picadura de mosquito sin hinchazón importante", "correct": "farmacia"},
+            {"id": "p4", "text": "Un bebé de dos meses con fiebre", "correct": "derivar"},
+            {"id": "p5", "text": "Una quemadura solar leve en los hombros", "correct": "farmacia"},
+            {"id": "p6", "text": "Alguien pide un antibiótico sin receta para el dolor de garganta", "correct": "derivar"},
+            {"id": "p7", "text": "Labios secos y agrietados por el frío", "correct": "farmacia"},
+            {"id": "p8", "text": "Pérdida brusca de visión en un ojo", "correct": "derivar"}
+          ],
+          "cats": ["Se atiende en la farmacia", "Derivar al médico o a urgencias"],
+          "keys": ["farmacia", "derivar"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_real_estate", "title": "Inmobiliaria",
+    "desc": "Fija el precio de salida de una vivienda con comparables, gestiona por escrito una negociación entre comprador y vendedor y decide qué prácticas son correctas en la intermediación.",
+    "exercises": [
+      {
+        "id": "e1", "title": "El precio de salida de un piso", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás los datos de viviendas parecidas vendidas en la zona. Tendrás que proponer un precio de salida.",
+        "sub": "Valoración — 10 min", "skills": {"hard": ["Valoración por comparables"], "soft": ["Decisión con datos"]},
+        "scenario": "Una propietaria quiere vender su piso de 85 m² en Valencia (tercera planta con ascensor, reformado en 2019, sin terraza) y pide 320.000 € porque «el del vecino se anuncia por 330.000». Tienes las ventas reales recientes de la zona.\n\nResponde en tres partes:\n\nA) Qué precio de salida recomiendas y cómo lo calculas.\n\nB) Por qué el anuncio del vecino no es una buena referencia.\n\nC) Qué le dirías a la propietaria si insiste en los 320.000 €.",
+        "data": {
+          "headers": ["Vivienda vendida", "Precio de venta", "Superficie", "Características", "Estado"],
+          "table": [
+            {"n": "Calle paralela", "a": "282.000 €", "b": "80 m²", "c": "Reformado, con ascensor, sin terraza", "d": "Bien", "cls": "v-good"},
+            {"n": "Misma calle", "a": "305.000 €", "b": "90 m²", "c": "Reformado, ascensor, terraza de 10 m²", "d": "Bien", "cls": "v-good"},
+            {"n": "A dos manzanas", "a": "245.000 €", "b": "84 m²", "c": "Para reformar, sin ascensor", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Mismo edificio (2022)", "a": "270.000 €", "b": "85 m²", "c": "Reformado, hace dos años", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Piso del vecino", "a": "Anunciado a 330.000 €", "b": "88 m²", "c": "Lleva 9 meses en venta sin ofertas", "d": "Revisar", "cls": "v-bad"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de las ventas.",
+          "kw": ["precio por metro cuadrado", "3.500", "comparables", "ventas reales", "precio de anuncio", "tiempo en el mercado", "ajustar por terraza", "ascensor", "horquilla", "estrategia de salida"]
+        }
+      },
+      {
+        "id": "e2", "title": "Una oferta por debajo del precio", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Escribirás a la vendedora para presentarle una oferta y ayudarla a decidir.",
+        "sub": "Negociación — 10 min", "skills": {"hard": ["Intermediación inmobiliaria"], "soft": ["Negociación", "Comunicación"]},
+        "scenario": "El piso salió a 299.000 €. Tras 7 semanas y 14 visitas, una pareja ofrece 280.000 € con hipoteca preaprobada y puede firmar en 60 días. Otros dos visitantes dijeron que el precio era alto. La vendedora necesita vender antes de verano para comprar otra vivienda.",
+        "data": {
+          "to": "Propietaria del piso",
+          "subject": "Oferta recibida por su piso",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Presenta la oferta con todos sus datos (importe, financiación, plazo).\n\n2. Pon la oferta en contexto con lo que ha pasado en estas 7 semanas y con el mercado.\n\n3. Explica sus opciones (aceptar, contraofertar, esperar) con lo que supone cada una para sus plazos.\n\n4. Da tu recomendación y deja claro que la decisión es suya.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["280.000", "hipoteca preaprobada", "60 días", "14 visitas", "precio alto", "contraoferta", "plazos", "comprar otra vivienda", "recomendación", "la decisión es suya"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Práctica correcta?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas de una agencia inmobiliaria son correctas.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Normativa de intermediación"], "soft": ["Ética"]},
+        "scenario": "Clasifica cada práctica de una agencia inmobiliaria:\n\nCorrecta — Es transparente con comprador y vendedor y cumple la normativa.\n\nNo correcta — Engaña, discrimina o incumple obligaciones.",
+        "data": {
+          "options": [
+            {"id": "i1", "text": "Informar al comprador de los gastos de compraventa e impuestos aproximados", "correct": "si"},
+            {"id": "i2", "text": "Ocultar en el anuncio que el piso tiene una derrama aprobada", "correct": "no"},
+            {"id": "i3", "text": "Pedir el certificado energético antes de anunciar la vivienda", "correct": "si"},
+            {"id": "i4", "text": "Rechazar a un inquilino por su nacionalidad porque «el dueño lo prefiere»", "correct": "no"},
+            {"id": "i5", "text": "Presentar al vendedor todas las ofertas recibidas por escrito", "correct": "si"},
+            {"id": "i6", "text": "Decir que hay otra oferta inexistente para presionar al comprador", "correct": "no"},
+            {"id": "i7", "text": "Dejar por escrito los honorarios de la agencia antes de empezar", "correct": "si"},
+            {"id": "i8", "text": "Anunciar más metros de los que constan sin explicar de dónde salen", "correct": "no"}
+          ],
+          "cats": ["Correcta", "No correcta"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_hospitality", "title": "Hostelería y turismo",
+    "desc": "Analiza los resultados de un hotel para mejorar sus ingresos, contesta una mala reseña en público y decide qué decisiones mejoran la experiencia del cliente.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un hotel lleno que gana poco", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás los indicadores de un hotel por canal de venta. Tendrás que explicar por qué gana poco estando lleno.",
+        "sub": "Gestión de ingresos — 10 min", "skills": {"hard": ["Indicadores hoteleros", "Canales de venta"], "soft": ["Diagnóstico"]},
+        "scenario": "Un hotel de 60 habitaciones en San Sebastián tiene una ocupación del 91 % en temporada alta, pero su rentabilidad es peor que la de hoteles parecidos de la zona. El director te pide un análisis por canales.\n\nResponde en tres partes:\n\nA) Qué indicador explica el problema y qué lo causa, con las cifras.\n\nB) Qué cambiarías en precios y canales.\n\nC) Qué riesgo tienen tus cambios y cómo los vigilarías.",
+        "data": {
+          "headers": ["Canal", "Reservas", "Precio medio por noche", "Comisión", "Estado"],
+          "table": [
+            {"n": "Agencias online", "a": "68 %", "b": "142 €", "c": "18 %", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Web propia", "a": "9 %", "b": "139 €", "c": "2 %", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Touroperador (cupo anual)", "a": "20 %", "b": "88 €", "c": "Precio cerrado en enero", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Directo (teléfono)", "a": "3 %", "b": "150 €", "c": "0 %", "d": "Bien", "cls": "v-good"},
+            {"n": "Competencia de la zona", "a": "Ocupación 84 %", "b": "Precio medio 175 €", "c": "", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos por canal.",
+          "kw": ["ocupación", "precio medio", "RevPAR", "ingreso por habitación disponible", "comisiones", "cupo del touroperador", "precio dinámico", "venta directa", "paridad", "competencia"]
+        }
+      },
+      {
+        "id": "e2", "title": "Contestar una mala reseña", "type": "email", "timeLimit": 540, "difficulty": "intermedio",
+        "briefing": "Escribirás la respuesta pública del hotel a una reseña negativa.",
+        "sub": "Reputación online — 9 min", "skills": {"hard": ["Gestión de reseñas"], "soft": ["Empatía", "Profesionalidad"]},
+        "scenario": "Una clienta ha escrito en una web de reseñas: «Habitación preciosa pero imposible dormir: ruido de la calle hasta las 3 de la madrugada. Lo comenté en recepción y me dijeron que era lo normal en el centro. Para ese precio, no repetiré. 2 estrellas». El hotel tiene 8 habitaciones interiores y tapones para los oídos, pero en recepción no lo ofrecieron.",
+        "data": {
+          "to": "Respuesta pública en la web de reseñas",
+          "subject": "Respuesta de la dirección",
+          "hint": "Escribe la respuesta pública cuidando cuatro puntos:\n\n1. Agradece y reconoce lo que le pasó, sin justificarte.\n\n2. Explica qué debió hacerse en recepción y no se hizo.\n\n3. Cuenta qué habéis cambiado para otros huéspedes (ofrecer habitación interior, informar al reservar).\n\n4. Invítala a contactar directamente, sin ofrecer compensaciones en público.",
+          "minChars": 340, "minWords": 58,
+          "kw": ["gracias", "lamentamos", "ruido", "recepción", "debimos ofrecer", "habitación interior", "informar al reservar", "hemos cambiado", "contacto directo", "firma"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Mejora la experiencia o no?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué decisiones de un hotel mejoran la experiencia del cliente.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Experiencia del cliente"], "soft": ["Criterio"]},
+        "scenario": "Clasifica cada decisión que ha tomado la dirección de un hotel urbano:\n\nMejora la experiencia — El cliente lo nota para bien sin coste oculto.\n\nNo la mejora — Ahorra o vende más a costa de la experiencia o de la confianza.",
+        "data": {
+          "options": [
+            {"id": "h1", "text": "Permitir dejar el equipaje gratis antes de la entrada y tras la salida", "correct": "si"},
+            {"id": "h2", "text": "Añadir una tasa de servicio sorpresa al pagar", "correct": "no"},
+            {"id": "h3", "text": "Preguntar al reservar si prefiere una habitación tranquila", "correct": "si"},
+            {"id": "h4", "text": "Quitar el desayuno incluido sin cambiar el precio", "correct": "no"},
+            {"id": "h5", "text": "Enviar antes de la llegada cómo llegar y dónde aparcar", "correct": "si"},
+            {"id": "h6", "text": "Mostrar fotos de habitaciones superiores en el anuncio de la estándar", "correct": "no"},
+            {"id": "h7", "text": "Dar autoridad a recepción para resolver quejas pequeñas al momento", "correct": "si"},
+            {"id": "h8", "text": "Cobrar el wifi aparte y lento en la tarifa básica", "correct": "no"}
+          ],
+          "cats": ["Mejora la experiencia", "No la mejora"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_events", "title": "Eventos y protocolo",
+    "desc": "Ajusta el presupuesto de un evento con datos reales, coordina proveedores ante un imprevisto y decide qué decisiones de protocolo son correctas.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Un evento que se sale de presupuesto", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás el presupuesto de un evento de empresa. Tendrás que ajustarlo sin estropearlo.",
+        "sub": "Presupuesto — 9 min", "skills": {"hard": ["Organización de eventos", "Presupuestos"], "soft": ["Priorización"]},
+        "scenario": "Organizas la convención anual de una empresa de seguros: 250 asistentes, un día, en Sevilla. El presupuesto es de 60.000 € y la previsión actual suma 74.500 €. El objetivo del evento es presentar la estrategia y motivar a la red comercial.\n\nResponde en tres partes:\n\nA) Dónde recortarías y por qué, sin afectar al objetivo.\n\nB) Qué no tocarías y por qué.\n\nC) Cómo controlarías el gasto hasta el día del evento.",
+        "data": {
+          "headers": ["Partida", "Previsto", "Detalle", "Relación con el objetivo", "Estado"],
+          "table": [
+            {"n": "Sala y técnica audiovisual", "a": "18.000 €", "b": "Hotel céntrico", "c": "Imprescindible", "d": "Bien", "cls": "v-good"},
+            {"n": "Ponente motivacional famoso", "a": "15.000 €", "b": "45 minutos", "c": "El equipo prefiere casos de compañeros", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Comida y cena de gala", "a": "27.500 €", "b": "Cena con menú de 5 platos", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Regalos para asistentes", "a": "8.000 €", "b": "Mochila con logotipo", "c": "El año pasado sobraron 90", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Transporte y alojamiento de la red comercial", "a": "6.000 €", "b": "", "c": "Imprescindible", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con las partidas del presupuesto.",
+          "kw": ["objetivo del evento", "prioridad", "ponente", "casos internos", "menú", "regalos", "confirmación de asistentes", "negociar", "contingencia", "seguimiento del gasto"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un imprevisto el día antes", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Coordinarás por escrito la respuesta a un problema grave el día antes del evento.",
+        "sub": "Gestión de crisis — 10 min", "skills": {"hard": ["Coordinación de proveedores"], "soft": ["Calma bajo presión"]},
+        "scenario": "Son las 17:00 del día anterior a la convención. El hotel te avisa de que una avería en el aire acondicionado deja la sala principal inutilizable mañana. Ofrece dos salas pequeñas de 130 personas cada una, conectadas. El cliente aún no lo sabe. Llegan 250 personas a las 9:00.",
+        "data": {
+          "to": "Directora de comunicación del cliente y proveedores",
+          "subject": "Cambio de sala para mañana: plan",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Qué ha pasado, dicho con claridad y sin dramatismo.\n\n2. El plan para mañana (dos salas, retransmisión entre ellas, reparto de asistentes, cambios de horario si los hay).\n\n3. Qué tiene que hacer cada proveedor y a qué hora (técnica, catering, azafatas).\n\n4. Qué decisión necesitas del cliente y antes de cuándo, y cómo vais a pedir compensación al hotel.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["avería", "dos salas", "retransmisión", "reparto de asistentes", "técnica audiovisual", "señalización", "horarios", "proveedores", "decisión antes de", "compensación"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Protocolo correcto?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué decisiones de protocolo son adecuadas en un acto institucional.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Protocolo"], "soft": ["Criterio"]},
+        "scenario": "Una empresa inaugura su nueva sede con el alcalde y la presidenta de la comunidad autónoma. Clasifica cada decisión:\n\nCorrecta — Se ajusta al protocolo y a la cortesía institucional.\n\nNo correcta — Genera un problema de precedencia, de imagen o de cortesía.",
+        "data": {
+          "options": [
+            {"id": "e1x", "text": "Confirmar con los gabinetes de las autoridades quién preside el acto", "correct": "si"},
+            {"id": "e2x", "text": "Sentar al patrocinador principal delante de la presidenta autonómica", "correct": "no"},
+            {"id": "e3x", "text": "Enviar un borrador del orden de intervenciones a los gabinetes", "correct": "si"},
+            {"id": "e4x", "text": "Cambiar el orden de los discursos el mismo día sin avisar", "correct": "no"},
+            {"id": "e5x", "text": "Preparar un espacio para la prensa con buena visibilidad", "correct": "si"},
+            {"id": "e6x", "text": "Colocar las banderas oficiales en cualquier orden porque «nadie se fija»", "correct": "no"},
+            {"id": "e7x", "text": "Prever una persona que reciba a cada autoridad a su llegada", "correct": "si"},
+            {"id": "e8x", "text": "Poner a todos los invitados con tarjetas de nombre salvo a las autoridades", "correct": "no"}
+          ],
+          "cats": ["Correcta", "No correcta"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_sustainability", "title": "Sostenibilidad y ESG",
+    "desc": "Calcula dónde está la mayor parte de las emisiones de una empresa, comunica sus avances sin exagerar y distingue las acciones con impacto real del lavado de imagen.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Dónde están las emisiones", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás el inventario de emisiones de una empresa. Tendrás que decidir dónde actuar primero.",
+        "sub": "Huella de carbono — 10 min", "skills": {"hard": ["Huella de carbono", "Alcances 1, 2 y 3"], "soft": ["Priorización"]},
+        "scenario": "Una empresa textil de 300 personas ha calculado su huella de carbono por primera vez. El comité quiere empezar por «poner placas solares y quitar los vasos de plástico». Tienes el inventario.\n\nResponde en tres partes:\n\nA) Dónde están la mayoría de las emisiones, con los porcentajes.\n\nB) Qué tres acciones tendrían más impacto y qué dificultad tienen.\n\nC) Qué le dirías al comité sobre su propuesta inicial.",
+        "data": {
+          "headers": ["Fuente", "Alcance", "Toneladas de CO2 equivalente", "Porcentaje", "Estado"],
+          "table": [
+            {"n": "Gas de la caldera de la fábrica", "a": "Alcance 1", "b": "620", "c": "6 %", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Electricidad comprada", "a": "Alcance 2", "b": "480", "c": "5 %", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Materias primas (algodón y poliéster)", "a": "Alcance 3", "b": "6.900", "c": "69 %", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Transporte de mercancías", "a": "Alcance 3", "b": "1.500", "c": "15 %", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Viajes, desplazamientos y oficina", "a": "Alcance 3", "b": "500", "c": "5 %", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos del inventario.",
+          "kw": ["alcance 3", "69 %", "materias primas", "algodón reciclado", "proveedores", "transporte", "electricidad renovable", "objetivos de reducción", "impacto frente a visibilidad", "datos de proveedores"]
+        }
+      },
+      {
+        "id": "e2", "title": "Contar los avances sin exagerar", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Revisarás el texto de una campaña de sostenibilidad para que sea veraz.",
+        "sub": "Comunicación responsable — 10 min", "skills": {"hard": ["Comunicación de sostenibilidad"], "soft": ["Honestidad"]},
+        "scenario": "Marketing quiere lanzar la campaña «Somos una marca 100 % sostenible y neutra en carbono». Los hechos: la empresa compra electricidad renovable (5 % de sus emisiones), ha compensado 500 toneladas con proyectos forestales y el 12 % de sus prendas usa algodón reciclado. El resto de emisiones no se ha reducido. Las autoridades europeas están endureciendo las reglas sobre afirmaciones ambientales.",
+        "data": {
+          "to": "Directora de marketing",
+          "subject": "Antes de lanzar la campaña de sostenibilidad",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Por qué «100 % sostenible y neutra en carbono» no se sostiene con los datos.\n\n2. Qué riesgos tiene publicarlo (legales y de reputación).\n\n3. Qué sí se puede decir, con frases concretas y verificables.\n\n4. Qué haría falta conseguir para poder decir más en el futuro.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["afirmación genérica", "verificable", "compensación no es reducción", "5 %", "12 %", "algodón reciclado", "lavado de imagen", "greenwashing", "riesgo legal", "datos concretos"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Impacto real o lavado de imagen?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué acciones de sostenibilidad tienen impacto real.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Estrategia ESG"], "soft": ["Pensamiento crítico"]},
+        "scenario": "Clasifica cada acción que anuncia una empresa textil:\n\nImpacto real — Reduce de forma medible un impacto importante de la empresa.\n\nLavado de imagen — Se comunica mucho pero cambia poco o desvía la atención.",
+        "data": {
+          "options": [
+            {"id": "s1", "text": "Exigir a sus proveedores principales datos de emisiones y objetivos de reducción", "correct": "real"},
+            {"id": "s2", "text": "Lanzar una colección «verde» del 2 % de las ventas mientras el resto sigue igual", "correct": "lavado"},
+            {"id": "s3", "text": "Pasar al 50 % de algodón reciclado en dos años con verificación externa", "correct": "real"},
+            {"id": "s4", "text": "Llamarse «neutra en carbono» solo compensando, sin reducir emisiones", "correct": "lavado"},
+            {"id": "s5", "text": "Enviar las mercancías en barco y tren en lugar de avión", "correct": "real"},
+            {"id": "s6", "text": "Cambiar el logotipo a color verde", "correct": "lavado"},
+            {"id": "s7", "text": "Publicar su inventario de emisiones con los tres alcances", "correct": "real"},
+            {"id": "s8", "text": "Destacar en la campaña la retirada de los vasos de plástico de la oficina", "correct": "lavado"}
+          ],
+          "cats": ["Impacto real", "Lavado de imagen"],
+          "keys": ["real", "lavado"]
+        }
+      }
+    ]
+  }
+]

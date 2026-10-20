@@ -462,3 +462,35 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Pendiente (decisión o configuración, no código).** Exigir confirmar el email; activar la verificación en dos pasos (TOTP) y la protección contra contraseñas filtradas de Supabase; quitar `'unsafe-inline'` de la CSP (requiere pasar los `onclick` del HTML a JavaScript); copias con PITR en Supabase; rotar las claves si alguna se compartió.
 
 **Ficheros.** `lib/limites.js`, `lib/tp.js`, handlers `evaluate-exercise`, `support-chat`, `parse-job-doc`, `verify-credential`, `issue-credential`, `apply`, `status-list`, `did-web`; `08-ofertas-y-ejercicios.js`; `check-rls.js`; `supabase_schema_seguridad.sql`; `tests/seguridad.test.js` (3). Tests: 192 en 27 ficheros.
+
+---
+
+## 2026-10-20 — Mejora de cada ejercicio: los 342, uno por uno
+
+**Qué.**
+- **Auditoría** (`tools/auditar_retos.js`): reglas objetivas por ejercicio. Al empezar, 287 de 342 ejercicios fallaban alguna: escenarios de relleno (249), emojis y símbolos (165), análisis sin tabla de datos (72), clasificaciones de 4 opciones (74), guías sin puntos de los que el corrector saca los indicadores, títulos en inglés.
+- **72 retos de plantilla reescritos enteros.** Eran «X — Nivel Básico / Caso Práctico / Reto Avanzado», con tablas de «Concepto A / Valor 1» y opciones como «Opción estratégica A»: contenido de relleno de cara al candidato. Ahora cada uno tiene un análisis con una tabla de datos realista y una pregunta en tres partes, un escrito con destinatario y guía en cuatro bloques, y una clasificación de 8 o 9 casos con las categorías explicadas. Cubre tecnología, datos, marketing, comercial, finanzas, personas y legal, operaciones, diseño, educación, comunicación, idiomas (con el ejercicio en inglés, francés o alemán), sectores y emprendimiento.
+- **21 retos con contenido real, retocados:** escenarios ampliados, guías numeradas y títulos en español. Además:
+  - **Soluciones fuera de los enunciados:** el código de tres ejercicios llevaba marcado dónde estaba cada error (`// Bug 1: no suma`).
+  - **Guías que ya no resuelven el ejercicio:** varias daban las fórmulas de Excel, el truco del LEFT JOIN o el `set()` de Python.
+  - **Un ejercicio arreglado:** la comprensión en inglés preguntaba por un mensaje que no aparecía en ningún sitio.
+- **Rama IA:** escenarios de clasificación explicados.
+- **Corrector:** reconoce las guías numeradas con «1.» al principio de línea (antes solo «1)»). Las guías de los retos ya reescritos, como RGPD, le llegaban como un único indicador.
+- **Catálogo:** todo el contenido sin ✓/✕/⚠︎, con categorías en minúscula y sin el campo de emoji de cada reto.
+- **Test nuevo** (`tests/catalogo-calidad.test.js`, 3): obliga a que la auditoría quede a cero, a que no vuelva ninguna plantilla y a que el código no lleve marcados los errores.
+
+**Pendiente.** Revisión de contenido por la asesora (soft skills) y por expertos de cada área; los retos de oferta (`EX_DB`) siguen fuera del catálogo del servidor.
+
+**Ficheros.** `tools/mejoras_retos/01…14_*.json` (contenido revisable), `tools/aplicar_mejoras_retos.js`, `tools/auditar_retos.js`, `catalogo-retos.json`, `07-retos-comunes.js`, `evaluator.js`, `tools/retos_ia.json`, `tests/catalogo-calidad.test.js`. Tests: 195 en 28 ficheros.
+
+---
+
+## 2026-10-20 — Arreglo al ejecutar retos y cierre de una fuga de soluciones
+
+**Qué.**
+- **Enunciados de los retos**: se pintaban tal cual (`<p>${ex.scenario}</p>`). El código de un ejercicio (por ejemplo, el `<input>` de un componente React) se convertía en HTML real dentro del enunciado, y el texto salía sin párrafos ni bloques de código. Ahora se escapa, se separa en párrafos y el código va en un bloque monoespaciado (`tpFormatoEnunciado`). Escapados también la tabla de los análisis, las opciones y categorías de las clasificaciones, y el destinatario y el asunto de los correos.
+- **Guía de respuesta visible**: iba como texto de ayuda dentro del cuadro de respuesta y desaparecía al empezar a escribir. Ahora está en un recuadro fijo encima («Cómo organizar tu respuesta»).
+- **Fuga de soluciones**: sin carpeta de publicación en `netlify.toml`, Netlify servía el repositorio entero, así que `talentpact.es/netlify/functions/lib/catalogo-retos.json` (enunciados y soluciones de todos los retos), `tools/` y `tests/` se podían descargar. Bloqueados con redirecciones 404 forzadas (también `tfm/tech/`, la bóveda y los ficheros internos). `serve-demo.js` bloquea lo mismo y hay una página `404.html`.
+- Comprobado en el navegador: análisis, correo, clasificación de 2, 3 y 4 categorías, secuencias y un reto de IA se pintan bien, y una clasificación se corrige de principio a fin con la solución del servidor.
+
+**Ficheros.** `08-ofertas-y-ejercicios.js`, `18-interfaz.js`, `componentes.css`, `netlify.toml`, `serve-demo.js`, `404.html`, `tests/bandas.test.js`, `tests/seguridad.test.js`. Tests: 197 en 28 ficheros.

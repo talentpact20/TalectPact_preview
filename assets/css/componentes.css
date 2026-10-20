@@ -542,3 +542,13 @@ body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
 .dash-acceso:hover{border-color:var(--emerald-300)}
 .dash-acceso b{font-size:var(--fs-cuerpo)}
 .dash-acceso span{font-size:var(--fs-peq);color:var(--c-texto-3)}
+
+/* ─── Enunciado de un reto: párrafos, código y guía visible ─ */
+.scenario-texto p{margin:0 0 var(--sp-3)}
+.scenario-texto p:last-child{margin-bottom:0}
+.ex-codigo{margin:var(--sp-3) 0;padding:var(--sp-3) var(--sp-4);background:var(--c-superficie-2);border:1px solid var(--c-borde);border-radius:var(--radius);overflow-x:auto;max-width:100%}
+.ex-codigo code{font-family:var(--font-mono);font-size:var(--fs-micro);line-height:1.6;color:var(--c-texto);white-space:pre}
+.ex-guia{border:1px solid var(--c-borde);border-left:3px solid var(--emerald-500);border-radius:var(--radius);padding:var(--sp-3) var(--sp-4);margin-bottom:var(--sp-4);background:var(--c-superficie)}
+.ex-guia p{font-size:var(--fs-peq);color:var(--c-texto-2);line-height:1.6;margin:0 0 var(--sp-2)}
+.ex-guia p:last-child{margin-bottom:0}
+.ex-email-texto{min-height:200px}

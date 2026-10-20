@@ -1,0 +1,515 @@
+[
+  {
+    "id": "common_office_admin", "title": "Administración de oficina",
+    "desc": "Ordena los gastos generales de una oficina, organiza una mudanza de oficina por escrito y decide qué documentos guardar y cuánto tiempo.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Los gastos de la oficina", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los gastos generales de una oficina. Tendrás que proponer dónde ahorrar.",
+        "sub": "Control de gastos — 9 min", "skills": {"hard": ["Gestión administrativa"], "soft": ["Rigor"]},
+        "scenario": "Una gestoría de 25 personas quiere reducir un 15 % sus gastos generales (54.000 € al año) sin empeorar el trabajo del equipo. Has revisado las facturas del último año.\n\nResponde en tres partes:\n\nA) Dónde está el gasto evitable, con las cifras.\n\nB) Qué harías en cada partida y cuánto ahorrarías.\n\nC) Qué control pondrías para que no vuelva a pasar.",
+        "data": {
+          "headers": ["Partida", "Coste anual", "Uso real", "Detalle", "Estado"],
+          "table": [
+            {"n": "Impresoras en alquiler", "a": "9.600 €", "b": "4 impresoras, una al 80 % y tres al 10 %", "c": "Contrato que se renueva solo", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Líneas de móvil", "a": "7.200 €", "b": "32 líneas para 25 personas", "c": "7 de antiguos empleados", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Licencias de software", "a": "14.400 €", "b": "30 licencias de un programa que usan 12", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Material de oficina", "a": "6.000 €", "b": "Pedidos sueltos de cada persona", "c": "Sin proveedor fijo", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Limpieza", "a": "16.800 €", "b": "Contrato revisado este año", "c": "Precio de mercado", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de cada partida.",
+          "kw": ["renovación automática", "líneas sin uso", "licencias", "usuarios reales", "centralizar pedidos", "proveedor", "inventario de contratos", "fecha de vencimiento", "ahorro", "revisión anual"]
+        }
+      },
+      {
+        "id": "e2", "title": "La mudanza de la oficina", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Organizarás por escrito la mudanza de una oficina sin parar el trabajo.",
+        "sub": "Organización — 10 min", "skills": {"hard": ["Planificación de tareas"], "soft": ["Comunicación", "Organización"]},
+        "scenario": "La gestoría se muda dentro de 6 semanas a otra planta del mismo edificio. Hay que mover 25 puestos, archivos en papel de clientes y los servidores. Diciembre es temporada alta y no se puede cerrar más de un día. El gerente te pide un plan para enviar a todo el equipo.",
+        "data": {
+          "to": "Todo el equipo",
+          "subject": "Mudanza a la planta 4: plan y fechas",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Fecha de la mudanza y por qué se elige ese día.\n\n2. Qué tiene que hacer cada persona y cuándo (vaciar cajones, etiquetar cajas, archivos).\n\n3. Cómo se protegen los archivos de clientes y qué pasa con los servidores y el teléfono.\n\n4. A quién preguntar y cómo será el primer día en la planta nueva.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["fecha", "viernes", "calendario", "etiquetar", "archivos de clientes", "confidencialidad", "informática", "teléfono", "responsable", "primer día"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Cuánto tiempo hay que guardarlo?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué documentos de una empresa hay que conservar y cuáles se pueden destruir.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Gestión documental"], "soft": ["Criterio"]},
+        "scenario": "Haces limpieza del archivo de una empresa. Clasifica cada documento:\n\nConservar — Hay una obligación legal o un motivo claro para guardarlo todavía.\n\nSe puede destruir de forma segura — Ya no hace falta y no hay obligación de guardarlo.",
+        "data": {
+          "options": [
+            {"id": "o1", "text": "Las facturas emitidas del año pasado", "correct": "conservar"},
+            {"id": "o2", "text": "Catálogos de proveedores de hace diez años", "correct": "destruir"},
+            {"id": "o3", "text": "Los libros de contabilidad del último ejercicio cerrado", "correct": "conservar"},
+            {"id": "o4", "text": "Currículos de candidatos no seleccionados de hace tres años, sin consentimiento para guardarlos", "correct": "destruir"},
+            {"id": "o5", "text": "Los contratos laborales de la plantilla actual", "correct": "conservar"},
+            {"id": "o6", "text": "Borradores de presentaciones que ya se hicieron", "correct": "destruir"},
+            {"id": "o7", "text": "Las declaraciones de impuestos del año pasado", "correct": "conservar"},
+            {"id": "o8", "text": "Copias duplicadas de correos impresos sin valor de documento", "correct": "destruir"}
+          ],
+          "cats": ["Conservar", "Se puede destruir de forma segura"],
+          "keys": ["conservar", "destruir"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_executive_assistant", "title": "Asistente de dirección",
+    "desc": "Organiza la semana de una directora con conflictos de agenda, gestiona un viaje que se complica y decide qué asuntos necesitan de verdad su atención.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Una semana que no cabe", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás la agenda de la semana de una directora general. Tendrás que reorganizarla.",
+        "sub": "Gestión de agenda — 9 min", "skills": {"hard": ["Gestión de agenda"], "soft": ["Priorización", "Discreción"]},
+        "scenario": "Eres asistente de la directora general de una empresa de alimentación. Su prioridad esta semana es cerrar el acuerdo con una gran cadena de supermercados antes del jueves. La agenda tiene conflictos.\n\nResponde en tres partes:\n\nA) Qué conflictos hay y cuáles afectan a su prioridad.\n\nB) Cómo reorganizarías la semana: qué mueves, qué delegas y qué cancelas.\n\nC) Cómo se lo propondrías a la directora y a los afectados.",
+        "data": {
+          "headers": ["Reunión", "Cuándo", "Quién", "Detalle", "Estado"],
+          "table": [
+            {"n": "Negociación final con la cadena de supermercados", "a": "Miércoles 10:00", "b": "Director de compras de la cadena", "c": "Imprescindible", "d": "Bien", "cls": "v-good"},
+            {"n": "Comité de seguridad laboral", "a": "Miércoles 10:00", "b": "Equipo de planta", "c": "Puede presidirlo el director de operaciones", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Preparación de la negociación", "a": "No está en la agenda", "b": "Equipo comercial", "c": "Necesaria antes del miércoles", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Entrevista con un periódico local", "a": "Martes 12:00", "b": "Periodista", "c": "Se puede mover a la semana siguiente", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Cena con un antiguo socio", "a": "Martes 21:00", "b": "", "c": "Personal, sin prisa", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con la agenda de la tabla.",
+          "kw": ["prioridad", "conflicto", "delegar", "director de operaciones", "preparación", "bloque de tiempo", "aplazar", "avisar con antelación", "proponer, no imponer", "confirmar"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un viaje que se complica", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Resolverás por escrito un problema en un viaje de trabajo de la directora.",
+        "sub": "Gestión de imprevistos — 10 min", "skills": {"hard": ["Organización de viajes"], "soft": ["Resolución de problemas"]},
+        "scenario": "La directora vuela mañana a las 7:00 de Madrid a Milán para una feria donde presenta a las 15:00. A las 19:00 de hoy la aerolínea cancela el vuelo por huelga. Opciones: un vuelo a las 9:30 que llega a las 12:00 a otro aeropuerto (a 50 minutos del recinto), o un vuelo a las 6:15 desde Barcelona. Ella está en una cena hasta las 22:00.",
+        "data": {
+          "to": "Directora general",
+          "subject": "Vuelo cancelado: propuesta para mañana",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. El problema en una frase, al principio.\n\n2. Las opciones con sus ventajas, riesgos y horarios.\n\n3. Tu recomendación y lo que ya has dejado preparado (reserva provisional, traslado).\n\n4. Qué necesitas que confirme y antes de qué hora.",
+          "minChars": 360, "minWords": 60,
+          "kw": ["cancelado", "huelga", "9:30", "12:00", "traslado", "50 minutos", "margen", "reserva provisional", "recomendación", "confirmar antes de"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Necesita su atención?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué asuntos hay que pasar a la directora y cuáles puedes resolver o derivar.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Filtrado de asuntos"], "soft": ["Criterio", "Discreción"]},
+        "scenario": "Es la semana de la negociación. Llegan estos asuntos a la asistente de la directora general. Clasifica cada uno:\n\nPasar a la directora — Solo ella puede decidirlo o es urgente e importante.\n\nResolver o derivar — Lo puede gestionar la asistente u otra persona.",
+        "data": {
+          "options": [
+            {"id": "x1", "text": "El director de compras de la cadena quiere adelantar la reunión", "correct": "pasar"},
+            {"id": "x2", "text": "Un proveedor de material de oficina pide una reunión comercial", "correct": "derivar"},
+            {"id": "x3", "text": "Ha habido un accidente laboral grave en la planta", "correct": "pasar"},
+            {"id": "x4", "text": "Hay que elegir el catering de la comida de Navidad", "correct": "derivar"},
+            {"id": "x5", "text": "El presidente del consejo quiere hablar con ella hoy", "correct": "pasar"},
+            {"id": "x6", "text": "Un estudiante pide una entrevista para su trabajo de fin de grado", "correct": "derivar"},
+            {"id": "x7", "text": "Una consulta de RR. HH. sobre las vacaciones de un empleado", "correct": "derivar"},
+            {"id": "x8", "text": "Una periodista pregunta por un rumor de despidos en la empresa", "correct": "pasar"}
+          ],
+          "cats": ["Pasar a la directora", "Resolver o derivar"],
+          "keys": ["pasar", "derivar"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_data_entry", "title": "Introducción de datos y precisión",
+    "desc": "Detecta errores en un registro de datos, explica cómo evitar que se repitan y decide qué datos son válidos antes de introducirlos.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Errores en la base de clientes", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás una muestra de registros de clientes con errores. Tendrás que detectarlos y proponer cómo corregirlos.",
+        "sub": "Revisión de datos — 9 min", "skills": {"hard": ["Calidad de datos", "Introducción de datos"], "soft": ["Precisión"]},
+        "scenario": "Una empresa de reparto ha perdido 300 envíos en un mes por direcciones mal escritas en su base de clientes. Has revisado una muestra de 500 registros que se introdujeron a mano.\n\nResponde en tres partes:\n\nA) Qué tipos de error hay y cuál causa más envíos perdidos.\n\nB) Cómo corregirías los registros existentes.\n\nC) Qué cambiarías en la forma de introducir los datos para evitarlos.",
+        "data": {
+          "headers": ["Tipo de error", "Registros afectados", "Ejemplo", "Efecto", "Estado"],
+          "table": [
+            {"n": "Código postal que no corresponde a la ciudad", "a": "41 (8 %)", "b": "28001 en Barcelona", "c": "El envío va a otra provincia", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Teléfono con dígitos de menos", "a": "33 (7 %)", "b": "61234567", "c": "No se puede avisar al cliente", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Clientes duplicados", "a": "25 (5 %)", "b": "«C/ Mayor 5» y «Calle Mayor, 5»", "c": "Envíos a dos direcciones", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Número de la calle vacío", "a": "19 (4 %)", "b": "", "c": "El repartidor no encuentra la casa", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Nombre del cliente", "a": "2 errores", "b": "", "c": "Sin efecto en la entrega", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de la muestra.",
+          "kw": ["código postal", "validación", "campos obligatorios", "formato", "desplegable", "autocompletar dirección", "duplicados", "normalizar", "doble comprobación", "muestra"]
+        }
+      },
+      {
+        "id": "e2", "title": "Explicar el nuevo procedimiento", "type": "email", "timeLimit": 540, "difficulty": "intermedio",
+        "briefing": "Escribirás al equipo de introducción de datos para explicar un procedimiento nuevo.",
+        "sub": "Procedimientos — 9 min", "skills": {"hard": ["Procedimientos de calidad"], "soft": ["Comunicación", "Tacto"]},
+        "scenario": "Tras el análisis de errores, a partir del lunes cada dirección se introduce con un buscador que propone direcciones reales, el código postal se rellena solo y el teléfono exige 9 dígitos. El equipo de 6 personas está molesto porque cree que se les culpa de los envíos perdidos.",
+        "data": {
+          "to": "Equipo de atención y registro",
+          "subject": "Cambios en el registro de clientes desde el lunes",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Por qué se cambia, dejando claro que el problema es del sistema, no de las personas.\n\n2. Qué cambia exactamente, paso a paso.\n\n3. Qué hacer si una dirección no aparece en el buscador.\n\n4. Cómo se va a revisar si funciona y cómo pueden proponer mejoras.",
+          "minChars": 360, "minWords": 60,
+          "kw": ["no es culpa", "sistema", "buscador de direcciones", "código postal automático", "9 dígitos", "si no aparece", "pasos", "revisión", "propuestas", "gracias"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Dato válido o hay que revisarlo?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué datos se pueden introducir tal cual y cuáles hay que revisar antes.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Validación de datos"], "soft": ["Precisión"]},
+        "scenario": "Te llegan estos datos de clientes nuevos de España. Clasifica cada uno:\n\nVálido — Se puede introducir tal cual.\n\nRevisar antes — Tiene un error o una incoherencia que hay que comprobar.",
+        "data": {
+          "options": [
+            {"id": "d1", "text": "Teléfono móvil: 612 345 678", "correct": "valido"},
+            {"id": "d2", "text": "Código postal: 08001 en Sevilla", "correct": "revisar"},
+            {"id": "d3", "text": "Fecha de nacimiento: 14/03/1987", "correct": "valido"},
+            {"id": "d4", "text": "Fecha de nacimiento: 31/02/1990", "correct": "revisar"},
+            {"id": "d5", "text": "Correo: marta.lopez@empresa.es", "correct": "valido"},
+            {"id": "d6", "text": "Correo: marta.lopez@empresa", "correct": "revisar"},
+            {"id": "d7", "text": "Código postal: 46001 en Valencia", "correct": "valido"},
+            {"id": "d8", "text": "Fecha del pedido posterior a la fecha de entrega", "correct": "revisar"}
+          ],
+          "cats": ["Válido", "Revisar antes"],
+          "keys": ["valido", "revisar"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_startup", "title": "Emprendimiento",
+    "desc": "Lee los números de una startup para decidir si funciona, valida una idea antes de construirla y distingue las señales reales de tracción de las falsas.",
+    "exercises": [
+      {
+        "id": "e1", "title": "¿Funciona el negocio?", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás los números de una startup de suscripción. Tendrás que decir si el negocio funciona.",
+        "sub": "Unidad económica — 10 min", "skills": {"hard": ["Métricas de startup", "Unidad económica"], "soft": ["Pensamiento crítico"]},
+        "scenario": "Una startup vende cajas mensuales de comida para mascotas por suscripción a 30 € al mes. Ha crecido de 200 a 3.000 clientes en un año y los fundadores quieren levantar 1 millón para crecer más rápido. Has revisado sus números.\n\nResponde en tres partes:\n\nA) ¿Gana o pierde dinero con cada cliente? Haz el cálculo.\n\nB) Qué tendría que cambiar antes de acelerar el crecimiento.\n\nC) Qué le preguntarías a los fundadores antes de invertir.",
+        "data": {
+          "headers": ["Métrica", "Valor", "Detalle", "Comparación", "Estado"],
+          "table": [
+            {"n": "Precio de la suscripción", "a": "30 € al mes", "b": "", "c": "", "d": "Bien", "cls": "v-good"},
+            {"n": "Coste de producto y envío", "a": "21 € por caja", "b": "Margen de 9 € al mes", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Coste de conseguir un cliente", "a": "95 €", "b": "Sobre todo publicidad en redes", "c": "Ha subido desde 40 € en el año", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Duración media de un cliente", "a": "7 meses", "b": "El 35 % se va tras la primera caja", "c": "", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Caja disponible", "a": "180.000 €", "b": "Pierde 45.000 € al mes", "c": "4 meses de margen", "d": "Revisar", "cls": "v-bad"}
+          ],
+          "q": "Responde a las partes A, B y C calculando lo que gana cada cliente frente a lo que cuesta.",
+          "kw": ["margen por cliente", "63 €", "coste de adquisición", "95 €", "pierde dinero", "valor de vida del cliente", "retención", "primera caja", "meses de caja", "antes de escalar"]
+        }
+      },
+      {
+        "id": "e2", "title": "Validar antes de construir", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Propondrás cómo comprobar si una idea de negocio tiene clientes antes de invertir en ella.",
+        "sub": "Validación — 10 min", "skills": {"hard": ["Validación de ideas"], "soft": ["Rigor"]},
+        "scenario": "Una amiga quiere dejar su trabajo para montar una app que conecte a personas mayores con estudiantes que les ayuden con la tecnología, cobrando 15 € por hora. Va a pedir un préstamo de 40.000 € para desarrollar la app. Aún no ha hablado con ningún posible cliente.",
+        "data": {
+          "to": "Tu amiga emprendedora",
+          "subject": "Antes de pedir el préstamo",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Qué hipótesis tienen que ser ciertas para que el negocio funcione (quién paga, cuánto, con qué frecuencia).\n\n2. Cómo comprobarías cada una en cuatro semanas y con poco dinero, sin app.\n\n3. Qué resultado te haría seguir adelante y cuál te haría cambiar o parar.\n\n4. Un consejo sobre el préstamo y el momento de dejar el trabajo.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["hipótesis", "quién paga", "familias", "entrevistas", "prueba sin app", "cobrar desde el principio", "criterio de éxito", "aprender", "pivotar", "riesgo"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Tracción real o espejismo?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué señales demuestran que un negocio interesa de verdad a sus clientes.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Métricas de validación"], "soft": ["Pensamiento crítico"]},
+        "scenario": "Unos fundadores presentan estos datos para demostrar que su producto funciona. Clasifica cada uno:\n\nTracción real — Demuestra que los clientes pagan, vuelven o recomiendan.\n\nEspejismo — Parece positivo pero no demuestra que el negocio funcione.",
+        "data": {
+          "options": [
+            {"id": "t1", "text": "El 60 % de los clientes sigue pagando a los seis meses", "correct": "real"},
+            {"id": "t2", "text": "20.000 personas se han apuntado a una lista de espera gratuita", "correct": "espejismo"},
+            {"id": "t3", "text": "Clientes que pagan por adelantado un año", "correct": "real"},
+            {"id": "t4", "text": "Un vídeo viral con un millón de visualizaciones", "correct": "espejismo"},
+            {"id": "t5", "text": "El 30 % de los clientes nuevos llega recomendado por otros clientes", "correct": "real"},
+            {"id": "t6", "text": "Ganar un premio de un concurso de startups", "correct": "espejismo"},
+            {"id": "t7", "text": "Clientes que piden ampliar su contrato sin que se lo ofrezcan", "correct": "real"},
+            {"id": "t8", "text": "Muchas descargas de la app con un 90 % de abandono en una semana", "correct": "espejismo"}
+          ],
+          "cats": ["Tracción real", "Espejismo"],
+          "keys": ["real", "espejismo"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_pitch", "title": "Presentación a inversores",
+    "desc": "Revisa una presentación a inversores con criterio, prepara la respuesta a las preguntas difíciles y decide qué contenido convence a un inversor.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Una presentación de 20 diapositivas", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás la estructura de una presentación a inversores. Tendrás que decir qué mejorar.",
+        "sub": "Revisión de la presentación — 9 min", "skills": {"hard": ["Presentaciones a inversores"], "soft": ["Síntesis"]},
+        "scenario": "Una startup de software para restaurantes tiene 10 minutos para presentarse ante un fondo de inversión. Su presentación tiene 20 diapositivas y en el ensayo duró 22 minutos. Has anotado cómo está construida.\n\nResponde en tres partes:\n\nA) Qué partes sobran, cuáles faltan y cuáles están mal ordenadas.\n\nB) Cómo reorganizarías la presentación en 10 diapositivas.\n\nC) Qué dato pondrías en la primera diapositiva y por qué.",
+        "data": {
+          "headers": ["Parte", "Diapositivas", "Contenido", "Observación", "Estado"],
+          "table": [
+            {"n": "Historia de los fundadores", "a": "4", "b": "Desde la universidad", "c": "Al principio", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Funcionalidades del producto", "a": "7", "b": "Capturas de pantalla", "c": "Sin decir qué problema resuelven", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Tracción", "a": "1", "b": "140 restaurantes pagando, 4 % de bajas al mes", "c": "En la diapositiva 17", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Competencia", "a": "0", "b": "«No tenemos competencia»", "c": "", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Cuánto piden y para qué", "a": "1", "b": "500.000 €", "c": "Sin decir en qué se gasta", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con la estructura actual de la presentación.",
+          "kw": ["problema", "solución", "tracción al principio", "mercado", "competencia", "por qué ahora", "equipo", "modelo de negocio", "uso de los fondos", "hitos"]
+        }
+      },
+      {
+        "id": "e2", "title": "Las preguntas difíciles", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Prepararás por escrito las respuestas a las preguntas más difíciles de un inversor.",
+        "sub": "Preparación — 10 min", "skills": {"hard": ["Relación con inversores"], "soft": ["Honestidad", "Seguridad"]},
+        "scenario": "Tras la presentación, el fondo envía tres preguntas: «Vuestro coste de conseguir un restaurante ha subido de 300 € a 700 € en seis meses: ¿por qué?», «¿Qué pasa si una gran empresa de reservas lanza lo mismo gratis?» y «Si no levantáis la ronda, ¿cuánto tiempo aguantáis?». Datos: el coste subió porque se agotó el canal de recomendaciones y se pasó a publicidad; tenéis integraciones con 3 programas de caja que la competencia no tiene; tenéis caja para 9 meses.",
+        "data": {
+          "to": "Socio del fondo de inversión",
+          "subject": "Respuestas a vuestras preguntas",
+          "hint": "Escribe la respuesta en cuatro bloques:\n\n1. Una respuesta honesta sobre el coste de adquisición y qué vais a hacer.\n\n2. Por qué una gran empresa no os sustituiría fácilmente, sin despreciar el riesgo.\n\n3. Cuánto tiempo aguantáis y qué haríais sin la ronda.\n\n4. Un cierre que proponga el siguiente paso.",
+          "minChars": 400, "minWords": 66,
+          "kw": ["coste de adquisición", "300", "700", "recomendaciones", "publicidad", "plan", "integraciones", "riesgo", "9 meses", "sin la ronda", "siguiente paso"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Convence a un inversor?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué contenidos de una presentación generan confianza en un inversor.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Captación de inversión"], "soft": ["Criterio"]},
+        "scenario": "Revisas el contenido de una presentación a un fondo de inversión. Clasifica cada elemento:\n\nGenera confianza — Datos concretos, realistas y verificables.\n\nResta credibilidad — Exagera, esconde un problema o no se puede comprobar.",
+        "data": {
+          "options": [
+            {"id": "p1", "text": "Ingresos mensuales de los últimos 12 meses en una gráfica", "correct": "si"},
+            {"id": "p2", "text": "«Nuestro mercado es de 500.000 millones» sin explicar cuánto podéis alcanzar", "correct": "no"},
+            {"id": "p3", "text": "Las bajas de clientes y qué se está haciendo para reducirlas", "correct": "si"},
+            {"id": "p4", "text": "«No tenemos competencia»", "correct": "no"},
+            {"id": "p5", "text": "En qué se gastará el dinero y qué hitos se alcanzarán", "correct": "si"},
+            {"id": "p6", "text": "Una previsión que multiplica las ventas por 50 en tres años sin justificar", "correct": "no"},
+            {"id": "p7", "text": "La opinión grabada de un cliente real que paga", "correct": "si"},
+            {"id": "p8", "text": "Logotipos de grandes empresas que solo han probado una demo gratuita", "correct": "no"}
+          ],
+          "cats": ["Genera confianza", "Resta credibilidad"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_product_mgmt", "title": "Gestión de producto",
+    "desc": "Prioriza las peticiones que llegan al equipo de producto, comunica una decisión de producto impopular y distingue las métricas que miden valor de las que no.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Demasiadas peticiones, un solo equipo", "type": "analysis", "timeLimit": 600, "difficulty": "basico",
+        "briefing": "Verás las peticiones que tiene pendientes un equipo de producto. Tendrás que priorizarlas.",
+        "sub": "Priorización — 10 min", "skills": {"hard": ["Priorización de producto"], "soft": ["Decisión con datos"]},
+        "scenario": "Eres responsable de producto de un software de reservas para peluquerías (2.400 clientes, 39 € al mes). El equipo puede hacer dos de estas cinco cosas este trimestre. Cada departamento defiende la suya.\n\nResponde en tres partes:\n\nA) Qué dos eliges y por qué, comparando impacto y esfuerzo.\n\nB) Qué datos te faltan para estar seguro.\n\nC) Cómo explicarías la decisión a los departamentos que no salen elegidos.",
+        "data": {
+          "headers": ["Petición", "Quién la pide", "Impacto estimado", "Esfuerzo", "Estado"],
+          "table": [
+            {"n": "Recordatorio automático de citas por WhatsApp", "a": "Clientes (310 peticiones)", "b": "Reduce ausencias; 18 % de bajas citan las ausencias", "c": "4 semanas", "d": "Bien", "cls": "v-good"},
+            {"n": "Rediseño completo del panel", "a": "Diseño", "b": "«Más moderno»; sin datos de quejas", "c": "12 semanas", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Integración con el programa de facturación más usado", "a": "Ventas", "b": "Bloquea 60 ventas en curso", "c": "6 semanas", "d": "Bien", "cls": "v-good"},
+            {"n": "Informe personalizado para un cliente grande", "a": "Un cliente de 15 salones", "b": "Lo usaría solo él", "c": "3 semanas", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Modo oscuro", "a": "12 peticiones", "b": "Bajo", "c": "2 semanas", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C comparando las peticiones de la tabla.",
+          "kw": ["impacto", "esfuerzo", "bajas", "ausencias", "ventas bloqueadas", "ingresos", "priorizar", "datos", "explicar el porqué", "hoja de ruta"]
+        }
+      },
+      {
+        "id": "e2", "title": "Decir que no a un cliente importante", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Escribirás a un cliente importante para explicarle que su petición no entra este trimestre.",
+        "sub": "Comunicación de producto — 10 min", "skills": {"hard": ["Gestión de producto"], "soft": ["Comunicación difícil"]},
+        "scenario": "El cliente de 15 salones (el mayor, 7.000 € al año) pidió un informe personalizado y el equipo comercial se lo había casi prometido. Has decidido que no entra este trimestre porque solo lo usaría él. Sí entran los recordatorios por WhatsApp, que él también usará.",
+        "data": {
+          "to": "Gerente de la cadena de 15 salones",
+          "subject": "Sobre el informe que nos pediste",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Agradece la petición y muestra que entiendes para qué la necesita.\n\n2. Explica con honestidad la decisión y el criterio.\n\n3. Ofrece una alternativa útil (exportar datos, una consulta con el equipo, otra fecha).\n\n4. Cuéntale lo que sí llega y cómo le beneficia, y deja la puerta abierta.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["gracias", "entiendo", "decisión", "criterio", "todos los clientes", "alternativa", "exportar", "recordatorios", "WhatsApp", "próximo trimestre"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Mide valor o vanidad?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué métricas indican que un producto aporta valor a sus clientes.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Métricas de producto"], "soft": ["Criterio"]},
+        "scenario": "El equipo de producto propone estas métricas para su panel trimestral. Clasifica cada una:\n\nMide valor — Muestra que los clientes consiguen lo que necesitan y se quedan.\n\nVanidad — Crece fácilmente pero no indica si el producto sirve.",
+        "data": {
+          "options": [
+            {"id": "m1", "text": "Porcentaje de peluquerías que usan la agenda cada semana", "correct": "valor"},
+            {"id": "m2", "text": "Número total de registros acumulados desde el lanzamiento", "correct": "vanidad"},
+            {"id": "m3", "text": "Reducción de citas perdidas en los salones que usan recordatorios", "correct": "valor"},
+            {"id": "m4", "text": "Visitas a la página de inicio", "correct": "vanidad"},
+            {"id": "m5", "text": "Bajas mensuales de clientes de pago", "correct": "valor"},
+            {"id": "m6", "text": "Número de funcionalidades lanzadas en el año", "correct": "vanidad"},
+            {"id": "m7", "text": "Tiempo que tarda un salón nuevo en hacer su primera reserva", "correct": "valor"},
+            {"id": "m8", "text": "Seguidores en redes sociales", "correct": "vanidad"}
+          ],
+          "cats": ["Mide valor", "Vanidad"],
+          "keys": ["valor", "vanidad"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_agile", "title": "Ágil y Scrum",
+    "desc": "Analiza los datos de varios sprints para encontrar el problema del equipo, facilita una retrospectiva difícil y distingue las prácticas ágiles de las que solo usan el nombre.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Sprints que nunca se terminan", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los datos de los últimos sprints de un equipo. Tendrás que encontrar el problema.",
+        "sub": "Análisis de sprints — 9 min", "skills": {"hard": ["Scrum", "Métricas ágiles"], "soft": ["Diagnóstico"]},
+        "scenario": "Un equipo de 7 personas trabaja en sprints de dos semanas. En los últimos cinco sprints ha terminado de media el 55 % de lo planificado y el negocio ya no se fía de sus compromisos. Tienes los datos.\n\nResponde en tres partes:\n\nA) Qué patrón explica que no terminen lo planificado.\n\nB) Qué cambiarías en la planificación y durante el sprint.\n\nC) Cómo sabrías dentro de tres sprints si ha mejorado.",
+        "data": {
+          "headers": ["Dato", "Valor medio", "Detalle", "Efecto", "Estado"],
+          "table": [
+            {"n": "Puntos planificados frente a terminados", "a": "40 frente a 22", "b": "Se planifica según lo que pide negocio", "c": "Se compromete más de lo que se hace", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Tareas urgentes añadidas a mitad de sprint", "a": "6 por sprint", "b": "Llegan directamente a los desarrolladores", "c": "Se abandona lo planificado", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Historias empezadas a la vez", "a": "12", "b": "Para 7 personas", "c": "Muchas a medias al acabar", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Historias sin criterios de aceptación", "a": "40 %", "b": "", "c": "Se rehacen tras la revisión", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Reunión diaria", "a": "15 minutos", "b": "Se hace cada día", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de los sprints.",
+          "kw": ["velocidad", "capacidad", "comprometer lo realista", "interrupciones", "propietario del producto", "trabajo en curso", "limitar", "criterios de aceptación", "definición de terminado", "medir"]
+        }
+      },
+      {
+        "id": "e2", "title": "Una retrospectiva tensa", "type": "email", "timeLimit": 600, "difficulty": "intermedio",
+        "briefing": "Prepararás una retrospectiva en un equipo con tensiones.",
+        "sub": "Facilitación — 10 min", "skills": {"hard": ["Retrospectivas"], "soft": ["Facilitación", "Gestión de conflictos"]},
+        "scenario": "Eres Scrum Master del equipo. En la última retrospectiva, dos desarrolladores culparon al propietario del producto de meter urgencias, él respondió que el equipo «siempre pone excusas» y la reunión terminó sin acciones. La próxima es el jueves. Te escribes a ti y al equipo un plan.",
+        "data": {
+          "to": "Equipo y propietario del producto",
+          "subject": "Cómo será la retrospectiva del jueves",
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. El objetivo de la retrospectiva y las reglas para hablar (hechos, no personas).\n\n2. La dinámica que usarás y por qué ayuda en esta situación.\n\n3. Cómo partirás de los datos (urgencias, tareas terminadas) en lugar de opiniones.\n\n4. Cómo se cerrará con pocas acciones concretas, con responsable, y cómo se revisarán.",
+          "minChars": 380, "minWords": 64,
+          "kw": ["objetivo", "reglas", "hechos", "no personas", "seguridad", "dinámica", "datos", "urgencias", "acciones concretas", "responsable", "revisar"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Ágil de verdad o solo de nombre?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué prácticas aplican de verdad los principios ágiles.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Principios ágiles"], "soft": ["Criterio"]},
+        "scenario": "Una empresa asegura que trabaja con metodología ágil. Clasifica cada práctica que has observado:\n\nÁgil de verdad — Entrega valor a menudo, aprende del usuario y mejora el proceso.\n\nSolo de nombre — Usa las reuniones y palabras ágiles pero sin su sentido.",
+        "data": {
+          "options": [
+            {"id": "a1", "text": "Enseñar cada sprint software funcionando a usuarios reales", "correct": "si"},
+            {"id": "a2", "text": "Una reunión diaria de una hora en la que cada uno informa al jefe", "correct": "no"},
+            {"id": "a3", "text": "Cambiar las prioridades del siguiente sprint con lo aprendido", "correct": "si"},
+            {"id": "a4", "text": "Planificar los sprints de todo el año el primer día", "correct": "no"},
+            {"id": "a5", "text": "Retrospectivas que acaban con mejoras que se aplican", "correct": "si"},
+            {"id": "a6", "text": "Usar los puntos de historia para comparar la productividad de las personas", "correct": "no"},
+            {"id": "a7", "text": "Un equipo que puede decidir cómo hacer su trabajo", "correct": "si"},
+            {"id": "a8", "text": "Hacer sprints de dos semanas pero entregar solo una vez al año", "correct": "no"}
+          ],
+          "cats": ["Ágil de verdad", "Solo de nombre"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_photography", "title": "Fotografía y edición",
+    "desc": "Elige y corrige las fotos de un catálogo con criterios técnicos, responde a un encargo con condiciones claras y decide qué usos de una imagen necesitan permiso.",
+    "exercises": [
+      {
+        "id": "e1", "title": "Las fotos del catálogo", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás la revisión técnica de las fotos de un catálogo online. Tendrás que decidir qué repetir y qué corregir.",
+        "sub": "Revisión técnica — 9 min", "skills": {"hard": ["Fotografía de producto", "Edición"], "soft": ["Rigor"]},
+        "scenario": "Has hecho las fotos de 120 productos de una marca de bolsos para su tienda online. Antes de entregar, el cliente ha hecho una revisión y ha encontrado problemas. Tiene que publicarlas en una semana.\n\nResponde en tres partes:\n\nA) Qué problemas se pueden corregir en edición y cuáles obligan a repetir la foto.\n\nB) Cómo los corregirías y cómo evitarías que pase en la próxima sesión.\n\nC) Qué le dirías al cliente sobre el plazo.",
+        "data": {
+          "headers": ["Problema", "Fotos afectadas", "Detalle", "Efecto", "Estado"],
+          "table": [
+            {"n": "El color del bolso no coincide con el real", "a": "35", "b": "Balance de blancos distinto entre sesiones", "c": "Devoluciones por «no era ese color»", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Fondo gris en lugar de blanco", "a": "50", "b": "Fondo poco iluminado", "c": "No cumple la norma del marketplace", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Desenfocadas en los detalles", "a": "12", "b": "Poca profundidad de campo en el cierre", "c": "No se ve la calidad", "d": "Revisar", "cls": "v-bad"},
+            {"n": "Reflejos en el cuero brillante", "a": "8", "b": "Luz directa", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Encuadre y tamaño", "a": "120", "b": "Coherentes", "c": "", "d": "Bien", "cls": "v-good"}
+          ],
+          "q": "Responde a las partes A, B y C problema por problema.",
+          "kw": ["balance de blancos", "carta de color", "perfil de color", "fondo blanco", "iluminar el fondo", "enfoque", "profundidad de campo", "diafragma", "reflejos", "luz difusa", "repetir"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un encargo con condiciones claras", "type": "email", "timeLimit": 540, "difficulty": "intermedio",
+        "briefing": "Responderás a un cliente nuevo dejando claras las condiciones del encargo.",
+        "sub": "Presupuesto y condiciones — 9 min", "skills": {"hard": ["Gestión de encargos"], "soft": ["Comunicación con cliente"]},
+        "scenario": "Una bodega te pide fotos de sus 8 vinos y de la finca para su web «y lo que vayamos necesitando». Pregunta el precio. En otro encargo, un cliente usó tus fotos en vallas publicitarias sin pagar esos usos y te pidió 30 retoques más gratis.",
+        "data": {
+          "to": "Responsable de marketing de la bodega",
+          "subject": "Presupuesto para las fotos de los vinos y la finca",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Qué incluye el trabajo (número de fotos, jornada, edición) y el precio.\n\n2. Para qué usos se ceden las fotos (web, redes, impresión) y qué pasa con otros usos.\n\n3. Cuántas revisiones incluye y cómo se cobran las adicionales.\n\n4. Plazos de entrega, forma de pago y el siguiente paso.",
+          "minChars": 360, "minWords": 60,
+          "kw": ["incluye", "número de fotos", "edición", "precio", "licencia de uso", "web y redes", "publicidad", "revisiones", "plazo", "pago"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Necesita permiso?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué usos de una fotografía necesitan autorización.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Derechos de imagen"], "soft": ["Criterio"]},
+        "scenario": "Trabajas como fotógrafo para una marca. Clasifica cada uso de una foto:\n\nNecesita permiso — Hace falta el consentimiento de la persona fotografiada o del autor.\n\nNo lo necesita — Ya está cubierto o no afecta a derechos de nadie.",
+        "data": {
+          "options": [
+            {"id": "f1", "text": "Usar en un anuncio la cara reconocible de un cliente de la tienda", "correct": "si"},
+            {"id": "f2", "text": "Publicar fotos de producto hechas por ti para la marca que te las encargó con cesión", "correct": "no"},
+            {"id": "f3", "text": "Publicar fotos de menores en las redes de la marca", "correct": "si"},
+            {"id": "f4", "text": "Fotografiar un paisaje público sin personas reconocibles", "correct": "no"},
+            {"id": "f5", "text": "Usar la foto de otro fotógrafo encontrada en internet", "correct": "si"},
+            {"id": "f6", "text": "Usar una foto propia en tu portfolio cuando el contrato lo permite", "correct": "no"},
+            {"id": "f7", "text": "Usar la foto de una modelo en una campaña distinta de la pactada", "correct": "si"},
+            {"id": "f8", "text": "Usar fotos de un banco de imágenes con licencia comercial", "correct": "no"}
+          ],
+          "cats": ["Necesita permiso", "No lo necesita"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_video_edit", "title": "Edición de vídeo",
+    "desc": "Mejora un vídeo con datos de cómo lo ve la gente, coordina un encargo de vídeo con un cliente y decide qué decisiones de montaje ayudan a contar la historia.",
+    "exercises": [
+      {
+        "id": "e1", "title": "La gente deja el vídeo a los 5 segundos", "type": "analysis", "timeLimit": 540, "difficulty": "basico",
+        "briefing": "Verás los datos de visualización de un vídeo corporativo. Tendrás que proponer cómo reeditarlo.",
+        "sub": "Análisis de retención — 9 min", "skills": {"hard": ["Montaje", "Retención de audiencia"], "soft": ["Diagnóstico"]},
+        "scenario": "Una escuela de cocina ha publicado en redes un vídeo de 2 minutos para anunciar sus cursos. Lo han visto 40.000 personas pero solo se han apuntado 9. Tienes los datos de retención y la estructura del vídeo.\n\nResponde en tres partes:\n\nA) Dónde se pierde la audiencia y por qué.\n\nB) Cómo reeditarías el vídeo (orden, duración, subtítulos, cierre).\n\nC) Cómo probarías si la nueva versión funciona mejor.",
+        "data": {
+          "headers": ["Momento", "Audiencia que sigue", "Lo que se ve", "Observación", "Estado"],
+          "table": [
+            {"n": "0-5 segundos", "a": "100 % → 42 %", "b": "Logotipo animado de la escuela", "c": "Nada que llame la atención", "d": "Revisar", "cls": "v-bad"},
+            {"n": "5-40 segundos", "a": "42 % → 18 %", "b": "Entrevista al director", "c": "Sin subtítulos; el 80 % ve sin sonido", "d": "Revisar", "cls": "v-bad"},
+            {"n": "40-90 segundos", "a": "18 % → 12 %", "b": "Alumnos cocinando", "c": "La parte más comentada", "d": "Bien", "cls": "v-good"},
+            {"n": "90-120 segundos", "a": "12 % → 9 %", "b": "Precios y fechas en texto pequeño", "c": "", "d": "Revisar", "cls": "v-warn"},
+            {"n": "Formato", "a": "Horizontal", "b": "Se ve sobre todo en móvil", "c": "", "d": "Revisar", "cls": "v-warn"}
+          ],
+          "q": "Responde a las partes A, B y C con los datos de retención.",
+          "kw": ["primeros segundos", "gancho", "empezar por la acción", "subtítulos", "sin sonido", "formato vertical", "duración", "llamada a la acción", "texto legible", "probar dos versiones"]
+        }
+      },
+      {
+        "id": "e2", "title": "Un encargo de vídeo bien planteado", "type": "email", "timeLimit": 540, "difficulty": "intermedio",
+        "briefing": "Plantearás por escrito un encargo de vídeo para evitar malentendidos.",
+        "sub": "Gestión del encargo — 9 min", "skills": {"hard": ["Producción de vídeo"], "soft": ["Comunicación con cliente"]},
+        "scenario": "Una empresa de reformas quiere un vídeo «para la web y para redes» sobre su forma de trabajar. No tiene guion, quiere que salgan clientes reales y espera tenerlo en dos semanas. En el último encargo, otro cliente pidió seis rondas de cambios y acabó cambiando la música tres veces.",
+        "data": {
+          "to": "Gerente de la empresa de reformas",
+          "subject": "Propuesta para el vídeo de la empresa",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Qué vídeos entregarás (duración y formatos para web y redes) y qué historia contarán.\n\n2. Qué necesitas de ellos (clientes que acepten salir y firmen su consentimiento, acceso a una obra, materiales).\n\n3. El calendario con las fases y cuántas rondas de cambios incluye.\n\n4. La música y otros derechos, el precio y el siguiente paso.",
+          "minChars": 360, "minWords": 60,
+          "kw": ["duración", "formato vertical", "web", "historia", "clientes reales", "consentimiento", "rodaje", "calendario", "rondas de cambios", "música con licencia", "precio"]
+        }
+      },
+      {
+        "id": "e3", "title": "¿Ayuda a contar la historia?", "type": "decision", "timeLimit": 300, "difficulty": "avanzado",
+        "briefing": "Decidirás qué decisiones de montaje ayudan a que un vídeo se entienda y se vea entero.",
+        "sub": "Clasificación — 5 min", "skills": {"hard": ["Montaje"], "soft": ["Criterio"]},
+        "scenario": "Estás montando un vídeo de 60 segundos sobre un cliente que reformó su cocina. Clasifica cada decisión:\n\nAyuda — Hace la historia más clara, más rítmica o más fácil de ver.\n\nNo ayuda — Distrae, alarga o confunde.",
+        "data": {
+          "options": [
+            {"id": "v1", "text": "Empezar con el antes y el después de la cocina", "correct": "si"},
+            {"id": "v2", "text": "Usar una transición distinta entre cada plano", "correct": "no"},
+            {"id": "v3", "text": "Poner subtítulos legibles a lo que dice el cliente", "correct": "si"},
+            {"id": "v4", "text": "Mantener la música al mismo volumen que la voz del cliente", "correct": "no"},
+            {"id": "v5", "text": "Cortar los silencios y dudas de la entrevista", "correct": "si"},
+            {"id": "v6", "text": "Añadir un logotipo animado de 8 segundos al principio", "correct": "no"},
+            {"id": "v7", "text": "Cambiar de plano al ritmo de la música en los momentos de acción", "correct": "si"},
+            {"id": "v8", "text": "Incluir todas las tomas buenas aunque se repitan", "correct": "no"}
+          ],
+          "cats": ["Ayuda", "No ayuda"],
+          "keys": ["si", "no"]
+        }
+      }
+    ]
+  }
+]

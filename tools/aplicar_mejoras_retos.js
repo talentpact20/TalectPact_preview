@@ -21,7 +21,7 @@ const CLIENTE = path.join(RAIZ, "assets/js/app/07-retos-comunes.js");
 const DIR = path.join(__dirname, "mejoras_retos");
 
 const SIMBOLO = /^[\s✓✔✕✖⚠︎️ℹ]+/u;
-const ESTADO = { "✓": "Bien", "⚠︎": "Revisar", "⚠": "Revisar", "✕": "Mal" };
+const ESTADO = { "✓": "Bien", "⚠︎": "Revisar", "⚠": "Revisar", "✕": "Mal", "→": "Revisar" };
 
 function limpiarTexto(t) {
   if (typeof t !== "string") return t;
@@ -51,7 +51,9 @@ if (fs.existsSync(DIR)) {
   for (const f of fs.readdirSync(DIR).filter((x) => x.endsWith(".json")).sort()) {
     for (const r of JSON.parse(fs.readFileSync(path.join(DIR, f), "utf8"))) {
       if (mejoras.has(r.id)) throw new Error(`Reto repetido en las mejoras: ${r.id}`);
-      if (!Array.isArray(r.exercises) || r.exercises.length !== 3) throw new Error(`${r.id}: hacen falta 3 ejercicios`);
+      // Un parche solo cambia los campos que trae (y en data, solo sus claves);
+      // una mejora completa sustituye los tres ejercicios.
+      if (!r.parche && (!Array.isArray(r.exercises) || r.exercises.length !== 3)) throw new Error(`${r.id}: hacen falta 3 ejercicios`);
       mejoras.set(r.id, r);
     }
   }
@@ -63,7 +65,15 @@ const solo = (o, ks) => Object.fromEntries(ks.filter((k) => o[k] !== undefined).
 
 const catalogo = JSON.parse(fs.readFileSync(CATALOGO, "utf8")).map((r) => {
   const m = mejoras.get(r.id);
-  if (m) {
+  if (m && m.parche) {
+    r.title = m.title || r.title;
+    for (const p of m.exercises || []) {
+      const e = r.exercises.find((x) => x.id === p.id);
+      if (!e) throw new Error(`${r.id}.${p.id} no existe`);
+      Object.assign(e, solo(p, SERVIDOR_EJ.filter((k) => k !== "data")));
+      if (p.data) e.data = Object.assign({}, e.data, p.data);
+    }
+  } else if (m) {
     r.title = m.title || r.title;
     r.exercises = m.exercises.map((e) => solo(e, SERVIDOR_EJ));
   }
@@ -84,8 +94,15 @@ const lineas = fs.readFileSync(CLIENTE, "utf8").split("\n").map((l) => {
     if (mej.title) meta.title = mej.title;
     if (mej.desc) meta.desc = mej.desc;
     if (mej.searchTerms) meta.searchTerms = mej.searchTerms;
-    meta.exercises = mej.exercises.map((e, i) => solo(Object.assign({ num: String(i + 1).padStart(2, "0") }, e), CLIENTE_EJ));
-    const min = Math.round(mej.exercises.reduce((s, e) => s + e.timeLimit, 0) / 60);
+    if (mej.parche) {
+      for (const p of mej.exercises || []) {
+        const e = meta.exercises.find((x) => x.id === p.id);
+        Object.assign(e, solo(p, CLIENTE_EJ.filter((k) => k !== "id" && k !== "num")));
+      }
+    } else {
+      meta.exercises = mej.exercises.map((e, i) => solo(Object.assign({ num: String(i + 1).padStart(2, "0") }, e), CLIENTE_EJ));
+    }
+    const min = Math.round(meta.exercises.reduce((s, e) => s + e.timeLimit, 0) / 60);
     if (Array.isArray(meta.tags)) meta.tags = meta.tags.map((t) => (/^\d+ min$/.test(t) ? min + " min" : t));
   }
   // Iconos: la interfaz pinta monogramas; el emoji del dato sobraba.

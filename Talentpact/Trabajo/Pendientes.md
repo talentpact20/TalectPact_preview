@@ -33,6 +33,7 @@
 - [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
 
 ## Código (Claude)
+- [x] Retos: enunciado escapado y con código formateado, guía visible; bloqueada la descarga pública del catálogo con soluciones (20/10).
 - [x] Menú lateral en los paneles de candidato y empresa y Ajustes como página propia (20/10).
 - [x] Rama IA (20/10): bloque propio en el catálogo, 10 retos técnicos de la ola 1 + IA en el trabajo (33 ejercicios), rúbrica técnica y errores que penalizan (corrector 2.2.0).
 - [ ] Rama IA: revisión por un experto, gold set, itinerarios en la oferta, fase 2 (sandbox) y defensa de 2 preguntas; ola 2 (6 competencias).
@@ -40,7 +41,8 @@
 - [ ] Blockchain: verificación por lotes (CSV) y API `GET /verify/{id}` para Pro/Enterprise; multifirma 2 de 2 como emisor del contrato v2; EBSI más adelante.
 - [x] Pasada de seguridad (20/10): límites persistentes, CORS cerrado, no-store, RLS de las 14 tablas comprobado por test.
 - [ ] Seguridad siguiente: quitar 'unsafe-inline' de la CSP (pasar los onclick a JS), TOTP y protección de contraseñas filtradas en Supabase, PITR.
-- [ ] Mejorar cada ejercicio uno por uno (pedido el 20/10, después de lo demás).
+- [x] Mejorar cada ejercicio uno por uno (20/10): 342 ejercicios auditados; 72 retos de plantilla reescritos y 21 retocados. Test de calidad.
+- [ ] Revisión del contenido de los retos por la asesora (soft) y expertos de cada área; pasar los retos de oferta (`EX_DB`) al catálogo del servidor.
 - [x] Revisión del código de Iván (20/10): seed fuera, pipeline solo con postulados o visibles en el pool, dilemas alineados.
 - [x] Antitrampas fase 0 + intento único + cámara obligatoria (19/10): contenido y soluciones fuera del navegador, `retos-intento`, comprobación previa, pantalla completa, solicitudes de reapertura y de alternativa a la cámara, secuencias corregidas en el servidor. Pendiente de commit.
 - [ ] Backoffice: cola de solicitudes (reapertura / sin cámara) con aprobar y rechazar, y aviso al candidato en su bandeja.

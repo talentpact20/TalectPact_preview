@@ -1,0 +1,804 @@
+[
+  {
+    "id": "common_analytical",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e2",
+        "title": "Priorizar iniciativas",
+        "scenario": "El CEO de la startup del ejercicio anterior (abandono de clientes del 7,2 % y subiendo, coste de captación +45 %, NPS en caída) tiene ocho iniciativas sobre la mesa, pero solo equipo y presupuesto para la mitad. Clasifica cada una:\n\nAlta prioridad — Ataca el problema principal que muestran las métricas.\n\nBaja prioridad — Puede tener sentido, pero no resuelve lo urgente o empeora el coste.",
+        "data": {
+          "options": [
+            {
+              "id": "p1",
+              "text": "Contratar 2 comerciales más para conseguir más oportunidades (+8.000 € al mes)",
+              "correct": "low"
+            },
+            {
+              "id": "p2",
+              "text": "Montar una acogida automatizada para los clientes nuevos y reducir las bajas (sin coste extra)",
+              "correct": "high"
+            },
+            {
+              "id": "p3",
+              "text": "Lanzar una campaña de notoriedad de marca en LinkedIn (+5.000 € al mes)",
+              "correct": "low"
+            },
+            {
+              "id": "p4",
+              "text": "Crear un equipo de éxito de cliente para rescatar las cuentas en riesgo (+4.000 € al mes)",
+              "correct": "high"
+            },
+            {
+              "id": "p5",
+              "text": "Llamar a los clientes que se dieron de baja este trimestre para saber por qué",
+              "correct": "high"
+            },
+            {
+              "id": "p6",
+              "text": "Rediseñar el logotipo y la web corporativa",
+              "correct": "low"
+            },
+            {
+              "id": "p7",
+              "text": "Arreglar los cinco fallos del producto que más se repiten en soporte",
+              "correct": "high"
+            },
+            {
+              "id": "p8",
+              "text": "Abrir una oficina comercial en Londres",
+              "correct": "low"
+            }
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "Informe ejecutivo",
+        "scenario": "Redacta el correo de resumen para el consejo con tu diagnóstico de las métricas del primer ejercicio (ingresos recurrentes +12 % al mes, abandono del 7,2 % y subiendo, coste de captación +45 %, NPS de 34 con −18 puntos) y tu plan de acción. Máximo 150 palabras: el consejo lo leerá en el móvil antes de la reunión. Tono directo, sin adornos.",
+        "data": {
+          "to": "Consejo de administración",
+          "subject": "Diagnóstico del trimestre y plan de acción",
+          "hint": "Escribe el correo en cuatro bloques:\n\n1. Una frase con el estado general del negocio.\n\n2. Las tres métricas clave con su tendencia.\n\n3. El riesgo principal y por qué lo es.\n\n4. Tres acciones con su plazo. Máximo 150 palabras."
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_communication",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e2",
+        "title": "Correo persuasivo",
+        "scenario": "Trabajas en un equipo de 12 personas de una empresa de software. Todo es presencial. Datos: el tiempo medio de desplazamiento es de 1 hora y 50 minutos al día, la rotación del equipo fue del 20 % el último año y dos de las tres empresas competidoras ya ofrecen trabajo híbrido. Quieres convencer a la directora general de probar un modelo de 3 días presenciales y 2 en remoto. Escribe el correo.",
+        "data": {
+          "to": "María López, directora general",
+          "subject": "Propuesta: probar un modelo híbrido de 3 + 2 días"
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_logic",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Secuencias numéricas",
+        "scenario": "Tienes cuatro secuencias numéricas. En cada una, encuentra la regla que la genera y elige el número que la completa. Antes de elegir, comprueba que la regla funciona con todos los números de la serie y no solo con los dos primeros: es el error más frecuente en este tipo de prueba."
+      },
+      {
+        "id": "e2",
+        "title": "Razonamiento verbal",
+        "scenario": "En un informe interno aparecen estas conclusiones. Clasifica cada una:\n\nVálida — La conclusión se sigue necesariamente de lo que se afirma.\n\nInválida — La conclusión puede ser falsa aunque lo que se afirma sea cierto.",
+        "data": {
+          "options": [
+            {
+              "id": "v1",
+              "text": "«Todos los de ventas superaron su objetivo. María es de ventas.» → María superó su objetivo.",
+              "correct": "valid"
+            },
+            {
+              "id": "v2",
+              "text": "«Algunos desarrolladores saben Python. Juan es desarrollador.» → Juan sabe Python.",
+              "correct": "invalid"
+            },
+            {
+              "id": "v3",
+              "text": "«Ningún candidato sin experiencia fue seleccionado. Pedro no tiene experiencia.» → Pedro no fue seleccionado.",
+              "correct": "valid"
+            },
+            {
+              "id": "v4",
+              "text": "«Los empleados en remoto son, de media, más productivos. Ana trabaja en remoto.» → Ana es más productiva que cualquier empleado presencial.",
+              "correct": "invalid"
+            },
+            {
+              "id": "v5",
+              "text": "«Si llueve, se suspende el partido. El partido se ha suspendido.» → Ha llovido.",
+              "correct": "invalid"
+            },
+            {
+              "id": "v6",
+              "text": "«Si llueve, se suspende el partido. El partido no se ha suspendido.» → No ha llovido.",
+              "correct": "valid"
+            },
+            {
+              "id": "v7",
+              "text": "«Todos los gerentes tienen coche de empresa. Laura tiene coche de empresa.» → Laura es gerente.",
+              "correct": "invalid"
+            },
+            {
+              "id": "v8",
+              "text": "«Todo pedido de más de 500 € necesita aprobación. Este pedido no necesita aprobación.» → El pedido no supera los 500 €.",
+              "correct": "valid"
+            }
+          ],
+          "cats": [
+            "Válida",
+            "Inválida"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "Asignar tareas con un plazo",
+        "scenario": "Tienes 4 personas, 4 tareas y 5 días laborables para entregar una funcionalidad. Dependencias: el frontend necesita el diseño terminado, y las pruebas necesitan terminados el frontend y la API. La disponibilidad de cada persona es la de la tabla. Asigna las tareas para entregar a tiempo. Si con estos datos no es posible, dilo, explica por qué y propón qué harías.",
+        "data": {
+          "q": "Tareas: diseño (2 días), frontend (3 días), API (2 días), pruebas (1 día). Plazo: 5 días. ¿Cómo las asignas y en qué orden? ¿Llegas al plazo?",
+          "kw": [
+            "Sara",
+            "diseño",
+            "Ana",
+            "frontend",
+            "Luis",
+            "API",
+            "Pedro",
+            "pruebas",
+            "dependencias",
+            "en paralelo",
+            "no cabe",
+            "riesgo"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_english",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Llamada de un cliente en inglés",
+        "timeLimit": 180,
+        "sub": "Llamada en inglés — 3 min"
+      },
+      {
+        "id": "e2",
+        "title": "Correo profesional en inglés",
+        "scenario": "Write a professional email in English to a partner company proposing a joint webinar. Your company sells accounting software for small businesses; theirs sells online payment terminals. Both serve the same type of customer. Be specific about the topic, the date and the benefits for both companies.",
+        "data": {
+          "subject": "Joint webinar proposal"
+        }
+      },
+      {
+        "id": "e3",
+        "title": "Comprensión de un mensaje",
+        "scenario": "You receive this voicemail from a client:\n\n«Hi, this is Karen Lowe from Brightline. I'm afraid I can't make Tuesday's meeting. Could we move it to Thursday at the same time? To be honest, we haven't been happy with your response times over the last two months, and another provider has offered us a lower price. We'd like to stay with you, but we need an updated proposal by Friday so we can compare. Please call me rather than email: I'm on the road most of the week.»\n\nClassify each statement as true or false according to the message.",
+        "data": {
+          "options": [
+            {
+              "id": "e1",
+              "text": "The client wants to reschedule the meeting to Thursday",
+              "correct": "true"
+            },
+            {
+              "id": "e2",
+              "text": "They are satisfied with current service levels",
+              "correct": "false"
+            },
+            {
+              "id": "e3",
+              "text": "A competitor has offered them a better price",
+              "correct": "true"
+            },
+            {
+              "id": "e4",
+              "text": "The client wants to cancel the contract",
+              "correct": "false"
+            },
+            {
+              "id": "e5",
+              "text": "They need the updated proposal by Friday",
+              "correct": "true"
+            },
+            {
+              "id": "e6",
+              "text": "They prefer email over phone calls",
+              "correct": "false"
+            },
+            {
+              "id": "e7",
+              "text": "Karen works for Brightline",
+              "correct": "true"
+            },
+            {
+              "id": "e8",
+              "text": "The meeting was originally on Monday",
+              "correct": "false"
+            }
+          ],
+          "cats": [
+            "True",
+            "False"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_decisions",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "data": {
+          "hint": "Escribe tu plan en cuatro bloques:\n\n1. Las cuatro tareas ordenadas por prioridad, con el motivo.\n\n2. Para cada una, si la haces tú, la delegas (a quién) o la aplazas, y por qué.\n\n3. Qué mensajes envías antes de irte y a quién.\n\n4. Qué dejas preparado para no ser imprescindible durante las vacaciones."
+        }
+      },
+      {
+        "id": "e3",
+        "data": {
+          "cats": [
+            "Factor de riesgo",
+            "Factor favorable"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_problemsolving",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "El cuello de botella",
+        "scenario": "Una tienda online de muebles tarda de media 23 días desde que entra un pedido hasta que sale hacia el cliente. La competencia tarda 5 y las reseñas negativas por retraso se han triplicado. Tienes los pasos del proceso con su duración media. Identifica los cuellos de botella y propón soluciones concretas, con el plazo que esperas conseguir."
+      },
+      {
+        "id": "e3",
+        "title": "Estimación rápida",
+        "scenario": "En una entrevista te preguntan: ¿cuántas pizzas se consumen al día en Barcelona? No puedes buscar datos: tienes que estimarlo con lógica. Lo que se evalúa es el razonamiento, no acertar la cifra. Explica tu razonamiento paso a paso y di qué supuesto cambiaría más el resultado."
+      }
+    ]
+  },
+  {
+    "id": "common_creativity",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e2",
+        "data": {
+          "hint": "Escribe el plan en cuatro bloques:\n\n1. El público al que te diriges y el mensaje principal.\n\n2. Las tres o cuatro acciones que harás (sin anuncios de pago) y por qué funcionarían en Barcelona.\n\n3. Qué harás cada semana, de forma concreta.\n\n4. Cómo sabrás si ha funcionado (qué medirás)."
+        }
+      },
+      {
+        "id": "e3",
+        "data": {
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Qué siente y qué necesita el paciente mientras espera (información, comodidad, compañía).\n\n2. Tres o cuatro cambios concretos y baratos, explicando qué problema resuelve cada uno.\n\n3. Cómo atenderías a quien espera con niños o con una persona mayor.\n\n4. Cómo probarías los cambios y cómo sabrías si la espera es menos estresante."
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_time",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "La bandeja de entrada a las 9:00",
+        "scenario": "Llegas el lunes a las 9:00 con 8 correos sin leer. A las 10:30 tienes una reunión importante con un cliente y antes necesitas 30 minutos para prepararla. Clasifica cada correo:\n\nAtender ahora — Tiene que estar resuelto o respondido antes de las 10:30.\n\nPuede esperar — Se atiende después de la reunión sin perjuicio.",
+        "data": {
+          "cats": [
+            "Atender ahora",
+            "Puede esperar"
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "data": {
+          "cats": [
+            "Atiendo ahora (es más urgente que mi tarea)",
+            "Respondo después (puede esperar 1-2 horas)"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_customer",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e3",
+        "title": "Escalado de incidencias",
+        "scenario": "Viernes a las 17:00. Te llegan ocho incidencias a la vez y tu compañero ya se ha ido. Clasifica cada una por orden de atención:\n\nP1 — Atender ya: un cliente no puede trabajar o hay dinero en juego ahora.\n\nP2 — Atender hoy: es importante pero no bloquea su actividad en este momento.\n\nP3 — Puede esperar al lunes.",
+        "data": {
+          "options": [
+            {
+              "id": "c1",
+              "text": "Empresa grande (50.000 € al año): «Nuestro panel no carga desde hace 10 minutos»",
+              "correct": "p1"
+            },
+            {
+              "id": "c2",
+              "text": "Usuario gratuito: «¿Cómo cambio mi foto de perfil?»",
+              "correct": "p3"
+            },
+            {
+              "id": "c3",
+              "text": "Empresa mediana (10.000 € al año): «Hemos detectado un cobro duplicado en nuestra factura»",
+              "correct": "p2"
+            },
+            {
+              "id": "c4",
+              "text": "Posible cliente: «Me interesa contratar, ¿podemos hablar el lunes?»",
+              "correct": "p3"
+            },
+            {
+              "id": "c5",
+              "text": "Empresa grande (50.000 € al año): «Nuestra API devuelve errores 500 intermitentes»",
+              "correct": "p1"
+            },
+            {
+              "id": "c6",
+              "text": "Usuario gratuito: «Vuestra app es una basura», sin más detalle",
+              "correct": "p3"
+            },
+            {
+              "id": "c7",
+              "text": "Pyme de pago: «No nos llegan los correos de recuperación de contraseña desde esta mañana»",
+              "correct": "p2"
+            },
+            {
+              "id": "c8",
+              "text": "Empresa mediana: «Un usuario no puede exportar el informe que necesita para el cierre del lunes»",
+              "correct": "p2"
+            }
+          ],
+          "cats": [
+            "P1 — Atender ya",
+            "P2 — Atender hoy",
+            "P3 — Puede esperar al lunes"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_excel",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e2",
+        "title": "Un panel semanal para el CEO"
+      },
+      {
+        "id": "e3",
+        "title": "Fórmulas y lógica",
+        "scenario": "Te piden varias tareas en una hoja de ventas. Antes de empezar, decides qué tipo de fórmula necesita cada una. Clasifica cada tarea:\n\nBásica — Se resuelve con SUMA, PROMEDIO, CONTAR u operaciones simples.\n\nAvanzada — Necesita condiciones o búsquedas (SI, BUSCARV o BUSCARX, PROMEDIO.SI, CONTAR.SI…).",
+        "data": {
+          "cats": [
+            "Básica",
+            "Avanzada"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_strategy",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e2",
+        "title": "¿Oportunidad o trampa?",
+        "scenario": "Eres cofundador de una startup de software con 1,2 millones de euros de ingresos al año y rentable. Te llegan estas propuestas en el mismo mes. Clasifica cada una:\n\nOportunidad real — Te acerca a tus objetivos sin hipotecar la empresa.\n\nTrampa disfrazada — Parece buena, pero te quita control, futuro o datos."
+      }
+    ]
+  },
+  {
+    "id": "common_marketing_digital",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e2",
+        "title": "Crisis en redes sociales",
+        "data": {
+          "hint": "Escribe los dos textos cuidando cuatro puntos:\n\n1. El mensaje público (máximo 280 caracteres): reconoce la situación, sin atacar ni negar sin investigar.\n\n2. Qué compromiso concreto anuncias (investigación, plazo, a quién se puede dirigir quien se vea afectado).\n\n3. El comunicado interno: transparente con la plantilla y con lo que se va a hacer.\n\n4. Qué no vas a decir ni hacer (borrar comentarios, atacar al exempleado) y por qué."
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Anuncios o SEO?",
+        "scenario": "Tu empresa lanza un nuevo CRM para pymes con poco presupuesto de marketing. Clasifica cada búsqueda según dónde conviene trabajarla:\n\nGoogle Ads — Quien busca está listo para comprar o comparar: interesa aparecer ya.\n\nSEO y contenidos — Quien busca quiere aprender: conviene un contenido que atraiga a largo plazo.",
+        "data": {
+          "cats": [
+            "Google Ads (venta ahora)",
+            "SEO y contenidos (largo plazo)"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_dev_tech",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Depuración de un cobro",
+        "scenario": "El siguiente pseudocódigo calcula el total del carrito de una tienda online. Hay quejas de clientes por cobros incorrectos y has encontrado que tiene 3 errores. Encuéntralos y explica cómo los arreglarías.\n\n```\nfunction calcularTotal(carrito):\n  total = 0\n  for item in carrito:\n    total = item.precio\n  if usuario.esPremium:\n    descuento = total * 0.20\n  total = total - descuento\n  impuesto = total * 0.21\n  return total\n```"
+      },
+      {
+        "id": "e2",
+        "title": "Diseño de un sistema de avisos"
+      },
+      {
+        "id": "e3",
+        "title": "¿Deuda técnica o buena práctica?",
+        "scenario": "Tu equipo tiene que entregar una versión en 2 semanas y hay presión para ir rápido. Clasifica cada decisión técnica que se ha propuesto:\n\nBuena práctica — Ayuda a entregar con calidad y a mantener el código.\n\nDeuda técnica — Ahorra tiempo ahora pero se pagará después con errores o riesgo.",
+        "data": {
+          "options": [
+            {
+              "id": "t1",
+              "text": "Copiar y pegar la misma función en 4 archivos en vez de crear un módulo compartido",
+              "correct": "debt"
+            },
+            {
+              "id": "t2",
+              "text": "Escribir las pruebas de la lógica de pagos antes de implementarla",
+              "correct": "best"
+            },
+            {
+              "id": "t3",
+              "text": "Poner las credenciales de la API directamente en el código «para ir rápido»",
+              "correct": "debt"
+            },
+            {
+              "id": "t4",
+              "text": "Usar variables de entorno para la configuración y un .env.example en el repositorio",
+              "correct": "best"
+            },
+            {
+              "id": "t5",
+              "text": "Desplegar a mano por FTP en el servidor de producción",
+              "correct": "debt"
+            },
+            {
+              "id": "t6",
+              "text": "Desplegar automáticamente con pruebas en un sistema de integración continua",
+              "correct": "best"
+            },
+            {
+              "id": "t7",
+              "text": "Revisar el código de cada cambio antes de integrarlo",
+              "correct": "best"
+            },
+            {
+              "id": "t8",
+              "text": "Desactivar las pruebas que fallan para poder desplegar",
+              "correct": "debt"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_data_analytics",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Panel de producto",
+        "scenario": "Eres analista de producto de una aplicación de software por suscripción. El CEO está contento porque los registros han subido un 22 %, pero los usuarios activos bajan. Te pide un análisis del último mes. Interpreta los datos y escribe tu diagnóstico."
+      },
+      {
+        "id": "e2",
+        "data": {
+          "hint": "Escribe la entrega en cuatro bloques:\n\n1. La consulta de los 10 clientes que más han gastado, con una frase que explique la lógica.\n\n2. La consulta de ingresos por plan del último mes.\n\n3. La consulta de usuarios sin pedidos, y qué pasa con los pedidos cancelados.\n\n4. Qué comprobarías para estar seguro de que los resultados son correctos. Si no dominas la sintaxis, describe paso a paso qué datos combinarías."
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Métrica accionable o de vanidad?",
+        "scenario": "Tu startup mide muchas cosas y el equipo quiere centrarse en pocas. Clasifica cada métrica:\n\nMétrica accionable — Si cambia, sabes qué decisión tomar.\n\nMétrica de vanidad — Crece y queda bien en una presentación, pero no orienta decisiones.",
+        "data": {
+          "cats": [
+            "Métrica accionable",
+            "Métrica de vanidad"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_finance_accounting",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Análisis de la cuenta de resultados",
+        "scenario": "Eres controller junior en una empresa de distribución. El director financiero te pide un análisis rápido de la cuenta de resultados del último trimestre frente al anterior, para la reunión de mañana con dirección. Los ingresos suben, pero algo no cuadra. ¿Qué va bien y qué va mal?"
+      },
+      {
+        "id": "e3",
+        "title": "Clasificación contable",
+        "scenario": "Repasas las operaciones de marzo de una empresa de servicios para preparar el cierre. Clasifica cada partida en su categoría contable:\n\nGasto o ingreso — Va a la cuenta de resultados del periodo.\n\nActivo o pasivo — Va al balance: lo que la empresa tiene o lo que debe.",
+        "data": {
+          "options": [
+            {
+              "id": "f1",
+              "text": "Factura del alquiler de la oficina de marzo",
+              "correct": "gasto"
+            },
+            {
+              "id": "f2",
+              "text": "Compra de 10 portátiles para el equipo (8.000 €)",
+              "correct": "activo"
+            },
+            {
+              "id": "f3",
+              "text": "Factura emitida a un cliente por servicios de marzo",
+              "correct": "ingreso"
+            },
+            {
+              "id": "f4",
+              "text": "Préstamo bancario a devolver en 3 años",
+              "correct": "pasivo"
+            },
+            {
+              "id": "f5",
+              "text": "Nóminas del mes de marzo",
+              "correct": "gasto"
+            },
+            {
+              "id": "f6",
+              "text": "Beneficio por vender una furgoneta por encima de su valor contable",
+              "correct": "ingreso"
+            },
+            {
+              "id": "f7",
+              "text": "Factura de un proveedor pendiente de pagar a 60 días",
+              "correct": "pasivo"
+            },
+            {
+              "id": "f8",
+              "text": "Saldo de la cuenta bancaria de la empresa",
+              "correct": "activo"
+            }
+          ],
+          "cats": [
+            "Gasto",
+            "Activo",
+            "Ingreso",
+            "Pasivo"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_frontend",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Una tarjeta de producto mal maquetada",
+        "data": {
+          "to": "Pull request — Revisión de CSS",
+          "subject": "Arreglos en la tarjeta de producto",
+          "hint": "Escribe la revisión en cuatro bloques, uno por problema:\n\n1. La imagen deformada: qué la causa y el CSS que la corrige.\n\n2. El botón que se sale en móvil: causa y corrección.\n\n3. El texto que se solapa con el precio: causa y corrección.\n\n4. La falta de espacio entre tarjetas: corrección, y cómo comprobarías el resultado en distintos anchos."
+        }
+      },
+      {
+        "id": "e3",
+        "title": "Depuración de un buscador en JavaScript",
+        "scenario": "Este código de un formulario de búsqueda tiene 4 errores: los usuarios dicen que no aparecen resultados, que la página va lenta y que algunos botones dejan de funcionar. Encuéntralos y explica cómo arreglarlos.\n\n```\nasync function search(query) {\n  const results = await fetch(\"/api/search?q=\" + query);\n  displayResults(results);\n}\n\nlet debounceTimer;\nfunction onInput(e) {\n  clearTimeout(debounceTimer);\n  debounceTimer = setTimeout(search(e.target.value), 300);\n}\n\nfunction displayResults(data) {\n  const container = document.getElementById(\"results\");\n  data.forEach(item => {\n    container.innerHTML += `<div>${item.name}</div>`;\n  });\n}\n\ndocument.querySelector(\".search\").addEventListener(\"click\", onInput);\n```",
+        "data": {
+          "to": "Revisión de código",
+          "subject": "Errores en el buscador"
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_python_backend",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Python: lógica básica",
+        "data": {
+          "to": "Entrega del ejercicio técnico",
+          "subject": "Python: función analizar_pedidos()",
+          "hint": "Escribe la entrega en cuatro bloques:\n\n1. El código de la función.\n\n2. La salida que obtienes con los datos del ejemplo.\n\n3. Qué pasa si la lista está vacía o falta algún campo, y cómo lo tratas.\n\n4. Una prueba que escribirías. Si no dominas Python, un pseudocódigo claro también vale."
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Diseño de una API REST",
+        "data": {
+          "to": "Equipo de backend",
+          "subject": "Propuesta: API REST del gestor de tareas",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Cada endpoint: método, ruta, cuerpo de la petición y respuesta.\n\n2. Los códigos de estado y los errores de cada uno.\n\n3. Cómo filtras y paginas la lista de tareas.\n\n4. Cómo se sabe qué usuario hace cada petición y qué puede tocar."
+        }
+      },
+      {
+        "id": "e3",
+        "title": "Python: optimización",
+        "data": {
+          "to": "Revisión de código: rendimiento",
+          "subject": "Optimización de find_duplicates y count_words",
+          "hint": "Escribe la revisión en cuatro bloques:\n\n1. Por qué es lenta cada función, con su complejidad.\n\n2. El código optimizado de cada una.\n\n3. La complejidad antes y después.\n\n4. Cómo comprobarías que el resultado es el mismo y cuánto mejora con un fichero grande."
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_sql_databases",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "SQL básico: consultar y filtrar",
+        "data": {
+          "to": "Entrega técnica: SQL",
+          "subject": "Tres consultas SQL básicas",
+          "hint": "Escribe la entrega en cuatro bloques:\n\n1. La consulta de los usuarios de Barcelona.\n\n2. La consulta de los pedidos de más de 100 € del último mes.\n\n3. La consulta del número de usuarios por ciudad.\n\n4. Una frase por consulta que explique qué devuelve y un caso que podría dar un resultado inesperado."
+        }
+      },
+      {
+        "id": "e2",
+        "title": "SQL intermedio: uniones",
+        "data": {
+          "to": "Equipo de datos",
+          "subject": "Tres consultas con uniones y agregaciones",
+          "hint": "Escribe la entrega en cuatro bloques:\n\n1. La consulta del gasto total por usuario.\n\n2. La consulta de usuarios que nunca han hecho un pedido.\n\n3. La consulta del ticket medio por plan, solo de pedidos completados.\n\n4. Qué tipo de unión has usado en cada una y por qué."
+        }
+      },
+      {
+        "id": "e3",
+        "title": "Modelado de datos",
+        "data": {
+          "to": "Equipo de backend",
+          "subject": "Propuesta de esquema para la plataforma de reservas",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Las tablas con sus campos principales y claves.\n\n2. Las relaciones entre tablas (uno a muchos, muchos a muchos) y cómo las resuelves.\n\n3. Las restricciones que evitan datos imposibles (reservas solapadas, puntuaciones fuera de rango).\n\n4. Los índices que crearías para las búsquedas más frecuentes y por qué."
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_seo_content",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Intención de búsqueda",
+        "scenario": "Preparas el plan de contenidos de una tienda online. Antes de decidir qué página crear para cada búsqueda, clasifica la intención de quien la escribe:\n\nInformacional — Quiere aprender o resolver una duda.\n\nTransaccional — Está listo para comprar o contratar.\n\nComparativa — Está decidiendo entre opciones."
+      }
+    ]
+  },
+  {
+    "id": "common_excel_advanced",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Fórmulas esenciales",
+        "data": {
+          "to": "Entrega del ejercicio de Excel",
+          "subject": "Cuatro fórmulas",
+          "hint": "Escribe la entrega en cuatro bloques, uno por fórmula:\n\n1. Salario medio del departamento de Marketing.\n\n2. Número de personas contratadas en 2025.\n\n3. Salario de «Ana García» buscándolo por su nombre.\n\n4. «Senior» o «Junior» según el salario. En cada una, explica en una frase qué hace y qué pasaría si el dato no existe."
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Modelo financiero",
+        "data": {
+          "to": "Finanzas: modelo de proyección",
+          "subject": "Modelo a 12 meses y punto de equilibrio",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Las columnas de la hoja y qué contiene cada una.\n\n2. Las fórmulas clave (clientes, ingresos, costes, resultado) explicadas.\n\n3. En qué mes se llega al punto de equilibrio y cómo lo has calculado.\n\n4. Qué supuesto cambia más el resultado y cómo lo probarías en la hoja."
+        }
+      }
+    ]
+  },
+  {
+    "id": "common_ux_design",
+    "parche": true,
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Heurísticas de usabilidad",
+        "scenario": "Haces una revisión de usabilidad de una aplicación con las heurísticas de Nielsen. Clasifica cada problema según el principio que incumple:\n\nVisibilidad del estado — El usuario no sabe qué está pasando.\n\nControl y libertad — El usuario no puede salir, deshacer o volver atrás con facilidad.\n\nPrevención de errores — El diseño permite cometer un error que se podía evitar.",
+        "data": {
+          "options": [
+            {
+              "id": "u1",
+              "text": "Tras enviar un formulario no aparece ningún mensaje de confirmación",
+              "correct": "visibilidad"
+            },
+            {
+              "id": "u2",
+              "text": "Subir un archivo grande no muestra progreso y parece que la app se ha colgado",
+              "correct": "visibilidad"
+            },
+            {
+              "id": "u3",
+              "text": "Darse de baja exige llamar por teléfono, aunque el alta es online en un clic",
+              "correct": "control"
+            },
+            {
+              "id": "u4",
+              "text": "No hay forma de deshacer tras borrar un archivo",
+              "correct": "control"
+            },
+            {
+              "id": "u5",
+              "text": "Volver atrás en el proceso de compra borra todo lo escrito",
+              "correct": "control"
+            },
+            {
+              "id": "u6",
+              "text": "El campo de fecha acepta el 31 de febrero",
+              "correct": "prevencion"
+            },
+            {
+              "id": "u7",
+              "text": "El botón «Eliminar cuenta» está junto a «Guardar», del mismo color y sin confirmación",
+              "correct": "prevencion"
+            },
+            {
+              "id": "u8",
+              "text": "El país se escribe a mano y hay pedidos con «Espña» o «España »",
+              "correct": "prevencion"
+            }
+          ],
+          "cats": [
+            "Visibilidad del estado",
+            "Control y libertad",
+            "Prevención de errores"
+          ],
+          "keys": [
+            "visibilidad",
+            "control",
+            "prevencion"
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Rediseñar un registro",
+        "data": {
+          "to": "Equipo de producto",
+          "subject": "Propuesta: reducir el abandono en el registro",
+          "hint": "Escribe la propuesta en cuatro bloques:\n\n1. Por qué abandona la gente en el flujo actual, paso por paso.\n\n2. El flujo nuevo, paso a paso, y qué se pide en cada uno.\n\n3. Qué datos se piden más tarde y en qué momento.\n\n4. Cómo medirías si el nuevo flujo funciona mejor."
+        }
+      },
+      {
+        "id": "e3",
+        "title": "Auditoría de una app de banca",
+        "data": {
+          "to": "Dirección de diseño",
+          "subject": "Auditoría de la app de banca: cambios prioritarios",
+          "hint": "Escribe la auditoría en cuatro bloques:\n\n1. Los problemas de cada pantalla y su efecto en el usuario.\n\n2. Cómo los priorizas y por qué.\n\n3. Cinco propuestas concretas de rediseño: problema, solución e impacto esperado.\n\n4. Cómo comprobarías con usuarios que las propuestas funcionan."
+        }
+      }
+    ]
+  }
+]

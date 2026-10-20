@@ -35,3 +35,13 @@ test("el navegador calcula la misma banda que el servidor y la empresa no ve el 
   assert.doesNotMatch(empresa, /<b>73<\/b>/);
   assert.match(ctx.tpBandaHtml(73, true), /<b>73<\/b>/);
 });
+
+test("el enunciado de un reto se escapa y el código se muestra como código", () => {
+  const ctx = { _tpEsc: (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])), document: { readyState: "loading", addEventListener() {} } };
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(__dirname, "../assets/js/app/18-interfaz.js"), "utf8"), ctx);
+  const html = ctx.tpFormatoEnunciado("Revisa esto.\n\n```jsx\nreturn <input value={x} />;\n```\n\nA) Parte uno.");
+  assert.doesNotMatch(html, /<input/);
+  assert.match(html, /<pre class="ex-codigo"><code>return &lt;input value=\{x\} \/&gt;;<\/code><\/pre>/);
+  assert.match(html, /<p>A\) Parte uno.<\/p>/);
+});

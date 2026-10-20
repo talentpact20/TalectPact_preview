@@ -62,3 +62,15 @@ test("el corrector frena por IP a quien no tiene sesión antes de llamar a la IA
     assert.ok(alModelo <= 12, `llamó a la IA ${alModelo} veces`);
   } finally { globalThis.fetch = real; process.env = env; }
 });
+
+test("el catálogo con soluciones, las herramientas y los tests no se sirven como web", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const toml = fs.readFileSync(path.join(__dirname, "..", "netlify.toml"), "utf8");
+  for (const ruta of ["/netlify/*", "/tools/*", "/tests/*", "/tfm/tech/*", "/Talentpact/*"]) {
+    const bloque = toml.split("[[redirects]]").find((b) => b.includes(`from = "${ruta}"`));
+    assert.ok(bloque && /status = 404/.test(bloque) && /force = true/.test(bloque), `${ruta} no está bloqueado en netlify.toml`);
+  }
+  const demo = fs.readFileSync(path.join(__dirname, "..", "serve-demo.js"), "utf8");
+  for (const d of ["netlify", "tools", "tests", "Talentpact"]) assert.ok(demo.includes(`"${d}"`), `serve-demo.js no bloquea ${d}`);
+});
