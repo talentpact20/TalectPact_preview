@@ -29,3 +29,4 @@
 - **Buscar candidatos** al estilo Recruiter: filtros por lo demostrado en retos (no por CV), situación de búsqueda («open to work») elegida por el candidato e interés en la empresa (botón o haberse postulado; la empresa solo ve un sí/no). La IA propone filtros visibles y editables. (21/10)
 - **Desbloqueos gratis**: las 3 primeras ofertas de una empresa incluyen 1 desbloqueo de contacto cada una (máximo 3). (21/10)
 - **Cribado** en la oferta (hasta 6 preguntas de sí o no, de contrato y de descarte): **sin descarte automático**. El candidato recibe aviso antes de enviar; la empresa ve «No cumple» y descarta con un clic. El servidor elimina preguntas sobre datos protegidos. (21/10)
+- **Currículum en PDF**: opcional, en un bucket privado; la empresa solo lo abre tras desbloquear el contacto (enlace de 5 minutos) y mientras el candidato acepte contacto. El pool solo indica si existe. (21/10)

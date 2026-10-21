@@ -111,6 +111,8 @@ function construirPool(perfiles, evaluaciones, { soloVerificados = false, empres
       integ: peor,
       verified: top.every((s) => s.verified),
       acceptsContact: p.allow_contact !== false,
+      // Solo si existe: el archivo sale tras desbloquear (función cv).
+      cv: !!(p.cv && p.cv.subido),
       retos: top.length,
       // Señales para la empresa que pide el pool, no para todas.
       interesa: !!(empresaId && cond.interes.includes(String(empresaId))),
@@ -159,12 +161,20 @@ exports.handler = async (event) => {
     const user = await authUser(event, b);
     if (!user) return jsonResponse(401, { error: "Inicia sesión para ver el pool de talento" });
 
-    const perfiles = await selectTolerante(
-      "profiles",
-      `select=id,user_id,sector,empleo,pool_visible,allow_contact&pool_visible=is.true&order=created_at.desc&limit=${MAX_PERFILES}`,
-      `select=id,user_id,sector&order=created_at.desc&limit=${MAX_PERFILES}`,
-      /empleo|pool_visible|allow_contact/i
-    );
+    const conFiltro = (extra) => `select=id,user_id,sector,empleo,pool_visible,allow_contact${extra}&pool_visible=is.true&order=created_at.desc&limit=${MAX_PERFILES}`;
+    let perfiles;
+    // Sin la columna cv se repite con el filtro de visibilidad intacto: nunca
+    // se cae a la consulta sin pool_visible por una columna que no es de privacidad.
+    try { perfiles = await sb.select("profiles", conFiltro(",cv")); }
+    catch (err) {
+      if (!faltaEnEsquema(err, /\bcv\b/i)) throw err;
+      perfiles = await selectTolerante(
+        "profiles",
+        conFiltro(""),
+        `select=id,user_id,sector&order=created_at.desc&limit=${MAX_PERFILES}`,
+        /empleo|pool_visible|allow_contact/i
+      );
+    }
     const lista = Array.isArray(perfiles) ? perfiles : [];
 
     // Evaluaciones por lotes de ids: una URL con 500 uuids sería demasiado larga.

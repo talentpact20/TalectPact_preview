@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261021a">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261021b">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
@@ -166,6 +166,16 @@
       <div id="spChainResult" style="display:none"></div>
       <div id="spSelloLinea"></div>
     </div>
+
+    <!-- Currículum en PDF: solo lo ven las empresas que desbloquean el contacto -->
+    <section class="skill-profile-card u-mt-18 u-p-20 tp-cv" id="cvCard" aria-labelledby="cvTitulo">
+      <div class="tp-cv-cab">
+        <h3 id="cvTitulo">Tu currículum</h3>
+        <p>Súbelo en PDF. Tu perfil sigue siendo anónimo: solo lo abren las empresas que desbloquean tu contacto, y deja de estar disponible si desactivas «Aceptar contacto» o lo eliminas.</p>
+      </div>
+      <div id="cvCuerpo"></div>
+      <input type="file" id="cvArchivo" accept="application/pdf,.pdf" class="sr-only" tabindex="-1" aria-hidden="true" onchange="TPCv.elegido(this)">
+    </section>
   </div>
 
   <!-- TAB: Retos Comunes -->
@@ -1162,7 +1172,7 @@
 <script src="assets/js/app/13-integridad.js?v=20261019d"></script>
 <script src="assets/js/app/14-empleo.js?v=20261021a"></script>
 <script src="assets/js/app/15-proteccion-acceso.js?v=20261015j"></script>
-<script src="assets/js/app/16-pool-real.js?v=20261021a"></script>
+<script src="assets/js/app/16-pool-real.js?v=20261021b"></script>
 <script src="assets/js/app/17-ofertas-reales.js?v=20261021a"></script>
 <script src="assets/js/app/18-interfaz.js?v=20261020f"></script>
 <script src="assets/js/app/19-rrhh.js?v=20261021a"></script>
@@ -1171,8 +1181,9 @@
 <script src="assets/js/app/22-reto-oficial.js?v=20261019d"></script>
 <script src="assets/js/app/23-clasificacion.js?v=20261020b"></script>
 <script src="assets/js/app/24-verificar.js?v=20261020a"></script>
-<script src="assets/js/app/25-talento.js?v=20261021a"></script>
+<script src="assets/js/app/25-talento.js?v=20261021b"></script>
 <script src="assets/js/app/26-cribado.js?v=20261021a"></script>
+<script src="assets/js/app/27-cv.js?v=20261021b"></script>
 <script src="assets/js/app/99-arranque.js?v=20261019e"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->

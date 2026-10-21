@@ -510,3 +510,18 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Para el usuario.** Ejecutar `tfm/tech/supabase_schema_cribado.sql` (columnas `jobs.screening` y `applications.screening_answers`). Sin él, las ofertas se publican sin cribado y nada falla.
 
 **Ficheros.** `get-talent-pool.js`, `lib/gratis.js`, `unlock-free` (handler y entrada), `lib/cribado.js`, `save-job.js`, `list-jobs.js`, `apply.js`, `applications.js`, `oferta-doc.js`, `parse-job-doc.js`, `lib/notify.js`, `index.html`, `08`, `14`, `16`, `17`, `19`, `25-talento.js`, `26-cribado.js`, `componentes.css`, `supabase_schema_cribado.sql`, `tests/talento.test.js` (7). Detalle en [11_busqueda_candidatos.md](11_busqueda_candidatos.md). Tests: 204 en 29 ficheros.
+
+---
+
+## 2026-10-21 — Currículum en PDF del candidato, visible tras desbloquear
+
+**Qué.**
+- **Candidato** («Mi perfil» → «Tu currículum»): sube su CV en PDF (hasta 4 MB), lo ve, lo sustituye o lo elimina. El aviso explica que el perfil sigue anónimo y que solo lo abren las empresas que desbloquean su contacto.
+- **Empresa**: en el buscador, la tarjeta dice «Currículum al desbloquear» (o «Currículum disponible» si ya lo desbloqueó). En la ficha de contacto aparece la fila «Currículum» con «Abrir PDF».
+- **Privacidad**: el PDF va a un bucket **privado** de Supabase Storage al que solo accede el servidor. La empresa recibe un enlace firmado de 5 minutos y solo si tiene un desbloqueo pagado (o gratis) de ese candidato y este sigue aceptando contacto. Si retira el consentimiento o borra el CV, deja de poder abrirse. Cada apertura queda en `contact_access`. El pool solo dice si hay CV, nunca el nombre del archivo.
+- **Validación**: solo PDF de verdad (se comprueba la cabecera `%PDF-`, no la extensión), máximo 4 MB, nombre saneado y ruta fija por perfil; límite de 10 subidas por hora.
+- **Borrar la cuenta** borra también el PDF.
+
+**Para el usuario.** Ejecutar `tfm/tech/supabase_schema_cv.sql` (bucket privado `cvs` y columna `profiles.cv`). Sin él, la tarjeta avisa de que la subida aún no está disponible y nada falla.
+
+**Ficheros.** `lib/cv.js`, `handlers/cv.js` y `cv.mjs` (nuevos), `get-contact.js`, `get-talent-pool.js`, `delete-account.js`, `index.html`, `16-pool-real.js`, `25-talento.js`, `27-cv.js` (nuevo), `componentes.css`, `supabase_schema_cv.sql`, `tests/cv.test.js` (6). Tests: 210 en 30 ficheros.

@@ -291,6 +291,7 @@ function tpBuscaSenales(c){
   if(c.interesa)out.push(tpChip('Le interesa tu empresa','info'));
   if(c.postulado)out.push(tpChip(c.etapa&&c.etapa!=='aplicado'?'En tu proceso: '+(TP_APP_ESTADOS[c.etapa]||c.etapa):'Se ha postulado a '+(c.postulado===1?'tu oferta':c.postulado+' de tus ofertas'),c.etapa==='descartado'?'error':'aviso'));
   if(c._unlocked)out.push(tpChip('Contacto desbloqueado','ok'));
+  if(c.cv)out.push(tpChip(c._unlocked?'Currículum disponible':'Currículum al desbloquear',''));
   return out.join('');
 }
 function tpBuscaFila(c){

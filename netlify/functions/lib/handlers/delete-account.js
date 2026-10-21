@@ -8,7 +8,7 @@
  * cambiando un id en la peticion.
  *
  * Orden de borrado (las credenciales y evaluaciones cuelgan del perfil):
- *   credentials -> evaluations -> profiles -> companies (y en cascada sus
+ *   PDF del currículum (Storage) -> credentials -> evaluations -> profiles -> companies (y en cascada sus
  *   ofertas y postulaciones) -> unlocks -> notifications -> usuario de Auth
  *
  * Una tabla que no existe (migración sin aplicar) se salta. Cualquier otro
@@ -21,6 +21,7 @@
  * promete supresion completa, no parcial.
  */
 const { jsonResponse, sb, supabaseEnv, errorInterno, tokenFromEvent, faltaEnEsquema } = require("../tp");
+const { borrarCv } = require("../cv");
 
 /** Borra si la tabla existe; si no existe, devuelve false. Otros errores se propagan. */
 async function borrarSiExiste(tabla, filtro) {
@@ -68,6 +69,8 @@ exports.handler = async (event) => {
     const profile = Array.isArray(found) && found.length ? found[0] : null;
 
     if (profile) {
+      // El PDF del currículum vive en Storage, fuera de las tablas.
+      await borrarCv(profile.id);
       // `credentials` y `evaluations` referencian el perfil: van primero.
       await borrarSiExiste("credentials", `profile_id=eq.${profile.id}`);
       await sb.remove("evaluations", `profile_id=eq.${profile.id}`);

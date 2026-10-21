@@ -15,6 +15,7 @@
 - [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
 
 ## Supabase (usuario)
+- [ ] **Ejecutar `supabase_schema_cv.sql`** (bucket privado `cvs` y columna `profiles.cv`). Sin él, el candidato no puede subir su currículum.
 - [ ] **Ejecutar `supabase_schema_cribado.sql`** (preguntas de cribado en `jobs` y respuestas en `applications`). Sin él, las ofertas se publican sin cribado.
 - [ ] **Ejecutar `supabase_schema_seguridad.sql`** (límite de frecuencia persistente) y luego `npm run check:rls`.
 - [ ] **SkillPass v2**: `npm run vc:clave` → `VC_SIGNING_KEY` en Netlify; ejecutar `supabase_schema_vc.sql`; fondear la cartera en Base Sepolia y `npm run deploy:contract:v2` → `SKILLPASS_V2_CONTRACT_ADDRESS`. Para producción, `SEAL_CHAIN=base`. Ver changelog 20/10.
@@ -48,6 +49,7 @@
 - [x] Antitrampas fase 0 + intento único + cámara obligatoria (19/10): contenido y soluciones fuera del navegador, `retos-intento`, comprobación previa, pantalla completa, solicitudes de reapertura y de alternativa a la cámara, secuencias corregidas en el servidor. Pendiente de commit.
 - [ ] Backoffice: cola de solicitudes (reapertura / sin cámara) con aprobar y rechazar, y aviso al candidato en su bandeja.
 - [ ] Antitrampas siguientes: variantes por intento (datos distintos y detalle trampa), defensa de 2 preguntas, patrón de escritura, detección de móvil y segunda persona, segundo monitor; retos de oferta (`EX_DB`, `03-datos-retos.js`) aún con contenido en el navegador.
+- [ ] Legal: `legal.html` no menciona el currículum en PDF (21/10). Añadir la finalidad (entregarlo a empresas que desbloquean), la conservación (hasta que lo borre o borre la cuenta) y el derecho a retirarlo.
 - [ ] Legal: evaluación de impacto (EIPD) antes de activar la cámara obligatoria en producción; revisar `legal.html` §05 con asesoría.
 - [x] Áreas de empleo tipo LinkedIn y vocabulario (19/10): `taxonomia.json` único (7 áreas + especialidades, 12 sectores + ampliados, nombres de skills en español), oferta con área y especialidad, tablón filtrado por área, sector de empresa (12), área de interés del candidato. Pendiente de commit.
 - [x] Clasificación de la asesora (19/10): 9 áreas generales con las 21 concretas, 12 sectores con los 22 concretos (en dos pasos), 6 dimensiones y 32 competencias, catálogo de retos filtrado por pilar y luego por dimensión o área, tipo de puesto en la oferta con competencias sugeridas. Ver `docs/Cambios_prereunion/09_clasificacion_retos_y_competencias.md`. Pendiente de commit.

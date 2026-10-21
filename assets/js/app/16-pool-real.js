@@ -33,7 +33,7 @@ var TPPool={
         id:f.ref,i:f.i,alias:f.alias,sector:f.sector,score:f.score,skills:f.skills||[],
         personas:f.personas||[],todas:f.todas||[],
         cond:f.cond||{},integ:f.integ,verified:!!f.verified,retos:f.retos,_real:true,acceptsContact:f.acceptsContact!==false,
-        interesa:!!f.interesa,postulado:Number(f.postulado)||0,etapa:f.etapa||'',
+        interesa:!!f.interesa,postulado:Number(f.postulado)||0,etapa:f.etapa||'',cv:!!f.cv,
         _unlocked:Pay.paidRefs.has(String(f.ref))
       }));
       CANDIDATES.unshift(...reales);
@@ -98,7 +98,8 @@ var TPPool={
     _lastContact={name:d.name||'',email:d.email||'',phone:d.phone||'',linkedin:d.linkedin||''};
     box.innerHTML='<div class="tp-integrity-note u-bg-emerald-50 u-c-emerald-600 u-b-1-solid-emerald-100">Contacto real de '+escHtml(TPPool.alias(c))+
       (r.unlockedAt?' · desbloqueado el '+escHtml(new Date(r.unlockedAt).toLocaleDateString('es-ES')):'')+'</div>'+
-      fila('Nombre',d.name)+fila('Email',d.email)+fila('Teléfono',d.phone)+fila('LinkedIn',d.linkedin);
+      fila('Nombre',d.name)+fila('Email',d.email)+fila('Teléfono',d.phone)+fila('LinkedIn',d.linkedin)+
+      (typeof tpCvFilaContacto==='function'?tpCvFilaContacto(c,r.cv):'');
   };
 })();
 

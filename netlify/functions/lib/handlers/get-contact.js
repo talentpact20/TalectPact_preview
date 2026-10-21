@@ -11,9 +11,10 @@
  *    estado `paid` (lo pone Stripe, vía webhook o confirm-checkout);
  *  · cada entrega queda registrada en `contact_access` (trazabilidad RGPD).
  *
- * Devuelve: { contact: { name, email, phone, linkedin }, unlockedAt }
+ * Devuelve: { contact: { name, email, phone, linkedin }, cv: {nombre, bytes, subido} | null, unlockedAt }
  */
 const { jsonResponse, sb, authUser, isUuid, supabaseEnv, faltaEnEsquema, errorInterno } = require("../tp");
+const { metaPublica } = require("../cv");
 
 /** Completa con Auth lo que el perfil no tenga (email de la cuenta, metadatos). */
 async function datosDeAuth(userId) {
@@ -58,11 +59,17 @@ exports.handler = async (event) => {
       return jsonResponse(402, { error: "Este contacto no está desbloqueado por tu cuenta", code: "not_unlocked" });
     }
 
+    // Columnas opcionales por migración: se quitan solo si faltan de verdad.
+    const opcionales = [["cv", /\bcv\b/i], ["allow_contact", /allow_contact/i]];
     let filas;
-    try { filas = await sb.select("profiles", `id=eq.${ref}&select=id,user_id,full_name,email,phone,linkedin,allow_contact&limit=1`); }
-    catch (err) {
-      if (!faltaEnEsquema(err, /allow_contact/i)) throw err;
-      filas = await sb.select("profiles", `id=eq.${ref}&select=id,user_id,full_name,email,phone,linkedin&limit=1`);
+    for (;;) {
+      const cols = ["id", "user_id", "full_name", "email", "phone", "linkedin"].concat(opcionales.map(([c]) => c)).join(",");
+      try { filas = await sb.select("profiles", `id=eq.${ref}&select=${cols}&limit=1`); break; }
+      catch (err) {
+        const i = opcionales.findIndex(([, re]) => faltaEnEsquema(err, re));
+        if (i < 0) throw err;
+        opcionales.splice(i, 1);
+      }
     }
     const perfil = Array.isArray(filas) ? filas[0] : null;
     if (!perfil) {
@@ -96,7 +103,8 @@ exports.handler = async (event) => {
       console.warn("get-contact: no se pudo registrar el acceso:", err.message);
     }
 
-    return jsonResponse(200, { ok: true, contact, unlockedAt: unlock.paid_at || null });
+    // Solo si hay CV y su nombre; el archivo se pide aparte a la función cv.
+    return jsonResponse(200, { ok: true, contact, cv: metaPublica(perfil.cv), unlockedAt: unlock.paid_at || null });
   } catch (err) {
     return errorInterno("No se pudo obtener el contacto", err);
   }

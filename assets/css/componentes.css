@@ -646,3 +646,19 @@ body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
 .tp-crib-lista li.ko strong{color:var(--c-error)}
 .tp-interes-box{margin-left:auto}
 .tp-interes.activo{border-color:var(--c-marca);background:var(--c-marca-suave);color:var(--c-texto)}
+
+/* Currículum en PDF (Mi perfil y ficha de contacto) */
+.tp-cv-cab h3{font-size:var(--fs-dest);font-weight:700;color:var(--c-texto);margin:0 0 var(--sp-1)}
+.tp-cv-cab p{font-size:var(--fs-micro);color:var(--c-texto-3);line-height:1.55;margin:0 0 var(--sp-3)}
+.tp-cv-fila{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--sp-3);padding:var(--sp-3);border:1px solid var(--c-borde);border-radius:var(--radius);background:var(--c-superficie-2)}
+.tp-cv-info{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tp-cv-info strong{font-size:var(--fs-peq);color:var(--c-texto);overflow-wrap:anywhere}
+.tp-cv-info span{font-size:var(--fs-micro);color:var(--c-texto-3)}
+.tp-cv-acc{display:flex;flex-wrap:wrap;gap:var(--sp-2)}
+.tp-cv-borrar{color:var(--c-error)}
+.tp-cv-vacio{font-size:var(--fs-peq);color:var(--c-texto-3);margin:0}
+.tp-cv-msg{font-size:var(--fs-micro);margin:var(--sp-2) 0 0}
+.tp-cv-msg.ok{color:var(--c-ok)}
+.tp-cv-msg.err{color:var(--c-error)}
+.tp-cv-ct{display:inline-flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:var(--sp-2)}
+@media (max-width:480px){.tp-cv-acc,.tp-cv-acc .btn{width:100%}.tp-cv-acc .btn{justify-content:center}}
