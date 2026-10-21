@@ -17,7 +17,7 @@ async function notificarDesbloqueo(unlock) {
       user_id: perfil.user_id,
       type: "contact_unlocked",
       title: "Una empresa ha desbloqueado tu contacto",
-      body: "Una empresa ha pagado para escribirte. Revisa tu correo y tu bandeja en TalentPact.",
+      body: "Una empresa quiere escribirte y ya tiene tus datos de contacto. Revisa tu correo y tu bandeja en TalentPact.",
       meta: {
         unlock_id: unlock.id || null,
         company_user_id: unlock.company_user_id || null,

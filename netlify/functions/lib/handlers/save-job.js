@@ -3,7 +3,9 @@
  *
  * Body: { id?, title, area, especialidad?, description, skillRequirements?, requiredSkills?, tags?,
  *         requiredLevel?, exerciseConfig?, jornada?, modalidad?, contrato?, ubicacion?,
- *         salMin?, salMax?, cultureQuestions?, dilemmas? }
+ *         salMin?, salMax?, cultureQuestions?, dilemmas?, screening? }
+ *
+ * screening: preguntas de cribado de sí o no (lib/cribado.js), máx. 6.
  *
  * skillRequirements: [{ skill, peso: "imprescindible"|"valorable", minimo: "aceptable"|"bueno"|"muy_bueno" }]
  * (máx. 8, de ellas 4 imprescindibles). Si llega, manda: required_skills y
@@ -22,6 +24,7 @@
 const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema, errorInterno } = require("../tp");
 const { limpiarRequisitos, nivelDerivado } = require("../requisitos");
 const { esArea, legadoDeArea, especialidadDe, T } = require("../taxonomia");
+const { limpiarCribado } = require("../cribado");
 
 const SECTORES = ["Marketing", "IT", "Data", "Business", "Design", "RRHH", "Finance", "Legal", "Ops", "Sales", "Languages"];
 const NIVELES = ["basico", "intermedio", "avanzado"];
@@ -31,7 +34,7 @@ const MODALIDADES = ["remoto", "hibrido", "presencial"];
 const CONTRATOS = ["indefinido", "temporal", "freelance", "practicas"];
 
 // Columnas que añaden migraciones posteriores a supabase_schema_jobs.sql.
-const OPCIONALES = ["area", "especialidad", "skill_requirements", "dilemmas", "culture_questions"];
+const OPCIONALES = ["area", "especialidad", "skill_requirements", "dilemmas", "culture_questions", "screening"];
 
 const texto = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : "");
 const lista = (v, max, n) => (Array.isArray(v) ? [...new Set(v.filter((x) => typeof x === "string" && x.trim()).map((x) => x.trim().slice(0, n)))].slice(0, max) : []);
@@ -82,7 +85,8 @@ function validarOferta(b) {
     sal_min: entero(b.salMin),
     sal_max: entero(b.salMax),
     culture_questions: limpiarPreguntas(b.cultureQuestions),
-    dilemmas: limpiarDilemas(b.dilemmas)
+    dilemmas: limpiarDilemas(b.dilemmas),
+    screening: limpiarCribado(b.screening)
   };
   if (fila.title.length < 3) return { error: "El título necesita al menos 3 caracteres" };
   if (!SECTORES.includes(fila.sector)) return { error: "Área del puesto no válida" };

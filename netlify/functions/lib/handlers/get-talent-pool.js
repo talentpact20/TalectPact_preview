@@ -10,14 +10,21 @@
  * e integridad. Nunca nombre, email, teléfono ni LinkedIn: eso solo sale por
  * get-contact y solo tras un desbloqueo pagado.
  *
- * Devuelve: { candidates: [{ ref, alias, i, sector, score, skills, cond, integ, verified, retos }] }
+ * Devuelve: { candidates: [{ ref, alias, i, sector, score, skills, cond, integ, verified, retos,
+ *            interesa, postulado, etapa }], gratis }
+ * interesa / postulado / etapa y gratis solo tienen sentido si pide una empresa.
  */
-const { jsonResponse, sb, authUser, anonymousAlias, faltaEnEsquema, errorInterno } = require("../tp");
+const { jsonResponse, sb, authUser, anonymousAlias, faltaEnEsquema, errorInterno, isUuid, companyOf } = require("../tp");
 const { extraerPersonas } = require("../personas");
+const { creditosGratis } = require("../gratis");
 
 const MAX_PERFILES = 500;
 const LOTE = 100;
 const ORDEN_RIESGO = { bajo: 0, medio: 1, alto: 2 };
+
+// «Open to work»: lo marca el candidato en sus preferencias de empleo.
+const BUSQUEDAS = ["activa", "abierta", "no"];
+const MAX_INTERES = 50;
 
 /** Condiciones de empleo, saneadas: es dato que escribe el candidato. */
 function limpiarCond(e) {
@@ -34,15 +41,25 @@ function limpiarCond(e) {
     reubicacion: !!e.reubicacion,
     disponibilidad: texto(e.disponibilidad, 20),
     salMin: Number.isFinite(sal) && sal > 0 ? Math.round(sal) : null,
-    horas: Number.isFinite(horas) && horas >= 5 && horas <= 40 ? Math.round(horas) : null
+    horas: Number.isFinite(horas) && horas >= 5 && horas <= 40 ? Math.round(horas) : null,
+    busqueda: BUSQUEDAS.includes(e.busqueda) ? e.busqueda : "",
+    // Empresas (companies.id) que le interesan. No sale nunca en el pool: cada
+    // empresa solo sabe si está ella en la lista.
+    interes: Array.isArray(e.interes) ? [...new Set(e.interes.filter((x) => isUuid(String(x))).map(String))].slice(0, MAX_INTERES) : []
   };
+}
+
+/** Lo que ve una empresa de las condiciones: todo menos la lista de empresas. */
+function condPublica(e) {
+  const { interes: _i, ...resto } = limpiarCond(e);
+  return resto;
 }
 
 /**
  * Agrega perfiles + evaluaciones en fichas anónimas. Función pura: es lo que
  * prueban los tests, sin base de datos.
  */
-function construirPool(perfiles, evaluaciones, { soloVerificados = false } = {}) {
+function construirPool(perfiles, evaluaciones, { soloVerificados = false, empresaId = null, postulaciones = null } = {}) {
   const porPerfil = new Map();
   for (const e of evaluaciones || []) {
     if (!e || !e.profile_id || !e.skill) continue;
@@ -78,6 +95,8 @@ function construirPool(perfiles, evaluaciones, { soloVerificados = false } = {})
     const skillsFicha = seis.map(({ n, v, verified }) => ({ n, v, verified }));
     // Todas las skills del candidato (no solo top 6) para el bloque Personas.
     const todas = top.map(({ n, v, verified }) => ({ n, v, verified }));
+    const cond = limpiarCond(p.empleo);
+    const post = postulaciones && postulaciones.get(p.id);
     fichas.push({
       ref: p.id,
       alias,
@@ -85,15 +104,36 @@ function construirPool(perfiles, evaluaciones, { soloVerificados = false } = {})
       sector: typeof p.sector === "string" && p.sector ? p.sector.slice(0, 40) : "Sin sector",
       score: Math.round(seis.reduce((n, s) => n + s.v, 0) / seis.length),
       skills: skillsFicha,
+      // Todas, para que el buscador encuentre también las que no están en el top 6.
+      todas: todas.slice(0, 40),
       personas: extraerPersonas(todas),
-      cond: limpiarCond(p.empleo),
+      cond: condPublica(p.empleo),
       integ: peor,
       verified: top.every((s) => s.verified),
       acceptsContact: p.allow_contact !== false,
-      retos: top.length
+      retos: top.length,
+      // Señales para la empresa que pide el pool, no para todas.
+      interesa: !!(empresaId && cond.interes.includes(String(empresaId))),
+      postulado: post ? post.ofertas : 0,
+      etapa: post ? post.etapa : ""
     });
   }
   return fichas.sort((a, b) => b.score - a.score);
+}
+
+const ORDEN_ETAPA = ["descartado", "aplicado", "retos", "preseleccionado", "entrevista", "contratado"];
+
+/** Postulaciones de una empresa → perfil: { ofertas, etapa más avanzada }. */
+function resumirPostulaciones(filas) {
+  const m = new Map();
+  for (const a of Array.isArray(filas) ? filas : []) {
+    if (!a || !a.candidate_profile_id) continue;
+    const r = m.get(a.candidate_profile_id) || { ofertas: 0, etapa: "" };
+    r.ofertas++;
+    if (ORDEN_ETAPA.indexOf(a.status) > ORDEN_ETAPA.indexOf(r.etapa)) r.etapa = a.status;
+    m.set(a.candidate_profile_id, r);
+  }
+  return m;
 }
 
 /**
@@ -141,8 +181,26 @@ exports.handler = async (event) => {
       if (Array.isArray(filas)) evaluaciones.push(...filas);
     }
 
-    const candidates = construirPool(lista, evaluaciones, { soloVerificados: !!b.soloVerificados });
-    return jsonResponse(200, { ok: true, candidates, total: candidates.length });
+    // Si quien pide es una empresa: quién se ha postulado a sus ofertas, quién
+    // ha marcado que le interesa y cuántos desbloqueos gratis le quedan.
+    const empresa = await companyOf(user.id).catch(() => null);
+    let postulaciones = null, gratis = null;
+    if (empresa) {
+      try {
+        const filas = await sb.select("applications", `company_user_id=eq.${user.id}&select=candidate_profile_id,status&limit=2000`);
+        postulaciones = resumirPostulaciones(filas);
+      } catch (err) {
+        if (!faltaEnEsquema(err, "applications")) throw err;
+      }
+      gratis = await creditosGratis(user.id).catch(() => null);
+    }
+
+    const candidates = construirPool(lista, evaluaciones, {
+      soloVerificados: !!b.soloVerificados,
+      empresaId: empresa ? empresa.id : null,
+      postulaciones
+    });
+    return jsonResponse(200, { ok: true, candidates, total: candidates.length, gratis });
   } catch (err) {
     return errorInterno("No se pudo cargar el pool de talento", err);
   }
@@ -150,3 +208,5 @@ exports.handler = async (event) => {
 
 module.exports.construirPool = construirPool;
 module.exports.limpiarCond = limpiarCond;
+module.exports.condPublica = condPublica;
+module.exports.resumirPostulaciones = resumirPostulaciones;

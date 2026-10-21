@@ -213,7 +213,7 @@ var TPApps={
     return a?a.status:'';
   },
   /** Diálogo propio (accesible) para el motivo de descarte. Devuelve el texto o null. */
-  pedirMotivo(){
+  pedirMotivo(defecto){
     return new Promise(res=>{
       const d=document.createElement('dialog');
       d.className='tp-dialogo';
@@ -223,13 +223,14 @@ var TPApps={
       d.querySelector('[data-r=no]').onclick=()=>fin(null);
       d.addEventListener('cancel',e=>{e.preventDefault();fin(null);});
       d.querySelector('form').onsubmit=e=>{e.preventDefault();fin(d.querySelector('textarea').value);};
+      if(defecto)d.querySelector('textarea').value=String(defecto).slice(0,300);
       d.showModal();d.querySelector('textarea').focus();
     });
   },
-  async set(jobId,ref,status){
+  async set(jobId,ref,status,motivo){
     let reason='';
     if(status==='descartado'){
-      reason=await TPApps.pedirMotivo();
+      reason=await TPApps.pedirMotivo(motivo);
       if(reason===null){await TPApps.cargar(jobId);showOfferCandidates(jobId);return;}
       if(reason.trim().length<3){toast('Hace falta un motivo para descartar.');await TPApps.cargar(jobId);showOfferCandidates(jobId);return;}
     }

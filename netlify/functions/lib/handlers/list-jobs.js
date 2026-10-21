@@ -9,13 +9,15 @@
 const { jsonResponse, sb, authUser, faltaEnEsquema, errorInterno } = require("../tp");
 const { limpiarRequisitos } = require("../requisitos");
 const { areaDeOferta } = require("../taxonomia");
+const { limpiarCribado } = require("../cribado");
 
 const CAMPOS_BASE = "id,title,sector,description,required_skills,tags,required_level,exercise_config," +
-  "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at";
+  "jornada,modalidad,contrato,ubicacion,sal_min,sal_max,status,created_at,closed_at,company_id";
 const CAMPOS_QS = CAMPOS_BASE + ",culture_questions";
 const CAMPOS_DIL = CAMPOS_QS + ",dilemmas";
 const CAMPOS_REQ = CAMPOS_DIL + ",skill_requirements";
-const CAMPOS = CAMPOS_REQ + ",area,especialidad";
+const CAMPOS_AREA = CAMPOS_REQ + ",area,especialidad";
+const CAMPOS = CAMPOS_AREA + ",screening";
 
 function textosJson(v, max, len) {
   if (!Array.isArray(v)) return [];
@@ -45,10 +47,14 @@ function aOferta(f) {
     salMax: f.sal_max,
     cultureQuestions: textosJson(f.culture_questions, 3, 200),
     dilemmas: textosJson(f.dilemmas, 3, 600),
+    screening: limpiarCribado(f.screening),
     status: f.status,
     createdAt: f.created_at,
     closedAt: f.closed_at,
     company: {
+      // Id público de la ficha de empresa (no el de la cuenta): con él el
+      // candidato marca «Me interesa esta empresa».
+      ref: f.company_id || null,
       name: c.company_name || "Empresa",
       size: c.company_size || null,
       description: c.description || null,
@@ -67,6 +73,7 @@ async function seleccionar(filtro) {
   const joinMin = "companies(company_name,company_size)";
   const intentos = [
     `select=${CAMPOS},${joinVer}&${filtro}`,
+    `select=${CAMPOS_AREA},${joinVer}&${filtro}`,
     `select=${CAMPOS_REQ},${joinVer}&${filtro}`,
     `select=${CAMPOS_REQ},${join}&${filtro}`,
     `select=${CAMPOS_DIL},${join}&${filtro}`,
@@ -80,7 +87,7 @@ async function seleccionar(filtro) {
       return await sb.select("jobs", q);
     } catch (err) {
       ultimo = err;
-      if (!faltaEnEsquema(err, /area|especialidad|verificacion|skill_requirements|culture_questions|dilemmas|description|sector|website|location/i)) throw err;
+      if (!faltaEnEsquema(err, /area|especialidad|verificacion|skill_requirements|culture_questions|dilemmas|screening|description|sector|website|location/i)) throw err;
     }
   }
   throw ultimo || new Error("No se pudieron cargar las ofertas");

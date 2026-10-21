@@ -38,3 +38,4 @@ Carpeta viva de lo que se cambia en producto **antes de hablar con la asesora** 
 | [08_taxonomia_aptitudes_y_oferta.md](08_taxonomia_aptitudes_y_oferta.md) | **Taxonomía** Hard / Soft / Transferibles y oferta = skills + 3 preguntas + 1–3 dilemas | En código; falta SQL dilemas en Supabase |
 | [09_clasificacion_retos_y_competencias.md](09_clasificacion_retos_y_competencias.md) | Propuesta de la asesora: 21 áreas y 22 sectores en dos niveles, 6 dimensiones y 32 competencias, competencias sugeridas por tipo de puesto | En código; por validar con la asesora |
 | [10_corrector_explicado.md](10_corrector_explicado.md) | **El corrector explicado** (v2.2.0): cómo corrige, rúbricas, dónde encaja cada mejora y cómo mejorarlo | Vivo |
+| [11_busqueda_candidatos.md](11_busqueda_candidatos.md) | «Buscar candidatos» al estilo Recruiter, cribado en ofertas y desbloqueos gratis | En código; falta SQL cribado en Supabase |

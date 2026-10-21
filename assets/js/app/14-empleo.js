@@ -6,7 +6,8 @@
 // ═══════════════════════════════════════════════════════════════════════════
 var TPEmpleo={
   filtro:{jornada:'',modalidad:'',soloEncaje:false},
-  vacio(){return {jornadas:[],modalidades:[],contratos:[],salMin:null,disponibilidad:'',ciudad:'',horas:null,reubicacion:false};},
+  // busqueda: «open to work» (activa | abierta | no). interes: ids de empresa que le interesan.
+  vacio(){return {jornadas:[],modalidades:[],contratos:[],salMin:null,disponibilidad:'',ciudad:'',horas:null,reubicacion:false,busqueda:'',interes:[]};},
   prefs(){
     const m=(tpUser&&tpUser.user_metadata&&tpUser.user_metadata.empleo)||null;
     return Object.assign(TPEmpleo.vacio(),m||TP.load('prefs:empleo',null)||{});
@@ -52,7 +53,7 @@ var TPEmpleo={
     const d=document.getElementById('st-pref-disp');
     if(d&&d.options.length<=1)d.insertAdjacentHTML('beforeend',Object.entries(TP_COND.disponibilidad).map(([v,t])=>`<option value="${v}">${t}</option>`).join(''));
     const set=(id,v)=>{const e=document.getElementById(id);if(e){if(e.type==='checkbox')e.checked=!!v;else e.value=v==null?'':v;}};
-    set('st-pref-sal',p.salMin);set('st-pref-disp',p.disponibilidad);set('st-pref-city',p.ciudad);set('st-pref-hours',p.horas);set('st-pref-reloc',p.reubicacion);
+    set('st-pref-busqueda',p.busqueda);set('st-pref-sal',p.salMin);set('st-pref-disp',p.disponibilidad);set('st-pref-city',p.ciudad);set('st-pref-hours',p.horas);set('st-pref-reloc',p.reubicacion);
   },
   async guardarDesdeAjustes(){
     const p=TPEmpleo.vacio();
@@ -60,6 +61,8 @@ var TPEmpleo={
     const num=id=>{const v=Number(document.getElementById(id).value);return Number.isFinite(v)&&v>0?Math.round(v):null;};
     p.salMin=num('st-pref-sal');p.horas=num('st-pref-hours');
     p.disponibilidad=document.getElementById('st-pref-disp').value;
+    const bus=document.getElementById('st-pref-busqueda');p.busqueda=bus?bus.value:'';
+    p.interes=(TPEmpleo.prefs().interes||[]).slice();
     p.ciudad=(document.getElementById('st-pref-city').value||'').trim().slice(0,80);
     p.reubicacion=document.getElementById('st-pref-reloc').checked;
     if(p.horas&&!p.jornadas.includes('parcial')&&!p.jornadas.includes('horas')){stMsg('st-pref-msg','err','Las horas semanales solo aplican a media jornada o por horas.');return;}

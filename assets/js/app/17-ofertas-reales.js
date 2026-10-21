@@ -69,7 +69,8 @@ publishJob=async function(){
     jornada:v('pj-jornada'),modalidad:v('pj-mode'),contrato:v('pj-contrato'),ubicacion:v('pj-city'),
     salMin:Number(v('pj-sal-min'))||null,salMax:Number(v('pj-sal-max'))||null,
     cultureQuestions:typeof tpLeerPreguntasVacante==='function'?tpLeerPreguntasVacante():[],
-    dilemmas:typeof tpLeerDilemasVacante==='function'?tpLeerDilemasVacante():[]
+    dilemmas:typeof tpLeerDilemasVacante==='function'?tpLeerDilemasVacante():[],
+    screening:typeof TPCribadoOferta!=='undefined'?TPCribadoOferta.paraEnviar():[]
   };
   if(!datos.title||!datos.area||datos.description.length<20){toast('Faltan el título, el área o una descripción de al menos 20 caracteres.');if(typeof tpReqIr==='function')tpReqIr(1,true);return;}
   if(!datos.requiredSkills.length){toast('Elige al menos una skill que tenga que demostrar.');if(typeof tpReqIr==='function')tpReqIr(2,true);return;}
@@ -84,6 +85,7 @@ publishJob=async function(){
   if(!r||r.error){toast('No se pudo publicar: '+((r&&(r.error||r.details))||'error desconocido'));return;}
   pjSkills=[];pjReqSkills=[];pjExConfigVal='common+custom';pjLevel='basico';
   if(typeof TPReq!=='undefined')TPReq.reset();
+  if(typeof TPCribadoOferta!=='undefined')TPCribadoOferta.reset();
   ['pj-title','pj-desc','pj-sal-min','pj-sal-max','pj-city','pj-q1','pj-q2','pj-q3','pj-d1','pj-d2','pj-d3'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
   try{renderPjTags();renderPjSkills&&renderPjSkills();}catch(e){}
   togglePostJob();

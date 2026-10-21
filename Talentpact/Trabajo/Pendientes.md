@@ -3,7 +3,7 @@
 ## Decide el equipo
 - [ ] **Plan post reunión** (`docs/plan_post_reunion/00_plan_maestro.md`, §5): fase 0 antitrampas, diccionario canónico, 12 sectores + 7 áreas, intento oficial cada 30 días, precios (Plus 6,99 €/mes · 49 €/año, sello 4,99 €, certificación IA 39 €, perfil IA 89 €), prueba gratuita 30 días, quién hace el gold set, pago del candidato con Stripe. Ver [[Plan post reunión]].
 - [ ] **Skills en la plataforma** (19/10, `skills_en_la_plataforma.md`, parte 08): grados declarada/demostrada/verificada, pasaporte básico de 3 retos. Hecho en código el 19/10: imprescindible/valorable con banda mínima por skill, oferta en 3 pasos, relleno desde documento y encaje en 3 estados.
-- [ ] **Búsqueda de candidatos tipo LinkedIn Recruiter** (19/10): columna fija + secciones plegables (condiciones, evidencia, perfil, actividad) + contador en vivo + listas, notas y búsquedas guardadas. ¿Parte avanzada solo en Pro/Enterprise? Ver `estructura_plataforma.md`, parte 08, y doc 01 §8.
+- [ ] **Búsqueda de candidatos tipo LinkedIn Recruiter** (19/10): hecho en código el 21/10 (columna, secciones «+ campo», contador, IA, open to work, interés, cribado, desbloqueos gratis; ver `docs/Cambios_prereunion/11_busqueda_candidatos.md`). Falta: listas, notas y búsquedas guardadas, y decidir si la parte avanzada va solo en Pro/Enterprise.
 - [x] **Ofertas de ejemplo en producción** (20/10): decidido quitarlas. Seed retirado del repo.
 
 - [ ] Decisiones de `04_estrategia.md`: perfil de trabajo inicial, plazo entre reintentos, nota por bloques, pool solo para empresas verificadas. Ver [[Estrategia]].
@@ -15,6 +15,7 @@
 - [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
 
 ## Supabase (usuario)
+- [ ] **Ejecutar `supabase_schema_cribado.sql`** (preguntas de cribado en `jobs` y respuestas en `applications`). Sin él, las ofertas se publican sin cribado.
 - [ ] **Ejecutar `supabase_schema_seguridad.sql`** (límite de frecuencia persistente) y luego `npm run check:rls`.
 - [ ] **SkillPass v2**: `npm run vc:clave` → `VC_SIGNING_KEY` en Netlify; ejecutar `supabase_schema_vc.sql`; fondear la cartera en Base Sepolia y `npm run deploy:contract:v2` → `SKILLPASS_V2_CONTRACT_ADDRESS`. Para producción, `SEAL_CHAIN=base`. Ver changelog 20/10.
 - [ ] **Ejecutar `supabase_limpiar_ofertas_demo.sql`** para borrar las 4 empresas y 8 ofertas de ejemplo que siguen en producción.
@@ -53,7 +54,7 @@
 - [x] Retos en dos bloques (19/10, noche): Hard skills (sector → área) y Soft skills (dimensión → enfoque); fuera Transferibles. Pendiente de commit.
 - [ ] Validar con la asesora: las dos áreas generales nuevas (Dirección y Sanidad/educación), llamar «sectores» a esas áreas generales dentro de Hard skills, y los enfoques de cada reto.
 - [ ] Retos para las 16 competencias sin reto (dimensión 06 entera; casi toda la 02 y la 03), usando el «reto sugerido» de cada ficha del diccionario. Rúbricas con los anclajes 1/3/5 y la escala NE + 1–5.
-- [ ] Siguiente de áreas: filtro de área en el pool; «Recomendados para ti» por área del candidato; códigos ESCO.
+- [ ] Siguiente de áreas: ~~filtro de área en el pool~~ (hecho 21/10); «Recomendados para ti» por área del candidato; códigos ESCO.
 - [x] Google integrado para empresas (paso «Completa los datos de tu empresa», aviso de Workspace) y verificación de empresa con sello en las ofertas (19/10). Pendiente de commit.
 - [ ] Decidir si el pool o el desbloqueo exigen empresa verificada (propuesta del doc 04_estrategia).
 - [x] Oferta: imprescindible o valorable con banda mínima, tres pasos tipo LinkedIn, relleno desde documento con IA (`parse-job-doc`), encaje por grupos (19/10). Pendiente de commit.

@@ -1,11 +1,12 @@
 /**
  * apply — el candidato se postula a una oferta y consulta sus postulaciones.
  *
- * Body: { jobId, dilemmaAnswers? }  → crea la postulación (etapa "aplicado"); es idempotente
+ * Body: { jobId, dilemmaAnswers?, screeningAnswers? } → crea la postulación (etapa "aplicado"); es idempotente
  * Body: {}                          → lista las postulaciones del candidato
  * Cabecera: Authorization Bearer
  *
  * dilemmaAnswers: array de strings (máx. 3, 2000 chars) alineados con jobs.dilemmas.
+ * screeningAnswers: "si" | "no" alineados con jobs.screening (lib/cribado.js).
  * Antes el botón "Aplicar" solo enseñaba una pantalla de éxito: no se guardaba
  * nada y la empresa nunca se enteraba. La identidad sale siempre del token. La
  * empresa ve el alias del candidato, nunca su identidad (eso sigue siendo el
@@ -13,6 +14,7 @@
  */
 const { jsonResponse, sb, authUser, ensureProfileByUser, isUuid, faltaEnEsquema, esDuplicado, errorInterno } = require("../tp");
 const { limitar } = require("../limites");
+const { evaluarCribado } = require("../cribado");
 
 /** Respuestas en la misma posición que su dilema: una vacía se queda vacía, no corre las demás. */
 function limpiarRespuestasDilema(v) {
@@ -52,12 +54,14 @@ exports.handler = async (event) => {
       }
       const jobId = String(b.jobId);
       if (!isUuid(jobId)) return jsonResponse(400, { error: "jobId no válido" });
-      let jobs;
-      try {
-        jobs = await sb.select("jobs", `id=eq.${jobId}&status=eq.open&select=id,title,company_user_id,dilemmas&limit=1`);
-      } catch (err) {
-        if (!faltaEnEsquema(err, /dilemmas/i)) throw err;
-        jobs = await sb.select("jobs", `id=eq.${jobId}&status=eq.open&select=id,title,company_user_id&limit=1`);
+      let jobs = null;
+      for (const campos of ["id,title,company_user_id,dilemmas,screening", "id,title,company_user_id,dilemmas", "id,title,company_user_id"]) {
+        try {
+          jobs = await sb.select("jobs", `id=eq.${jobId}&status=eq.open&select=${campos}&limit=1`);
+          break;
+        } catch (err) {
+          if (!faltaEnEsquema(err, /dilemmas|screening/i)) throw err;
+        }
       }
       if (!Array.isArray(jobs) || !jobs.length) {
         return jsonResponse(404, { error: "Esta oferta ya no está abierta" });
@@ -75,6 +79,10 @@ exports.handler = async (event) => {
         prompt: String(prompt).slice(0, 600),
         answer: respuestas[i] || ""
       }));
+      // Cribado: se guarda si cumple, pero no se descarta a nadie aquí.
+      const cribado = evaluarCribado(jobs[0].screening, b.screeningAnswers);
+      if (cribado.error) return jsonResponse(400, { error: cribado.error });
+      const screening_answers = cribado.respuestas;
       const previas = await sb.select(
         "applications",
         `job_id=eq.${jobId}&candidate_profile_id=eq.${perfil.id}&select=job_id,status,updated_at,created_at&limit=1`
@@ -91,20 +99,23 @@ exports.handler = async (event) => {
         created_at: ahora,
         updated_at: ahora
       };
+      // Sin las columnas de dilemas o de cribado (migración pendiente) se
+      // guarda la postulación igual, sin ellas.
+      let datos = Object.assign({}, base,
+        dilemma_answers.length ? { dilemma_answers } : {},
+        screening_answers.length ? { screening_answers } : {});
       let filas;
-      try {
-        filas = await sb.insert(
-          "applications",
-          dilemma_answers.length ? Object.assign({}, base, { dilemma_answers }) : base
-        );
-      } catch (err) {
-        // Doble clic: la otra petición ya la ha guardado (unique job_id+perfil).
-        if (esDuplicado(err)) return jsonResponse(200, { ok: true, yaPostulado: true, application: aPostulacion({ job_id: jobId, status: "aplicado", created_at: ahora, updated_at: ahora }) });
-        // Sin columna dilemma_answers: se guarda la postulación igual.
-        if (faltaEnEsquema(err, /dilemma_answers/i) && dilemma_answers.length) {
-          filas = await sb.insert("applications", base);
-        } else {
-          throw err;
+      for (;;) {
+        try {
+          filas = await sb.insert("applications", datos);
+          break;
+        } catch (err) {
+          // Doble clic: la otra petición ya la ha guardado (unique job_id+perfil).
+          if (esDuplicado(err)) return jsonResponse(200, { ok: true, yaPostulado: true, application: aPostulacion({ job_id: jobId, status: "aplicado", created_at: ahora, updated_at: ahora }) });
+          const falta = ["dilemma_answers", "screening_answers"].find((c) => c in datos && faltaEnEsquema(err, new RegExp(c, "i")));
+          if (!falta) throw err;
+          const { [falta]: _x, ...resto } = datos;
+          datos = resto;
         }
       }
       const fila = Array.isArray(filas) ? filas[0] : filas;
@@ -120,7 +131,11 @@ exports.handler = async (event) => {
       } catch (e) {
         console.warn("[TP] aviso de postulación:", e.message);
       }
-      return jsonResponse(200, { ok: true, application: aPostulacion(fila || { job_id: jobId, status: "aplicado", created_at: ahora, updated_at: ahora }) });
+      return jsonResponse(200, {
+        ok: true,
+        application: aPostulacion(fila || { job_id: jobId, status: "aplicado", created_at: ahora, updated_at: ahora }),
+        cribado: { cumple: cribado.cumple, noCumple: cribado.noCumple }
+      });
     }
 
     let lista;

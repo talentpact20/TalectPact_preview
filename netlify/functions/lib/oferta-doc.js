@@ -143,16 +143,23 @@ No inventes nada que no esté en el documento: deja el campo vacío.
 Skills del catálogo (${catalogo.length}): ${catalogo.join(" · ")}`;
 }
 
+// Búsqueda de candidatos: mismo esquema, pero lo que sale son filtros del pool.
+const MODO_BUSQUEDA = `
+
+Esta vez la empresa no va a publicar una oferta: describe (o adjunta) el perfil que busca para filtrar el pool de candidatos. Rellena los mismos campos con lo que se deduzca. Lo que más importa son las skills con su banda mínima, el área, la ubicación y las condiciones (jornada, modalidad, contrato, salario). Deja "preguntas" y "dilemas" vacíos. En "avisos", di en una frase qué no has podido convertir en filtro (por ejemplo, años de experiencia o titulaciones, que el pool no guarda).`;
+
 /** Mensajes para el modelo según el tipo de documento ya leído. */
-function construirPeticion(doc, catalogo) {
+function construirPeticion(doc, catalogo, { modo } = {}) {
+  const busqueda = modo === "busqueda";
+  const pide = busqueda ? "Propón los filtros de búsqueda." : "Propón el formulario de la oferta.";
   const contenido = [];
   if (doc.tipo === "pdf") {
     contenido.push({ type: "document", source: { type: "base64", media_type: "application/pdf", data: doc.base64 } });
-    contenido.push({ type: "text", text: "<documento>El documento es el PDF adjunto.</documento>\nPropón el formulario de la oferta." });
+    contenido.push({ type: "text", text: `<documento>El documento es el PDF adjunto.</documento>\n${pide}` });
   } else {
-    contenido.push({ type: "text", text: `<documento>\n${doc.texto}\n</documento>\nPropón el formulario de la oferta.` });
+    contenido.push({ type: "text", text: `<documento>\n${doc.texto}\n</documento>\n${pide}` });
   }
-  return { system: instrucciones(catalogo), messages: [{ role: "user", content: contenido }] };
+  return { system: instrucciones(catalogo) + (busqueda ? MODO_BUSQUEDA : ""), messages: [{ role: "user", content: contenido }] };
 }
 
 const corta = (v, n) => (typeof v === "string" ? v.trim().slice(0, n) : "");

@@ -1,7 +1,7 @@
 # Estado del producto
 
 - Web: talentpact.es (Netlify, rama `main`). Datos: Supabase. Pagos: Stripe.
-- Tests: 174 en 28 ficheros (`npm test`). Cifra canónica en `tfm/cifras_canonicas.json`.
+- Tests: 204 en 29 ficheros (`npm test`). Cifra canónica en `tfm/cifras_canonicas.json`.
 - Ofertas: tabla `jobs` ya existe en producción; hay 9 ofertas (8 del seed de ejemplo de Iván + «Contable · TalentPact00.»). Las 8 de ejemplo se borran con `supabase_limpiar_ofertas_demo.sql` (pendiente de ejecutar).
 - Scripts cliente `assets/js/app/00…19`; funciones `netlify/functions/*.mjs` → `lib/handlers/*.js`.
 - Último trabajo: rediseño visual (tokens, modo oscuro, portada a dos columnas), paneles con estados de error honestos.

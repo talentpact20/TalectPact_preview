@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261014">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261014">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261020f">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261021a">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
@@ -282,6 +282,7 @@
       <div class="st-section-label">Preferencias de empleo</div>
       <div class="st-card">
         <p class="tp-pref-lead">Las ofertas se ordenan y filtran con esto. Las empresas ven tus condiciones, nunca tu nombre.</p>
+        <div class="st-field u-mb-12"><label for="st-pref-busqueda">¿Estás buscando empleo?</label><select id="st-pref-busqueda"><option value="">Prefiero no indicarlo</option><option value="activa">Sí, busco empleo activamente</option><option value="abierta">Estoy abierto/a a propuestas</option><option value="no">No busco ahora</option></select></div>
         <fieldset class="tp-pref-group"><legend>Tipo de jornada</legend><div class="tp-chips" data-pref="jornadas"></div></fieldset>
         <fieldset class="tp-pref-group"><legend>Modalidad</legend><div class="tp-chips" data-pref="modalidades"></div></fieldset>
         <fieldset class="tp-pref-group"><legend>Tipo de contrato</legend><div class="tp-chips" data-pref="contratos"></div></fieldset>
@@ -413,6 +414,7 @@
     <!-- Ofertas: publicar, las mías y sus candidatos -->
     <div class="dash-tab-content" id="empTab-ofertas">
     <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Publicar oferta</div><button class="btn btn-primary btn-sm" onclick="togglePostJob()">+ Nueva oferta</button></div>
+    <p class="tp-rs-gratis" id="empGratisOfertas" hidden></p>
     <div id="postJobForm" style="display:none"><div class="post-job">
       <div class="pj-cab"><div class="pj-title">Nueva oferta</div><div id="pjPasos"></div></div>
 
@@ -459,6 +461,10 @@
           <div class="pj-field"><label for="pj-sal-min">Salario mínimo (€/año)</label><input type="number" id="pj-sal-min" min="0" step="1000" inputmode="numeric" placeholder="22000"></div>
           <div class="pj-field"><label for="pj-sal-max">Salario máximo (€/año)</label><input type="number" id="pj-sal-max" min="0" step="1000" inputmode="numeric" placeholder="28000"></div>
         </div>
+        <details class="pj-plegable" ontoggle="if(this.open)TPCribadoOferta.pintar()"><summary>Preguntas de cribado <span class="pj-cuenta" id="pjCuentaCrib">0 de 6</span></summary>
+          <p class="pj-ayuda">Preguntas de sí o no que el candidato responde al postularse. Las de <strong>contrato</strong> confirman las condiciones del puesto; las de <strong>descarte</strong>, requisitos que no pueden faltar. Si alguien no da la respuesta de una eliminatoria, se le avisa antes de enviar y tú lo verás marcado: descartar sigue siendo decisión tuya.</p>
+          <div id="pjCribado"></div>
+        </details>
         <details class="pj-plegable"><summary>Preguntas de la vacante <span class="pj-cuenta" id="pjCuentaQ">0 de 3</span></summary>
           <p class="pj-ayuda">Para conocer al candidato (turnos, viajes, preferencias). No es un test de personalidad.</p>
           <input class="search-bar" id="pj-q1" maxlength="200" oninput="tpReqContar()" placeholder="Ej.: ¿Aceptas turnos de tarde 2 días/semana?">
@@ -493,7 +499,7 @@
 
     <!-- Pool de talento -->
     <div class="dash-tab-content" id="empTab-talento">
-    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Pool general de talento</div></div><p class="u-c-slate-500 u-fs-peq u-mb-12">Todos los candidatos evaluados. Perfiles 100% anónimos.</p><div id="empPool"></div></div>
+    <div class="dash-section"><div class="dash-section-head"><div class="dash-section-title">Buscar candidatos</div></div><p class="u-c-slate-500 u-fs-peq u-mb-12">Filtra por lo que cada persona ha demostrado en sus retos, no por su CV. Los perfiles son anónimos hasta que desbloqueas el contacto.</p><div id="empPool"></div></div>
     </div>
 
     <!-- Verificar credencial -->
@@ -528,6 +534,7 @@
       </div>
 
       <!-- Uso actual -->
+      <p class="tp-rs-gratis" id="empGratisPlan" hidden></p>
       <!-- Planes -->
       <div class="emp-sub-wrap">
 
@@ -539,6 +546,7 @@
           <div class="emp-sub-desc">Accede al pool y publica ofertas. Paga solo cuando contrates.</div>
           <ul class="emp-sub-features">
             <li>Ofertas ilimitadas</li>
+            <li>Tus 3 primeras ofertas incluyen <strong>1 desbloqueo gratis</strong> cada una</li>
             <li>Pool completo de candidatos</li>
             <li>Desbloqueo por contacto: <strong>€49</strong></li>
             <li>Retos comunes de plataforma</li>
@@ -1047,6 +1055,7 @@
       </div>
     </div>
     <div class="pay-body">
+      <div class="pay-gratis" id="payGratis" hidden></div>
       <div class="pay-plan">
         <div class="pay-plan-badge">Recomendado</div>
         <div class="pay-plan-price"><span class="amount">€49</span><span class="per">por contacto</span></div>
@@ -1145,23 +1154,25 @@
 <script src="assets/js/app/05-qr.js?v=20261015c"></script>
 <script src="assets/js/app/06-skillpass-y-sesion.js?v=20261020c"></script>
 <script src="assets/js/app/07-retos-comunes.js?v=20261020e"></script>
-<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261020f"></script>
+<script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261021a"></script>
 <script src="assets/js/app/09-acceso.js?v=20261020a"></script>
 <script src="assets/js/app/10-paneles-y-pagos.js?v=20261020c"></script>
 <script src="assets/js/app/11-superadmin.js?v=20261015c"></script>
 <script src="assets/js/app/12-soporte-y-ranking.js?v=20261015e"></script>
 <script src="assets/js/app/13-integridad.js?v=20261019d"></script>
-<script src="assets/js/app/14-empleo.js?v=20261020c"></script>
+<script src="assets/js/app/14-empleo.js?v=20261021a"></script>
 <script src="assets/js/app/15-proteccion-acceso.js?v=20261015j"></script>
-<script src="assets/js/app/16-pool-real.js?v=20261020a"></script>
-<script src="assets/js/app/17-ofertas-reales.js?v=20261020a"></script>
+<script src="assets/js/app/16-pool-real.js?v=20261021a"></script>
+<script src="assets/js/app/17-ofertas-reales.js?v=20261021a"></script>
 <script src="assets/js/app/18-interfaz.js?v=20261020f"></script>
-<script src="assets/js/app/19-rrhh.js?v=20261020b"></script>
+<script src="assets/js/app/19-rrhh.js?v=20261021a"></script>
 <script src="assets/js/app/20-requisitos.js?v=20261020c"></script>
 <script src="assets/js/app/21-empresa.js?v=20261019d"></script>
 <script src="assets/js/app/22-reto-oficial.js?v=20261019d"></script>
 <script src="assets/js/app/23-clasificacion.js?v=20261020b"></script>
 <script src="assets/js/app/24-verificar.js?v=20261020a"></script>
+<script src="assets/js/app/25-talento.js?v=20261021a"></script>
+<script src="assets/js/app/26-cribado.js?v=20261021a"></script>
 <script src="assets/js/app/99-arranque.js?v=20261019e"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->

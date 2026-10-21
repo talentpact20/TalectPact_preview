@@ -31,11 +31,13 @@ var TPPool={
       for(let k=CANDIDATES.length-1;k>=0;k--)if(CANDIDATES[k]._real)CANDIDATES.splice(k,1);
       const reales=(r.candidates||[]).map(f=>({
         id:f.ref,i:f.i,alias:f.alias,sector:f.sector,score:f.score,skills:f.skills||[],
-        personas:f.personas||[],
+        personas:f.personas||[],todas:f.todas||[],
         cond:f.cond||{},integ:f.integ,verified:!!f.verified,retos:f.retos,_real:true,acceptsContact:f.acceptsContact!==false,
+        interesa:!!f.interesa,postulado:Number(f.postulado)||0,etapa:f.etapa||'',
         _unlocked:Pay.paidRefs.has(String(f.ref))
       }));
       CANDIDATES.unshift(...reales);
+      if(r.gratis&&typeof TPGratis!=='undefined')TPGratis.poner(r.gratis);
       TPPool.total=reales.length;TPPool.estado='ok';TPPool.error=null;
       if(typeof tpActividadEmpresa==='function')tpActividadEmpresa();
     })().catch(e=>{TPPool.estado='error';TPPool.error=e.message||String(e);}).finally(()=>{TPPool._promesa=null;});

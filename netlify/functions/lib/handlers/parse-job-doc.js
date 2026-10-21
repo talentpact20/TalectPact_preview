@@ -3,6 +3,8 @@
  * requisitos de la empresa (PDF, Word o texto), con IA.
  *
  * Body: { nombre: "requisitos.pdf", base64: "<archivo>" }   o   { texto: "<texto pegado>" }
+ *       + modo: "busqueda" → la misma propuesta sirve de filtros para buscar en el pool
+ *         (acepta una descripción corta).
  * Cabecera: Authorization: Bearer <access token de Supabase>
  * Devuelve: { ok, propuesta: { title, sector, description, ..., skillRequirements, avisos } }
  *
@@ -37,7 +39,9 @@ function leerDocumento(b) {
   if (typeof b.texto === "string" && b.texto.trim()) {
     const texto = b.texto.trim();
     if (texto.length > MAX_TEXTO) return { status: 413, error: "El texto es demasiado largo. Pega solo la parte de requisitos del puesto." };
-    if (texto.length < 40) return { status: 400, error: "Hay muy poco texto para rellenar la oferta." };
+    // Para buscar basta una frase («comercial en Madrid que negocie bien»).
+    if (b.modo === "busqueda" && texto.length < 15) return { status: 400, error: "Describe un poco más el perfil que buscas." };
+    if (b.modo !== "busqueda" && texto.length < 40) return { status: 400, error: "Hay muy poco texto para rellenar la oferta." };
     return { doc: { tipo: "texto", texto } };
   }
   const tipo = tipoDeArchivo(b.nombre);
@@ -72,8 +76,11 @@ exports.handler = async (event) => {
     if (!user) return jsonResponse(401, { error: "Inicia sesión con tu cuenta de empresa" });
     const empresas = await sb.select("companies", `user_id=eq.${user.id}&select=id&limit=1`);
     if (!Array.isArray(empresas) || !empresas.length) return jsonResponse(403, { error: "Necesitas una cuenta de empresa" });
-    if (await limitar("doc:" + user.id, { max: 10, ventanaS: 3600 })) {
-      return jsonResponse(429, { error: "Has leído muchos documentos seguidos. Prueba de nuevo dentro de un rato." });
+    const modo = b.modo === "busqueda" ? "busqueda" : "oferta";
+    if (await limitar((modo === "busqueda" ? "busca:" : "doc:") + user.id, { max: modo === "busqueda" ? 20 : 10, ventanaS: 3600 })) {
+      return jsonResponse(429, { error: modo === "busqueda"
+        ? "Has hecho muchas búsquedas con IA seguidas. Prueba dentro de un rato o usa los filtros."
+        : "Has leído muchos documentos seguidos. Prueba de nuevo dentro de un rato." });
     }
 
     const leido = leerDocumento(b);
@@ -84,7 +91,7 @@ exports.handler = async (event) => {
     }
 
     const catalogo = skillsDelCatalogo();
-    const { system, messages } = construirPeticion(leido.doc, catalogo);
+    const { system, messages } = construirPeticion(leido.doc, catalogo, { modo });
     const respuesta = await cliente().beta.messages.create({
       model: MODELO(),
       max_tokens: 8000,

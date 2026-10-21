@@ -26,3 +26,6 @@
 - Paneles con **menú lateral** (barra horizontal en móvil) y **Ajustes como página** del menú, no como cajón. Empresa: Resumen · Ofertas · Talento · Verificar credencial · Plan · Ajustes. (20/10)
 - Las funciones solo aceptan su propio dominio (CORS = SITE_URL); verificar, revocación y DID son públicos. Límites de frecuencia persistentes en Supabase, con la clave en hash. (20/10)
 - Calidad mínima de cada ejercicio fijada por test: escenario concreto, tabla real en los análisis, guía en bloques numerados, clasificaciones de 8 o más casos, sin símbolos ni soluciones en el enunciado. (20/10)
+- **Buscar candidatos** al estilo Recruiter: filtros por lo demostrado en retos (no por CV), situación de búsqueda («open to work») elegida por el candidato e interés en la empresa (botón o haberse postulado; la empresa solo ve un sí/no). La IA propone filtros visibles y editables. (21/10)
+- **Desbloqueos gratis**: las 3 primeras ofertas de una empresa incluyen 1 desbloqueo de contacto cada una (máximo 3). (21/10)
+- **Cribado** en la oferta (hasta 6 preguntas de sí o no, de contrato y de descarte): **sin descarte automático**. El candidato recibe aviso antes de enviar; la empresa ve «No cumple» y descarta con un clic. El servidor elimina preguntas sobre datos protegidos. (21/10)

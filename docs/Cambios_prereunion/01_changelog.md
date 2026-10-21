@@ -494,3 +494,19 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 - Comprobado en el navegador: análisis, correo, clasificación de 2, 3 y 4 categorías, secuencias y un reto de IA se pintan bien, y una clasificación se corrige de principio a fin con la solución del servidor.
 
 **Ficheros.** `08-ofertas-y-ejercicios.js`, `18-interfaz.js`, `componentes.css`, `netlify.toml`, `serve-demo.js`, `404.html`, `tests/bandas.test.js`, `tests/seguridad.test.js`. Tests: 197 en 28 ficheros.
+
+---
+
+## 2026-10-21 — «Buscar candidatos» al estilo Recruiter, cribado en ofertas y desbloqueos gratis
+
+**Qué.**
+- **Talento → «Buscar candidatos».** Columna de filtros principales (puesto o área, ubicación con remoto y «acepta mudarse», skills demostradas con banda mínima, tipo de skill, situación de búsqueda, sector, palabras clave) y tres secciones plegables con filas «+ campo» (Condiciones del puesto, Evidencia, Interés y actividad). Contador «N candidatos encajan de M en el pool», recuento junto a cada opción, filtros activos como etiquetas que se quitan con un clic y, si no sale nadie, qué filtro quitar y cuántos aparecerían. En móvil la columna se pliega tras un botón para ver antes los resultados.
+- **Buscar con IA.** Describir el perfil o importar un documento (o usar una oferta propia) y convertirlo en filtros revisables. Usa `parse-job-doc` en modo búsqueda; si la IA no responde, un lector local saca área, skills, modalidad, jornada, contrato, ciudad, salario y disponibilidad.
+- **Situación de búsqueda («open to work»).** Nueva preferencia del candidato: busca activamente, abierto a propuestas o no. Se ve en cada tarjeta y se puede filtrar.
+- **«Le interesa tu empresa».** Botón «Me interesa esta empresa» en la oferta; también cuenta haberse postulado a una oferta de la empresa. La empresa solo recibe un sí/no para ella, nunca la lista del candidato.
+- **Preguntas de cribado** en la oferta (hasta 6, de sí o no): de **contrato** (confirmar condiciones) y de **descarte** (requisitos). Se proponen a partir de los campos de la oferta y se rechazan las que preguntan por datos protegidos (edad, nacionalidad, hijos, estado civil, religión, salud, ideología…). No descartan solas: si el candidato no da la respuesta de una eliminatoria, se le avisa antes de enviar; la empresa ve «No cumple» y puede «Descartar por cribado» con un clic y el motivo ya escrito.
+- **Desbloqueos gratis.** Las 3 primeras ofertas que publica una empresa incluyen 1 desbloqueo de contacto gratis cada una. Se ofrece en el modal de pago y se ve en Talento, Ofertas y Plan. El servidor cuenta y vuelve a contar para que dos clics a la vez no gasten de más.
+
+**Para el usuario.** Ejecutar `tfm/tech/supabase_schema_cribado.sql` (columnas `jobs.screening` y `applications.screening_answers`). Sin él, las ofertas se publican sin cribado y nada falla.
+
+**Ficheros.** `get-talent-pool.js`, `lib/gratis.js`, `unlock-free` (handler y entrada), `lib/cribado.js`, `save-job.js`, `list-jobs.js`, `apply.js`, `applications.js`, `oferta-doc.js`, `parse-job-doc.js`, `lib/notify.js`, `index.html`, `08`, `14`, `16`, `17`, `19`, `25-talento.js`, `26-cribado.js`, `componentes.css`, `supabase_schema_cribado.sql`, `tests/talento.test.js` (7). Detalle en [11_busqueda_candidatos.md](11_busqueda_candidatos.md). Tests: 204 en 29 ficheros.

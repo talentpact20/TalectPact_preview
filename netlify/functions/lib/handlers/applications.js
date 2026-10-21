@@ -9,6 +9,7 @@
  */
 const { jsonResponse, sb, authUser, isUuid, faltaEnEsquema, errorInterno } = require("../tp");
 const { notificarEtapa } = require("../notify");
+const { leerRespuestas } = require("../cribado");
 
 const ESTADOS = ["aplicado", "retos", "preseleccionado", "entrevista", "contratado", "descartado"];
 
@@ -98,23 +99,20 @@ exports.handler = async (event) => {
       }
     }
 
-    let filas;
-    try {
-      filas = await sb.select(
-        "applications",
-        `job_id=eq.${jobId}&company_user_id=eq.${user.id}&select=id,candidate_profile_id,status,reason,dilemma_answers,updated_at,created_at&order=updated_at.desc&limit=200`
-      );
-    } catch (err) {
-      if (faltaEnEsquema(err, "applications")) {
-        return jsonResponse(200, { ok: true, applications: [], pendingMigration: true });
-      }
-      if (faltaEnEsquema(err, /dilemma_answers/i)) {
+    let filas = null;
+    const base = "id,candidate_profile_id,status,reason,updated_at,created_at";
+    for (const campos of [base + ",dilemma_answers,screening_answers", base + ",dilemma_answers", base]) {
+      try {
         filas = await sb.select(
           "applications",
-          `job_id=eq.${jobId}&company_user_id=eq.${user.id}&select=id,candidate_profile_id,status,reason,updated_at,created_at&order=updated_at.desc&limit=200`
+          `job_id=eq.${jobId}&company_user_id=eq.${user.id}&select=${campos}&order=updated_at.desc&limit=200`
         );
-      } else {
-        throw err;
+        break;
+      } catch (err) {
+        if (faltaEnEsquema(err, "applications") && !faltaEnEsquema(err, /dilemma_answers|screening_answers/i)) {
+          return jsonResponse(200, { ok: true, applications: [], pendingMigration: true });
+        }
+        if (!faltaEnEsquema(err, /dilemma_answers|screening_answers/i)) throw err;
       }
     }
 
@@ -128,12 +126,15 @@ exports.handler = async (event) => {
               answer: String(x.answer || "").slice(0, 2000)
             }))
         : [];
+      const cribado = leerRespuestas(a.screening_answers);
       return {
         id: a.id,
         candidateRef: a.candidate_profile_id,
         status: a.status,
         reason: a.reason || "",
         dilemmaAnswers: answers,
+        screeningAnswers: cribado,
+        noCumple: cribado.filter((x) => x.eliminatoria && !x.cumple).map((x) => x.texto),
         updatedAt: a.updated_at,
         createdAt: a.created_at
       };

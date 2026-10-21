@@ -189,12 +189,16 @@ async function applyDirectly(dilemasOk){
     box.innerHTML='<div class="apply-screen u-ta-center">'+tpVacio({icono:'lock',titulo:'Inicia sesión para postularte',texto:'Tu postulación se guarda en tu cuenta y la empresa verá tu perfil anónimo de skills.',acciones:[{txt:'Iniciar sesión o crear cuenta',accion:"closeJobModal();openAuth('candidate')",tipo:'btn-primary'}]})+'</div>';
     return;
   }
+  // Primero el cribado (sí o no), luego los dilemas, luego se envía.
+  const qs=(j&&j.screening)||[];
+  if(qs.length&&typeof TPCribado!=='undefined'&&!TPCribado.listo(j.id)){tpPintarCribado(j);return;}
   const ds=(j&&j.dilemmas)||[];
   if(ds.length&&!dilemasOk){tpPintarDilemasAplicar(j);return;}
   const dilemmaAnswers=ds.length&&typeof tpLeerRespuestasDilema==='function'?tpLeerRespuestasDilema():[];
+  const screeningAnswers=qs.length&&typeof TPCribado!=='undefined'?TPCribado.respuestas(j.id):[];
   box.innerHTML='<div class="apply-screen">'+tpEsqueleto(3)+'</div>';
   let r;
-  try{r=await TPCloud._postAuth('apply',{jobId:String(j.id),dilemmaAnswers});}catch(e){r={error:e.message||String(e)};}
+  try{r=await TPCloud._postAuth('apply',{jobId:String(j.id),dilemmaAnswers,screeningAnswers});}catch(e){r={error:e.message||String(e)};}
   if(!r||r.error){
     box.innerHTML='<div class="apply-screen u-ta-center">'+tpVacio({error:true,icono:'alert',titulo:'No se ha podido enviar tu postulación',texto:(r&&r.error)||'Sin respuesta del servidor. Inténtalo de nuevo.',acciones:[{txt:'Reintentar',accion:ds.length?'tpPintarDilemasAplicar(activeJob)':'applyDirectly()',tipo:'btn-primary'}]})+'</div>';
     return;
