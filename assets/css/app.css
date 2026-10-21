@@ -556,7 +556,7 @@ nav a.nl:hover{color:var(--slate-900)}
 .empresa-accent .auth-tab.active{background:var(--slate-900);color:var(--c-sobre-tinta)}
 
 /* ── DASHBOARDS ── */
-.dash-overlay{display:none;position:fixed;inset:0;z-index:10000;background:var(--slate-50);overflow-y:auto}.dash-overlay.open{display:block;animation:authIn .3s ease}
+.dash-overlay{display:none;position:fixed;inset:0;z-index:10000;background:var(--c-fondo);overflow-y:auto}.dash-overlay.open{display:block;animation:authIn .3s ease}
 .dash-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:56px;background:var(--c-superficie);border-bottom:1px solid var(--slate-200);position:sticky;top:0;z-index:10}
 .dash-user{display:flex;align-items:center;gap:10px;font-size:var(--fs-peq);font-weight:500;color:var(--slate-600)}
 .dash-avatar{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:var(--fs-micro);font-weight:700;flex-shrink:0}

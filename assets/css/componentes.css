@@ -518,24 +518,58 @@ body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
 .sp-pass .tp-banda-seg i{background:var(--slate-600)}
 
 /* ─── Paneles con menú lateral (candidato y empresa) ─ */
-.dash-body.dash-con-menu{max-width:1240px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:var(--sp-6);align-items:start}
-.dash-menu{position:sticky;top:76px;display:flex;flex-direction:column;gap:2px;padding:var(--sp-2);background:var(--c-superficie);border:1px solid var(--c-borde);border-radius:var(--radius-lg)}
-.dash-menu-item{display:block;width:100%;text-align:left;padding:9px 12px;border:0;border-radius:var(--radius);background:none;color:var(--c-texto-2);font:inherit;font-size:var(--fs-peq);font-weight:500;cursor:pointer;white-space:nowrap}
+/* Ancho completo: barra a la izquierda, contenido que usa el resto de la pantalla. */
+.dash-body.dash-con-menu{
+  max-width:none;width:100%;margin:0;padding:0;
+  display:grid;grid-template-columns:240px minmax(0,1fr);gap:0;
+  align-items:stretch;min-height:calc(100vh - 56px);box-sizing:border-box
+}
+.dash-menu{
+  /* Anula el <nav> global de la portada (fixed, space-between, height 64px…). */
+  position:sticky;top:56px;left:auto;right:auto;z-index:5;align-self:start;
+  width:auto;height:calc(100vh - 56px);box-sizing:border-box;
+  display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:2px;
+  padding:var(--sp-4) var(--sp-3);
+  background:var(--c-superficie);backdrop-filter:none;
+  border:0;border-right:1px solid var(--c-borde);border-radius:0;
+  overflow-y:auto
+}
+.dash-menu-item{
+  display:block;width:100%;text-align:left;
+  padding:10px 14px;border:0;border-radius:var(--radius);
+  background:transparent;color:var(--c-texto-2);
+  font:inherit;font-size:var(--fs-peq);font-weight:500;
+  cursor:pointer;white-space:nowrap
+}
 .dash-menu-item:hover{background:var(--c-superficie-2);color:var(--c-texto)}
-.dash-menu-item[aria-current="page"]{background:var(--emerald-50);color:var(--emerald-800);font-weight:600}
+.dash-menu-item[aria-current="page"]{background:var(--c-marca-suave);color:var(--c-marca);font-weight:600}
+.dash-menu-item:focus{outline:none}
 .dash-menu-item:focus-visible{outline:2px solid var(--c-foco);outline-offset:1px}
-.dash-menu-sep{height:1px;background:var(--c-borde);margin:var(--sp-2) var(--sp-1)}
-.dash-main{min-width:0}
+.dash-menu-sep{height:1px;background:var(--c-borde);margin:var(--sp-3) var(--sp-2);flex-shrink:0}
+.dash-main{min-width:0;padding:28px 32px 40px;background:var(--c-fondo);box-sizing:border-box}
 .dash-pagina-cab{margin-bottom:var(--sp-4)}
 .dash-pagina-cab h2{font-size:var(--fs-t2);margin:0}
 .dash-pagina-cab p{font-size:var(--fs-peq);color:var(--c-texto-3);margin:var(--sp-1) 0 0}
 .st-body.st-pagina{overflow:visible;padding:0;max-width:760px}
+/* Rejilla de ofertas: rellena el ancho disponible en vez de quedar pegada a la izquierda. */
+.dash-main .jobs-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 @media (max-width:900px){
-  .dash-body.dash-con-menu{grid-template-columns:minmax(0,1fr);gap:var(--sp-3)}
-  .dash-menu{top:52px;z-index:5;flex-direction:row;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .dash-body.dash-con-menu{grid-template-columns:minmax(0,1fr);min-height:0;padding:0}
+  .dash-menu{
+    top:52px;z-index:5;height:auto;
+    flex-direction:row;align-items:center;justify-content:flex-start;
+    padding:var(--sp-2) var(--sp-3);
+    border-right:0;border-bottom:1px solid var(--c-borde);
+    overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none
+  }
   .dash-menu::-webkit-scrollbar{display:none}
-  .dash-menu-item{width:auto;flex-shrink:0}
-  .dash-menu-sep{width:1px;height:auto;margin:var(--sp-1) var(--sp-1)}
+  .dash-menu-item{width:auto;flex-shrink:0;padding:8px 12px}
+  .dash-menu-sep{width:1px;height:auto;align-self:stretch;margin:var(--sp-1) var(--sp-1)}
+  .dash-main{padding:16px 16px 32px}
+}
+@media (max-width:480px){
+  .dash-main{padding:12px 12px 28px}
+  .dash-main .jobs-grid{grid-template-columns:1fr}
 }
 .dash-accesos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-3);margin-top:var(--sp-4)}
 .dash-acceso{display:flex;flex-direction:column;gap:var(--sp-1);text-align:left;padding:var(--sp-4);border:1px solid var(--c-borde);border-radius:var(--radius-lg);background:var(--c-superficie);color:var(--c-texto);font:inherit;cursor:pointer}

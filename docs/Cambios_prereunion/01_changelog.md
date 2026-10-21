@@ -525,3 +525,11 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Para el usuario.** Ejecutar `tfm/tech/supabase_schema_cv.sql` (bucket privado `cvs` y columna `profiles.cv`). Sin él, la tarjeta avisa de que la subida aún no está disponible y nada falla.
 
 **Ficheros.** `lib/cv.js`, `handlers/cv.js` y `cv.mjs` (nuevos), `get-contact.js`, `get-talent-pool.js`, `delete-account.js`, `index.html`, `16-pool-real.js`, `25-talento.js`, `27-cv.js` (nuevo), `componentes.css`, `supabase_schema_cv.sql`, `tests/cv.test.js` (6). Tests: 210 en 30 ficheros.
+
+---
+
+## 2026-10-21 — Menú lateral del panel: ya no se desparrama ni deja el contenido a la izquierda
+
+**Qué.** El menú de candidato y de empresa heredaba el `nav` de la portada (`justify-content: space-between`, altura fija, etc.), así que los ítems quedaban separados a lo alto y el panel parecía «todo a la izquierda». Ahora el panel usa todo el ancho: barra lateral compacta a la izquierda y contenido que ocupa el resto; en móvil el menú vuelve a ser una fila horizontal.
+
+**Ficheros.** `componentes.css`, `app.css`, `index.html` (caché CSS).
