@@ -548,11 +548,11 @@ body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
 .dash-menu-sep{height:1px;background:var(--c-borde);margin:var(--sp-3) var(--sp-2);flex-shrink:0}
 /* El menú ocupa toda la altura; el contenido vuelve al ancho de antes (~1100 px). */
 .dash-main{min-width:0;padding:28px 32px 40px;background:var(--c-fondo);box-sizing:border-box}
-.dash-main > .dash-tab-content{max-width:1100px}
+.dash-main > .dash-tab-content{max-width:1100px;margin-left:auto;margin-right:auto;width:100%}
 .dash-pagina-cab{margin-bottom:var(--sp-4)}
 .dash-pagina-cab h2{font-size:var(--fs-t2);margin:0}
 .dash-pagina-cab p{font-size:var(--fs-peq);color:var(--c-texto-3);margin:var(--sp-1) 0 0}
-.st-body.st-pagina{overflow:visible;padding:0;max-width:760px}
+.st-body.st-pagina{overflow:visible;padding:0;max-width:760px;margin-left:auto;margin-right:auto;width:100%}
 @media (max-width:900px){
   .dash-body.dash-con-menu{grid-template-columns:minmax(0,1fr);min-height:0;padding:0}
   .dash-menu{

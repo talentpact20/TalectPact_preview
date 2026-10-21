@@ -541,3 +541,11 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Qué.** Se mantiene el menú lateral compacto. El contenido del panel vuelve a ~1100 px (como antes). Además, en Explorar las tarjetas se metían dentro de un `.jobs-grid` anidado y solo ocupaban la primera columna: ahora van directamente en la rejilla.
 
 **Ficheros.** `componentes.css`, `10-paneles-y-pagos.js`, `index.html`.
+
+---
+
+## 2026-10-21 — Contenido del panel centrado en todas las páginas
+
+**Qué.** Con el menú lateral a la izquierda, los bloques del contenido (ofertas, perfil, talento, ajustes…) quedaban pegados al menú. Ahora cada página se centra en el hueco libre (`margin: auto` sobre el tope de 1100 px).
+
+**Ficheros.** `componentes.css`, `index.html`.
