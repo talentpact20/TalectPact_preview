@@ -16,10 +16,16 @@ function renderCandOfertas(){
   });
   // Sin ofertas no siempre es "no hay": puede que no se hayan podido cargar.
   const est=typeof TPOfertas!=='undefined'?TPOfertas.estado:'ok';
-  document.getElementById('candJobsList').innerHTML=JOBS.length?`<div class="jobs-grid">${h}</div>`
-    :est==='error'?tpVacio({error:true,icono:'alert',titulo:'No se han podido cargar las ofertas',texto:'Es un problema nuestro, no de tu cuenta. Vuelve a intentarlo en unos minutos.',acciones:[{txt:'Reintentar',accion:'TPOfertas.cargar()'}]})
-    :(est==='cargando'||est==='sin cargar')?tpEsqueleto(4)
-    :tpVacio({icono:'building',titulo:'Todavía no hay ofertas publicadas',texto:'Mientras tanto, completa retos: las empresas buscan en el pool por skills y verán tu nota en cuanto publiquen.'});
+  // #candJobsList ya es .jobs-grid: no envolver otra vez (si no, las tarjetas
+  // quedan en una sola columna a la izquierda).
+  const box=document.getElementById('candJobsList');
+  if(JOBS.length){box.className='jobs-grid';box.innerHTML=h;}
+  else{
+    box.className='';
+    box.innerHTML=est==='error'?tpVacio({error:true,icono:'alert',titulo:'No se han podido cargar las ofertas',texto:'Es un problema nuestro, no de tu cuenta. Vuelve a intentarlo en unos minutos.',acciones:[{txt:'Reintentar',accion:'TPOfertas.cargar()'}]})
+      :(est==='cargando'||est==='sin cargar')?tpEsqueleto(4)
+      :tpVacio({icono:'building',titulo:'Todavía no hay ofertas publicadas',texto:'Mientras tanto, completa retos: las empresas buscan en el pool por skills y verán tu nota en cuanto publiquen.'});
+  }
   const emp=COMPANIES.map(c=>`<div class="tp-company-card"><div class="tp-company-head">${companyMonogramHTML(c.name)}<div><strong>${escHtml(c.name)}</strong><div class="tp-company-meta">${[c.sector,c.size&&c.size!=='—'?c.size+' empleados':'',c.location].filter(Boolean).map(escHtml).join(' · ')}</div></div></div>${c.desc?`<p>${escHtml(c.desc)}</p>`:''}${c.website?`<a href="${escHtml(c.website)}" target="_blank" rel="noopener nofollow">${escHtml(c.website.replace(/^https?:\/\//,''))}</a>`:''}</div>`).join('');
   document.getElementById('candCompaniesList').innerHTML=COMPANIES.length?`<div class="companies-grid">${emp}</div>`:'<div class="tp-empty">Aún no hay empresas con ofertas abiertas.</div>';
 }

@@ -533,3 +533,11 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Qué.** El menú de candidato y de empresa heredaba el `nav` de la portada (`justify-content: space-between`, altura fija, etc.), así que los ítems quedaban separados a lo alto y el panel parecía «todo a la izquierda». Ahora el panel usa todo el ancho: barra lateral compacta a la izquierda y contenido que ocupa el resto; en móvil el menú vuelve a ser una fila horizontal.
 
 **Ficheros.** `componentes.css`, `app.css`, `index.html` (caché CSS).
+
+---
+
+## 2026-10-21 — Ofertas del candidato otra vez en rejilla de 3 (sin estirar el contenido)
+
+**Qué.** Se mantiene el menú lateral compacto. El contenido del panel vuelve a ~1100 px (como antes). Además, en Explorar las tarjetas se metían dentro de un `.jobs-grid` anidado y solo ocupaban la primera columna: ahora van directamente en la rejilla.
+
+**Ficheros.** `componentes.css`, `10-paneles-y-pagos.js`, `index.html`.

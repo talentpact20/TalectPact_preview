@@ -546,13 +546,13 @@ body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
 .dash-menu-item:focus{outline:none}
 .dash-menu-item:focus-visible{outline:2px solid var(--c-foco);outline-offset:1px}
 .dash-menu-sep{height:1px;background:var(--c-borde);margin:var(--sp-3) var(--sp-2);flex-shrink:0}
+/* El menú ocupa toda la altura; el contenido vuelve al ancho de antes (~1100 px). */
 .dash-main{min-width:0;padding:28px 32px 40px;background:var(--c-fondo);box-sizing:border-box}
+.dash-main > .dash-tab-content{max-width:1100px}
 .dash-pagina-cab{margin-bottom:var(--sp-4)}
 .dash-pagina-cab h2{font-size:var(--fs-t2);margin:0}
 .dash-pagina-cab p{font-size:var(--fs-peq);color:var(--c-texto-3);margin:var(--sp-1) 0 0}
 .st-body.st-pagina{overflow:visible;padding:0;max-width:760px}
-/* Rejilla de ofertas: rellena el ancho disponible en vez de quedar pegada a la izquierda. */
-.dash-main .jobs-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
 @media (max-width:900px){
   .dash-body.dash-con-menu{grid-template-columns:minmax(0,1fr);min-height:0;padding:0}
   .dash-menu{
@@ -569,7 +569,6 @@ body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
 }
 @media (max-width:480px){
   .dash-main{padding:12px 12px 28px}
-  .dash-main .jobs-grid{grid-template-columns:1fr}
 }
 .dash-accesos{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:var(--sp-3);margin-top:var(--sp-4)}
 .dash-acceso{display:flex;flex-direction:column;gap:var(--sp-1);text-align:left;padding:var(--sp-4);border:1px solid var(--c-borde);border-radius:var(--radius-lg);background:var(--c-superficie);color:var(--c-texto);font:inherit;cursor:pointer}
