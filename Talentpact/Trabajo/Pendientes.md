@@ -35,6 +35,7 @@ Guía: `docs/Cambios_prereunion/12_produccion_urgente.md`. Diagnóstico: `npm ru
 - [x] Menú lateral en los paneles de candidato y empresa y Ajustes como página propia (20/10).
 - [x] Rama IA (20/10): bloque propio en el catálogo, 10 retos técnicos de la ola 1 + IA en el trabajo (33 ejercicios), rúbrica técnica y errores que penalizan (corrector 2.2.0).
 - [x] Ingeniería ola 1 (22/10): en Hard → Tecnología, 6 especialidades × 1 reto × 3 ejercicios; rúbrica `tecnico`.
+- [x] Resumen de empresa con gráficos (22/10): ofertas, bandas del pool, encaje por oferta, open to work; datos reales.
 - [ ] Rama IA: revisión por un experto, gold set, itinerarios en la oferta, fase 2 (sandbox) y defensa de 2 preguntas; ola 2 (6 competencias).
 - [ ] Ingeniería: revisión por ingenieros de cada especialidad, engordar a 2–3 retos por pista, gold set.
 - [x] Blockchain definitivo (plan 03): VC 2.0 firmada, revocación, caducidad, verificación en 5 estados, lote Merkle diario, contrato v2 (20/10).

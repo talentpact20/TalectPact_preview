@@ -582,6 +582,16 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+## 2026-10-22 — Resumen de empresa con gráficos reales
+
+**Qué.** El resumen del panel de empresa deja de ser solo cuatro cifras: donut de ofertas abiertas/cerradas, barras del nivel del pool (mejor skill por banda), encaje ≥50 % por oferta abierta, situación de búsqueda (open to work) y pie con desbloqueos / gratis. Todo con datos ya cargados (ofertas propias, pool, Pay); estados vacíos si aún no hay nada.
+
+**Por qué.** La primera pantalla de la empresa resultaba pobre frente a Talento y Ofertas.
+
+**Ficheros.** `28-resumen-empresa.js` (nuevo), `17-ofertas-reales.js`, `index.html`, `componentes.css`, `tests/resumen-empresa.test.js` (3). Tests: 222 en 33 ficheros.
+
+---
+
 ## 2026-10-22 — Ingeniería (ola 1) dentro de Hard skills → Tecnología
 
 **Qué.** Seis especialidades nuevas bajo **Tecnología** (software, sistemas, industrial/procesos, mecánica, civil/caminos, eléctrica), cada una con 1 reto × 3 ejercicios, rúbrica `tecnico` y errores que penalizan. En el catálogo se navegan como Hard skills → Tecnología → la especialidad (no como cuarto bloque junto a Soft/IA). Se mantiene «Ingeniería e I+D» para la rama IA.

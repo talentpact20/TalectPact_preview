@@ -186,12 +186,5 @@ TPOfertas.cargar();
 // Cifras del panel de empresa, con datos reales: ofertas abiertas propias,
 // candidatos del pool, cuántos tienen media de 80 o más y contactos desbloqueados
 // (los confirma el servidor). Antes eran números fijos en el HTML (4, 127, 23).
-function tpActividadEmpresa(){
-  const pon=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  const cands=(typeof CANDIDATES!=='undefined'?CANDIDATES:[]);
-  const poolOk=typeof TPPool!=='undefined'&&TPPool.estado==='ok';
-  pon('empStatOffers',tpCompany?String((TPOfertas.mias||[]).filter(j=>j.status==='open').length):'—');
-  pon('empStatPool',poolOk?String(TPPool.total||0):'—');
-  pon('empStatTop',poolOk?String(cands.filter(c=>(c.skills||[]).some(x=>Number(x.v)>=80)).length):'—');
-  pon('empStatUnlocks',String(cands.filter(c=>c._unlocked).length));
-}
+// Resumen con gráficos: assets/js/app/28-resumen-empresa.js (tpActividadEmpresa).
+function tpActividadEmpresa(){if(typeof tpResumenEmpresa==='function')tpResumenEmpresa();}

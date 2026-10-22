@@ -576,6 +576,48 @@ body.vf-pagina{background:var(--c-fondo);color:var(--c-texto);margin:0}
 .dash-acceso b{font-size:var(--fs-cuerpo)}
 .dash-acceso span{font-size:var(--fs-peq);color:var(--c-texto-3)}
 
+/* Resumen empresa: KPIs + gráficos (datos reales) */
+.emp-rs-cab{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-3);margin-bottom:var(--sp-3);flex-wrap:wrap}
+.emp-rs-tit{font-size:var(--fs-t3);font-weight:700;letter-spacing:-.02em;color:var(--c-texto);margin:0}
+.emp-rs-sub{font-size:var(--fs-peq);color:var(--c-texto-3);margin:4px 0 0;max-width:48ch}
+.emp-rs-meta{font-size:var(--fs-micro);color:var(--c-texto-3);margin:0}
+.emp-rs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-3);margin-bottom:var(--sp-4)}
+.emp-rs-panel{background:var(--c-superficie);border:1px solid var(--c-borde);border-radius:var(--radius-lg);padding:var(--sp-4);min-height:12rem}
+.emp-rs-panel-tit{font-size:var(--fs-cuerpo);font-weight:600;color:var(--c-texto);margin:0 0 4px}
+.emp-rs-panel-sub{font-size:var(--fs-micro);color:var(--c-texto-3);margin:0 0 var(--sp-3)}
+.emp-rs-vacio{font-size:var(--fs-peq);color:var(--c-texto-3);margin:var(--sp-2) 0 0}
+.emp-rs-pie{font-size:var(--fs-peq);color:var(--c-texto-2);margin:0 0 var(--sp-3);grid-column:1/-1}
+.emp-rs-donut-wrap{display:flex;align-items:center;gap:var(--sp-4);flex-wrap:wrap}
+.emp-rs-donut-box{position:relative;width:7.5rem;height:7.5rem;flex-shrink:0}
+.emp-rs-donut{width:100%;height:100%;transform:rotate(-90deg)}
+.emp-rs-donut-pista{fill:none;stroke:var(--c-superficie-2);stroke-width:12}
+.emp-rs-donut-a,.emp-rs-donut-b{fill:none;stroke-width:12;stroke-linecap:butt}
+.emp-rs-donut-a{stroke:var(--emerald-600)}
+.emp-rs-donut-b{stroke:var(--slate-300)}
+.emp-rs-donut-centro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.emp-rs-donut-centro strong{font-size:var(--fs-t3);font-weight:700;color:var(--c-texto);line-height:1;font-variant-numeric:tabular-nums}
+.emp-rs-donut-centro span{font-size:var(--fs-micro);color:var(--c-texto-3);margin-top:2px}
+.emp-rs-leyenda{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;font-size:var(--fs-peq);color:var(--c-texto-2)}
+.emp-rs-leyenda b{color:var(--c-texto);font-variant-numeric:tabular-nums}
+.emp-rs-swatch{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:middle}
+.emp-rs-swatch-a{background:var(--emerald-600)}
+.emp-rs-swatch-b{background:var(--slate-300)}
+.emp-rs-barras{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.emp-rs-bar-meta{display:flex;justify-content:space-between;gap:var(--sp-2);margin-bottom:4px;font-size:var(--fs-peq)}
+.emp-rs-bar-etq{color:var(--c-texto-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.emp-rs-bar-n{color:var(--c-texto);font-variant-numeric:tabular-nums;flex-shrink:0}
+.emp-rs-bar-pista{height:8px;border-radius:999px;background:var(--c-superficie-2);overflow:hidden}
+.emp-rs-bar-relleno{display:block;height:100%;border-radius:999px;background:var(--emerald-600);min-width:0}
+.emp-rs-bar-relleno.emp-rs-bar-muy{background:var(--emerald-600)}
+.emp-rs-bar-relleno.emp-rs-bar-bueno{background:var(--emerald-400)}
+.emp-rs-bar-relleno.emp-rs-bar-acept{background:var(--slate-400)}
+.emp-rs-bar-relleno.emp-rs-bar-insuf{background:var(--slate-300)}
+.emp-rs-bar-relleno.emp-rs-bar-sin{background:var(--slate-200)}
+@media (max-width:760px){
+  .emp-rs-grid{grid-template-columns:1fr}
+  .emp-rs-cab{align-items:flex-start}
+}
+
 /* ─── Enunciado de un reto: párrafos, código y guía visible ─ */
 .scenario-texto p{margin:0 0 var(--sp-3)}
 .scenario-texto p:last-child{margin-bottom:0}

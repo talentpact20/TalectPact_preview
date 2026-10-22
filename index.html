@@ -32,7 +32,7 @@
 <link rel="stylesheet" href="assets/css/app.css?v=20261021c">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
 <link rel="stylesheet" href="assets/css/tema.css?v=20261022a">
-<link rel="stylesheet" href="assets/css/componentes.css?v=20261021f">
+<link rel="stylesheet" href="assets/css/componentes.css?v=20261022g">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
 <body>
@@ -410,10 +410,22 @@
 
     <!-- Resumen -->
     <div class="dash-tab-content active" id="empTab-resumen">
-  <div id="empVerificacion"></div>
-  <!-- Estadísticas siempre visibles -->
-  <div class="dash-stats"><div class="dash-stat-card"><div class="dsc-val" id="empStatOffers">—</div><div class="dsc-lbl">Ofertas abiertas</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatPool">—</div><div class="dsc-lbl">Candidatos en el pool</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatTop">—</div><div class="dsc-lbl">Con alguna skill en «Muy bueno»</div></div><div class="dash-stat-card"><div class="dsc-val" id="empStatUnlocks">—</div><div class="dsc-lbl">Contactos desbloqueados</div></div></div>
-    <div id="empInbox" class="u-mb-16" hidden></div>
+      <div id="empVerificacion"></div>
+      <header class="emp-rs-cab">
+        <div>
+          <h2 class="emp-rs-tit">Resumen</h2>
+          <p class="emp-rs-sub">Cifras reales de tus ofertas y del pool. Se actualizan al cargar el panel.</p>
+        </div>
+        <p class="emp-rs-meta" id="empRsMeta" role="status"></p>
+      </header>
+      <div class="dash-stats" aria-label="Indicadores clave">
+        <div class="dash-stat-card"><div class="dsc-val" id="empStatOffers">—</div><div class="dsc-lbl">Ofertas abiertas</div></div>
+        <div class="dash-stat-card"><div class="dsc-val" id="empStatPool">—</div><div class="dsc-lbl">Candidatos en el pool</div></div>
+        <div class="dash-stat-card"><div class="dsc-val" id="empStatTop">—</div><div class="dsc-lbl">Con alguna skill en «Muy bueno»</div></div>
+        <div class="dash-stat-card"><div class="dsc-val" id="empStatUnlocks">—</div><div class="dsc-lbl">Contactos desbloqueados</div></div>
+      </div>
+      <div class="emp-rs-grid" id="empRsGraficos" aria-live="polite"></div>
+      <div id="empInbox" class="u-mb-16" hidden></div>
       <div class="dash-accesos" role="group" aria-label="Accesos rápidos">
         <button type="button" class="dash-acceso" onclick="togglePostJob()"><b>Publicar una oferta</b><span>Tres pasos; puedes rellenarla desde tu documento.</span></button>
         <button type="button" class="dash-acceso" onclick="tpPanelIr('emp','talento')"><b>Buscar talento</b><span>Perfiles anónimos con skills demostradas.</span></button>
@@ -1186,6 +1198,7 @@
 <script src="assets/js/app/25-talento.js?v=20261021b"></script>
 <script src="assets/js/app/26-cribado.js?v=20261021a"></script>
 <script src="assets/js/app/27-cv.js?v=20261021b"></script>
+<script src="assets/js/app/28-resumen-empresa.js?v=20261022a"></script>
 <script src="assets/js/app/99-arranque.js?v=20261019e"></script>
 
 <!-- TalentPact Analytics — eventos personalizados GA4 -->
