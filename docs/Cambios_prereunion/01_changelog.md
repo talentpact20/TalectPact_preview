@@ -582,11 +582,11 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
-## 2026-10-22 — Rama Ingeniería (ola 1): seis pistas en el catálogo
+## 2026-10-22 — Ingeniería (ola 1) dentro de Hard skills → Tecnología
 
-**Qué.** Nuevo bloque **Ingeniería** en el catálogo (junto a Hard, Soft e IA), con 6 pistas: software, sistemas, industrial/procesos, mecánica, civil/caminos y eléctrica. Cada pista tiene 1 reto con 3 ejercicios (diagnóstico/diseño + clasificación), rúbrica técnica `tecnico` y errores que penalizan. Bajo Tecnología se añaden las 6 especialidades (se mantiene «Ingeniería e I+D» para la rama IA).
+**Qué.** Seis especialidades nuevas bajo **Tecnología** (software, sistemas, industrial/procesos, mecánica, civil/caminos, eléctrica), cada una con 1 reto × 3 ejercicios, rúbrica `tecnico` y errores que penalizan. En el catálogo se navegan como Hard skills → Tecnología → la especialidad (no como cuarto bloque junto a Soft/IA). Se mantiene «Ingeniería e I+D» para la rama IA.
 
-**Por qué.** Un ingeniero entraba y no veía su dominio: solo soft, sector genérico e IA.
+**Por qué.** Un ingeniero entraba y no veía su dominio; y el bloque debe vivir con el resto de hard skills, no aparte.
 
 **Ficheros.** `tools/retos_ingenieria.json`, `tools/agregar_retos_ingenieria.js`, `catalogo-retos.json`, `07-retos-comunes.js`, `taxonomia.json`, `01b-taxonomia.js`, `evaluator.js` (rúbrica `tecnico`), `23-clasificacion.js`, `19-rrhh.js`, `18-interfaz.js`, `00-iconos.js`, `tests/rama-ingenieria.test.js` (4). Tests: 219 en 32 ficheros.
 

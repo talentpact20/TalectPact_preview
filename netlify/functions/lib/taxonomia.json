@@ -1056,7 +1056,7 @@
     }
   },
   "ingenieria": {
-    "nota": "Rama Ingeniería (ola 1, 22/10): seis pistas con un reto cada una. Rúbrica técnica y errores que penalizan, mismo patrón que la rama IA.",
+    "nota": "Ingeniería (ola 1, 22/10): vive en Hard skills → Tecnología (especialidades). Seis pistas con un reto cada una. Rúbrica técnica y errores que penalizan.",
     "grupos": [
       {
         "id": "ing_software",

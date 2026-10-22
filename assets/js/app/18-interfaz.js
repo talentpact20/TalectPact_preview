@@ -154,8 +154,8 @@ function tpVacio(o){
 function tpPintarPruebaPortada(){
   const el=document.getElementById('heroProof');
   if(!el||typeof COMMON_EXERCISES==='undefined'||!COMMON_EXERCISES.length)return;
-  const total=COMMON_EXERCISES.length,soft=COMMON_EXERCISES.filter(c=>c.category==='soft').length,ia=COMMON_EXERCISES.filter(c=>c.rama==='ia').length,ing=COMMON_EXERCISES.filter(c=>c.rama==='ingenieria').length;
-  el.innerHTML='<strong>'+total+' retos</strong> ('+soft+' transversales, '+(total-soft-ia-ing)+' de sector, '+ing+' de ingeniería y '+ia+' de inteligencia artificial) · corrección con IA criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a>';
+  const total=COMMON_EXERCISES.length,soft=COMMON_EXERCISES.filter(c=>c.category==='soft').length,ia=COMMON_EXERCISES.filter(c=>c.rama==='ia').length;
+  el.innerHTML='<strong>'+total+' retos</strong> ('+soft+' transversales, '+(total-soft-ia)+' de sector —incl. ingeniería— y '+ia+' de inteligencia artificial) · corrección con IA criterio a criterio · <a href="/verify.html" class="hero-proof-link">comprueba un SkillPass →</a>';
 }
 
 // ═══ Respuesta en curso: palabras y autoguardado en este navegador ═══

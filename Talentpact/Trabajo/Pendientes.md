@@ -34,9 +34,9 @@ Guía: `docs/Cambios_prereunion/12_produccion_urgente.md`. Diagnóstico: `npm ru
 - [x] Retos: enunciado escapado y con código formateado, guía visible; bloqueada la descarga pública del catálogo con soluciones (20/10).
 - [x] Menú lateral en los paneles de candidato y empresa y Ajustes como página propia (20/10).
 - [x] Rama IA (20/10): bloque propio en el catálogo, 10 retos técnicos de la ola 1 + IA en el trabajo (33 ejercicios), rúbrica técnica y errores que penalizan (corrector 2.2.0).
-- [x] Rama Ingeniería ola 1 (22/10): bloque propio, 6 pistas × 1 reto × 3 ejercicios; especialidades bajo Tecnología; rúbrica `tecnico`.
+- [x] Ingeniería ola 1 (22/10): en Hard → Tecnología, 6 especialidades × 1 reto × 3 ejercicios; rúbrica `tecnico`.
 - [ ] Rama IA: revisión por un experto, gold set, itinerarios en la oferta, fase 2 (sandbox) y defensa de 2 preguntas; ola 2 (6 competencias).
-- [ ] Rama Ingeniería: revisión por ingenieros de cada pista, engordar a 2–3 retos por pista, gold set.
+- [ ] Ingeniería: revisión por ingenieros de cada especialidad, engordar a 2–3 retos por pista, gold set.
 - [x] Blockchain definitivo (plan 03): VC 2.0 firmada, revocación, caducidad, verificación en 5 estados, lote Merkle diario, contrato v2 (20/10).
 - [ ] Blockchain: verificación por lotes (CSV) y API `GET /verify/{id}` para Pro/Enterprise; multifirma 2 de 2 como emisor del contrato v2; EBSI más adelante.
 - [x] Pasada de seguridad (20/10): límites persistentes, CORS cerrado, no-store, RLS de las 14 tablas comprobado por test.

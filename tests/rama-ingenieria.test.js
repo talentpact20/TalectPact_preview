@@ -1,6 +1,6 @@
 /**
- * Rama Ingeniería (ola 1): 6 pistas × 1 reto × 3 ejercicios, rúbrica técnica
- * y errores que penalizan. Visible como bloque propio del catálogo.
+ * Ingeniería (ola 1): 6 especialidades bajo Hard → Tecnología, 1 reto × 3
+ * ejercicios cada una, rúbrica técnica y errores que penalizan.
  */
 const test = require("node:test");
 const assert = require("node:assert/strict");
@@ -13,17 +13,19 @@ const T = require("../netlify/functions/lib/taxonomia.json");
 
 const ing = catalogo.filter((r) => r.category === "ingenieria");
 
-test("la rama Ingeniería tiene las 6 pistas de la ola 1, cada una con tres ejercicios", () => {
+test("Ingeniería tiene 6 especialidades bajo Tecnología, cada una con tres ejercicios", () => {
   assert.equal(ing.length, 6);
   assert.deepEqual(ing.map((r) => r.id).sort(), [
     "ing_civil", "ing_electrica", "ing_industrial", "ing_mecanica", "ing_sistemas", "ing_software"
   ]);
   assert.equal(T.ingenieria.grupos.length, 6);
+  const tec = T.areas.find((a) => a.id === "tecnologia");
   for (const r of ing) {
     assert.equal(r.exercises.length, 3, r.id);
     assert.ok(T.ingenieria.skills[r.skill], r.skill);
     assert.equal(T.areaDeSkill[r.skill], "tecnologia");
     assert.ok(T.areaConcretaDeSkill[r.skill], r.skill);
+    assert.ok(tec.especialidades.includes(T.areaConcretaDeSkill[r.skill]), r.skill);
     assert.ok(r.exercises.some((e) => e.type === "decision"), `${r.id} sin clasificación`);
   }
 });
@@ -46,8 +48,9 @@ test("el candidato no recibe penaliza ni kw de los retos de ingeniería", () => 
   }
 });
 
-test("las skills de ingeniería cuentan como hard skills", () => {
+test("las skills de ingeniería cuentan como hard skills (no como bloque aparte ni soft)", () => {
   assert.equal(familiaDe("Ingeniería de software"), "hard");
   assert.equal(familiaDe("Ingeniería civil y de caminos"), "hard");
   assert.equal(familiaDe("Ingeniería eléctrica"), "hard");
+  assert.equal(Object.keys(T.competenciasDeSkill || {}).some((s) => /^Ingeniería /.test(s)), false);
 });

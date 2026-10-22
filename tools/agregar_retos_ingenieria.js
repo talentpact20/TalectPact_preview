@@ -78,7 +78,7 @@ if (tec) {
 }
 
 T.ingenieria = {
-  nota: "Rama Ingeniería (ola 1, 22/10): seis pistas con un reto cada una. Rúbrica técnica y errores que penalizan, mismo patrón que la rama IA.",
+  nota: "Ingeniería (ola 1, 22/10): vive en Hard skills → Tecnología (especialidades). Seis pistas con un reto cada una. Rúbrica técnica y errores que penalizan.",
   grupos: [
     { id: "ing_software", nombre: "Ingeniería de software", corto: "Software", desc: "APIs, calidad, deuda técnica y prácticas de entrega continua." },
     { id: "ing_sistemas", nombre: "Ingeniería de sistemas", corto: "Sistemas", desc: "Disponibilidad, latencia, incidentes y trade-offs de arquitectura." },
