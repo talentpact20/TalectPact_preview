@@ -582,6 +582,14 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 
 ---
 
+## 2026-10-22 — Una página para la asesora (avances de la semana)
+
+**Qué.** Documento de una página (md + html imprimible) con los cambios de producto del 17–22/10, en lenguaje de RRHH: retos Hard/Soft, ofertas, búsqueda de talento, confianza en la prueba y pendiente de validar con ella.
+
+**Ficheros.** `docs/Cambios_prereunion/13_para_la_asesora_semana.md`, `13_para_la_asesora_semana.html`.
+
+---
+
 ## 2026-10-22 — Resumen de empresa con gráficos reales
 
 **Qué.** El resumen del panel de empresa deja de ser solo cuatro cifras: donut de ofertas abiertas/cerradas, barras del nivel del pool (mejor skill por banda), encaje ≥50 % por oferta abierta, situación de búsqueda (open to work) y pie con desbloqueos / gratis. Todo con datos ya cargados (ofertas propias, pool, Pay); estados vacíos si aún no hay nada.
