@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="assets/css/tokens.css?v=20261014">
 <link rel="stylesheet" href="assets/css/app.css?v=20261021c">
 <link rel="stylesheet" href="assets/css/modulos.css?v=20261015e">
-<link rel="stylesheet" href="assets/css/tema.css?v=20261014">
+<link rel="stylesheet" href="assets/css/tema.css?v=20261022a">
 <link rel="stylesheet" href="assets/css/componentes.css?v=20261021f">
 <link rel="stylesheet" href="assets/css/utilidades.css?v=20261015c">
 </head>
@@ -1040,6 +1040,7 @@
       <button class="adm-nav" data-pag="evaluaciones" onclick="admPagina('evaluaciones',this)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/><path d="M19 15l.7 1.8L21.5 17.5l-1.8.7L19 20l-.7-1.8-1.8-.7 1.8-.7z"/></svg><span>Evaluaciones e IA</span></button>
       <button class="adm-nav" data-pag="pagos" onclick="admPagina('pagos',this)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 15h2"/></svg><span>Pagos</span></button>
       <button class="adm-nav" data-pag="ofertas" onclick="admPagina('ofertas',this)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 12h6M9 16h4"/></svg><span>Ofertas y empresas</span></button>
+      <button class="adm-nav" data-pag="solicitudes" onclick="admPagina('solicitudes',this)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg><span>Solicitudes<span id="admSolBadge" class="adm-nav-badge" hidden></span></span></button>
       <button class="adm-nav" data-pag="catalogo" onclick="admPagina('catalogo',this)"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg><span>Catálogo de retos</span></button>
     </aside>
     <main class="adm-main">
@@ -1048,6 +1049,7 @@
       <section class="adm-pag" id="admPag-evaluaciones"><h2>Evaluaciones e IA</h2><p class="adm-sub">Registro de evaluaciones (AI Act, art. 12): modelo, nota, verificación del recibo e integridad.</p><div class="adm-kpis" id="admKpisIA"></div><div class="adm-card"><h3>Uso por modelo</h3><div id="admModelos"></div></div><div class="adm-card"><h3>Últimas evaluaciones</h3><div id="admEvals"></div></div></section>
       <section class="adm-pag" id="admPag-pagos"><h2>Pagos</h2><p class="adm-sub">Desbloqueos confirmados por Stripe.</p><div class="adm-kpis" id="admKpisPagos"></div><div class="adm-card"><h3>Últimos pagos</h3><div id="admPagos"></div></div></section>
       <section class="adm-pag" id="admPag-ofertas"><h2>Ofertas y empresas</h2><div class="adm-card"><h3>Ofertas</h3><div id="admOfertas"></div></div><div class="adm-card"><h3>Empresas recientes</h3><div id="admEmpresas"></div></div></section>
+      <section class="adm-pag" id="admPag-solicitudes"><h2>Solicitudes de intento</h2><p class="adm-sub">Reaperturas y alternativas a la cámara. El candidato recibe el resultado en su bandeja. Solo ves un alias, nunca el email.</p><div class="adm-kpis" id="admKpisSol"></div><div class="adm-card"><h3>Pendientes</h3><div id="admSolPendientes"></div></div><div class="adm-card"><h3>Resueltas recientemente</h3><div id="admSolRecientes"></div></div></section>
       <section class="adm-pag" id="admPag-catalogo"><h2>Catálogo de retos</h2><p class="adm-sub">Retos comunes disponibles para los candidatos.</p><input class="adm-buscar" id="admBuscarReto" type="search" placeholder="Buscar reto…" oninput="admPintarCatalogo()"><div class="adm-card"><div id="admCatalogo"></div></div></section>
     </main>
   </div>
@@ -1155,31 +1157,31 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/app/00-iconos.js?v=20261020b"></script>
+<script src="assets/js/app/00-iconos.js?v=20261022b"></script>
 <script src="assets/js/app/01-datos-ofertas.js?v=20261015c"></script>
-<script src="assets/js/app/01b-taxonomia.js?v=20261020e"></script>
+<script src="assets/js/app/01b-taxonomia.js?v=20261022b"></script>
 <script src="assets/js/app/02-grabacion.js?v=20261015e"></script>
 <script src="assets/js/app/03-datos-retos.js?v=20261015c"></script>
 <script src="assets/js/app/04-estado-y-nube.js?v=20261015j"></script>
 <script src="assets/js/app/05-qr.js?v=20261015c"></script>
 <script src="assets/js/app/06-skillpass-y-sesion.js?v=20261020c"></script>
-<script src="assets/js/app/07-retos-comunes.js?v=20261020e"></script>
+<script src="assets/js/app/07-retos-comunes.js?v=20261022b"></script>
 <script src="assets/js/app/08-ofertas-y-ejercicios.js?v=20261021a"></script>
 <script src="assets/js/app/09-acceso.js?v=20261020a"></script>
 <script src="assets/js/app/10-paneles-y-pagos.js?v=20261021d"></script>
-<script src="assets/js/app/11-superadmin.js?v=20261015c"></script>
+<script src="assets/js/app/11-superadmin.js?v=20261022a"></script>
 <script src="assets/js/app/12-soporte-y-ranking.js?v=20261015e"></script>
 <script src="assets/js/app/13-integridad.js?v=20261019d"></script>
 <script src="assets/js/app/14-empleo.js?v=20261021a"></script>
 <script src="assets/js/app/15-proteccion-acceso.js?v=20261015j"></script>
 <script src="assets/js/app/16-pool-real.js?v=20261021b"></script>
 <script src="assets/js/app/17-ofertas-reales.js?v=20261021a"></script>
-<script src="assets/js/app/18-interfaz.js?v=20261020f"></script>
-<script src="assets/js/app/19-rrhh.js?v=20261021a"></script>
+<script src="assets/js/app/18-interfaz.js?v=20261022b"></script>
+<script src="assets/js/app/19-rrhh.js?v=20261022b"></script>
 <script src="assets/js/app/20-requisitos.js?v=20261020c"></script>
 <script src="assets/js/app/21-empresa.js?v=20261019d"></script>
 <script src="assets/js/app/22-reto-oficial.js?v=20261019d"></script>
-<script src="assets/js/app/23-clasificacion.js?v=20261020b"></script>
+<script src="assets/js/app/23-clasificacion.js?v=20261022b"></script>
 <script src="assets/js/app/24-verificar.js?v=20261020a"></script>
 <script src="assets/js/app/25-talento.js?v=20261021b"></script>
 <script src="assets/js/app/26-cribado.js?v=20261021a"></script>

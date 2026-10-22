@@ -17,8 +17,8 @@ function tpFamiliaAptitud(n){
   return typeof tpDimensionDeSkill==='function'&&tpDimensionDeSkill(s)?'soft':'hard';
 }
 function tpEsPersonaSkill(n){return tpFamiliaAptitud(n)==='soft';}
-/** Bloque del catálogo: la rama IA tiene el suyo; el resto, Hard o Soft según su skill. */
-function tpSegmentoReto(ce){if(ce&&ce.rama==='ia')return 'ia';return ce&&tpFamiliaAptitud(ce.skill)||'hard';}
+/** Bloque del catálogo: IA e Ingeniería tienen el suyo; el resto, Hard o Soft según su skill. */
+function tpSegmentoReto(ce){if(ce&&ce.rama==='ia')return 'ia';if(ce&&ce.rama==='ingenieria')return 'ingenieria';return ce&&tpFamiliaAptitud(ce.skill)||'hard';}
 
 /** Chips de Soft skills (+ integridad) para pool / ficha. */
 function tpPersonasChips(c){

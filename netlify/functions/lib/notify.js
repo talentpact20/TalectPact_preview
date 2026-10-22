@@ -66,4 +66,55 @@ async function notificarEtapa({ profileId, status, jobId }) {
   }
 }
 
-module.exports = { notificarDesbloqueo, notificarEtapa, mensajeEtapa, AVISOS_ETAPA };
+/**
+ * Aviso al candidato cuando TalentPact resuelve su solicitud de reapertura
+ * o de alternativa a la cámara.
+ */
+function mensajeSolicitudIntento({ tipo, decision, reto, nota }) {
+  const esCam = tipo === "sin_camara";
+  const deQue = esCam ? "alternativa a la cámara" : ("otra oportunidad" + (reto ? ` en «${reto}»` : ""));
+  if (decision === "aprobada") {
+    return {
+      title: esCam ? "Puedes hacer el reto sin cámara" : "Puedes volver a hacer el reto",
+      body: esCam
+        ? "Hemos aprobado tu solicitud. Al empezar un reto oficial puedes continuar sin cámara; el informe lo registrará."
+        : `Hemos aprobado tu solicitud de ${deQue}. Ya puedes empezar de nuevo desde el catálogo.`
+    };
+  }
+  const motivo = nota ? ` Motivo: ${nota}` : "";
+  return {
+    title: "Tu solicitud no se ha podido aprobar",
+    body: `No hemos podido aprobar tu solicitud de ${deQue}.${motivo}`
+  };
+}
+
+async function notificarSolicitudIntento({ userId, tipo, decision, challengeId, reto, nota, requestId, adminId }) {
+  if (!userId || !isUuid(String(userId))) return;
+  const msg = mensajeSolicitudIntento({ tipo, decision, reto, nota });
+  try {
+    await sb.insert("notifications", {
+      user_id: userId,
+      type: "attempt_request_" + decision,
+      title: msg.title,
+      body: msg.body,
+      meta: {
+        request_id: requestId || null,
+        tipo: tipo || null,
+        challenge_id: challengeId || null,
+        decision: decision || null,
+        admin_id: adminId || null
+      }
+    });
+  } catch (err) {
+    console.warn("[TP] notificación solicitud intento:", err.message);
+  }
+}
+
+module.exports = {
+  notificarDesbloqueo,
+  notificarEtapa,
+  mensajeEtapa,
+  AVISOS_ETAPA,
+  notificarSolicitudIntento,
+  mensajeSolicitudIntento
+};

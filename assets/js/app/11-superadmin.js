@@ -27,10 +27,13 @@ function openAdmin(){
 }
 function closeAdmin(){const d=document.getElementById('dashAdmin');if(d)d.classList.remove('open');document.body.style.overflow='';}
 
+let _admSol=null;
+
 function admPagina(pag,btn){
   document.querySelectorAll('.adm-nav').forEach(b=>b.classList.toggle('active',b===btn));
   document.querySelectorAll('.adm-pag').forEach(p=>p.classList.toggle('active',p.id==='admPag-'+pag));
   if(pag==='catalogo')admPintarCatalogo();
+  if(pag==='solicitudes')admCargarSolicitudes();
 }
 
 async function admCargar(){
@@ -41,6 +44,7 @@ async function admCargar(){
   _admDatos=r;
   est.textContent='Actualizado '+new Date(r.generadoEn).toLocaleString('es-ES');
   admPintar();
+  admCargarSolicitudes({silencio:true});
 }
 
 const _admNum=v=>v==null?'—':Number(v).toLocaleString('es-ES');
@@ -78,4 +82,89 @@ function admPintarCatalogo(){
   const lista=COMMON_EXERCISES.filter(ce=>!q||tpNorm(ce.title+' '+(ce.searchTerms||'')).includes(q));
   document.getElementById('admCatalogo').innerHTML=_admTabla(['Reto','Categoría','Skill','Ejercicios'],
     lista.map(ce=>[`<span class="adm-reto">${tpMonograma(ce.title,ce.category)}<span>${escHtml(ce.title)}</span></span>`,ce.category==='soft'?'Transversal':'Sector',escHtml(ce.skill||''),String((ce.exercises||[]).length)]),'Ningún reto coincide con la búsqueda.');
+}
+
+function _admTipoSol(t){return t==='sin_camara'?'Sin cámara':'Reapertura';}
+
+function admBadgeSol(n){
+  const b=document.getElementById('admSolBadge');
+  if(!b)return;
+  if(n>0){b.hidden=false;b.textContent=String(n);}else{b.hidden=true;b.textContent='';}
+}
+
+async function admCargarSolicitudes(opt){
+  const silencio=!!(opt&&opt.silencio);
+  const r=await TPCloud._postAuth('admin-solicitudes',{accion:'listar'});
+  if(!r||r.error){
+    if(!silencio){
+      const box=document.getElementById('admSolPendientes');
+      if(box)box.innerHTML=`<div class="tp-empty">${escHtml((r&&r.error)||'No se pudieron cargar las solicitudes.')}</div>`;
+    }
+    return;
+  }
+  _admSol=r;
+  admBadgeSol(r.pendientesCount||0);
+  if(document.getElementById('admPag-solicitudes')&&document.getElementById('admPag-solicitudes').classList.contains('active'))admPintarSolicitudes();
+  else if(document.getElementById('admKpisSol'))admPintarSolicitudes();
+}
+
+function admPintarSolicitudes(){
+  const d=_admSol;if(!d)return;
+  const k=document.getElementById('admKpisSol');
+  if(k)k.innerHTML=_admKpi('Pendientes',_admNum(d.pendientesCount||0),d.configurado===false?'Tabla aún no migrada':'')+
+    _admKpi('Resueltas (muestra)',_admNum((d.recientes||[]).length));
+  const tipoFila=s=>{
+    const reto=s.tipo==='reapertura'?(s.reto||s.challengeId||'—'):'Todos los retos';
+    return [
+      escHtml(_admTipoSol(s.tipo)),
+      escHtml(s.alias||'—'),
+      escHtml(reto),
+      `<span class="adm-motivo">${escHtml(s.motivo||'')}</span>`,
+      _admFecha(s.creadaEn),
+      `<span class="adm-sol-acc"><button type="button" class="btn btn-primary btn-sm" onclick="admResolverSol('${escHtml(s.id)}','aprobada')">Aprobar</button><button type="button" class="btn btn-outline btn-sm" onclick="admResolverSol('${escHtml(s.id)}','rechazada')">Rechazar</button></span>`
+    ];
+  };
+  const pen=document.getElementById('admSolPendientes');
+  if(pen)pen.innerHTML=_admTabla(['Tipo','Candidato','Reto','Motivo','Fecha','Acción'],(d.pendientes||[]).map(tipoFila),'No hay solicitudes pendientes.');
+  const rec=document.getElementById('admSolRecientes');
+  if(rec)rec.innerHTML=_admTabla(['Tipo','Candidato','Reto','Estado','Nota','Fecha'],
+    (d.recientes||[]).map(s=>[
+      escHtml(_admTipoSol(s.tipo)),
+      escHtml(s.alias||'—'),
+      escHtml(s.tipo==='reapertura'?(s.reto||s.challengeId||'—'):'Todos los retos'),
+      s.estado==='aprobada'?'Aprobada':'Rechazada',
+      escHtml(s.nota||'—'),
+      _admFecha(s.resueltaEn||s.creadaEn)
+    ]),'Todavía no hay solicitudes resueltas.');
+}
+
+function admPedirNotaRechazo(){
+  return new Promise(resolve=>{
+    const d=document.createElement('dialog');
+    d.className='tp-dialogo';
+    d.innerHTML='<form method="dialog"><h3>Motivo del rechazo</h3><p>El candidato lo verá en su bandeja. Sé concreto y breve.</p><label class="sr-only" for="admNotaSol">Nota</label><textarea id="admNotaSol" rows="3" minlength="5" maxlength="800" required></textarea><div class="tp-dialogo-acc"><button type="button" class="btn btn-outline" data-r="no">Cancelar</button><button type="submit" class="btn btn-dark" value="ok">Rechazar</button></div></form>';
+    document.body.appendChild(d);
+    const form=d.querySelector('form');
+    const ta=d.querySelector('#admNotaSol');
+    d.querySelector('[data-r="no"]').addEventListener('click',()=>{d.close();resolve(null);});
+    form.addEventListener('submit',e=>{e.preventDefault();const v=(ta.value||'').trim();if(v.length<5){ta.focus();return;}d.close();resolve(v);});
+    d.addEventListener('close',()=>{d.remove();});
+    d.showModal();
+    ta.focus();
+  });
+}
+
+async function admResolverSol(id,decision){
+  if(!id||!decision)return;
+  let nota=null;
+  if(decision==='rechazada'){
+    nota=await admPedirNotaRechazo();
+    if(nota==null)return;
+  }else{
+    if(!(await tpConfirmar({titulo:'¿Aprobar esta solicitud?',texto:'El candidato podrá continuar (reabrir el reto o hacerlo sin cámara) y recibirá un aviso en su bandeja.',si:'Aprobar',no:'Cancelar'})))return;
+  }
+  const r=await TPCloud._postAuth('admin-solicitudes',{accion:'resolver',id,decision,nota});
+  if(!r||r.error){toast((r&&r.error)||'No se pudo resolver la solicitud.');return;}
+  toast(decision==='aprobada'?'Solicitud aprobada.':'Solicitud rechazada.');
+  await admCargarSolicitudes();
 }

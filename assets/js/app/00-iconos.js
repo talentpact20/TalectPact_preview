@@ -8,6 +8,6 @@ function tpIcon(n,cls){const p=TP_ICONS[n];if(!p)return '';return '<svg class="i
 function tpMonograma(titulo,categoria){
   const pal=String(titulo||'').replace(/[^\p{L}\p{N}\s]/gu,'').split(/\s+/).filter(w=>w.length>2||/^[A-Z0-9]+$/.test(w));
   const ini=((pal[0]||'?')[0]+((pal[1]||pal[0]||'?')[pal[1]?0:1]||'')).toUpperCase();
-  const cat=categoria==='ia'?'tech':(/^(soft|sector|cognitive|tech|languages)$/.test(categoria)?categoria:'otros');
+  const cat=(categoria==='ia'||categoria==='ingenieria')?'tech':(/^(soft|sector|cognitive|tech|languages)$/.test(categoria)?categoria:'otros');
   return '<span class="tp-mono tp-mono-'+cat+'" aria-hidden="true">'+ini.replace(/[<>&"]/g,'')+'</span>';
 }

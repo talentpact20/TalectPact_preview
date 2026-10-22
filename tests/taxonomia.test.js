@@ -24,12 +24,13 @@ test("áreas y sectores en dos niveles, con la versión ampliada de la asesora",
     "Marketing, ventas y comunicación", "Operaciones", "Recursos humanos", "Sanidad, educación e investigación",
     "Sostenibilidad", "Tecnología"
   ]);
-  // Las 21 áreas de la versión ampliada cuelgan de una general, sin repetirse.
+  // Las 21 de la asesora + 6 pistas de ingeniería (ola 1) cuelgan de una general, sin repetirse.
   const concretas = tax.T.areas.flatMap((a) => a.especialidades);
-  assert.equal(concretas.length, 21);
-  assert.equal(new Set(concretas).size, 21);
+  assert.equal(concretas.length, 27);
+  assert.equal(new Set(concretas).size, 27);
   for (const n of ["Consultoría", "Dirección general y consejo de administración", "Sanidad y atención sociosanitaria",
-    "Educación, formación e investigación", "Calidad y medio ambiente", "Transformación y digitalización"]) {
+    "Educación, formación e investigación", "Calidad y medio ambiente", "Transformación y digitalización",
+    "Ingeniería de software", "Ingeniería mecánica", "Ingeniería eléctrica"]) {
     assert.ok(concretas.includes(n), n);
   }
   // 12 sectores generales y 22 concretos; el primero de cada uno repite el id del general.

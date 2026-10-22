@@ -14,31 +14,29 @@
 - [x] Corrector v2.1 (15/10): rúbrica con pesos, evidencia verificada, topes en servidor, clasificaciones sin IA. Ver `docs/Cambios_prereunion/06_corrector.md`.
 - [ ] Corrector: gold set del catálogo con notas humanas (asesora) y banco v2 sobre el corrector real; bandas para la empresa; doble corrección cerca de los cortes.
 
-## Supabase (usuario)
-- [ ] **Ejecutar `supabase_schema_cv.sql`** (bucket privado `cvs` y columna `profiles.cv`). Sin él, el candidato no puede subir su currículum.
-- [ ] **Ejecutar `supabase_schema_cribado.sql`** (preguntas de cribado en `jobs` y respuestas en `applications`). Sin él, las ofertas se publican sin cribado.
-- [ ] **Ejecutar `supabase_schema_seguridad.sql`** (límite de frecuencia persistente) y luego `npm run check:rls`.
-- [ ] **SkillPass v2**: `npm run vc:clave` → `VC_SIGNING_KEY` en Netlify; ejecutar `supabase_schema_vc.sql`; fondear la cartera en Base Sepolia y `npm run deploy:contract:v2` → `SKILLPASS_V2_CONTRACT_ADDRESS`. Para producción, `SEAL_CHAIN=base`. Ver changelog 20/10.
-- [ ] **Ejecutar `supabase_limpiar_ofertas_demo.sql`** para borrar las 4 empresas y 8 ofertas de ejemplo que siguen en producción.
-- [ ] **Ejecutar `supabase_schema_intentos.sql`** (intento único por reto y solicitudes). Sin él los retos funcionan sin control de intento. Resolver solicitudes, de momento, con el `update` que trae el propio SQL.
-- [ ] **Ejecutar `supabase_schema_areas.sql`** (área y especialidad en `jobs`; rellena las ofertas existentes desde su sector antiguo). Sin él, el área se deduce del sector antiguo y la especialidad no se guarda.
-- [ ] **Activar Google** (Authentication → Sign In / Providers → Google, con el Client ID y el secreto de Google Cloud). En Google Cloud: origen `https://talentpact.es` y redirección `https://vqyqedmizxqneniynxqp.supabase.co/auth/v1/callback`. Comprobar con `npm run check:google -- https://talentpact.es`. El código ya está: el botón aparece solo.
-- [ ] **Ejecutar `supabase_schema_verificacion.sql`** (columnas de verificación en `companies`). Sin él, la verificación se calcula pero no se guarda y las ofertas no muestran el sello.
-- [ ] **Exigir confirmar el email** (desactivar la confirmación automática): hasta entonces un email corporativo no verifica a la empresa; solo Google Workspace.
-- [ ] **Ejecutar `supabase_schema_requisitos.sql`** (requisitos imprescindible/valorable por skill en `jobs`). Sin él, las ofertas se guardan sin requisitos.
-- [ ] **Activar Google** en Authentication → Providers (hoy Google y LinkedIn están desactivados; ver `docs/Cambios_prereunion/01_changelog.md`, 15/10). Añadir `https://talentpact.es/` a Redirect URLs.
-- [ ] Decidir si se exige confirmar el email al registrarse (hoy `mailer_autoconfirm` está activo: cualquiera puede registrarse con un correo ajeno).
-- [ ] Ejecutar `supabase_schema_pool_fix.sql` si falta.
-- [ ] Ejecutar `supabase_schema_rrhh_corto.sql` (preguntas de vacante, avisos, pipeline).
-- [ ] Rol admin en `app_metadata` y **`EVAL_SIGNING_SECRET` en Netlify** (sin él ninguna nota sale verificada).
-- [ ] Ejecutar `supabase_schema_dilemmas.sql` (dilemas en oferta + respuestas al postularse).
-- [ ] Rol admin en `app_metadata` y `EVAL_SIGNING_SECRET` en Netlify.
+## Supabase / Netlify (usuario) — punto 1 urgente
+Guía: `docs/Cambios_prereunion/12_produccion_urgente.md`. Diagnóstico: `npm run check:schema`.
+
+**Esquema en producción (22/10, vía plugin Supabase):** `npm run check:schema` → todo `ok`.
+- [x] requisitos, verificación, áreas, integrity, seguridad, intentos, sello, VC
+- [x] bucket `cvs` privado (PDF, 4 MB)
+- [x] ofertas/empresas de ejemplo borradas (`supabase_limpiar_ofertas_demo.sql`)
+
+**Netlify / Auth:**
+- [ ] **`EVAL_SIGNING_SECRET`** en Netlify (`openssl rand -hex 32`). Sin él ninguna nota sale verificada. Redeploy.
+- [ ] Comprobar `SITE_URL=https://talentpact.es`, `SUPABASE_*`, `ANTHROPIC_API_KEY`, Stripe.
+- [ ] **SkillPass v2**: `npm run vc:clave` → `VC_SIGNING_KEY`; contrato v2 → `SKILLPASS_V2_CONTRACT_ADDRESS` (y `SEAL_CHAIN=base` en producción).
+- [ ] **Exigir confirmar el email** (quitar autoconfirm).
+- [ ] **Activar Google** (Providers + Redirect URLs). Comprobar: `npm run check:google -- https://talentpact.es`.
+- [ ] Rol admin en `app_metadata` (backoffice).
 
 ## Código (Claude)
 - [x] Retos: enunciado escapado y con código formateado, guía visible; bloqueada la descarga pública del catálogo con soluciones (20/10).
 - [x] Menú lateral en los paneles de candidato y empresa y Ajustes como página propia (20/10).
 - [x] Rama IA (20/10): bloque propio en el catálogo, 10 retos técnicos de la ola 1 + IA en el trabajo (33 ejercicios), rúbrica técnica y errores que penalizan (corrector 2.2.0).
+- [x] Rama Ingeniería ola 1 (22/10): bloque propio, 6 pistas × 1 reto × 3 ejercicios; especialidades bajo Tecnología; rúbrica `tecnico`.
 - [ ] Rama IA: revisión por un experto, gold set, itinerarios en la oferta, fase 2 (sandbox) y defensa de 2 preguntas; ola 2 (6 competencias).
+- [ ] Rama Ingeniería: revisión por ingenieros de cada pista, engordar a 2–3 retos por pista, gold set.
 - [x] Blockchain definitivo (plan 03): VC 2.0 firmada, revocación, caducidad, verificación en 5 estados, lote Merkle diario, contrato v2 (20/10).
 - [ ] Blockchain: verificación por lotes (CSV) y API `GET /verify/{id}` para Pro/Enterprise; multifirma 2 de 2 como emisor del contrato v2; EBSI más adelante.
 - [x] Pasada de seguridad (20/10): límites persistentes, CORS cerrado, no-store, RLS de las 14 tablas comprobado por test.
@@ -47,9 +45,9 @@
 - [ ] Revisión del contenido de los retos por la asesora (soft) y expertos de cada área; pasar los retos de oferta (`EX_DB`) al catálogo del servidor.
 - [x] Revisión del código de Iván (20/10): seed fuera, pipeline solo con postulados o visibles en el pool, dilemas alineados.
 - [x] Antitrampas fase 0 + intento único + cámara obligatoria (19/10): contenido y soluciones fuera del navegador, `retos-intento`, comprobación previa, pantalla completa, solicitudes de reapertura y de alternativa a la cámara, secuencias corregidas en el servidor. Pendiente de commit.
-- [ ] Backoffice: cola de solicitudes (reapertura / sin cámara) con aprobar y rechazar, y aviso al candidato en su bandeja.
+- [x] Backoffice: cola de solicitudes (reapertura / sin cámara) con aprobar y rechazar, y aviso al candidato en su bandeja (22/10).
 - [ ] Antitrampas siguientes: variantes por intento (datos distintos y detalle trampa), defensa de 2 preguntas, patrón de escritura, detección de móvil y segunda persona, segundo monitor; retos de oferta (`EX_DB`, `03-datos-retos.js`) aún con contenido en el navegador.
-- [ ] Legal: `legal.html` no menciona el currículum en PDF (21/10). Añadir la finalidad (entregarlo a empresas que desbloquean), la conservación (hasta que lo borre o borre la cuenta) y el derecho a retirarlo.
+- [x] Legal: `legal.html` menciona el currículum en PDF (22/10): finalidad (empresas que desbloquean), conservación (hasta eliminarlo o borrar la cuenta) y derecho a retirarlo en «Mi perfil».
 - [ ] Legal: evaluación de impacto (EIPD) antes de activar la cámara obligatoria en producción; revisar `legal.html` §05 con asesoría.
 - [x] Áreas de empleo tipo LinkedIn y vocabulario (19/10): `taxonomia.json` único (7 áreas + especialidades, 12 sectores + ampliados, nombres de skills en español), oferta con área y especialidad, tablón filtrado por área, sector de empresa (12), área de interés del candidato. Pendiente de commit.
 - [x] Clasificación de la asesora (19/10): 9 áreas generales con las 21 concretas, 12 sectores con los 22 concretos (en dos pasos), 6 dimensiones y 32 competencias, catálogo de retos filtrado por pilar y luego por dimensión o área, tipo de puesto en la oferta con competencias sugeridas. Ver `docs/Cambios_prereunion/09_clasificacion_retos_y_competencias.md`. Pendiente de commit.

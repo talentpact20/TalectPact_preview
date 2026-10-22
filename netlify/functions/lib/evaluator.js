@@ -105,12 +105,19 @@ const RUBRICAS = {
     { id: "estructura", nombre: "Estructura", peso: 15, que: "Apertura, desarrollo y cierre; se entiende en una lectura." },
     { id: "concision", nombre: "Concisión", peso: 10, que: "Sin relleno ni repeticiones." }
   ],
-  // Rama IA (docs/plan_post_reunion/02_rama_ia.md §7.4): se puntúan artefactos
-  // técnicos (diagnóstico, diseño, revisión), no cómo escribe la persona.
+  // Rúbrica técnica (rama IA y rama Ingeniería): se puntúan artefactos
+  // (diagnóstico, diseño, revisión), no cómo escribe la persona.
   tecnico_ia: [
     { id: "correccion", nombre: "Corrección técnica", peso: 35, que: "Lo que propone funciona y es correcto: identifica el problema real y la solución no introduce otro." },
     { id: "justificacion", nombre: "Justificación", peso: 25, que: "Explica por qué cada decisión, con alternativas y su coste, apoyándose en los datos del escenario." },
     { id: "riesgos", nombre: "Riesgos y límites", peso: 20, que: "Señala qué puede fallar (datos, seguridad, coste, sesgos) y cómo lo mediría o mitigaría." },
+    { id: "comunicacion", nombre: "Comunicación técnica", peso: 20, que: "Precisa y ordenada: otro ingeniero podría ejecutarla sin preguntar." }
+  ],
+  // Alias usado por la rama Ingeniería (ola 1); mismos pesos que tecnico_ia.
+  tecnico: [
+    { id: "correccion", nombre: "Corrección técnica", peso: 35, que: "Lo que propone funciona y es correcto: identifica el problema real y la solución no introduce otro." },
+    { id: "justificacion", nombre: "Justificación", peso: 25, que: "Explica por qué cada decisión, con alternativas y su coste, apoyándose en los datos del escenario." },
+    { id: "riesgos", nombre: "Riesgos y límites", peso: 20, que: "Señala qué puede fallar (seguridad, coste, fiabilidad, normativa) y cómo lo mediría o mitigaría." },
     { id: "comunicacion", nombre: "Comunicación técnica", peso: 20, que: "Precisa y ordenada: otro ingeniero podría ejecutarla sin preguntar." }
   ],
   general: [

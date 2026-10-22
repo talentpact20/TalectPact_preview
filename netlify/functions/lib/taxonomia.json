@@ -91,6 +91,12 @@
       "especialidades": [
         "Tecnología",
         "Ingeniería e I+D",
+        "Ingeniería de software",
+        "Ingeniería de sistemas",
+        "Ingeniería industrial y de procesos",
+        "Ingeniería mecánica",
+        "Ingeniería civil y de caminos",
+        "Ingeniería eléctrica",
         "Diseño y producto",
         "Transformación y digitalización"
       ]
@@ -700,7 +706,13 @@
     "Agentes de IA": "tecnologia",
     "Evaluación de modelos": "tecnologia",
     "MLOps y LLMOps": "tecnologia",
-    "Seguridad de IA": "tecnologia"
+    "Seguridad de IA": "tecnologia",
+    "Ingeniería de software": "tecnologia",
+    "Ingeniería de sistemas": "tecnologia",
+    "Ingeniería industrial y de procesos": "tecnologia",
+    "Ingeniería mecánica": "tecnologia",
+    "Ingeniería civil y de caminos": "tecnologia",
+    "Ingeniería eléctrica": "tecnologia"
   },
   "areaConcretaDeSkill": {
     "Derecho Laboral": "Asesoría jurídica, riesgos y cumplimiento normativo",
@@ -797,7 +809,13 @@
     "Agentes de IA": "Ingeniería e I+D",
     "Evaluación de modelos": "Ingeniería e I+D",
     "MLOps y LLMOps": "Ingeniería e I+D",
-    "Seguridad de IA": "Ingeniería e I+D"
+    "Seguridad de IA": "Ingeniería e I+D",
+    "Ingeniería de software": "Ingeniería de software",
+    "Ingeniería de sistemas": "Ingeniería de sistemas",
+    "Ingeniería industrial y de procesos": "Ingeniería industrial y de procesos",
+    "Ingeniería mecánica": "Ingeniería mecánica",
+    "Ingeniería civil y de caminos": "Ingeniería civil y de caminos",
+    "Ingeniería eléctrica": "Ingeniería eléctrica"
   },
   "nombreSkill": {
     "Pensamiento Analítico": "Pensamiento analítico",
@@ -865,7 +883,13 @@
     "Google Ads": "Publicidad en Google",
     "Cloud": "Cloud",
     "DevOps": "DevOps",
-    "Lean": "Lean"
+    "Lean": "Lean",
+    "Ingeniería de software": "Ingeniería de software",
+    "Ingeniería de sistemas": "Ingeniería de sistemas",
+    "Ingeniería industrial y de procesos": "Ingeniería industrial y de procesos",
+    "Ingeniería mecánica": "Ingeniería mecánica",
+    "Ingeniería civil y de caminos": "Ingeniería civil y de caminos",
+    "Ingeniería eléctrica": "Ingeniería eléctrica"
   },
   "ia": {
     "nota": "Rama especial de IA (docs/plan_post_reunion/02_rama_ia.md). Competencias con el id del diccionario de IA v4.0; solo las que tienen nombre en el plan.",
@@ -1028,6 +1052,81 @@
       "IA en el trabajo": {
         "grupo": "ia_trabajo",
         "competencia": "05.6"
+      }
+    }
+  },
+  "ingenieria": {
+    "nota": "Rama Ingeniería (ola 1, 22/10): seis pistas con un reto cada una. Rúbrica técnica y errores que penalizan, mismo patrón que la rama IA.",
+    "grupos": [
+      {
+        "id": "ing_software",
+        "nombre": "Ingeniería de software",
+        "corto": "Software",
+        "desc": "APIs, calidad, deuda técnica y prácticas de entrega continua."
+      },
+      {
+        "id": "ing_sistemas",
+        "nombre": "Ingeniería de sistemas",
+        "corto": "Sistemas",
+        "desc": "Disponibilidad, latencia, incidentes y trade-offs de arquitectura."
+      },
+      {
+        "id": "ing_industrial",
+        "nombre": "Ingeniería industrial y de procesos",
+        "corto": "Industrial",
+        "desc": "Flujo, cuellos de botella, Lean e indicadores honestos."
+      },
+      {
+        "id": "ing_mecanica",
+        "nombre": "Ingeniería mecánica",
+        "corto": "Mecánica",
+        "desc": "Fallos, vibración, tolerancias y causa raíz."
+      },
+      {
+        "id": "ing_civil",
+        "nombre": "Ingeniería civil y de caminos",
+        "corto": "Civil",
+        "desc": "Obra, seguridad, control de calidad y decisiones bajo plazo."
+      },
+      {
+        "id": "ing_electrica",
+        "nombre": "Ingeniería eléctrica",
+        "corto": "Eléctrica",
+        "desc": "Protecciones, instalaciones y prácticas seguras en baja tensión."
+      }
+    ],
+    "competencias": {
+      "ing.sw": "Ingeniería de software",
+      "ing.sis": "Ingeniería de sistemas",
+      "ing.ind": "Ingeniería industrial y de procesos",
+      "ing.mec": "Ingeniería mecánica",
+      "ing.civ": "Ingeniería civil y de caminos",
+      "ing.ele": "Ingeniería eléctrica"
+    },
+    "skills": {
+      "Ingeniería de software": {
+        "grupo": "ing_software",
+        "competencia": "ing.sw"
+      },
+      "Ingeniería de sistemas": {
+        "grupo": "ing_sistemas",
+        "competencia": "ing.sis"
+      },
+      "Ingeniería industrial y de procesos": {
+        "grupo": "ing_industrial",
+        "competencia": "ing.ind"
+      },
+      "Ingeniería mecánica": {
+        "grupo": "ing_mecanica",
+        "competencia": "ing.mec"
+      },
+      "Ingeniería civil y de caminos": {
+        "grupo": "ing_civil",
+        "competencia": "ing.civ"
+      },
+      "Ingeniería eléctrica": {
+        "grupo": "ing_electrica",
+        "competencia": "ing.ele"
       }
     }
   }

@@ -11,6 +11,7 @@
     "bench": "node tfm/tech/eval/run_bench.js",
     "bench:offline": "node tfm/tech/eval/run_bench.js --offline",
     "check:rls": "node tfm/tech/scripts/check-rls.js",
+    "check:schema": "node tfm/tech/scripts/check-schema.js",
     "check:google": "node tfm/tech/scripts/check-google-auth.js",
     "deploy:contract": "node tfm/tech/scripts/deploy-contract.js",
     "compile:contract": "node tfm/tech/scripts/deploy-contract.js --dry-run",

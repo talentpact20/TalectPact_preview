@@ -549,3 +549,53 @@ Orden: más reciente abajo. Cada entrada: fecha, qué, por qué (para la asesora
 **Qué.** Con el menú lateral a la izquierda, los bloques del contenido (ofertas, perfil, talento, ajustes…) quedaban pegados al menú. Ahora cada página se centra en el hueco libre (`margin: auto` sobre el tope de 1100 px).
 
 **Ficheros.** `componentes.css`, `index.html`.
+
+---
+
+## 2026-10-22 — Punto 1 urgente: diagnóstico de esquema y guía de producción
+
+**Qué.** Script `npm run check:schema` que pregunta a Supabase (solo lectura, clave pública) qué tablas/columnas del código faltan. Guía `12_produccion_urgente.md` con el orden de SQL y los secretos de Netlify.
+
+**Diagnóstico (22/10).** Ya están: pool, notificaciones, dilemas, cribado, CV, respuestas. Faltan: requisitos, verificación, áreas, integrity, seguridad (`rate_events`), intentos, sello y VC (`anchor_batches`), más limpiar demos.
+
+**Ficheros.** `tfm/tech/scripts/check-schema.js`, `package.json`, `docs/Cambios_prereunion/12_produccion_urgente.md`, `Pendientes.md`.
+
+---
+
+## 2026-10-22 — SQL de producción aplicado vía plugin Supabase
+
+**Qué.** Con el MCP `plugin-supabase-supabase` autenticado, aplicadas las migraciones que faltaban en el proyecto `talentpact` (`vqyqedmizxqneniynxqp`): requisitos, verificación, áreas, integrity, seguridad (`rate_events`), intentos, sello, VC (`anchor_batches`), bucket `cvs` privado, y limpieza de ofertas demo (0 quedan).
+
+**Comprobado.** `npm run check:schema` → todas las piezas `ok`.
+
+**Sigue pendiente (Netlify / Auth):** `EVAL_SIGNING_SECRET`, confirmar email, Google, SkillPass v2 keys/contrato.
+
+---
+
+## 2026-10-22 — Legal: currículum en PDF en privacidad
+
+**Qué.** `legal.html` §03 pasa a documentar el CV opcional: finalidad (entregarlo solo a empresas que desbloquean el contacto), conservación (hasta que el candidato lo elimine o borre la cuenta) y derecho a retirarlo desde «Mi perfil › Tu currículum». También se actualiza el párrafo de anonimato, el proveedor Supabase (Storage) y la fecha de la página.
+
+**Por qué.** El producto ya guardaba y entregaba el PDF; el aviso legal aún no lo decía.
+
+**Ficheros.** `legal.html`, `Talentpact/Trabajo/Pendientes.md`, `Talentpact/Trabajo/Decisiones.md`.
+
+---
+
+## 2026-10-22 — Rama Ingeniería (ola 1): seis pistas en el catálogo
+
+**Qué.** Nuevo bloque **Ingeniería** en el catálogo (junto a Hard, Soft e IA), con 6 pistas: software, sistemas, industrial/procesos, mecánica, civil/caminos y eléctrica. Cada pista tiene 1 reto con 3 ejercicios (diagnóstico/diseño + clasificación), rúbrica técnica `tecnico` y errores que penalizan. Bajo Tecnología se añaden las 6 especialidades (se mantiene «Ingeniería e I+D» para la rama IA).
+
+**Por qué.** Un ingeniero entraba y no veía su dominio: solo soft, sector genérico e IA.
+
+**Ficheros.** `tools/retos_ingenieria.json`, `tools/agregar_retos_ingenieria.js`, `catalogo-retos.json`, `07-retos-comunes.js`, `taxonomia.json`, `01b-taxonomia.js`, `evaluator.js` (rúbrica `tecnico`), `23-clasificacion.js`, `19-rrhh.js`, `18-interfaz.js`, `00-iconos.js`, `tests/rama-ingenieria.test.js` (4). Tests: 219 en 32 ficheros.
+
+---
+
+## 2026-10-22 — Backoffice: cola de solicitudes de intento
+
+**Qué.** Nueva sección «Solicitudes» en el backoffice (solo `app_metadata.role = admin`): lista pendientes de reapertura y de alternativa a la cámara, con aprobar / rechazar. Al aprobar una reapertura se anula el intento previo; al rechazar hace falta una nota. El candidato recibe el resultado en su bandeja. Solo se muestra alias, nunca el email.
+
+**Por qué.** Sin esta cola, las solicitudes que ya enviaba el candidato (reto oficial) solo se podían resolver a mano en SQL.
+
+**Ficheros.** `admin-solicitudes` (handler + `.mjs`), `notify.js`, `11-superadmin.js`, `index.html`, `tema.css`, `supabase_schema_intentos.sql` (comentario), `tests/admin-solicitudes.test.js` (5). Tests: 215 en 31 ficheros.

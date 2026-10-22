@@ -130,6 +130,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--emerald-
 .adm-nav .ico{width:16px;height:16px}
 .adm-nav:hover{background:var(--slate-50);color:var(--slate-900)}
 .adm-nav.active{background:var(--emerald-50);color:var(--emerald-700);font-weight:600}
+.adm-nav-badge{display:inline-block;margin-left:6px;min-width:1.25rem;padding:0 6px;border-radius:999px;background:var(--emerald-600);color:var(--c-superficie);font-size:var(--fs-micro);font-weight:700;line-height:1.4;text-align:center;vertical-align:middle}
+.adm-sol-acc{display:flex;flex-wrap:wrap;gap:6px}
+.adm-motivo{display:block;max-width:28ch;white-space:normal;line-height:1.4}
 .adm-main{flex:1;overflow:auto;padding:28px 32px}
 .adm-pag{display:none}.adm-pag.active{display:block}
 .adm-main h2{font-size:var(--fs-t3);font-weight:700;margin-bottom:4px}

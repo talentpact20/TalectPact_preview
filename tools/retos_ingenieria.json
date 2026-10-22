@@ -1,0 +1,506 @@
+[
+  {
+    "id": "ing_software",
+    "skill": "Ingeniería de software",
+    "competencia": "ing.sw",
+    "grupo": "ing_software",
+    "title": "Ingeniería de software",
+    "desc": "Revisa código y APIs con fallos reales, prioriza deuda técnica con datos y separa buenas prácticas de riesgos en un equipo que entrega cada semana.",
+    "searchTerms": "software api deuda técnica revisión código idempotencia timeouts pruebas contrato versionado",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Revisión de un endpoint de cobros",
+        "type": "email",
+        "timeLimit": 1080,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Revisarás un fragmento que cobra a clientes. Hay fallos de robustez y de contrato.",
+        "sub": "Revisión de código — 18 min",
+        "skills": { "hard": ["APIs", "Idempotencia"], "soft": ["Rigor"] },
+        "scenario": "Un compañero abre un pull request con el endpoint que cobra una factura pendiente. En producción hay cobros duplicados tras reintentos de la pasarela y a veces se responde 200 con el cuerpo a medias.\n\n```javascript\napp.post('/cobros', async (req, res) => {\n  const { facturaId, importe } = req.body;\n  const cobro = await stripe.charges.create({ amount: importe, currency: 'eur', metadata: { facturaId } });\n  await db.query('UPDATE facturas SET pagada=true WHERE id=$1', [facturaId]);\n  res.json({ ok: true, cobroId: cobro.id });\n});\n```",
+        "data": {
+          "to": "Pull request — Revisión de código",
+          "subject": "Revisión: POST /cobros",
+          "hint": "1) Lista los problemas de más a menos grave, con qué provoca en producción. 2) Explica por qué aparecen cobros duplicados. 3) Propón el contrato del endpoint (código HTTP, cuerpo, cabeceras) y cómo harías el cobro idempotente. 4) Di qué prueba automática añadirías.",
+          "kw": ["idempotencia", "reintento", "clave de idempotencia", "transacción", "validación", "timeout", "código HTTP", "prueba"],
+          "penaliza": [
+            { "id": "sin_idempotencia", "texto": "No propone ninguna forma de evitar cobros duplicados ante reintentos.", "criterio": "correccion", "tope": 40 },
+            { "id": "ignora_validacion", "texto": "Acepta el cuerpo sin validar facturaId, importe o moneda.", "criterio": "correccion", "tope": 60 }
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Qué deuda técnica atacar primero",
+        "type": "analysis",
+        "timeLimit": 720,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Verás el coste de varios focos de deuda técnica. Tendrás que priorizar con datos.",
+        "sub": "Priorización — 12 min",
+        "skills": { "hard": ["Deuda técnica", "Priorización"], "soft": ["Juicio"] },
+        "scenario": "El equipo tiene cuatro semanas para reducir fallos en producción antes de la campaña de Navidad. Solo podéis acometer un foco grande y uno pequeño. Tienes el resumen del último trimestre.",
+        "data": {
+          "headers": ["Foco", "Incidentes / mes", "Tiempo medio de reparación", "Esfuerzo estimado", "Estado"],
+          "table": [
+            { "n": "Suite de pruebas flaky", "a": "2", "b": "4 h", "c": "3 semanas", "d": "Revisar", "cls": "v-warn" },
+            { "n": "Servicio de pagos sin reintentos controlados", "a": "11", "b": "6 h", "c": "2 semanas", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Monolito difícil de desplegar", "a": "1", "b": "2 días", "c": "8 semanas", "d": "Revisar", "cls": "v-warn" },
+            { "n": "Logs sin correlación de petición", "a": "0", "b": "—", "c": "1 semana", "d": "Mejora", "cls": "v-good" }
+          ],
+          "q": "¿Qué foco grande y qué foco pequeño acometerías, en qué orden, y qué métrica mirarías a las dos semanas para saber si acertaste?",
+          "kw": ["incidentes", "tiempo de reparación", "pagos", "reintentos", "esfuerzo", "métrica", "prioridad", "campaña"],
+          "penaliza": [
+            { "id": "elige_monolito", "texto": "Prioriza el monolito (8 semanas) como foco grande antes de la campaña, ignorando el volumen de incidentes de pagos.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Buena práctica o riesgo?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "basico",
+        "briefing": "Clasificarás prácticas habituales en un equipo de producto que entrega cada semana.",
+        "sub": "Clasificación — 5 min",
+        "skills": { "hard": ["Calidad"], "soft": ["Criterio"] },
+        "scenario": "Revisas el día a día de un equipo de ingeniería de software. Clasifica cada práctica:\n\nBuena práctica — Reduce fallos, acelera el aprendizaje o protege al usuario.\n\nRiesgo — Puede romper producción, ocultar errores o frenar al equipo sin beneficio claro.",
+        "data": {
+          "options": [
+            { "id": "p1", "text": "Exigir revisión de código por otra persona antes de fusionar en la rama principal", "correct": "buena" },
+            { "id": "p2", "text": "Desplegar el viernes por la tarde cambios grandes sin plan de vuelta atrás", "correct": "riesgo" },
+            { "id": "p3", "text": "Guardar secretos de producción en el repositorio «privado» del equipo", "correct": "riesgo" },
+            { "id": "p4", "text": "Correr la suite de pruebas en cada pull request antes de fusionar", "correct": "buena" },
+            { "id": "p5", "text": "Silenciar las alertas de error «porque siempre saltan» sin investigar la causa", "correct": "riesgo" },
+            { "id": "p6", "text": "Definir un contrato de API versionado y probarlo con clientes de prueba", "correct": "buena" },
+            { "id": "p7", "text": "Hacer cambios directos en producción con la consola de la base de datos sin registro", "correct": "riesgo" },
+            { "id": "p8", "text": "Medir el tiempo desde que se abre un fallo hasta que se mitiga", "correct": "buena" }
+          ],
+          "cats": ["Buena práctica", "Riesgo"],
+          "keys": ["buena", "riesgo"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "ing_sistemas",
+    "skill": "Ingeniería de sistemas",
+    "competencia": "ing.sis",
+    "grupo": "ing_sistemas",
+    "title": "Ingeniería de sistemas",
+    "desc": "Diseña con restricciones de disponibilidad y latencia, diagnostica un incidente de punta a punta y decide qué trade-off aceptar.",
+    "searchTerms": "sistemas disponibilidad latencia cola caché circuito abierto incidente arquitectura trade-off",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Diseño con presupuesto de error",
+        "type": "email",
+        "timeLimit": 1200,
+        "difficulty": "avanzado",
+        "rubrica": "tecnico",
+        "briefing": "Diseñarás un servicio de alta disponibilidad con números concretos de latencia y error.",
+        "sub": "Diseño — 20 min",
+        "skills": { "hard": ["Arquitectura", "Disponibilidad"], "soft": ["Comunicación técnica"] },
+        "scenario": "Una aseguradora quiere un servicio que consulte pólizas para el call center. Requisitos: 99,9 % de disponibilidad mensual, latencia p95 menor de 300 ms, picos de 800 peticiones por segundo, datos con permiso por departamento. Presupuesto: dos regiones en la Unión Europea. No podéis reescribir el sistema de pólizas legado (respuesta p95 de 180 ms, caídas de 20 minutos al mes).",
+        "data": {
+          "to": "Comité técnico — Propuesta de arquitectura",
+          "subject": "Servicio de consulta de pólizas para el call center",
+          "hint": "1) Propón los componentes (caché, cola, cortafuegos de dependencia, etc.) y el flujo de una petición. 2) Calcula si el legado solo permite cumplir el 99,9 % o qué mitigación hace falta. 3) Explica cómo respetas los permisos por departamento. 4) Lista dos riesgos y cómo los medirías en las dos primeras semanas.",
+          "kw": ["disponibilidad", "latencia", "caché", "circuito abierto", "permisos", "región", "legado", "presupuesto de error"],
+          "penaliza": [
+            { "id": "ignora_legado", "texto": "Ignora las caídas del legado o afirma que con una sola dependencia sin mitigación se cumple el 99,9 %.", "criterio": "correccion", "tope": 40 },
+            { "id": "permisos_despues", "texto": "Filtra los permisos después de devolver datos de otros departamentos.", "criterio": "riesgos", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Incidente: cola saturada",
+        "type": "analysis",
+        "timeLimit": 780,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Verás la línea temporal de un incidente. Tendrás que localizar la causa y el siguiente paso.",
+        "sub": "Incidente — 13 min",
+        "skills": { "hard": ["Observabilidad", "Colas"], "soft": ["Calma"] },
+        "scenario": "A las 10:12 sube la latencia del checkout. A las 10:18 empiezan a fallar los pagos y el soporte recibe quejas de carritos abandonados. Acaba de entrar en producción un cambio etiquetado como «optimiza workers». Tienes la tabla de señales del panel de control de las 10:10 a las 10:20.",
+        "data": {
+          "headers": ["Señal", "10:10", "10:15", "10:20", "Nota"],
+          "table": [
+            { "n": "Latencia p95 checkout", "a": "210 ms", "b": "1,8 s", "c": "4,2 s", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Errores 5xx pasarela", "a": "0,1 %", "b": "0,2 %", "c": "0,3 %", "d": "Estable", "cls": "v-good" },
+            { "n": "Profundidad cola de reservas", "a": "120", "b": "8.400", "c": "22.000", "d": "Crítico", "cls": "v-bad" },
+            { "n": "CPU trabajadores de cola", "a": "35 %", "b": "98 %", "c": "99 %", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Despliegue «optimiza workers»", "a": "—", "b": "10:11", "c": "activo", "d": "Sospechoso", "cls": "v-warn" }
+          ],
+          "q": "¿Cuál es la causa más probable, qué harías en los próximos 15 minutos y qué no harías todavía?",
+          "kw": ["cola", "trabajadores", "despliegue", "saturación", "mitigar", "rollback", "latencia", "checkout"],
+          "penaliza": [
+            { "id": "culpa_pasarela", "texto": "Atribuye el incidente a la pasarela de pago pese a que sus errores 5xx apenas suben.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Qué trade-off aceptas?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "basico",
+        "briefing": "Clasificarás decisiones de arquitectura según el compromiso que aceptan.",
+        "sub": "Clasificación — 5 min",
+        "skills": { "hard": ["Trade-offs"], "soft": ["Juicio"] },
+        "scenario": "En un diseño de sistemas casi siempre cedes algo. Clasifica cada decisión:\n\nPrioriza disponibilidad — Aceptas más complejidad o coste para seguir sirviendo.\n\nPrioriza simplicidad — Aceptas menos resiliencia o más latencia a cambio de un sistema más simple.",
+        "data": {
+          "options": [
+            { "id": "p1", "text": "Replicar el servicio de lectura en dos regiones con conmutación automática", "correct": "disponibilidad" },
+            { "id": "p2", "text": "Una sola base de datos sin réplica, con copias nocturnas", "correct": "simplicidad" },
+            { "id": "p3", "text": "Caché con caducidad corta delante de un servicio lento", "correct": "disponibilidad" },
+            { "id": "p4", "text": "Llamar en línea a tres servicios externos en cada petición sin tiempos máximos", "correct": "simplicidad" },
+            { "id": "p5", "text": "Cola con reintentos y circuito abierto ante un proveedor inestable", "correct": "disponibilidad" },
+            { "id": "p6", "text": "Procesar todo en un único proceso sin colas «porque es más fácil de depurar»", "correct": "simplicidad" },
+            { "id": "p7", "text": "Presupuesto de error mensual acordado con negocio y alarmas al 50 %", "correct": "disponibilidad" },
+            { "id": "p8", "text": "Desactivar la monitorización fuera de horario laboral para ahorrar", "correct": "simplicidad" }
+          ],
+          "cats": ["Prioriza disponibilidad", "Prioriza simplicidad"],
+          "keys": ["disponibilidad", "simplicidad"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "ing_industrial",
+    "skill": "Ingeniería industrial y de procesos",
+    "competencia": "ing.ind",
+    "grupo": "ing_industrial",
+    "title": "Ingeniería industrial y de procesos",
+    "desc": "Localiza cuellos de botella en un flujo real, propone un cambio Lean con números y clasifica mejoras frente a maquillaje de indicadores.",
+    "searchTerms": "industrial procesos lean cuello de botella takt lead time oee desperdicio flujo",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "El cuello de botella de la línea",
+        "type": "analysis",
+        "timeLimit": 900,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Verás tiempos y stocks de una línea de montaje. Tendrás que decir dónde está el límite real.",
+        "sub": "Diagnóstico — 15 min",
+        "skills": { "hard": ["Flujo", "Cuello de botella"], "soft": ["Análisis"] },
+        "scenario": "Una planta monta equipos de climatización. La demanda es de 12 unidades por hora. La dirección quiere «más gente en el embalaje» porque allí se ven colas. Tienes los datos del turno de mañana.",
+        "data": {
+          "headers": ["Estación", "Tiempo de ciclo", "Disponibilidad", "Stock delante", "Estado"],
+          "table": [
+            { "n": "Preparación de chasis", "a": "3,8 min", "b": "96 %", "c": "4 ud.", "d": "Holgado", "cls": "v-good" },
+            { "n": "Montaje de circuito", "a": "6,2 min", "b": "91 %", "c": "18 ud.", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Prueba funcional", "a": "4,1 min", "b": "88 %", "c": "3 ud.", "d": "Revisar", "cls": "v-warn" },
+            { "n": "Embalaje", "a": "3,5 min", "b": "97 %", "c": "22 ud.", "d": "Cola visible", "cls": "v-warn" }
+          ],
+          "q": "¿Dónde está el cuello de botella, por qué el embalaje muestra cola y qué harías en la primera semana (una acción grande y una pequeña)?",
+          "kw": ["cuello de botella", "tiempo de ciclo", "demanda", "stock", "embalaje", "montaje", "capacidad", "flujo"],
+          "penaliza": [
+            { "id": "mas_gente_embalaje", "texto": "Propone como primera medida meter más gente en embalaje sin tocar el montaje de circuito.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Propuesta Lean a dirección",
+        "type": "email",
+        "timeLimit": 900,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Escribirás una propuesta breve para reducir el lead time de un pedido.",
+        "sub": "Propuesta — 15 min",
+        "skills": { "hard": ["Lean", "Lead time"], "soft": ["Comunicación"] },
+        "scenario": "El lead time medio de un pedido estándar es de 14 días. El tiempo de proceso neto suma 2,5 días. El resto es espera entre estaciones, reprocesos por defectos (8 %) y lotes grandes en pintura. Dirección pide un plan de 90 días sin invertir en una línea nueva.",
+        "data": {
+          "to": "Dirección de operaciones",
+          "subject": "Plan 90 días para bajar el lead time del pedido estándar",
+          "hint": "1) Señala las tres fuentes de demora con el dato que las respalda. 2) Propón tres acciones en los 90 días, con dueño y métrica. 3) Di qué no harías (inversión o vanity metric). 4) Anticipa un riesgo de la implantación y cómo lo vigilarías.",
+          "kw": ["lead time", "espera", "reproceso", "lote", "métrica", "90 días", "desperdicio", "flujo"],
+          "penaliza": [
+            { "id": "solo_invertir", "texto": "La propuesta principal es comprar una línea nueva o automatizarlo todo sin atacar esperas y reprocesos.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Mejora real o maquillaje?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "basico",
+        "briefing": "Clasificarás cambios en planta según si mejoran el flujo o solo el indicador.",
+        "sub": "Clasificación — 5 min",
+        "skills": { "hard": ["Indicadores"], "soft": ["Criterio"] },
+        "scenario": "Un equipo de mejora presenta iniciativas. Clasifica cada una:\n\nMejora real — Reduce demora, defecto o sobrecarga de forma sostenible.\n\nMaquillaje — Sube un indicador sin mejorar el valor para el cliente o traslada el problema.",
+        "data": {
+          "options": [
+            { "id": "p1", "text": "Reducir el tamaño de lote en pintura y equilibrar el ritmo con la demanda", "correct": "mejora" },
+            { "id": "p2", "text": "Dejar de contar los defectos que el cliente no reclama para subir el OEE reportado", "correct": "maquillaje" },
+            { "id": "p3", "text": "Estandarizar el cambio de utillaje y medir el tiempo real de cambio", "correct": "mejora" },
+            { "id": "p4", "text": "Mover el stock de defectos a otro almacén para que «no cuente» en la línea", "correct": "maquillaje" },
+            { "id": "p5", "text": "Atacar la causa de un defecto recurrente con un experimento controlado", "correct": "mejora" },
+            { "id": "p6", "text": "Pedir a los operarios que apunten menos paradas para no estropear el cuadro de mando", "correct": "maquillaje" },
+            { "id": "p7", "text": "Limitar el trabajo en curso entre estaciones con un máximo visible", "correct": "mejora" },
+            { "id": "p8", "text": "Cambiar la definición de «a tiempo» para incluir pedidos con dos días de retraso", "correct": "maquillaje" }
+          ],
+          "cats": ["Mejora real", "Maquillaje"],
+          "keys": ["mejora", "maquillaje"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "ing_mecanica",
+    "skill": "Ingeniería mecánica",
+    "competencia": "ing.mec",
+    "grupo": "ing_mecanica",
+    "title": "Ingeniería mecánica",
+    "desc": "Diagnostica un fallo mecánico con evidencias, elige tolerancias con criterio y separa causas raíz de síntomas.",
+    "searchTerms": "mecánica fatiga tolerancia vibración rodamiento holgura mantenimiento causa raíz",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Vibración en un reductor",
+        "type": "analysis",
+        "timeLimit": 900,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Verás síntomas y mediciones de un reductor que vibra. Tendrás que priorizar hipótesis.",
+        "sub": "Diagnóstico — 15 min",
+        "skills": { "hard": ["Vibración", "Mantenimiento"], "soft": ["Método"] },
+        "scenario": "Un reductor de un transportador vibra por encima del límite desde hace 10 días. Se sustituyó grasa hace tres semanas. No hay fugas visibles. La producción pide «cambiar el motor ya».",
+        "data": {
+          "headers": ["Evidencia", "Valor", "Límite", "Tendencia", "Estado"],
+          "table": [
+            { "n": "Vibración en carcasa (mm/s)", "a": "7,8", "b": "4,5", "c": "Sube desde día 1", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Temperatura rodamiento salida", "a": "78 °C", "b": "70 °C", "c": "Sube", "d": "Revisar", "cls": "v-warn" },
+            { "n": "Corriente del motor", "a": "Nominal", "b": "—", "c": "Estable", "d": "Bien", "cls": "v-good" },
+            { "n": "Holgura axial medida", "a": "0,45 mm", "b": "0,15 mm", "c": "Fuera de rango", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Espectro: pico a frecuencia de engranaje", "a": "Alto", "b": "—", "c": "Nuevo", "d": "Sospechoso", "cls": "v-warn" }
+          ],
+          "q": "¿Cuál es la hipótesis más probable, qué comprobarías antes de cambiar el motor y qué harías si la planta solo te da 4 horas de parada?",
+          "kw": ["holgura", "rodamiento", "engranaje", "vibración", "motor", "temperatura", "parada", "causa"],
+          "penaliza": [
+            { "id": "cambia_motor", "texto": "Propone cambiar el motor como primera acción pese a corriente nominal y evidencias en el reductor.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Tolerancias que no cuadran",
+        "type": "email",
+        "timeLimit": 900,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Responderás a fabricación sobre un ajuste que no monta en serie.",
+        "sub": "Tolerancias — 15 min",
+        "skills": { "hard": ["Tolerancias", "Ajustes"], "soft": ["Claridad"] },
+        "scenario": "Fabricación monta un eje Ø20 en un casquillo. El plano pide ajuste H7/g6. El 12 % de los montajes quedan flojos y vibran; el 5 % no entran en frío. Compras cambió de proveedor de casquillos hace un mes «con el mismo plano».",
+        "data": {
+          "to": "Fabricación y calidad",
+          "subject": "Ajuste eje-casquillo: montajes flojos y que no entran",
+          "hint": "1) Explica qué significa el ajuste pedido en lenguaje claro. 2) Lista las tres causas más plausibles del síntoma mixto (flojos y que no entran). 3) Propón mediciones concretas en 20 piezas de cada proveedor. 4) Di qué no cambiarías en el plano hasta tener datos.",
+          "kw": ["H7", "g6", "tolerancia", "proveedor", "medición", "interferencia", "holgura", "capacidad"],
+          "penaliza": [
+            { "id": "afloja_plano", "texto": "Propone abrir el plano a ojo (p. ej. pasar a holgura libre) sin medir ni comparar proveedores.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Causa raíz o síntoma?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "basico",
+        "briefing": "Clasificarás hallazgos de un análisis de fallo.",
+        "sub": "Clasificación — 5 min",
+        "skills": { "hard": ["Causa raíz"], "soft": ["Criterio"] },
+        "scenario": "Tras una rotura de un eje, el equipo enumera hallazgos. Clasifica cada uno:\n\nCausa raíz plausible — Explica el mecanismo del fallo y guía la acción.\n\nSíntoma o consecuencia — Es real, pero actuar solo ahí no evita la repetición.",
+        "data": {
+          "options": [
+            { "id": "p1", "text": "Marcas de fatiga en la sección de rotura junto a un radio de acuerdo insuficiente", "correct": "causa" },
+            { "id": "p2", "text": "El eje está roto en dos trozos", "correct": "sintoma" },
+            { "id": "p3", "text": "Desalineación crónica del acoplamiento por apoyo flojo en la bancada", "correct": "causa" },
+            { "id": "p4", "text": "Ruido anormal las dos semanas previas", "correct": "sintoma" },
+            { "id": "p5", "text": "Par de apriete de la brida por debajo del valor del plano de forma sistemática", "correct": "causa" },
+            { "id": "p6", "text": "Aceite con virutas metálicas en el cárter", "correct": "sintoma" },
+            { "id": "p7", "text": "Sobrecarga cíclica por un arranque directo no previsto en el diseño", "correct": "causa" },
+            { "id": "p8", "text": "Alarma de vibración disparada el día del fallo", "correct": "sintoma" }
+          ],
+          "cats": ["Causa raíz plausible", "Síntoma o consecuencia"],
+          "keys": ["causa", "sintoma"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "ing_civil",
+    "skill": "Ingeniería civil y de caminos",
+    "competencia": "ing.civ",
+    "grupo": "ing_civil",
+    "title": "Ingeniería civil y de caminos",
+    "desc": "Prioriza riesgos en obra, responde a una no conformidad con criterio de seguridad y clasifica decisiones según si protegen a las personas o solo el plazo.",
+    "searchTerms": "civil caminos obra seguridad talud drenaje firme no conformidad plazo señalización",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Riesgos en un tramo en obra",
+        "type": "analysis",
+        "timeLimit": 900,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Verás el estado de un tramo de carretera en obra. Tendrás que priorizar qué atacar mañana.",
+        "sub": "Obra — 15 min",
+        "skills": { "hard": ["Seguridad", "Obra"], "soft": ["Priorización"] },
+        "scenario": "Diriges la supervisión de un acondicionamiento de 2,4 km. Mañana hay visita de inspección y lluvia fuerte prevista. El jefe de obra quiere «cerrar el firme del pk 1+200 porque se ve bien en foto».",
+        "data": {
+          "headers": ["Punto", "Hallazgo", "Gravedad", "Plazo", "Estado"],
+          "table": [
+            { "n": "Talud pk 0+800", "a": "Grietas abiertas tras lluvia; sin red provisional", "b": "Alta", "c": "Inmediato", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Drenaje pk 1+050", "a": "Cuneta obstruida; agua hacia el terraplén", "b": "Alta", "c": "48 h", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Firme pk 1+200", "a": "Capa de rodadura pendiente; base conforme", "b": "Media", "c": "1 semana", "d": "Planificable", "cls": "v-warn" },
+            { "n": "Señalización provisional", "a": "Faltan 3 paneles en curva; velocidad no reducida", "b": "Alta", "c": "Inmediato", "d": "Crítico", "cls": "v-bad" },
+            { "n": "Acopio de material", "a": "Ordenado fuera de calzada", "b": "Baja", "c": "—", "d": "Bien", "cls": "v-good" }
+          ],
+          "q": "¿Qué tres acciones harías mañana antes de las 10:00, en qué orden, y qué le dirías al jefe de obra sobre el firme del pk 1+200?",
+          "kw": ["talud", "drenaje", "señalización", "seguridad", "lluvia", "prioridad", "firme", "inspección"],
+          "penaliza": [
+            { "id": "prioriza_foto", "texto": "Prioriza cerrar el firme del pk 1+200 por imagen o plazo antes que talud, drenaje o señalización.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Respuesta a una no conformidad",
+        "type": "email",
+        "timeLimit": 840,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Redactarás la respuesta técnica a una no conformidad de compactación.",
+        "sub": "Calidad — 14 min",
+        "skills": { "hard": ["Control de calidad"], "soft": ["Claridad"] },
+        "scenario": "La dirección facultativa abre una no conformidad: tres ensayos de compactación en terraplén dan el 92 %, 93 % y 91 % del Proctor modificado (exigido ≥ 95 %). El contratista alega que «está casi» y pide aceptar con descuento.",
+        "data": {
+          "to": "Dirección facultativa y contratista",
+          "subject": "No conformidad NC-17: compactación de terraplén",
+          "hint": "1) Di con claridad si se puede aceptar o no, y por qué (sin rodeos). 2) Propón la acción correctora (qué se rehace, cómo se vuelve a ensayar). 3) Señala el riesgo de aceptar «casi» para la estabilidad. 4) Indica qué registro dejáis firmado.",
+          "kw": ["Proctor", "compactación", "rechazo", "rehacer", "ensayo", "estabilidad", "registro", "95 %"],
+          "penaliza": [
+            { "id": "acepta_casi", "texto": "Acepta el terraplén con descuento o «casi cumple» sin rehacer ni nuevo control al 95 %.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Seguridad o solo plazo?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "basico",
+        "briefing": "Clasificarás decisiones de obra según lo que priorizan de verdad.",
+        "sub": "Clasificación — 5 min",
+        "skills": { "hard": ["Seguridad vial"], "soft": ["Ética profesional"] },
+        "scenario": "En obra aparecen estas decisiones. Clasifica cada una:\n\nProtege a las personas — Reduce un riesgo real para operarios o usuarios.\n\nSolo el plazo — Busca velocidad o imagen y deja el riesgo intacto o peor.",
+        "data": {
+          "options": [
+            { "id": "p1", "text": "Cortar el carril y señalizar un desvío antes de trabajar junto a tráfico vivo", "correct": "seguridad" },
+            { "id": "p2", "text": "Quitar barreras provisionales «unas horas» para que pasen más camiones de obra", "correct": "plazo" },
+            { "id": "p3", "text": "Parar el tajo de talud al detectar grietas nuevas tras una tormenta", "correct": "seguridad" },
+            { "id": "p4", "text": "Rellenar un parte de ensayo con valores inventados para no parar la tongada", "correct": "plazo" },
+            { "id": "p5", "text": "Iluminar y balizar un desvío nocturno antes de abrirlo al tráfico", "correct": "seguridad" },
+            { "id": "p6", "text": "Permitir el paso de turismos por una zona sin firme terminado para no divertir tráfico", "correct": "plazo" },
+            { "id": "p7", "text": "Exigir EPI y charla específica antes de trabajos en altura", "correct": "seguridad" },
+            { "id": "p8", "text": "Ocultar una incidencia grave hasta después de la visita de inspección", "correct": "plazo" }
+          ],
+          "cats": ["Protege a las personas", "Solo el plazo"],
+          "keys": ["seguridad", "plazo"]
+        }
+      }
+    ]
+  },
+  {
+    "id": "ing_electrica",
+    "skill": "Ingeniería eléctrica",
+    "competencia": "ing.ele",
+    "grupo": "ing_electrica",
+    "title": "Ingeniería eléctrica",
+    "desc": "Diagnostica un disparo de protección, revisa una instalación con defectos de seguridad y clasifica prácticas eléctricas seguras frente a riesgos.",
+    "searchTerms": "eléctrica protección diferencial magnetotérmico cortocircuito puesta a tierra selectividad cuadro",
+    "exercises": [
+      {
+        "id": "e1",
+        "title": "Disparo que no debería subir",
+        "type": "analysis",
+        "timeLimit": 900,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Verás la secuencia de un disparo en un cuadro. Tendrás que explicar la selectividad.",
+        "sub": "Protecciones — 15 min",
+        "skills": { "hard": ["Protecciones", "Selectividad"], "soft": ["Método"] },
+        "scenario": "En una nave industrial salta el interruptor general y deja sin servicio a toda la planta. El fallo estaba en una máquina del final de línea. Mantenimiento quiere «subir el calibre del general» para que no vuelva a pasar.",
+        "data": {
+          "headers": ["Elemento", "Calibre / ajuste", "Qué hizo", "Tiempo", "Estado"],
+          "table": [
+            { "n": "Fusible de la máquina", "a": "32 A", "b": "No abrió", "c": "—", "d": "Fallo", "cls": "v-bad" },
+            { "n": "Magnetotérmico de salida", "a": "40 A curva C", "b": "No abrió", "c": "—", "d": "Fallo", "cls": "v-bad" },
+            { "n": "Interruptor general", "a": "250 A", "b": "Abrió", "c": "0,2 s", "d": "Actuó", "cls": "v-warn" },
+            { "n": "Diferencial de la máquina", "a": "30 mA", "b": "No instalado", "c": "—", "d": "Ausente", "cls": "v-bad" },
+            { "n": "Tipo de fallo medido", "a": "Cortocircuito fase-neutro en bornes", "b": "—", "c": "—", "d": "Confirmado", "cls": "v-warn" }
+          ],
+          "q": "¿Por qué abrió el general, qué está mal en la cadena de protección y por qué subir el calibre del general es una mala idea?",
+          "kw": ["selectividad", "fusible", "magnetotérmico", "general", "cortocircuito", "calibre", "coordinación", "máquina"],
+          "penaliza": [
+            { "id": "sube_general", "texto": "Propone subir el calibre o el umbral del interruptor general como solución principal.", "criterio": "correccion", "tope": 40 }
+          ]
+        }
+      },
+      {
+        "id": "e2",
+        "title": "Revisión de un cuadro secundario",
+        "type": "email",
+        "timeLimit": 960,
+        "difficulty": "intermedio",
+        "rubrica": "tecnico",
+        "briefing": "Documentarás defectos de un cuadro antes de dar por buena una reforma.",
+        "sub": "Instalación — 16 min",
+        "skills": { "hard": ["Instalaciones", "Seguridad"], "soft": ["Rigor"] },
+        "scenario": "Te piden el visto bueno de un cuadro secundario reformado en oficinas. En la visita ves: bornes sin marcar, un puente improvisado en el diferencial, cable de tierra cortado en un rack, y el esquema unifilar no coincide con lo instalado. El instalador dice que «funciona desde hace dos semanas».",
+        "data": {
+          "to": "Propiedad e instalador",
+          "subject": "Revisión previa al visto bueno del cuadro secundario",
+          "hint": "1) Lista los defectos por gravedad y el riesgo de cada uno. 2) Di qué condiciones son bloqueantes para el visto bueno. 3) Propón las pruebas mínimas (aislamiento, continuidad de tierra, disparo diferencial) antes de energizar. 4) Explica por qué «funciona» no equivale a seguro.",
+          "kw": ["diferencial", "tierra", "unifilar", "bornes", "visto bueno", "prueba", "riesgo", "bloqueo"],
+          "penaliza": [
+            { "id": "da_visto_bueno", "texto": "Da el visto bueno o autoriza dejarlo en servicio con el puente en el diferencial o sin tierra.", "criterio": "correccion", "tope": 35 }
+          ]
+        }
+      },
+      {
+        "id": "e3",
+        "title": "¿Seguro o peligroso?",
+        "type": "decision",
+        "timeLimit": 300,
+        "difficulty": "basico",
+        "briefing": "Clasificarás prácticas en instalaciones de baja tensión.",
+        "sub": "Clasificación — 5 min",
+        "skills": { "hard": ["Seguridad eléctrica"], "soft": ["Criterio"] },
+        "scenario": "En mantenimiento eléctrico aparecen estas prácticas. Clasifica cada una:\n\nSeguro — Reduce el riesgo de contacto, incendio o mal disparo.\n\nPeligroso — Aumenta el riesgo aunque «a veces funcione».",
+        "data": {
+          "options": [
+            { "id": "p1", "text": "Bloquear y etiquetar la fuente antes de trabajar en un circuito", "correct": "seguro" },
+            { "id": "p2", "text": "Puente provisional en un diferencial «porque dispara en falso»", "correct": "peligroso" },
+            { "id": "p3", "text": "Verificar ausencia de tensión con un equipo adecuado antes de tocar", "correct": "seguro" },
+            { "id": "p4", "text": "Usar el conductor de tierra como neutro porque falta un cable", "correct": "peligroso" },
+            { "id": "p5", "text": "Coordinar fusibles e interruptores para que abra primero el más cercano al fallo", "correct": "seguro" },
+            { "id": "p6", "text": "Dejar empalmes con cinta fuera de caja en un falso techo", "correct": "peligroso" },
+            { "id": "p7", "text": "Actualizar el unifilar tras cada cambio y dejarlo en el cuadro", "correct": "seguro" },
+            { "id": "p8", "text": "Anular la protección térmica de un motor que «se calienta en verano»", "correct": "peligroso" }
+          ],
+          "cats": ["Seguro", "Peligroso"],
+          "keys": ["seguro", "peligroso"]
+        }
+      }
+    ]
+  }
+]

@@ -57,9 +57,10 @@ create trigger attempt_requests_aprobar before update on attempt_requests
 alter table attempts enable row level security;
 alter table attempt_requests enable row level security;
 
--- Para resolver una solicitud (hasta que esté en el backoffice):
---   update attempt_requests set estado = 'aprobada', nota = 'Aprobada: problema técnico comprobado' where id = '…';
---   update attempt_requests set estado = 'rechazada', nota = 'Motivo: …' where id = '…';
+-- Resolver solicitudes: backoffice (admin-solicitudes) con rol app_metadata.admin.
+-- Manual, si hiciera falta:
+--   update attempt_requests set estado = 'aprobada', nota = 'Aprobada: problema técnico comprobado', resuelto_en = now() where id = '…';
+--   update attempt_requests set estado = 'rechazada', nota = 'Motivo: …', resuelto_en = now() where id = '…';
 
 -- Comprobación
 select 'attempts' as tabla, count(*) from attempts

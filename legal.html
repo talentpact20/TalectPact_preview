@@ -78,7 +78,7 @@ footer{border-top:1px solid var(--slate-200);background:var(--c-superficie)}
   <div class="kicker">Transparencia</div>
   <h1>Quiénes somos, qué datos tratamos y cómo decide la IA.</h1>
   <p class="lead">TalentPact evalúa a personas y eso afecta a su acceso al empleo. Esta página explica en castellano llano quién está detrás, qué información guardamos, cómo funciona la evaluación automática y qué sale exactamente a la blockchain.</p>
-  <p class="updated">Última actualización: 12 de octubre de 2026.</p>
+  <p class="updated">Última actualización: 22 de octubre de 2026.</p>
 
   <nav class="toc" aria-label="Índice">
     <h2>En esta página</h2>
@@ -122,6 +122,7 @@ footer{border-top:1px solid var(--slate-200);background:var(--c-superficie)}
         <tbody>
           <tr><td>Correo y contraseña</td><td>Crear y proteger tu cuenta</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
           <tr><td>Nombre, sector, teléfono y LinkedIn</td><td>Ficha de contacto que una empresa ve <em>solo</em> tras desbloquearla. Todo salvo el sector es opcional</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
+          <tr><td>Currículum en PDF (opcional, hasta 4 MB)</td><td>Entregarlo a las empresas que desbloquean tu contacto, para el proceso de selección. El pool solo indica si has subido uno; nunca el archivo ni su nombre</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
           <tr><td>Tus respuestas a los retos</td><td>Evaluarlas y poder justificar la nota después</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
           <tr><td>Puntuación, criterios y razonamiento de la IA</td><td>Explicabilidad y trazabilidad (art. 12 del Reglamento de IA)</td><td>Ejecución del servicio y obligación legal · art. 6.1.b y 6.1.c</td></tr>
           <tr><td>Preferencias de empleo (jornada, modalidad, contrato, salario mínimo, ciudad, disponibilidad)</td><td>Mostrarte las ofertas que encajan y que las empresas vean tus condiciones, nunca tu identidad</td><td>Ejecución del servicio · art. 6.1.b</td></tr>
@@ -132,15 +133,15 @@ footer{border-top:1px solid var(--slate-200);background:var(--c-superficie)}
         </tbody>
       </table>
     </div>
-    <p>Tu perfil es <strong>anónimo por defecto</strong>: hasta que una empresa paga por desbloquear el contacto, lo que ve es un alias del tipo <code>Candidato #A1B2</code>, tu sector, tus puntuaciones y tus condiciones de empleo. Nunca tu nombre, tu foto, tu edad ni tu género.</p>
-    <p><strong>Tú decides quién puede contactarte.</strong> En Ajustes › Privacidad puedes ocultarte del pool y retirar el permiso de contacto. Si lo retiras, ninguna empresa puede pagar por tu contacto, y a quien ya lo hubiera desbloqueado deja de entregársele. Cuando una empresa recibe tu contacto, pasa a ser responsable de ese dato y solo puede usarlo para el proceso de selección.</p>
+    <p>Tu perfil es <strong>anónimo por defecto</strong>: hasta que una empresa desbloquea el contacto, lo que ve es un alias del tipo <code>Candidato #A1B2</code>, tu sector, tus puntuaciones y tus condiciones de empleo. Nunca tu nombre, tu foto, tu edad ni tu género. Si has subido un currículum, tampoco se abre hasta ese desbloqueo (y solo mientras sigas aceptando contacto).</p>
+    <p><strong>Tú decides quién puede contactarte.</strong> En Ajustes › Privacidad puedes ocultarte del pool y retirar el permiso de contacto. Si lo retiras, ninguna empresa puede pagar por tu contacto, y a quien ya lo hubiera desbloqueado deja de entregársele (incluido el PDF del currículum). Cuando una empresa recibe tu contacto, pasa a ser responsable de ese dato y solo puede usarlo para el proceso de selección.</p>
 
     <h3>Con quién lo compartimos</h3>
     <div class="tablewrap">
       <table>
         <thead><tr><th>Proveedor</th><th>Qué trata</th><th>Dónde</th></tr></thead>
         <tbody>
-          <tr><td>Supabase</td><td>Base de datos y autenticación</td><td>Unión Europea</td></tr>
+          <tr><td>Supabase</td><td>Base de datos, autenticación y almacenamiento privado del PDF del currículum</td><td>Unión Europea</td></tr>
           <tr><td>Anthropic (Claude)</td><td>El texto de tu respuesta, para evaluarlo, y los mensajes al asistente de soporte. Sin tu nombre ni tu correo</td><td>EE. UU. · cláusulas contractuales tipo</td></tr>
           <tr><td>Stripe</td><td>Pagos de empresa. No vemos ni almacenamos números de tarjeta</td><td>EE. UU./UE · cláusulas contractuales tipo</td></tr>
           <tr><td>Netlify</td><td>Alojamiento de la web y de las funciones</td><td>EE. UU. · cláusulas contractuales tipo</td></tr>
@@ -156,6 +157,7 @@ footer{border-top:1px solid var(--slate-200);background:var(--c-superficie)}
         <thead><tr><th>Dato</th><th>Plazo</th></tr></thead>
         <tbody>
           <tr><td>Cuenta, perfil y preferencias</td><td>Mientras tengas cuenta. Al eliminarla se borra todo</td></tr>
+          <tr><td>Currículum en PDF</td><td>Hasta que lo elimines en «Mi perfil» o borres la cuenta. En ambos casos se borra el archivo del almacenamiento</td></tr>
           <tr><td>Notas y criterios de evaluación</td><td>24 meses desde tu última actividad</td></tr>
           <tr><td>Texto de tus respuestas y razonamiento de la IA (puede citarlas)</td><td>12 meses</td></tr>
           <tr><td>Registro de entregas de tu contacto</td><td>3 años, plazo de prescripción de las infracciones muy graves de la LOPDGDD</td></tr>
@@ -166,7 +168,7 @@ footer{border-top:1px solid var(--slate-200);background:var(--c-superficie)}
     </div>
 
     <h3>Tus derechos</h3>
-    <p>Puedes ejercer acceso, rectificación, supresión, portabilidad, limitación y oposición. Dos de ellos están en el propio producto, sin escribir a nadie: en <strong>Ajustes de cuenta</strong> tienes <strong>Descargar mis datos</strong> (exporta tu perfil y tus evaluaciones en JSON) y <strong>Eliminar cuenta</strong>. Para el resto, escríbenos a <a href="mailto:hello@talentpact.io">hello@talentpact.io</a>.</p>
+    <p>Puedes ejercer acceso, rectificación, supresión, portabilidad, limitación y oposición. Varios están en el propio producto, sin escribir a nadie: en <strong>Mi perfil › Tu currículum</strong> puedes <strong>retirar el PDF</strong> cuando quieras (las empresas que ya desbloquearon tu contacto dejan de poder abrirlo); en <strong>Ajustes de cuenta</strong> tienes <strong>Descargar mis datos</strong> (exporta tu perfil y tus evaluaciones en JSON) y <strong>Eliminar cuenta</strong> (borra también el currículum). Para el resto, escríbenos a <a href="mailto:hello@talentpact.io">hello@talentpact.io</a>.</p>
   </section>
 
   <section id="ia">

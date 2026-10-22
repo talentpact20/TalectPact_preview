@@ -24,9 +24,9 @@ Propuesta de la asesora (19/10), ya aplicada en la web. Fuente única: `netlify/
 | Recursos humanos | La misma |
 | Sanidad, educación e investigación | Sanidad y atención sociosanitaria · Educación, formación e investigación |
 | Sostenibilidad | La misma |
-| Tecnología | La misma · Ingeniería e I+D · Diseño y producto · Transformación y digitalización |
+| Tecnología | La misma · Ingeniería e I+D · Ingeniería de software · Ingeniería de sistemas · Ingeniería industrial y de procesos · Ingeniería mecánica · Ingeniería civil y de caminos · Ingeniería eléctrica · Diseño y producto · Transformación y digitalización |
 
-Son las 7 áreas de la versión resumida más dos generales nuevas. Hacían falta porque Consultoría, Dirección general, Sanidad y Educación no encajaban bien en ninguna de las 7. **Pendiente de validar con la asesora.**
+Son las 7 áreas de la versión resumida más dos generales nuevas. Hacían falta porque Consultoría, Dirección general, Sanidad y Educación no encajaban bien en ninguna de las 7. **Pendiente de validar con la asesora.** El 22/10 se añadieron las 6 especialidades de ingeniería (ola 1 del bloque Ingeniería del catálogo); el total de áreas concretas pasa de 21 a 27.
 
 **Sector de la empresa (a qué se dedica).** Son los 12 sectores de la versión resumida. Si el elegido se divide en varios, aparece «Concretamente», con los 22 de la ampliada. Ejemplo: Servicios financieros → «en general» o «Fintech y medios de pago». Se pide en el perfil de la empresa y en «Completa los datos de tu empresa».
 
